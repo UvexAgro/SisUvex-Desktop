@@ -93,9 +93,6 @@
             nóminaExcelToolStripMenuItem = new ToolStripMenuItem();
             nóminaToolStripMenuItem = new ToolStripMenuItem();
             proveedoresToolStripMenuItem = new ToolStripMenuItem();
-            áreaComedorToolStripMenuItem = new ToolStripMenuItem();
-            asignarComedorToolStripMenuItem = new ToolStripMenuItem();
-            reportesComedorToolStripMenuItem = new ToolStripMenuItem();
             modificacionesToolStripMenuItem = new ToolStripMenuItem();
             actualizarEmpleadosSisUvexToolStripMenuItem = new ToolStripMenuItem();
             actualizarDatosDeEmpleadosPorExcelAgrosmartToolStripMenuItem = new ToolStripMenuItem();
@@ -105,6 +102,12 @@
             empaqueToolStripMenuItem = new ToolStripMenuItem();
             registroHorasToolStripMenuItem = new ToolStripMenuItem();
             preciosToolStripMenuItem = new ToolStripMenuItem();
+            preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
+            credencialesToolStripMenuItem = new ToolStripMenuItem();
+            comedorToolStripMenuItem = new ToolStripMenuItem();
+            áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
+            asignarComedorToolStripMenuItem1 = new ToolStripMenuItem();
+            reportesComedorToolStripMenuItem1 = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             palletsToolStripMenuItem = new ToolStripMenuItem();
             manifiestosToolStripMenuItem = new ToolStripMenuItem();
@@ -116,7 +119,6 @@
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -546,7 +548,7 @@
             // 
             // nóminaToolStripMenuItem
             // 
-            nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { proveedoresToolStripMenuItem, áreaComedorToolStripMenuItem, asignarComedorToolStripMenuItem, reportesComedorToolStripMenuItem, modificacionesToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem, desertGhostToolStripMenuItem, empaqueToolStripMenuItem });
+            nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { proveedoresToolStripMenuItem, modificacionesToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem, desertGhostToolStripMenuItem, empaqueToolStripMenuItem, credencialesToolStripMenuItem, comedorToolStripMenuItem });
             nóminaToolStripMenuItem.Name = "nóminaToolStripMenuItem";
             nóminaToolStripMenuItem.Size = new Size(62, 19);
             nóminaToolStripMenuItem.Text = "Nómina";
@@ -556,26 +558,6 @@
             proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
             proveedoresToolStripMenuItem.Size = new Size(180, 22);
             proveedoresToolStripMenuItem.Text = "Proveedores";
-            // 
-            // áreaComedorToolStripMenuItem
-            // 
-            áreaComedorToolStripMenuItem.Name = "áreaComedorToolStripMenuItem";
-            áreaComedorToolStripMenuItem.Size = new Size(180, 22);
-            áreaComedorToolStripMenuItem.Text = "Área comedor";
-            // 
-            // asignarComedorToolStripMenuItem
-            // 
-            asignarComedorToolStripMenuItem.Name = "asignarComedorToolStripMenuItem";
-            asignarComedorToolStripMenuItem.Size = new Size(180, 22);
-            asignarComedorToolStripMenuItem.Text = "Asignar comedor";
-            asignarComedorToolStripMenuItem.Click += asignarComedorToolStripMenuItem_Click;
-            // 
-            // reportesComedorToolStripMenuItem
-            // 
-            reportesComedorToolStripMenuItem.Name = "reportesComedorToolStripMenuItem";
-            reportesComedorToolStripMenuItem.Size = new Size(180, 22);
-            reportesComedorToolStripMenuItem.Text = "Reportes Comedor";
-            reportesComedorToolStripMenuItem.Click += reportesComedorToolStripMenuItem_Click_1;
             // 
             // modificacionesToolStripMenuItem
             // 
@@ -639,6 +621,48 @@
             preciosToolStripMenuItem.Size = new Size(239, 22);
             preciosToolStripMenuItem.Text = "Precios";
             preciosToolStripMenuItem.Click += preciosToolStripMenuItem_Click;
+            // 
+            // preciosPorGTINToolStripMenuItem
+            // 
+            preciosPorGTINToolStripMenuItem.Name = "preciosPorGTINToolStripMenuItem";
+            preciosPorGTINToolStripMenuItem.Size = new Size(239, 22);
+            preciosPorGTINToolStripMenuItem.Text = "Precios por GTIN";
+            preciosPorGTINToolStripMenuItem.Click += preciosPorGTINToolStripMenuItem_Click;
+            // 
+            // credencialesToolStripMenuItem
+            // 
+            credencialesToolStripMenuItem.Name = "credencialesToolStripMenuItem";
+            credencialesToolStripMenuItem.Size = new Size(180, 22);
+            credencialesToolStripMenuItem.Text = "Credenciales";
+            credencialesToolStripMenuItem.Click += credencialesToolStripMenuItem_Click;
+            // 
+            // comedorToolStripMenuItem
+            // 
+            comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1 });
+            comedorToolStripMenuItem.Name = "comedorToolStripMenuItem";
+            comedorToolStripMenuItem.Size = new Size(180, 22);
+            comedorToolStripMenuItem.Text = "Comedor";
+            // 
+            // áreaComedorToolStripMenuItem1
+            // 
+            áreaComedorToolStripMenuItem1.Name = "áreaComedorToolStripMenuItem1";
+            áreaComedorToolStripMenuItem1.Size = new Size(180, 22);
+            áreaComedorToolStripMenuItem1.Text = "Área comedor";
+            áreaComedorToolStripMenuItem1.Click += áreaComedorToolStripMenuItem1_Click;
+            // 
+            // asignarComedorToolStripMenuItem1
+            // 
+            asignarComedorToolStripMenuItem1.Name = "asignarComedorToolStripMenuItem1";
+            asignarComedorToolStripMenuItem1.Size = new Size(180, 22);
+            asignarComedorToolStripMenuItem1.Text = "Asignar comedor";
+            asignarComedorToolStripMenuItem1.Click += asignarComedorToolStripMenuItem1_Click;
+            // 
+            // reportesComedorToolStripMenuItem1
+            // 
+            reportesComedorToolStripMenuItem1.Name = "reportesComedorToolStripMenuItem1";
+            reportesComedorToolStripMenuItem1.Size = new Size(180, 22);
+            reportesComedorToolStripMenuItem1.Text = "Reportes comedor";
+            reportesComedorToolStripMenuItem1.Click += reportesComedorToolStripMenuItem1_Click;
             // 
             // consultasToolStripMenuItem
             // 
@@ -716,13 +740,6 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // preciosPorGTINToolStripMenuItem
-            // 
-            preciosPorGTINToolStripMenuItem.Name = "preciosPorGTINToolStripMenuItem";
-            preciosPorGTINToolStripMenuItem.Size = new Size(239, 22);
-            preciosPorGTINToolStripMenuItem.Text = "Precios por GTIN";
-            preciosPorGTINToolStripMenuItem.Click += preciosPorGTINToolStripMenuItem_Click;
-            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -796,10 +813,7 @@
         private ToolStripMenuItem materialToolStripMenuItem;
         private ToolStripMenuItem nóminaToolStripMenuItem;
         private ToolStripMenuItem proveedoresToolStripMenuItem;
-        private ToolStripMenuItem áreaComedorToolStripMenuItem;
-        private ToolStripMenuItem asignarComedorToolStripMenuItem;
         private ToolStripMenuItem registroMaterialToolStripMenuItem;
-        private ToolStripMenuItem reportesComedorToolStripMenuItem;
         private ToolStripMenuItem etiquetaPreviewToolStripMenuItem;
         private ToolStripMenuItem registroDeMaterialToolStripMenuItem;
         private ToolStripMenuItem consultasToolStripMenuItem;
@@ -837,5 +851,10 @@
         private ToolStripMenuItem totalDeCajasEmbarcadasToolStripMenuItem;
         private ToolStripMenuItem convertirPalletToolStripMenuItem;
         private ToolStripMenuItem preciosPorGTINToolStripMenuItem;
+        private ToolStripMenuItem credencialesToolStripMenuItem;
+        private ToolStripMenuItem comedorToolStripMenuItem;
+        private ToolStripMenuItem áreaComedorToolStripMenuItem1;
+        private ToolStripMenuItem asignarComedorToolStripMenuItem1;
+        private ToolStripMenuItem reportesComedorToolStripMenuItem1;
     }
 }

@@ -64,5 +64,24 @@ namespace SisUvex.Catalogos.Metods.Querys
 
             return dato;
         }
+        public static bool ExecuteQuery(string query)
+        {
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand(query, sql.cnn);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Ejecutar consulta.");
+                return false;
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+            return true;
+        }
     }
 }
