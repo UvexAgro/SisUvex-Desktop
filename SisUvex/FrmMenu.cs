@@ -1,15 +1,4 @@
 ﻿using SisUvex.Usuarios;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using SisUvex;
-using SisUvex.Catalogos;
 using SisUvex.Catalogos.Variedad;
 using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
@@ -28,19 +17,11 @@ using SisUvex.Catalogos.Caja;
 using SisUvex.Catalogos.Troque;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
-
-
-using SisUvex.Archivo.RegistroMaterial;
 using SisUvex.Catalogos.RegistroMaterial;
-
 using SisUvex.Catalogos.Nomina;
-
-using SisUvex.Archivo.Etiquetas;
 using SisUvex.Archivo.Impresoras;
-using SisUvex.Archivo.CodigoEmp;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Configuracion;
-using SisUvex.Catalogos.PlanTrabajo;
 using SisUvex.Consultas.Pallets;
 using SisUvex.Archivo.Etiquetas.CajaEmpleado;
 using SisUvex.Archivo.Manifiesto;
@@ -53,7 +34,6 @@ using SisUvex.Nomina.Actualizar_empleados;
 using SisUvex.Nomina.Actualizar_datos_empelado;
 using SisUvex.Operacion;
 using SisUvex.Nomina.Asistencia_de_empaque;
-using Microsoft.CodeAnalysis;
 using SisUvex.Catalogos.Container;
 using SisUvex.Catalogos.Presentacion;
 using SisUvex.Archivo.WorkPlan;
@@ -66,6 +46,7 @@ using SisUvex.Consultas.Manifest;
 using SisUvex.Consultas.Manifest.QueryPerManifest;
 using SisUvex.Archivo.WorkPlan.ConvertPallet;
 using SisUvex.Nomina.Prices.PricesGtin;
+using SisUvex.Nomina.EmployeeCredentials;
 
 namespace SisUvex
 {
@@ -192,11 +173,6 @@ namespace SisUvex
             FrmChoferCat cat = new FrmChoferCat();
             AbrirVentanaHijo(cat, 1);
         }
-        private void asignarComedorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UExcel cat = new UExcel();
-            AbrirVentanaHijo(cat, 2);
-        }
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmCajaCat cat = new FrmCajaCat();
@@ -233,8 +209,6 @@ namespace SisUvex
 
         private void reportesComedorToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            REPORTECOMEDOR cat = new REPORTECOMEDOR();
-            AbrirVentanaHijo(cat, 2);
         }
 
         private void impresoraPalletToolStripMenuItem_Click(object sender, EventArgs e)
@@ -455,6 +429,29 @@ namespace SisUvex
         {
             ClsPricesGtin cls = new ClsPricesGtin();
             AbrirVentanaHijo(cls._frmCat, 1);
+        }
+
+        private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void asignarComedorToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            UExcel cat = new UExcel();
+            AbrirVentanaHijo(cat, 2);
+        }
+
+        private void reportesComedorToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            REPORTECOMEDOR cat = new REPORTECOMEDOR();
+            AbrirVentanaHijo(cat, 2);
+        }
+
+        private void credencialesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmCredentials cat = new FrmCredentials();
+            AbrirVentanaHijo(cat, 1);
         }
     }
 }
