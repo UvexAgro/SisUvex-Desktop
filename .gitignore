@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignorar todos los archivos DLL
+*.dll
+
+# Excepción para el archivo DLL específico
+!SisUvex/pdfium.dll
