@@ -430,6 +430,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 ReadOnly = true
             });
         }
+
         private List<string> GetIdEmployeesListToPrint()
         {
             List<string> idEmployees = new List<string>();
@@ -493,6 +494,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 }
             }
         }
+
         public void SetImprimirColumnValues(bool value)
         {
             string newValue = value ? "1" : "0";
@@ -505,11 +507,15 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
             ShowDgvEmployeesList();
         }
+
         public void ClsFrmClosing()
         {
+            if (pdfViewer != null)
+            {
                 pdfViewer.Document?.Dispose();
                 pdfViewer.Dispose();
                 pdfViewer = null;
+            }
         }
     }
 }
