@@ -3,7 +3,7 @@
 
 using System.Data;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using System.Text.Json;
 namespace SisUvex.Catalogos.Metods.ComboBoxes
 {
     internal class ClsComboBoxFiles : ClsColumnName
@@ -42,8 +42,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Create)) //LE AGREGA EL DATATABLE A ESE ARCHIVO
                 {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(fileStream, dataTable);
+                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    //binaryFormatter.Serialize(fileStream, dataTable);
+                    JsonSerializer.Serialize(fileStream, dataTable);
                 }
 
                 lastUpdateDates[catalogName] = databaseLastUpdateDate; // ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION EN EL DICCIONARIO
@@ -54,8 +55,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             {
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Open))
                 {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    return (DataTable)binaryFormatter.Deserialize(fileStream);
+                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    //return (DataTable)binaryFormatter.Deserialize(fileStream);
+
+                    return(DataTable)JsonSerializer.Deserialize(fileStream, typeof(DataTable));
                 }
             }
             // PARA MOSTRAR LOS NOMBRES DE LAS COLUMNAS DEL DATATABLE
@@ -72,8 +75,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(fileStream, lastUpdateDates);
+                //BinaryFormatter binaryFormatter = new BinaryFormatter();
+                //binaryFormatter.Serialize(fileStream, lastUpdateDates);
+
+                JsonSerializer.Serialize(fileStream, lastUpdateDates);
             }
         }
 
@@ -86,8 +91,11 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             {
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
                 {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    lastUpdateDates = (Dictionary<string, string>)binaryFormatter.Deserialize(fileStream);
+                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    //lastUpdateDates = (Dictionary<string, string>)binaryFormatter.Deserialize(fileStream);
+
+
+                    lastUpdateDates = (Dictionary<string, string>)JsonSerializer.Deserialize(fileStream, typeof(Dictionary<string, string>));
                 }
             }
         }

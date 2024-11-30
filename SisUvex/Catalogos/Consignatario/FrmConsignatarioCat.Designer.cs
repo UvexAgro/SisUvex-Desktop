@@ -1,4 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿
 using System.Windows.Forms;
 
 namespace SisUvex.Catalogos.Consignatario

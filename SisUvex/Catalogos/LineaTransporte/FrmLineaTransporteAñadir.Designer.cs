@@ -1,4 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿
 
 namespace SisUvex.Catalogos.LineaTransporte
 {
