@@ -309,7 +309,9 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             RFC = RFC.ToUpper();
-            return true;
+
+            string pattern = @"^[A-Z]{4}\d{6}[A-Z0-9]{3}$";
+            return System.Text.RegularExpressions.Regex.IsMatch(RFC, pattern);
         }
 
         public bool EvaluarLP(ref string LP)
@@ -337,7 +339,9 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             CURP = CURP.ToUpper();
-            return true;
+
+            string pattern = @"^[A-Z]{4}\d{6}[A-Z]{6}[A-Z0-9]{2}$";
+            return System.Text.RegularExpressions.Regex.IsMatch(CURP, pattern);
         }
         public bool EvaluarCP(ref string CP)
         {
@@ -348,7 +352,12 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             long numero;
-            return long.TryParse(CP, out numero);
+            if (!long.TryParse(CP, out numero))
+                return false;
+
+            CP = cls.FormatoCeros(CP, "00000");
+
+            return true;
         }
 
         private void MostrarMensajeEmpleadosNoCumplen(List<string> empleadosNoCumplen)
