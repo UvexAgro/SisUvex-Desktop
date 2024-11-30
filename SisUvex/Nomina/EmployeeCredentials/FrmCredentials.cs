@@ -1,4 +1,6 @@
-﻿namespace SisUvex.Nomina.EmployeeCredentials
+﻿using PdfiumViewer;
+
+namespace SisUvex.Nomina.EmployeeCredentials
 {
     public partial class FrmCredentials : Form
     {
@@ -58,6 +60,11 @@
                 InsertOneEmployee();
                 e.Handled = true;
             }
+        }
+
+        private void FrmCredentials_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            cls.ClsFrmClosing();
         }
     }
 }

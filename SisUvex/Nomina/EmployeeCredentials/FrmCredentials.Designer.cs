@@ -155,7 +155,7 @@
             pnlPrincipal.Controls.Add(dataGridView1);
             pnlPrincipal.Location = new Point(12, 140);
             pnlPrincipal.Name = "pnlPrincipal";
-            pnlPrincipal.Size = new Size(858, 352);
+            pnlPrincipal.Size = new Size(661, 352);
             pnlPrincipal.TabIndex = 11;
             // 
             // dataGridView1
@@ -168,9 +168,8 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(-2, -2);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dataGridView1.Size = new Size(858, 357);
+            dataGridView1.Size = new Size(661, 352);
             dataGridView1.TabIndex = 0;
             // 
             // btnRegisterAsPrinterCards
@@ -198,7 +197,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(882, 504);
+            ClientSize = new Size(685, 504);
             Controls.Add(chbSelectAll);
             Controls.Add(btnRegisterAsPrinterCards);
             Controls.Add(pnlPrincipal);
@@ -216,6 +215,7 @@
             Name = "FrmCredentials";
             Text = "Impresión de credenciales";
             WindowState = FormWindowState.Maximized;
+            FormClosing += FrmCredentials_FormClosing;
             Load += FrmCredentials_Load;
             pnlPrincipal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();

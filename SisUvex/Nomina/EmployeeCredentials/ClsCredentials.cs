@@ -38,7 +38,6 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
         public void btnLoadPdfEmployeesCards()
         {
-
             List<string> idEmployees = GetIdEmployeesListToPrint();
 
             if (idEmployees.Count == 0)
@@ -73,6 +72,8 @@ namespace SisUvex.Nomina.EmployeeCredentials
             pdfViewer.Document?.Dispose(); // Libera el documento anterior
             pdfViewer.Document = PdfiumViewer.PdfDocument.Load(outputPathVarias); // Cargar el nuevo PDF
             pdfViewer.ZoomMode = PdfViewerZoomMode.FitHeight;
+
+            frm.btnCargarCredenciales.Enabled = false;
         }
 
         void CreateEmployeesCards(DataTable empleados)
@@ -503,6 +504,12 @@ namespace SisUvex.Nomina.EmployeeCredentials
             HidePdfViewer();
 
             ShowDgvEmployeesList();
+        }
+        public void ClsFrmClosing()
+        {
+                pdfViewer.Document?.Dispose();
+                pdfViewer.Dispose();
+                pdfViewer = null;
         }
     }
 }
