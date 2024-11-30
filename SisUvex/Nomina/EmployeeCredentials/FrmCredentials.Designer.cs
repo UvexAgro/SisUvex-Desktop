@@ -168,7 +168,6 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(-2, -2);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView1.Size = new Size(858, 357);
             dataGridView1.TabIndex = 0;
@@ -216,6 +215,7 @@
             Name = "FrmCredentials";
             Text = "Impresión de credenciales";
             WindowState = FormWindowState.Maximized;
+            FormClosing += FrmCredentials_FormClosing;
             Load += FrmCredentials_Load;
             pnlPrincipal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();

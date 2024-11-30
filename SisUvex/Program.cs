@@ -21,6 +21,7 @@ using SisUvex.Catalogos.Categoría;
 using SisUvex.Catalogos.Presentacion;
 using SisUvex.Catalogos.PlantillaV1;
 using SisUvex.Nomina.Prices.PricesGtin;
+using SisUvex.Nomina.EmployeeCredentials;
 
 namespace SisUvex
 {
