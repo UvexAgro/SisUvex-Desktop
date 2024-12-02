@@ -65,7 +65,8 @@ namespace SisUvex.Nomina.EmployeeCredentials
             pdfViewer = new PdfViewer
             {
                 Visible = true,
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                TabIndex = 9
             };
             frm.pnlPrincipal.Controls.Add(pdfViewer);
 

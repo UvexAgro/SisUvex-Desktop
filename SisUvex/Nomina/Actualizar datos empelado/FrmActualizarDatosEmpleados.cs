@@ -297,7 +297,10 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             long numero;
-            return long.TryParse(NSS, out numero);
+            if (!long.TryParse(NSS, out numero))
+                return false;
+
+            return true;
         }
 
         public bool EvaluarRFC(ref string RFC)
