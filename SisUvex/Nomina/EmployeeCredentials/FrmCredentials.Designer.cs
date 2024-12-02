@@ -90,7 +90,7 @@
             cboLP.Location = new Point(139, 9);
             cboLP.Name = "cboLP";
             cboLP.Size = new Size(303, 23);
-            cboLP.TabIndex = 4;
+            cboLP.TabIndex = 0;
             // 
             // dtpFechaIngreso1
             // 
@@ -98,7 +98,7 @@
             dtpFechaIngreso1.Location = new Point(139, 38);
             dtpFechaIngreso1.Name = "dtpFechaIngreso1";
             dtpFechaIngreso1.Size = new Size(95, 23);
-            dtpFechaIngreso1.TabIndex = 5;
+            dtpFechaIngreso1.TabIndex = 1;
             // 
             // dtpFechaIngreso2
             // 
@@ -106,7 +106,7 @@
             dtpFechaIngreso2.Location = new Point(240, 38);
             dtpFechaIngreso2.Name = "dtpFechaIngreso2";
             dtpFechaIngreso2.Size = new Size(95, 23);
-            dtpFechaIngreso2.TabIndex = 6;
+            dtpFechaIngreso2.TabIndex = 2;
             // 
             // txbCodigoEmpleado
             // 
@@ -114,7 +114,7 @@
             txbCodigoEmpleado.MaxLength = 6;
             txbCodigoEmpleado.Name = "txbCodigoEmpleado";
             txbCodigoEmpleado.Size = new Size(96, 23);
-            txbCodigoEmpleado.TabIndex = 7;
+            txbCodigoEmpleado.TabIndex = 4;
             txbCodigoEmpleado.KeyPress += txbCodigoEmpleado_KeyPress;
             // 
             // btnGenerarListado
@@ -122,7 +122,7 @@
             btnGenerarListado.Location = new Point(341, 38);
             btnGenerarListado.Name = "btnGenerarListado";
             btnGenerarListado.Size = new Size(101, 23);
-            btnGenerarListado.TabIndex = 8;
+            btnGenerarListado.TabIndex = 3;
             btnGenerarListado.Text = "Generar listado";
             btnGenerarListado.UseVisualStyleBackColor = true;
             btnGenerarListado.Click += btnGenerarListado_Click;
@@ -132,7 +132,7 @@
             btnAgregarListado.Location = new Point(239, 66);
             btnAgregarListado.Name = "btnAgregarListado";
             btnAgregarListado.Size = new Size(113, 23);
-            btnAgregarListado.TabIndex = 9;
+            btnAgregarListado.TabIndex = 5;
             btnAgregarListado.Text = "Agregar al listado";
             btnAgregarListado.UseVisualStyleBackColor = true;
             btnAgregarListado.Click += btnAgregarListado_Click;
@@ -142,7 +142,7 @@
             btnCargarCredenciales.Location = new Point(139, 111);
             btnCargarCredenciales.Name = "btnCargarCredenciales";
             btnCargarCredenciales.Size = new Size(55, 23);
-            btnCargarCredenciales.TabIndex = 10;
+            btnCargarCredenciales.TabIndex = 7;
             btnCargarCredenciales.Text = "Cargar";
             btnCargarCredenciales.UseVisualStyleBackColor = true;
             btnCargarCredenciales.Click += btnCargarCredenciales_Click;
@@ -170,14 +170,14 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView1.Size = new Size(661, 352);
-            dataGridView1.TabIndex = 0;
+            dataGridView1.TabIndex = 8;
             // 
             // btnRegisterAsPrinterCards
             // 
             btnRegisterAsPrinterCards.Location = new Point(200, 111);
             btnRegisterAsPrinterCards.Name = "btnRegisterAsPrinterCards";
             btnRegisterAsPrinterCards.Size = new Size(125, 23);
-            btnRegisterAsPrinterCards.TabIndex = 12;
+            btnRegisterAsPrinterCards.TabIndex = 8;
             btnRegisterAsPrinterCards.Text = "Registrar impresión";
             btnRegisterAsPrinterCards.UseVisualStyleBackColor = true;
             btnRegisterAsPrinterCards.Click += btnRegisterAsPrinterCards_Click;
@@ -188,7 +188,7 @@
             chbSelectAll.Location = new Point(19, 115);
             chbSelectAll.Name = "chbSelectAll";
             chbSelectAll.Size = new Size(114, 19);
-            chbSelectAll.TabIndex = 13;
+            chbSelectAll.TabIndex = 6;
             chbSelectAll.Text = "Seleccionar todo";
             chbSelectAll.UseVisualStyleBackColor = true;
             chbSelectAll.CheckedChanged += chbSelectAll_CheckedChanged;

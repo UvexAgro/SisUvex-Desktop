@@ -54,7 +54,7 @@
             btnCargarArchivos.Location = new Point(524, 12);
             btnCargarArchivos.Name = "btnCargarArchivos";
             btnCargarArchivos.Size = new Size(70, 23);
-            btnCargarArchivos.TabIndex = 1;
+            btnCargarArchivos.TabIndex = 2;
             btnCargarArchivos.Text = "Cargar";
             btnCargarArchivos.UseVisualStyleBackColor = true;
             btnCargarArchivos.Click += btnAbrirArchivos_Click;
@@ -77,9 +77,8 @@
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
-            dataGridView.RowTemplate.Height = 25;
             dataGridView.Size = new Size(776, 368);
-            dataGridView.TabIndex = 2;
+            dataGridView.TabIndex = 8;
             // 
             // btnNSS
             // 
@@ -87,7 +86,7 @@
             btnNSS.Location = new Point(12, 41);
             btnNSS.Name = "btnNSS";
             btnNSS.Size = new Size(74, 23);
-            btnNSS.TabIndex = 3;
+            btnNSS.TabIndex = 4;
             btnNSS.Text = "NSS";
             btnNSS.UseVisualStyleBackColor = true;
             btnNSS.Click += btnNSS_Click;
@@ -98,7 +97,7 @@
             btnRFC.Location = new Point(92, 41);
             btnRFC.Name = "btnRFC";
             btnRFC.Size = new Size(74, 23);
-            btnRFC.TabIndex = 4;
+            btnRFC.TabIndex = 5;
             btnRFC.Text = "RFC";
             btnRFC.UseVisualStyleBackColor = true;
             btnRFC.Click += btnRFC_Click;
@@ -109,7 +108,7 @@
             btnLP.Location = new Point(172, 41);
             btnLP.Name = "btnLP";
             btnLP.Size = new Size(74, 23);
-            btnLP.TabIndex = 5;
+            btnLP.TabIndex = 6;
             btnLP.Text = "LP";
             btnLP.UseVisualStyleBackColor = true;
             btnLP.Click += btnLP_Click;
@@ -120,7 +119,7 @@
             btnCURP.Location = new Point(252, 41);
             btnCURP.Name = "btnCURP";
             btnCURP.Size = new Size(74, 23);
-            btnCURP.TabIndex = 6;
+            btnCURP.TabIndex = 7;
             btnCURP.Text = "CURP";
             btnCURP.UseVisualStyleBackColor = true;
             btnCURP.Click += btnCURP_Click;
@@ -130,7 +129,7 @@
             btnLimpiar.Location = new Point(600, 13);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(70, 23);
-            btnLimpiar.TabIndex = 7;
+            btnLimpiar.TabIndex = 3;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
@@ -140,7 +139,7 @@
             btnExaminar.Location = new Point(448, 12);
             btnExaminar.Name = "btnExaminar";
             btnExaminar.Size = new Size(70, 23);
-            btnExaminar.TabIndex = 8;
+            btnExaminar.TabIndex = 1;
             btnExaminar.Text = "Examinar";
             btnExaminar.UseVisualStyleBackColor = true;
             btnExaminar.Click += btnExaminar_Click;
@@ -151,7 +150,7 @@
             btnCP.Location = new Point(332, 41);
             btnCP.Name = "btnCP";
             btnCP.Size = new Size(74, 23);
-            btnCP.TabIndex = 9;
+            btnCP.TabIndex = 8;
             btnCP.Text = "CP";
             btnCP.UseVisualStyleBackColor = true;
             btnCP.Click += btnCP_Click;
