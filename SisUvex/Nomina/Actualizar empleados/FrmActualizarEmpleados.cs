@@ -25,7 +25,7 @@ namespace SisUvex.Nomina.Actualizar_empleados
                 try
                 {
                     sql.OpenConectionWrite();
-                    SqlCommand cmd = new SqlCommand("sp_SincEmployees", sql.cnn);
+                    SqlCommand cmd = new SqlCommand("sp_Nom_EmployeesSinc", sql.cnn);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.ExecuteNonQuery();
@@ -45,4 +45,3 @@ namespace SisUvex.Nomina.Actualizar_empleados
         }
     }
 }
-
