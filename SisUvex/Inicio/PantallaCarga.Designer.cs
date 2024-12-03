@@ -55,7 +55,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            BackgroundImage = Properties.Resources.Pantalla_de_carga_verde;
+            BackgroundImage = Properties.Resources.screenload1;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(714, 315);
             Controls.Add(lblCadenaConexion);
