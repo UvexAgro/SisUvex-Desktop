@@ -34,7 +34,7 @@
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(183, 14);
+            btnActualizar.Location = new Point(205, 14);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(68, 23);
             btnActualizar.TabIndex = 0;
@@ -56,7 +56,7 @@
             AcceptButton = btnActualizar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(261, 49);
+            ClientSize = new Size(285, 49);
             Controls.Add(lblTexto);
             Controls.Add(btnActualizar);
             FormBorderStyle = FormBorderStyle.FixedSingle;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SisUvex.Catalogos.Metods.Querys;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,29 +21,15 @@ namespace SisUvex.Nomina.Actualizar_empleados
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SQLControl sql = new SQLControl();
-
-                try
+            if (ClsQuerysDB.ExecuteQuery("sp_Nom_EmployeesSinc"))
+                if (ClsQuerysDB.ExecuteQuery("sp_Nom_PlacePayment"))
                 {
-                    sql.OpenConectionWrite();
-                    SqlCommand cmd = new SqlCommand("sp_SincEmployees", sql.cnn);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.ExecuteNonQuery();
-
-                    MessageBox.Show("Se ha actualizado la tabla de empleados.", "Actualizar Empleados");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Actualizar empleados");
+                    MessageBox.Show("Se han actualizado los datos de los empleados exitosamente.");
+                    this.Close();
+                    return;
                 }
 
-                finally
-                {
-                    sql.CloseConectionWrite();
-                }
-            
+            MessageBox.Show("Error al actualizar los datos de los empleados.");
         }
     }
 }
-
