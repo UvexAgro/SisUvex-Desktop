@@ -16,7 +16,7 @@ namespace SisUvex.Catalogos.Nomina.LOAD
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT id_dinerProvider FROM Nom_DinerProvider", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT id_dinerProvider AS 'Código', CONCAT(id_dinerProvider,' | ', v_nameDinerProvider) AS 'Nombre' FROM Nom_DinerProvider", sql.cnn);
                 da.Fill(ds);
                 sql.CloseConectionWrite();
                 return ds;
