@@ -47,6 +47,7 @@ using SisUvex.Consultas.Manifest.QueryPerManifest;
 using SisUvex.Archivo.WorkPlan.ConvertPallet;
 using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
+using SisUvex.Nomina.Comedores.DiningHall;
 
 namespace SisUvex
 {
@@ -452,6 +453,12 @@ namespace SisUvex
         {
             FrmCredentials cat = new FrmCredentials();
             AbrirVentanaHijo(cat, 1);
+        }
+
+        private void catálogoVentanillasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClsDiningHall cls = new ClsDiningHall();
+            AbrirVentanaHijo(cls._frmCat, 1);
         }
     }
 }

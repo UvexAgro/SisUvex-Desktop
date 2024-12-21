@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SisUvex.Catalogos.Presentacion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +11,30 @@ using System.Windows.Forms;
 
 namespace SisUvex.Nomina.Comedores.DiningHall
 {
-    public partial class FrmDiningHallAdd : Form
+    internal partial class FrmDiningHallAdd : Form
     {
+        public ClsDiningHall cls;
+        private FrmDiningHallCat frmCat;
+        public bool IsAddModify = true, AddIsUpdate = false;
+        public string? idModify;
         public FrmDiningHallAdd()
         {
             InitializeComponent();
+        }
+
+        private void FrmDiningHallAdd_Load(object sender, EventArgs e)
+        {
+            cls.BeginFormAdd();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            cls.btnAcceptAddModify();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
