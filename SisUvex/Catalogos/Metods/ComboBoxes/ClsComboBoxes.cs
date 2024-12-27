@@ -47,6 +47,11 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             {
                 textBox.Text = comboBox.SelectedValue?.ToString();
             };
+
+            comboBox.SelectedValueChanged += (sender, e) =>
+            {
+                textBox.Text = comboBox.SelectedValue?.ToString();
+            };
         }
         public static void CboApplyClickEvent(ComboBox comboBox, CheckBox checkBox)
         {

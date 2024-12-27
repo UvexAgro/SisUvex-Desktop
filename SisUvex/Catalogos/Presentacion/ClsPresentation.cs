@@ -7,6 +7,7 @@ using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Catalogos.Presentacion
 {
@@ -38,7 +39,7 @@ namespace SisUvex.Catalogos.Presentacion
             if (_frmAdd.IsAddModify)
             {
                 _frmAdd.chbActive.Checked = true;
-                _frmAdd.txbId.Text = ObtenerDatoConsulta("SELECT FORMAT(COALESCE(MAX(id_presentation), 0) +1, '0000') FROM Pack_Presentation").ToString();
+                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_presentation), 0) +1, '0000') FROM Pack_Presentation").ToString();
             }
             else
             {
