@@ -250,5 +250,39 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogProductionLine";
             public const string QueryCbo = $"SELECT id_productionLine AS '{Column.id}', CONCAT(v_pLName, ' | ', id_productionLine, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Nom_ProductionLine ORDER BY '{Column.name}'";
         }
+
+        public static class PlacePayment
+        {
+            public const string TableName = "Nom_PlacePayment";
+            public const string ColumnName = "Lugar de pago";
+            public const string ColumnId = "idPlacePayment";
+            public const string ColumnActive = "ActivePlacePayment";
+            public const string Cbo = "CboPlacePayment";
+            public const string DgvCatalog = "DgvCatalogPlacePayment";
+            public const string QueryCbo = $"SELECT id_placePayment AS '{Column.id}', CONCAT(id_placePayment, ' | ', v_namePlace,  ' | (', c_activePlace, ')')  AS '{Column.name}', c_activePlace AS '{Column.active}' FROM Nom_PlacePayment ORDER BY '{Column.id}'";
+        }
+
+        public static class DiningHall
+        {
+            public const string TableName = "Nom_DiningHall";
+            public const string ColumnName = "Ventanilla";
+            public const string ColumnId = "idDiningHall";
+            public const string ColumnActive = "ActiveDiningHall";
+            public const string ColumnDinerProvider = "idDinerProvider";
+            public const string Cbo = "CboDiningHall";
+            public const string DgvCatalog = "DgvCatalogDiningHall";
+            public const string QueryCbo = $"SELECT dhl.id_dinningHall AS '{Column.id}', CONCAT(dhl.v_nameDiningHall, ' | ', dhl.id_dinningHall, ' | ', dpr.v_nameDinerProvider, ' | (', dhl.c_active, ')') AS '{Column.name}', dhl.c_active AS '{Column.active}', dhl.id_dinerProvider AS '{ColumnDinerProvider}' FROM Nom_DiningHall dhl LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = dhl.id_dinerProvider ORDER BY '{Column.name}' ";
+        }
+
+        public static class DinerProvider
+        {
+            public const string TableName = "Nom_DinerProvider";
+            public const string ColumnName = "Proveedor";
+            public const string ColumnId = "id_dinerProvider";
+            public const string ColumnActive = "ActiveDinerProvider";
+            public const string Cbo = "CboDinerProvider";
+            public const string DgvCatalog = "DgvCatalogDinerProvider";
+            public const string QueryCbo = $"SELECT id_dinerProvider AS '{Column.id}', CONCAT(v_nameDinerProvider, ' | ', id_dinerProvider, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Nom_DinerProvider ORDER BY '{Column.name}'";
+        }
     }
 }

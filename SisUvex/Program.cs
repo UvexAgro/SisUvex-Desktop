@@ -24,6 +24,7 @@ using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Grow.PlantsRowLot;
 using SisUvex.Grow.PlantsRowLotLoadExcel;
+using SisUvex.Nomina.Comedores.DiningReports;
 
 namespace SisUvex
 {
