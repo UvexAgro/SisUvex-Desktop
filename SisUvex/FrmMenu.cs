@@ -48,6 +48,7 @@ using SisUvex.Archivo.WorkPlan.ConvertPallet;
 using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Nomina.Comedores.DiningHall;
+using SisUvex.Nomina.Comedores.DiningReports;
 
 namespace SisUvex
 {
@@ -445,8 +446,11 @@ namespace SisUvex
 
         private void reportesComedorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            REPORTECOMEDOR cat = new REPORTECOMEDOR();
-            AbrirVentanaHijo(cat, 2);
+            //REPORTECOMEDOR cat = new REPORTECOMEDOR();
+            //AbrirVentanaHijo(cat, 2);
+
+            FrmDiningReport frm = new FrmDiningReport();
+            AbrirVentanaHijo(frm, 2);
         }
 
         private void credencialesToolStripMenuItem_Click(object sender, EventArgs e)
