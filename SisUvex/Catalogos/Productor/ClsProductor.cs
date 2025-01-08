@@ -8,19 +8,19 @@ namespace SisUvex.Catalogos.Productor
     internal class ClsProductor : ClsCatalogos
     {
         SQLControl sql = new SQLControl();
+        string queryActivos = " SELECT c_active 'Activo', id_grower 'Código', v_nameGrower 'Nombre',  v_shortName 'Diminutivo', v_address 'Dirección', v_city 'Ciudad', v_RFC 'RFC', c_phoneNumber 'Telefono', v_GGN 'GGN', v_logo 'Logo', v_regPat 'Registro patronal' FROM Pack_Grower ";
 
-        #region Vistas
         private DataTable CatalogoActivos()
         {
             DataTable dt = new DataTable();
             try
             {
+                string query = queryActivos + " WHERE c_active = '1' ORDER BY id_grower";
+
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_grower 'Código', v_nameGrower 'Nombre', v_address 'Dirección', v_city 'Ciudad', v_RFC 'RFC', c_phoneNumber 'Telefono', d_create 'Fecha creación', userCreate 'Creado por', d_update 'Fecha modificado', userUpdate 'Modificado por' FROM Pack_Grower WHERE c_active = '1'", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter(query, sql.cnn);
                 da.Fill(dt);
                 return dt;
-
-
             }
             catch (Exception ex)
             {
@@ -40,11 +40,12 @@ namespace SisUvex.Catalogos.Productor
 
             try
             {
+                string query = queryActivos + " ORDER BY id_grower";
+
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SElECT c_active 'Activo', id_grower 'Código', v_nameGrower 'Nombre', v_address 'Dirección', v_city 'Ciudad', v_RFC 'RFC', c_phoneNumber 'Telefono', d_create 'Fecha creación', userCreate 'Creado por', d_update 'Fecha modificado', userUpdate 'Modificado por'  FROM Pack_Grower ORDER BY c_active DESC, id_grower", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter(query, sql.cnn);
                 da.Fill(dt);
                 return dt;
-
             }
             catch (Exception ex)
             {
@@ -72,10 +73,7 @@ namespace SisUvex.Catalogos.Productor
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_grower), 0) + 1, '00') FROM Pack_Grower");
         }
-        #endregion
-
-        #region CRUD
-        public void AñadirProductor(string nombre, string activo, string direccion, string ciudad, string rfc, string telefono)
+        public void AñadirProductor(string nombre, string activo, string direccion, string ciudad, string rfc, string telefono, string ggn, string logo, string shortName, string regPat)
         {
             try
             {
@@ -88,10 +86,13 @@ namespace SisUvex.Catalogos.Productor
                 cmd.Parameters.AddWithValue("@city", ValorNull(ciudad));
                 cmd.Parameters.AddWithValue("@RFC", ValorNull(rfc));
                 cmd.Parameters.AddWithValue("@phoneNumber", ValorNull(telefono));
+                cmd.Parameters.AddWithValue("@ggn", ValorNull(ggn));
+                cmd.Parameters.AddWithValue("@logo", ValorNull(logo));
+                cmd.Parameters.AddWithValue("@shortName", shortName);
+                cmd.Parameters.AddWithValue("@regPat", ValorNull(regPat));
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
                 cmd.ExecuteNonQuery();
-
             }
             catch (Exception ex)
             {
@@ -103,7 +104,7 @@ namespace SisUvex.Catalogos.Productor
             }
         }
 
-        public void ModificarProductor(string id, string activo, string nombre, string direccion, string ciudad, string rfc, string telefono)
+        public void ModificarProductor(string id, string activo, string nombre, string direccion, string ciudad, string rfc, string telefono, string ggn, string logo, string shortName, string regPat)
         {
             try
             {
@@ -117,6 +118,10 @@ namespace SisUvex.Catalogos.Productor
                 cmd.Parameters.AddWithValue("@city", ValorNull(ciudad));
                 cmd.Parameters.AddWithValue("@RFC", ValorNull(rfc));
                 cmd.Parameters.AddWithValue("@phoneNumber", ValorNull(telefono));
+                cmd.Parameters.AddWithValue("@ggn", ValorNull(ggn));
+                cmd.Parameters.AddWithValue("@logo", ValorNull(logo));
+                cmd.Parameters.AddWithValue("@shortName", shortName);
+                cmd.Parameters.AddWithValue("@regPat", ValorNull(regPat));
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
                 cmd.ExecuteNonQuery();
             }
@@ -131,7 +136,6 @@ namespace SisUvex.Catalogos.Productor
         }
         public void EliminarProductor(string id)
         {
-
             try
             {
                 sql.OpenConectionWrite();
@@ -151,12 +155,10 @@ namespace SisUvex.Catalogos.Productor
             {
                 sql.CloseConectionWrite();
             }
-
         }
 
         public void RecuperarProductor(string id)
         {
-
             try
             {
                 sql.OpenConectionWrite();
@@ -176,9 +178,6 @@ namespace SisUvex.Catalogos.Productor
             {
                 sql.CloseConectionWrite();
             }
-
         }
-        #endregion
-        
     }
 }

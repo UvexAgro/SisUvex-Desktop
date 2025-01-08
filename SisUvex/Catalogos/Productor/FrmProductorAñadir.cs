@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.IdentityModel.Tokens;
+
 namespace SisUvex.Catalogos.Productor
 {
     public partial class FrmProductorAñadir : Form
@@ -26,24 +28,21 @@ namespace SisUvex.Catalogos.Productor
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (txbNombre.Text == string.Empty)
+            if (txbNombre.Text.IsNullOrEmpty() || txbShortName.Text.IsNullOrEmpty())
             {
                 txbNombre.Focus();
-                MessageBox.Show("Debe ingresar el nombre del productor.");
+                MessageBox.Show("Debe ingresar el nombre y diminutivo del productor.");
             }
             else
             {
                 if (añadirModificar)
-                    cls.AñadirProductor(txbNombre.Text, cboActivo.SelectedIndex.ToString(), txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text);
-                
+                    cls.AñadirProductor(txbNombre.Text, cboActivo.SelectedIndex.ToString(), txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbGGN.Text, txbLogo.Text, txbShortName.Text, txbRegPat.Text);
                 else
-                    cls.ModificarProductor(txbId.Text, cboActivo.SelectedIndex.ToString(), txbNombre.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text);
+                    cls.ModificarProductor(txbId.Text, cboActivo.SelectedIndex.ToString(), txbNombre.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbGGN.Text, txbLogo.Text, txbShortName.Text, txbRegPat.Text);
                 cls.LimpiarTextBox(this);
                 ActualizarCatalogoHijo();
                 this.Close();
             }
-
-
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
