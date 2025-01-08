@@ -28,11 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            dgvEmpleados = new DataGridView();
-            btnBuscar = new Button();
-            txbNombreEmpleado = new TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmNombreYCodigo2x1));
             lblCantidad = new Label();
             btnImprimir = new Button();
             lblNombre = new Label();
@@ -41,72 +37,9 @@
             txbCodigoEmp = new TextBox();
             label1 = new Label();
             btnBuscarCodigo = new Button();
-            btnSeleccionar = new Button();
             lblApellido = new Label();
-            ((System.ComponentModel.ISupportInitialize)dgvEmpleados).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
-            // 
-            // dgvEmpleados
-            // 
-            dgvEmpleados.AllowUserToAddRows = false;
-            dgvEmpleados.AllowUserToDeleteRows = false;
-            dgvEmpleados.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            dgvEmpleados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvEmpleados.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dgvEmpleados.BackgroundColor = SystemColors.ControlLightLight;
-            dgvEmpleados.BorderStyle = BorderStyle.Fixed3D;
-            dgvEmpleados.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvEmpleados.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvEmpleados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvEmpleados.EnableHeadersVisualStyles = false;
-            dgvEmpleados.ImeMode = ImeMode.NoControl;
-            dgvEmpleados.Location = new Point(12, 180);
-            dgvEmpleados.Name = "dgvEmpleados";
-            dgvEmpleados.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvEmpleados.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvEmpleados.RowHeadersVisible = false;
-            dgvEmpleados.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvEmpleados.RowTemplate.Height = 25;
-            dgvEmpleados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEmpleados.Size = new Size(466, 318);
-            dgvEmpleados.TabIndex = 24;
-            dgvEmpleados.CellContentDoubleClick += dgvEmpleados_CellContentDoubleClick;
-            // 
-            // btnBuscar
-            // 
-            btnBuscar.Font = new Font("Segoe UI", 9F);
-            btnBuscar.Location = new Point(274, 151);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(107, 23);
-            btnBuscar.TabIndex = 23;
-            btnBuscar.Text = "Buscar empleado";
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
-            // 
-            // txbNombreEmpleado
-            // 
-            txbNombreEmpleado.Font = new Font("Segoe UI", 9F);
-            txbNombreEmpleado.Location = new Point(12, 151);
-            txbNombreEmpleado.MaxLength = 70;
-            txbNombreEmpleado.Name = "txbNombreEmpleado";
-            txbNombreEmpleado.Size = new Size(256, 23);
-            txbNombreEmpleado.TabIndex = 22;
-            txbNombreEmpleado.KeyPress += txbNombreEmpleado_KeyPress;
             // 
             // lblCantidad
             // 
@@ -191,17 +124,6 @@
             btnBuscarCodigo.UseVisualStyleBackColor = true;
             btnBuscarCodigo.Click += btnBuscarCodigo_Click;
             // 
-            // btnSeleccionar
-            // 
-            btnSeleccionar.Font = new Font("Segoe UI", 9F);
-            btnSeleccionar.Location = new Point(387, 151);
-            btnSeleccionar.Name = "btnSeleccionar";
-            btnSeleccionar.Size = new Size(91, 23);
-            btnSeleccionar.TabIndex = 27;
-            btnSeleccionar.Text = "Seleccionar";
-            btnSeleccionar.UseVisualStyleBackColor = true;
-            btnSeleccionar.Click += btnSeleccionar_Click;
-            // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
@@ -215,13 +137,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(490, 510);
+            ClientSize = new Size(525, 148);
             Controls.Add(lblApellido);
-            Controls.Add(btnSeleccionar);
             Controls.Add(btnBuscarCodigo);
-            Controls.Add(dgvEmpleados);
-            Controls.Add(btnBuscar);
-            Controls.Add(txbNombreEmpleado);
             Controls.Add(lblCantidad);
             Controls.Add(btnImprimir);
             Controls.Add(lblNombre);
@@ -229,19 +147,19 @@
             Controls.Add(lblCodigoEmp);
             Controls.Add(txbCodigoEmp);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MaximumSize = new Size(541, 187);
+            MinimumSize = new Size(541, 187);
             Name = "FrmNombreYCodigo2x1";
             Text = "Imprimir código de empleado con nombre QR";
-            ((System.ComponentModel.ISupportInitialize)dgvEmpleados).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        public DataGridView dgvEmpleados;
-        private Button btnBuscar;
-        private TextBox txbNombreEmpleado;
         private Label lblCantidad;
         private Button btnImprimir;
         private Label lblNombre;
@@ -250,7 +168,6 @@
         private TextBox txbCodigoEmp;
         private Label label1;
         private Button btnBuscarCodigo;
-        private Button btnSeleccionar;
         private Label lblApellido;
     }
 }

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDiningReport));
             cboPaymentPlace = new ComboBox();
             lblPaymentPlace = new Label();
@@ -47,6 +47,7 @@
             btnReport1 = new Button();
             btnResume = new Button();
             btnExcel = new Button();
+            btnFrmSearchEmployeeId = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvQuery).BeginInit();
             SuspendLayout();
             // 
@@ -134,28 +135,28 @@
             dgvQuery.BackgroundColor = SystemColors.ControlLightLight;
             dgvQuery.BorderStyle = BorderStyle.Fixed3D;
             dgvQuery.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgvQuery.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvQuery.EnableHeadersVisualStyles = false;
             dgvQuery.ImeMode = ImeMode.NoControl;
             dgvQuery.Location = new Point(5, 156);
             dgvQuery.Name = "dgvQuery";
             dgvQuery.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -236,11 +237,23 @@
             btnExcel.UseVisualStyleBackColor = true;
             btnExcel.Click += btnExcel_Click;
             // 
+            // btnFrmSearchEmployeeId
+            // 
+            btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFrmSearchEmployeeId.Location = new Point(113, 89);
+            btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
+            btnFrmSearchEmployeeId.Size = new Size(26, 23);
+            btnFrmSearchEmployeeId.TabIndex = 64;
+            btnFrmSearchEmployeeId.Text = "...";
+            btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
+            btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
+            // 
             // FrmDiningReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(602, 450);
+            Controls.Add(btnFrmSearchEmployeeId);
             Controls.Add(btnExcel);
             Controls.Add(btnResume);
             Controls.Add(btnReport1);
@@ -284,5 +297,6 @@
         private Button btnReport1;
         private Button btnResume;
         private Button btnExcel;
+        private Button btnFrmSearchEmployeeId;
     }
 }

@@ -1,4 +1,6 @@
-﻿using PdfiumViewer;
+﻿using Microsoft.IdentityModel.Tokens;
+using PdfiumViewer;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 
 namespace SisUvex.Nomina.EmployeeCredentials
 {
@@ -65,6 +67,20 @@ namespace SisUvex.Nomina.EmployeeCredentials
         private void FrmCredentials_FormClosing(object sender, FormClosingEventArgs e)
         {
             cls.ClsFrmClosing();
+        }
+
+        private void btnFrmSearchEmployeeId_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+                txbCodigoEmpleado.Text = sel.SelectedValue;
+
+            txbCodigoEmpleado.Focus();
+
+            txbCodigoEmpleado.SelectAll();
         }
     }
 }

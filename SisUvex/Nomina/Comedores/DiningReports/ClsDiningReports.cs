@@ -32,6 +32,10 @@ namespace SisUvex.Nomina.Comedores.DiningReports
         public void LoadForm()
         {
             DataTable dtPlacePayment = ClsQuerysDB.GetDataTable(ClsObject.PlacePayment.QueryCbo);
+
+            if (dtPlacePayment == null || dtPlacePayment.Rows.Count == 0)
+                return;
+
             dtPlacePayment.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboPaymentPlace, dtPlacePayment);
 
