@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -60,7 +62,7 @@ namespace SisUvex.Nomina.Comedores.DiningReports
         private void btnExcel_Click(object sender, EventArgs e)
         {
             if (!AreReportsTablesNull())
-            cls.ExportDataGridViewExcel(dgvQuery);
+                cls.ExportDataGridViewExcel(dgvQuery);
         }
 
         private bool AreReportsTablesNull()
@@ -72,6 +74,20 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             }
             else
                 return false;
+        }
+
+        private void btnFrmSearchEmployeeId_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+                txbIdEmployee.Text = sel.SelectedValue;
+
+            txbIdEmployee.Focus();
+
+            txbIdEmployee.SelectAll();
         }
     }
 }

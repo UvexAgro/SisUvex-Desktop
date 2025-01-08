@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion;
@@ -31,41 +32,12 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             ClsConfPrinter clsConfPrinter = new ClsConfPrinter();
             clsConfPrinter.Leer();
         }
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
-            FirstClick();
 
-            if (dgvEmpleados.DataSource == null)
-                dgvEmpleados.DataSource = dt.dtEmployees;
-
-            dt.FilterEmployeesWithFullName(txbNombreEmpleado.Text);
-        }
-
-        private void dgvEmpleados_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            SelectEmployeeInDgv();
-        }
-        private void btnSeleccionar_Click(object sender, EventArgs e)
-        {
-            SelectEmployeeInDgv();
-        }
-
-        private void SelectEmployeeInDgv()
-        {
-            if (dgvEmpleados.SelectedRows.Count > 0)
-            {
-                string id_ = dgvEmpleados.SelectedRows[0].Cells[0].Value.ToString();
-                LoadEmployeeData(id_);
-            }
-            else
-                SystemSounds.Exclamation.Play();
-        }
         private void txbCodigoEmp_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
                 LoadEmployeeData(txbCodigoEmp.Text);
-                nudCantidad.Focus();
             }
         }
         public void LoadEmployeeData(string idEmployee)
@@ -78,11 +50,26 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             lblLastNamePat.Text = dt.lastNamePat;
             lblLastNameMat.Text = dt.lastNameMat;
             if (dt.id.IsNullOrEmpty())
+            {
                 SystemSounds.Exclamation.Play();
+                txbCodigoEmp.Focus();
+                txbCodigoEmp.SelectAll();
+            }
+            else
+            {
+                nudCantidad.Focus();
+                nudCantidad.Select(0, nudCantidad.Text.Length);
+            }
         }
         private void btnBuscarCodigo_Click(object sender, EventArgs e)
         {
-            txbCodigoEmp.Text = ClsValues.FormatZeros(txbCodigoEmp.Text, "000000");
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+                txbCodigoEmp.Text = sel.SelectedValue;
+
             LoadEmployeeData(txbCodigoEmp.Text);
         }
         private void nudCantidad_KeyPress(object sender, KeyPressEventArgs e)

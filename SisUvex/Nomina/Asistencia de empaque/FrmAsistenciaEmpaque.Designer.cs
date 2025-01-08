@@ -37,6 +37,7 @@
             btnDia = new Button();
             dtpDia = new DateTimePicker();
             btnSeleccionar = new Button();
+            btnFrmSearchEmployeeId = new Button();
             SuspendLayout();
             // 
             // btnNuevo
@@ -71,7 +72,7 @@
             // 
             btnEmpleado.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnEmpleado.BackgroundImageLayout = ImageLayout.Stretch;
-            btnEmpleado.Location = new Point(204, 186);
+            btnEmpleado.Location = new Point(198, 187);
             btnEmpleado.Name = "btnEmpleado";
             btnEmpleado.Size = new Size(23, 23);
             btnEmpleado.TabIndex = 2;
@@ -80,7 +81,7 @@
             // 
             // txbEmpleado
             // 
-            txbEmpleado.Location = new Point(93, 187);
+            txbEmpleado.Location = new Point(90, 187);
             txbEmpleado.Name = "txbEmpleado";
             txbEmpleado.Size = new Size(105, 23);
             txbEmpleado.TabIndex = 4;
@@ -98,7 +99,7 @@
             // 
             btnDia.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnDia.BackgroundImageLayout = ImageLayout.Stretch;
-            btnDia.Location = new Point(242, 101);
+            btnDia.Location = new Point(239, 101);
             btnDia.Name = "btnDia";
             btnDia.Size = new Size(23, 23);
             btnDia.TabIndex = 5;
@@ -121,11 +122,23 @@
             btnSeleccionar.Text = "Seleccionar";
             btnSeleccionar.UseVisualStyleBackColor = true;
             // 
+            // btnFrmSearchEmployeeId
+            // 
+            btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFrmSearchEmployeeId.Location = new Point(223, 188);
+            btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
+            btnFrmSearchEmployeeId.Size = new Size(26, 23);
+            btnFrmSearchEmployeeId.TabIndex = 66;
+            btnFrmSearchEmployeeId.Text = "...";
+            btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
+            btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
+            // 
             // FrmAsistenciaEmpaque
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(279, 221);
+            Controls.Add(btnFrmSearchEmployeeId);
             Controls.Add(btnSeleccionar);
             Controls.Add(dtpDia);
             Controls.Add(lblDia);
@@ -153,5 +166,6 @@
         public DateTimePicker dtpDia;
         private Button btnSeleccionar;
         public TextBox txbEmpleado;
+        private Button btnFrmSearchEmployeeId;
     }
 }

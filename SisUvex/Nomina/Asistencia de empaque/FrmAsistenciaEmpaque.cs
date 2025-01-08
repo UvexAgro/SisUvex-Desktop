@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -43,6 +45,18 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
             this.Close();
         }
 
+        private void btnFrmSearchEmployeeId_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
 
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+                txbEmpleado.Text = sel.SelectedValue;
+
+            txbEmpleado.Focus();
+
+            txbEmpleado.SelectAll();
+        }
     }
 }

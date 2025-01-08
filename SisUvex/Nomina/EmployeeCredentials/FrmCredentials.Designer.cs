@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCredentials));
             lblLP = new Label();
             lblIngresoEntre = new Label();
             lblCodigoEmpleado = new Label();
@@ -43,6 +44,7 @@
             dataGridView1 = new DataGridView();
             btnRegisterAsPrinterCards = new Button();
             chbSelectAll = new CheckBox();
+            btnFrmSearchEmployeeId = new Button();
             pnlPrincipal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -68,7 +70,7 @@
             // lblCodigoEmpleado
             // 
             lblCodigoEmpleado.AutoSize = true;
-            lblCodigoEmpleado.Location = new Point(12, 71);
+            lblCodigoEmpleado.Location = new Point(12, 78);
             lblCodigoEmpleado.Name = "lblCodigoEmpleado";
             lblCodigoEmpleado.Size = new Size(121, 15);
             lblCodigoEmpleado.TabIndex = 2;
@@ -110,7 +112,7 @@
             // 
             // txbCodigoEmpleado
             // 
-            txbCodigoEmpleado.Location = new Point(139, 67);
+            txbCodigoEmpleado.Location = new Point(139, 74);
             txbCodigoEmpleado.MaxLength = 6;
             txbCodigoEmpleado.Name = "txbCodigoEmpleado";
             txbCodigoEmpleado.Size = new Size(96, 23);
@@ -129,7 +131,7 @@
             // 
             // btnAgregarListado
             // 
-            btnAgregarListado.Location = new Point(239, 66);
+            btnAgregarListado.Location = new Point(240, 74);
             btnAgregarListado.Name = "btnAgregarListado";
             btnAgregarListado.Size = new Size(113, 23);
             btnAgregarListado.TabIndex = 5;
@@ -193,11 +195,23 @@
             chbSelectAll.UseVisualStyleBackColor = true;
             chbSelectAll.CheckedChanged += chbSelectAll_CheckedChanged;
             // 
+            // btnFrmSearchEmployeeId
+            // 
+            btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFrmSearchEmployeeId.Location = new Point(357, 74);
+            btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
+            btnFrmSearchEmployeeId.Size = new Size(26, 23);
+            btnFrmSearchEmployeeId.TabIndex = 65;
+            btnFrmSearchEmployeeId.Text = "...";
+            btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
+            btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
+            // 
             // FrmCredentials
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(685, 504);
+            Controls.Add(btnFrmSearchEmployeeId);
             Controls.Add(chbSelectAll);
             Controls.Add(btnRegisterAsPrinterCards);
             Controls.Add(pnlPrincipal);
@@ -212,6 +226,7 @@
             Controls.Add(lblCodigoEmpleado);
             Controls.Add(lblIngresoEntre);
             Controls.Add(lblLP);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmCredentials";
             Text = "Impresión de credenciales";
             WindowState = FormWindowState.Maximized;
@@ -240,5 +255,6 @@
         public Button btnCargarCredenciales;
         public Button btnRegisterAsPrinterCards;
         private CheckBox chbSelectAll;
+        private Button btnFrmSearchEmployeeId;
     }
 }
