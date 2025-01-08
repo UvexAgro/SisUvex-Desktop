@@ -301,14 +301,14 @@
             lblShortName.Font = new Font("Segoe UI", 12F);
             lblShortName.Location = new Point(12, 93);
             lblShortName.Name = "lblShortName";
-            lblShortName.Size = new Size(90, 21);
+            lblShortName.Size = new Size(111, 21);
             lblShortName.TabIndex = 28;
-            lblShortName.Text = "Diminutivo:";
+            lblShortName.Text = "Nombre corto:";
             // 
             // txbShortName
             // 
             txbShortName.Font = new Font("Segoe UI", 12F);
-            txbShortName.Location = new Point(108, 90);
+            txbShortName.Location = new Point(129, 90);
             txbShortName.MaxLength = 6;
             txbShortName.Name = "txbShortName";
             txbShortName.Size = new Size(121, 29);
@@ -319,7 +319,7 @@
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
             label1.ForeColor = Color.Crimson;
-            label1.Location = new Point(99, 90);
+            label1.Location = new Point(121, 90);
             label1.Name = "label1";
             label1.Size = new Size(12, 15);
             label1.TabIndex = 29;
