@@ -55,9 +55,9 @@ namespace SisUvex.Catalogos.Distribuidor
             else
             {
                 if (añadirModificar)
-                    cls.AñadirDistribuidor(txbNombre.Text, cboActivo.SelectedIndex.ToString(), cboMercado.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdProductor.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbNombreCorto.Text);
+                    cls.AñadirDistribuidor(txbNombre.Text, cboActivo.SelectedIndex.ToString(), cboMercado.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdProductor.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbNombreCorto.Text, txbPais.Text);
                 else
-                    cls.ModificarDistribuidor(txbId.Text, cboActivo.SelectedIndex.ToString(), txbNombre.Text, cboMercado.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdProductor.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbNombreCorto.Text);
+                    cls.ModificarDistribuidor(txbId.Text, cboActivo.SelectedIndex.ToString(), txbNombre.Text, cboMercado.Text, txbDireccion.Text, txbCiudad.Text, txbRFC.Text, txbTelefono.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdProductor.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbNombreCorto.Text, txbPais.Text);
 
                 cls.LimpiarTextBox(this);
                 ActualizarCatalogoHijo();
