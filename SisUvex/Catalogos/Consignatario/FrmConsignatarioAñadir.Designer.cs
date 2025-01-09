@@ -64,7 +64,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(9, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(267, 31);
@@ -74,7 +74,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblDistribuidor
             // 
             lblDistribuidor.AutoSize = true;
-            lblDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblDistribuidor.Font = new Font("Segoe UI", 12F);
             lblDistribuidor.Location = new Point(9, 87);
             lblDistribuidor.Name = "lblDistribuidor";
             lblDistribuidor.Size = new Size(96, 21);
@@ -84,7 +84,7 @@ namespace SisUvex.Catalogos.Consignatario
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(654, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
@@ -94,7 +94,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(622, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -144,7 +144,7 @@ namespace SisUvex.Catalogos.Consignatario
             // txbIdDistribuidor
             // 
             txbIdDistribuidor.Enabled = false;
-            txbIdDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdDistribuidor.Location = new Point(111, 84);
             txbIdDistribuidor.Name = "txbIdDistribuidor";
             txbIdDistribuidor.Size = new Size(46, 29);
@@ -153,10 +153,11 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // cboDistribuidor
             // 
-            cboDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboDistribuidor.Font = new Font("Segoe UI", 12F);
             cboDistribuidor.FormattingEnabled = true;
             cboDistribuidor.ItemHeight = 21;
             cboDistribuidor.Location = new Point(163, 84);
+            cboDistribuidor.MaxLength = 100;
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(413, 29);
             cboDistribuidor.TabIndex = 1;
@@ -186,7 +187,7 @@ namespace SisUvex.Catalogos.Consignatario
             // cboActivo
             // 
             cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboActivo.Font = new Font("Segoe UI", 12F);
             cboActivo.FormattingEnabled = true;
             cboActivo.Items.AddRange(new object[] { "No", "Sí" });
             cboActivo.Location = new Point(570, 12);
@@ -197,7 +198,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblActivo
             // 
             lblActivo.AutoSize = true;
-            lblActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblActivo.Font = new Font("Segoe UI", 12F);
             lblActivo.Location = new Point(508, 15);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(60, 21);
@@ -216,7 +217,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbTelefono
             // 
-            txbTelefono.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbTelefono.Font = new Font("Segoe UI", 12F);
             txbTelefono.Location = new Point(109, 262);
             txbTelefono.MaxLength = 13;
             txbTelefono.Name = "txbTelefono";
@@ -226,7 +227,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblTelefono
             // 
             lblTelefono.AutoSize = true;
-            lblTelefono.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTelefono.Font = new Font("Segoe UI", 12F);
             lblTelefono.Location = new Point(32, 265);
             lblTelefono.Name = "lblTelefono";
             lblTelefono.Size = new Size(71, 21);
@@ -235,7 +236,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbRFC
             // 
-            txbRFC.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbRFC.Font = new Font("Segoe UI", 12F);
             txbRFC.Location = new Point(109, 227);
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
@@ -245,7 +246,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblRFC
             // 
             lblRFC.AutoSize = true;
-            lblRFC.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblRFC.Font = new Font("Segoe UI", 12F);
             lblRFC.Location = new Point(62, 230);
             lblRFC.Name = "lblRFC";
             lblRFC.Size = new Size(41, 21);
@@ -254,7 +255,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbCiudad
             // 
-            txbCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbCiudad.Font = new Font("Segoe UI", 12F);
             txbCiudad.Location = new Point(111, 155);
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
@@ -264,7 +265,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblCiudad
             // 
             lblCiudad.AutoSize = true;
-            lblCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCiudad.Font = new Font("Segoe UI", 12F);
             lblCiudad.Location = new Point(43, 158);
             lblCiudad.Name = "lblCiudad";
             lblCiudad.Size = new Size(62, 21);
@@ -273,7 +274,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbDireccion
             // 
-            txbDireccion.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbDireccion.Font = new Font("Segoe UI", 12F);
             txbDireccion.Location = new Point(111, 120);
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
@@ -283,7 +284,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblDireccion
             // 
             lblDireccion.AutoSize = true;
-            lblDireccion.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblDireccion.Font = new Font("Segoe UI", 12F);
             lblDireccion.Location = new Point(27, 123);
             lblDireccion.Name = "lblDireccion";
             lblDireccion.Size = new Size(78, 21);
@@ -292,9 +293,9 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbNombre
             // 
-            txbNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNombre.Font = new Font("Segoe UI", 12F);
             txbNombre.Location = new Point(109, 49);
-            txbNombre.MaxLength = 0;
+            txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(591, 29);
             txbNombre.TabIndex = 50;
@@ -302,7 +303,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNombre.Font = new Font("Segoe UI", 12F);
             lblNombre.Location = new Point(32, 52);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(71, 21);
@@ -321,7 +322,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             // txbPais
             // 
-            txbPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbPais.Font = new Font("Segoe UI", 12F);
             txbPais.Location = new Point(109, 190);
             txbPais.MaxLength = 15;
             txbPais.Name = "txbPais";
@@ -331,7 +332,7 @@ namespace SisUvex.Catalogos.Consignatario
             // lblPais
             // 
             lblPais.AutoSize = true;
-            lblPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblPais.Font = new Font("Segoe UI", 12F);
             lblPais.Location = new Point(63, 193);
             lblPais.Name = "lblPais";
             lblPais.Size = new Size(40, 21);
