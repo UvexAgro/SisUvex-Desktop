@@ -171,13 +171,12 @@ namespace SisUvex.Catalogos.Cuadrilla
             // 
             // txbName
             // 
-            txbName.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txbName.Location = new Point(159, 84);
             txbName.MaxLength = 15;
             txbName.Name = "txbName";
             txbName.Size = new Size(275, 29);
             txbName.TabIndex = 36;
-            txbName.TextAlign = HorizontalAlignment.Center;
             // 
             // label1
             // 
