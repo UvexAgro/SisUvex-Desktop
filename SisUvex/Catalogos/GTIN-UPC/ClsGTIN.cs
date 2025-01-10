@@ -11,6 +11,7 @@ using System.Media;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using System.Windows.Forms;
 
 namespace SisUvex.Catalogos.GTIN
 {
@@ -21,7 +22,7 @@ namespace SisUvex.Catalogos.GTIN
         private FrmGtinAdd _frmAdd;
         public FrmGtinCat _frmCat;
         public Egtin eGtin;
-        private string queryCatalog = $"SELECT *, Activo AS '{Gtin.ColumnActive}' FROM vw_PackGTINCat";
+        private string queryCatalog = $" SELECT vw.*, vw.Activo AS '{Gtin.ColumnActive}' FROM vw_PackGTINCat AS vw ";
         public DataTable dtCatalog;
 
         public ClsGTIN()
@@ -38,6 +39,8 @@ namespace SisUvex.Catalogos.GTIN
             ClsComboBoxes.CboLoadActives(_frmCat.cboContainer, ClsObject.Container.Cbo);
 
             LoadDataGridViewCatalog();
+
+            AjustarEncabezados(_frmCat.dgvCatalog);
 
             ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
@@ -57,7 +60,7 @@ namespace SisUvex.Catalogos.GTIN
 
         public string  SetQueryString()
         {
-            string query = queryCatalog + " vw JOIN Pack_GTIN g ON g.id_GTIN = vw.[Código] WHERE 1 = 1 ";
+            string query = queryCatalog + " JOIN Pack_GTIN g ON g.id_GTIN = vw.[Código] WHERE 1 = 1 ";
 
             if (_frmCat.cboDistributor.SelectedIndex > 0)
                 query += $" AND g.id_distributor = '{_frmCat.cboDistributor.SelectedValue}' ";
@@ -388,5 +391,31 @@ namespace SisUvex.Catalogos.GTIN
                 sql.CloseConectionWrite();
             }
         }
+
+        private void AjustarEncabezados(DataGridView dataGridView)
+        {
+            // Habilitar texto multilínea en los encabezados
+            dataGridView.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+            // Ajustar automáticamente las alturas de los encabezados y las columnas
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+            // Recorrer todas las columnas y ajustar los encabezados
+            foreach (DataGridViewColumn column in dataGridView.Columns)
+            {
+                column.HeaderText = InsertarSaltosDeLinea(column.HeaderText);
+            }
+        }
+
+        // Método para dividir automáticamente el texto de los encabezados largos
+        private string InsertarSaltosDeLinea(string texto)
+        {
+            // Dividir el texto por palabras
+            string[] palabras = texto.Split(' ');
+            // Insertar saltos de línea entre las palabras
+            return string.Join("\n", palabras);
+        }
+
     }
 }
