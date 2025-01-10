@@ -15,7 +15,7 @@ namespace SisUvex.Catalogos.LineaTransporte
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM vw_PackTransportLineCat", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM vw_PackTransportLineCat WHERE Activo = '1' ORDER BY Código", sql.cnn);
                 da.Fill(dt);
                 return dt;
 
@@ -40,7 +40,7 @@ namespace SisUvex.Catalogos.LineaTransporte
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM vw_PackTransportLineDelete ORDER BY Activo desc, Código", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM vw_PackTransportLineCat ORDER BY Código", sql.cnn);
                 da.Fill(dt);
                 return dt;
 
