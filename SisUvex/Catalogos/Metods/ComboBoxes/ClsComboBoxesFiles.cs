@@ -1,5 +1,5 @@
 
-﻿using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Querys;
 
 using System.Data;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -13,7 +13,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
         private static Dictionary<string, string> cboFiles = new Dictionary<string, string>();
         private static Dictionary<string, string> lastUpdateDates = new Dictionary<string, string>();
 
-        public static DataTable GetCboCatalogDataTable(string catalogName) // cambiarle al string entrada
+        public static DataTable GetCboCatalogDataTable(string catalogName)
         {
             DataTable dataTable = new DataTable();
 
@@ -27,8 +27,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 lastUpdateDates[catalogName] = DateTime.MinValue.ToString();
 
             string lastUpdateDate = lastUpdateDates[catalogName]; //OBTIENE LA FECHA DE ACTUALIZACION DEL CATALOGO EN EL DICCIONARIO
-
-
             string databaseLastUpdateDate = GetDataBaseLastUpdateDate(catalogName); //OBTIENE LA LA FECHA DE LA ULTIMA ACTUALIZACION EN LA BASE DE DATOS DE PARA ESE CATALOGO SEGUN CUALES REFERENCIAS TIENE
 
             if (lastUpdateDate != databaseLastUpdateDate)
@@ -36,68 +34,94 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 dataTable = GetDataTableForFile(catalogName); //OBTIENE EL DATATABLE SEGUN EL NOMBRE DEL CATALOGO
 
                 string directoryPath = Path.GetDirectoryName(cboFiles[catalogName]); //OBTIENE LA DIRECCION DEL ARCHIVO DE ESE CATALOGO
-
-                if (!Directory.Exists(directoryPath)) //SI NO EXISTE EL DIRECTORIO, LO CREA EL ARCHIVO PAR EL CATALOGO
+                if (!Directory.Exists(directoryPath))
                     Directory.CreateDirectory(directoryPath);
 
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Create)) //LE AGREGA EL DATATABLE A ESE ARCHIVO
                 {
-                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    //binaryFormatter.Serialize(fileStream, dataTable);
-                    JsonSerializer.Serialize(fileStream, dataTable);
+                    var serializedData = ConvertDataTableToList(dataTable);    //////////////////////////////////////////
+                    JsonSerializer.Serialize(fileStream, serializedData);
                 }
 
                 lastUpdateDates[catalogName] = databaseLastUpdateDate; // ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION EN EL DICCIONARIO
-
                 SaveLastUpdateDates(); // ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION EN EL ARCHIVO DE LAS FECHAS DE ACTUALIZACIONES
             }
             else if (File.Exists(cboFiles[catalogName])) // SI NO HA HABIDO ACTUALIZACIONES, ENTONCES JALA DIRECTO DEL ARCHIVO DEL CATALOGO
             {
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Open))
                 {
-                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    //return (DataTable)binaryFormatter.Deserialize(fileStream);
-
-                    return(DataTable)JsonSerializer.Deserialize(fileStream, typeof(DataTable));
+                    var serializedData = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(fileStream);
+                    dataTable = ConvertListToDataTable(serializedData);
                 }
             }
             // PARA MOSTRAR LOS NOMBRES DE LAS COLUMNAS DEL DATATABLE
             //string columnNames = string.Join("\n", dataTable.Columns.Cast<DataColumn>().Select(c => $"-{c.ColumnName}-"));
             //MessageBox.Show(columnNames);
-
             return dataTable;
         }
 
         public static void SaveLastUpdateDates()
         {
-            // Save the last update dates to a file
+            //GUARDAR EL ARCHIVO DE LAS FECHAS DE ACTUALIZACIONES
             string filePath = Path.Combine(rutaConsultaCbo, "lastUpdateDates.dat");
 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
-                //BinaryFormatter binaryFormatter = new BinaryFormatter();
-                //binaryFormatter.Serialize(fileStream, lastUpdateDates);
-
                 JsonSerializer.Serialize(fileStream, lastUpdateDates);
             }
         }
 
         public static void LoadLastUpdateDates()
         {
-            // Load the last update dates from a file
+            //CARGAR EL ARCHIVO DE LAS FECHAS DE ACTUALIZACIONES
             string filePath = Path.Combine(rutaConsultaCbo, "lastUpdateDates.dat");
-
             if (File.Exists(filePath))
             {
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
                 {
-                    //BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    //lastUpdateDates = (Dictionary<string, string>)binaryFormatter.Deserialize(fileStream);
-
-
-                    lastUpdateDates = (Dictionary<string, string>)JsonSerializer.Deserialize(fileStream, typeof(Dictionary<string, string>));
+                    lastUpdateDates = JsonSerializer.Deserialize<Dictionary<string, string>>(fileStream);
                 }
             }
+        }
+
+        private static List<Dictionary<string, object>> ConvertDataTableToList(DataTable table)
+        {
+            //CONVIERTE EL DATATABLE A UNA LISTA DE DICCIONARIOS
+            var result = new List<Dictionary<string, object>>();
+            foreach (DataRow row in table.Rows)
+            {
+                var rowDict = new Dictionary<string, object>();
+                foreach (DataColumn column in table.Columns)
+                {
+                    rowDict[column.ColumnName] = row[column];
+                }
+                result.Add(rowDict);
+            }
+            return result;
+        }
+
+        private static DataTable ConvertListToDataTable(List<Dictionary<string, object>> list)
+        {
+            //CONVIERTE LA LISTA DE DICCIONARIOS A UN DATATABLE
+            DataTable table = new DataTable();
+            if (list.Count > 0)
+            {
+                foreach (var column in list[0].Keys)
+                {
+                    table.Columns.Add(column);
+                }
+
+                foreach (var rowDict in list)
+                {
+                    var row = table.NewRow();
+                    foreach (var column in rowDict.Keys)
+                    {
+                        row[column] = rowDict[column];
+                    }
+                    table.Rows.Add(row);
+                }
+            }
+            return table;
         }
 
         private static DataTable GetDataTableForFile(string catalogName)
@@ -243,6 +267,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 
         public static bool IsInfoNeededToUpdate(string catalogName)
         {
+            //CONSULTA SI LA INFORMACION DEL CATALOGO NECESITA SER ACTUALIZADA
             if (!lastUpdateDates.ContainsKey(catalogName))
                 return false;
 
