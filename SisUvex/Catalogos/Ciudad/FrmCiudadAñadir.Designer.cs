@@ -50,7 +50,7 @@ namespace SisUvex.Catalogos.Ciudad
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(9, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(182, 31);
@@ -60,7 +60,7 @@ namespace SisUvex.Catalogos.Ciudad
             // lblNomCiudad
             // 
             lblNomCiudad.AutoSize = true;
-            lblNomCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNomCiudad.Font = new Font("Segoe UI", 12F);
             lblNomCiudad.Location = new Point(12, 58);
             lblNomCiudad.Name = "lblNomCiudad";
             lblNomCiudad.Size = new Size(121, 21);
@@ -69,7 +69,7 @@ namespace SisUvex.Catalogos.Ciudad
             // 
             // txbNomCiudad
             // 
-            txbNomCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNomCiudad.Font = new Font("Segoe UI", 12F);
             txbNomCiudad.Location = new Point(139, 55);
             txbNomCiudad.MaxLength = 50;
             txbNomCiudad.Name = "txbNomCiudad";
@@ -79,7 +79,7 @@ namespace SisUvex.Catalogos.Ciudad
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(450, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
@@ -89,7 +89,7 @@ namespace SisUvex.Catalogos.Ciudad
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(422, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -119,7 +119,7 @@ namespace SisUvex.Catalogos.Ciudad
             // lblActivo
             // 
             lblActivo.AutoSize = true;
-            lblActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblActivo.Font = new Font("Segoe UI", 12F);
             lblActivo.Location = new Point(313, 15);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(60, 21);
@@ -129,7 +129,7 @@ namespace SisUvex.Catalogos.Ciudad
             // cboActivo
             // 
             cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboActivo.Font = new Font("Segoe UI", 12F);
             cboActivo.FormattingEnabled = true;
             cboActivo.Items.AddRange(new object[] { "No", "Sí" });
             cboActivo.Location = new Point(369, 12);
@@ -140,7 +140,7 @@ namespace SisUvex.Catalogos.Ciudad
             // lblNomEstado
             // 
             lblNomEstado.AutoSize = true;
-            lblNomEstado.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNomEstado.Font = new Font("Segoe UI", 12F);
             lblNomEstado.Location = new Point(12, 93);
             lblNomEstado.Name = "lblNomEstado";
             lblNomEstado.Size = new Size(121, 21);
@@ -149,7 +149,7 @@ namespace SisUvex.Catalogos.Ciudad
             // 
             // txbNomEstado
             // 
-            txbNomEstado.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNomEstado.Font = new Font("Segoe UI", 12F);
             txbNomEstado.Location = new Point(139, 90);
             txbNomEstado.MaxLength = 30;
             txbNomEstado.Name = "txbNomEstado";
@@ -158,17 +158,17 @@ namespace SisUvex.Catalogos.Ciudad
             // 
             // txbNomPais
             // 
-            txbNomPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNomPais.Font = new Font("Segoe UI", 12F);
             txbNomPais.Location = new Point(139, 125);
-            txbNomPais.MaxLength = 30;
+            txbNomPais.MaxLength = 15;
             txbNomPais.Name = "txbNomPais";
-            txbNomPais.Size = new Size(357, 29);
+            txbNomPais.Size = new Size(276, 29);
             txbNomPais.TabIndex = 14;
             // 
             // lblNomPais
             // 
             lblNomPais.AutoSize = true;
-            lblNomPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNomPais.Font = new Font("Segoe UI", 12F);
             lblNomPais.Location = new Point(12, 128);
             lblNomPais.Name = "lblNomPais";
             lblNomPais.Size = new Size(103, 21);
