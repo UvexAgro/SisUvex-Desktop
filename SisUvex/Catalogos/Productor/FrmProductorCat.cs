@@ -1,4 +1,7 @@
 ﻿
+using SisUvex.Catalogos.Metods.Querys;
+using System.Data;
+
 namespace SisUvex.Catalogos.Productor
 {
     public partial class FrmProductorCat : Form
@@ -38,7 +41,8 @@ namespace SisUvex.Catalogos.Productor
 
         private void btnEliminados_Click(object sender, EventArgs e)
         {
-            _dgvStatus = false;
+            _dgvStatus = !_dgvStatus;
+
             dgvCatalogo.DataSource = cls.CatalogoActualizar(_dgvStatus);
         }
 
@@ -97,16 +101,32 @@ namespace SisUvex.Catalogos.Productor
             {
                 FrmProductorAñadir frmAñadir = new FrmProductorAñadir(this);
                 frmAñadir.lblTitulo.Text = "Modificar productor";
-                frmAñadir.cboActivo.SelectedIndex = Int32.Parse(dgvCatalogo.SelectedRows[0].Cells[0].Value.ToString());
-                frmAñadir.txbId.Text = dgvCatalogo.SelectedRows[0].Cells[1].Value.ToString();
-                frmAñadir.txbNombre.Text = dgvCatalogo.SelectedRows[0].Cells[2].Value.ToString();
-                frmAñadir.txbDireccion.Text = dgvCatalogo.SelectedRows[0].Cells[3].Value.ToString();
-                frmAñadir.txbCiudad.Text = dgvCatalogo.SelectedRows[0].Cells[4].Value.ToString();
-                frmAñadir.txbRFC.Text = dgvCatalogo.SelectedRows[0].Cells[5].Value.ToString();
-                frmAñadir.txbTelefono.Text = dgvCatalogo.SelectedRows[0].Cells[6].Value.ToString();
-                frmAñadir.añadirModificar = false;
                 frmAñadir.Text = "Modificar productor";
+                frmAñadir.añadirModificar = false;
                 frmAñadir.UpdateEventHandler += CatalogoActualizarHijo;
+
+
+                //frmAñadir.cboActivo.SelectedIndex = Int32.Parse(dgvCatalogo.SelectedRows[0].Cells[0].Value.ToString());
+                //frmAñadir.txbId.Text = dgvCatalogo.SelectedRows[0].Cells[1].Value.ToString();
+                //frmAñadir.txbNombre.Text = dgvCatalogo.SelectedRows[0].Cells[2].Value.ToString();
+                //frmAñadir.txbDireccion.Text = dgvCatalogo.SelectedRows[0].Cells[3].Value.ToString();
+                //frmAñadir.txbCiudad.Text = dgvCatalogo.SelectedRows[0].Cells[4].Value.ToString();
+                //frmAñadir.txbRFC.Text = dgvCatalogo.SelectedRows[0].Cells[5].Value.ToString();
+                //frmAñadir.txbTelefono.Text = dgvCatalogo.SelectedRows[0].Cells[6].Value.ToString();
+
+                DataTable dtProductor = ClsQuerysDB.GetDataTable("SELECT * FROM Pack_Grower WHERE id_grower = '" + dgvCatalogo.SelectedRows[0].Cells[1].Value.ToString() + "'");
+
+                frmAñadir.cboActivo.SelectedIndex = Int32.Parse(dtProductor.Rows[0]["c_active"].ToString());
+                frmAñadir.txbId.Text = dtProductor.Rows[0]["id_grower"].ToString();
+                frmAñadir.txbNombre.Text = dtProductor.Rows[0]["v_nameGrower"].ToString();
+                frmAñadir.txbDireccion.Text = dtProductor.Rows[0]["v_address"].ToString();
+                frmAñadir.txbCiudad.Text = dtProductor.Rows[0]["v_city"].ToString();
+                frmAñadir.txbRFC.Text = dtProductor.Rows[0]["v_RFC"].ToString();
+                frmAñadir.txbTelefono.Text = dtProductor.Rows[0]["c_phoneNumber"].ToString();
+                frmAñadir.txbGGN.Text = dtProductor.Rows[0]["v_GGN"].ToString();
+                frmAñadir.txbLogo.Text = dtProductor.Rows[0]["v_logo"].ToString();
+                frmAñadir.txbShortName.Text = dtProductor.Rows[0]["v_shortName"].ToString();
+                frmAñadir.txbRegPat.Text = dtProductor.Rows[0]["v_regPat"].ToString();
 
                 frmAñadir.ShowDialog();
             }

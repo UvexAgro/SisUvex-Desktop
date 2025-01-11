@@ -104,7 +104,7 @@ namespace SisUvex.Catalogos.Distribuidor
                 f.lblTitulo.Text = "Modificar distribuidor";
                 f.Text = "Modificar distribuidor";
 
-                cls.LlenarFormulario(dgv.Cells["Código"].Value.ToString(), f.txbId, f.cboActivo, f.cboMercado, f.txbNombre, f.txbDireccion, f.txbCiudad, f.txbRFC, f.txbTelefono, f.txbIdAgenciaUS, f.txbIdAgenciaMX, f.txbIdProductor, f.txbIdCiudadCruce, f.txbIdCiudadDestino, f.txbNombreCorto);
+                cls.LlenarFormulario(dgv.Cells["Código"].Value.ToString(), f.txbId, f.cboActivo, f.cboMercado, f.txbNombre, f.txbDireccion, f.txbCiudad, f.txbRFC, f.txbTelefono, f.txbIdAgenciaUS, f.txbIdAgenciaMX, f.txbIdProductor, f.txbIdCiudadCruce, f.txbIdCiudadDestino, f.txbNombreCorto, f.txbPais);
 
                 f.UpdateEventHandler += CatalogoActualizarHijo;
                 f.ShowDialog();

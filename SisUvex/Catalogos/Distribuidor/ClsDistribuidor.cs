@@ -64,7 +64,7 @@ namespace SisUvex.Catalogos.Distribuidor
             }
         }
 
-        public void AñadirDistribuidor(string nombre, string activo, string mercado, string direccion, string ciudad, string rfc, string telefono, string idAgenciaUS, string idAgenciaMX, string idProductor, string idCiudadCruce, string idCiudadDestino, string nombreCorto)
+        public void AñadirDistribuidor(string nombre, string activo, string mercado, string direccion, string ciudad, string rfc, string telefono, string idAgenciaUS, string idAgenciaMX, string idProductor, string idCiudadCruce, string idCiudadDestino, string nombreCorto, string pais)
         {
             try
             {
@@ -83,7 +83,8 @@ namespace SisUvex.Catalogos.Distribuidor
                 cmd.Parameters.AddWithValue("@phoneNumber", ValorNull(telefono));
                 cmd.Parameters.AddWithValue("@idCityCrossPoint", Id00Null(idCiudadCruce));
                 cmd.Parameters.AddWithValue("@idCityDestiny", Id00Null(idCiudadDestino));
-                cmd.Parameters.AddWithValue("@nameShort", ValorNull(nombreCorto));
+                cmd.Parameters.AddWithValue("@shortName", ValorNull(nombreCorto));
+                cmd.Parameters.AddWithValue("@country", ValorNull(pais));
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
                 cmd.ExecuteNonQuery();
             }
@@ -97,7 +98,7 @@ namespace SisUvex.Catalogos.Distribuidor
             }
         }
 
-        public void ModificarDistribuidor(string id, string activo, string nombre, string mercado, string direccion, string ciudad, string rfc, string telefono, string idAgenciaUS, string idAgenciaMX, string idProductor, string idCiudadCruce, string idCiudadDestino, string nombreCorto)
+        public void ModificarDistribuidor(string id, string activo, string nombre, string mercado, string direccion, string ciudad, string rfc, string telefono, string idAgenciaUS, string idAgenciaMX, string idProductor, string idCiudadCruce, string idCiudadDestino, string nombreCorto, string pais)
         {
             try
             {
@@ -117,7 +118,8 @@ namespace SisUvex.Catalogos.Distribuidor
                 cmd.Parameters.AddWithValue("@phoneNumber", ValorNull(telefono));
                 cmd.Parameters.AddWithValue("@idCityCrossPoint", Id00Null(idCiudadCruce));
                 cmd.Parameters.AddWithValue("@idCityDestiny", Id00Null(idCiudadDestino));
-                cmd.Parameters.AddWithValue("@nameShort", ValorNull(nombreCorto));
+                cmd.Parameters.AddWithValue("@shortName", ValorNull(nombreCorto));
+                cmd.Parameters.AddWithValue("@country", ValorNull(pais));
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
                 cmd.ExecuteNonQuery();
             }
@@ -168,7 +170,7 @@ namespace SisUvex.Catalogos.Distribuidor
             CboCargarInicio(c[3], CboCiudad("","*"));
             CboCargarInicio(c[4], CboCiudad("","*"));
         }
-        public void LlenarFormulario(string dgvId, TextBox id, ComboBox activo, ComboBox mercado, TextBox nombre, TextBox direccion, TextBox ciudad, TextBox RFC,  TextBox telefono, TextBox idAgenciaUS, TextBox idAgenciaMX, TextBox idProductor, TextBox idCiudadCruce, TextBox idCiudadDestino, TextBox nombreCorto)
+        public void LlenarFormulario(string dgvId, TextBox id, ComboBox activo, ComboBox mercado, TextBox nombre, TextBox direccion, TextBox ciudad, TextBox RFC,  TextBox telefono, TextBox idAgenciaUS, TextBox idAgenciaMX, TextBox idProductor, TextBox idCiudadCruce, TextBox idCiudadDestino, TextBox nombreCorto, TextBox pais)
         {
             try
             {
@@ -191,6 +193,7 @@ namespace SisUvex.Catalogos.Distribuidor
                     idCiudadCruce.Text = dr.GetValue(dr.GetOrdinal("id_cityCrossPoint")).ToString();
                     idCiudadDestino.Text = dr.GetValue(dr.GetOrdinal("id_cityDestiny")).ToString();
                     nombreCorto.Text = dr.GetValue(dr.GetOrdinal("v_nameDistShort")).ToString();
+                    pais.Text = dr.GetValue(dr.GetOrdinal("v_country")).ToString();
                 }
             }
             catch (Exception ex)

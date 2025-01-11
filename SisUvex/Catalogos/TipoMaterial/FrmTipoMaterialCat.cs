@@ -56,6 +56,7 @@ namespace SisUvex.Catalogos.TipoMaterial
                 cls.CboCategoria(dgv.Cells["Categoría"].Value.ToString(), f.cboCategoría);
                 f.Text = "Modificar tipo de material";
                 f.UpdateEventHandler += CatalogoActualizarHijo;
+                f.txbId.Enabled = false;
 
 
                 f.ShowDialog();

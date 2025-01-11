@@ -21,15 +21,40 @@ namespace SisUvex.Nomina.Actualizar_empleados
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (ClsQuerysDB.ExecuteQuery("sp_Nom_EmployeesSinc"))
-                if (ClsQuerysDB.ExecuteQuery("sp_Nom_PlacePayment"))
-                {
-                    MessageBox.Show("Se han actualizado los datos de los empleados exitosamente.");
-                    this.Close();
-                    return;
-                }
+            var procedimientos = new Dictionary<string, string>
+            {
+                { "sp_Nom_EmployeesSinc", "Empleados SA" },
+                { "sp_Nom_PlacePayment", "Lugares de pago SA" },
+                { "sp_Nom_EmployeesSincDL", "Empleados DL" },
+                { "sp_Nom_DinerProviderAddDL", "Añadir comedores DL" },
+                { "sp_Nom_DiningHallAddDL", "Añadir ventanillas DL" }
+            };
 
-            MessageBox.Show("Error al actualizar los datos de los empleados.");
+            var resultados = procedimientos.ToDictionary(
+                proc => proc.Value,
+                proc => ClsQuerysDB.ExecuteQuery(proc.Key)
+            );
+
+            var exitosos = resultados.Where(r => r.Value).Select(r => r.Key).ToList();
+            var fallidos = resultados.Where(r => !r.Value).Select(r => r.Key).ToList();
+
+            var mensaje = new StringBuilder();
+            if (exitosos.Any())
+            {
+                mensaje.AppendLine("Se han actualizado correctamente los siguientes procedimientos:");
+                exitosos.ForEach(proc => mensaje.AppendLine(proc));
+            }
+            if (fallidos.Any())
+            {
+                mensaje.AppendLine("No se han actualizado correctamente los siguientes procedimientos:");
+                fallidos.ForEach(proc => mensaje.AppendLine(proc));
+            }
+
+            MessageBox.Show(mensaje.ToString());
+            if (!fallidos.Any())
+            {
+                this.Close();
+            }
         }
     }
 }

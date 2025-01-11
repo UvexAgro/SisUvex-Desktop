@@ -9,13 +9,14 @@ namespace SisUvex.Catalogos.Tamaño
     {
         SQLControl sql = new SQLControl();
 
+        string queryActives = " SELECT c_active 'Activo', id_size 'Código', v_sizeValue 'Nombre' FROM Pack_Size ";
         private DataTable CatalogoActivos()
         {
             DataTable dt = new DataTable();
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_size 'Código', v_sizeValue 'Nombre', userCreate 'Creado por', d_create 'Fecha creación', userUpdate 'Modificado por', d_update 'Fecha modificado' FROM Pack_Size WHERE c_active = '1' ORDER BY c_active desc, id_size", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter(queryActives + " WHERE c_active = '1' ORDER BY v_sizeValue ", sql.cnn);
                 da.Fill(dt);
                 return dt;
 
@@ -40,7 +41,7 @@ namespace SisUvex.Catalogos.Tamaño
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_size 'Código', v_sizeValue 'Nombre', userCreate 'Creado por', d_create 'Fecha creación', userUpdate 'Modificado por', d_update 'Fecha modificado' FROM Pack_Size ORDER BY c_active desc, id_size", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter(queryActives + " ORDER BY v_sizeValue ", sql.cnn);
                 da.Fill(dt);
                 return dt;
 

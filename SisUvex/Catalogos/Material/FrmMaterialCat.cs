@@ -47,18 +47,21 @@ namespace SisUvex.Catalogos.Material
             {
                 DataGridViewRow dgv = dgvCatalogo.SelectedRows[0];
 
+                EMaterial e = new EMaterial();
+                e.SetMaterial(dgv.Cells["Código"].Value.ToString());
+
                 FrmMaterialAñadir f = new FrmMaterialAñadir(this);
                 f.añadirModificar = false;
                 f.lblTitulo.Text = "Modificar material";
-                f.txbId.Text = dgv.Cells["Código"].Value.ToString();
-                f.txbIdTipo.Text = dgv.Cells["Código"].Value.ToString().Substring(0, 3);
-                f.txbNombre.Text = dgv.Cells["Nombre"].Value.ToString();
-                f.txbNombreEnEtiqueta.Text = dgv.Cells["Nombre en etiqueta"].Value.ToString();
-                f.txbCantidad.Text = dgv.Cells["Cantidad"].Value.ToString();
-                f.txbCantidadPorUnidad.Text = dgv.Cells["Cantidad por unidad"].Value.ToString();
-                f.txbIdDistribuidor.Text = dgv.Cells["Dis"].Value.ToString();
-                f.txbIdColor.Text = dgv.Cells["Col"].Value.ToString();
-                f.txbIdUnidad.Text = dgv.Cells["Uni"].Value.ToString();
+                f.txbId.Text = e.IdMaterial;
+                f.txbIdTipo.Text = e.IdMatType;
+                f.txbNombre.Text = e.NameMat;
+                f.txbNombreEnEtiqueta.Text = e.NameMatLabel;
+                f.txbCantidad.Text = e.QuantMat.ToString();
+                f.txbCantidadPorUnidad.Text = e.QuantMatPerUnit.ToString();
+                f.txbIdDistribuidor.Text = e.IdDistributor;
+                f.txbIdColor.Text = e.IdColor;
+                f.txbIdUnidad.Text = e.IdUnit;
                 f.cboTipoMat.Enabled = false;
                 f.Text = "Modificar material";
                 f.UpdateEventHandler += CatalogoActualizarHijo;

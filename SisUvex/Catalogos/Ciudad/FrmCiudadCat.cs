@@ -43,7 +43,7 @@ namespace SisUvex.Catalogos.Ciudad
         }
         private void btnEliminados_Click(object sender, EventArgs e)
         {
-            _dgvStatus = false;
+            _dgvStatus = !_dgvStatus;
             dgvCatalogo.DataSource = cls.CatalogoActualizar(_dgvStatus);
         }
         private void btnEliminar_Click(object sender, EventArgs e)

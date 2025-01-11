@@ -24,7 +24,7 @@ namespace SisUvex.Catalogos.Ciudad
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_city 'Código', v_nameCity 'Ciudad', v_state 'Estado',v_country 'País', d_create 'Fecha creación', userCreate 'Creado por', d_update 'Fecha modificado', userUpdate 'Modificado por' FROM Pack_City WHERE c_active = '1'", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_city 'Código', v_nameCity 'Ciudad', v_state 'Estado',v_country 'País' FROM Pack_City WHERE c_active = '1'", sql.cnn);
                 da.Fill(dt);
                 return dt;
             }
@@ -47,7 +47,7 @@ namespace SisUvex.Catalogos.Ciudad
             try
             {
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_city 'Código', v_nameCity 'Ciudad', v_state 'Estado',v_country 'País', d_create 'Fecha creación', userCreate 'Creado por', d_update 'Fecha modificado', userUpdate 'Modificado por' FROM Pack_City ORDER BY c_active DESC, id_city", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT c_active 'Activo', id_city 'Código', v_nameCity 'Ciudad', v_state 'Estado',v_country 'País' FROM Pack_City ORDER BY id_city", sql.cnn);
                 da.Fill(dt);
                 return dt;
 
