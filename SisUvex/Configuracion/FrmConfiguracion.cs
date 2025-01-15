@@ -15,6 +15,7 @@ namespace SisUvex.Configuracion
 {
     public partial class FrmConfiguracion : Form
     {
+        public bool isFrmLoginScreen = true;
         public FrmConfiguracion()
         {
             InitializeComponent();
@@ -29,6 +30,7 @@ namespace SisUvex.Configuracion
             txbBdWrite.Text = ClsConfig.DbWrite;
             txbUserWrite.Text = ClsConfig.UserWrite;
             txbPassWrite.Text = ClsConfig.PassWrite;
+            txbDbEmployees.Text = ClsConfig.DbEmployees;
             xml.DeleteXmlConTemp();
         }
 
@@ -44,6 +46,7 @@ namespace SisUvex.Configuracion
             ClsConfig.DbWrite = txbBdWrite.Text;
             ClsConfig.UserWrite = txbUserWrite.Text;
             ClsConfig.PassWrite = txbPassWrite.Text;
+            ClsConfig.DbEmployees = txbDbEmployees.Text;
             conf.Guardar();
             xml.PutInConfFile();
 
@@ -59,6 +62,10 @@ namespace SisUvex.Configuracion
         private void btnEscritura_Click(object sender, EventArgs e)
         {
             ConnectionTry(txbServer.Text, txbBdWrite.Text, txbUserWrite.Text, txbPassWrite.Text);
+        }
+        private void btnEmpleados_Click(object sender, EventArgs e)
+        {
+            ConnectionTry(txbServer.Text, txbDbEmployees.Text, txbUserWrite.Text, txbPassWrite.Text);
         }
         public void ConnectionTry(string svr, string bd, string user, string pass)
         {
@@ -84,7 +91,7 @@ namespace SisUvex.Configuracion
 
         private void FrmConfiguracion_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing && isFrmLoginScreen)
             {
                 Application.Exit();
             }

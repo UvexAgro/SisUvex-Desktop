@@ -47,8 +47,13 @@
             lblUserWrite = new Label();
             btnGuardar = new Button();
             lblServidor = new Label();
+            groupBox1 = new GroupBox();
+            btnEmpleados = new Button();
+            txbDbEmployees = new TextBox();
+            label1 = new Label();
             gpbConn.SuspendLayout();
             gpbEscritura.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // lblbdConn
@@ -210,7 +215,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(340, 338);
+            btnGuardar.Location = new Point(340, 422);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 11;
@@ -227,16 +232,57 @@
             lblServidor.TabIndex = 13;
             lblServidor.Text = "Server:";
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnEmpleados);
+            groupBox1.Controls.Add(txbDbEmployees);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Location = new Point(12, 334);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(403, 82);
+            groupBox1.TabIndex = 14;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Base de datos empleados";
+            // 
+            // btnEmpleados
+            // 
+            btnEmpleados.Location = new Point(280, 48);
+            btnEmpleados.Name = "btnEmpleados";
+            btnEmpleados.Size = new Size(110, 23);
+            btnEmpleados.TabIndex = 13;
+            btnEmpleados.Text = "Probar conexión";
+            btnEmpleados.UseVisualStyleBackColor = true;
+            btnEmpleados.Click += btnEmpleados_Click;
+            // 
+            // txbDbEmployees
+            // 
+            txbDbEmployees.Location = new Point(96, 19);
+            txbDbEmployees.Name = "txbDbEmployees";
+            txbDbEmployees.Size = new Size(294, 23);
+            txbDbEmployees.TabIndex = 7;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 22);
+            label1.Name = "label1";
+            label1.Size = new Size(82, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Base de datos:";
+            // 
             // FrmConfiguracion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(427, 373);
+            ClientSize = new Size(427, 456);
+            Controls.Add(groupBox1);
             Controls.Add(lblServidor);
             Controls.Add(btnGuardar);
             Controls.Add(gpbEscritura);
             Controls.Add(txbServer);
             Controls.Add(gpbConn);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "FrmConfiguracion";
             Text = "Configuracion de conexión";
             FormClosing += FrmConfiguracion_FormClosing;
@@ -244,6 +290,8 @@
             gpbConn.PerformLayout();
             gpbEscritura.ResumeLayout(false);
             gpbEscritura.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -269,5 +317,9 @@
         private Button btnGuardar;
         private Button btnLectura;
         private Button btnEscritura;
+        private GroupBox groupBox1;
+        private Button btnEmpleados;
+        private TextBox txbDbEmployees;
+        private Label label1;
     }
 }

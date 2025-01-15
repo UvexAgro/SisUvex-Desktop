@@ -98,7 +98,7 @@ namespace SisUvex.Configuracion
             if (!File.Exists(rutaConf))
             {
                 //1.- Crear xmlTemp
-                string textoBase = "<Configuracion>\r\n\t<server></server>\r\n\t<dbConn></dbConn>\r\n\t<userConn></userConn>\r\n\t<passConn></passConn>\r\n\t<dbWrite></dbWrite>\r\n\t<userWrite></userWrite>\r\n\t<passWrite></passWrite>\r\n\t<lastLogin></lastLogin>\r\n</Configuracion>\r\n";
+                string textoBase = "<Configuracion>\r\n\t<server></server>\r\n\t<dbConn></dbConn>\r\n\t<userConn></userConn>\r\n\t<passConn></passConn>\r\n\t<dbWrite></dbWrite>\r\n\t<userWrite></userWrite>\r\n\t<passWrite></passWrite>\r\n\t<dbEmployees></dbEmployees>\r\n\t<lastLogin></lastLogin>\r\n</Configuracion>\r\n";
 
                 File.WriteAllText(rutaTemp, textoBase);
 

@@ -338,6 +338,7 @@ namespace SisUvex
         private void conexiónToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmConfiguracion cat = new FrmConfiguracion();
+            cat.isFrmLoginScreen = false;
             AbrirFormularioDialog(cat, 4);
         }
 
