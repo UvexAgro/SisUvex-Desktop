@@ -19,6 +19,7 @@ namespace SisUvex.Configuracion
         public static string PrintTags { get; set; }
         public static string PrintPallet { get; set; }
         public static string PrintCode { get; set; }
+        public static string DbEmployees { get; set; }
         public static string lastLogin{ get; set; }
 
         //este si jalostring path2 = Path.Combine("Configuracion", "configuracion.xml");
@@ -44,6 +45,7 @@ namespace SisUvex.Configuracion
             UserWrite = configuracion.Element("userWrite").Value;
             PassWrite = configuracion.Element("passWrite").Value;
             lastLogin = configuracion.Element("lastLogin").Value;
+            DbEmployees = configuracion.Element("dbEmployees").Value;
         }
 
         public void Guardar()
@@ -61,7 +63,8 @@ namespace SisUvex.Configuracion
                     new XElement("printTags", PrintTags),
                     new XElement("printPallet", PrintPallet),
                     new XElement("printCode", PrintCode),
-                    new XElement("lastLogin", lastLogin)
+                    new XElement("lastLogin", lastLogin),
+                    new XElement("dbEmployees", DbEmployees)
                 )
             );
 

@@ -38,6 +38,7 @@
             label1 = new Label();
             btnBuscarCodigo = new Button();
             lblApellido = new Label();
+            btnSelectEmployeeFrm = new Button();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
             // 
@@ -116,11 +117,11 @@
             // btnBuscarCodigo
             // 
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
-            btnBuscarCodigo.Image = Properties.Resources.BuscarLupa1;
-            btnBuscarCodigo.Location = new Point(331, 62);
+            btnBuscarCodigo.Location = new Point(371, 61);
             btnBuscarCodigo.Name = "btnBuscarCodigo";
-            btnBuscarCodigo.Size = new Size(31, 33);
+            btnBuscarCodigo.Size = new Size(34, 33);
             btnBuscarCodigo.TabIndex = 26;
+            btnBuscarCodigo.Text = "...";
             btnBuscarCodigo.UseVisualStyleBackColor = true;
             btnBuscarCodigo.Click += btnBuscarCodigo_Click;
             // 
@@ -133,11 +134,23 @@
             lblApellido.Size = new Size(0, 25);
             lblApellido.TabIndex = 28;
             // 
+            // btnSelectEmployeeFrm
+            // 
+            btnSelectEmployeeFrm.Font = new Font("Segoe UI", 14F);
+            btnSelectEmployeeFrm.Image = Properties.Resources.BuscarLupa1;
+            btnSelectEmployeeFrm.Location = new Point(331, 61);
+            btnSelectEmployeeFrm.Name = "btnSelectEmployeeFrm";
+            btnSelectEmployeeFrm.Size = new Size(34, 33);
+            btnSelectEmployeeFrm.TabIndex = 29;
+            btnSelectEmployeeFrm.UseVisualStyleBackColor = true;
+            btnSelectEmployeeFrm.Click += btnSelectEmployeeFrm_Click;
+            // 
             // FrmNombreYCodigo2x1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(525, 148);
+            Controls.Add(btnSelectEmployeeFrm);
             Controls.Add(lblApellido);
             Controls.Add(btnBuscarCodigo);
             Controls.Add(lblCantidad);
@@ -154,6 +167,7 @@
             MinimumSize = new Size(541, 187);
             Name = "FrmNombreYCodigo2x1";
             Text = "Imprimir código de empleado con nombre QR";
+            Load += FrmNombreYCodigo2x1_Load;
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -169,5 +183,7 @@
         private Label label1;
         private Button btnBuscarCodigo;
         private Label lblApellido;
+        private Button button1;
+        private Button btnSelectEmployeeFrm;
     }
 }

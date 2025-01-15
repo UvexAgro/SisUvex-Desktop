@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZXing.QrCode.Internal;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.Etiquetas.PrintLabels
@@ -73,6 +74,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringPresentationZPL(eTag.Lbs+" LB Bags", string.Empty, string.Empty, string.Empty, string.Empty);//PRESENTACION FOUR STARS
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
+                case
+                    "06":
+                    //QR ESPARRAGO
+                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
+                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringQrSpaceDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR CON ESPACIO QR
+
+                    break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); ; //DISTRIBUIDOR STANDAR
@@ -80,17 +89,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     break;
             }
             SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
-            //GenPti.GrcodeZPLString(Qrcode, Size, Program);
             SetStringUpcZPL(eTag.upcGTIN);
             SetStringVoicePicKCodeZPL(eTag.voicePickCode, eTag.dateWorkPlan);
 
             reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
 
-            return SuperPrintPtiTag(copies);
+            if (eTag.idPti == "06") //QR ESPARRAGO
+                return SuperPrintPtiTagWithQrUniqueBox(copies);
+            else
+                return SuperPrintPtiTag(copies);
         }
 
         /*Sobrecarga del metodo para generar el string ZPL para la etiqueta PTI*/
-        public string SuperPrintPtiTag(int copies)
+        private string SuperPrintPtiTag(int copies)
         {
             labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
@@ -102,8 +113,38 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             return superString;
         }
 
-        /*Se crea el string ZPL para el código de barras GTIN*/
-        public void SetStringGtinZPL(string Gtin, DateTime? Date, string Lote, string Workgroup)
+        private string SuperPrintPtiTagWithQrUniqueBox(int copies)
+        {
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
+
+            string superString = string.Empty;
+
+            for (int i = 0; i < copies; i++)
+            {
+                string idUniqueBox = ClsUniqueBox.CreateNewBox(eTag.idWorkPlan);
+
+                qrcodeZPL = SetStringQrcodeEsparragoZPL(idUniqueBox, eTag.nameSize, eTag.idGTIN);
+
+                superString += "\n" + labelsZPLString + qrcodeZPL + zplEnd;
+
+                qrcodeZPL = string.Empty;
+            }
+            return superString;
+        }
+        private string SetStringQrcodeEsparragoZPL(string Qrcode, string sizeValue, string idGtin)
+        {
+            if (Qrcode.Length > 0)
+                qrcodeZPL = "\n^FX QR CODE\n" +
+                        "^FO24,280^BY2^BQN,2,4,Q,7^FDQA0" + Qrcode + " " + idGtin + " " + sizeValue + "^FS\n" +
+                        "^CFE,20\n" +
+                        "^FO23,392^FD" + Qrcode.Substring(2, 7) + "^FS\n";
+            else
+                qrcodeZPL = string.Empty;
+
+            return qrcodeZPL;
+        }
+
+        private void SetStringGtinZPL(string Gtin, DateTime? Date, string Lote, string Workgroup)
         {
             string DateShortUS = Date?.ToString("yyMMdd") ?? DateTime.Now.ToString("yyMMdd");
 
@@ -116,8 +157,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         "^FO100,95^FD(01)" + Gtin + "(13)" + DateShortUS + "(10)" + Lote + "C" + Workgroup + "^FS\n";
         }
 
-        /*Se crea el string ZPL para la variedad y el cultivo*/
-        public void SetStringCropVarietySizeZPL(string Crop, string Variety, string Size)
+        private void SetStringCropVarietySizeZPL(string Crop, string Variety, string Size)
         {
             //ChangeFontSize(Variety);
 
@@ -144,7 +184,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             //                "^FO15,230^FDProduce of Mexico^FS\n";
             //}
         }
-        public void SetStringCropVarietyZPL(string Crop, string Variety)
+        private void SetStringCropVarietyZPL(string Crop, string Variety)
         {
             //ChangeFontSize(Variety);
 
@@ -171,7 +211,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             //                "^FO15,230^FDProduce of Mexico^FS\n";
             //}
         }
-        public void SetStringAlbertonsSignatureSelect(string colorGenericName)
+        private void SetStringAlbertonsSignatureSelect(string colorGenericName)
         {
             //EN LA BASE DE DATOS LA TABLA DE PACK_COLOR TIENE LA COLUMNA DE v_genericName y se suele poner como COLOR SEEDLESS
             varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
@@ -179,17 +219,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
         private void SetStringPresentationZPL(string Weight, string Presentation, string container, string preLabel, string postLabel)
         {
+            MessageBox.Show("weight:" + Weight + "\npresentation:" + Presentation + "\nContainer:" + container + "\nPre:" + preLabel + "\npost:" + postLabel);
+
             string stringPresentation = container + Weight;
             if (!preLabel.IsNullOrEmpty()) stringPresentation += " " + preLabel;
             stringPresentation += " " + Presentation;
             if (!postLabel.IsNullOrEmpty()) stringPresentation += " " + postLabel;
 
             presentationZPL = "^FX PRESENTATION\n" +
-                        $"^CFF,60,10 ^FO25,190^FD{stringPresentation}^FS\n" +
+                        $"^CFF,60,10 ^FO25,190^FD" + stringPresentation + "^FS\n" +
                          "^CFF,30,10 ^FO25,255^FDProduce of Mexico^FS\n";
         }
 
-        public string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
+        private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
             //ChangeFontSize(Distributor);
 
@@ -202,9 +244,22 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             return distributorZPL;
         }
+        private string SetStringQrSpaceDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
+        {
+            //ChangeFontSize(Distributor);
+
+            distributorZPL = "^FX DISTRIBUTOR\n" +
+                        "^CFF,30,10\n" +
+                        "^FO133,300^FD" + Distributor + "^FS\n" +
+                        "^CFF,30,10\n" +
+                        "^FO133,335^FD" + AddresDistributor1 + "^FS\n" +
+                        "^FO133,365^FD" + AddresDistributor2 + "^FS\n";
+
+            return distributorZPL;
+        }
 
         /* Se crea el string ZPL para el código QR de caja unica por plan de trabajo*/
-        public string SetStringGrcodeZPL(string Qrcode, string Size, string Program)
+        private string SetStringGrcodeZPL(string Qrcode, string Size, string Program)
         {
             if (Qrcode.Length > 0)
             {
@@ -222,7 +277,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         /*Se crea el string ZPL para el código de barras UPC*/
-        public void SetStringUpcZPL(string upc)
+        private void SetStringUpcZPL(string upc)
         {
             if (upc.Length == 12)
             {
@@ -240,7 +295,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         /*Se crea el string ZPL para el Voice Pick Code*/
-        public void SetStringVoicePicKCodeZPL(string VPC, DateTime? Date)
+        private void SetStringVoicePicKCodeZPL(string VPC, DateTime? Date)
         {
             string VPC1 = VPC.Substring(0, 2);
             string VPC2 = VPC.Substring(2, 2);
@@ -286,5 +341,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             return orientation;
         }
+
     }
 }

@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using ExcelDataReader.Log;
 using iText.Layout.Element;
 using SisUvex.Catalogos;
+using SisUvex.Configuracion;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -178,7 +179,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                             {
                                 codigo = cls.FormatoCeros(codigo, "000000");
                                 bool valido = true;
-                                string query = "USE AgroSmart_SanAndres UPDATE nomempleados SET ";
+                                string query = $"USE {ClsConfig.DbEmployees} UPDATE nomempleados SET ";
 
                                 //elegir que columna de la bd modificar
                                 switch (columna)
