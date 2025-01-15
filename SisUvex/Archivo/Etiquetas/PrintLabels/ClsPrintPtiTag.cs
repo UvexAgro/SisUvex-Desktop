@@ -13,13 +13,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         public void SendToPrintPtiTag(ETagInfo eTagInfo, int copies, bool reverseOrientation)
         {
-            ClsConfPrinter.Leer();
-
             string SuperString = GenPti.GenerateSuperStringTag(eTagInfo, copies, reverseOrientation);
 
             PrintZPL(SuperString, ClsConfPrinter.PrintTags);
 
             Clipboard.SetText(SuperString);
+            MessageBox.Show(SuperString);
         }
 
         public void SetTagInfo(string workPlan)
@@ -31,7 +30,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             string SuperString = GenPallet.GenerateSuperStringTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation);
             PrintZPL(SuperString, ClsConfPrinter.PrintPallet);
-            Clipboard.SetText(SuperString);
+            //Clipboard.SetText(SuperString);
         }
 
         private void PrintZPL(string superPrint, string printer)

@@ -1,12 +1,14 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SisUvex.Archivo.Etiquetas.NombreYCodigo2x1;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Configuracion;
 
 namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
 {
     public partial class FrmNombreYCodigo2x1 : Form
     {
         ClsNombreYCodigo2x1 cls = new ClsNombreYCodigo2x1();
+        ClsConfPrinter ClsConfPrinter = new ClsConfPrinter();
         public FrmNombreYCodigo2x1()
         {
             InitializeComponent();
@@ -24,8 +26,14 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
             sel.OpenSelectionForm("EmployeeBasic", "Código");
 
             if (!sel.SelectedValue.IsNullOrEmpty())
+            {
                 txbCodigoEmp.Text = sel.SelectedValue;
 
+                BuscarEmpleadoCodigo();
+            }
+        }
+        private void btnSelectEmployeeFrm_Click(object sender, EventArgs e)
+        {
             BuscarEmpleadoCodigo();
         }
 
@@ -79,6 +87,11 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
             {
                 ImprimirEtiquetaEmpleado();
             }
+        }
+
+        private void FrmNombreYCodigo2x1_Load(object sender, EventArgs e)
+        {
+            ClsConfPrinter.Leer();
         }
     }
 }

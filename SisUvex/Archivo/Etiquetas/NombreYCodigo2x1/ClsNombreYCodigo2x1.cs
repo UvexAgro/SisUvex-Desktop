@@ -13,37 +13,10 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
 {
     internal class ClsNombreYCodigo2x1 : ClsCatalogos
     {
+
+
         SQLControl sql = new SQLControl();
         private string? _impresoraNombre = null;
-
-        public DataTable ListadoEmpleados(string nombre)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                string query = "  SELECT id_employee AS 'Código', v_lastNamePat AS 'Apellido paterno ', v_lastNameMat AS 'Apellido materno', v_name AS 'Nombre', id_paymentPlace AS 'LP'FROM Nom_Employees";
-
-                if (nombre.Length != 0)
-                {
-                    query += $" WHERE CONCAT(v_lastNamePat,' ',v_lastNameMat,' ', v_name) LIKE '%{nombre}%'";
-                }
-
-                sql.OpenConectionWrite();
-
-                SqlDataAdapter da = new SqlDataAdapter(query, sql.cnn);
-                da.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo empleados");
-                return dt;
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
 
         public bool DatosEmpleado (ref Label lblNombre, ref Label lblApellido, ref TextBox txbIdEmpleado)
         {            
@@ -126,42 +99,5 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
             }
            
         }
-
-        /*
-
-        public void GetImpresora()
-        {
-            StreamReader leer;
-            List<string> lista = new List<string>();
-            string[] separador = { Environment.NewLine, "=" };
-            string printCode = "";
-            string pathFile = "C:\\SisUvex\\configPrinter.txt";
-
-            try
-            {
-                leer = File.OpenText(pathFile);
-                string cadenaTexto = leer.ReadToEnd();
-                lista = cadenaTexto.Split(separador, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                for (int i = 0; i < lista.Count - 1; i++)
-                {
-                    Console.WriteLine(lista[i]);
-                    switch (lista[i].Trim())
-                    {
-                        case "printCode": printCode = lista[i + 1]; break;
-                        default:; break;
-                    }
-                }
-                leer.Close();
-
-                _impresoraNombre = printCode;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Read Printers");
-            }
-        }  
-        
-        */
     }
 }

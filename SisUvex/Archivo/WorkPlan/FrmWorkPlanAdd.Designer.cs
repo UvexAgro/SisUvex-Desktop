@@ -182,7 +182,6 @@
             dgvGTIN.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvGTIN.RowHeadersVisible = false;
             dgvGTIN.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvGTIN.RowTemplate.Height = 25;
             dgvGTIN.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvGTIN.Size = new Size(636, 177);
             dgvGTIN.TabIndex = 161;
@@ -640,6 +639,7 @@
             Controls.Add(label8);
             Controls.Add(label2);
             Controls.Add(label4);
+            MinimumSize = new Size(676, 594);
             Name = "FrmWorkPlanAdd";
             Text = "Añadir plan de trabajo";
             Load += FrmWorkPlanAdd_Load;
