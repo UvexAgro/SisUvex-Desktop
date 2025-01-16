@@ -17,8 +17,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             PrintZPL(SuperString, ClsConfPrinter.PrintTags);
 
-            Clipboard.SetText(SuperString);
-            MessageBox.Show(SuperString);
+            //Clipboard.SetText(SuperString);
         }
 
         public void SetTagInfo(string workPlan)

@@ -139,14 +139,14 @@ namespace SisUvex.Archivo.WorkPlan
                 idVariety = clsWP._frmAdd.txbIdLot.Text.Substring(5, 2);
 
             if (!IsChbGTINChecked)
-                filter = $"{Gtin.ColumnActive} = '1'";
+                filter = $" {Gtin.ColumnActive} = '1' ";
 
             if (!idVariety.IsNullOrEmpty())
             {
                 if (!filter.IsNullOrEmpty())
                     filter += $" AND ";
 
-                filter += $"{Variety.ColumnId} = '{idVariety}'";
+                filter += $" {Variety.ColumnId} = '{idVariety}' ";
             }
 
             if (!idDistributor.IsNullOrEmpty())
@@ -154,7 +154,7 @@ namespace SisUvex.Archivo.WorkPlan
                 if (!filter.IsNullOrEmpty())
                     filter += $" AND ";
 
-                filter += $"{Distributor.ColumnId} = '{idDistributor}'";
+                filter += $" {Distributor.ColumnId} = '{idDistributor}' ";
             }
 
             dt.DefaultView.RowFilter = filter;
@@ -170,7 +170,7 @@ namespace SisUvex.Archivo.WorkPlan
                 if (!filter.IsNullOrEmpty())
                     filter += $" OR ";
 
-                filter += $"{Gtin.ColumnId} = '{clsWP._frmAdd.txbIdGTIN.Text}'";
+                filter += $" {Gtin.ColumnId} = '{clsWP._frmAdd.txbIdGTIN.Text}' ";
 
                 dt.DefaultView.RowFilter = filter;
                 clsWP._frmAdd.dgvGTIN.DataSource = dt;
@@ -189,7 +189,7 @@ namespace SisUvex.Archivo.WorkPlan
 
             if (idGTIN.Length == 5 && idLote.Length == 4 && fecha > new DateTime(2000, 1, 1))
             {
-                string GTIN = ClsQuerysDB.GetData($"SELECT v_GTIN FROM Pack_GTIN WHERE id_GTIN = '{idGTIN}'");
+                string GTIN = ClsQuerysDB.GetData($" SELECT v_GTIN FROM Pack_GTIN WHERE id_GTIN = '{idGTIN}' ");
 
                 if (GTIN != string.Empty)
                     VPC = ClsVoicePickCode.Calculator(GTIN, idLote, fecha);
@@ -210,7 +210,7 @@ namespace SisUvex.Archivo.WorkPlan
         public static void DgvLoadActives(DataGridView dataGridView, string tableNameDB)
         {
             DataTable dt = ClsComboBoxFiles.GetCboCatalogDataTable(tableNameDB);
-            dt.DefaultView.RowFilter = $"{Gtin.ColumnActive} = '1'";
+            dt.DefaultView.RowFilter = $" {Gtin.ColumnActive} = '1' ";
 
             LoadDataGridView(dataGridView, dt);
         }
