@@ -2,6 +2,7 @@
 using System.Media;
 using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
@@ -53,12 +54,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             ApplyEventComboBoxPrintLabels(frm.cboWorkGroup);
             ApplyEventDateTimePickerPrintLabels(frm.dtpWorkDay);
             ApplyEventComboBoxWorkPlanPrintLabels(frm.cboWorkPlan);
-
+            
             LoadDgvLastPallets();
         }
         public void ApplyEventComboBoxPrintLabels(ComboBox comboBox)
         {
-            
             comboBox.TextChanged += (sender, e) =>
             {
                 dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
@@ -66,7 +66,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 frm.cboWorkPlan.SelectedIndex = 0;
 
             };
-
         }
         public void ApplyEventDateTimePickerPrintLabels(DateTimePicker dateTimePicker)
         {
@@ -95,7 +94,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             frm.lblDistributorAddress.Text  = eTagInfo.addressDistributor;
             frm.lblDistributorCity.Text     = eTagInfo.cityDistributor;
             frm.lblContainerName.Text       = eTagInfo.nameContainer;
-            frm.lblPresentationName.Text    = eTagInfo.preLabel + " " + eTagInfo.namePresentation + " " + eTagInfo.postLabel;
             frm.lblLbsNum.Text              = eTagInfo.Lbs;
             frm.lblSizeName.Text            = eTagInfo.nameSize;
             frm.txbBoxesTotaL.Text          = eTagInfo.palletBoxes;
@@ -104,6 +102,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             frm.lblGtinNumber.Text          = eTagInfo.valueGTIN;
             frm.lblUpcNumber.Text           = eTagInfo.upcGTIN;
             frm.lblPluNumber.Text           = eTagInfo.PLU;
+
+            string presentation = "";
+            if (eTagInfo.preLabel.IsNullOrEmpty())
+                presentation += eTagInfo.preLabel;
+            presentation += eTagInfo.namePresentation;
+            if (eTagInfo.postLabel.IsNullOrEmpty())
+                presentation += eTagInfo.postLabel;
+            frm.lblPresentationName.Text = presentation;
         }
 
         public void SetTagInfo(string idWorkPlan, ETagInfo eTag)

@@ -108,6 +108,7 @@
             áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
             asignarComedorToolStripMenuItem1 = new ToolStripMenuItem();
             reportesComedorToolStripMenuItem1 = new ToolStripMenuItem();
+            catálogoVentanillasToolStripMenuItem = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             palletsToolStripMenuItem = new ToolStripMenuItem();
             manifiestosToolStripMenuItem = new ToolStripMenuItem();
@@ -119,7 +120,7 @@
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            catálogoVentanillasToolStripMenuItem = new ToolStripMenuItem();
+            sincronizarRegistrosToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -639,7 +640,7 @@
             // 
             // comedorToolStripMenuItem
             // 
-            comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, catálogoVentanillasToolStripMenuItem });
+            comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, catálogoVentanillasToolStripMenuItem, sincronizarRegistrosToolStripMenuItem });
             comedorToolStripMenuItem.Name = "comedorToolStripMenuItem";
             comedorToolStripMenuItem.Size = new Size(180, 22);
             comedorToolStripMenuItem.Text = "Comedor";
@@ -647,23 +648,30 @@
             // áreaComedorToolStripMenuItem1
             // 
             áreaComedorToolStripMenuItem1.Name = "áreaComedorToolStripMenuItem1";
-            áreaComedorToolStripMenuItem1.Size = new Size(180, 22);
+            áreaComedorToolStripMenuItem1.Size = new Size(181, 22);
             áreaComedorToolStripMenuItem1.Text = "Área comedor";
             áreaComedorToolStripMenuItem1.Click += áreaComedorToolStripMenuItem1_Click;
             // 
             // asignarComedorToolStripMenuItem1
             // 
             asignarComedorToolStripMenuItem1.Name = "asignarComedorToolStripMenuItem1";
-            asignarComedorToolStripMenuItem1.Size = new Size(180, 22);
+            asignarComedorToolStripMenuItem1.Size = new Size(181, 22);
             asignarComedorToolStripMenuItem1.Text = "Asignar comedor";
             asignarComedorToolStripMenuItem1.Click += asignarComedorToolStripMenuItem1_Click;
             // 
             // reportesComedorToolStripMenuItem1
             // 
             reportesComedorToolStripMenuItem1.Name = "reportesComedorToolStripMenuItem1";
-            reportesComedorToolStripMenuItem1.Size = new Size(180, 22);
+            reportesComedorToolStripMenuItem1.Size = new Size(181, 22);
             reportesComedorToolStripMenuItem1.Text = "Reportes comedor";
             reportesComedorToolStripMenuItem1.Click += reportesComedorToolStripMenuItem1_Click;
+            // 
+            // catálogoVentanillasToolStripMenuItem
+            // 
+            catálogoVentanillasToolStripMenuItem.Name = "catálogoVentanillasToolStripMenuItem";
+            catálogoVentanillasToolStripMenuItem.Size = new Size(181, 22);
+            catálogoVentanillasToolStripMenuItem.Text = "Catálogo ventanillas";
+            catálogoVentanillasToolStripMenuItem.Click += catálogoVentanillasToolStripMenuItem_Click;
             // 
             // consultasToolStripMenuItem
             // 
@@ -675,7 +683,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(180, 22);
+            palletsToolStripMenuItem.Size = new Size(135, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -683,7 +691,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(180, 22);
+            manifiestosToolStripMenuItem.Size = new Size(135, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -741,12 +749,12 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // catálogoVentanillasToolStripMenuItem
+            // sincronizarRegistrosToolStripMenuItem
             // 
-            catálogoVentanillasToolStripMenuItem.Name = "catálogoVentanillasToolStripMenuItem";
-            catálogoVentanillasToolStripMenuItem.Size = new Size(181, 22);
-            catálogoVentanillasToolStripMenuItem.Text = "Catálogo ventanillas";
-            catálogoVentanillasToolStripMenuItem.Click += catálogoVentanillasToolStripMenuItem_Click;
+            sincronizarRegistrosToolStripMenuItem.Name = "sincronizarRegistrosToolStripMenuItem";
+            sincronizarRegistrosToolStripMenuItem.Size = new Size(181, 22);
+            sincronizarRegistrosToolStripMenuItem.Text = "Sincronizar registros";
+            sincronizarRegistrosToolStripMenuItem.Click += sincronizarRegistrosToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
@@ -865,5 +873,6 @@
         private ToolStripMenuItem asignarComedorToolStripMenuItem1;
         private ToolStripMenuItem reportesComedorToolStripMenuItem1;
         private ToolStripMenuItem catálogoVentanillasToolStripMenuItem;
+        private ToolStripMenuItem sincronizarRegistrosToolStripMenuItem;
     }
 }

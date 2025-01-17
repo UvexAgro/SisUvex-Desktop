@@ -49,6 +49,7 @@ using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Nomina.Comedores.DiningHall;
 using SisUvex.Nomina.Comedores.DiningReports;
+using SisUvex.Nomina.Comedores.Registers.SyncRegisters;
 
 namespace SisUvex
 {
@@ -464,6 +465,12 @@ namespace SisUvex
         {
             ClsDiningHall cls = new ClsDiningHall();
             AbrirVentanaHijo(cls._frmCat, 1);
+        }
+
+        private void sincronizarRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSyncRegisters cat = new FrmSyncRegisters();
+            AbrirFormularioDialog(cat, 1);
         }
     }
 }

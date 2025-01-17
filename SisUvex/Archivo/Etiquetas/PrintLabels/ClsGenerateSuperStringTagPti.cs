@@ -136,8 +136,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (Qrcode.Length > 0)
                 qrcodeZPL = "\n^FX QR CODE\n" +
                         "^FO24,280^BY2^BQN,2,4,Q,7^FDQA0" + Qrcode + " " + idGtin + " " + sizeValue + "^FS\n" +
-                        "^CFE,20\n" +
-                        "^FO23,392^FD" + Qrcode.Substring(2, 7) + "^FS\n";
+                        "^CFC,15\n" +
+                        "^FO32,392^FD" + Qrcode.Substring(2, 7) + "^FS\n";
             else
                 qrcodeZPL = string.Empty;
 
@@ -219,8 +219,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
         private void SetStringPresentationZPL(string Weight, string Presentation, string container, string preLabel, string postLabel)
         {
-            MessageBox.Show("weight:" + Weight + "\npresentation:" + Presentation + "\nContainer:" + container + "\nPre:" + preLabel + "\npost:" + postLabel);
-
             string stringPresentation = container + Weight;
             if (!preLabel.IsNullOrEmpty()) stringPresentation += " " + preLabel;
             stringPresentation += " " + Presentation;

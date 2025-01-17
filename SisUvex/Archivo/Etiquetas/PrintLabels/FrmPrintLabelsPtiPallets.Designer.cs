@@ -920,7 +920,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Name = "FrmPrintLabelsPtiPallets";
             Text = "Impresión de etiquetas PTI y Pallet";
             WindowState = FormWindowState.Maximized;
-            Load += FrmPrintLabelsPtiPallets_Load;
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).EndInit();
             grbTag.ResumeLayout(false);
@@ -940,6 +939,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
+            Load += FrmPrintLabelsPtiPallets_Load;
+
         }
 
         #endregion

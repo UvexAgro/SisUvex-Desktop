@@ -86,23 +86,25 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 
         private static List<Dictionary<string, object>> ConvertDataTableToList(DataTable table)
         {
-            //CONVIERTE EL DATATABLE A UNA LISTA DE DICCIONARIOS
+            //CONVIERTE EL DATATABLE A UNA LISTA DE DICCIONARIOS INCLUYENDO NULLS
             var result = new List<Dictionary<string, object>>();
             foreach (DataRow row in table.Rows)
             {
                 var rowDict = new Dictionary<string, object>();
                 foreach (DataColumn column in table.Columns)
                 {
-                    rowDict[column.ColumnName] = row[column];
+                    // Reemplazar DBNull.Value por null
+                    rowDict[column.ColumnName] = row[column] == DBNull.Value ? null : row[column];
                 }
                 result.Add(rowDict);
             }
             return result;
         }
 
+
         private static DataTable ConvertListToDataTable(List<Dictionary<string, object>> list)
         {
-            //CONVIERTE LA LISTA DE DICCIONARIOS A UN DATATABLE
+            //CONVIERTE LA LISTA DE DICCIONARIOS A UN DATATABLE INCLUYENDO NULLS
             DataTable table = new DataTable();
             if (list.Count > 0)
             {
@@ -116,13 +118,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     var row = table.NewRow();
                     foreach (var column in rowDict.Keys)
                     {
-                        row[column] = rowDict[column];
+                        // Reemplazar null por DBNull.Value
+                        row[column] = rowDict[column] ?? DBNull.Value;
                     }
                     table.Rows.Add(row);
                 }
             }
             return table;
         }
+
 
         private static DataTable GetDataTableForFile(string catalogName)
         {// OBTIENE EL DATATABLE SEGUN LA QUERY SEGUN QUE OBJETO SEA
