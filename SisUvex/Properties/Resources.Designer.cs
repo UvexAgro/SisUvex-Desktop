@@ -63,6 +63,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap basuraIcon16 {
+            get {
+                object obj = ResourceManager.GetObject("basuraIcon16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BuscarLupa {
             get {
                 object obj = ResourceManager.GetObject("BuscarLupa", resourceCulture);
@@ -106,6 +116,16 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap Instrucciones_cargar_excel_asistencia_de_empaque {
             get {
                 object obj = ResourceManager.GetObject("Instrucciones cargar excel asistencia de empaque", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mas_16 {
+            get {
+                object obj = ResourceManager.GetObject("mas+16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

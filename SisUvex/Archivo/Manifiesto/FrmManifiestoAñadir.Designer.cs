@@ -32,8 +32,8 @@ namespace SisUvex.Archivo.Manifiesto
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifiestoAñadir));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             lblTitulo = new Label();
             lblLinea = new Label();
             txbId = new TextBox();
@@ -190,8 +190,8 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             // btnCancelar
             // 
-            btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancelar.Location = new Point(853, 653);
+            btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancelar.Location = new Point(684, 652);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(64, 25);
             btnCancelar.TabIndex = 7;
@@ -201,8 +201,8 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             // btnAceptar
             // 
-            btnAceptar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAceptar.Location = new Point(783, 653);
+            btnAceptar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnAceptar.Location = new Point(614, 652);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(64, 25);
             btnAceptar.TabIndex = 8;
@@ -338,11 +338,12 @@ namespace SisUvex.Archivo.Manifiesto
             // btnBorrarPallet
             // 
             btnBorrarPallet.Font = new Font("Microsoft Sans Serif", 8.25F);
-            btnBorrarPallet.Location = new Point(690, 44);
+            btnBorrarPallet.Image = Properties.Resources.basuraIcon16;
+            btnBorrarPallet.ImageAlign = ContentAlignment.MiddleRight;
+            btnBorrarPallet.Location = new Point(606, 45);
             btnBorrarPallet.Name = "btnBorrarPallet";
-            btnBorrarPallet.Size = new Size(120, 21);
+            btnBorrarPallet.Size = new Size(23, 23);
             btnBorrarPallet.TabIndex = 225;
-            btnBorrarPallet.Text = "Borrar seleccionado";
             btnBorrarPallet.TextAlign = ContentAlignment.TopCenter;
             btnBorrarPallet.UseVisualStyleBackColor = true;
             btnBorrarPallet.Click += btnBorrarPallet_Click;
@@ -350,11 +351,12 @@ namespace SisUvex.Archivo.Manifiesto
             // btnAñadirPallet
             // 
             btnAñadirPallet.Font = new Font("Microsoft Sans Serif", 9F);
-            btnAñadirPallet.Location = new Point(669, 44);
+            btnAñadirPallet.Image = Properties.Resources.mas_16;
+            btnAñadirPallet.ImageAlign = ContentAlignment.BottomRight;
+            btnAñadirPallet.Location = new Point(574, 45);
             btnAñadirPallet.Name = "btnAñadirPallet";
-            btnAñadirPallet.Size = new Size(20, 23);
+            btnAñadirPallet.Size = new Size(23, 23);
             btnAñadirPallet.TabIndex = 224;
-            btnAñadirPallet.Text = "+";
             btnAñadirPallet.TextAlign = ContentAlignment.TopRight;
             btnAñadirPallet.UseVisualStyleBackColor = true;
             btnAñadirPallet.Click += btnAñadirPallet_Click;
@@ -362,17 +364,17 @@ namespace SisUvex.Archivo.Manifiesto
             // label15
             // 
             label15.AutoSize = true;
-            label15.Font = new Font("Microsoft Sans Serif", 9F);
-            label15.Location = new Point(471, 45);
+            label15.Font = new Font("Microsoft Sans Serif", 8.25F);
+            label15.Location = new Point(494, 33);
             label15.Name = "label15";
-            label15.Size = new Size(62, 15);
+            label15.Size = new Size(38, 13);
             label15.TabIndex = 223;
-            label15.Text = "No. pallet:";
+            label15.Text = "N. pal:";
             // 
             // txbIdPallet
             // 
             txbIdPallet.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdPallet.Location = new Point(530, 44);
+            txbIdPallet.Location = new Point(496, 46);
             txbIdPallet.MaxLength = 5;
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(47, 21);
@@ -757,7 +759,7 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             // btnTodoDistribuidor
             // 
-            btnTodoDistribuidor.BackgroundImage = (System.Drawing.Image)resources.GetObject("btnTodoDistribuidor.BackgroundImage");
+            btnTodoDistribuidor.BackgroundImage = (Image)resources.GetObject("btnTodoDistribuidor.BackgroundImage");
             btnTodoDistribuidor.BackgroundImageLayout = ImageLayout.Stretch;
             btnTodoDistribuidor.Enabled = false;
             btnTodoDistribuidor.Font = new Font("Microsoft Sans Serif", 9F);
@@ -1240,14 +1242,14 @@ namespace SisUvex.Archivo.Manifiesto
             dgvListado.BackgroundColor = SystemColors.ControlLightLight;
             dgvListado.BorderStyle = BorderStyle.Fixed3D;
             dgvListado.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvListado.EnableHeadersVisualStyles = false;
             dgvListado.ImeMode = ImeMode.NoControl;
             dgvListado.Location = new Point(462, 71);
@@ -1255,16 +1257,15 @@ namespace SisUvex.Archivo.Manifiesto
             dgvListado.Name = "dgvListado";
             dgvListado.ReadOnly = true;
             dgvListado.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvListado.RowHeadersVisible = false;
-            dgvListado.RowTemplate.Height = 25;
             dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvListado.Size = new Size(455, 576);
             dgvListado.TabIndex = 238;
@@ -1273,17 +1274,17 @@ namespace SisUvex.Archivo.Manifiesto
             // lblPosicionPal
             // 
             lblPosicionPal.AutoSize = true;
-            lblPosicionPal.Font = new Font("Microsoft Sans Serif", 9F);
-            lblPosicionPal.Location = new Point(583, 46);
+            lblPosicionPal.Font = new Font("Microsoft Sans Serif", 8.25F);
+            lblPosicionPal.Location = new Point(544, 33);
             lblPosicionPal.Name = "lblPosicionPal";
-            lblPosicionPal.Size = new Size(57, 15);
+            lblPosicionPal.Size = new Size(28, 13);
             lblPosicionPal.TabIndex = 239;
-            lblPosicionPal.Text = "Posición:";
+            lblPosicionPal.Text = "Pos:";
             // 
             // txbPosicionPal
             // 
             txbPosicionPal.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPosicionPal.Location = new Point(637, 45);
+            txbPosicionPal.Location = new Point(546, 46);
             txbPosicionPal.MaxLength = 2;
             txbPosicionPal.Name = "txbPosicionPal";
             txbPosicionPal.Size = new Size(26, 21);
@@ -1291,8 +1292,8 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             // printManifestBtn
             // 
-            printManifestBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            printManifestBtn.Location = new Point(713, 653);
+            printManifestBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            printManifestBtn.Location = new Point(544, 652);
             printManifestBtn.Name = "printManifestBtn";
             printManifestBtn.Size = new Size(64, 25);
             printManifestBtn.TabIndex = 241;
@@ -1344,6 +1345,7 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             // chkBoxPackingList
             // 
+            chkBoxPackingList.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkBoxPackingList.AutoSize = true;
             chkBoxPackingList.Location = new Point(462, 654);
             chkBoxPackingList.Name = "chkBoxPackingList";
@@ -1377,13 +1379,15 @@ namespace SisUvex.Archivo.Manifiesto
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(918, 683);
+            Controls.Add(chkBoxPackingList);
+            Controls.Add(printManifestBtn);
+            Controls.Add(btnAceptar);
+            Controls.Add(btnCancelar);
             Controls.Add(label1);
             Controls.Add(txbFitosanitario);
-            Controls.Add(chkBoxPackingList);
             Controls.Add(txbDieselLiters);
             Controls.Add(lblDieselInvoice);
             Controls.Add(txbDieselInvoice);
-            Controls.Add(printManifestBtn);
             Controls.Add(txbPosicionPal);
             Controls.Add(lblPosicionPal);
             Controls.Add(txbPosicion);
@@ -1477,8 +1481,6 @@ namespace SisUvex.Archivo.Manifiesto
             Controls.Add(btnBuscarLinea);
             Controls.Add(txbIdLinea);
             Controls.Add(cboLinea);
-            Controls.Add(btnAceptar);
-            Controls.Add(btnCancelar);
             Controls.Add(txbId);
             Controls.Add(lblTitulo);
             Controls.Add(lblObliId);
@@ -1489,6 +1491,7 @@ namespace SisUvex.Archivo.Manifiesto
             Controls.Add(label13);
             Font = new Font("Microsoft Sans Serif", 8.25F);
             MaximizeBox = false;
+            MinimumSize = new Size(834, 722);
             Name = "FrmManifiestoAñadir";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Añadir Manifiesto";
