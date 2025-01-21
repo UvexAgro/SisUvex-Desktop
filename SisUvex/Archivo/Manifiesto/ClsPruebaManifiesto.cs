@@ -10,10 +10,9 @@ using iText.Kernel.Colors;
 using iText.Kernel.Pdf.Canvas.Draw;
 using System.Data;
 using DocumentFormat.OpenXml.Drawing.Charts;
-
 namespace SisUvex.Archivo.Manifiesto
 {
-    internal class ClsPDFManifiesto
+    internal class ClsPruebaManifiesto
     {
         ClsQueryManifest queryManifest = new ClsQueryManifest();
         PdfFont font = PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN);
@@ -41,7 +40,7 @@ namespace SisUvex.Archivo.Manifiesto
 
             // Crear un nuevo documento PDF
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos",queryManifest.distributorShortName, $"{manifestNumber}");
+            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
             if (!Directory.Exists(manifestDirectory))
             {
                 Directory.CreateDirectory(manifestDirectory);
@@ -53,7 +52,7 @@ namespace SisUvex.Archivo.Manifiesto
             iText.Layout.Document document = new iText.Layout.Document(pdf);
 
             //Metodos que componen el diseño del PDF
-            DesignPDFManifestHeader(document,manifestNumber);
+            DesignPDFManifestHeader(document, manifestNumber);
             DesignPDFManifestClientAndConsigne(document, manifestNumber);
             DesignPDFManifestCustoms(document, manifestNumber);
             DesignPDFManifestTransport(document, manifestNumber);
@@ -93,7 +92,8 @@ namespace SisUvex.Archivo.Manifiesto
                 logoCell.SetPaddingRight(0);
                 table.AddCell(logoCell);
 
-            }else
+            }
+            else
             {
                 // Crear una celda vacía para mantener la alineación de la tabla
                 Cell emptyCell = new Cell();
@@ -118,12 +118,12 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph shipperRFCParagraph = new Paragraph("RFC: "+queryManifest.shipperRFC)
+            Paragraph shipperRFCParagraph = new Paragraph("RFC: " + queryManifest.shipperRFC)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph shipperGGNParagraph = new Paragraph("GGN: "+ queryManifest.shipperGGN)
+            Paragraph shipperGGNParagraph = new Paragraph("GGN: " + queryManifest.shipperGGN)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
@@ -153,20 +153,20 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetFontSize(fontSizeBody)
                 .SetFont(font);
 
-                // Agregar condicionalmente la propiedad PO
-                if (!string.IsNullOrEmpty(queryManifest.manifestPO))
-                {
-                    manifestParagraph.Add("\n")
-                        .Add("PO: ")
-                        .Add(new Text(queryManifest.manifestPO).SetFontColor(ColorConstants.RED));
-                }
+            // Agregar condicionalmente la propiedad PO
+            if (!string.IsNullOrEmpty(queryManifest.manifestPO))
+            {
+                manifestParagraph.Add("\n")
+                    .Add("PO: ")
+                    .Add(new Text(queryManifest.manifestPO).SetFontColor(ColorConstants.RED));
+            }
 
-                if (!string.IsNullOrEmpty(queryManifest.manifestBooking))
-                {
-                    manifestParagraph.Add("\n")
-                        .Add("Booking: ")
-                        .Add(new Text(queryManifest.manifestBooking).SetFontColor(ColorConstants.RED));
-                }
+            if (!string.IsNullOrEmpty(queryManifest.manifestBooking))
+            {
+                manifestParagraph.Add("\n")
+                    .Add("Booking: ")
+                    .Add(new Text(queryManifest.manifestBooking).SetFontColor(ColorConstants.RED));
+            }
 
             // Agregar el párrafo a la tercera celda de la tabla
             Cell manifestCell = new Cell().Add(manifestParagraph);
@@ -177,6 +177,8 @@ namespace SisUvex.Archivo.Manifiesto
             // Agregar la tabla al documento
             document.Add(table);
 
+
+            /*
             // Crear un separador de línea
             LineSeparator ls = new LineSeparator(new SolidLine());
             document.Add(ls);
@@ -184,8 +186,7 @@ namespace SisUvex.Archivo.Manifiesto
             // Crear un párrafo vacío para agregar un espacio en blanco
             Paragraph separator = new Paragraph("\n");
             document.Add(separator);
-
-
+            */
         }
 
         public void DesignPDFManifestClientAndConsigne(iText.Layout.Document document, string manifestNumber)
@@ -353,7 +354,6 @@ namespace SisUvex.Archivo.Manifiesto
             customUSTitleCell.SetBackgroundColor(lightGreen); // Establecer el color de fondo a gris claro
             tableCustoms.AddCell(customUSTitleCell);
 
-
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph customMXNameParagraph = new Paragraph(queryManifest.customMXName)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
@@ -366,15 +366,16 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph customMXCityParagraph = new Paragraph(queryManifest.customMXCity)
+            string MXCity = $"{queryManifest.customMXCity}, {queryManifest.customMXCountry}".Trim(',', ' ');
+            Paragraph customMXCityParagraph = new Paragraph(MXCity)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph customMXCountryParagraph = new Paragraph(queryManifest.customMXCountry)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
-                .SetFont(font);
+            //Paragraph customMXCountryParagraph = new Paragraph(queryManifest.customMXCountry)
+            //    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+            //    .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
+            //    .SetFont(font);
 
             Paragraph customMXRFCParagraph = new Paragraph(queryManifest.customMXRFC)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
@@ -386,7 +387,7 @@ namespace SisUvex.Archivo.Manifiesto
             customMXCell.Add(customMXNameParagraph);
             customMXCell.Add(customMXAddressParagraph);
             customMXCell.Add(customMXCityParagraph);
-            customMXCell.Add(customMXCountryParagraph);
+            //customMXCell.Add(customMXCountryParagraph);
             customMXCell.Add(customMXRFCParagraph);
             customMXCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             customMXCell.SetPaddingRight(0);
@@ -406,16 +407,17 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph customUSCityParagraph = new Paragraph(queryManifest.customUSCity)
+            string USCity = $"{queryManifest.customUSCity}, {queryManifest.customUSCountry}".Trim(',', ' ');
+
+            Paragraph customUSCityParagraph = new Paragraph(USCity)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph customUSCountryParagraph = new Paragraph(queryManifest.customUSCountry)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
-                .SetFont(font);
-
+            //Paragraph customUSCountryParagraph = new Paragraph(queryManifest.customUSCountry)
+            //    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+            //    .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
+            //    .SetFont(font);
 
             Paragraph customUSRFCParagraph = new Paragraph(queryManifest.customUSRFC)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
@@ -427,7 +429,7 @@ namespace SisUvex.Archivo.Manifiesto
             customUSCell.Add(customUSNameParagraph);
             customUSCell.Add(customUSAddressParagraph);
             customUSCell.Add(customUSCityParagraph);
-            customUSCell.Add(customUSCountryParagraph);
+            //customUSCell.Add(customUSCountryParagraph);
             customUSCell.Add(customUSRFCParagraph);
             customUSCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             customUSCell.SetPaddingRight(0);
@@ -435,15 +437,8 @@ namespace SisUvex.Archivo.Manifiesto
             customUSCell.SetHeight(heightCell); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
             tableCustoms.AddCell(customUSCell);
 
-
             // Agregar la tabla al documento
             document.Add(tableCustoms);
-
-            // Crear un párrafo vacío para agregar un espacio en blanco
-            /*
-            Paragraph separator = new Paragraph("\n");
-            document.Add(separator);
-            */
         }
 
         public void DesignPDFManifestTransport(iText.Layout.Document document, string manifestNumber)
@@ -465,12 +460,18 @@ namespace SisUvex.Archivo.Manifiesto
             transportTitleCell.SetBackgroundColor(lightGreen); // Establecer el color de fondo a gris claro
             tableTransport.AddCell(transportTitleCell);
 
-
             // Crear una tabla con 3 columnas
             Table tableDetailedTransport = new Table(3);
             tableDetailedTransport.SetWidth(UnitValue.CreatePercentValue(100));
             tableDetailedTransport.SetBorder(Border.NO_BORDER);
 
+            Cell carrierCell = new Cell(); //Añadir celda izquierda y sus carácteristicas
+            carrierCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
+            carrierCell.SetPaddingRight(0);
+            carrierCell.SetPaddingBottom(0);
+            carrierCell.SetBorder(Border.NO_BORDER);
+            carrierCell.SetWidth(UnitValue.CreatePercentValue(40)); // Establecer el ancho de la celda al 50% del ancho de la tabla
+            carrierCell.SetHeight(heigthCarrier); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph carrierNameParagraph = new Paragraph("Linea: ")
@@ -478,85 +479,70 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(boldFont);
+            carrierCell.Add(carrierNameParagraph);
 
             // Crear nuevos párrafos para la dirección, la ciudad y el RFC del embarcador con un tamaño de fuente menor
             Paragraph carrierSCACParagraph = new Paragraph("SCAC: ")
                 .Add(queryManifest.carrierSCAC)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
-                .SetFont(font);
+                .SetFont(font); 
+            carrierCell.Add(carrierSCACParagraph);
 
             Paragraph carrierSCAATParagraph = new Paragraph("SCAAT: ")
                 .Add(queryManifest.carrierSCAAT)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
+            carrierCell.Add(carrierSCAATParagraph);
 
             Paragraph carrierTransportParagraph = new Paragraph("Medio: ")
                 .Add(queryManifest.manifestVehiculeType)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
+            carrierCell.Add(carrierTransportParagraph);
 
-            Paragraph carrierDriverParagraph = new Paragraph("\n")
-                .Add("Chofer: ")
+            Paragraph carrierDriverParagraph = new Paragraph("Chofer: ")
                 .Add(queryManifest.driverName)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(boldFont);
-
-            Paragraph carrierDriverLicenseParagraph = new Paragraph("Licencia: ");
+            carrierCell.Add(carrierDriverParagraph);
 
             if (!string.IsNullOrEmpty(queryManifest.driverLicense))
             {
+                Paragraph carrierDriverLicenseParagraph = new Paragraph("Licencia: ");
                 carrierDriverLicenseParagraph
                 .Add(queryManifest.driverLicense)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
+                carrierCell.Add(carrierDriverLicenseParagraph);
             }
-          
-
-            Paragraph carrierDriverVisaParagraph = new Paragraph("VISA: ");
 
             if (!string.IsNullOrEmpty(queryManifest.driverVisa))
             {
+                Paragraph carrierDriverVisaParagraph = new Paragraph("VISA: ");
                 carrierDriverVisaParagraph
                     .Add(queryManifest.driverVisa)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                     .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                     .SetFont(font);
-                carrierDriverParagraph.Add(carrierDriverVisaParagraph);
+                carrierCell.Add(carrierDriverVisaParagraph);
             }
-
-            Paragraph carrierDriverBirthdayParagraph = new Paragraph("Fecha de nacimiento: ");
 
             if (queryManifest.driverBirthday != null)
             {
+                Paragraph carrierDriverBirthdayParagraph = new Paragraph("Fecha de nacimiento: ");
                 carrierDriverBirthdayParagraph
                     .Add(queryManifest.driverBirthday.ToString("yyyy-MMMM-dd"))
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                     .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                     .SetFont(font);
-                carrierDriverParagraph.Add(carrierDriverBirthdayParagraph);
+                carrierCell.Add(carrierDriverBirthdayParagraph);
             }
 
-
-            // Agregar los párrafos a la celda
-            Cell carrierCell = new Cell();
-            carrierCell.Add(carrierNameParagraph);
-            carrierCell.Add(carrierSCACParagraph);
-            carrierCell.Add(carrierSCAATParagraph);
-            carrierCell.Add(carrierTransportParagraph);
-            carrierCell.Add(carrierDriverParagraph);
-            carrierCell.Add(carrierDriverLicenseParagraph);
-            carrierCell.Add(carrierDriverVisaParagraph);
-            carrierCell.Add(carrierDriverBirthdayParagraph);
-            carrierCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
-            carrierCell.SetPaddingRight(0);
-            carrierCell.SetBorder(Border.NO_BORDER);
-            carrierCell.SetWidth(UnitValue.CreatePercentValue(40)); // Establecer el ancho de la celda al 50% del ancho de la tabla
-            carrierCell.SetHeight(heigthCarrier); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
             tableDetailedTransport.AddCell(carrierCell);
 
             Paragraph truckNoEcoParagraph = new Paragraph("Troque: ")
@@ -571,7 +557,7 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(font);
 
-            
+
             Paragraph truckUSPlateParagraph = new Paragraph("Placas US: ")
                 .Add(queryManifest.truckPlateUS)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
@@ -589,9 +575,10 @@ namespace SisUvex.Archivo.Manifiesto
             truckCell.Add(truckNoEcoParagraph);
             truckCell.Add(truckBrandParagraph);
             truckCell.Add(truckUSPlateParagraph);
-            truckCell.Add(truckMXPlateParagraph);      
+            truckCell.Add(truckMXPlateParagraph);
             truckCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             truckCell.SetPaddingRight(0);
+            truckCell.SetPaddingBottom(0);
             truckCell.SetBorder(Border.NO_BORDER);
             truckCell.SetWidth(UnitValue.CreatePercentValue(30)); // Establecer el ancho de la celda al 50% del ancho de la tabla
             truckCell.SetHeight(heigthCarrier); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
@@ -609,7 +596,6 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(font);
-
 
             Paragraph thermoUSPlateParagraph = new Paragraph("Placas US: ")
                 .Add(queryManifest.thermoPlateUS)
@@ -639,6 +625,7 @@ namespace SisUvex.Archivo.Manifiesto
             fcoCell.Add(thermoLenghtParagraph);
             fcoCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             fcoCell.SetPaddingRight(0);
+            fcoCell.SetPaddingBottom(0);
             fcoCell.SetBorder(Border.NO_BORDER);
             fcoCell.SetWidth(UnitValue.CreatePercentValue(30)); // Establecer el ancho de la celda al 50% del ancho de la tabla
             fcoCell.SetHeight(heigthCarrier); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
@@ -650,14 +637,10 @@ namespace SisUvex.Archivo.Manifiesto
 
             // Agregar la tabla al documento
             document.Add(tableTransport);
-
-            // Crear un párrafo vacío para agregar un espacio en blanco
-
         }
 
         public void DesignPDFManifestRemisionTable(iText.Layout.Document document, string manifestNumber)
         {
-            // Crear una tabla con 3 columnas que ocupa todo el ancho de la página
             Table tableRemisionDetailed = new Table(5).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
 
             // Agregar los encabezados de la tabla
@@ -680,21 +663,16 @@ namespace SisUvex.Archivo.Manifiesto
 
             Table tableRemisionTotal = new Table(5).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
 
-
-            if(queryManifest.TotalesCarga.Rows.Count == 0)
-            {
+            if (queryManifest.TotalesCarga.Rows.Count == 0)
                 return;
-            }
+
             DataRow remisionTotalDT = queryManifest.TotalesCarga.Rows[0];
 
             AddCellToTable(tableRemisionTotal, "", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, "", 33, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, "TOTALES:", 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            AddCellToTable(tableRemisionTotal, remisionTotalDT["Bultos"].ToString(),8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, remisionTotalDT["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, remisionTotalDT["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            //AddCellToTable(tableRemisionTotal, "", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-
-
 
             // Agregar la tabla al documento
             document.Add(tableRemisionDetailed);
@@ -703,111 +681,123 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void DesignPDFManifestDetails(iText.Layout.Document document, string manifestNumber)
         {
-           
             Table tableManifestDetailHeader = new Table(1);
             tableManifestDetailHeader.SetWidth(UnitValue.CreatePercentValue(100));
 
-            // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph manifestDetailHeaderParagraph = new Paragraph("DETALLES DE MANIFIESTO")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFontSize(fontSizeTitle) // Cambiar el tamaño de la fuente a 14
                 .SetFont(boldFont);
 
-            // Crear una celda para el título del distribuidor y agregarle un borde
             Cell manifestDetailTitleCell = new Cell();
             manifestDetailTitleCell.Add(manifestDetailHeaderParagraph);
             manifestDetailTitleCell.SetBorder(new SolidBorder(1));
-            manifestDetailTitleCell.SetBackgroundColor(lightGreen); // Establecer el color de fondo a gris claro
+            manifestDetailTitleCell.SetBackgroundColor(lightGreen);
+
             tableManifestDetailHeader.AddCell(manifestDetailTitleCell);
 
-
             // Crear una tabla con 3 columnas
-            Table tableDetailedManifest = new Table(2);
+            Table tableDetailedManifest = new Table(3);
             tableDetailedManifest.SetWidth(UnitValue.CreatePercentValue(100));
             tableDetailedManifest.SetBorder(Border.NO_BORDER);
 
-            // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
-            Paragraph manifestDetailSeal1Paragraph = new Paragraph("SELLO 1: ")
-                .Add(queryManifest.manifestSeal1)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
-                .SetFont(font);
-
-            Paragraph manifestDetailSeal2Paragraph = new Paragraph("SELLO 2: ")
-                .Add(queryManifest.manifestSeal2)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
-                .SetFont(font);
-
-            Paragraph manifestDetailSeal3Paragraph = new Paragraph("SELLO 3: ")
-                .Add(queryManifest.manifestSeal3)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
-                .SetFont(font);
-
-            Paragraph manifestDetailComentsParagraph = new Paragraph("OBSERVACIONES: ")
-                .Add(queryManifest.manifestComments)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
-                .SetFont(font);
-
-
-
-            // Agregar los párrafos a la celda
+            // CALDA DE LA IZQUIERDA
             Cell leftCell = new Cell();
-            leftCell.Add(manifestDetailSeal1Paragraph);
-            leftCell.Add(manifestDetailSeal2Paragraph);
-            leftCell.Add(manifestDetailSeal3Paragraph);
-            leftCell.Add(manifestDetailComentsParagraph);
-            leftCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
+            leftCell.SetPaddingLeft(5);
             leftCell.SetPaddingRight(0);
+            leftCell.SetPaddingBottom(0);
             leftCell.SetBorder(Border.NO_BORDER);
-            leftCell.SetWidth(UnitValue.CreatePercentValue(50)); // Establecer el ancho de la celda al 50% del ancho de la tabla
-            leftCell.SetHeight(heightCellDetail); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
-            tableDetailedManifest.AddCell(leftCell);
+            leftCell.SetWidth(UnitValue.CreatePercentValue(33));
+            
+                Paragraph manifestDetailTemperatureParagraph = new Paragraph("TEMPERATURA: ")
+                    .Add(queryManifest.thermoTemperature)
+                    .Add(" F°")
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
 
-            // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
-            Paragraph manifestDetailThermometerParagraph = new Paragraph("TERMOGRAFO: ")
-                .Add(queryManifest.manifestThermometer)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
+                Paragraph manifestDetailSeal1Paragraph = new Paragraph("SELLO 1: ")
+                    .Add(queryManifest.manifestSeal1)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
                 .SetFont(font);
 
-            // Crear nuevos párrafos para la dirección, la ciudad y el RFC del embarcador con un tamaño de fuente menor
-            Paragraph manifestDetailPositionParagraph = new Paragraph("POSICION: ")
-                .Add(queryManifest.manifestThermometerPosition)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
-                .SetFont(font);
+                leftCell.Add(manifestDetailTemperatureParagraph);
+                leftCell.Add(manifestDetailSeal1Paragraph);
+                tableDetailedManifest.AddCell(leftCell);
 
-            Paragraph manifestDetailTemperatureParagraph = new Paragraph("TEMPERATURA: ")
-                .Add(queryManifest.thermoTemperature)
-                .Add(" F°")
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
-                .SetFont(font);
+            // CELDA DE EN MEDIO
+            Cell centerCell = new Cell();
+            centerCell.SetPaddingLeft(5);
+            centerCell.SetPaddingRight(0);
+            centerCell.SetPaddingBottom(0);
+            centerCell.SetBorder(Border.NO_BORDER);
+            centerCell.SetWidth(UnitValue.CreatePercentValue(33));
 
-            // Agregar los párrafos a la celda
+                Paragraph manifestDetailThermometerParagraph = new Paragraph("TERMOGRAFO: ")
+                    .Add(queryManifest.manifestThermometer)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
+
+                Paragraph manifestDetailSeal2Paragraph = new Paragraph("SELLO 2: ")
+                    .Add(queryManifest.manifestSeal2)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
+
+                centerCell.Add(manifestDetailThermometerParagraph);
+                centerCell.Add(manifestDetailSeal2Paragraph);
+                tableDetailedManifest.AddCell(centerCell);
+
+            //CELDA DE LA DERECHA
             Cell rightCell = new Cell();
-            rightCell.Add(manifestDetailThermometerParagraph);
-            rightCell.Add(manifestDetailPositionParagraph);
-            rightCell.Add(manifestDetailTemperatureParagraph);
-            rightCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
+            rightCell.SetPaddingLeft(5);
             rightCell.SetPaddingRight(0);
+            rightCell.SetPaddingBottom(0);
             rightCell.SetBorder(Border.NO_BORDER);
-            rightCell.SetWidth(UnitValue.CreatePercentValue(50)); // Establecer el ancho de la celda al 50% del ancho de la tabla
-            rightCell.SetHeight(heightCellDetail); // Establecer la altura de la celda a 1.5 pulgadas (1 pulgada = 72 puntos)
+            rightCell.SetWidth(UnitValue.CreatePercentValue(33));
+
+                Paragraph manifestDetailPositionParagraph = new Paragraph("POSICION: ")
+                    .Add(queryManifest.manifestThermometerPosition)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
+
+                Paragraph manifestDetailSeal3Paragraph = new Paragraph("SELLO 3: ")
+                    .Add(queryManifest.manifestSeal3)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
+
+                rightCell.Add(manifestDetailPositionParagraph);
+                rightCell.Add(manifestDetailSeal3Paragraph);
             tableDetailedManifest.AddCell(rightCell);
 
+            //CELDA INFERIOR
+            Cell ObsCell = new Cell();
+            ObsCell.SetPaddingLeft(5);
+            ObsCell.SetPaddingTop(0);
+            ObsCell.SetPaddingRight(0);
+            ObsCell.SetBorder(Border.NO_BORDER);
+            ObsCell.SetWidth(UnitValue.CreatePercentValue(100));
+
+                Paragraph manifestDetailComentsParagraph = new Paragraph("OBSERVACIONES: ")
+                    .Add(queryManifest.manifestComments)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                    .SetFontSize(fontSizeBody)
+                    .SetFont(font);
+
+                ObsCell.Add(manifestDetailComentsParagraph);
+
+            // JUNTAR TODAS LAS CELDAS
             Cell manifestALLDetailCell = new Cell();
             manifestALLDetailCell.Add(tableDetailedManifest);
+            manifestALLDetailCell.Add(ObsCell);
 
             tableManifestDetailHeader.AddCell(manifestALLDetailCell);
 
-
-            // Agregar la tabla al documento
             document.Add(tableManifestDetailHeader);
-            document.Add(separator);
         }
 
         private void AddCellToTable(Table table, string text, float widthPercent, iText.Layout.Properties.TextAlignment alignment, int? fontSize = null, PdfFont font = null, Border border = null, iText.Kernel.Colors.Color backgroundColor = null)
@@ -846,4 +836,5 @@ namespace SisUvex.Archivo.Manifiesto
 
 
     }
+
 }

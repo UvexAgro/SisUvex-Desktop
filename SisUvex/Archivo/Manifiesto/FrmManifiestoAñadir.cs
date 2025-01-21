@@ -330,7 +330,8 @@ namespace SisUvex.Archivo.Manifiesto
         {
             if(txbId.Text != "")
             {
-                ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
                 pdf.CreatePDFManifest(txbId.Text);
                 ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
                 pdfMap.CreatePDFMaping(txbId.Text);
