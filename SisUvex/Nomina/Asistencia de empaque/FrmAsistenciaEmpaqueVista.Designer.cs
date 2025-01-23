@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaEmpaqueVista));
             dgvLista = new DataGridView();
             dtpDia = new DateTimePicker();
             btnBuscar = new Button();
@@ -70,24 +71,23 @@
             dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvLista.RowHeadersVisible = false;
             dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvLista.RowTemplate.Height = 25;
             dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvLista.Size = new Size(529, 397);
-            dgvLista.TabIndex = 16;
+            dgvLista.TabIndex = 2;
             // 
             // dtpDia
             // 
             dtpDia.Location = new Point(12, 12);
             dtpDia.Name = "dtpDia";
             dtpDia.Size = new Size(254, 23);
-            dtpDia.TabIndex = 27;
+            dtpDia.TabIndex = 0;
             // 
             // btnBuscar
             // 
             btnBuscar.Location = new Point(272, 12);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
-            btnBuscar.TabIndex = 25;
+            btnBuscar.TabIndex = 1;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
@@ -100,6 +100,7 @@
             Controls.Add(dtpDia);
             Controls.Add(btnBuscar);
             Controls.Add(dgvLista);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaEmpaqueVista";
             Text = "Consulta de asistencia de empaque";
             WindowState = FormWindowState.Maximized;

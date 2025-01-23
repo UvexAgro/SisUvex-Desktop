@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmEtiquetas));
             lblTagHead = new Label();
             lblTagWorkGroup = new Label();
             cmBoxWorkGroup = new ComboBox();
@@ -915,6 +916,7 @@
             Controls.Add(cmBoxWorkGroup);
             Controls.Add(lblTagWorkGroup);
             Controls.Add(lblTagHead);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(1);
             Name = "FrmEtiquetas";
             Text = "Etiquetas";

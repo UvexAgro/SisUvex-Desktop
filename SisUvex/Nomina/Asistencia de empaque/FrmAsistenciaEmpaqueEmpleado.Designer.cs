@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaEmpaqueEmpleado));
             btnBuscar = new Button();
             dgvLista = new DataGridView();
             txbIdEmpleado = new TextBox();
@@ -45,7 +46,7 @@
             btnBuscar.Location = new Point(512, 12);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(113, 23);
-            btnBuscar.TabIndex = 29;
+            btnBuscar.TabIndex = 5;
             btnBuscar.Text = "Buscar empleado";
             btnBuscar.UseVisualStyleBackColor = true;
             // 
@@ -59,34 +60,33 @@
             dgvLista.BackgroundColor = SystemColors.ControlLightLight;
             dgvLista.BorderStyle = BorderStyle.Fixed3D;
             dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvLista.EnableHeadersVisualStyles = false;
             dgvLista.ImeMode = ImeMode.NoControl;
             dgvLista.Location = new Point(12, 70);
             dgvLista.Name = "dgvLista";
             dgvLista.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvLista.RowHeadersVisible = false;
             dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvLista.RowTemplate.Height = 25;
             dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvLista.Size = new Size(613, 368);
-            dgvLista.TabIndex = 28;
+            dgvLista.TabIndex = 5;
             // 
             // txbIdEmpleado
             // 
@@ -94,7 +94,7 @@
             txbIdEmpleado.MaxLength = 6;
             txbIdEmpleado.Name = "txbIdEmpleado";
             txbIdEmpleado.Size = new Size(60, 23);
-            txbIdEmpleado.TabIndex = 30;
+            txbIdEmpleado.TabIndex = 0;
             txbIdEmpleado.KeyPress += txbIdEmpleado_KeyPress;
             // 
             // txbNombreEmpleado
@@ -104,14 +104,14 @@
             txbNombreEmpleado.Location = new Point(205, 12);
             txbNombreEmpleado.Name = "txbNombreEmpleado";
             txbNombreEmpleado.Size = new Size(301, 23);
-            txbNombreEmpleado.TabIndex = 31;
+            txbNombreEmpleado.TabIndex = 4;
             // 
             // btnBuscarAsistencias
             // 
             btnBuscarAsistencias.Location = new Point(12, 41);
             btnBuscarAsistencias.Name = "btnBuscarAsistencias";
             btnBuscarAsistencias.Size = new Size(117, 23);
-            btnBuscarAsistencias.TabIndex = 32;
+            btnBuscarAsistencias.TabIndex = 4;
             btnBuscarAsistencias.Text = "Buscar asistencias";
             btnBuscarAsistencias.UseVisualStyleBackColor = true;
             btnBuscarAsistencias.Click += btnBuscarAsistencias_Click;
@@ -136,6 +136,7 @@
             Controls.Add(txbIdEmpleado);
             Controls.Add(btnBuscar);
             Controls.Add(dgvLista);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaEmpaqueEmpleado";
             Text = "Consulta de asistencias por empleado";
             WindowState = FormWindowState.Maximized;

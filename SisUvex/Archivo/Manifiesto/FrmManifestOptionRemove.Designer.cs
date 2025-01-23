@@ -124,6 +124,7 @@
             Controls.Add(radioButton1);
             Name = "FrmManifestOptionRemove";
             Text = "Eliminar manifiesto";
+            Load += FrmManifestOptionRemove_Load;
             ResumeLayout(false);
             PerformLayout();
         }

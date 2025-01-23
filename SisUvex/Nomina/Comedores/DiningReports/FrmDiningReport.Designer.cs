@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDiningReport));
             cboPaymentPlace = new ComboBox();
             lblPaymentPlace = new Label();
@@ -58,7 +58,7 @@
             cboPaymentPlace.Location = new Point(5, 50);
             cboPaymentPlace.Name = "cboPaymentPlace";
             cboPaymentPlace.Size = new Size(356, 23);
-            cboPaymentPlace.TabIndex = 58;
+            cboPaymentPlace.TabIndex = 3;
             // 
             // lblPaymentPlace
             // 
@@ -72,12 +72,12 @@
             // 
             // btnSearchEmployee
             // 
-            btnSearchEmployee.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchEmployee.BackgroundImage = Properties.Resources.guardarIcon16;
             btnSearchEmployee.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchEmployee.Location = new Point(88, 89);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Size = new Size(23, 23);
-            btnSearchEmployee.TabIndex = 55;
+            btnSearchEmployee.TabIndex = 6;
             btnSearchEmployee.UseVisualStyleBackColor = true;
             btnSearchEmployee.Click += btnSearchEmployee_Click;
             // 
@@ -97,7 +97,7 @@
             txbIdEmployee.MaxLength = 6;
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(80, 23);
-            txbIdEmployee.TabIndex = 53;
+            txbIdEmployee.TabIndex = 5;
             txbIdEmployee.KeyPress += txbIdEmployee_KeyPress;
             // 
             // cboDinerProvider
@@ -107,7 +107,7 @@
             cboDinerProvider.Location = new Point(187, 12);
             cboDinerProvider.Name = "cboDinerProvider";
             cboDinerProvider.Size = new Size(174, 23);
-            cboDinerProvider.TabIndex = 48;
+            cboDinerProvider.TabIndex = 2;
             // 
             // dtpDate2
             // 
@@ -115,7 +115,7 @@
             dtpDate2.Location = new Point(101, 12);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
-            dtpDate2.TabIndex = 46;
+            dtpDate2.TabIndex = 1;
             // 
             // dtpDate1
             // 
@@ -123,7 +123,7 @@
             dtpDate1.Location = new Point(5, 12);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
-            dtpDate1.TabIndex = 45;
+            dtpDate1.TabIndex = 0;
             // 
             // dgvQuery
             // 
@@ -135,33 +135,33 @@
             dgvQuery.BackgroundColor = SystemColors.ControlLightLight;
             dgvQuery.BorderStyle = BorderStyle.Fixed3D;
             dgvQuery.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvQuery.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvQuery.EnableHeadersVisualStyles = false;
             dgvQuery.ImeMode = ImeMode.NoControl;
             dgvQuery.Location = new Point(5, 156);
             dgvQuery.Name = "dgvQuery";
             dgvQuery.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvQuery.Size = new Size(585, 282);
-            dgvQuery.TabIndex = 44;
+            dgvQuery.TabIndex = 11;
             // 
             // btnSearch
             // 
@@ -170,7 +170,7 @@
             btnSearch.Location = new Point(363, 50);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 43;
+            btnSearch.TabIndex = 4;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -208,7 +208,7 @@
             btnReport1.Location = new Point(5, 127);
             btnReport1.Name = "btnReport1";
             btnReport1.Size = new Size(75, 23);
-            btnReport1.TabIndex = 61;
+            btnReport1.TabIndex = 8;
             btnReport1.Text = "Trabajador";
             btnReport1.UseVisualStyleBackColor = true;
             btnReport1.Click += btnReport1_Click;
@@ -218,7 +218,7 @@
             btnResume.Location = new Point(85, 127);
             btnResume.Name = "btnResume";
             btnResume.Size = new Size(92, 23);
-            btnResume.TabIndex = 62;
+            btnResume.TabIndex = 9;
             btnResume.Text = "Lugar de pago";
             btnResume.UseVisualStyleBackColor = true;
             btnResume.Click += btnResume_Click;
@@ -231,7 +231,7 @@
             btnExcel.Location = new Point(183, 127);
             btnExcel.Name = "btnExcel";
             btnExcel.Size = new Size(56, 23);
-            btnExcel.TabIndex = 63;
+            btnExcel.TabIndex = 10;
             btnExcel.Text = "Excel";
             btnExcel.TextAlign = ContentAlignment.BottomLeft;
             btnExcel.UseVisualStyleBackColor = true;
@@ -239,12 +239,12 @@
             // 
             // btnFrmSearchEmployeeId
             // 
+            btnFrmSearchEmployeeId.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
             btnFrmSearchEmployeeId.Location = new Point(113, 89);
             btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
-            btnFrmSearchEmployeeId.Size = new Size(26, 23);
-            btnFrmSearchEmployeeId.TabIndex = 64;
-            btnFrmSearchEmployeeId.Text = "...";
+            btnFrmSearchEmployeeId.Size = new Size(23, 23);
+            btnFrmSearchEmployeeId.TabIndex = 7;
             btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
             btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
             // 

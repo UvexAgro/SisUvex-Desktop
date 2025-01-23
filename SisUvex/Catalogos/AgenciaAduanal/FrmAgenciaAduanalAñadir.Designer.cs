@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAgenciaAduanalAñadir));
             lblTitulo = new Label();
             lblNombre = new Label();
             txbNombre = new TextBox();
@@ -52,7 +53,7 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(9, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(301, 31);
@@ -62,7 +63,7 @@
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNombre.Font = new Font("Segoe UI", 12F);
             lblNombre.Location = new Point(12, 58);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(71, 21);
@@ -71,27 +72,27 @@
             // 
             // txbNombre
             // 
-            txbNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNombre.Font = new Font("Segoe UI", 12F);
             txbNombre.Location = new Point(89, 55);
             txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(486, 29);
-            txbNombre.TabIndex = 1;
+            txbNombre.TabIndex = 2;
             // 
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(529, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 9;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(501, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -113,7 +114,7 @@
             btnAceptar.Location = new Point(419, 231);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 6;
+            btnAceptar.TabIndex = 7;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -121,7 +122,7 @@
             // lblActivo
             // 
             lblActivo.AutoSize = true;
-            lblActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblActivo.Font = new Font("Segoe UI", 12F);
             lblActivo.Location = new Point(392, 15);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(60, 21);
@@ -131,13 +132,13 @@
             // cboActivo
             // 
             cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboActivo.Font = new Font("Segoe UI", 12F);
             cboActivo.FormattingEnabled = true;
             cboActivo.Items.AddRange(new object[] { "No", "Sí" });
             cboActivo.Location = new Point(448, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 10;
+            cboActivo.TabIndex = 0;
             // 
             // lblObliCom
             // 
@@ -152,7 +153,7 @@
             // lblRFC
             // 
             lblRFC.AutoSize = true;
-            lblRFC.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblRFC.Font = new Font("Segoe UI", 12F);
             lblRFC.Location = new Point(12, 199);
             lblRFC.Name = "lblRFC";
             lblRFC.Size = new Size(41, 21);
@@ -161,17 +162,17 @@
             // 
             // txbCiudad
             // 
-            txbCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbCiudad.Font = new Font("Segoe UI", 12F);
             txbCiudad.Location = new Point(89, 126);
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
             txbCiudad.Size = new Size(486, 29);
-            txbCiudad.TabIndex = 3;
+            txbCiudad.TabIndex = 4;
             // 
             // lblCiudad
             // 
             lblCiudad.AutoSize = true;
-            lblCiudad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCiudad.Font = new Font("Segoe UI", 12F);
             lblCiudad.Location = new Point(12, 129);
             lblCiudad.Name = "lblCiudad";
             lblCiudad.Size = new Size(62, 21);
@@ -180,17 +181,17 @@
             // 
             // txbDireccion
             // 
-            txbDireccion.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbDireccion.Font = new Font("Segoe UI", 12F);
             txbDireccion.Location = new Point(89, 161);
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
             txbDireccion.Size = new Size(486, 29);
-            txbDireccion.TabIndex = 4;
+            txbDireccion.TabIndex = 5;
             // 
             // lblDireccion
             // 
             lblDireccion.AutoSize = true;
-            lblDireccion.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblDireccion.Font = new Font("Segoe UI", 12F);
             lblDireccion.Location = new Point(13, 164);
             lblDireccion.Name = "lblDireccion";
             lblDireccion.Size = new Size(78, 21);
@@ -199,17 +200,17 @@
             // 
             // txbRFC
             // 
-            txbRFC.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbRFC.Font = new Font("Segoe UI", 12F);
             txbRFC.Location = new Point(89, 196);
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
             txbRFC.Size = new Size(486, 29);
-            txbRFC.TabIndex = 5;
+            txbRFC.TabIndex = 6;
             // 
             // lblPais
             // 
             lblPais.AutoSize = true;
-            lblPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblPais.Font = new Font("Segoe UI", 12F);
             lblPais.Location = new Point(13, 94);
             lblPais.Name = "lblPais";
             lblPais.Size = new Size(40, 21);
@@ -219,13 +220,13 @@
             // cboPais
             // 
             cboPais.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboPais.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboPais.Font = new Font("Segoe UI", 12F);
             cboPais.FormattingEnabled = true;
             cboPais.Items.AddRange(new object[] { "MX", "US" });
             cboPais.Location = new Point(89, 91);
             cboPais.Name = "cboPais";
             cboPais.Size = new Size(67, 29);
-            cboPais.TabIndex = 2;
+            cboPais.TabIndex = 3;
             // 
             // label1
             // 
@@ -262,10 +263,11 @@
             Controls.Add(lblObliCom);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmAgenciaAduanalAñadir";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Añadir agenciaAduanal";
+            Text = "Añadir agencia aduanal";
             FormClosing += FrmAgenciaAduanalAñadir_FormClosing;
             Load += FrmAgenciaAduanalAñadir_Load;
             ResumeLayout(false);

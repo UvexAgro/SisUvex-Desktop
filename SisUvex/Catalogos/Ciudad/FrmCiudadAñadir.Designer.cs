@@ -31,6 +31,7 @@ namespace SisUvex.Catalogos.Ciudad
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCiudadAñadir));
             lblTitulo = new Label();
             lblNomCiudad = new Label();
             txbNomCiudad = new TextBox();
@@ -83,7 +84,7 @@ namespace SisUvex.Catalogos.Ciudad
             txbId.Location = new Point(450, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 5;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -101,7 +102,7 @@ namespace SisUvex.Catalogos.Ciudad
             btnCancelar.Location = new Point(422, 160);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 7;
+            btnCancelar.TabIndex = 6;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -111,7 +112,7 @@ namespace SisUvex.Catalogos.Ciudad
             btnAceptar.Location = new Point(341, 160);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 8;
+            btnAceptar.TabIndex = 5;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -135,7 +136,7 @@ namespace SisUvex.Catalogos.Ciudad
             cboActivo.Location = new Point(369, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 11;
+            cboActivo.TabIndex = 0;
             // 
             // lblNomEstado
             // 
@@ -154,7 +155,7 @@ namespace SisUvex.Catalogos.Ciudad
             txbNomEstado.MaxLength = 30;
             txbNomEstado.Name = "txbNomEstado";
             txbNomEstado.Size = new Size(357, 29);
-            txbNomEstado.TabIndex = 13;
+            txbNomEstado.TabIndex = 3;
             // 
             // txbNomPais
             // 
@@ -163,7 +164,7 @@ namespace SisUvex.Catalogos.Ciudad
             txbNomPais.MaxLength = 15;
             txbNomPais.Name = "txbNomPais";
             txbNomPais.Size = new Size(276, 29);
-            txbNomPais.TabIndex = 14;
+            txbNomPais.TabIndex = 4;
             // 
             // lblNomPais
             // 
@@ -205,6 +206,7 @@ namespace SisUvex.Catalogos.Ciudad
             Controls.Add(lblActivo);
             Controls.Add(lblObliCiudad);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmCiudadAñadir";
             StartPosition = FormStartPosition.CenterScreen;

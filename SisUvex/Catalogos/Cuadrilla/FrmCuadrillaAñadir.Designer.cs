@@ -31,6 +31,7 @@ namespace SisUvex.Catalogos.Cuadrilla
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCuadrillaAñadir));
             lblTitulo = new Label();
             lblContratista = new Label();
             txbId = new TextBox();
@@ -74,7 +75,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             txbId.Location = new Point(159, 49);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 5;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -102,7 +103,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             btnAceptar.Location = new Point(404, 155);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 8;
+            btnAceptar.TabIndex = 6;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -112,7 +113,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             btnTodoContratista.Location = new Point(503, 120);
             btnTodoContratista.Name = "btnTodoContratista";
             btnTodoContratista.Size = new Size(57, 29);
-            btnTodoContratista.TabIndex = 32;
+            btnTodoContratista.TabIndex = 5;
             btnTodoContratista.Text = "Activos";
             btnTodoContratista.UseVisualStyleBackColor = true;
             btnTodoContratista.Click += btnTodoContratista_Click;
@@ -122,7 +123,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             btnBuscarContratista.Location = new Point(440, 120);
             btnBuscarContratista.Name = "btnBuscarContratista";
             btnBuscarContratista.Size = new Size(57, 29);
-            btnBuscarContratista.TabIndex = 31;
+            btnBuscarContratista.TabIndex = 4;
             btnBuscarContratista.Text = "Buscar";
             btnBuscarContratista.UseVisualStyleBackColor = true;
             btnBuscarContratista.Click += btnBuscarContratista_Click;
@@ -134,7 +135,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             txbIdContratista.Location = new Point(107, 119);
             txbIdContratista.Name = "txbIdContratista";
             txbIdContratista.Size = new Size(46, 29);
-            txbIdContratista.TabIndex = 34;
+            txbIdContratista.TabIndex = 2;
             txbIdContratista.TextAlign = HorizontalAlignment.Center;
             // 
             // cboContratista
@@ -145,7 +146,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             cboContratista.Location = new Point(159, 119);
             cboContratista.Name = "cboContratista";
             cboContratista.Size = new Size(275, 29);
-            cboContratista.TabIndex = 30;
+            cboContratista.TabIndex = 3;
             cboContratista.TextChanged += cboContratista_TextChanged;
             cboContratista.MouseClick += cboContratista_MouseClick;
             // 
@@ -176,7 +177,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             txbName.MaxLength = 15;
             txbName.Name = "txbName";
             txbName.Size = new Size(275, 29);
-            txbName.TabIndex = 36;
+            txbName.TabIndex = 1;
             // 
             // label1
             // 
@@ -208,6 +209,7 @@ namespace SisUvex.Catalogos.Cuadrilla
             Controls.Add(label1);
             Controls.Add(lblId);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmCuadrillaAñadir";
             StartPosition = FormStartPosition.CenterScreen;

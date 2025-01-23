@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmQueryPerManifest));
             cboGrower = new ComboBox();
             label3 = new Label();
             cboVariety = new ComboBox();
@@ -58,7 +59,7 @@
             cboGrower.Location = new Point(12, 47);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(203, 23);
-            cboGrower.TabIndex = 60;
+            cboGrower.TabIndex = 2;
             // 
             // label3
             // 
@@ -77,7 +78,7 @@
             cboVariety.Location = new Point(221, 47);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 23);
-            cboVariety.TabIndex = 58;
+            cboVariety.TabIndex = 3;
             // 
             // label2
             // 
@@ -96,7 +97,7 @@
             btnManifest.Location = new Point(567, 73);
             btnManifest.Name = "btnManifest";
             btnManifest.Size = new Size(23, 23);
-            btnManifest.TabIndex = 56;
+            btnManifest.TabIndex = 9;
             btnManifest.UseVisualStyleBackColor = true;
             btnManifest.Click += btnManifest_Click;
             // 
@@ -116,7 +117,7 @@
             txbManifest.MaxLength = 5;
             txbManifest.Name = "txbManifest";
             txbManifest.Size = new Size(75, 23);
-            txbManifest.TabIndex = 52;
+            txbManifest.TabIndex = 8;
             // 
             // label1
             // 
@@ -130,12 +131,12 @@
             // 
             // btnAll
             // 
-            btnAll.BackgroundImage = Properties.Resources.reiniciar2;
+            btnAll.BackgroundImage = Properties.Resources.reiniciarMini;
             btnAll.BackgroundImageLayout = ImageLayout.Stretch;
             btnAll.Location = new Point(397, 73);
             btnAll.Name = "btnAll";
             btnAll.Size = new Size(27, 23);
-            btnAll.TabIndex = 49;
+            btnAll.TabIndex = 7;
             btnAll.UseVisualStyleBackColor = true;
             btnAll.Click += btnAll_Click;
             // 
@@ -146,7 +147,7 @@
             cboContainer.Location = new Point(221, 11);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(203, 23);
-            cboContainer.TabIndex = 48;
+            cboContainer.TabIndex = 1;
             // 
             // cboDistributor
             // 
@@ -155,7 +156,7 @@
             cboDistributor.Location = new Point(12, 11);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
-            cboDistributor.TabIndex = 47;
+            cboDistributor.TabIndex = 0;
             // 
             // dtpDate2
             // 
@@ -163,7 +164,7 @@
             dtpDate2.Location = new Point(277, 73);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
-            dtpDate2.TabIndex = 45;
+            dtpDate2.TabIndex = 5;
             // 
             // dtpDate1
             // 
@@ -171,7 +172,7 @@
             dtpDate1.Location = new Point(185, 73);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
-            dtpDate1.TabIndex = 44;
+            dtpDate1.TabIndex = 4;
             // 
             // dgvQuery
             // 
@@ -183,34 +184,33 @@
             dgvQuery.BackgroundColor = SystemColors.ControlLightLight;
             dgvQuery.BorderStyle = BorderStyle.Fixed3D;
             dgvQuery.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvQuery.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvQuery.EnableHeadersVisualStyles = false;
             dgvQuery.ImeMode = ImeMode.NoControl;
             dgvQuery.Location = new Point(12, 100);
             dgvQuery.Name = "dgvQuery";
             dgvQuery.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvQuery.RowTemplate.Height = 25;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvQuery.Size = new Size(576, 337);
-            dgvQuery.TabIndex = 43;
+            dgvQuery.TabIndex = 10;
             dgvQuery.CellFormatting += dgvQuery_CellFormatting;
             // 
             // btnSearch
@@ -220,7 +220,7 @@
             btnSearch.Location = new Point(360, 73);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 42;
+            btnSearch.TabIndex = 6;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -277,6 +277,7 @@
             Controls.Add(btnSearch);
             Controls.Add(lblDistribuidor);
             Controls.Add(lblY);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmQueryPerManifest";
             Text = "Detalles manifiesto";
             WindowState = FormWindowState.Maximized;

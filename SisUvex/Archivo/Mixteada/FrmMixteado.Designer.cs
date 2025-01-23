@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMixteado));
             txbIdPallet = new TextBox();
             lblIdPallet = new Label();
             dgvPallet = new DataGridView();
@@ -71,7 +72,7 @@
             dgvPallet.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
@@ -85,7 +86,7 @@
             dgvPallet.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
             dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
@@ -93,17 +94,16 @@
             dgvPallet.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPallet.RowHeadersVisible = false;
             dgvPallet.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvPallet.RowTemplate.Height = 25;
             dgvPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPallet.Size = new Size(776, 337);
-            dgvPallet.TabIndex = 5;
+            dgvPallet.TabIndex = 3;
             // 
             // btnAgregar
             // 
             btnAgregar.Location = new Point(171, 43);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
-            btnAgregar.TabIndex = 6;
+            btnAgregar.TabIndex = 1;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             btnAgregar.Click += btnAgregar_Click;
@@ -113,7 +113,7 @@
             btnQuitar.Location = new Point(252, 43);
             btnQuitar.Name = "btnQuitar";
             btnQuitar.Size = new Size(129, 23);
-            btnQuitar.TabIndex = 7;
+            btnQuitar.TabIndex = 2;
             btnQuitar.Text = "Quitar seleeccionado";
             btnQuitar.UseVisualStyleBackColor = true;
             btnQuitar.Click += btnQuitar_Click;
@@ -124,7 +124,7 @@
             btnGuardar.Location = new Point(12, 415);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(65, 23);
-            btnGuardar.TabIndex = 8;
+            btnGuardar.TabIndex = 4;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click_1;
@@ -143,17 +143,17 @@
             // 
             txbCajas.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txbCajas.Enabled = false;
-            txbCajas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            txbCajas.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             txbCajas.Location = new Point(83, 416);
             txbCajas.Name = "txbCajas";
             txbCajas.Size = new Size(42, 23);
-            txbCajas.TabIndex = 10;
+            txbCajas.TabIndex = 5;
             txbCajas.TextAlign = HorizontalAlignment.Right;
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(216, 31);
@@ -174,6 +174,7 @@
             Controls.Add(dgvPallet);
             Controls.Add(lblIdPallet);
             Controls.Add(txbIdPallet);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(816, 489);
             Name = "FrmMixteado";
             StartPosition = FormStartPosition.CenterScreen;

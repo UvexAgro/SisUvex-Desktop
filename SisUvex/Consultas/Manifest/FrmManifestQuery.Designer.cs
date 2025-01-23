@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestQuery));
             btnManifest = new Button();
             lblManifiesto = new Label();
             txbManifest = new TextBox();
@@ -58,7 +59,7 @@
             btnManifest.Location = new Point(564, 74);
             btnManifest.Name = "btnManifest";
             btnManifest.Size = new Size(23, 23);
-            btnManifest.TabIndex = 36;
+            btnManifest.TabIndex = 9;
             btnManifest.UseVisualStyleBackColor = true;
             btnManifest.Click += btnManifest_Click;
             // 
@@ -78,7 +79,7 @@
             txbManifest.MaxLength = 5;
             txbManifest.Name = "txbManifest";
             txbManifest.Size = new Size(75, 23);
-            txbManifest.TabIndex = 32;
+            txbManifest.TabIndex = 8;
             // 
             // label1
             // 
@@ -95,7 +96,7 @@
             btnAll.Location = new Point(384, 74);
             btnAll.Name = "btnAll";
             btnAll.Size = new Size(41, 23);
-            btnAll.TabIndex = 29;
+            btnAll.TabIndex = 7;
             btnAll.Text = "Todo";
             btnAll.UseVisualStyleBackColor = true;
             btnAll.Click += btnAll_Click;
@@ -107,7 +108,7 @@
             cboPresentation.Location = new Point(221, 12);
             cboPresentation.Name = "cboPresentation";
             cboPresentation.Size = new Size(203, 23);
-            cboPresentation.TabIndex = 28;
+            cboPresentation.TabIndex = 2;
             // 
             // cboDistributor
             // 
@@ -116,7 +117,7 @@
             cboDistributor.Location = new Point(12, 12);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
-            cboDistributor.TabIndex = 27;
+            cboDistributor.TabIndex = 0;
             // 
             // lblY
             // 
@@ -133,7 +134,7 @@
             dtpDate2.Location = new Point(277, 74);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
-            dtpDate2.TabIndex = 25;
+            dtpDate2.TabIndex = 5;
             // 
             // dtpDate1
             // 
@@ -141,7 +142,7 @@
             dtpDate1.Location = new Point(185, 74);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
-            dtpDate1.TabIndex = 24;
+            dtpDate1.TabIndex = 4;
             // 
             // dgvQuery
             // 
@@ -177,10 +178,9 @@
             dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvQuery.RowTemplate.Height = 25;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvQuery.Size = new Size(573, 337);
-            dgvQuery.TabIndex = 23;
+            dgvQuery.TabIndex = 10;
             // 
             // btnSearch
             // 
@@ -189,7 +189,7 @@
             btnSearch.Location = new Point(360, 74);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 22;
+            btnSearch.TabIndex = 6;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnBuscar_Click;
             // 
@@ -229,7 +229,7 @@
             cboGrower.Location = new Point(12, 48);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(203, 23);
-            cboGrower.TabIndex = 40;
+            cboGrower.TabIndex = 1;
             // 
             // label3
             // 
@@ -274,6 +274,7 @@
             Controls.Add(lblDistribuidor);
             Controls.Add(lblY);
             Controls.Add(label4);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifestQuery";
             Text = "Consulta de cajas totales embarcadas por día";
             WindowState = FormWindowState.Maximized;

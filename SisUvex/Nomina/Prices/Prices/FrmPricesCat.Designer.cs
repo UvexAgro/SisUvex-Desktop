@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesCat));
             dgvCatalog = new DataGridView();
             btnModify = new Button();
             btnAdd = new Button();
@@ -70,17 +71,16 @@
             dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalog.RowTemplate.Height = 25;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(783, 404);
-            dgvCatalog.TabIndex = 22;
+            dgvCatalog.TabIndex = 2;
             // 
             // btnModify
             // 
             btnModify.Location = new Point(90, 9);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 19;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -90,7 +90,7 @@
             btnAdd.Location = new Point(9, 9);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 18;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -103,6 +103,7 @@
             Controls.Add(dgvCatalog);
             Controls.Add(btnModify);
             Controls.Add(btnAdd);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPricesCat";
             Text = "Catálogo precios";
             WindowState = FormWindowState.Maximized;
