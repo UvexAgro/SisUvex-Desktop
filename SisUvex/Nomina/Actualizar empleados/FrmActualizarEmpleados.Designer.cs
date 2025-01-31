@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmActualizarEmpleados));
             btnActualizar = new Button();
             lblTexto = new Label();
             SuspendLayout();
@@ -60,10 +61,10 @@
             Controls.Add(lblTexto);
             Controls.Add(btnActualizar);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmActualizarEmpleados";
-            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Actualizar empleados";
             ResumeLayout(false);

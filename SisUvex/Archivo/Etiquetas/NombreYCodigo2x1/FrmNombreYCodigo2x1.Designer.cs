@@ -46,7 +46,7 @@
             // 
             lblCantidad.AutoSize = true;
             lblCantidad.Font = new Font("Segoe UI", 14F);
-            lblCantidad.Location = new Point(14, 104);
+            lblCantidad.Location = new Point(12, 117);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(200, 25);
             lblCantidad.TabIndex = 21;
@@ -54,12 +54,13 @@
             // 
             // btnImprimir
             // 
+            btnImprimir.BackgroundImageLayout = ImageLayout.Stretch;
             btnImprimir.Font = new Font("Segoe UI", 14F);
-            btnImprimir.Location = new Point(274, 101);
+            btnImprimir.Image = Properties.Resources.imprimirIcon321;
+            btnImprimir.Location = new Point(274, 109);
             btnImprimir.Name = "btnImprimir";
-            btnImprimir.Size = new Size(96, 33);
-            btnImprimir.TabIndex = 20;
-            btnImprimir.Text = "Imprimir";
+            btnImprimir.Size = new Size(40, 40);
+            btnImprimir.TabIndex = 4;
             btnImprimir.UseVisualStyleBackColor = true;
             btnImprimir.Click += btnImprimir_Click;
             // 
@@ -74,13 +75,13 @@
             // 
             // nudCantidad
             // 
-            nudCantidad.Font = new Font("Segoe UI", 14F);
-            nudCantidad.Location = new Point(220, 102);
+            nudCantidad.Font = new Font("Segoe UI", 17F);
+            nudCantidad.Location = new Point(220, 110);
             nudCantidad.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
-            nudCantidad.Size = new Size(48, 32);
-            nudCantidad.TabIndex = 18;
+            nudCantidad.Size = new Size(48, 38);
+            nudCantidad.TabIndex = 3;
             nudCantidad.Value = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.KeyPress += nudCantidad_KeyPress;
             // 
@@ -96,12 +97,12 @@
             // 
             // txbCodigoEmp
             // 
-            txbCodigoEmp.Font = new Font("Segoe UI", 14F);
-            txbCodigoEmp.Location = new Point(186, 62);
+            txbCodigoEmp.Font = new Font("Segoe UI", 17F);
+            txbCodigoEmp.Location = new Point(186, 58);
             txbCodigoEmp.MaxLength = 6;
             txbCodigoEmp.Name = "txbCodigoEmp";
-            txbCodigoEmp.Size = new Size(139, 32);
-            txbCodigoEmp.TabIndex = 16;
+            txbCodigoEmp.Size = new Size(82, 38);
+            txbCodigoEmp.TabIndex = 0;
             txbCodigoEmp.KeyPress += txbCodigoEmp_KeyPress;
             // 
             // label1
@@ -117,11 +118,11 @@
             // btnBuscarCodigo
             // 
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
-            btnBuscarCodigo.Location = new Point(371, 61);
+            btnBuscarCodigo.Image = Properties.Resources.buscarIcon32;
+            btnBuscarCodigo.Location = new Point(319, 58);
             btnBuscarCodigo.Name = "btnBuscarCodigo";
-            btnBuscarCodigo.Size = new Size(34, 33);
-            btnBuscarCodigo.TabIndex = 26;
-            btnBuscarCodigo.Text = "...";
+            btnBuscarCodigo.Size = new Size(40, 40);
+            btnBuscarCodigo.TabIndex = 2;
             btnBuscarCodigo.UseVisualStyleBackColor = true;
             btnBuscarCodigo.Click += btnBuscarCodigo_Click;
             // 
@@ -136,12 +137,13 @@
             // 
             // btnSelectEmployeeFrm
             // 
+            btnSelectEmployeeFrm.BackgroundImageLayout = ImageLayout.None;
             btnSelectEmployeeFrm.Font = new Font("Segoe UI", 14F);
-            btnSelectEmployeeFrm.Image = Properties.Resources.BuscarLupa1;
-            btnSelectEmployeeFrm.Location = new Point(331, 61);
+            btnSelectEmployeeFrm.Image = Properties.Resources.guardarIcon321;
+            btnSelectEmployeeFrm.Location = new Point(274, 58);
             btnSelectEmployeeFrm.Name = "btnSelectEmployeeFrm";
-            btnSelectEmployeeFrm.Size = new Size(34, 33);
-            btnSelectEmployeeFrm.TabIndex = 29;
+            btnSelectEmployeeFrm.Size = new Size(40, 40);
+            btnSelectEmployeeFrm.TabIndex = 1;
             btnSelectEmployeeFrm.UseVisualStyleBackColor = true;
             btnSelectEmployeeFrm.Click += btnSelectEmployeeFrm_Click;
             // 
@@ -149,7 +151,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(525, 148);
+            ClientSize = new Size(525, 161);
             Controls.Add(btnSelectEmployeeFrm);
             Controls.Add(lblApellido);
             Controls.Add(btnBuscarCodigo);
@@ -163,8 +165,8 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MaximumSize = new Size(541, 187);
-            MinimumSize = new Size(541, 187);
+            MaximumSize = new Size(541, 200);
+            MinimumSize = new Size(541, 200);
             Name = "FrmNombreYCodigo2x1";
             Text = "Imprimir código de empleado con nombre QR";
             Load += FrmNombreYCodigo2x1_Load;

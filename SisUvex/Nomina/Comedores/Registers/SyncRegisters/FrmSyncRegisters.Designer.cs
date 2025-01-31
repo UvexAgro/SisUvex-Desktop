@@ -65,7 +65,6 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmSyncRegisters";
-            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Sincronizar registros comedor";
             Load += FrmSyncRegisters_Load;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPresentationAdd));
             cboMarket = new ComboBox();
             txbId = new TextBox();
             txbName = new TextBox();
@@ -66,7 +67,7 @@
             cboMarket.Location = new Point(358, 60);
             cboMarket.Name = "cboMarket";
             cboMarket.Size = new Size(43, 29);
-            cboMarket.TabIndex = 46;
+            cboMarket.TabIndex = 2;
             // 
             // txbId
             // 
@@ -75,7 +76,7 @@
             txbId.Location = new Point(527, 9);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 43;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -85,7 +86,7 @@
             txbName.MaxLength = 50;
             txbName.Name = "txbName";
             txbName.Size = new Size(310, 29);
-            txbName.TabIndex = 40;
+            txbName.TabIndex = 3;
             // 
             // lblName
             // 
@@ -164,7 +165,7 @@
             txbIdCategory.Location = new Point(91, 130);
             txbIdCategory.Name = "txbIdCategory";
             txbIdCategory.Size = new Size(43, 29);
-            txbIdCategory.TabIndex = 54;
+            txbIdCategory.TabIndex = 4;
             txbIdCategory.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCategory
@@ -176,7 +177,7 @@
             cboCategory.Location = new Point(140, 131);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(388, 29);
-            cboCategory.TabIndex = 52;
+            cboCategory.TabIndex = 5;
             // 
             // lblCategory
             // 
@@ -195,7 +196,7 @@
             txbIdCrop.Location = new Point(91, 165);
             txbIdCrop.Name = "txbIdCrop";
             txbIdCrop.Size = new Size(43, 29);
-            txbIdCrop.TabIndex = 57;
+            txbIdCrop.TabIndex = 7;
             txbIdCrop.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCrop
@@ -207,7 +208,7 @@
             cboCrop.Location = new Point(140, 166);
             cboCrop.Name = "cboCrop";
             cboCrop.Size = new Size(388, 29);
-            cboCrop.TabIndex = 55;
+            cboCrop.TabIndex = 8;
             // 
             // lblCrop
             // 
@@ -226,7 +227,7 @@
             txbIdColor.Location = new Point(91, 200);
             txbIdColor.Name = "txbIdColor";
             txbIdColor.Size = new Size(43, 29);
-            txbIdColor.TabIndex = 60;
+            txbIdColor.TabIndex = 9;
             txbIdColor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboColor
@@ -238,7 +239,7 @@
             cboColor.Location = new Point(140, 201);
             cboColor.Name = "cboColor";
             cboColor.Size = new Size(388, 29);
-            cboColor.TabIndex = 58;
+            cboColor.TabIndex = 10;
             // 
             // lblColor
             // 
@@ -285,7 +286,7 @@
             btnAccept.Location = new Point(417, 242);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 64;
+            btnAccept.TabIndex = 11;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -295,7 +296,7 @@
             btnCancel.Location = new Point(498, 242);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 65;
+            btnCancel.TabIndex = 12;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -317,7 +318,7 @@
             chbActive.Location = new Point(91, 58);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 68;
+            chbActive.TabIndex = 0;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -342,7 +343,7 @@
             chbActiveCategory.Location = new Point(534, 131);
             chbActiveCategory.Name = "chbActiveCategory";
             chbActiveCategory.Size = new Size(39, 29);
-            chbActiveCategory.TabIndex = 70;
+            chbActiveCategory.TabIndex = 6;
             chbActiveCategory.Text = "     ";
             chbActiveCategory.UseVisualStyleBackColor = true;
             // 
@@ -379,6 +380,7 @@
             Controls.Add(lblMarket);
             Controls.Add(label2);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPresentationAdd";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Añadir Presentacion";

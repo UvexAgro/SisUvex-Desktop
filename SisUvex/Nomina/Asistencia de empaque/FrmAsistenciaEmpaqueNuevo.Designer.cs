@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaEmpaqueNuevo));
             dtpDia = new DateTimePicker();
             btnMostrar = new Button();
             lblExcel = new Label();
@@ -50,14 +51,14 @@
             dtpDia.Location = new Point(52, 70);
             dtpDia.Name = "dtpDia";
             dtpDia.Size = new Size(254, 23);
-            dtpDia.TabIndex = 24;
+            dtpDia.TabIndex = 4;
             // 
             // btnMostrar
             // 
             btnMostrar.Location = new Point(393, 41);
             btnMostrar.Name = "btnMostrar";
             btnMostrar.Size = new Size(75, 23);
-            btnMostrar.TabIndex = 23;
+            btnMostrar.TabIndex = 3;
             btnMostrar.Text = "Mostrar";
             btnMostrar.UseVisualStyleBackColor = true;
             btnMostrar.Click += btnMostrar_Click;
@@ -87,14 +88,14 @@
             cboHoja.Location = new Point(52, 41);
             cboHoja.Name = "cboHoja";
             cboHoja.Size = new Size(335, 23);
-            cboHoja.TabIndex = 20;
+            cboHoja.TabIndex = 2;
             // 
             // btnExaminar
             // 
             btnExaminar.Location = new Point(393, 12);
             btnExaminar.Name = "btnExaminar";
             btnExaminar.Size = new Size(75, 23);
-            btnExaminar.TabIndex = 19;
+            btnExaminar.TabIndex = 1;
             btnExaminar.Text = "Examinar...";
             btnExaminar.UseVisualStyleBackColor = true;
             btnExaminar.Click += btnExaminar_Click;
@@ -104,14 +105,14 @@
             txbExaminar.Location = new Point(93, 12);
             txbExaminar.Name = "txbExaminar";
             txbExaminar.Size = new Size(294, 23);
-            txbExaminar.TabIndex = 18;
+            txbExaminar.TabIndex = 0;
             // 
             // btnCancelar
             // 
             btnCancelar.Location = new Point(393, 70);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
-            btnCancelar.TabIndex = 17;
+            btnCancelar.TabIndex = 6;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -121,7 +122,7 @@
             btnAceptar.Location = new Point(312, 70);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 16;
+            btnAceptar.TabIndex = 5;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -136,34 +137,33 @@
             dgvLista.BackgroundColor = SystemColors.ControlLightLight;
             dgvLista.BorderStyle = BorderStyle.Fixed3D;
             dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvLista.EnableHeadersVisualStyles = false;
             dgvLista.ImeMode = ImeMode.NoControl;
             dgvLista.Location = new Point(11, 99);
             dgvLista.Name = "dgvLista";
             dgvLista.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvLista.RowHeadersVisible = false;
             dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvLista.RowTemplate.Height = 25;
             dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvLista.Size = new Size(604, 339);
-            dgvLista.TabIndex = 15;
+            dgvLista.TabIndex = 8;
             // 
             // ofdExcel
             // 
@@ -175,7 +175,7 @@
             btnInstrucciones.Location = new Point(525, 13);
             btnInstrucciones.Name = "btnInstrucciones";
             btnInstrucciones.Size = new Size(91, 23);
-            btnInstrucciones.TabIndex = 25;
+            btnInstrucciones.TabIndex = 7;
             btnInstrucciones.Text = "Instrucciones";
             btnInstrucciones.UseVisualStyleBackColor = true;
             btnInstrucciones.Click += btnInstrucciones_Click;
@@ -196,6 +196,7 @@
             Controls.Add(btnCancelar);
             Controls.Add(btnAceptar);
             Controls.Add(dgvLista);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaEmpaqueNuevo";
             Text = "Registro de asistencia de empaque";
             WindowState = FormWindowState.Maximized;

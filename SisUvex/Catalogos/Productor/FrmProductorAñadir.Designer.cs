@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmProductorAñadir));
             lblTitulo = new Label();
             lblNombre = new Label();
             txbNombre = new TextBox();
@@ -84,7 +85,7 @@
             txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(528, 29);
-            txbNombre.TabIndex = 1;
+            txbNombre.TabIndex = 2;
             // 
             // txbId
             // 
@@ -93,7 +94,7 @@
             txbId.Location = new Point(571, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 8;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -112,7 +113,7 @@
             btnCancelar.Location = new Point(542, 367);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 7;
+            btnCancelar.TabIndex = 12;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -123,7 +124,7 @@
             btnAceptar.Location = new Point(461, 367);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 6;
+            btnAceptar.TabIndex = 11;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -148,7 +149,7 @@
             cboActivo.MaxDropDownItems = 9;
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 8;
+            cboActivo.TabIndex = 0;
             // 
             // lblDireccion
             // 
@@ -167,7 +168,7 @@
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
             txbDireccion.Size = new Size(528, 29);
-            txbDireccion.TabIndex = 2;
+            txbDireccion.TabIndex = 4;
             // 
             // lblCiudad
             // 
@@ -186,7 +187,7 @@
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
             txbCiudad.Size = new Size(528, 29);
-            txbCiudad.TabIndex = 3;
+            txbCiudad.TabIndex = 5;
             // 
             // lblRFC
             // 
@@ -205,7 +206,7 @@
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
             txbRFC.Size = new Size(248, 29);
-            txbRFC.TabIndex = 4;
+            txbRFC.TabIndex = 6;
             // 
             // txbTelefono
             // 
@@ -214,7 +215,7 @@
             txbTelefono.MaxLength = 13;
             txbTelefono.Name = "txbTelefono";
             txbTelefono.Size = new Size(248, 29);
-            txbTelefono.TabIndex = 5;
+            txbTelefono.TabIndex = 7;
             txbTelefono.KeyPress += txbTelefono_KeyPress;
             // 
             // lblTelefono
@@ -255,7 +256,7 @@
             txbGGN.MaxLength = 13;
             txbGGN.Name = "txbGGN";
             txbGGN.Size = new Size(248, 29);
-            txbGGN.TabIndex = 21;
+            txbGGN.TabIndex = 8;
             // 
             // lblRegPat
             // 
@@ -274,7 +275,7 @@
             txbRegPat.MaxLength = 30;
             txbRegPat.Name = "txbRegPat";
             txbRegPat.Size = new Size(307, 29);
-            txbRegPat.TabIndex = 23;
+            txbRegPat.TabIndex = 9;
             // 
             // lblLogo
             // 
@@ -293,7 +294,7 @@
             txbLogo.MaxLength = 15;
             txbLogo.Name = "txbLogo";
             txbLogo.Size = new Size(248, 29);
-            txbLogo.TabIndex = 25;
+            txbLogo.TabIndex = 10;
             // 
             // lblShortName
             // 
@@ -312,7 +313,7 @@
             txbShortName.MaxLength = 6;
             txbShortName.Name = "txbShortName";
             txbShortName.Size = new Size(121, 29);
-            txbShortName.TabIndex = 27;
+            txbShortName.TabIndex = 3;
             // 
             // label1
             // 
@@ -358,6 +359,7 @@
             Controls.Add(lblActivo);
             Controls.Add(lblObliNom);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmProductorAñadir";
             StartPosition = FormStartPosition.CenterScreen;

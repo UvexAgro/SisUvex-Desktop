@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkPlanAdd));
             txbIdSize = new TextBox();
             cboSize = new ComboBox();
             label1 = new Label();
@@ -82,7 +83,7 @@
             txbIdSize.Location = new Point(91, 155);
             txbIdSize.Name = "txbIdSize";
             txbIdSize.Size = new Size(46, 29);
-            txbIdSize.TabIndex = 167;
+            txbIdSize.TabIndex = 5;
             txbIdSize.TextAlign = HorizontalAlignment.Center;
             // 
             // cboSize
@@ -98,7 +99,7 @@
             cboSize.Location = new Point(143, 155);
             cboSize.Name = "cboSize";
             cboSize.Size = new Size(244, 29);
-            cboSize.TabIndex = 142;
+            cboSize.TabIndex = 6;
             // 
             // label1
             // 
@@ -127,7 +128,7 @@
             dtpDateWorkPlan.Location = new Point(91, 85);
             dtpDateWorkPlan.Name = "dtpDateWorkPlan";
             dtpDateWorkPlan.Size = new Size(341, 29);
-            dtpDateWorkPlan.TabIndex = 146;
+            dtpDateWorkPlan.TabIndex = 1;
             // 
             // lblVPC
             // 
@@ -147,7 +148,7 @@
             txbVPC.Location = new Point(368, 51);
             txbVPC.Name = "txbVPC";
             txbVPC.Size = new Size(64, 29);
-            txbVPC.TabIndex = 163;
+            txbVPC.TabIndex = 25;
             txbVPC.TextAlign = HorizontalAlignment.Center;
             // 
             // dgvGTIN
@@ -184,7 +185,7 @@
             dgvGTIN.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvGTIN.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvGTIN.Size = new Size(636, 177);
-            dgvGTIN.TabIndex = 161;
+            dgvGTIN.TabIndex = 20;
             dgvGTIN.MouseDoubleClick += dgvGTIN_MouseDoubleClick;
             // 
             // btnIdGTINSelect
@@ -192,7 +193,7 @@
             btnIdGTINSelect.Location = new Point(133, 300);
             btnIdGTINSelect.Name = "btnIdGTINSelect";
             btnIdGTINSelect.Size = new Size(115, 29);
-            btnIdGTINSelect.TabIndex = 144;
+            btnIdGTINSelect.TabIndex = 15;
             btnIdGTINSelect.Text = "Seleccionar GTIN";
             btnIdGTINSelect.UseVisualStyleBackColor = true;
             btnIdGTINSelect.Click += btnIdGTINSelect_Click;
@@ -215,7 +216,7 @@
             txbIdWorkGroup.Location = new Point(91, 120);
             txbIdWorkGroup.Name = "txbIdWorkGroup";
             txbIdWorkGroup.Size = new Size(46, 29);
-            txbIdWorkGroup.TabIndex = 157;
+            txbIdWorkGroup.TabIndex = 2;
             txbIdWorkGroup.TextAlign = HorizontalAlignment.Center;
             // 
             // cboWorkGroup
@@ -230,7 +231,7 @@
             cboWorkGroup.Location = new Point(143, 120);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(244, 29);
-            cboWorkGroup.TabIndex = 140;
+            cboWorkGroup.TabIndex = 3;
             // 
             // lblLot
             // 
@@ -250,7 +251,7 @@
             txbIdLot.Location = new Point(62, 254);
             txbIdLot.Name = "txbIdLot";
             txbIdLot.Size = new Size(75, 29);
-            txbIdLot.TabIndex = 153;
+            txbIdLot.TabIndex = 11;
             txbIdLot.TextAlign = HorizontalAlignment.Center;
             // 
             // cboLot
@@ -265,7 +266,7 @@
             cboLot.Location = new Point(143, 254);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(460, 29);
-            cboLot.TabIndex = 141;
+            cboLot.TabIndex = 12;
             // 
             // lblIdGTIN
             // 
@@ -286,7 +287,7 @@
             txbIdGTIN.Name = "txbIdGTIN";
             txbIdGTIN.ReadOnly = true;
             txbIdGTIN.Size = new Size(60, 29);
-            txbIdGTIN.TabIndex = 148;
+            txbIdGTIN.TabIndex = 14;
             txbIdGTIN.TextAlign = HorizontalAlignment.Center;
             // 
             // txbId
@@ -296,7 +297,7 @@
             txbId.Location = new Point(368, 14);
             txbId.Name = "txbId";
             txbId.Size = new Size(64, 29);
-            txbId.TabIndex = 143;
+            txbId.TabIndex = 23;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -369,7 +370,7 @@
             chbLotActives.Location = new Point(609, 254);
             chbLotActives.Name = "chbLotActives";
             chbLotActives.Size = new Size(39, 29);
-            chbLotActives.TabIndex = 175;
+            chbLotActives.TabIndex = 13;
             chbLotActives.Text = "     ";
             chbLotActives.UseVisualStyleBackColor = true;
             // 
@@ -383,7 +384,7 @@
             chbSizeActives.Location = new Point(393, 154);
             chbSizeActives.Name = "chbSizeActives";
             chbSizeActives.Size = new Size(39, 29);
-            chbSizeActives.TabIndex = 177;
+            chbSizeActives.TabIndex = 7;
             chbSizeActives.Text = "     ";
             chbSizeActives.UseVisualStyleBackColor = true;
             // 
@@ -414,7 +415,7 @@
             btnAccept.Location = new Point(492, 518);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 181;
+            btnAccept.TabIndex = 21;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -425,7 +426,7 @@
             btnCancel.Location = new Point(573, 518);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 180;
+            btnCancel.TabIndex = 22;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -447,7 +448,7 @@
             chbActive.Location = new Point(91, 48);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 183;
+            chbActive.TabIndex = 0;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -472,7 +473,7 @@
             chbWorkGroupActives.Location = new Point(393, 120);
             chbWorkGroupActives.Name = "chbWorkGroupActives";
             chbWorkGroupActives.Size = new Size(39, 29);
-            chbWorkGroupActives.TabIndex = 184;
+            chbWorkGroupActives.TabIndex = 4;
             chbWorkGroupActives.Text = "     ";
             chbWorkGroupActives.UseVisualStyleBackColor = true;
             // 
@@ -486,7 +487,7 @@
             chbGtinActives.Location = new Point(254, 300);
             chbGtinActives.Name = "chbGtinActives";
             chbGtinActives.Size = new Size(39, 29);
-            chbGtinActives.TabIndex = 185;
+            chbGtinActives.TabIndex = 16;
             chbGtinActives.Text = "     ";
             chbGtinActives.UseVisualStyleBackColor = true;
             // 
@@ -500,7 +501,7 @@
             chbVarietyActives.Location = new Point(609, 218);
             chbVarietyActives.Name = "chbVarietyActives";
             chbVarietyActives.Size = new Size(39, 29);
-            chbVarietyActives.TabIndex = 190;
+            chbVarietyActives.TabIndex = 10;
             chbVarietyActives.Text = "     ";
             chbVarietyActives.UseVisualStyleBackColor = true;
             // 
@@ -523,7 +524,7 @@
             txbIdVariety.Location = new Point(91, 218);
             txbIdVariety.Name = "txbIdVariety";
             txbIdVariety.Size = new Size(46, 29);
-            txbIdVariety.TabIndex = 188;
+            txbIdVariety.TabIndex = 8;
             txbIdVariety.TextAlign = HorizontalAlignment.Center;
             // 
             // cboVariety
@@ -539,7 +540,7 @@
             cboVariety.Location = new Point(143, 218);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(460, 29);
-            cboVariety.TabIndex = 187;
+            cboVariety.TabIndex = 9;
             // 
             // chbDistributorActives
             // 
@@ -551,7 +552,7 @@
             chbDistributorActives.Location = new Point(609, 300);
             chbDistributorActives.Name = "chbDistributorActives";
             chbDistributorActives.Size = new Size(39, 29);
-            chbDistributorActives.TabIndex = 194;
+            chbDistributorActives.TabIndex = 19;
             chbDistributorActives.Text = "     ";
             chbDistributorActives.UseVisualStyleBackColor = true;
             // 
@@ -574,7 +575,7 @@
             txbIdDistributor.Location = new Point(404, 300);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(35, 29);
-            txbIdDistributor.TabIndex = 193;
+            txbIdDistributor.TabIndex = 17;
             txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistributor
@@ -590,7 +591,7 @@
             cboDistributor.Location = new Point(445, 300);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(158, 29);
-            cboDistributor.TabIndex = 192;
+            cboDistributor.TabIndex = 18;
             // 
             // FrmWorkPlanAdd
             // 
@@ -639,6 +640,7 @@
             Controls.Add(label8);
             Controls.Add(label2);
             Controls.Add(label4);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(676, 594);
             Name = "FrmWorkPlanAdd";
             Text = "Añadir plan de trabajo";

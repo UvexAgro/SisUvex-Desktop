@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReestibado));
             txbIdPallet = new TextBox();
             lblTitulo = new Label();
             lblPallet = new Label();
@@ -195,14 +196,14 @@
             nudCajasFinal.Location = new Point(159, 64);
             nudCajasFinal.Name = "nudCajasFinal";
             nudCajasFinal.Size = new Size(67, 23);
-            nudCajasFinal.TabIndex = 15;
+            nudCajasFinal.TabIndex = 2;
             // 
             // btnReestibar
             // 
             btnReestibar.Location = new Point(359, 62);
             btnReestibar.Name = "btnReestibar";
             btnReestibar.Size = new Size(63, 23);
-            btnReestibar.TabIndex = 17;
+            btnReestibar.TabIndex = 4;
             btnReestibar.Text = "Reestibar";
             btnReestibar.UseVisualStyleBackColor = true;
             btnReestibar.Click += btnReestibar_Click;
@@ -223,7 +224,7 @@
             btnPallet.Location = new Point(125, 64);
             btnPallet.Name = "btnPallet";
             btnPallet.Size = new Size(23, 23);
-            btnPallet.TabIndex = 22;
+            btnPallet.TabIndex = 1;
             btnPallet.UseVisualStyleBackColor = true;
             btnPallet.Click += btnPallet_Click;
             // 
@@ -244,7 +245,7 @@
             cboMotivo.Location = new Point(232, 63);
             cboMotivo.Name = "cboMotivo";
             cboMotivo.Size = new Size(121, 23);
-            cboMotivo.TabIndex = 24;
+            cboMotivo.TabIndex = 3;
             cboMotivo.SelectedIndexChanged += cboMotivo_SelectedIndexChanged;
             // 
             // lblCajasFinal
@@ -304,6 +305,7 @@
             Controls.Add(lblTitulo);
             Controls.Add(txbIdPallet);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmReestibado";

@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConvertPallet));
             lblTitulo = new Label();
             btnQuit = new Button();
             btnAddPallet = new Button();
@@ -55,14 +56,14 @@
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(201, 31);
             lblTitulo.TabIndex = 20;
-            lblTitulo.Text = "Convertit pallet";
+            lblTitulo.Text = "Convertir pallet";
             // 
             // btnQuit
             // 
             btnQuit.Location = new Point(280, 47);
             btnQuit.Name = "btnQuit";
             btnQuit.Size = new Size(129, 23);
-            btnQuit.TabIndex = 16;
+            btnQuit.TabIndex = 3;
             btnQuit.Text = "Quitar seleeccionado";
             btnQuit.UseVisualStyleBackColor = true;
             btnQuit.Click += btnQuit_Click;
@@ -72,7 +73,7 @@
             btnAddPallet.Location = new Point(213, 47);
             btnAddPallet.Name = "btnAddPallet";
             btnAddPallet.Size = new Size(61, 23);
-            btnAddPallet.TabIndex = 15;
+            btnAddPallet.TabIndex = 2;
             btnAddPallet.Text = "Agregar";
             btnAddPallet.UseVisualStyleBackColor = true;
             btnAddPallet.Click += btnAddPallet_Click;
@@ -110,10 +111,9 @@
             dgvPallet.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPallet.RowHeadersVisible = false;
             dgvPallet.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvPallet.RowTemplate.Height = 25;
             dgvPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPallet.Size = new Size(776, 246);
-            dgvPallet.TabIndex = 14;
+            dgvPallet.TabIndex = 7;
             // 
             // lblIdPallet
             // 
@@ -130,7 +130,7 @@
             txbIdPallet.MaxLength = 5;
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(66, 23);
-            txbIdPallet.TabIndex = 12;
+            txbIdPallet.TabIndex = 0;
             txbIdPallet.KeyPress += txbIdPallet_KeyPress;
             // 
             // txbWorkPlan
@@ -140,7 +140,7 @@
             txbWorkPlan.MaxLength = 5;
             txbWorkPlan.Name = "txbWorkPlan";
             txbWorkPlan.Size = new Size(558, 23);
-            txbWorkPlan.TabIndex = 21;
+            txbWorkPlan.TabIndex = 5;
             // 
             // label1
             // 
@@ -169,7 +169,7 @@
             cboWorkPlan.Margin = new Padding(1);
             cboWorkPlan.Name = "cboWorkPlan";
             cboWorkPlan.Size = new Size(654, 23);
-            cboWorkPlan.TabIndex = 75;
+            cboWorkPlan.TabIndex = 6;
             // 
             // txbIdWorkPlan
             // 
@@ -178,14 +178,14 @@
             txbIdWorkPlan.MaxLength = 5;
             txbIdWorkPlan.Name = "txbIdWorkPlan";
             txbIdWorkPlan.Size = new Size(41, 23);
-            txbIdWorkPlan.TabIndex = 76;
+            txbIdWorkPlan.TabIndex = 3;
             // 
             // btnAccept
             // 
             btnAccept.Location = new Point(12, 381);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(127, 23);
-            btnAccept.TabIndex = 77;
+            btnAccept.TabIndex = 8;
             btnAccept.Text = "Convertir pallets";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -195,7 +195,7 @@
             btnCancel.Location = new Point(147, 381);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(127, 23);
-            btnCancel.TabIndex = 78;
+            btnCancel.TabIndex = 9;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -207,7 +207,7 @@
             txbDay.MaxLength = 5;
             txbDay.Name = "txbDay";
             txbDay.Size = new Size(87, 23);
-            txbDay.TabIndex = 79;
+            txbDay.TabIndex = 4;
             // 
             // FrmConvertPallet
             // 
@@ -228,8 +228,9 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(lblIdPallet);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmConvertPallet";
-            Text = "FrmConvertPallet";
+            Text = "Convertir pallet";
             Load += FrmConvertPallet_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPallet).EndInit();
             ResumeLayout(false);

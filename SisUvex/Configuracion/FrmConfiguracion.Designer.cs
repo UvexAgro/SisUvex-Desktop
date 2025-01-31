@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConfiguracion));
             lblbdConn = new Label();
             lblUserConn = new Label();
             lblPassConn = new Label();
@@ -104,7 +105,7 @@
             btnLectura.Location = new Point(280, 108);
             btnLectura.Name = "btnLectura";
             btnLectura.Size = new Size(110, 23);
-            btnLectura.TabIndex = 12;
+            btnLectura.TabIndex = 4;
             btnLectura.Text = "Probar conexión";
             btnLectura.UseVisualStyleBackColor = true;
             btnLectura.Click += btnLectura_Click;
@@ -114,7 +115,7 @@
             txbPassConn.Location = new Point(96, 77);
             txbPassConn.Name = "txbPassConn";
             txbPassConn.Size = new Size(294, 23);
-            txbPassConn.TabIndex = 9;
+            txbPassConn.TabIndex = 3;
             txbPassConn.UseSystemPasswordChar = true;
             // 
             // txbUserConn
@@ -122,21 +123,21 @@
             txbUserConn.Location = new Point(96, 48);
             txbUserConn.Name = "txbUserConn";
             txbUserConn.Size = new Size(294, 23);
-            txbUserConn.TabIndex = 8;
+            txbUserConn.TabIndex = 2;
             // 
             // txbBdConn
             // 
             txbBdConn.Location = new Point(96, 19);
             txbBdConn.Name = "txbBdConn";
             txbBdConn.Size = new Size(294, 23);
-            txbBdConn.TabIndex = 7;
+            txbBdConn.TabIndex = 1;
             // 
             // txbServer
             // 
             txbServer.Location = new Point(108, 14);
             txbServer.Name = "txbServer";
             txbServer.Size = new Size(292, 23);
-            txbServer.TabIndex = 6;
+            txbServer.TabIndex = 0;
             // 
             // gpbEscritura
             // 
@@ -159,7 +160,7 @@
             btnEscritura.Location = new Point(280, 106);
             btnEscritura.Name = "btnEscritura";
             btnEscritura.Size = new Size(110, 23);
-            btnEscritura.TabIndex = 13;
+            btnEscritura.TabIndex = 8;
             btnEscritura.Text = "Probar conexión";
             btnEscritura.UseVisualStyleBackColor = true;
             btnEscritura.Click += btnEscritura_Click;
@@ -169,7 +170,7 @@
             txbPassWrite.Location = new Point(96, 77);
             txbPassWrite.Name = "txbPassWrite";
             txbPassWrite.Size = new Size(294, 23);
-            txbPassWrite.TabIndex = 9;
+            txbPassWrite.TabIndex = 7;
             txbPassWrite.UseSystemPasswordChar = true;
             // 
             // txbUserWrite
@@ -177,14 +178,14 @@
             txbUserWrite.Location = new Point(96, 48);
             txbUserWrite.Name = "txbUserWrite";
             txbUserWrite.Size = new Size(294, 23);
-            txbUserWrite.TabIndex = 8;
+            txbUserWrite.TabIndex = 6;
             // 
             // txbBdWrite
             // 
             txbBdWrite.Location = new Point(96, 19);
             txbBdWrite.Name = "txbBdWrite";
             txbBdWrite.Size = new Size(294, 23);
-            txbBdWrite.TabIndex = 7;
+            txbBdWrite.TabIndex = 5;
             // 
             // lblBdWrite
             // 
@@ -249,7 +250,7 @@
             btnEmpleados.Location = new Point(280, 48);
             btnEmpleados.Name = "btnEmpleados";
             btnEmpleados.Size = new Size(110, 23);
-            btnEmpleados.TabIndex = 13;
+            btnEmpleados.TabIndex = 10;
             btnEmpleados.Text = "Probar conexión";
             btnEmpleados.UseVisualStyleBackColor = true;
             btnEmpleados.Click += btnEmpleados_Click;
@@ -259,7 +260,7 @@
             txbDbEmployees.Location = new Point(96, 19);
             txbDbEmployees.Name = "txbDbEmployees";
             txbDbEmployees.Size = new Size(294, 23);
-            txbDbEmployees.TabIndex = 7;
+            txbDbEmployees.TabIndex = 9;
             // 
             // label1
             // 
@@ -282,6 +283,7 @@
             Controls.Add(txbServer);
             Controls.Add(gpbConn);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmConfiguracion";
             Text = "Configuracion de conexión";

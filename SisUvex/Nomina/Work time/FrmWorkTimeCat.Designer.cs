@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkTimeCat));
             dgvCatalog = new DataGridView();
             btnModify = new Button();
             btnAdd = new Button();
@@ -53,34 +54,33 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 36);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalog.RowTemplate.Height = 25;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 402);
-            dgvCatalog.TabIndex = 23;
+            dgvCatalog.TabIndex = 7;
             dgvCatalog.DoubleClick += dgvCatalog_DoubleClick;
             // 
             // btnModify
@@ -88,7 +88,7 @@
             btnModify.Location = new Point(76, 8);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 2;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -98,7 +98,7 @@
             btnAdd.Location = new Point(12, 8);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(58, 23);
-            btnAdd.TabIndex = 1;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -111,7 +111,7 @@
             cboProductionLine.Location = new Point(236, 8);
             cboProductionLine.Name = "cboProductionLine";
             cboProductionLine.Size = new Size(194, 23);
-            cboProductionLine.TabIndex = 4;
+            cboProductionLine.TabIndex = 3;
             // 
             // lblProductionLine
             // 
@@ -132,7 +132,7 @@
             chbActiveProductionLine.Location = new Point(203, 7);
             chbActiveProductionLine.Name = "chbActiveProductionLine";
             chbActiveProductionLine.Size = new Size(32, 25);
-            chbActiveProductionLine.TabIndex = 3;
+            chbActiveProductionLine.TabIndex = 2;
             chbActiveProductionLine.Text = "     ";
             chbActiveProductionLine.UseVisualStyleBackColor = true;
             // 
@@ -144,7 +144,7 @@
             btnSearch.Location = new Point(431, 7);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(25, 25);
-            btnSearch.TabIndex = 5;
+            btnSearch.TabIndex = 4;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -153,7 +153,7 @@
             btnReportField.Location = new Point(543, 8);
             btnReportField.Name = "btnReportField";
             btnReportField.Size = new Size(70, 23);
-            btnReportField.TabIndex = 28;
+            btnReportField.TabIndex = 5;
             btnReportField.Text = "Campo";
             btnReportField.UseVisualStyleBackColor = true;
             btnReportField.Click += btnReportField_Click;
@@ -163,7 +163,7 @@
             btnReportFacility.Location = new Point(619, 8);
             btnReportFacility.Name = "btnReportFacility";
             btnReportFacility.Size = new Size(70, 23);
-            btnReportFacility.TabIndex = 29;
+            btnReportFacility.TabIndex = 6;
             btnReportFacility.Text = "Empaque";
             btnReportFacility.UseVisualStyleBackColor = true;
             btnReportFacility.Click += btnReportFacility_Click;
@@ -192,6 +192,7 @@
             Controls.Add(btnAdd);
             Controls.Add(dgvCatalog);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmWorkTimeCat";
             Text = "Horarios de empaque";
             WindowState = FormWindowState.Maximized;

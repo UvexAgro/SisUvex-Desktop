@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSetupPrint));
             cmBxSetupPrintPallet = new ComboBox();
             label1 = new Label();
             btnSetupPrintPTI = new Button();
@@ -49,7 +50,7 @@
             cmBxSetupPrintPallet.Font = new Font("Segoe UI", 14F);
             cmBxSetupPrintPallet.FormattingEnabled = true;
             cmBxSetupPrintPallet.Location = new Point(21, 81);
-            cmBxSetupPrintPallet.Margin = new Padding(1, 1, 1, 1);
+            cmBxSetupPrintPallet.Margin = new Padding(1);
             cmBxSetupPrintPallet.Name = "cmBxSetupPrintPallet";
             cmBxSetupPrintPallet.Size = new Size(258, 33);
             cmBxSetupPrintPallet.TabIndex = 0;
@@ -70,10 +71,10 @@
             // 
             btnSetupPrintPTI.Font = new Font("Segoe UI", 14F);
             btnSetupPrintPTI.Location = new Point(544, 270);
-            btnSetupPrintPTI.Margin = new Padding(1, 1, 1, 1);
+            btnSetupPrintPTI.Margin = new Padding(1);
             btnSetupPrintPTI.Name = "btnSetupPrintPTI";
             btnSetupPrintPTI.Size = new Size(78, 30);
-            btnSetupPrintPTI.TabIndex = 2;
+            btnSetupPrintPTI.TabIndex = 5;
             btnSetupPrintPTI.Text = "FIJAR";
             btnSetupPrintPTI.UseVisualStyleBackColor = true;
             btnSetupPrintPTI.Click += btnSetupPrintPTI_Click;
@@ -94,10 +95,10 @@
             cmBxSetupPrintPTI.Font = new Font("Segoe UI", 14F);
             cmBxSetupPrintPTI.FormattingEnabled = true;
             cmBxSetupPrintPTI.Location = new Point(367, 81);
-            cmBxSetupPrintPTI.Margin = new Padding(1, 1, 1, 1);
+            cmBxSetupPrintPTI.Margin = new Padding(1);
             cmBxSetupPrintPTI.Name = "cmBxSetupPrintPTI";
             cmBxSetupPrintPTI.Size = new Size(258, 33);
-            cmBxSetupPrintPTI.TabIndex = 3;
+            cmBxSetupPrintPTI.TabIndex = 1;
             // 
             // label3
             // 
@@ -115,10 +116,10 @@
             cmBxSetupPrintCode.Font = new Font("Segoe UI", 14F);
             cmBxSetupPrintCode.FormattingEnabled = true;
             cmBxSetupPrintCode.Location = new Point(21, 213);
-            cmBxSetupPrintCode.Margin = new Padding(1, 1, 1, 1);
+            cmBxSetupPrintCode.Margin = new Padding(1);
             cmBxSetupPrintCode.Name = "cmBxSetupPrintCode";
             cmBxSetupPrintCode.Size = new Size(258, 33);
-            cmBxSetupPrintCode.TabIndex = 6;
+            cmBxSetupPrintCode.TabIndex = 2;
             // 
             // label4
             // 
@@ -136,10 +137,10 @@
             cmBxSetupPrintDoc.Font = new Font("Segoe UI", 14F);
             cmBxSetupPrintDoc.FormattingEnabled = true;
             cmBxSetupPrintDoc.Location = new Point(367, 213);
-            cmBxSetupPrintDoc.Margin = new Padding(1, 1, 1, 1);
+            cmBxSetupPrintDoc.Margin = new Padding(1);
             cmBxSetupPrintDoc.Name = "cmBxSetupPrintDoc";
             cmBxSetupPrintDoc.Size = new Size(258, 33);
-            cmBxSetupPrintDoc.TabIndex = 9;
+            cmBxSetupPrintDoc.TabIndex = 3;
             // 
             // lblPallet
             // 
@@ -185,10 +186,10 @@
             // 
             button1.Font = new Font("Segoe UI", 14F);
             button1.Location = new Point(388, 270);
-            button1.Margin = new Padding(1, 1, 1, 1);
+            button1.Margin = new Padding(1);
             button1.Name = "button1";
             button1.Size = new Size(114, 30);
-            button1.TabIndex = 16;
+            button1.TabIndex = 4;
             button1.Text = "MOSTRAR";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
@@ -197,7 +198,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(668, 307);
+            ClientSize = new Size(668, 322);
             Controls.Add(button1);
             Controls.Add(lblPTI);
             Controls.Add(lblCode);
@@ -212,9 +213,10 @@
             Controls.Add(btnSetupPrintPTI);
             Controls.Add(label1);
             Controls.Add(cmBxSetupPrintPallet);
-            Margin = new Padding(1, 1, 1, 1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(1);
             Name = "FrmSetupPrint";
-            Text = "FrmSetupPrinterPallet";
+            Text = "Configurar impresoras";
             Load += FrmSetupPrinterPallet_Load;
             ResumeLayout(false);
             PerformLayout();

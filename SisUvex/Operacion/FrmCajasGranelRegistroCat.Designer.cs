@@ -30,17 +30,19 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCajasGranelRegistroCat));
             btnEliminar = new Button();
             dgvCatalogo = new DataGridView();
             btnModificar = new Button();
             btnAñadir = new Button();
             dtpFecha = new DateTimePicker();
+            btnSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogo).BeginInit();
             SuspendLayout();
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(394, 9);
+            btnEliminar.Location = new Point(434, 9);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 13;
@@ -81,14 +83,13 @@
             dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogo.RowHeadersVisible = false;
             dgvCatalogo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogo.RowTemplate.Height = 25;
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogo.Size = new Size(783, 404);
             dgvCatalogo.TabIndex = 11;
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(313, 9);
+            btnModificar.Location = new Point(353, 9);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 10;
@@ -98,7 +99,7 @@
             // 
             // btnAñadir
             // 
-            btnAñadir.Location = new Point(232, 9);
+            btnAñadir.Location = new Point(272, 9);
             btnAñadir.Name = "btnAñadir";
             btnAñadir.Size = new Size(75, 23);
             btnAñadir.TabIndex = 9;
@@ -114,18 +115,31 @@
             dtpFecha.TabIndex = 14;
             dtpFecha.ValueChanged += dtpFecha_ValueChanged;
             // 
+            // btnSearch
+            // 
+            btnSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearch.Location = new Point(232, 9);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(23, 23);
+            btnSearch.TabIndex = 15;
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // FrmCajasGranelRegistroCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnSearch);
             Controls.Add(dtpFecha);
             Controls.Add(btnEliminar);
             Controls.Add(btnModificar);
             Controls.Add(btnAñadir);
             Controls.Add(dgvCatalogo);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmCajasGranelRegistroCat";
-            Text = "FrmCajasGranelRegistroCat";
+            Text = "Registros granel";
             WindowState = FormWindowState.Minimized;
             Load += FrmCajasGranelRegistroCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalogo).EndInit();
@@ -138,5 +152,6 @@
         private Button btnModificar;
         private Button btnAñadir;
         public DateTimePicker dtpFecha;
+        private Button btnSearch;
     }
 }

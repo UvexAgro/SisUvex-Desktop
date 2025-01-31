@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesGtinAdd));
             lblTitle = new Label();
             txbId = new TextBox();
             lblPrice = new Label();
@@ -69,7 +70,7 @@
             txbId.Name = "txbId";
             txbId.ReadOnly = true;
             txbId.Size = new Size(29, 24);
-            txbId.TabIndex = 29;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblPrice
@@ -90,7 +91,7 @@
             txbDescription.Name = "txbDescription";
             txbDescription.ReadOnly = true;
             txbDescription.Size = new Size(543, 24);
-            txbDescription.TabIndex = 32;
+            txbDescription.TabIndex = 1;
             // 
             // gpbField
             // 
@@ -114,7 +115,7 @@
             txbFieldOver.Name = "txbFieldOver";
             txbFieldOver.ReadOnly = true;
             txbFieldOver.Size = new Size(61, 24);
-            txbFieldOver.TabIndex = 35;
+            txbFieldOver.TabIndex = 3;
             // 
             // txbFieldNormal
             // 
@@ -124,7 +125,7 @@
             txbFieldNormal.Name = "txbFieldNormal";
             txbFieldNormal.ReadOnly = true;
             txbFieldNormal.Size = new Size(61, 24);
-            txbFieldNormal.TabIndex = 34;
+            txbFieldNormal.TabIndex = 2;
             // 
             // label1
             // 
@@ -168,7 +169,7 @@
             txbFacilityOver.Name = "txbFacilityOver";
             txbFacilityOver.ReadOnly = true;
             txbFacilityOver.Size = new Size(61, 24);
-            txbFacilityOver.TabIndex = 35;
+            txbFacilityOver.TabIndex = 5;
             // 
             // txbFacilityNormal
             // 
@@ -178,7 +179,7 @@
             txbFacilityNormal.Name = "txbFacilityNormal";
             txbFacilityNormal.ReadOnly = true;
             txbFacilityNormal.Size = new Size(61, 24);
-            txbFacilityNormal.TabIndex = 34;
+            txbFacilityNormal.TabIndex = 4;
             // 
             // label2
             // 
@@ -233,10 +234,9 @@
             dgvPricesGtinAdd.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPricesGtinAdd.RowHeadersVisible = false;
             dgvPricesGtinAdd.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvPricesGtinAdd.RowTemplate.Height = 25;
             dgvPricesGtinAdd.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPricesGtinAdd.Size = new Size(718, 498);
-            dgvPricesGtinAdd.TabIndex = 41;
+            dgvPricesGtinAdd.TabIndex = 6;
             // 
             // btnAccept
             // 
@@ -244,7 +244,7 @@
             btnAccept.Location = new Point(12, 644);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 82;
+            btnAccept.TabIndex = 7;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -255,7 +255,7 @@
             btnCancel.Location = new Point(93, 644);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 81;
+            btnCancel.TabIndex = 8;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -274,6 +274,7 @@
             Controls.Add(txbId);
             Controls.Add(lblPrice);
             Controls.Add(lblTitle);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPricesGtinAdd";
             Text = "Asignar precio a productos GTIN";
             Load += FrmPricesGtinAdd_Load;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkTimeAdd));
             lblTitle = new Label();
             gpbNormal = new GroupBox();
             dtpEndExtra = new DateTimePicker();
@@ -144,7 +145,7 @@
             dtpDay.Location = new Point(42, 35);
             dtpDay.Name = "dtpDay";
             dtpDay.Size = new Size(216, 23);
-            dtpDay.TabIndex = 1;
+            dtpDay.TabIndex = 0;
             dtpDay.ValueChanged += dtpDay_ValueChanged;
             // 
             // btnCancel
@@ -174,7 +175,7 @@
             cboProductionLine.Location = new Point(69, 70);
             cboProductionLine.Name = "cboProductionLine";
             cboProductionLine.Size = new Size(189, 23);
-            cboProductionLine.TabIndex = 2;
+            cboProductionLine.TabIndex = 1;
             // 
             // chbActiveProductionLine
             // 
@@ -186,7 +187,7 @@
             chbActiveProductionLine.Location = new Point(263, 69);
             chbActiveProductionLine.Name = "chbActiveProductionLine";
             chbActiveProductionLine.Size = new Size(32, 25);
-            chbActiveProductionLine.TabIndex = 3;
+            chbActiveProductionLine.TabIndex = 2;
             chbActiveProductionLine.Text = "     ";
             chbActiveProductionLine.UseVisualStyleBackColor = true;
             // 
@@ -206,7 +207,7 @@
             txbWorkers.MaxLength = 4;
             txbWorkers.Name = "txbWorkers";
             txbWorkers.Size = new Size(100, 23);
-            txbWorkers.TabIndex = 159;
+            txbWorkers.TabIndex = 3;
             // 
             // lblWorkers
             // 
@@ -235,6 +236,7 @@
             Controls.Add(lblTitle);
             Controls.Add(lblWorkers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmWorkTimeAdd";
             StartPosition = FormStartPosition.CenterScreen;

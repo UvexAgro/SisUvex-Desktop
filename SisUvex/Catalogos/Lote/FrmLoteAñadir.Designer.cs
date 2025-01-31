@@ -31,6 +31,7 @@ namespace SisUvex.Catalogos.Lote
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLoteAñadir));
             lblTitulo = new Label();
             lblNombre = new Label();
             txbNombre = new TextBox();
@@ -62,7 +63,7 @@ namespace SisUvex.Catalogos.Lote
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(9, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(147, 31);
@@ -72,7 +73,7 @@ namespace SisUvex.Catalogos.Lote
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNombre.Font = new Font("Segoe UI", 12F);
             lblNombre.Location = new Point(12, 61);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(71, 21);
@@ -81,17 +82,17 @@ namespace SisUvex.Catalogos.Lote
             // 
             // txbNombre
             // 
-            txbNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNombre.Font = new Font("Segoe UI", 12F);
             txbNombre.Location = new Point(99, 58);
             txbNombre.MaxLength = 20;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(434, 29);
-            txbNombre.TabIndex = 0;
+            txbNombre.TabIndex = 2;
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(570, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -103,7 +104,7 @@ namespace SisUvex.Catalogos.Lote
             btnCancelar.Location = new Point(584, 197);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 7;
+            btnCancelar.TabIndex = 10;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -113,7 +114,7 @@ namespace SisUvex.Catalogos.Lote
             btnAceptar.Location = new Point(503, 197);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 8;
+            btnAceptar.TabIndex = 9;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -121,8 +122,8 @@ namespace SisUvex.Catalogos.Lote
             // lblActivo
             // 
             lblActivo.AutoSize = true;
-            lblActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblActivo.Location = new Point(461, 15);
+            lblActivo.Font = new Font("Segoe UI", 12F);
+            lblActivo.Location = new Point(451, 15);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(60, 21);
             lblActivo.TabIndex = 10;
@@ -131,20 +132,20 @@ namespace SisUvex.Catalogos.Lote
             // cboActivo
             // 
             cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboActivo.Font = new Font("Segoe UI", 12F);
             cboActivo.FormattingEnabled = true;
             cboActivo.Items.AddRange(new object[] { "No", "Sí" });
             cboActivo.Location = new Point(517, 12);
             cboActivo.MaxDropDownItems = 10;
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 11;
+            cboActivo.TabIndex = 0;
             // 
             // lblObliNom
             // 
             lblObliNom.AutoSize = true;
             lblObliNom.ForeColor = Color.Crimson;
-            lblObliNom.Location = new Point(88, 61);
+            lblObliNom.Location = new Point(89, 61);
             lblObliNom.Name = "lblObliNom";
             lblObliNom.Size = new Size(12, 15);
             lblObliNom.TabIndex = 13;
@@ -153,30 +154,30 @@ namespace SisUvex.Catalogos.Lote
             // txbIdVariedad
             // 
             txbIdVariedad.Enabled = false;
-            txbIdVariedad.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdVariedad.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdVariedad.Location = new Point(99, 93);
             txbIdVariedad.Name = "txbIdVariedad";
             txbIdVariedad.Size = new Size(46, 29);
-            txbIdVariedad.TabIndex = 30;
+            txbIdVariedad.TabIndex = 3;
             txbIdVariedad.TextAlign = HorizontalAlignment.Center;
             // 
             // cboVariedad
             // 
-            cboVariedad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboVariedad.Font = new Font("Segoe UI", 12F);
             cboVariedad.FormattingEnabled = true;
             cboVariedad.ItemHeight = 21;
             cboVariedad.Location = new Point(151, 93);
             cboVariedad.MaxDropDownItems = 4;
             cboVariedad.Name = "cboVariedad";
             cboVariedad.Size = new Size(382, 29);
-            cboVariedad.TabIndex = 2;
+            cboVariedad.TabIndex = 4;
             cboVariedad.TextChanged += cboVariedad_TextChanged;
             cboVariedad.MouseClick += cboVariedad_MouseClick;
             // 
             // lblVariedad
             // 
             lblVariedad.AutoSize = true;
-            lblVariedad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblVariedad.Font = new Font("Segoe UI", 12F);
             lblVariedad.Location = new Point(12, 96);
             lblVariedad.Name = "lblVariedad";
             lblVariedad.Size = new Size(74, 21);
@@ -188,7 +189,7 @@ namespace SisUvex.Catalogos.Lote
             btnTodoVariedad.Location = new Point(602, 93);
             btnTodoVariedad.Name = "btnTodoVariedad";
             btnTodoVariedad.Size = new Size(57, 29);
-            btnTodoVariedad.TabIndex = 4;
+            btnTodoVariedad.TabIndex = 6;
             btnTodoVariedad.Text = "Activos";
             btnTodoVariedad.UseVisualStyleBackColor = true;
             btnTodoVariedad.Click += btnTodoVariedad_Click;
@@ -198,26 +199,26 @@ namespace SisUvex.Catalogos.Lote
             btnBuscarVariedad.Location = new Point(539, 93);
             btnBuscarVariedad.Name = "btnBuscarVariedad";
             btnBuscarVariedad.Size = new Size(57, 29);
-            btnBuscarVariedad.TabIndex = 3;
+            btnBuscarVariedad.TabIndex = 5;
             btnBuscarVariedad.Text = "Buscar";
             btnBuscarVariedad.UseVisualStyleBackColor = true;
             btnBuscarVariedad.Click += btnBuscarVariedad_Click;
             // 
             // txbHectareas
             // 
-            txbHectareas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbHectareas.Font = new Font("Segoe UI", 12F);
             txbHectareas.Location = new Point(99, 128);
             txbHectareas.MaxLength = 7;
             txbHectareas.Name = "txbHectareas";
             txbHectareas.Size = new Size(139, 29);
-            txbHectareas.TabIndex = 5;
+            txbHectareas.TabIndex = 7;
             txbHectareas.TextChanged += txbHectareas_TextChanged;
             txbHectareas.KeyPress += txbHectareas_KeyPress;
             // 
             // lblHectareas
             // 
             lblHectareas.AutoSize = true;
-            lblHectareas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblHectareas.Font = new Font("Segoe UI", 12F);
             lblHectareas.Location = new Point(12, 131);
             lblHectareas.Name = "lblHectareas";
             lblHectareas.Size = new Size(81, 21);
@@ -226,18 +227,18 @@ namespace SisUvex.Catalogos.Lote
             // 
             // spnFecha
             // 
-            spnFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            spnFecha.Font = new Font("Segoe UI", 12F);
             spnFecha.Location = new Point(168, 163);
             spnFecha.Mask = "00/00/0000";
             spnFecha.Name = "spnFecha";
             spnFecha.Size = new Size(100, 29);
-            spnFecha.TabIndex = 6;
+            spnFecha.TabIndex = 8;
             spnFecha.ValidatingType = typeof(DateTime);
             // 
             // lblFecha
             // 
             lblFecha.AutoSize = true;
-            lblFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblFecha.Font = new Font("Segoe UI", 12F);
             lblFecha.Location = new Point(12, 166);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(150, 21);
@@ -247,7 +248,7 @@ namespace SisUvex.Catalogos.Lote
             // lblDíaMesAÑo
             // 
             lblDíaMesAÑo.AutoSize = true;
-            lblDíaMesAÑo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblDíaMesAÑo.Font = new Font("Segoe UI", 12F);
             lblDíaMesAÑo.ForeColor = SystemColors.AppWorkspace;
             lblDíaMesAÑo.Location = new Point(274, 166);
             lblDíaMesAÑo.Name = "lblDíaMesAÑo";
@@ -259,7 +260,7 @@ namespace SisUvex.Catalogos.Lote
             // 
             lblObliVar.AutoSize = true;
             lblObliVar.ForeColor = Color.Crimson;
-            lblObliVar.Location = new Point(88, 96);
+            lblObliVar.Location = new Point(89, 96);
             lblObliVar.Name = "lblObliVar";
             lblObliVar.Size = new Size(12, 15);
             lblObliVar.TabIndex = 46;
@@ -279,7 +280,7 @@ namespace SisUvex.Catalogos.Lote
             // 
             lblObliFecha.AutoSize = true;
             lblObliFecha.ForeColor = Color.Crimson;
-            lblObliFecha.Location = new Point(158, 166);
+            lblObliFecha.Location = new Point(159, 166);
             lblObliFecha.Name = "lblObliFecha";
             lblObliFecha.Size = new Size(12, 15);
             lblObliFecha.TabIndex = 48;
@@ -307,12 +308,12 @@ namespace SisUvex.Catalogos.Lote
             // 
             // spnId
             // 
-            spnId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            spnId.Font = new Font("Segoe UI", 12F);
             spnId.Location = new Point(602, 12);
             spnId.Mask = "9999";
             spnId.Name = "spnId";
             spnId.Size = new Size(57, 29);
-            spnId.TabIndex = 9;
+            spnId.TabIndex = 1;
             spnId.TextAlign = HorizontalAlignment.Center;
             spnId.ValidatingType = typeof(int);
             // 
@@ -347,6 +348,7 @@ namespace SisUvex.Catalogos.Lote
             Controls.Add(lblObliAct);
             Controls.Add(lblActivo);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmLoteAñadir";
             StartPosition = FormStartPosition.CenterScreen;

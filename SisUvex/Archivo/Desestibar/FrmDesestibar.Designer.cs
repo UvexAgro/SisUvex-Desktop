@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDesestibar));
             lblTitulo = new Label();
             lblIdEstiba = new Label();
             txbIdEstiba = new TextBox();
@@ -43,7 +44,7 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(226, 31);
@@ -64,7 +65,7 @@
             txbIdEstiba.Location = new Point(57, 43);
             txbIdEstiba.Name = "txbIdEstiba";
             txbIdEstiba.Size = new Size(108, 23);
-            txbIdEstiba.TabIndex = 13;
+            txbIdEstiba.TabIndex = 0;
             // 
             // dgvEstiba
             // 
@@ -75,34 +76,33 @@
             dgvEstiba.BackgroundColor = SystemColors.ControlLightLight;
             dgvEstiba.BorderStyle = BorderStyle.Fixed3D;
             dgvEstiba.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvEstiba.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvEstiba.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvEstiba.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvEstiba.EnableHeadersVisualStyles = false;
             dgvEstiba.ImeMode = ImeMode.NoControl;
             dgvEstiba.Location = new Point(12, 72);
             dgvEstiba.Name = "dgvEstiba";
             dgvEstiba.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvEstiba.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvEstiba.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvEstiba.RowHeadersVisible = false;
             dgvEstiba.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvEstiba.RowTemplate.Height = 25;
             dgvEstiba.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvEstiba.Size = new Size(776, 337);
-            dgvEstiba.TabIndex = 15;
+            dgvEstiba.TabIndex = 2;
             // 
             // btnBuscarEstiba
             // 
@@ -111,7 +111,7 @@
             btnBuscarEstiba.Location = new Point(171, 43);
             btnBuscarEstiba.Name = "btnBuscarEstiba";
             btnBuscarEstiba.Size = new Size(23, 23);
-            btnBuscarEstiba.TabIndex = 23;
+            btnBuscarEstiba.TabIndex = 1;
             btnBuscarEstiba.UseVisualStyleBackColor = true;
             btnBuscarEstiba.Click += btnBuscarEstiba_Click;
             // 
@@ -121,7 +121,7 @@
             btnDesestibar.Location = new Point(713, 415);
             btnDesestibar.Name = "btnDesestibar";
             btnDesestibar.Size = new Size(75, 23);
-            btnDesestibar.TabIndex = 24;
+            btnDesestibar.TabIndex = 3;
             btnDesestibar.Text = "Desestibar";
             btnDesestibar.UseVisualStyleBackColor = true;
             btnDesestibar.Click += btnDesestibar_Click;
@@ -148,6 +148,7 @@
             Controls.Add(lblIdEstiba);
             Controls.Add(txbIdEstiba);
             Controls.Add(lblTitulo);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(816, 489);
             Name = "FrmDesestibar";
             StartPosition = FormStartPosition.CenterScreen;

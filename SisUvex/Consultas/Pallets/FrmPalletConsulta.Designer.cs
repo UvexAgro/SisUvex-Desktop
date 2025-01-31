@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPalletConsulta));
             dgvConsulta = new DataGridView();
             btnBuscar = new Button();
             dtpFecha1 = new DateTimePicker();
@@ -97,10 +98,9 @@
             dgvConsulta.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvConsulta.RowHeadersVisible = false;
             dgvConsulta.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvConsulta.RowTemplate.Height = 25;
             dgvConsulta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvConsulta.Size = new Size(929, 270);
-            dgvConsulta.TabIndex = 7;
+            dgvConsulta.Size = new Size(858, 271);
+            dgvConsulta.TabIndex = 16;
             // 
             // btnBuscar
             // 
@@ -109,7 +109,7 @@
             btnBuscar.Location = new Point(12, 46);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(23, 23);
-            btnBuscar.TabIndex = 5;
+            btnBuscar.TabIndex = 9;
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
@@ -119,7 +119,7 @@
             dtpFecha1.Location = new Point(41, 12);
             dtpFecha1.Name = "dtpFecha1";
             dtpFecha1.Size = new Size(80, 23);
-            dtpFecha1.TabIndex = 8;
+            dtpFecha1.TabIndex = 0;
             // 
             // dtpFecha2
             // 
@@ -127,7 +127,7 @@
             dtpFecha2.Location = new Point(41, 46);
             dtpFecha2.Name = "dtpFecha2";
             dtpFecha2.Size = new Size(80, 23);
-            dtpFecha2.TabIndex = 9;
+            dtpFecha2.TabIndex = 1;
             // 
             // cboDistribuidor
             // 
@@ -136,7 +136,7 @@
             cboDistribuidor.Location = new Point(127, 11);
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(203, 23);
-            cboDistribuidor.TabIndex = 11;
+            cboDistribuidor.TabIndex = 2;
             // 
             // cboPresentacion
             // 
@@ -145,7 +145,7 @@
             cboPresentacion.Location = new Point(336, 46);
             cboPresentacion.Name = "cboPresentacion";
             cboPresentacion.Size = new Size(203, 23);
-            cboPresentacion.TabIndex = 12;
+            cboPresentacion.TabIndex = 4;
             // 
             // lblDistribuidor
             // 
@@ -173,7 +173,7 @@
             txbManifiesto.MaxLength = 5;
             txbManifiesto.Name = "txbManifiesto";
             txbManifiesto.Size = new Size(75, 23);
-            txbManifiesto.TabIndex = 16;
+            txbManifiesto.TabIndex = 10;
             txbManifiesto.KeyPress += txbManifiesto_KeyPress;
             // 
             // lblManifiesto
@@ -202,7 +202,7 @@
             txbPallet.MaxLength = 5;
             txbPallet.Name = "txbPallet";
             txbPallet.Size = new Size(75, 23);
-            txbPallet.TabIndex = 18;
+            txbPallet.TabIndex = 12;
             txbPallet.KeyPress += txbPallet_KeyPress;
             // 
             // btnManifiesto
@@ -212,7 +212,7 @@
             btnManifiesto.Location = new Point(737, 13);
             btnManifiesto.Name = "btnManifiesto";
             btnManifiesto.Size = new Size(23, 23);
-            btnManifiesto.TabIndex = 20;
+            btnManifiesto.TabIndex = 11;
             btnManifiesto.UseVisualStyleBackColor = true;
             btnManifiesto.Click += btnManifiesto_Click;
             // 
@@ -223,28 +223,34 @@
             btnPallet.Location = new Point(737, 45);
             btnPallet.Name = "btnPallet";
             btnPallet.Size = new Size(23, 23);
-            btnPallet.TabIndex = 21;
+            btnPallet.TabIndex = 13;
             btnPallet.UseVisualStyleBackColor = true;
             btnPallet.Click += btnPallet_Click;
             // 
             // btnImprimir
             // 
             btnImprimir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnImprimir.Location = new Point(12, 350);
+            btnImprimir.Image = Properties.Resources.imprimirIcon16;
+            btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
+            btnImprimir.Location = new Point(12, 353);
             btnImprimir.Name = "btnImprimir";
-            btnImprimir.Size = new Size(66, 23);
-            btnImprimir.TabIndex = 22;
+            btnImprimir.Size = new Size(78, 24);
+            btnImprimir.TabIndex = 17;
             btnImprimir.Text = "Imprimir";
+            btnImprimir.TextAlign = ContentAlignment.MiddleRight;
             btnImprimir.UseVisualStyleBackColor = true;
             // 
             // btnEliminar
             // 
             btnEliminar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnEliminar.Location = new Point(120, 350);
+            btnEliminar.Image = Properties.Resources.basuraIcon16;
+            btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnEliminar.Location = new Point(96, 353);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(66, 23);
-            btnEliminar.TabIndex = 23;
+            btnEliminar.Size = new Size(73, 24);
+            btnEliminar.TabIndex = 18;
             btnEliminar.Text = "Eliminar";
+            btnEliminar.TextAlign = ContentAlignment.MiddleRight;
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
             // 
@@ -255,7 +261,7 @@
             cboVariety.Location = new Point(127, 46);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 23);
-            cboVariety.TabIndex = 24;
+            cboVariety.TabIndex = 2;
             // 
             // label2
             // 
@@ -284,7 +290,7 @@
             cboContainer.Location = new Point(336, 11);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(203, 23);
-            cboContainer.TabIndex = 25;
+            cboContainer.TabIndex = 3;
             // 
             // label4
             // 
@@ -310,10 +316,10 @@
             // 
             btnInvoice.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnInvoice.BackgroundImageLayout = ImageLayout.Stretch;
-            btnInvoice.Location = new Point(859, 12);
+            btnInvoice.Location = new Point(848, 12);
             btnInvoice.Name = "btnInvoice";
             btnInvoice.Size = new Size(23, 23);
-            btnInvoice.TabIndex = 32;
+            btnInvoice.TabIndex = 15;
             btnInvoice.UseVisualStyleBackColor = true;
             btnInvoice.Click += btnInvoice_Click;
             // 
@@ -321,7 +327,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(782, -1);
+            label6.Location = new Point(771, -1);
             label6.Name = "label6";
             label6.Size = new Size(40, 12);
             label6.TabIndex = 31;
@@ -329,11 +335,11 @@
             // 
             // txbInvoice
             // 
-            txbInvoice.Location = new Point(782, 11);
+            txbInvoice.Location = new Point(771, 11);
             txbInvoice.MaxLength = 5;
             txbInvoice.Name = "txbInvoice";
             txbInvoice.Size = new Size(75, 23);
-            txbInvoice.TabIndex = 30;
+            txbInvoice.TabIndex = 14;
             txbInvoice.KeyPress += txbInvoice_KeyPress;
             // 
             // chbShipped
@@ -344,7 +350,7 @@
             chbShipped.Location = new Point(545, 7);
             chbShipped.Name = "chbShipped";
             chbShipped.Size = new Size(91, 19);
-            chbShipped.TabIndex = 33;
+            chbShipped.TabIndex = 5;
             chbShipped.Text = "Embarcados";
             chbShipped.UseVisualStyleBackColor = true;
             // 
@@ -354,7 +360,7 @@
             chbRestowing.Location = new Point(545, 23);
             chbRestowing.Name = "chbRestowing";
             chbRestowing.Size = new Size(89, 19);
-            chbRestowing.TabIndex = 34;
+            chbRestowing.TabIndex = 6;
             chbRestowing.Text = "Reestibados";
             chbRestowing.UseVisualStyleBackColor = true;
             // 
@@ -366,7 +372,7 @@
             chbRacked.Location = new Point(545, 39);
             chbRacked.Name = "chbRacked";
             chbRacked.Size = new Size(112, 19);
-            chbRacked.TabIndex = 35;
+            chbRacked.TabIndex = 7;
             chbRacked.Text = "En conservación";
             chbRacked.UseVisualStyleBackColor = true;
             // 
@@ -376,7 +382,7 @@
             chbRegected.Location = new Point(545, 55);
             chbRegected.Name = "chbRegected";
             chbRegected.Size = new Size(88, 19);
-            chbRegected.TabIndex = 36;
+            chbRegected.TabIndex = 8;
             chbRegected.Text = "Rechazados";
             chbRegected.UseVisualStyleBackColor = true;
             // 
@@ -384,7 +390,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(953, 383);
+            ClientSize = new Size(882, 387);
             Controls.Add(chbRegected);
             Controls.Add(chbRacked);
             Controls.Add(chbRestowing);
@@ -414,6 +420,7 @@
             Controls.Add(lblPallet);
             Controls.Add(txbPallet);
             Controls.Add(label4);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPalletConsulta";
             Text = "Consulta de pallets";
             WindowState = FormWindowState.Maximized;

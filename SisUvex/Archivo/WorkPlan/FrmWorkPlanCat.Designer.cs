@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkPlanCat));
             dgvCatalog = new DataGridView();
             btnRemove = new Button();
             btnRecover = new Button();
@@ -90,10 +91,9 @@
             dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalog.RowTemplate.Height = 25;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(783, 337);
-            dgvCatalog.TabIndex = 22;
+            dgvCatalog.TabIndex = 14;
             dgvCatalog.MouseDoubleClick += dgvCatalog_MouseDoubleClick;
             // 
             // btnRemove
@@ -101,7 +101,7 @@
             btnRemove.Location = new Point(231, 76);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(61, 23);
-            btnRemove.TabIndex = 21;
+            btnRemove.TabIndex = 12;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -111,7 +111,7 @@
             btnRecover.Location = new Point(298, 76);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 20;
+            btnRecover.TabIndex = 13;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -121,7 +121,7 @@
             btnModify.Location = new Point(82, 75);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(67, 23);
-            btnModify.TabIndex = 19;
+            btnModify.TabIndex = 10;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -131,7 +131,7 @@
             btnAdd.Location = new Point(9, 75);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(67, 23);
-            btnAdd.TabIndex = 18;
+            btnAdd.TabIndex = 9;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -144,7 +144,7 @@
             dtpDate2.MinDate = new DateTime(2010, 1, 1, 0, 0, 0, 0);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(95, 23);
-            dtpDate2.TabIndex = 24;
+            dtpDate2.TabIndex = 1;
             dtpDate2.Value = new DateTime(2024, 5, 16, 0, 0, 0, 0);
             // 
             // btnSearch
@@ -154,7 +154,7 @@
             btnSearch.Location = new Point(9, 46);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 25;
+            btnSearch.TabIndex = 8;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -166,7 +166,7 @@
             dtpDate1.MinDate = new DateTime(2010, 1, 1, 0, 0, 0, 0);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(95, 23);
-            dtpDate1.TabIndex = 26;
+            dtpDate1.TabIndex = 0;
             dtpDate1.Value = new DateTime(2024, 5, 16, 0, 0, 0, 0);
             // 
             // chbRemoved
@@ -178,7 +178,7 @@
             chbRemoved.Margin = new Padding(1);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 25);
-            chbRemoved.TabIndex = 29;
+            chbRemoved.TabIndex = 11;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
@@ -212,7 +212,7 @@
             cboVariety.Location = new Point(139, 47);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 23);
-            cboVariety.TabIndex = 36;
+            cboVariety.TabIndex = 3;
             // 
             // label2
             // 
@@ -242,7 +242,7 @@
             cboContainer.Location = new Point(348, 12);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(203, 23);
-            cboContainer.TabIndex = 37;
+            cboContainer.TabIndex = 4;
             // 
             // cboDistribuidor
             // 
@@ -252,7 +252,7 @@
             cboDistribuidor.Location = new Point(139, 12);
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(203, 23);
-            cboDistribuidor.TabIndex = 32;
+            cboDistribuidor.TabIndex = 2;
             // 
             // lblDistribuidor
             // 
@@ -282,7 +282,7 @@
             cboPresentacion.Location = new Point(348, 47);
             cboPresentacion.Name = "cboPresentacion";
             cboPresentacion.Size = new Size(203, 23);
-            cboPresentacion.TabIndex = 33;
+            cboPresentacion.TabIndex = 5;
             // 
             // label6
             // 
@@ -302,7 +302,7 @@
             cboWorkGroup.Location = new Point(557, 12);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(203, 23);
-            cboWorkGroup.TabIndex = 42;
+            cboWorkGroup.TabIndex = 6;
             // 
             // label7
             // 
@@ -322,7 +322,7 @@
             cboLot.Location = new Point(557, 47);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(203, 23);
-            cboLot.TabIndex = 40;
+            cboLot.TabIndex = 7;
             // 
             // FrmWorkPlanCat
             // 
@@ -352,6 +352,7 @@
             Controls.Add(btnAdd);
             Controls.Add(label5);
             Controls.Add(label4);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmWorkPlanCat";
             Text = "Catálogo plan de trabajo";
             Load += FrmWorkPlanCat_Load;

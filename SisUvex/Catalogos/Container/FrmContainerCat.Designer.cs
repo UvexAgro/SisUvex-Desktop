@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmContainerCat));
             btnRemoved = new Button();
             dgvCatalog = new DataGridView();
             btnRemove = new Button();
@@ -44,7 +45,7 @@
             btnRemoved.Location = new Point(171, 9);
             btnRemoved.Name = "btnRemoved";
             btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 23;
+            btnRemoved.TabIndex = 2;
             btnRemoved.Text = "Eliminados";
             btnRemoved.UseVisualStyleBackColor = true;
             btnRemoved.Click += btnRemoved_Click;
@@ -83,7 +84,6 @@
             dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalog.RowTemplate.Height = 25;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(783, 404);
             dgvCatalog.TabIndex = 22;
@@ -94,7 +94,7 @@
             btnRemove.Location = new Point(252, 9);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 21;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -104,7 +104,7 @@
             btnRecover.Location = new Point(333, 9);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 20;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -114,7 +114,7 @@
             btnModify.Location = new Point(90, 9);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 19;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -124,7 +124,7 @@
             btnAdd.Location = new Point(9, 9);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 18;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -140,6 +140,7 @@
             Controls.Add(btnRecover);
             Controls.Add(btnModify);
             Controls.Add(btnAdd);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmContainerCat";
             Text = "Catálogo Contenedor";
             WindowState = FormWindowState.Maximized;

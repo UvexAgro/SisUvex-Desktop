@@ -30,9 +30,10 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrintLabelsPtiPallets));
             btnLastPallets = new Button();
             label1 = new Label();
             txbInvoice = new TextBox();
@@ -89,9 +90,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbPrint = new GroupBox();
             chbReversePtiTag = new CheckBox();
             gpbLastPallets = new GroupBox();
-            chbReverseReprintPallet = new CheckBox();
             btnReprintPallet = new Button();
             dgvLastUserPallet = new DataGridView();
+            chbReverseReprintPallet = new CheckBox();
             groupBox1 = new GroupBox();
             chbRevesePalletTag = new CheckBox();
             label2 = new Label();
@@ -117,7 +118,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnLastPallets.Margin = new Padding(0);
             btnLastPallets.Name = "btnLastPallets";
             btnLastPallets.Size = new Size(29, 29);
-            btnLastPallets.TabIndex = 79;
+            btnLastPallets.TabIndex = 11;
             btnLastPallets.UseVisualStyleBackColor = false;
             btnLastPallets.Click += btnLastPallets_Click;
             // 
@@ -140,7 +141,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             txbInvoice.MaxLength = 4;
             txbInvoice.Name = "txbInvoice";
             txbInvoice.Size = new Size(123, 29);
-            txbInvoice.TabIndex = 75;
+            txbInvoice.TabIndex = 4;
             // 
             // cboWorkPlan
             // 
@@ -151,7 +152,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cboWorkPlan.Margin = new Padding(1);
             cboWorkPlan.Name = "cboWorkPlan";
             cboWorkPlan.Size = new Size(614, 29);
-            cboWorkPlan.TabIndex = 74;
+            cboWorkPlan.TabIndex = 2;
             // 
             // dtpWorkDay
             // 
@@ -161,7 +162,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dtpWorkDay.Margin = new Padding(1);
             dtpWorkDay.Name = "dtpWorkDay";
             dtpWorkDay.Size = new Size(281, 29);
-            dtpWorkDay.TabIndex = 73;
+            dtpWorkDay.TabIndex = 1;
             // 
             // label10
             // 
@@ -193,7 +194,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chBx.Margin = new Padding(1);
             chBx.Name = "chBx";
             chBx.Size = new Size(142, 23);
-            chBx.TabIndex = 68;
+            chBx.TabIndex = 15;
             chBx.Text = "Empaque Central";
             chBx.TextAlign = ContentAlignment.TopLeft;
             chBx.UseVisualStyleBackColor = true;
@@ -206,7 +207,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnPrintPtiTag.Margin = new Padding(1);
             btnPrintPtiTag.Name = "btnPrintPtiTag";
             btnPrintPtiTag.Size = new Size(29, 29);
-            btnPrintPtiTag.TabIndex = 67;
+            btnPrintPtiTag.TabIndex = 9;
             btnPrintPtiTag.UseVisualStyleBackColor = true;
             btnPrintPtiTag.Click += btnPrintPtiTag_Click;
             // 
@@ -219,7 +220,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             nudPalletTotal.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudPalletTotal.Name = "nudPalletTotal";
             nudPalletTotal.Size = new Size(55, 29);
-            nudPalletTotal.TabIndex = 64;
+            nudPalletTotal.TabIndex = 5;
             nudPalletTotal.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label7
@@ -242,7 +243,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             nudPtiTotal.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudPtiTotal.Name = "nudPtiTotal";
             nudPtiTotal.Size = new Size(55, 29);
-            nudPtiTotal.TabIndex = 62;
+            nudPtiTotal.TabIndex = 8;
             nudPtiTotal.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // grbTag
@@ -530,7 +531,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cboWorkGroup.Margin = new Padding(1);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(183, 29);
-            cboWorkGroup.TabIndex = 57;
+            cboWorkGroup.TabIndex = 0;
             // 
             // lblTagWorkGroup
             // 
@@ -585,7 +586,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             txbBoxesTotaL.MaxLength = 6;
             txbBoxesTotaL.Name = "txbBoxesTotaL";
             txbBoxesTotaL.Size = new Size(68, 29);
-            txbBoxesTotaL.TabIndex = 39;
+            txbBoxesTotaL.TabIndex = 3;
             // 
             // label14
             // 
@@ -737,7 +738,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnPrintPalletTag.Margin = new Padding(1);
             btnPrintPalletTag.Name = "btnPrintPalletTag";
             btnPrintPalletTag.Size = new Size(29, 29);
-            btnPrintPalletTag.TabIndex = 81;
+            btnPrintPalletTag.TabIndex = 6;
             btnPrintPalletTag.UseVisualStyleBackColor = true;
             btnPrintPalletTag.Click += btnPrintPalletTag_Click;
             // 
@@ -764,7 +765,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chbReversePtiTag.Location = new Point(12, 63);
             chbReversePtiTag.Name = "chbReversePtiTag";
             chbReversePtiTag.Size = new Size(109, 19);
-            chbReversePtiTag.TabIndex = 83;
+            chbReversePtiTag.TabIndex = 10;
             chbReversePtiTag.Text = "Invertir etiqueta";
             chbReversePtiTag.UseVisualStyleBackColor = true;
             // 
@@ -785,17 +786,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             gpbLastPallets.TabStop = false;
             gpbLastPallets.Text = "ÚLTIMOS PALLETS";
             // 
-            // chbReverseReprintPallet
-            // 
-            chbReverseReprintPallet.AutoSize = true;
-            chbReverseReprintPallet.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            chbReverseReprintPallet.Location = new Point(67, 36);
-            chbReverseReprintPallet.Name = "chbReverseReprintPallet";
-            chbReverseReprintPallet.Size = new Size(109, 19);
-            chbReverseReprintPallet.TabIndex = 83;
-            chbReverseReprintPallet.Text = "Invertir etiqueta";
-            chbReverseReprintPallet.UseVisualStyleBackColor = true;
-            // 
             // btnReprintPallet
             // 
             btnReprintPallet.BackgroundImage = Properties.Resources.PrintIcon;
@@ -804,7 +794,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnReprintPallet.Margin = new Padding(1);
             btnReprintPallet.Name = "btnReprintPallet";
             btnReprintPallet.Size = new Size(29, 29);
-            btnReprintPallet.TabIndex = 84;
+            btnReprintPallet.TabIndex = 12;
             btnReprintPallet.UseVisualStyleBackColor = true;
             btnReprintPallet.Click += button1_Click;
             // 
@@ -818,42 +808,52 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dgvLastUserPallet.BackgroundColor = SystemColors.ButtonFace;
             dgvLastUserPallet.BorderStyle = BorderStyle.Fixed3D;
             dgvLastUserPallet.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvLastUserPallet.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvLastUserPallet.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLastUserPallet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            dgvLastUserPallet.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvLastUserPallet.DefaultCellStyle = dataGridViewCellStyle2;
             dgvLastUserPallet.EnableHeadersVisualStyles = false;
             dgvLastUserPallet.ImeMode = ImeMode.NoControl;
             dgvLastUserPallet.Location = new Point(4, 53);
             dgvLastUserPallet.Name = "dgvLastUserPallet";
             dgvLastUserPallet.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvLastUserPallet.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvLastUserPallet.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvLastUserPallet.RowHeadersVisible = false;
             dgvLastUserPallet.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvLastUserPallet.RowTemplate.Height = 25;
             dgvLastUserPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvLastUserPallet.Size = new Size(444, 225);
-            dgvLastUserPallet.TabIndex = 80;
+            dgvLastUserPallet.TabIndex = 14;
+            // 
+            // chbReverseReprintPallet
+            // 
+            chbReverseReprintPallet.AutoSize = true;
+            chbReverseReprintPallet.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            chbReverseReprintPallet.Location = new Point(67, 36);
+            chbReverseReprintPallet.Name = "chbReverseReprintPallet";
+            chbReverseReprintPallet.Size = new Size(109, 19);
+            chbReverseReprintPallet.TabIndex = 13;
+            chbReverseReprintPallet.Text = "Invertir etiqueta";
+            chbReverseReprintPallet.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -880,7 +880,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chbRevesePalletTag.Location = new Point(10, 106);
             chbRevesePalletTag.Name = "chbRevesePalletTag";
             chbRevesePalletTag.Size = new Size(109, 19);
-            chbRevesePalletTag.TabIndex = 82;
+            chbRevesePalletTag.TabIndex = 7;
             chbRevesePalletTag.Text = "Invertir etiqueta";
             chbRevesePalletTag.UseVisualStyleBackColor = true;
             // 
@@ -917,9 +917,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Controls.Add(cboWorkGroup);
             Controls.Add(lblTagWorkGroup);
             Controls.Add(lblTagHead);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrintLabelsPtiPallets";
             Text = "Impresión de etiquetas PTI y Pallet";
             WindowState = FormWindowState.Maximized;
+            Load += FrmPrintLabelsPtiPallets_Load;
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).EndInit();
             grbTag.ResumeLayout(false);
@@ -939,8 +941,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
-            Load += FrmPrintLabelsPtiPallets_Load;
-
         }
 
         #endregion

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAddEmployees));
             btnExaminar = new Button();
             btnLimpiar = new Button();
             dataGridView = new DataGridView();
@@ -39,21 +40,27 @@
             // 
             // btnExaminar
             // 
+            btnExaminar.Image = Properties.Resources.excelIcon16;
+            btnExaminar.ImageAlign = ContentAlignment.MiddleLeft;
             btnExaminar.Location = new Point(448, 12);
             btnExaminar.Name = "btnExaminar";
-            btnExaminar.Size = new Size(70, 23);
-            btnExaminar.TabIndex = 13;
+            btnExaminar.Size = new Size(79, 23);
+            btnExaminar.TabIndex = 1;
             btnExaminar.Text = "Examinar";
+            btnExaminar.TextAlign = ContentAlignment.MiddleRight;
             btnExaminar.UseVisualStyleBackColor = true;
             btnExaminar.Click += btnExaminar_Click;
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(600, 13);
+            btnLimpiar.Image = Properties.Resources.limpiarIcon16;
+            btnLimpiar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLimpiar.Location = new Point(533, 12);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(70, 23);
             btnLimpiar.TabIndex = 12;
             btnLimpiar.Text = "Limpiar";
+            btnLimpiar.TextAlign = ContentAlignment.MiddleRight;
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
@@ -69,16 +76,15 @@
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
-            dataGridView.RowTemplate.Height = 25;
             dataGridView.Size = new Size(853, 368);
-            dataGridView.TabIndex = 11;
+            dataGridView.TabIndex = 4;
             // 
             // textBox1
             // 
             textBox1.Location = new Point(12, 12);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(430, 23);
-            textBox1.TabIndex = 9;
+            textBox1.TabIndex = 0;
             // 
             // ofdExcel
             // 
@@ -88,11 +94,14 @@
             // 
             // btnGuardarEmpleados
             // 
+            btnGuardarEmpleados.Image = Properties.Resources.guardarIcon16;
+            btnGuardarEmpleados.ImageAlign = ContentAlignment.MiddleLeft;
             btnGuardarEmpleados.Location = new Point(12, 41);
             btnGuardarEmpleados.Name = "btnGuardarEmpleados";
-            btnGuardarEmpleados.Size = new Size(131, 23);
-            btnGuardarEmpleados.TabIndex = 14;
+            btnGuardarEmpleados.Size = new Size(134, 23);
+            btnGuardarEmpleados.TabIndex = 3;
             btnGuardarEmpleados.Text = "Guardar empleados";
+            btnGuardarEmpleados.TextAlign = ContentAlignment.MiddleRight;
             btnGuardarEmpleados.UseVisualStyleBackColor = true;
             btnGuardarEmpleados.Click += btnGuardarEmpleados_Click;
             // 
@@ -106,6 +115,7 @@
             Controls.Add(btnLimpiar);
             Controls.Add(dataGridView);
             Controls.Add(textBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAddEmployees";
             Text = "FrmAddEmployees";
             WindowState = FormWindowState.Maximized;

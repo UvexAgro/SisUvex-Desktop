@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRePrintPallet));
             txbRePrintCode = new TextBox();
             lblReprintPallet = new Label();
             label1 = new Label();
@@ -75,7 +76,7 @@
             txbUpdateBoxes.Margin = new Padding(1);
             txbUpdateBoxes.Name = "txbUpdateBoxes";
             txbUpdateBoxes.Size = new Size(138, 33);
-            txbUpdateBoxes.TabIndex = 3;
+            txbUpdateBoxes.TabIndex = 1;
             // 
             // label3
             // 
@@ -95,7 +96,7 @@
             button2.Margin = new Padding(1);
             button2.Name = "button2";
             button2.Size = new Size(138, 33);
-            button2.TabIndex = 7;
+            button2.TabIndex = 2;
             button2.Text = "IMPRIMIR";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
@@ -108,7 +109,7 @@
             chbRevesePalletTag.Location = new Point(141, 283);
             chbRevesePalletTag.Name = "chbRevesePalletTag";
             chbRevesePalletTag.Size = new Size(109, 19);
-            chbRevesePalletTag.TabIndex = 83;
+            chbRevesePalletTag.TabIndex = 3;
             chbRevesePalletTag.Text = "Invertir etiqueta";
             chbRevesePalletTag.UseVisualStyleBackColor = true;
             // 
@@ -124,6 +125,7 @@
             Controls.Add(label1);
             Controls.Add(lblReprintPallet);
             Controls.Add(txbRePrintCode);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(1);
             Name = "FrmRePrintPallet";
             Text = "FrmRePrintPallet";

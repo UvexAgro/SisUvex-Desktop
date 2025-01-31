@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmInstruccionesExcelAsistencia));
             pbxImagen = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pbxImagen).BeginInit();
             SuspendLayout();
@@ -49,6 +50,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(616, 382);
             Controls.Add(pbxImagen);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmInstruccionesExcelAsistencia";

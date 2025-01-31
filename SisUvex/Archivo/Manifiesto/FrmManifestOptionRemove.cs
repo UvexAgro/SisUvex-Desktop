@@ -16,5 +16,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             InitializeComponent();
         }
+
+        private void FrmManifestOptionRemove_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -33,6 +33,7 @@ namespace SisUvex.Catalogos.Material
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialCat));
             btnAñadir = new Button();
             btnModificar = new Button();
             dgvCatalogo = new DataGridView();
@@ -71,7 +72,7 @@ namespace SisUvex.Catalogos.Material
             dgvCatalogo.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
@@ -85,7 +86,7 @@ namespace SisUvex.Catalogos.Material
             dgvCatalogo.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
             dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
@@ -93,7 +94,6 @@ namespace SisUvex.Catalogos.Material
             dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogo.RowHeadersVisible = false;
             dgvCatalogo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogo.RowTemplate.Height = 25;
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogo.Size = new Size(783, 404);
             dgvCatalogo.TabIndex = 4;
@@ -107,6 +107,7 @@ namespace SisUvex.Catalogos.Material
             Controls.Add(dgvCatalogo);
             Controls.Add(btnModificar);
             Controls.Add(btnAñadir);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialCat";
             Text = "Catálogo Materiales";
             WindowState = FormWindowState.Maximized;

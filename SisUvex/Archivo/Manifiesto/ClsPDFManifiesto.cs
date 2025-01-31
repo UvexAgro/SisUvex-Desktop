@@ -77,8 +77,6 @@ namespace SisUvex.Archivo.Manifiesto
             // Cargar el logo
             if (queryManifest.shipperLogo != null)
             {
-
-
                 //string dataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
                 logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", queryManifest.shipperLogo + "Logo.png");
@@ -102,10 +100,6 @@ namespace SisUvex.Archivo.Manifiesto
                 emptyCell.SetBorder(Border.NO_BORDER);
                 table.AddCell(emptyCell);
             }
-
-
-
-       
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph shipperNameParagraph = new Paragraph(queryManifest.shipperName)
@@ -664,26 +658,27 @@ namespace SisUvex.Archivo.Manifiesto
         public void DesignPDFManifestRemisionTable(iText.Layout.Document document, string manifestNumber)
         {
             // Crear una tabla con 3 columnas que ocupa todo el ancho de la página
-            Table tableRemisionDetailed = new Table(4).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionDetailed = new Table(5).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
 
             // Agregar los encabezados de la tabla
-            AddCellToTable(tableRemisionDetailed, "Bultos", 20, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            AddCellToTable(tableRemisionDetailed, "Kilos", 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            AddCellToTable(tableRemisionDetailed, "Descripción", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Variedad", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableRemisionDetailed, "Descripción", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableRemisionDetailed, "Bultos", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableRemisionDetailed, "Kilos", 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
 
             // Iterar sobre las filas de DetalleCarga
             foreach (DataRow detalle in queryManifest.DetalleCarga.Rows)
             {
                 // Agregar cada columna de la fila a la tabla del PDF
-                AddCellToTable(tableRemisionDetailed, detalle["Bultos"].ToString(), 20, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeBody, font);
-                AddCellToTable(tableRemisionDetailed, detalle["Kilos"].ToString(), 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeBody, font);
+                AddCellToTable(tableRemisionDetailed, detalle["Variedad"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Descripción"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
-                AddCellToTable(tableRemisionDetailed, detalle["Variedad"].ToString(),36,
-                  iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableRemisionDetailed, detalle["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableRemisionDetailed, detalle["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
             }
 
-            Table tableRemisionTotal = new Table(4).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionTotal = new Table(5).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
 
 
             if(queryManifest.TotalesCarga.Rows.Count == 0)
@@ -692,10 +687,12 @@ namespace SisUvex.Archivo.Manifiesto
             }
             DataRow remisionTotalDT = queryManifest.TotalesCarga.Rows[0];
 
-            AddCellToTable(tableRemisionTotal, "TOTALES:     " + remisionTotalDT["Bultos"].ToString(),20, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            AddCellToTable(tableRemisionTotal, remisionTotalDT["Kilos"].ToString(), 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, "", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            AddCellToTable(tableRemisionTotal, "", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, "", 33, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, "TOTALES:", 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, remisionTotalDT["Bultos"].ToString(),8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, remisionTotalDT["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            //AddCellToTable(tableRemisionTotal, "", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
 
 
 
