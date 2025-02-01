@@ -18,6 +18,7 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
         private readonly Dictionary<string, (string Query, string Parameter)> predefinedQueries = new()
             {
                 { "EmployeeBasic", ("SELECT id_employee AS 'Código', v_lastNamePat AS 'A. paterno', v_lastNameMat AS 'A. materno', v_name AS 'Nombre', id_paymentPlace AS 'LP', id_workGroup AS 'Cuadrilla', id_productionLine AS 'Línea', dpr.v_nameDinerProvider AS 'Comedor' ,FORMAT(emp.d_dateBirth, 'yyyy-MM-dd') AS 'F. nacimiento' FROM Nom_Employees emp LEFT JOIN Nom_DinerProvider AS dpr ON dpr.id_dinerProvider = emp.id_dinerProvider WHERE CONCAT_WS(' ', v_lastNamePat, v_lastNameMat, v_name, id_employee) LIKE @parameter", "@parameter") },
+                {"Contractor", ("SELECT cat.* FROM vw_PackContractorCat cat JOIN Pack_Contractor ctr ON ctr.id_contractor = cat.Código WHERE CONCAT(v_nameContractor,' ',id_contractor) LIKE @parameter", "@parameter")},
                 // Add more predefined queries here
             };
 

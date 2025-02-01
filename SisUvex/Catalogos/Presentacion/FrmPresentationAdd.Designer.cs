@@ -112,7 +112,7 @@
             // 
             lblId.AutoSize = true;
             lblId.Font = new Font("Segoe UI", 12F);
-            lblId.Location = new Point(499, 13);
+            lblId.Location = new Point(497, 13);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
             lblId.TabIndex = 44;

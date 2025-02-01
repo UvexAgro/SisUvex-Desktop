@@ -184,6 +184,12 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.ProductionLine.Cbo:
                     queryDataTable = ClsObject.ProductionLine.QueryCbo;
                     break;
+                case ClsObject.Contractor.Cbo:
+                    queryDataTable = ClsObject.Contractor.QueryCbo;
+                    break;
+                case ClsObject.Season.Cbo:
+                    queryDataTable = ClsObject.Season.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -217,6 +223,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
+                    break;
+                case ClsObject.Season.Cbo:
+                    query += " IN ('Pack_Season', 'Pack_Crop') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -264,6 +273,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Grower.TableName;
                 case ClsObject.ProductionLine.Cbo:
                     return ClsObject.ProductionLine.TableName;
+                case ClsObject.Contractor.Cbo:
+                    return ClsObject.Contractor.TableName;
+                case ClsObject.Season.Cbo:
+                    return ClsObject.Season.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

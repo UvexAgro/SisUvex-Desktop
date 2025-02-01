@@ -1,19 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-using iText.Commons.Utils;
-using Microsoft.CodeAnalysis;
-using Microsoft.Office.Interop.Excel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static SisUvex.Catalogos.Metods.ClsObject;
-
+﻿
 namespace SisUvex.Catalogos.Metods
 {
     class ClsObject
@@ -124,7 +109,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveContractor";
             public const string Cbo = "CboContractor";
             public const string DgvCatalog = "DgvCatalogContractor";
-            public const string QueryCbo = "queryContractor";
+            public const string QueryCbo = $"SELECT id_contractor AS '{Column.id}', CONCAT(v_nameContractor, ' | ', id_contractor, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_Contractor ORDER BY '{Column.name}'";
             public const string QueryDgvCatalog = "queryContractor";
         }
 
@@ -283,6 +268,17 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboDinerProvider";
             public const string DgvCatalog = "DgvCatalogDinerProvider";
             public const string QueryCbo = $"SELECT id_dinerProvider AS '{Column.id}', CONCAT(v_nameDinerProvider, ' | ', id_dinerProvider, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Nom_DinerProvider ORDER BY '{Column.name}'";
+        }
+
+        public static class Season
+        {
+            public const string TableName = "Pack_Season";
+            public const string ColumnName = "Temporada";
+            public const string ColumnId = "id_Season";
+            public const string ColumnActive = "ActiveSeason";
+            public const string Cbo = "CboSeason";
+            public const string DgvCatalog = "DgvCatalogSeason";
+            public const string QueryCbo = $"SELECT id_season AS '{Column.id}', CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_Season ORDER BY '{Column.name}'";
         }
     }
 }

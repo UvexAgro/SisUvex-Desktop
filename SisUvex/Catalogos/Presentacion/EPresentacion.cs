@@ -1,11 +1,4 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-
+﻿using System.Data.SqlClient;
 
 namespace SisUvex.Catalogos.Presentacion
 {
@@ -19,7 +12,6 @@ namespace SisUvex.Catalogos.Presentacion
         private string market;
         private int active;
 
-        private SQLControl sql = new SQLControl();
         public string IdPresentation
         {
             get { return idPresentation; }
@@ -58,6 +50,8 @@ namespace SisUvex.Catalogos.Presentacion
 
         public void SetPresentation(string idPresentacion)
         {
+            SQLControl sql = new SQLControl();
+
             try
             {
                 sql.OpenConectionWrite();
