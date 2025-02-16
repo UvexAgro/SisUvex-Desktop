@@ -26,6 +26,10 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
         }
         private void FrmCajaEmpleado_Load(object sender, EventArgs e)
         {
+            lblName.Text = "";
+            lblLastNamePat.Text = "";
+            lblLastNameMat.Text = "";
+
             dt = new ClsSearchEmployees();
             ClsTextBoxes.TxbApplyKeyPressEventInt(txbCodigoEmp);
 
@@ -122,6 +126,16 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
 
                 LoadEmployeeData(txbCodigoEmp.Text);
             }
+        }
+
+        private void txbCodigoEmp_Enter(object sender, EventArgs e)
+        {
+            txbCodigoEmp.SelectAll();
+        }
+
+        private void nudCantidad_Enter(object sender, EventArgs e)
+        {
+            nudCantidad.Select(0, nudCantidad.Text.Length);
         }
     }
 }
