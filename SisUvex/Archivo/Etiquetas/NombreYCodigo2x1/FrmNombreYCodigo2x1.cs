@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Archivo.Etiquetas.NombreYCodigo2x1;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Configuracion;
@@ -92,6 +93,16 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
         private void FrmNombreYCodigo2x1_Load(object sender, EventArgs e)
         {
             ClsConfPrinter.Leer();
+        }
+
+        private void txbCodigoEmp_Enter(object sender, EventArgs e)
+        {
+            txbCodigoEmp.SelectAll();
+        }
+
+        private void nudCantidad_Enter(object sender, EventArgs e)
+        {
+            nudCantidad.Select(0, nudCantidad.Text.Length);
         }
     }
 }

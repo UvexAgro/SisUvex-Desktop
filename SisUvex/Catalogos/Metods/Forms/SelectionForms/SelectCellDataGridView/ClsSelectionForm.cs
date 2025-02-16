@@ -1,4 +1,5 @@
-﻿using SisUvex.Catalogos.Metods.Forms.SelectionForms.SelectCellDataGridView;
+﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms.SelectCellDataGridView;
 using SisUvex.Catalogos.Metods.Querys;
 using System.Data;
 
@@ -78,12 +79,19 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
             //// Copiar el valor de query al portapapeles
             //System.Windows.Forms.Clipboard.SetText(query);
 
-            Dictionary<string, object> parameters = new Dictionary<string, object>
+            if (!text.IsNullOrEmpty())
             {
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
                 {ParameterName, $"%{text}%" }
-            };
+                };
 
-            frm.dgvRows.DataSource = ClsQuerysDB.ExecuteParameterizedQuery(queryString, parameters);
+                frm.dgvRows.DataSource = ClsQuerysDB.ExecuteParameterizedQuery(queryString, parameters);
+            }
+            else
+            {
+                System.Media.SystemSounds.Hand.Play();
+            }
         }
 
         private void btnSelect()

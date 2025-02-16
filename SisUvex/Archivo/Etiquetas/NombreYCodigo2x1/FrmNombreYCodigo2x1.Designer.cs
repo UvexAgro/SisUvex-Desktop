@@ -46,7 +46,7 @@
             // 
             lblCantidad.AutoSize = true;
             lblCantidad.Font = new Font("Segoe UI", 14F);
-            lblCantidad.Location = new Point(12, 117);
+            lblCantidad.Location = new Point(12, 186);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(200, 25);
             lblCantidad.TabIndex = 21;
@@ -57,7 +57,7 @@
             btnImprimir.BackgroundImageLayout = ImageLayout.Stretch;
             btnImprimir.Font = new Font("Segoe UI", 14F);
             btnImprimir.Image = Properties.Resources.imprimirIcon321;
-            btnImprimir.Location = new Point(274, 109);
+            btnImprimir.Location = new Point(297, 177);
             btnImprimir.Name = "btnImprimir";
             btnImprimir.Size = new Size(40, 40);
             btnImprimir.TabIndex = 4;
@@ -76,20 +76,21 @@
             // nudCantidad
             // 
             nudCantidad.Font = new Font("Segoe UI", 17F);
-            nudCantidad.Location = new Point(220, 110);
+            nudCantidad.Location = new Point(220, 179);
             nudCantidad.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
-            nudCantidad.Size = new Size(48, 38);
+            nudCantidad.Size = new Size(71, 38);
             nudCantidad.TabIndex = 3;
             nudCantidad.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            nudCantidad.Enter += nudCantidad_Enter;
             nudCantidad.KeyPress += nudCantidad_KeyPress;
             // 
             // lblCodigoEmp
             // 
             lblCodigoEmp.AutoSize = true;
             lblCodigoEmp.Font = new Font("Segoe UI", 14F);
-            lblCodigoEmp.Location = new Point(14, 65);
+            lblCodigoEmp.Location = new Point(14, 102);
             lblCodigoEmp.Name = "lblCodigoEmp";
             lblCodigoEmp.Size = new Size(166, 25);
             lblCodigoEmp.TabIndex = 17;
@@ -98,11 +99,12 @@
             // txbCodigoEmp
             // 
             txbCodigoEmp.Font = new Font("Segoe UI", 17F);
-            txbCodigoEmp.Location = new Point(186, 58);
+            txbCodigoEmp.Location = new Point(186, 95);
             txbCodigoEmp.MaxLength = 6;
             txbCodigoEmp.Name = "txbCodigoEmp";
-            txbCodigoEmp.Size = new Size(82, 38);
+            txbCodigoEmp.Size = new Size(105, 38);
             txbCodigoEmp.TabIndex = 0;
+            txbCodigoEmp.Enter += txbCodigoEmp_Enter;
             txbCodigoEmp.KeyPress += txbCodigoEmp_KeyPress;
             // 
             // label1
@@ -119,7 +121,7 @@
             // 
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
             btnBuscarCodigo.Image = Properties.Resources.buscarIcon32;
-            btnBuscarCodigo.Location = new Point(319, 58);
+            btnBuscarCodigo.Location = new Point(334, 94);
             btnBuscarCodigo.Name = "btnBuscarCodigo";
             btnBuscarCodigo.Size = new Size(40, 40);
             btnBuscarCodigo.TabIndex = 2;
@@ -140,7 +142,7 @@
             btnSelectEmployeeFrm.BackgroundImageLayout = ImageLayout.None;
             btnSelectEmployeeFrm.Font = new Font("Segoe UI", 14F);
             btnSelectEmployeeFrm.Image = Properties.Resources.guardarIcon321;
-            btnSelectEmployeeFrm.Location = new Point(274, 58);
+            btnSelectEmployeeFrm.Location = new Point(289, 94);
             btnSelectEmployeeFrm.Name = "btnSelectEmployeeFrm";
             btnSelectEmployeeFrm.Size = new Size(40, 40);
             btnSelectEmployeeFrm.TabIndex = 1;
@@ -151,10 +153,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(525, 161);
-            Controls.Add(btnSelectEmployeeFrm);
+            ClientSize = new Size(525, 244);
             Controls.Add(lblApellido);
-            Controls.Add(btnBuscarCodigo);
             Controls.Add(lblCantidad);
             Controls.Add(btnImprimir);
             Controls.Add(lblNombre);
@@ -162,11 +162,12 @@
             Controls.Add(lblCodigoEmp);
             Controls.Add(txbCodigoEmp);
             Controls.Add(label1);
+            Controls.Add(btnSelectEmployeeFrm);
+            Controls.Add(btnBuscarCodigo);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MaximumSize = new Size(541, 200);
-            MinimumSize = new Size(541, 200);
+            MaximumSize = new Size(541, 283);
             Name = "FrmNombreYCodigo2x1";
             Text = "Imprimir código de empleado con nombre QR";
             Load += FrmNombreYCodigo2x1_Load;

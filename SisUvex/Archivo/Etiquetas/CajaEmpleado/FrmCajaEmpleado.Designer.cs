@@ -47,7 +47,7 @@
             // 
             btnImprimir.Font = new Font("Segoe UI", 14F);
             btnImprimir.Image = Properties.Resources.imprimirIcon32;
-            btnImprimir.Location = new Point(272, 131);
+            btnImprimir.Location = new Point(299, 171);
             btnImprimir.Name = "btnImprimir";
             btnImprimir.Size = new Size(40, 40);
             btnImprimir.TabIndex = 3;
@@ -67,20 +67,21 @@
             // nudCantidad
             // 
             nudCantidad.Font = new Font("Segoe UI", 17F);
-            nudCantidad.Location = new Point(218, 132);
+            nudCantidad.Location = new Point(215, 172);
             nudCantidad.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
-            nudCantidad.Size = new Size(48, 38);
+            nudCantidad.Size = new Size(78, 38);
             nudCantidad.TabIndex = 2;
             nudCantidad.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            nudCantidad.Enter += nudCantidad_Enter;
             nudCantidad.KeyPress += nudCantidad_KeyPress;
             // 
             // lblCodigoEmp
             // 
             lblCodigoEmp.AutoSize = true;
             lblCodigoEmp.Font = new Font("Segoe UI", 14F);
-            lblCodigoEmp.Location = new Point(12, 90);
+            lblCodigoEmp.Location = new Point(12, 106);
             lblCodigoEmp.Name = "lblCodigoEmp";
             lblCodigoEmp.Size = new Size(166, 25);
             lblCodigoEmp.TabIndex = 7;
@@ -89,18 +90,19 @@
             // txbCodigoEmp
             // 
             txbCodigoEmp.Font = new Font("Segoe UI", 17F);
-            txbCodigoEmp.Location = new Point(184, 87);
+            txbCodigoEmp.Location = new Point(184, 103);
             txbCodigoEmp.MaxLength = 6;
             txbCodigoEmp.Name = "txbCodigoEmp";
-            txbCodigoEmp.Size = new Size(82, 38);
+            txbCodigoEmp.Size = new Size(109, 38);
             txbCodigoEmp.TabIndex = 0;
+            txbCodigoEmp.Enter += txbCodigoEmp_Enter;
             txbCodigoEmp.KeyPress += txbCodigoEmp_KeyPress;
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
             lblCantidad.Font = new Font("Segoe UI", 14F);
-            lblCantidad.Location = new Point(12, 134);
+            lblCantidad.Location = new Point(9, 174);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(200, 25);
             lblCantidad.TabIndex = 11;
@@ -110,7 +112,7 @@
             // 
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
             btnBuscarCodigo.Image = Properties.Resources.guardarIcon321;
-            btnBuscarCodigo.Location = new Point(272, 87);
+            btnBuscarCodigo.Location = new Point(290, 102);
             btnBuscarCodigo.Name = "btnBuscarCodigo";
             btnBuscarCodigo.Size = new Size(40, 40);
             btnBuscarCodigo.TabIndex = 1;
@@ -151,7 +153,7 @@
             // 
             button1.Font = new Font("Segoe UI", 14F);
             button1.Image = Properties.Resources.buscarIcon32;
-            button1.Location = new Point(318, 87);
+            button1.Location = new Point(345, 102);
             button1.Name = "button1";
             button1.Size = new Size(40, 40);
             button1.TabIndex = 35;
@@ -162,18 +164,18 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(485, 195);
+            ClientSize = new Size(485, 237);
             Controls.Add(button1);
             Controls.Add(lblLastNameMat);
             Controls.Add(lblLastNamePat);
             Controls.Add(lblName);
-            Controls.Add(btnBuscarCodigo);
             Controls.Add(lblCantidad);
             Controls.Add(btnImprimir);
             Controls.Add(lblNombre);
             Controls.Add(nudCantidad);
             Controls.Add(lblCodigoEmp);
             Controls.Add(txbCodigoEmp);
+            Controls.Add(btnBuscarCodigo);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
