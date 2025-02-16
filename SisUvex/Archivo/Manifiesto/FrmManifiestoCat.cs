@@ -26,9 +26,9 @@ namespace SisUvex.Archivo.Manifiesto
             f.lblTitulo.Text = "Añadir Manifiesto";
             f.Text = "Añadir Manifiesto";
             f.txbId.Text = cls.SiguienteManifiesto("E");
-            f.cboActivo.SelectedIndex = 1;
-            f.cboTipoEmbarque.Text = "E";
-            f.dtpFecha.Value = DateTime.Now;
+            f.cboActive.SelectedIndex = 1;
+            f.cboManifestType.Text = "E";
+            f.dtpDate.Value = DateTime.Now;
             f.UpdateEventHandler += CatalogoActualizarHijo;
             f.ShowDialog();
         }
@@ -70,11 +70,11 @@ namespace SisUvex.Archivo.Manifiesto
 
                 FrmManifiestoAñadir f = new FrmManifiestoAñadir(this);
                 f.añadirModificar = false;
-                f.cboTipoEmbarque.Enabled = false;
+                f.cboManifestType.Enabled = false;
                 f.lblTitulo.Text = "Modificar Manifiesto";
                 f.Text = "Modificar Manifiesto";
 
-                cls.LlenarFormulario(dgv.Cells["Manifiesto"].Value.ToString(), ref f.cboActivo, ref f.txbId, ref f.cboTipoEmbarque, ref f.txbIdDistribuidor, ref f.txbIdConsignatario, ref f.txbIdProductor, ref f.txbIdAgenciaUS, ref f.txbIdAgenciaMX, ref f.txbIdLinea, ref f.txbIdTroque, ref f.txbIdCaja, ref f.txbIdChofer, ref f.txbIdCiudadCruce, ref f.txbIdCiudadDestino, ref f.txbSello1, ref f.txbSello2, ref f.txbSello3, ref f.txbChismografo, ref f.txbOrden, ref f.txbBooking, ref f.dtpFecha, ref f.spnHoraSalida, ref f.txbGrados, ref f.cboGrados, ref f.txbOperador, ref f.txbEmbarcador, ref f.cboMedioTransporte, ref f.cboSegundoMedio, ref f.chkRechazado, ref f.txbObservaciones, ref f.txbPosicion, ref f.txbDieselInvoice, ref f.txbDieselLiters, ref f.txbFitosanitario);
+                cls.LlenarFormulario(dgv.Cells["Manifiesto"].Value.ToString(), ref f.cboActive, ref f.txbId, ref f.cboManifestType, ref f.txbIdDistributor, ref f.txbIdConsignee, ref f.txbIdGrower, ref f.txbIdAgencyUS, ref f.txbIdAgencyMX, ref f.txbIdTransportLine, ref f.txbIdTruck, ref f.txbIdFreightContainer, ref f.txbIdDriver, ref f.txbIdCityCrossPoint, ref f.txbIdCityDestination, ref f.txbSeal1, ref f.txbSeal2, ref f.txbSeal3, ref f.txbTermograph, ref f.txbPurchaseOrder, ref f.txbBooking, ref f.dtpDate, ref f.spnHour, ref f.txbTemperature, ref f.cboTemperatureUnit, ref f.txbNameOperator, ref f.txbNameShipper, ref f.cboTransportVehicle, ref f.cboTransportType, ref f.chkRejected, ref f.txbObservations, ref f.txbTermoPosition, ref f.txbDieselInvoice, ref f.txbDieselLiters, ref f.txbPhytosanitary);
 
                 f.UpdateEventHandler += CatalogoActualizarHijo;
                 f.ShowDialog();

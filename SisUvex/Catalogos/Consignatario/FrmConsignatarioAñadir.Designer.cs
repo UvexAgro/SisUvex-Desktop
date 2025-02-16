@@ -41,7 +41,6 @@ namespace SisUvex.Catalogos.Consignatario
             btnBuscarDistribuidor = new Button();
             txbIdDistribuidor = new TextBox();
             cboDistribuidor = new ComboBox();
-            lblObliContratista = new Label();
             lblObliId = new Label();
             cboActivo = new ComboBox();
             lblActivo = new Label();
@@ -59,6 +58,7 @@ namespace SisUvex.Catalogos.Consignatario
             lblObliNombre = new Label();
             txbPais = new TextBox();
             lblPais = new Label();
+            label1 = new Label();
             SuspendLayout();
             // 
             // lblTitulo
@@ -88,7 +88,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbId.Location = new Point(654, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 11;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -106,7 +106,7 @@ namespace SisUvex.Catalogos.Consignatario
             btnCancelar.Location = new Point(627, 297);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 9;
+            btnCancelar.TabIndex = 13;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -116,7 +116,7 @@ namespace SisUvex.Catalogos.Consignatario
             btnAceptar.Location = new Point(546, 297);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 10;
+            btnAceptar.TabIndex = 12;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -126,7 +126,7 @@ namespace SisUvex.Catalogos.Consignatario
             btnTodoDistribuidor.Location = new Point(645, 84);
             btnTodoDistribuidor.Name = "btnTodoDistribuidor";
             btnTodoDistribuidor.Size = new Size(57, 29);
-            btnTodoDistribuidor.TabIndex = 3;
+            btnTodoDistribuidor.TabIndex = 6;
             btnTodoDistribuidor.Text = "Activos";
             btnTodoDistribuidor.UseVisualStyleBackColor = true;
             btnTodoDistribuidor.Click += btnTodoDistribuidor_Click;
@@ -136,7 +136,7 @@ namespace SisUvex.Catalogos.Consignatario
             btnBuscarDistribuidor.Location = new Point(582, 84);
             btnBuscarDistribuidor.Name = "btnBuscarDistribuidor";
             btnBuscarDistribuidor.Size = new Size(57, 29);
-            btnBuscarDistribuidor.TabIndex = 2;
+            btnBuscarDistribuidor.TabIndex = 5;
             btnBuscarDistribuidor.Text = "Buscar";
             btnBuscarDistribuidor.UseVisualStyleBackColor = true;
             btnBuscarDistribuidor.Click += btnBuscarDistribuidor_Click;
@@ -148,7 +148,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbIdDistribuidor.Location = new Point(111, 84);
             txbIdDistribuidor.Name = "txbIdDistribuidor";
             txbIdDistribuidor.Size = new Size(46, 29);
-            txbIdDistribuidor.TabIndex = 34;
+            txbIdDistribuidor.TabIndex = 3;
             txbIdDistribuidor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistribuidor
@@ -160,19 +160,9 @@ namespace SisUvex.Catalogos.Consignatario
             cboDistribuidor.MaxLength = 100;
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(413, 29);
-            cboDistribuidor.TabIndex = 1;
+            cboDistribuidor.TabIndex = 4;
             cboDistribuidor.TextChanged += cboDistribuidor_TextChanged;
             cboDistribuidor.MouseClick += cboDistribuidor_MouseClick;
-            // 
-            // lblObliContratista
-            // 
-            lblObliContratista.AutoSize = true;
-            lblObliContratista.ForeColor = Color.Crimson;
-            lblObliContratista.Location = new Point(95, 84);
-            lblObliContratista.Name = "lblObliContratista";
-            lblObliContratista.Size = new Size(12, 15);
-            lblObliContratista.TabIndex = 35;
-            lblObliContratista.Text = "*";
             // 
             // lblObliId
             // 
@@ -193,7 +183,7 @@ namespace SisUvex.Catalogos.Consignatario
             cboActivo.Location = new Point(570, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 12;
+            cboActivo.TabIndex = 0;
             // 
             // lblActivo
             // 
@@ -222,7 +212,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbTelefono.MaxLength = 13;
             txbTelefono.Name = "txbTelefono";
             txbTelefono.Size = new Size(268, 29);
-            txbTelefono.TabIndex = 8;
+            txbTelefono.TabIndex = 11;
             // 
             // lblTelefono
             // 
@@ -241,7 +231,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
             txbRFC.Size = new Size(268, 29);
-            txbRFC.TabIndex = 7;
+            txbRFC.TabIndex = 10;
             // 
             // lblRFC
             // 
@@ -260,7 +250,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
             txbCiudad.Size = new Size(471, 29);
-            txbCiudad.TabIndex = 5;
+            txbCiudad.TabIndex = 8;
             // 
             // lblCiudad
             // 
@@ -279,7 +269,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
             txbDireccion.Size = new Size(591, 29);
-            txbDireccion.TabIndex = 4;
+            txbDireccion.TabIndex = 7;
             // 
             // lblDireccion
             // 
@@ -298,7 +288,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(591, 29);
-            txbNombre.TabIndex = 50;
+            txbNombre.TabIndex = 2;
             // 
             // lblNombre
             // 
@@ -314,7 +304,7 @@ namespace SisUvex.Catalogos.Consignatario
             // 
             lblObliNombre.AutoSize = true;
             lblObliNombre.ForeColor = Color.Crimson;
-            lblObliNombre.Location = new Point(24, 52);
+            lblObliNombre.Location = new Point(101, 52);
             lblObliNombre.Name = "lblObliNombre";
             lblObliNombre.Size = new Size(12, 15);
             lblObliNombre.TabIndex = 52;
@@ -327,7 +317,7 @@ namespace SisUvex.Catalogos.Consignatario
             txbPais.MaxLength = 15;
             txbPais.Name = "txbPais";
             txbPais.Size = new Size(268, 29);
-            txbPais.TabIndex = 6;
+            txbPais.TabIndex = 9;
             // 
             // lblPais
             // 
@@ -338,6 +328,16 @@ namespace SisUvex.Catalogos.Consignatario
             lblPais.Size = new Size(40, 21);
             lblPais.TabIndex = 54;
             lblPais.Text = "País:";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.Crimson;
+            label1.Location = new Point(103, 87);
+            label1.Name = "label1";
+            label1.Size = new Size(12, 15);
+            label1.TabIndex = 55;
+            label1.Text = "*";
             // 
             // FrmConsignatarioAñadir
             // 
@@ -360,18 +360,18 @@ namespace SisUvex.Catalogos.Consignatario
             Controls.Add(lblActivo);
             Controls.Add(label2);
             Controls.Add(cboActivo);
-            Controls.Add(lblDistribuidor);
             Controls.Add(btnTodoDistribuidor);
             Controls.Add(btnBuscarDistribuidor);
             Controls.Add(txbIdDistribuidor);
             Controls.Add(cboDistribuidor);
-            Controls.Add(lblObliContratista);
             Controls.Add(btnAceptar);
             Controls.Add(btnCancelar);
             Controls.Add(txbId);
             Controls.Add(lblTitulo);
             Controls.Add(lblId);
             Controls.Add(lblObliId);
+            Controls.Add(label1);
+            Controls.Add(lblDistribuidor);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "FrmConsignatarioAñadir";
@@ -394,7 +394,6 @@ namespace SisUvex.Catalogos.Consignatario
         private Button btnBuscarDistribuidor;
         public TextBox txbIdDistribuidor;
         private ComboBox cboDistribuidor;
-        private Label lblObliContratista;
         private Label lblObliId;
         public ComboBox cboActivo;
         private Label lblActivo;
@@ -412,5 +411,6 @@ namespace SisUvex.Catalogos.Consignatario
         private Label lblObliNombre;
         public TextBox txbPais;
         private Label lblPais;
+        private Label label1;
     }
 }

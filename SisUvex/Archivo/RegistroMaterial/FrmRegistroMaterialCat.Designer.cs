@@ -33,6 +33,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroMaterialCat));
             btnAñadir = new Button();
             btnModificar = new Button();
             dgvCatalogo = new DataGridView();
@@ -64,7 +65,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
             btnModificar.Location = new Point(231, 9);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
-            btnModificar.TabIndex = 1;
+            btnModificar.TabIndex = 2;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
@@ -81,7 +82,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
             dgvCatalogo.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
@@ -90,12 +91,12 @@ namespace SisUvex.Catalogos.RegistroMaterial
             dgvCatalogo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogo.EnableHeadersVisualStyles = false;
             dgvCatalogo.ImeMode = ImeMode.NoControl;
-            dgvCatalogo.Location = new Point(12, 38);
+            dgvCatalogo.Location = new Point(12, 97);
             dgvCatalogo.Name = "dgvCatalogo";
             dgvCatalogo.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
             dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
@@ -103,10 +104,9 @@ namespace SisUvex.Catalogos.RegistroMaterial
             dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogo.RowHeadersVisible = false;
             dgvCatalogo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogo.RowTemplate.Height = 25;
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogo.Size = new Size(986, 601);
-            dgvCatalogo.TabIndex = 4;
+            dgvCatalogo.Size = new Size(702, 352);
+            dgvCatalogo.TabIndex = 10;
             dgvCatalogo.CellFormatting += dgvCatalogo_CellFormatting;
             dgvCatalogo.MouseDoubleClick += dgvCatalogo_MouseDoubleClick;
             // 
@@ -115,7 +115,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
             btnEliminar.Location = new Point(312, 9);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
-            btnEliminar.TabIndex = 7;
+            btnEliminar.TabIndex = 3;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
@@ -125,29 +125,29 @@ namespace SisUvex.Catalogos.RegistroMaterial
             btnAgregarSalida.Location = new Point(120, 9);
             btnAgregarSalida.Name = "btnAgregarSalida";
             btnAgregarSalida.Size = new Size(105, 23);
-            btnAgregarSalida.TabIndex = 8;
+            btnAgregarSalida.TabIndex = 1;
             btnAgregarSalida.Text = "Agregar salida";
             btnAgregarSalida.UseVisualStyleBackColor = true;
             btnAgregarSalida.Click += btnAgregarSalida_Click;
             // 
             // dtpEntreFecha1
             // 
-            dtpEntreFecha1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dtpEntreFecha1.Font = new Font("Segoe UI", 9F);
             dtpEntreFecha1.Format = DateTimePickerFormat.Short;
-            dtpEntreFecha1.Location = new Point(752, 8);
+            dtpEntreFecha1.Location = new Point(106, 67);
             dtpEntreFecha1.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
             dtpEntreFecha1.MinDate = new DateTime(2010, 1, 1, 0, 0, 0, 0);
             dtpEntreFecha1.Name = "dtpEntreFecha1";
             dtpEntreFecha1.Size = new Size(82, 23);
-            dtpEntreFecha1.TabIndex = 143;
+            dtpEntreFecha1.TabIndex = 7;
             // 
             // btnBuscar
             // 
-            btnBuscar.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            btnBuscar.Location = new Point(944, 9);
+            btnBuscar.Font = new Font("Segoe UI", 9F);
+            btnBuscar.Location = new Point(298, 66);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(54, 23);
-            btnBuscar.TabIndex = 142;
+            btnBuscar.Size = new Size(54, 25);
+            btnBuscar.TabIndex = 9;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
@@ -155,8 +155,8 @@ namespace SisUvex.Catalogos.RegistroMaterial
             // lblY
             // 
             lblY.AutoSize = true;
-            lblY.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            lblY.Location = new Point(840, 14);
+            lblY.Font = new Font("Segoe UI", 9F);
+            lblY.Location = new Point(194, 73);
             lblY.Name = "lblY";
             lblY.Size = new Size(13, 15);
             lblY.TabIndex = 141;
@@ -165,8 +165,8 @@ namespace SisUvex.Catalogos.RegistroMaterial
             // lblRegistros
             // 
             lblRegistros.AutoSize = true;
-            lblRegistros.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            lblRegistros.Location = new Point(658, 12);
+            lblRegistros.Font = new Font("Segoe UI", 9F);
+            lblRegistros.Location = new Point(12, 71);
             lblRegistros.Name = "lblRegistros";
             lblRegistros.Size = new Size(88, 15);
             lblRegistros.TabIndex = 140;
@@ -174,42 +174,42 @@ namespace SisUvex.Catalogos.RegistroMaterial
             // 
             // dtpEntreFecha2
             // 
-            dtpEntreFecha2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dtpEntreFecha2.Font = new Font("Segoe UI", 9F);
             dtpEntreFecha2.Format = DateTimePickerFormat.Short;
-            dtpEntreFecha2.Location = new Point(858, 8);
+            dtpEntreFecha2.Location = new Point(212, 67);
             dtpEntreFecha2.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
             dtpEntreFecha2.MinDate = new DateTime(2010, 1, 1, 0, 0, 0, 0);
             dtpEntreFecha2.Name = "dtpEntreFecha2";
             dtpEntreFecha2.Size = new Size(82, 23);
-            dtpEntreFecha2.TabIndex = 144;
+            dtpEntreFecha2.TabIndex = 8;
             // 
             // btnEntradas
             // 
-            btnEntradas.Location = new Point(393, 9);
+            btnEntradas.Location = new Point(80, 38);
             btnEntradas.Name = "btnEntradas";
-            btnEntradas.Size = new Size(75, 23);
-            btnEntradas.TabIndex = 145;
+            btnEntradas.Size = new Size(62, 23);
+            btnEntradas.TabIndex = 4;
             btnEntradas.Text = "Entradas";
             btnEntradas.UseVisualStyleBackColor = true;
             btnEntradas.Click += btnEntradas_Click;
             // 
             // btnSalidas
             // 
-            btnSalidas.Location = new Point(474, 9);
+            btnSalidas.Location = new Point(12, 38);
             btnSalidas.Name = "btnSalidas";
-            btnSalidas.Size = new Size(75, 23);
-            btnSalidas.TabIndex = 146;
+            btnSalidas.Size = new Size(62, 23);
+            btnSalidas.TabIndex = 5;
             btnSalidas.Text = "Salidas";
             btnSalidas.UseVisualStyleBackColor = true;
             btnSalidas.Click += btnSalidas_Click;
             // 
             // btnTodo
             // 
-            btnTodo.Location = new Point(555, 9);
+            btnTodo.Location = new Point(148, 38);
             btnTodo.Name = "btnTodo";
-            btnTodo.Size = new Size(75, 23);
-            btnTodo.TabIndex = 147;
-            btnTodo.Text = "Todas";
+            btnTodo.Size = new Size(62, 23);
+            btnTodo.TabIndex = 6;
+            btnTodo.Text = "Todo";
             btnTodo.UseVisualStyleBackColor = true;
             btnTodo.Click += btnTodo_Click;
             // 
@@ -217,7 +217,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1010, 650);
+            ClientSize = new Size(726, 460);
             Controls.Add(btnTodo);
             Controls.Add(btnSalidas);
             Controls.Add(btnEntradas);
@@ -231,6 +231,7 @@ namespace SisUvex.Catalogos.RegistroMaterial
             Controls.Add(dgvCatalogo);
             Controls.Add(btnModificar);
             Controls.Add(btnAñadir);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmRegistroMaterialCat";
             Text = "Catálogo registro de material";
             WindowState = FormWindowState.Maximized;

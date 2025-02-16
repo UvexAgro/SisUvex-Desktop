@@ -31,6 +31,7 @@ namespace SisUvex.Catalogos.Troque
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmTroqueAñadir));
             lblTitulo = new Label();
             lblLinea = new Label();
             txbId = new TextBox();
@@ -67,7 +68,7 @@ namespace SisUvex.Catalogos.Troque
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(180, 31);
@@ -77,7 +78,7 @@ namespace SisUvex.Catalogos.Troque
             // lblLinea
             // 
             lblLinea.AutoSize = true;
-            lblLinea.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblLinea.Font = new Font("Segoe UI", 12F);
             lblLinea.Location = new Point(10, 56);
             lblLinea.Name = "lblLinea";
             lblLinea.Size = new Size(147, 21);
@@ -87,17 +88,17 @@ namespace SisUvex.Catalogos.Troque
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(572, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 12;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(540, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -109,7 +110,7 @@ namespace SisUvex.Catalogos.Troque
             btnCancelar.Location = new Point(544, 333);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 10;
+            btnCancelar.TabIndex = 14;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -119,7 +120,7 @@ namespace SisUvex.Catalogos.Troque
             btnAceptar.Location = new Point(463, 333);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 11;
+            btnAceptar.TabIndex = 13;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -129,7 +130,7 @@ namespace SisUvex.Catalogos.Troque
             btnTodoLinea.Location = new Point(562, 54);
             btnTodoLinea.Name = "btnTodoLinea";
             btnTodoLinea.Size = new Size(57, 29);
-            btnTodoLinea.TabIndex = 2;
+            btnTodoLinea.TabIndex = 5;
             btnTodoLinea.Text = "Activos";
             btnTodoLinea.UseVisualStyleBackColor = true;
             btnTodoLinea.Click += btnTodoLinea_Click;
@@ -139,7 +140,7 @@ namespace SisUvex.Catalogos.Troque
             btnBuscarLinea.Location = new Point(499, 54);
             btnBuscarLinea.Name = "btnBuscarLinea";
             btnBuscarLinea.Size = new Size(57, 29);
-            btnBuscarLinea.TabIndex = 1;
+            btnBuscarLinea.TabIndex = 4;
             btnBuscarLinea.Text = "Buscar";
             btnBuscarLinea.UseVisualStyleBackColor = true;
             btnBuscarLinea.Click += btnBuscarLinea_Click;
@@ -147,22 +148,22 @@ namespace SisUvex.Catalogos.Troque
             // txbIdLinea
             // 
             txbIdLinea.Enabled = false;
-            txbIdLinea.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdLinea.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdLinea.Location = new Point(163, 53);
             txbIdLinea.Name = "txbIdLinea";
             txbIdLinea.Size = new Size(46, 29);
-            txbIdLinea.TabIndex = 34;
+            txbIdLinea.TabIndex = 2;
             txbIdLinea.TextAlign = HorizontalAlignment.Center;
             // 
             // cboLinea
             // 
-            cboLinea.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboLinea.Font = new Font("Segoe UI", 12F);
             cboLinea.FormattingEnabled = true;
             cboLinea.ItemHeight = 21;
             cboLinea.Location = new Point(215, 53);
             cboLinea.Name = "cboLinea";
             cboLinea.Size = new Size(278, 29);
-            cboLinea.TabIndex = 0;
+            cboLinea.TabIndex = 3;
             cboLinea.TextChanged += cboLinea_TextChanged;
             cboLinea.MouseClick += cboLinea_MouseClick;
             // 
@@ -189,18 +190,18 @@ namespace SisUvex.Catalogos.Troque
             // cboActivo
             // 
             cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboActivo.Font = new Font("Segoe UI", 12F);
             cboActivo.FormattingEnabled = true;
             cboActivo.Items.AddRange(new object[] { "No", "Sí" });
             cboActivo.Location = new Point(488, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 13;
+            cboActivo.TabIndex = 0;
             // 
             // lblActivo
             // 
             lblActivo.AutoSize = true;
-            lblActivo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblActivo.Font = new Font("Segoe UI", 12F);
             lblActivo.Location = new Point(426, 15);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(60, 21);
@@ -219,17 +220,17 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbNumEco
             // 
-            txbNumEco.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNumEco.Font = new Font("Segoe UI", 12F);
             txbNumEco.Location = new Point(163, 88);
             txbNumEco.MaxLength = 15;
             txbNumEco.Name = "txbNumEco";
             txbNumEco.Size = new Size(175, 29);
-            txbNumEco.TabIndex = 3;
+            txbNumEco.TabIndex = 6;
             // 
             // lblNumEco
             // 
             lblNumEco.AutoSize = true;
-            lblNumEco.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNumEco.Font = new Font("Segoe UI", 12F);
             lblNumEco.Location = new Point(6, 91);
             lblNumEco.Name = "lblNumEco";
             lblNumEco.Size = new Size(151, 21);
@@ -249,7 +250,7 @@ namespace SisUvex.Catalogos.Troque
             // lblPlacasUS
             // 
             lblPlacasUS.AutoSize = true;
-            lblPlacasUS.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblPlacasUS.Font = new Font("Segoe UI", 12F);
             lblPlacasUS.Location = new Point(15, 126);
             lblPlacasUS.Name = "lblPlacasUS";
             lblPlacasUS.Size = new Size(80, 21);
@@ -258,17 +259,17 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbPlacasUS
             // 
-            txbPlacasUS.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbPlacasUS.Font = new Font("Segoe UI", 12F);
             txbPlacasUS.Location = new Point(101, 123);
             txbPlacasUS.MaxLength = 15;
             txbPlacasUS.Name = "txbPlacasUS";
             txbPlacasUS.Size = new Size(237, 29);
-            txbPlacasUS.TabIndex = 4;
+            txbPlacasUS.TabIndex = 7;
             // 
             // lblPlacasMX
             // 
             lblPlacasMX.AutoSize = true;
-            lblPlacasMX.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblPlacasMX.Font = new Font("Segoe UI", 12F);
             lblPlacasMX.Location = new Point(12, 161);
             lblPlacasMX.Name = "lblPlacasMX";
             lblPlacasMX.Size = new Size(83, 21);
@@ -277,17 +278,17 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbPlacasMX
             // 
-            txbPlacasMX.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbPlacasMX.Font = new Font("Segoe UI", 12F);
             txbPlacasMX.Location = new Point(101, 158);
             txbPlacasMX.MaxLength = 15;
             txbPlacasMX.Name = "txbPlacasMX";
             txbPlacasMX.Size = new Size(237, 29);
-            txbPlacasMX.TabIndex = 5;
+            txbPlacasMX.TabIndex = 8;
             // 
             // lblMarca
             // 
             lblMarca.AutoSize = true;
-            lblMarca.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblMarca.Font = new Font("Segoe UI", 12F);
             lblMarca.Location = new Point(39, 196);
             lblMarca.Name = "lblMarca";
             lblMarca.Size = new Size(56, 21);
@@ -296,17 +297,17 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbMarca
             // 
-            txbMarca.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbMarca.Font = new Font("Segoe UI", 12F);
             txbMarca.Location = new Point(101, 193);
             txbMarca.MaxLength = 30;
             txbMarca.Name = "txbMarca";
             txbMarca.Size = new Size(392, 29);
-            txbMarca.TabIndex = 6;
+            txbMarca.TabIndex = 9;
             // 
             // lblModelo
             // 
             lblModelo.AutoSize = true;
-            lblModelo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblModelo.Font = new Font("Segoe UI", 12F);
             lblModelo.Location = new Point(29, 231);
             lblModelo.Name = "lblModelo";
             lblModelo.Size = new Size(66, 21);
@@ -315,18 +316,18 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbModelo
             // 
-            txbModelo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbModelo.Font = new Font("Segoe UI", 12F);
             txbModelo.Location = new Point(101, 228);
             txbModelo.MaxLength = 4;
             txbModelo.Name = "txbModelo";
             txbModelo.Size = new Size(80, 29);
-            txbModelo.TabIndex = 7;
+            txbModelo.TabIndex = 10;
             txbModelo.KeyPress += txbModelo_KeyPress;
             // 
             // lblAño
             // 
             lblAño.AutoSize = true;
-            lblAño.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblAño.Font = new Font("Segoe UI", 12F);
             lblAño.ForeColor = SystemColors.AppWorkspace;
             lblAño.Location = new Point(182, 231);
             lblAño.Name = "lblAño";
@@ -337,7 +338,7 @@ namespace SisUvex.Catalogos.Troque
             // lblVIN
             // 
             lblVIN.AutoSize = true;
-            lblVIN.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblVIN.Font = new Font("Segoe UI", 12F);
             lblVIN.Location = new Point(56, 266);
             lblVIN.Name = "lblVIN";
             lblVIN.Size = new Size(39, 21);
@@ -346,17 +347,17 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbVIN
             // 
-            txbVIN.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbVIN.Font = new Font("Segoe UI", 12F);
             txbVIN.Location = new Point(101, 263);
             txbVIN.MaxLength = 30;
             txbVIN.Name = "txbVIN";
             txbVIN.Size = new Size(392, 29);
-            txbVIN.TabIndex = 8;
+            txbVIN.TabIndex = 11;
             // 
             // lblColor
             // 
             lblColor.AutoSize = true;
-            lblColor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblColor.Font = new Font("Segoe UI", 12F);
             lblColor.Location = new Point(44, 301);
             lblColor.Name = "lblColor";
             lblColor.Size = new Size(51, 21);
@@ -365,12 +366,12 @@ namespace SisUvex.Catalogos.Troque
             // 
             // txbColor
             // 
-            txbColor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbColor.Font = new Font("Segoe UI", 12F);
             txbColor.Location = new Point(101, 298);
             txbColor.MaxLength = 30;
             txbColor.Name = "txbColor";
             txbColor.Size = new Size(237, 29);
-            txbColor.TabIndex = 9;
+            txbColor.TabIndex = 12;
             // 
             // FrmTroqueAñadir
             // 
@@ -409,6 +410,7 @@ namespace SisUvex.Catalogos.Troque
             Controls.Add(lblActivo);
             Controls.Add(lblLinea);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmTroqueAñadir";
             StartPosition = FormStartPosition.CenterScreen;

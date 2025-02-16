@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesAdd));
             btnAccept = new Button();
             btnCancel = new Button();
             txbId = new TextBox();
@@ -59,7 +60,7 @@
             btnAccept.Location = new Point(339, 212);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 20;
+            btnAccept.TabIndex = 6;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -69,7 +70,7 @@
             btnCancel.Location = new Point(420, 212);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 19;
+            btnCancel.TabIndex = 7;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -81,7 +82,7 @@
             txbId.Location = new Point(449, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 17;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbDescription
@@ -91,7 +92,7 @@
             txbDescription.MaxLength = 25;
             txbDescription.Name = "txbDescription";
             txbDescription.Size = new Size(380, 29);
-            txbDescription.TabIndex = 16;
+            txbDescription.TabIndex = 1;
             // 
             // lblDescription
             // 
@@ -142,7 +143,7 @@
             nudPriceFieldNormal.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudPriceFieldNormal.Name = "nudPriceFieldNormal";
             nudPriceFieldNormal.Size = new Size(76, 29);
-            nudPriceFieldNormal.TabIndex = 24;
+            nudPriceFieldNormal.TabIndex = 2;
             nudPriceFieldNormal.TextAlign = HorizontalAlignment.Right;
             // 
             // lblFieldNormal
@@ -178,7 +179,7 @@
             nudPriceFieldOver.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudPriceFieldOver.Name = "nudPriceFieldOver";
             nudPriceFieldOver.Size = new Size(76, 29);
-            nudPriceFieldOver.TabIndex = 26;
+            nudPriceFieldOver.TabIndex = 3;
             nudPriceFieldOver.TextAlign = HorizontalAlignment.Right;
             // 
             // label1
@@ -214,7 +215,7 @@
             nudPriceFacilityOver.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudPriceFacilityOver.Name = "nudPriceFacilityOver";
             nudPriceFacilityOver.Size = new Size(76, 29);
-            nudPriceFacilityOver.TabIndex = 26;
+            nudPriceFacilityOver.TabIndex = 5;
             nudPriceFacilityOver.TextAlign = HorizontalAlignment.Right;
             // 
             // lblFacilityOver
@@ -236,7 +237,7 @@
             nudPriceFacilityNormal.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudPriceFacilityNormal.Name = "nudPriceFacilityNormal";
             nudPriceFacilityNormal.Size = new Size(76, 29);
-            nudPriceFacilityNormal.TabIndex = 24;
+            nudPriceFacilityNormal.TabIndex = 4;
             nudPriceFacilityNormal.TextAlign = HorizontalAlignment.Right;
             // 
             // lblFacilityNormal
@@ -264,6 +265,7 @@
             Controls.Add(lblTitle);
             Controls.Add(lblId);
             Controls.Add(lblObliCom);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPricesAdd";
             Text = "Añadir precio";
             Load += FrmPricesAdd_Load;

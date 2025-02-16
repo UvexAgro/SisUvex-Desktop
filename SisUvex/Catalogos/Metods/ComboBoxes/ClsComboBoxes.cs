@@ -74,49 +74,26 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             };
         }
 
-        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, TextBox txb)
+        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, TextBox txbValueMember)
         {
-            if (cbo.DataSource != null && txb.Text != string.Empty)
-            {
-                DataTable dt = (DataTable)cbo.DataSource;
-                string columnName = cbo.ValueMember;
-
-                if (dt.Columns.Contains(ClsObject.Column.active))
-                {
-                    dt.DefaultView.RowFilter = $"{columnName} = '{txb.Text}' OR {ClsObject.Column.active} = '1'";
-                }
-
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    if (dt.Rows[i][columnName].ToString() == txb.Text)
-                    {
-                        string valorBuscado = dt.Rows[i][ClsObject.Column.name].ToString();
-
-                        int indice = cbo.FindStringExact(valorBuscado);
-
-                        if (indice != -1)
-                        {
-                            cbo.SelectedIndex = indice;
-                        }
-                    }
-                }
-            }
+            CboSelectIndexWithTextInValueMember(cbo, txbValueMember.Text);
         }
-        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, string text)
+
+        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, string ValueMemberText)
         {
-            if (cbo.DataSource != null && text != string.Empty)
+            if (cbo.DataSource != null && ValueMemberText != string.Empty)
             {
                 DataTable dt = (DataTable)cbo.DataSource;
-                string columnName = cbo.ValueMember;
+                string columnNameValueMember = cbo.ValueMember;
 
                 if (dt.Columns.Contains(ClsObject.Column.active))
                 {
-                    dt.DefaultView.RowFilter = $"{columnName} = '{text}' OR {ClsObject.Column.active} = '1'";
+                    dt.DefaultView.RowFilter = $"{columnNameValueMember} = '{ValueMemberText}' OR {ClsObject.Column.active} = '1'";
                 }
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    if (dt.Rows[i][columnName].ToString() == text)
+                    if (dt.Rows[i][columnNameValueMember].ToString() == ValueMemberText)
                     {
                         string valorBuscado = dt.Rows[i][ClsObject.Column.name].ToString();
 

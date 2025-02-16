@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDiningHallAdd));
             chbProvider = new CheckBox();
             chbActive = new CheckBox();
             btnAccept = new Button();
@@ -57,7 +58,7 @@
             chbProvider.Location = new Point(533, 130);
             chbProvider.Name = "chbProvider";
             chbProvider.Size = new Size(39, 29);
-            chbProvider.TabIndex = 97;
+            chbProvider.TabIndex = 5;
             chbProvider.Text = "     ";
             chbProvider.UseVisualStyleBackColor = true;
             // 
@@ -78,7 +79,7 @@
             chbActive.Location = new Point(94, 58);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 95;
+            chbActive.TabIndex = 0;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -88,7 +89,7 @@
             btnAccept.Location = new Point(416, 166);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 93;
+            btnAccept.TabIndex = 6;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -98,7 +99,7 @@
             btnCancel.Location = new Point(497, 166);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 94;
+            btnCancel.TabIndex = 7;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -110,7 +111,7 @@
             txbIdProvider.Location = new Point(94, 130);
             txbIdProvider.Name = "txbIdProvider";
             txbIdProvider.Size = new Size(43, 29);
-            txbIdProvider.TabIndex = 83;
+            txbIdProvider.TabIndex = 3;
             txbIdProvider.TextAlign = HorizontalAlignment.Center;
             // 
             // cboProvider
@@ -122,7 +123,7 @@
             cboProvider.Location = new Point(143, 131);
             cboProvider.Name = "cboProvider";
             cboProvider.Size = new Size(381, 29);
-            cboProvider.TabIndex = 81;
+            cboProvider.TabIndex = 4;
             // 
             // lblProvider
             // 
@@ -141,7 +142,7 @@
             txbId.Location = new Point(526, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 74;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -151,7 +152,7 @@
             txbName.MaxLength = 30;
             txbName.Name = "txbName";
             txbName.Size = new Size(430, 29);
-            txbName.TabIndex = 71;
+            txbName.TabIndex = 2;
             // 
             // lblName
             // 
@@ -255,6 +256,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(lblProvider);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmDiningHallAdd";
             Text = "Añadir ventanilla";
             Load += FrmDiningHallAdd_Load;

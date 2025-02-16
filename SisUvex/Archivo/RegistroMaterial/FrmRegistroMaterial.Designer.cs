@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroMaterial));
             lblTitulo = new Label();
             lblFecha = new Label();
             btnTodoProveedor = new Button();
@@ -109,7 +110,7 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(289, 31);
@@ -120,7 +121,7 @@
             // 
             lblFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblFecha.AutoSize = true;
-            lblFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblFecha.Font = new Font("Segoe UI", 12F);
             lblFecha.Location = new Point(642, 16);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(53, 21);
@@ -133,7 +134,7 @@
             btnTodoProveedor.Location = new Point(760, 149);
             btnTodoProveedor.Name = "btnTodoProveedor";
             btnTodoProveedor.Size = new Size(54, 29);
-            btnTodoProveedor.TabIndex = 7;
+            btnTodoProveedor.TabIndex = 11;
             btnTodoProveedor.Text = "Todo";
             btnTodoProveedor.UseVisualStyleBackColor = true;
             btnTodoProveedor.Click += btnTodoProveedor_Click;
@@ -144,7 +145,7 @@
             btnBuscarProveedor.Location = new Point(700, 149);
             btnBuscarProveedor.Name = "btnBuscarProveedor";
             btnBuscarProveedor.Size = new Size(54, 29);
-            btnBuscarProveedor.TabIndex = 6;
+            btnBuscarProveedor.TabIndex = 10;
             btnBuscarProveedor.Text = "Buscar";
             btnBuscarProveedor.UseVisualStyleBackColor = true;
             btnBuscarProveedor.Click += btnBuscarProveedor_Click;
@@ -152,18 +153,18 @@
             // cboProveedor
             // 
             cboProveedor.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboProveedor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboProveedor.Font = new Font("Segoe UI", 12F);
             cboProveedor.FormattingEnabled = true;
             cboProveedor.ItemHeight = 21;
             cboProveedor.Location = new Point(114, 149);
             cboProveedor.Name = "cboProveedor";
             cboProveedor.Size = new Size(579, 29);
-            cboProveedor.TabIndex = 5;
+            cboProveedor.TabIndex = 9;
             // 
             // lblProveedor
             // 
             lblProveedor.AutoSize = true;
-            lblProveedor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblProveedor.Font = new Font("Segoe UI", 12F);
             lblProveedor.Location = new Point(23, 157);
             lblProveedor.Name = "lblProveedor";
             lblProveedor.Size = new Size(85, 21);
@@ -176,7 +177,7 @@
             btnBuscarTipoMat.Location = new Point(701, 352);
             btnBuscarTipoMat.Name = "btnBuscarTipoMat";
             btnBuscarTipoMat.Size = new Size(54, 29);
-            btnBuscarTipoMat.TabIndex = 15;
+            btnBuscarTipoMat.TabIndex = 20;
             btnBuscarTipoMat.Text = "Buscar";
             btnBuscarTipoMat.UseVisualStyleBackColor = true;
             btnBuscarTipoMat.Click += btnBuscarTipoMat_Click;
@@ -184,30 +185,30 @@
             // txbIdTipoMat
             // 
             txbIdTipoMat.Enabled = false;
-            txbIdTipoMat.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdTipoMat.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdTipoMat.Location = new Point(142, 351);
             txbIdTipoMat.Name = "txbIdTipoMat";
             txbIdTipoMat.Size = new Size(43, 29);
-            txbIdTipoMat.TabIndex = 100;
+            txbIdTipoMat.TabIndex = 18;
             txbIdTipoMat.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTipoMat
             // 
             cboTipoMat.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboTipoMat.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboTipoMat.Font = new Font("Segoe UI", 12F);
             cboTipoMat.FormattingEnabled = true;
             cboTipoMat.ItemHeight = 21;
             cboTipoMat.Location = new Point(191, 351);
             cboTipoMat.Name = "cboTipoMat";
             cboTipoMat.Size = new Size(502, 29);
-            cboTipoMat.TabIndex = 14;
+            cboTipoMat.TabIndex = 19;
             cboTipoMat.TextChanged += cboTipoMat_TextChanged;
             cboTipoMat.MouseClick += cboTipoMat_MouseClick;
             // 
             // lblTipoMat
             // 
             lblTipoMat.AutoSize = true;
-            lblTipoMat.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTipoMat.Font = new Font("Segoe UI", 12F);
             lblTipoMat.Location = new Point(11, 354);
             lblTipoMat.Name = "lblTipoMat";
             lblTipoMat.Size = new Size(125, 21);
@@ -220,7 +221,7 @@
             btnTodoMaterial.Location = new Point(761, 386);
             btnTodoMaterial.Name = "btnTodoMaterial";
             btnTodoMaterial.Size = new Size(54, 29);
-            btnTodoMaterial.TabIndex = 18;
+            btnTodoMaterial.TabIndex = 24;
             btnTodoMaterial.Text = "Todo";
             btnTodoMaterial.UseVisualStyleBackColor = true;
             btnTodoMaterial.Click += btnTodoMaterial_Click;
@@ -231,7 +232,7 @@
             btnBuscarMaterial.Location = new Point(701, 386);
             btnBuscarMaterial.Name = "btnBuscarMaterial";
             btnBuscarMaterial.Size = new Size(54, 29);
-            btnBuscarMaterial.TabIndex = 17;
+            btnBuscarMaterial.TabIndex = 23;
             btnBuscarMaterial.Text = "Buscar";
             btnBuscarMaterial.UseVisualStyleBackColor = true;
             btnBuscarMaterial.Click += btnBuscarMaterial_Click;
@@ -239,31 +240,31 @@
             // txbIdMaterial
             // 
             txbIdMaterial.Enabled = false;
-            txbIdMaterial.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdMaterial.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdMaterial.Location = new Point(142, 386);
             txbIdMaterial.Name = "txbIdMaterial";
             txbIdMaterial.Size = new Size(76, 29);
-            txbIdMaterial.TabIndex = 105;
+            txbIdMaterial.TabIndex = 21;
             txbIdMaterial.TextAlign = HorizontalAlignment.Center;
             txbIdMaterial.TextChanged += txbIdMaterial_TextChanged;
             // 
             // cboMaterial
             // 
             cboMaterial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboMaterial.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboMaterial.Font = new Font("Segoe UI", 12F);
             cboMaterial.FormattingEnabled = true;
             cboMaterial.ItemHeight = 21;
             cboMaterial.Location = new Point(224, 385);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(469, 29);
-            cboMaterial.TabIndex = 16;
+            cboMaterial.TabIndex = 22;
             cboMaterial.TextChanged += cboMaterial_TextChanged;
             cboMaterial.MouseClick += cboMaterial_MouseClick;
             // 
             // lblMaterial
             // 
             lblMaterial.AutoSize = true;
-            lblMaterial.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblMaterial.Font = new Font("Segoe UI", 12F);
             lblMaterial.Location = new Point(66, 389);
             lblMaterial.Name = "lblMaterial";
             lblMaterial.Size = new Size(70, 21);
@@ -272,19 +273,19 @@
             // 
             // txbCantidad
             // 
-            txbCantidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbCantidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbCantidad.Location = new Point(142, 421);
             txbCantidad.MaxLength = 11;
             txbCantidad.Name = "txbCantidad";
             txbCantidad.Size = new Size(183, 29);
-            txbCantidad.TabIndex = 19;
+            txbCantidad.TabIndex = 25;
             txbCantidad.TextChanged += txbCantidad_TextChanged;
             txbCantidad.KeyPress += txbCantidad_KeyPress;
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCantidad.Font = new Font("Segoe UI", 12F);
             lblCantidad.Location = new Point(61, 424);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(75, 21);
@@ -305,10 +306,9 @@
             dgvMateriales.Name = "dgvMateriales";
             dgvMateriales.ReadOnly = true;
             dgvMateriales.RowHeadersVisible = false;
-            dgvMateriales.RowTemplate.Height = 25;
             dgvMateriales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMateriales.Size = new Size(802, 136);
-            dgvMateriales.TabIndex = 132;
+            dgvMateriales.TabIndex = 31;
             dgvMateriales.CellContentClick += dgvMateriales_CellContentClick;
             // 
             // Código
@@ -418,7 +418,7 @@
             btnAñadir.Location = new Point(474, 421);
             btnAñadir.Name = "btnAñadir";
             btnAñadir.Size = new Size(64, 29);
-            btnAñadir.TabIndex = 20;
+            btnAñadir.TabIndex = 27;
             btnAñadir.Text = "Añadir";
             btnAñadir.UseVisualStyleBackColor = true;
             btnAñadir.Click += btnAñadir_Click;
@@ -426,14 +426,14 @@
             // dtpFecha
             // 
             dtpFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            dtpFecha.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            dtpFecha.Font = new Font("Segoe UI", 11F);
             dtpFecha.Format = DateTimePickerFormat.Short;
             dtpFecha.Location = new Point(699, 12);
             dtpFecha.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
             dtpFecha.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             dtpFecha.Name = "dtpFecha";
             dtpFecha.Size = new Size(114, 27);
-            dtpFecha.TabIndex = 26;
+            dtpFecha.TabIndex = 1;
             dtpFecha.ValueChanged += dtpFecha_ValueChanged;
             dtpFecha.Enter += dtpFecha_Enter;
             dtpFecha.Leave += dtpFecha_Leave;
@@ -442,18 +442,18 @@
             // 
             txbId.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(517, 10);
             txbId.Name = "txbId";
             txbId.Size = new Size(119, 29);
-            txbId.TabIndex = 142;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
             // 
             lblId.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(485, 13);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -463,7 +463,7 @@
             // lblCampo
             // 
             lblCampo.AutoSize = true;
-            lblCampo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCampo.Font = new Font("Segoe UI", 12F);
             lblCampo.Location = new Point(23, 46);
             lblCampo.Name = "lblCampo";
             lblCampo.Size = new Size(63, 21);
@@ -473,7 +473,7 @@
             // cboCampo
             // 
             cboCampo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboCampo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboCampo.Font = new Font("Segoe UI", 12F);
             cboCampo.FormattingEnabled = true;
             cboCampo.ItemHeight = 21;
             cboCampo.Items.AddRange(new object[] { "Don Luis", "San Andrés", "20s", "40s", "Espárrago" });
@@ -481,7 +481,7 @@
             cboCampo.MaxLength = 15;
             cboCampo.Name = "cboCampo";
             cboCampo.Size = new Size(296, 29);
-            cboCampo.TabIndex = 0;
+            cboCampo.TabIndex = 2;
             // 
             // btnEliminarSel
             // 
@@ -489,24 +489,24 @@
             btnEliminarSel.Location = new Point(676, 524);
             btnEliminarSel.Name = "btnEliminarSel";
             btnEliminarSel.Size = new Size(139, 27);
-            btnEliminarSel.TabIndex = 23;
+            btnEliminarSel.TabIndex = 30;
             btnEliminarSel.Text = "Eliminiar seleccionado";
             btnEliminarSel.UseVisualStyleBackColor = true;
             btnEliminarSel.Click += btnEliminarSel_Click;
             // 
             // txbCaja
             // 
-            txbCaja.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbCaja.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbCaja.Location = new Point(176, 266);
             txbCaja.MaxLength = 15;
             txbCaja.Name = "txbCaja";
             txbCaja.Size = new Size(233, 29);
-            txbCaja.TabIndex = 12;
+            txbCaja.TabIndex = 16;
             // 
             // lblCaja
             // 
             lblCaja.AutoSize = true;
-            lblCaja.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCaja.Font = new Font("Segoe UI", 12F);
             lblCaja.Location = new Point(127, 269);
             lblCaja.Name = "lblCaja";
             lblCaja.Size = new Size(43, 21);
@@ -516,7 +516,7 @@
             // lblPlacas
             // 
             lblPlacas.AutoSize = true;
-            lblPlacas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblPlacas.Font = new Font("Segoe UI", 12F);
             lblPlacas.Location = new Point(114, 304);
             lblPlacas.Name = "lblPlacas";
             lblPlacas.Size = new Size(56, 21);
@@ -525,17 +525,17 @@
             // 
             // txbPlacas
             // 
-            txbPlacas.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbPlacas.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbPlacas.Location = new Point(176, 301);
             txbPlacas.MaxLength = 15;
             txbPlacas.Name = "txbPlacas";
             txbPlacas.Size = new Size(233, 29);
-            txbPlacas.TabIndex = 13;
+            txbPlacas.TabIndex = 17;
             // 
             // lblChofer
             // 
             lblChofer.AutoSize = true;
-            lblChofer.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblChofer.Font = new Font("Segoe UI", 12F);
             lblChofer.Location = new Point(110, 234);
             lblChofer.Name = "lblChofer";
             lblChofer.Size = new Size(60, 21);
@@ -545,26 +545,26 @@
             // txbChofer
             // 
             txbChofer.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txbChofer.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbChofer.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbChofer.Location = new Point(176, 231);
             txbChofer.MaxLength = 50;
             txbChofer.Name = "txbChofer";
             txbChofer.Size = new Size(345, 29);
-            txbChofer.TabIndex = 11;
+            txbChofer.TabIndex = 15;
             // 
             // txbUnidad
             // 
             txbUnidad.Enabled = false;
-            txbUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbUnidad.Location = new Point(331, 421);
             txbUnidad.Name = "txbUnidad";
             txbUnidad.Size = new Size(137, 29);
-            txbUnidad.TabIndex = 153;
+            txbUnidad.TabIndex = 26;
             // 
             // lblLote
             // 
             lblLote.AutoSize = true;
-            lblLote.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblLote.Font = new Font("Segoe UI", 12F);
             lblLote.Location = new Point(23, 81);
             lblLote.Name = "lblLote";
             lblLote.Size = new Size(43, 21);
@@ -574,14 +574,14 @@
             // cboLote
             // 
             cboLote.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboLote.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboLote.Font = new Font("Segoe UI", 12F);
             cboLote.FormattingEnabled = true;
             cboLote.ItemHeight = 21;
             cboLote.Items.AddRange(new object[] { "DON LUIS", "SAN ANDRES" });
             cboLote.Location = new Point(127, 78);
             cboLote.Name = "cboLote";
             cboLote.Size = new Size(566, 29);
-            cboLote.TabIndex = 1;
+            cboLote.TabIndex = 5;
             cboLote.TextChanged += cboLote_TextChanged;
             cboLote.MouseClick += cboLote_MouseClick;
             // 
@@ -591,7 +591,7 @@
             btnTodoLote.Location = new Point(759, 78);
             btnTodoLote.Name = "btnTodoLote";
             btnTodoLote.Size = new Size(54, 29);
-            btnTodoLote.TabIndex = 3;
+            btnTodoLote.TabIndex = 7;
             btnTodoLote.Text = "Todo";
             btnTodoLote.UseVisualStyleBackColor = true;
             btnTodoLote.Click += btnTodoLote_Click;
@@ -602,7 +602,7 @@
             btnBuscarLote.Location = new Point(699, 78);
             btnBuscarLote.Name = "btnBuscarLote";
             btnBuscarLote.Size = new Size(54, 29);
-            btnBuscarLote.TabIndex = 2;
+            btnBuscarLote.TabIndex = 6;
             btnBuscarLote.Text = "Buscar";
             btnBuscarLote.UseVisualStyleBackColor = true;
             btnBuscarLote.Click += btnBuscarLote_Click;
@@ -610,11 +610,11 @@
             // txbIdLote
             // 
             txbIdLote.Enabled = false;
-            txbIdLote.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdLote.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdLote.Location = new Point(72, 78);
             txbIdLote.Name = "txbIdLote";
             txbIdLote.Size = new Size(49, 29);
-            txbIdLote.TabIndex = 190;
+            txbIdLote.TabIndex = 4;
             txbIdLote.TextAlign = HorizontalAlignment.Center;
             // 
             // btnModificarSel
@@ -623,7 +623,7 @@
             btnModificarSel.Location = new Point(531, 524);
             btnModificarSel.Name = "btnModificarSel";
             btnModificarSel.Size = new Size(139, 27);
-            btnModificarSel.TabIndex = 22;
+            btnModificarSel.TabIndex = 29;
             btnModificarSel.Text = "Modificar seleccionado";
             btnModificarSel.UseVisualStyleBackColor = true;
             btnModificarSel.Click += btnModificarSel_Click;
@@ -634,7 +634,7 @@
             btnGuardar.Location = new Point(671, 699);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(69, 27);
-            btnGuardar.TabIndex = 25;
+            btnGuardar.TabIndex = 32;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
@@ -645,7 +645,7 @@
             btnCancelar.Location = new Point(746, 699);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(69, 27);
-            btnCancelar.TabIndex = 24;
+            btnCancelar.TabIndex = 33;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -656,7 +656,7 @@
             btnTodoLineaTran.Location = new Point(760, 196);
             btnTodoLineaTran.Name = "btnTodoLineaTran";
             btnTodoLineaTran.Size = new Size(54, 29);
-            btnTodoLineaTran.TabIndex = 10;
+            btnTodoLineaTran.TabIndex = 14;
             btnTodoLineaTran.Text = "Todo";
             btnTodoLineaTran.UseVisualStyleBackColor = true;
             btnTodoLineaTran.Click += btnTodoLineaTran_Click;
@@ -667,7 +667,7 @@
             btnBuscarLineaTran.Location = new Point(700, 196);
             btnBuscarLineaTran.Name = "btnBuscarLineaTran";
             btnBuscarLineaTran.Size = new Size(54, 29);
-            btnBuscarLineaTran.TabIndex = 9;
+            btnBuscarLineaTran.TabIndex = 13;
             btnBuscarLineaTran.Text = "Buscar";
             btnBuscarLineaTran.UseVisualStyleBackColor = true;
             btnBuscarLineaTran.Click += btnBuscarLineaTran_Click;
@@ -675,18 +675,18 @@
             // cboLineaTran
             // 
             cboLineaTran.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cboLineaTran.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboLineaTran.Font = new Font("Segoe UI", 12F);
             cboLineaTran.FormattingEnabled = true;
             cboLineaTran.ItemHeight = 21;
             cboLineaTran.Location = new Point(176, 196);
             cboLineaTran.Name = "cboLineaTran";
             cboLineaTran.Size = new Size(517, 29);
-            cboLineaTran.TabIndex = 8;
+            cboLineaTran.TabIndex = 12;
             // 
             // lblLineaTran
             // 
             lblLineaTran.AutoSize = true;
-            lblLineaTran.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblLineaTran.Font = new Font("Segoe UI", 12F);
             lblLineaTran.Location = new Point(23, 204);
             lblLineaTran.Name = "lblLineaTran";
             lblLineaTran.Size = new Size(147, 21);
@@ -697,18 +697,18 @@
             // 
             txbItem.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txbItem.Enabled = false;
-            txbItem.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbItem.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbItem.Location = new Point(517, 43);
             txbItem.Name = "txbItem";
             txbItem.Size = new Size(40, 29);
-            txbItem.TabIndex = 198;
+            txbItem.TabIndex = 3;
             txbItem.TextAlign = HorizontalAlignment.Center;
             // 
             // lblItem
             // 
             lblItem.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblItem.AutoSize = true;
-            lblItem.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblItem.Font = new Font("Segoe UI", 12F);
             lblItem.Location = new Point(467, 46);
             lblItem.Name = "lblItem";
             lblItem.Size = new Size(44, 21);
@@ -718,17 +718,17 @@
             // txbFolio
             // 
             txbFolio.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txbFolio.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbFolio.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbFolio.Location = new Point(187, 114);
             txbFolio.MaxLength = 20;
             txbFolio.Name = "txbFolio";
             txbFolio.Size = new Size(296, 29);
-            txbFolio.TabIndex = 4;
+            txbFolio.TabIndex = 8;
             // 
             // lblFolio
             // 
             lblFolio.AutoSize = true;
-            lblFolio.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblFolio.Font = new Font("Segoe UI", 12F);
             lblFolio.Location = new Point(23, 117);
             lblFolio.Name = "lblFolio";
             lblFolio.Size = new Size(158, 21);
@@ -738,17 +738,17 @@
             // txbObservaciones
             // 
             txbObservaciones.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txbObservaciones.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbObservaciones.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbObservaciones.Location = new Point(11, 489);
             txbObservaciones.MaxLength = 200;
             txbObservaciones.Name = "txbObservaciones";
             txbObservaciones.Size = new Size(804, 29);
-            txbObservaciones.TabIndex = 21;
+            txbObservaciones.TabIndex = 28;
             // 
             // lblObservaciones
             // 
             lblObservaciones.AutoSize = true;
-            lblObservaciones.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblObservaciones.Font = new Font("Segoe UI", 12F);
             lblObservaciones.Location = new Point(12, 465);
             lblObservaciones.Name = "lblObservaciones";
             lblObservaciones.Size = new Size(115, 21);
@@ -898,6 +898,7 @@
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(label7);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(843, 777);
             Name = "FrmRegistroMaterial";
             Text = "FrmRegistroMaterial";

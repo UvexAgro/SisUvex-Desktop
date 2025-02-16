@@ -32,119 +32,122 @@ namespace SisUvex.Archivo.Manifiesto
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifiestoAñadir));
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             lblTitulo = new Label();
             lblLinea = new Label();
             txbId = new TextBox();
             lblId = new Label();
-            btnCancelar = new Button();
-            btnAceptar = new Button();
-            btnTodoLinea = new Button();
-            btnBuscarLinea = new Button();
-            txbIdLinea = new TextBox();
-            cboLinea = new ComboBox();
+            btnCancel = new Button();
+            btnAccept = new Button();
+            btnRemovedTransportLine = new Button();
+            btnSearchTransportLine = new Button();
+            txbIdTransportLine = new TextBox();
+            cboTransportLine = new ComboBox();
             lblObliId = new Label();
-            cboActivo = new ComboBox();
+            cboActive = new ComboBox();
             Mercado = new Label();
-            dtpFecha = new DateTimePicker();
+            dtpDate = new DateTimePicker();
             lblObservaciones = new Label();
-            txbObservaciones = new RichTextBox();
-            cboManifiestoVirtual = new ComboBox();
-            btnBorrarPallet = new Button();
-            btnAñadirPallet = new Button();
+            txbObservations = new RichTextBox();
+            btnRemovePallet = new Button();
+            btnAddPallet = new Button();
             label15 = new Label();
             txbIdPallet = new TextBox();
-            txbSello3 = new TextBox();
-            txbSello2 = new TextBox();
+            txbSeal3 = new TextBox();
+            txbSeal2 = new TextBox();
             label14 = new Label();
-            txbSello1 = new TextBox();
-            cboGrados = new ComboBox();
+            txbSeal1 = new TextBox();
+            cboTemperatureUnit = new ComboBox();
             label13 = new Label();
-            txbGrados = new TextBox();
+            txbTemperature = new TextBox();
             label12 = new Label();
-            txbPosicion = new TextBox();
+            txbTermoPosition = new TextBox();
             label11 = new Label();
-            txbChismografo = new TextBox();
+            txbTermograph = new TextBox();
             label10 = new Label();
-            cboSegundoMedio = new ComboBox();
+            cboTransportType = new ComboBox();
             label9 = new Label();
-            cboMedioTransporte = new ComboBox();
-            btnTodoCaja = new Button();
-            btnBuscarCaja = new Button();
-            btnTodoTroque = new Button();
-            btnBuscarTroque = new Button();
-            btnTodoChofer = new Button();
-            btnBuscarChofer = new Button();
-            txbIdCaja = new TextBox();
-            cboCaja = new ComboBox();
+            cboTransportVehicle = new ComboBox();
+            btnRemovedFreightContainer = new Button();
+            btnSearchFreightContainer = new Button();
+            btnRemovedTruck = new Button();
+            btnSearchTruck = new Button();
+            btnRemovedDriver = new Button();
+            btnSearchDriver = new Button();
+            txbIdFreightContainer = new TextBox();
+            cboFreightContainer = new ComboBox();
             label5 = new Label();
-            txbIdTroque = new TextBox();
-            cboTroque = new ComboBox();
+            txbIdTruck = new TextBox();
+            cboTruck = new ComboBox();
             label6 = new Label();
-            txbIdChofer = new TextBox();
-            cboChofer = new ComboBox();
+            txbIdDriver = new TextBox();
+            cboDriver = new ComboBox();
             label8 = new Label();
             label4 = new Label();
-            txbOrden = new TextBox();
+            txbPurchaseOrder = new TextBox();
             lblVisa = new Label();
             txbBooking = new TextBox();
-            spnHoraSalida = new MaskedTextBox();
-            btnTodoDistribuidor = new Button();
-            btnBuscarDistribuidor = new Button();
-            txbIdDistribuidor = new TextBox();
-            cboDistribuidor = new ComboBox();
+            spnHour = new MaskedTextBox();
+            btnRemovedDistributor = new Button();
+            btnSearchDistributor = new Button();
+            txbIdDistributor = new TextBox();
+            cboDistributor = new ComboBox();
             label3 = new Label();
-            btnTodoConsignatario = new Button();
-            btnBuscarConsignatario = new Button();
-            txbIdConsignatario = new TextBox();
-            cboConsignatario = new ComboBox();
+            btnRemovedConsignee = new Button();
+            btnSearchConsignee = new Button();
+            txbIdConsignee = new TextBox();
+            cboConsignee = new ComboBox();
             label16 = new Label();
-            btnTodoCiudadDestino = new Button();
-            btnBuscarCiudadDestino = new Button();
-            btnTodoCiudadCruce = new Button();
-            btnBuscarCiudadCruce = new Button();
-            btnTodoProductor = new Button();
-            btnBuscarProductor = new Button();
-            btnTodoAgenciaMX = new Button();
-            btnBuscarAgenciaMX = new Button();
-            btnTodoAgenciaUS = new Button();
-            btnBuscarAgenciaUS = new Button();
-            txbIdCiudadDestino = new TextBox();
-            cboCiudadDestino = new ComboBox();
+            btnRemovedCityDestination = new Button();
+            btnSearchCityDestination = new Button();
+            btnRemovedCityCrossPoint = new Button();
+            btnSearchCityCrossPoint = new Button();
+            btnRemovedGrower = new Button();
+            btnSearchGrower = new Button();
+            btnRemovedAgencyMX = new Button();
+            btnSearchAgencyMX = new Button();
+            btnRemovedAgencyUS = new Button();
+            btnSearchAgencyUS = new Button();
+            txbIdCityDestination = new TextBox();
+            cboCityDestination = new ComboBox();
             lblCiudadDestino = new Label();
-            txbIdCiudadCruce = new TextBox();
-            cboCiudadCruce = new ComboBox();
+            txbIdCityCrossPoint = new TextBox();
+            cboCityCrossPoint = new ComboBox();
             lblCiudadCruce = new Label();
-            txbIdProductor = new TextBox();
-            cboProductor = new ComboBox();
+            txbIdGrower = new TextBox();
+            cboGrower = new ComboBox();
             lblProductor = new Label();
-            txbIdAgenciaUS = new TextBox();
-            cboAgenciaUS = new ComboBox();
+            txbIdAgencyUS = new TextBox();
+            cboAgencyUS = new ComboBox();
             lblAgenciaUS = new Label();
-            txbIdAgenciaMX = new TextBox();
-            cboAgenciaMX = new ComboBox();
+            txbIdAgencyMX = new TextBox();
+            cboAgencyMX = new ComboBox();
             lblAcenciaMX = new Label();
             label17 = new Label();
             label18 = new Label();
-            cboTipoEmbarque = new ComboBox();
+            cboManifestType = new ComboBox();
             label7 = new Label();
-            txbEmbarcador = new TextBox();
+            txbNameShipper = new TextBox();
             label19 = new Label();
-            txbOperador = new TextBox();
-            chkRechazado = new CheckBox();
-            dgvListado = new DataGridView();
+            txbNameOperator = new TextBox();
+            chkRejected = new CheckBox();
+            dgvPalletList = new DataGridView();
             lblPosicionPal = new Label();
-            txbPosicionPal = new TextBox();
-            printManifestBtn = new Button();
+            txbPalletPosition = new TextBox();
+            btnPrintManifest = new Button();
             txbDieselLiters = new TextBox();
             lblDieselInvoice = new Label();
             txbDieselInvoice = new TextBox();
             lblDieselLiters = new Label();
             chkBoxPackingList = new CheckBox();
             label1 = new Label();
-            txbFitosanitario = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)dgvListado).BeginInit();
+            txbPhytosanitary = new TextBox();
+            button1 = new Button();
+            cboSeason = new ComboBox();
+            label2 = new Label();
+            txbIdSeason = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
@@ -188,76 +191,76 @@ namespace SisUvex.Archivo.Manifiesto
             lblId.TabIndex = 6;
             lblId.Text = "Id:";
             // 
-            // btnCancelar
+            // btnCancel
             // 
-            btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancelar.Location = new Point(684, 652);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(64, 25);
-            btnCancelar.TabIndex = 7;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = true;
-            btnCancelar.Click += btnCancelar_Click;
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancel.Location = new Point(684, 652);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(64, 25);
+            btnCancel.TabIndex = 7;
+            btnCancel.Text = "Cancelar";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancelar_Click;
             // 
-            // btnAceptar
+            // btnAccept
             // 
-            btnAceptar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAceptar.Location = new Point(614, 652);
-            btnAceptar.Name = "btnAceptar";
-            btnAceptar.Size = new Size(64, 25);
-            btnAceptar.TabIndex = 8;
-            btnAceptar.Text = "Aceptar";
-            btnAceptar.UseVisualStyleBackColor = true;
-            btnAceptar.Click += btnAceptar_Click;
+            btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnAccept.Location = new Point(614, 652);
+            btnAccept.Name = "btnAccept";
+            btnAccept.Size = new Size(64, 25);
+            btnAccept.TabIndex = 8;
+            btnAccept.Text = "Aceptar";
+            btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAceptar_Click;
             // 
-            // btnTodoLinea
+            // btnRemovedTransportLine
             // 
-            btnTodoLinea.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoLinea.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoLinea.Enabled = false;
-            btnTodoLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoLinea.Location = new Point(433, 314);
-            btnTodoLinea.Name = "btnTodoLinea";
-            btnTodoLinea.Size = new Size(23, 23);
-            btnTodoLinea.TabIndex = 32;
-            btnTodoLinea.UseVisualStyleBackColor = true;
-            btnTodoLinea.Click += btnTodoLinea_Click;
+            btnRemovedTransportLine.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedTransportLine.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedTransportLine.Enabled = false;
+            btnRemovedTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedTransportLine.Location = new Point(433, 314);
+            btnRemovedTransportLine.Name = "btnRemovedTransportLine";
+            btnRemovedTransportLine.Size = new Size(23, 23);
+            btnRemovedTransportLine.TabIndex = 32;
+            btnRemovedTransportLine.UseVisualStyleBackColor = true;
+            btnRemovedTransportLine.Click += btnTodoLinea_Click;
             // 
-            // btnBuscarLinea
+            // btnSearchTransportLine
             // 
-            btnBuscarLinea.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarLinea.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarLinea.Enabled = false;
-            btnBuscarLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarLinea.Location = new Point(409, 314);
-            btnBuscarLinea.Name = "btnBuscarLinea";
-            btnBuscarLinea.Size = new Size(23, 23);
-            btnBuscarLinea.TabIndex = 31;
-            btnBuscarLinea.UseVisualStyleBackColor = true;
-            btnBuscarLinea.Click += btnBuscarLinea_Click;
+            btnSearchTransportLine.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchTransportLine.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchTransportLine.Enabled = false;
+            btnSearchTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchTransportLine.Location = new Point(409, 314);
+            btnSearchTransportLine.Name = "btnSearchTransportLine";
+            btnSearchTransportLine.Size = new Size(23, 23);
+            btnSearchTransportLine.TabIndex = 31;
+            btnSearchTransportLine.UseVisualStyleBackColor = true;
+            btnSearchTransportLine.Click += btnBuscarLinea_Click;
             // 
-            // txbIdLinea
+            // txbIdTransportLine
             // 
-            txbIdLinea.Enabled = false;
-            txbIdLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdLinea.Location = new Point(129, 315);
-            txbIdLinea.Name = "txbIdLinea";
-            txbIdLinea.Size = new Size(37, 21);
-            txbIdLinea.TabIndex = 34;
-            txbIdLinea.TextAlign = HorizontalAlignment.Center;
-            txbIdLinea.TextChanged += txbIdLinea_TextChanged;
+            txbIdTransportLine.Enabled = false;
+            txbIdTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdTransportLine.Location = new Point(129, 315);
+            txbIdTransportLine.Name = "txbIdTransportLine";
+            txbIdTransportLine.Size = new Size(37, 21);
+            txbIdTransportLine.TabIndex = 34;
+            txbIdTransportLine.TextAlign = HorizontalAlignment.Center;
+            txbIdTransportLine.TextChanged += txbIdLinea_TextChanged;
             // 
-            // cboLinea
+            // cboTransportLine
             // 
-            cboLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            cboLinea.FormattingEnabled = true;
-            cboLinea.ItemHeight = 15;
-            cboLinea.Location = new Point(171, 314);
-            cboLinea.Name = "cboLinea";
-            cboLinea.Size = new Size(235, 23);
-            cboLinea.TabIndex = 30;
-            cboLinea.TextChanged += cboLinea_TextChanged;
-            cboLinea.MouseClick += cboLinea_MouseClick;
+            cboTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTransportLine.FormattingEnabled = true;
+            cboTransportLine.ItemHeight = 15;
+            cboTransportLine.Location = new Point(171, 314);
+            cboTransportLine.Name = "cboTransportLine";
+            cboTransportLine.Size = new Size(235, 23);
+            cboTransportLine.TabIndex = 30;
+            cboTransportLine.TextChanged += cboLinea_TextChanged;
+            cboTransportLine.MouseClick += cboLinea_MouseClick;
             // 
             // lblObliId
             // 
@@ -270,37 +273,37 @@ namespace SisUvex.Archivo.Manifiesto
             lblObliId.TabIndex = 13;
             lblObliId.Text = "*";
             // 
-            // cboActivo
+            // cboActive
             // 
-            cboActivo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboActivo.Font = new Font("Microsoft Sans Serif", 9F);
-            cboActivo.FormattingEnabled = true;
-            cboActivo.Items.AddRange(new object[] { "No", "Sí" });
-            cboActivo.Location = new Point(335, 13);
-            cboActivo.Name = "cboActivo";
-            cboActivo.Size = new Size(37, 23);
-            cboActivo.TabIndex = 36;
+            cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboActive.Font = new Font("Microsoft Sans Serif", 9F);
+            cboActive.FormattingEnabled = true;
+            cboActive.Items.AddRange(new object[] { "No", "Sí" });
+            cboActive.Location = new Point(309, 5);
+            cboActive.Name = "cboActive";
+            cboActive.Size = new Size(37, 23);
+            cboActive.TabIndex = 36;
             // 
             // Mercado
             // 
             Mercado.AutoSize = true;
             Mercado.Font = new Font("Microsoft Sans Serif", 9F);
-            Mercado.Location = new Point(294, 18);
+            Mercado.Location = new Point(268, 10);
             Mercado.Name = "Mercado";
             Mercado.Size = new Size(41, 15);
             Mercado.TabIndex = 230;
             Mercado.Text = "Activo:";
             // 
-            // dtpFecha
+            // dtpDate
             // 
-            dtpFecha.Font = new Font("Microsoft Sans Serif", 9F);
-            dtpFecha.Format = DateTimePickerFormat.Short;
-            dtpFecha.Location = new Point(342, 43);
-            dtpFecha.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
-            dtpFecha.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
-            dtpFecha.Name = "dtpFecha";
-            dtpFecha.Size = new Size(75, 21);
-            dtpFecha.TabIndex = 229;
+            dtpDate.Font = new Font("Microsoft Sans Serif", 9F);
+            dtpDate.Format = DateTimePickerFormat.Short;
+            dtpDate.Location = new Point(342, 43);
+            dtpDate.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
+            dtpDate.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
+            dtpDate.Name = "dtpDate";
+            dtpDate.Size = new Size(75, 21);
+            dtpDate.TabIndex = 229;
             // 
             // lblObservaciones
             // 
@@ -313,59 +316,47 @@ namespace SisUvex.Archivo.Manifiesto
             lblObservaciones.Text = "Observaciones:";
             lblObservaciones.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbObservaciones
+            // txbObservations
             // 
-            txbObservaciones.Font = new Font("Microsoft Sans Serif", 9F);
-            txbObservaciones.Location = new Point(129, 512);
-            txbObservaciones.MaxLength = 200;
-            txbObservaciones.Name = "txbObservaciones";
-            txbObservaciones.Size = new Size(314, 111);
-            txbObservaciones.TabIndex = 227;
-            txbObservaciones.Text = "";
+            txbObservations.Font = new Font("Microsoft Sans Serif", 9F);
+            txbObservations.Location = new Point(129, 512);
+            txbObservations.MaxLength = 200;
+            txbObservations.Name = "txbObservations";
+            txbObservations.Size = new Size(314, 111);
+            txbObservations.TabIndex = 227;
+            txbObservations.Text = "";
             // 
-            // cboManifiestoVirtual
+            // btnRemovePallet
             // 
-            cboManifiestoVirtual.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboManifiestoVirtual.Enabled = false;
-            cboManifiestoVirtual.Font = new Font("Microsoft Sans Serif", 9F);
-            cboManifiestoVirtual.FormattingEnabled = true;
-            cboManifiestoVirtual.Items.AddRange(new object[] { "No", "Sí" });
-            cboManifiestoVirtual.Location = new Point(423, 44);
-            cboManifiestoVirtual.Name = "cboManifiestoVirtual";
-            cboManifiestoVirtual.Size = new Size(42, 23);
-            cboManifiestoVirtual.TabIndex = 226;
+            btnRemovePallet.Font = new Font("Microsoft Sans Serif", 8.25F);
+            btnRemovePallet.Image = Properties.Resources.basuraIcon16;
+            btnRemovePallet.ImageAlign = ContentAlignment.MiddleRight;
+            btnRemovePallet.Location = new Point(572, 47);
+            btnRemovePallet.Name = "btnRemovePallet";
+            btnRemovePallet.Size = new Size(23, 23);
+            btnRemovePallet.TabIndex = 225;
+            btnRemovePallet.TextAlign = ContentAlignment.TopCenter;
+            btnRemovePallet.UseVisualStyleBackColor = true;
+            btnRemovePallet.Click += btnBorrarPallet_Click;
             // 
-            // btnBorrarPallet
+            // btnAddPallet
             // 
-            btnBorrarPallet.Font = new Font("Microsoft Sans Serif", 8.25F);
-            btnBorrarPallet.Image = Properties.Resources.basuraIcon16;
-            btnBorrarPallet.ImageAlign = ContentAlignment.MiddleRight;
-            btnBorrarPallet.Location = new Point(606, 45);
-            btnBorrarPallet.Name = "btnBorrarPallet";
-            btnBorrarPallet.Size = new Size(23, 23);
-            btnBorrarPallet.TabIndex = 225;
-            btnBorrarPallet.TextAlign = ContentAlignment.TopCenter;
-            btnBorrarPallet.UseVisualStyleBackColor = true;
-            btnBorrarPallet.Click += btnBorrarPallet_Click;
-            // 
-            // btnAñadirPallet
-            // 
-            btnAñadirPallet.Font = new Font("Microsoft Sans Serif", 9F);
-            btnAñadirPallet.Image = Properties.Resources.mas_16;
-            btnAñadirPallet.ImageAlign = ContentAlignment.BottomRight;
-            btnAñadirPallet.Location = new Point(574, 45);
-            btnAñadirPallet.Name = "btnAñadirPallet";
-            btnAñadirPallet.Size = new Size(23, 23);
-            btnAñadirPallet.TabIndex = 224;
-            btnAñadirPallet.TextAlign = ContentAlignment.TopRight;
-            btnAñadirPallet.UseVisualStyleBackColor = true;
-            btnAñadirPallet.Click += btnAñadirPallet_Click;
+            btnAddPallet.Font = new Font("Microsoft Sans Serif", 9F);
+            btnAddPallet.Image = Properties.Resources.mas_16;
+            btnAddPallet.ImageAlign = ContentAlignment.BottomRight;
+            btnAddPallet.Location = new Point(540, 47);
+            btnAddPallet.Name = "btnAddPallet";
+            btnAddPallet.Size = new Size(23, 23);
+            btnAddPallet.TabIndex = 224;
+            btnAddPallet.TextAlign = ContentAlignment.TopRight;
+            btnAddPallet.UseVisualStyleBackColor = true;
+            btnAddPallet.Click += btnAñadirPallet_Click;
             // 
             // label15
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Microsoft Sans Serif", 8.25F);
-            label15.Location = new Point(494, 33);
+            label15.Location = new Point(460, 35);
             label15.Name = "label15";
             label15.Size = new Size(38, 13);
             label15.TabIndex = 223;
@@ -374,32 +365,32 @@ namespace SisUvex.Archivo.Manifiesto
             // txbIdPallet
             // 
             txbIdPallet.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdPallet.Location = new Point(496, 46);
+            txbIdPallet.Location = new Point(462, 48);
             txbIdPallet.MaxLength = 5;
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(47, 21);
             txbIdPallet.TabIndex = 222;
             txbIdPallet.KeyPress += txbIdPallet_KeyPress;
             // 
-            // txbSello3
+            // txbSeal3
             // 
-            txbSello3.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSello3.Location = new Point(341, 489);
-            txbSello3.MaxLength = 10;
-            txbSello3.Name = "txbSello3";
-            txbSello3.Size = new Size(102, 21);
-            txbSello3.TabIndex = 220;
-            txbSello3.TextAlign = HorizontalAlignment.Center;
+            txbSeal3.Font = new Font("Microsoft Sans Serif", 9F);
+            txbSeal3.Location = new Point(341, 489);
+            txbSeal3.MaxLength = 10;
+            txbSeal3.Name = "txbSeal3";
+            txbSeal3.Size = new Size(102, 21);
+            txbSeal3.TabIndex = 220;
+            txbSeal3.TextAlign = HorizontalAlignment.Center;
             // 
-            // txbSello2
+            // txbSeal2
             // 
-            txbSello2.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSello2.Location = new Point(236, 489);
-            txbSello2.MaxLength = 10;
-            txbSello2.Name = "txbSello2";
-            txbSello2.Size = new Size(102, 21);
-            txbSello2.TabIndex = 219;
-            txbSello2.TextAlign = HorizontalAlignment.Center;
+            txbSeal2.Font = new Font("Microsoft Sans Serif", 9F);
+            txbSeal2.Location = new Point(236, 489);
+            txbSeal2.MaxLength = 10;
+            txbSeal2.Name = "txbSeal2";
+            txbSeal2.Size = new Size(102, 21);
+            txbSeal2.TabIndex = 219;
+            txbSeal2.TextAlign = HorizontalAlignment.Center;
             // 
             // label14
             // 
@@ -412,26 +403,26 @@ namespace SisUvex.Archivo.Manifiesto
             label14.Text = "Sellos:";
             label14.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbSello1
+            // txbSeal1
             // 
-            txbSello1.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSello1.Location = new Point(129, 489);
-            txbSello1.MaxLength = 10;
-            txbSello1.Name = "txbSello1";
-            txbSello1.Size = new Size(102, 21);
-            txbSello1.TabIndex = 217;
-            txbSello1.TextAlign = HorizontalAlignment.Center;
+            txbSeal1.Font = new Font("Microsoft Sans Serif", 9F);
+            txbSeal1.Location = new Point(129, 489);
+            txbSeal1.MaxLength = 10;
+            txbSeal1.Name = "txbSeal1";
+            txbSeal1.Size = new Size(102, 21);
+            txbSeal1.TabIndex = 217;
+            txbSeal1.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboGrados
+            // cboTemperatureUnit
             // 
-            cboGrados.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboGrados.Font = new Font("Microsoft Sans Serif", 9F);
-            cboGrados.FormattingEnabled = true;
-            cboGrados.Items.AddRange(new object[] { "F", "C", "K" });
-            cboGrados.Location = new Point(406, 465);
-            cboGrados.Name = "cboGrados";
-            cboGrados.Size = new Size(33, 23);
-            cboGrados.TabIndex = 216;
+            cboTemperatureUnit.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTemperatureUnit.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTemperatureUnit.FormattingEnabled = true;
+            cboTemperatureUnit.Items.AddRange(new object[] { "F", "C", "K" });
+            cboTemperatureUnit.Location = new Point(406, 465);
+            cboTemperatureUnit.Name = "cboTemperatureUnit";
+            cboTemperatureUnit.Size = new Size(33, 23);
+            cboTemperatureUnit.TabIndex = 216;
             // 
             // label13
             // 
@@ -443,16 +434,16 @@ namespace SisUvex.Archivo.Manifiesto
             label13.TabIndex = 215;
             label13.Text = "Grados:";
             // 
-            // txbGrados
+            // txbTemperature
             // 
-            txbGrados.Font = new Font("Microsoft Sans Serif", 9F);
-            txbGrados.Location = new Point(372, 465);
-            txbGrados.MaxLength = 3;
-            txbGrados.Name = "txbGrados";
-            txbGrados.Size = new Size(28, 21);
-            txbGrados.TabIndex = 214;
-            txbGrados.TextAlign = HorizontalAlignment.Center;
-            txbGrados.KeyPress += txbGrados_KeyPress;
+            txbTemperature.Font = new Font("Microsoft Sans Serif", 9F);
+            txbTemperature.Location = new Point(372, 465);
+            txbTemperature.MaxLength = 3;
+            txbTemperature.Name = "txbTemperature";
+            txbTemperature.Size = new Size(28, 21);
+            txbTemperature.TabIndex = 214;
+            txbTemperature.TextAlign = HorizontalAlignment.Center;
+            txbTemperature.KeyPress += txbGrados_KeyPress;
             // 
             // label12
             // 
@@ -464,16 +455,16 @@ namespace SisUvex.Archivo.Manifiesto
             label12.TabIndex = 213;
             label12.Text = "Posición:";
             // 
-            // txbPosicion
+            // txbTermoPosition
             // 
-            txbPosicion.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPosicion.Location = new Point(289, 467);
-            txbPosicion.MaxLength = 2;
-            txbPosicion.Name = "txbPosicion";
-            txbPosicion.Size = new Size(32, 21);
-            txbPosicion.TabIndex = 212;
-            txbPosicion.TextAlign = HorizontalAlignment.Center;
-            txbPosicion.KeyPress += txbPosicion_KeyPress;
+            txbTermoPosition.Font = new Font("Microsoft Sans Serif", 9F);
+            txbTermoPosition.Location = new Point(289, 467);
+            txbTermoPosition.MaxLength = 2;
+            txbTermoPosition.Name = "txbTermoPosition";
+            txbTermoPosition.Size = new Size(32, 21);
+            txbTermoPosition.TabIndex = 212;
+            txbTermoPosition.TextAlign = HorizontalAlignment.Center;
+            txbTermoPosition.KeyPress += txbPosicion_KeyPress;
             // 
             // label11
             // 
@@ -486,15 +477,15 @@ namespace SisUvex.Archivo.Manifiesto
             label11.Text = "Chismógrafo:";
             label11.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbChismografo
+            // txbTermograph
             // 
-            txbChismografo.Font = new Font("Microsoft Sans Serif", 9F);
-            txbChismografo.Location = new Point(129, 465);
-            txbChismografo.MaxLength = 20;
-            txbChismografo.Name = "txbChismografo";
-            txbChismografo.Size = new Size(102, 21);
-            txbChismografo.TabIndex = 210;
-            txbChismografo.TextAlign = HorizontalAlignment.Center;
+            txbTermograph.Font = new Font("Microsoft Sans Serif", 9F);
+            txbTermograph.Location = new Point(129, 465);
+            txbTermograph.MaxLength = 20;
+            txbTermograph.Name = "txbTermograph";
+            txbTermograph.Size = new Size(102, 21);
+            txbTermograph.TabIndex = 210;
+            txbTermograph.TextAlign = HorizontalAlignment.Center;
             // 
             // label10
             // 
@@ -507,16 +498,16 @@ namespace SisUvex.Archivo.Manifiesto
             label10.Text = "Segundo medio:";
             label10.TextAlign = ContentAlignment.TopRight;
             // 
-            // cboSegundoMedio
+            // cboTransportType
             // 
-            cboSegundoMedio.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboSegundoMedio.Font = new Font("Microsoft Sans Serif", 9F);
-            cboSegundoMedio.FormattingEnabled = true;
-            cboSegundoMedio.Items.AddRange(new object[] { "", "TRAILER", "CAJA REFRIGERADA", "CONTENEDOR", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboSegundoMedio.Location = new Point(129, 440);
-            cboSegundoMedio.Name = "cboSegundoMedio";
-            cboSegundoMedio.Size = new Size(211, 23);
-            cboSegundoMedio.TabIndex = 208;
+            cboTransportType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTransportType.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTransportType.FormattingEnabled = true;
+            cboTransportType.Items.AddRange(new object[] { "", "TRAILER", "CAJA REFRIGERADA", "CONTENEDOR", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
+            cboTransportType.Location = new Point(129, 440);
+            cboTransportType.Name = "cboTransportType";
+            cboTransportType.Size = new Size(211, 23);
+            cboTransportType.TabIndex = 208;
             // 
             // label9
             // 
@@ -529,109 +520,109 @@ namespace SisUvex.Archivo.Manifiesto
             label9.Text = "Medio de transporte:";
             label9.TextAlign = ContentAlignment.TopRight;
             // 
-            // cboMedioTransporte
+            // cboTransportVehicle
             // 
-            cboMedioTransporte.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMedioTransporte.Font = new Font("Microsoft Sans Serif", 9F);
-            cboMedioTransporte.FormattingEnabled = true;
-            cboMedioTransporte.Items.AddRange(new object[] { "", "TRAILER", "CONTENEDOR", "CAJA REFRIGERADA", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboMedioTransporte.Location = new Point(129, 415);
-            cboMedioTransporte.Name = "cboMedioTransporte";
-            cboMedioTransporte.Size = new Size(211, 23);
-            cboMedioTransporte.TabIndex = 206;
+            cboTransportVehicle.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTransportVehicle.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTransportVehicle.FormattingEnabled = true;
+            cboTransportVehicle.Items.AddRange(new object[] { "", "TRAILER", "CONTENEDOR", "CAJA REFRIGERADA", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
+            cboTransportVehicle.Location = new Point(129, 415);
+            cboTransportVehicle.Name = "cboTransportVehicle";
+            cboTransportVehicle.Size = new Size(211, 23);
+            cboTransportVehicle.TabIndex = 206;
             // 
-            // btnTodoCaja
+            // btnRemovedFreightContainer
             // 
-            btnTodoCaja.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoCaja.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoCaja.Enabled = false;
-            btnTodoCaja.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoCaja.Location = new Point(433, 390);
-            btnTodoCaja.Name = "btnTodoCaja";
-            btnTodoCaja.Size = new Size(23, 23);
-            btnTodoCaja.TabIndex = 197;
-            btnTodoCaja.UseVisualStyleBackColor = true;
+            btnRemovedFreightContainer.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedFreightContainer.Enabled = false;
+            btnRemovedFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedFreightContainer.Location = new Point(433, 390);
+            btnRemovedFreightContainer.Name = "btnRemovedFreightContainer";
+            btnRemovedFreightContainer.Size = new Size(23, 23);
+            btnRemovedFreightContainer.TabIndex = 197;
+            btnRemovedFreightContainer.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarCaja
+            // btnSearchFreightContainer
             // 
-            btnBuscarCaja.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarCaja.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarCaja.Enabled = false;
-            btnBuscarCaja.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarCaja.Location = new Point(409, 390);
-            btnBuscarCaja.Name = "btnBuscarCaja";
-            btnBuscarCaja.Size = new Size(23, 23);
-            btnBuscarCaja.TabIndex = 196;
-            btnBuscarCaja.UseVisualStyleBackColor = true;
+            btnSearchFreightContainer.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFreightContainer.Enabled = false;
+            btnSearchFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchFreightContainer.Location = new Point(409, 390);
+            btnSearchFreightContainer.Name = "btnSearchFreightContainer";
+            btnSearchFreightContainer.Size = new Size(23, 23);
+            btnSearchFreightContainer.TabIndex = 196;
+            btnSearchFreightContainer.UseVisualStyleBackColor = true;
             // 
-            // btnTodoTroque
+            // btnRemovedTruck
             // 
-            btnTodoTroque.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoTroque.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoTroque.Enabled = false;
-            btnTodoTroque.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoTroque.Location = new Point(433, 365);
-            btnTodoTroque.Name = "btnTodoTroque";
-            btnTodoTroque.Size = new Size(23, 23);
-            btnTodoTroque.TabIndex = 195;
-            btnTodoTroque.UseVisualStyleBackColor = true;
+            btnRemovedTruck.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedTruck.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedTruck.Enabled = false;
+            btnRemovedTruck.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedTruck.Location = new Point(433, 365);
+            btnRemovedTruck.Name = "btnRemovedTruck";
+            btnRemovedTruck.Size = new Size(23, 23);
+            btnRemovedTruck.TabIndex = 195;
+            btnRemovedTruck.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarTroque
+            // btnSearchTruck
             // 
-            btnBuscarTroque.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarTroque.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarTroque.Enabled = false;
-            btnBuscarTroque.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarTroque.Location = new Point(409, 365);
-            btnBuscarTroque.Name = "btnBuscarTroque";
-            btnBuscarTroque.Size = new Size(23, 23);
-            btnBuscarTroque.TabIndex = 194;
-            btnBuscarTroque.UseVisualStyleBackColor = true;
+            btnSearchTruck.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchTruck.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchTruck.Enabled = false;
+            btnSearchTruck.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchTruck.Location = new Point(409, 365);
+            btnSearchTruck.Name = "btnSearchTruck";
+            btnSearchTruck.Size = new Size(23, 23);
+            btnSearchTruck.TabIndex = 194;
+            btnSearchTruck.UseVisualStyleBackColor = true;
             // 
-            // btnTodoChofer
+            // btnRemovedDriver
             // 
-            btnTodoChofer.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoChofer.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoChofer.Enabled = false;
-            btnTodoChofer.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoChofer.Location = new Point(433, 339);
-            btnTodoChofer.Name = "btnTodoChofer";
-            btnTodoChofer.Size = new Size(23, 23);
-            btnTodoChofer.TabIndex = 193;
-            btnTodoChofer.UseVisualStyleBackColor = true;
+            btnRemovedDriver.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedDriver.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedDriver.Enabled = false;
+            btnRemovedDriver.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedDriver.Location = new Point(433, 339);
+            btnRemovedDriver.Name = "btnRemovedDriver";
+            btnRemovedDriver.Size = new Size(23, 23);
+            btnRemovedDriver.TabIndex = 193;
+            btnRemovedDriver.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarChofer
+            // btnSearchDriver
             // 
-            btnBuscarChofer.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarChofer.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarChofer.Enabled = false;
-            btnBuscarChofer.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarChofer.Location = new Point(409, 339);
-            btnBuscarChofer.Name = "btnBuscarChofer";
-            btnBuscarChofer.Size = new Size(23, 23);
-            btnBuscarChofer.TabIndex = 191;
-            btnBuscarChofer.UseVisualStyleBackColor = true;
+            btnSearchDriver.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchDriver.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchDriver.Enabled = false;
+            btnSearchDriver.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchDriver.Location = new Point(409, 339);
+            btnSearchDriver.Name = "btnSearchDriver";
+            btnSearchDriver.Size = new Size(23, 23);
+            btnSearchDriver.TabIndex = 191;
+            btnSearchDriver.UseVisualStyleBackColor = true;
             // 
-            // txbIdCaja
+            // txbIdFreightContainer
             // 
-            txbIdCaja.Enabled = false;
-            txbIdCaja.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCaja.Location = new Point(129, 390);
-            txbIdCaja.Name = "txbIdCaja";
-            txbIdCaja.Size = new Size(37, 21);
-            txbIdCaja.TabIndex = 205;
-            txbIdCaja.TextAlign = HorizontalAlignment.Center;
+            txbIdFreightContainer.Enabled = false;
+            txbIdFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdFreightContainer.Location = new Point(129, 390);
+            txbIdFreightContainer.Name = "txbIdFreightContainer";
+            txbIdFreightContainer.Size = new Size(37, 21);
+            txbIdFreightContainer.TabIndex = 205;
+            txbIdFreightContainer.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboCaja
+            // cboFreightContainer
             // 
-            cboCaja.Font = new Font("Microsoft Sans Serif", 9F);
-            cboCaja.FormattingEnabled = true;
-            cboCaja.ItemHeight = 15;
-            cboCaja.Location = new Point(171, 390);
-            cboCaja.Name = "cboCaja";
-            cboCaja.Size = new Size(235, 23);
-            cboCaja.TabIndex = 189;
-            cboCaja.TextChanged += cboCaja_TextChanged;
+            cboFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
+            cboFreightContainer.FormattingEnabled = true;
+            cboFreightContainer.ItemHeight = 15;
+            cboFreightContainer.Location = new Point(171, 390);
+            cboFreightContainer.Name = "cboFreightContainer";
+            cboFreightContainer.Size = new Size(235, 23);
+            cboFreightContainer.TabIndex = 189;
+            cboFreightContainer.TextChanged += cboCaja_TextChanged;
             // 
             // label5
             // 
@@ -643,26 +634,26 @@ namespace SisUvex.Archivo.Manifiesto
             label5.TabIndex = 204;
             label5.Text = "Caja:";
             // 
-            // txbIdTroque
+            // txbIdTruck
             // 
-            txbIdTroque.Enabled = false;
-            txbIdTroque.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdTroque.Location = new Point(129, 365);
-            txbIdTroque.Name = "txbIdTroque";
-            txbIdTroque.Size = new Size(37, 21);
-            txbIdTroque.TabIndex = 203;
-            txbIdTroque.TextAlign = HorizontalAlignment.Center;
+            txbIdTruck.Enabled = false;
+            txbIdTruck.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdTruck.Location = new Point(129, 365);
+            txbIdTruck.Name = "txbIdTruck";
+            txbIdTruck.Size = new Size(37, 21);
+            txbIdTruck.TabIndex = 203;
+            txbIdTruck.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboTroque
+            // cboTruck
             // 
-            cboTroque.Font = new Font("Microsoft Sans Serif", 9F);
-            cboTroque.FormattingEnabled = true;
-            cboTroque.ItemHeight = 15;
-            cboTroque.Location = new Point(171, 365);
-            cboTroque.Name = "cboTroque";
-            cboTroque.Size = new Size(235, 23);
-            cboTroque.TabIndex = 188;
-            cboTroque.TextChanged += cboTroque_TextChanged;
+            cboTruck.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTruck.FormattingEnabled = true;
+            cboTruck.ItemHeight = 15;
+            cboTruck.Location = new Point(171, 365);
+            cboTruck.Name = "cboTruck";
+            cboTruck.Size = new Size(235, 23);
+            cboTruck.TabIndex = 188;
+            cboTruck.TextChanged += cboTroque_TextChanged;
             // 
             // label6
             // 
@@ -675,26 +666,26 @@ namespace SisUvex.Archivo.Manifiesto
             label6.Text = "Troque:";
             label6.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbIdChofer
+            // txbIdDriver
             // 
-            txbIdChofer.Enabled = false;
-            txbIdChofer.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdChofer.Location = new Point(129, 339);
-            txbIdChofer.Name = "txbIdChofer";
-            txbIdChofer.Size = new Size(37, 21);
-            txbIdChofer.TabIndex = 199;
-            txbIdChofer.TextAlign = HorizontalAlignment.Center;
+            txbIdDriver.Enabled = false;
+            txbIdDriver.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdDriver.Location = new Point(129, 339);
+            txbIdDriver.Name = "txbIdDriver";
+            txbIdDriver.Size = new Size(37, 21);
+            txbIdDriver.TabIndex = 199;
+            txbIdDriver.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboChofer
+            // cboDriver
             // 
-            cboChofer.Font = new Font("Microsoft Sans Serif", 9F);
-            cboChofer.FormattingEnabled = true;
-            cboChofer.ItemHeight = 15;
-            cboChofer.Location = new Point(171, 339);
-            cboChofer.Name = "cboChofer";
-            cboChofer.Size = new Size(235, 23);
-            cboChofer.TabIndex = 187;
-            cboChofer.TextChanged += cboChofer_TextChanged;
+            cboDriver.Font = new Font("Microsoft Sans Serif", 9F);
+            cboDriver.FormattingEnabled = true;
+            cboDriver.ItemHeight = 15;
+            cboDriver.Location = new Point(171, 339);
+            cboDriver.Name = "cboDriver";
+            cboDriver.Size = new Size(235, 23);
+            cboDriver.TabIndex = 187;
+            cboDriver.TextChanged += cboChofer_TextChanged;
             // 
             // label8
             // 
@@ -718,14 +709,14 @@ namespace SisUvex.Archivo.Manifiesto
             label4.Text = "Orden de compra:";
             label4.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbOrden
+            // txbPurchaseOrder
             // 
-            txbOrden.Font = new Font("Microsoft Sans Serif", 9F);
-            txbOrden.Location = new Point(129, 267);
-            txbOrden.MaxLength = 30;
-            txbOrden.Name = "txbOrden";
-            txbOrden.Size = new Size(211, 21);
-            txbOrden.TabIndex = 184;
+            txbPurchaseOrder.Font = new Font("Microsoft Sans Serif", 9F);
+            txbPurchaseOrder.Location = new Point(129, 267);
+            txbPurchaseOrder.MaxLength = 30;
+            txbPurchaseOrder.Name = "txbPurchaseOrder";
+            txbPurchaseOrder.Size = new Size(211, 21);
+            txbPurchaseOrder.TabIndex = 184;
             // 
             // lblVisa
             // 
@@ -747,60 +738,60 @@ namespace SisUvex.Archivo.Manifiesto
             txbBooking.Size = new Size(211, 21);
             txbBooking.TabIndex = 182;
             // 
-            // spnHoraSalida
+            // spnHour
             // 
-            spnHoraSalida.Font = new Font("Microsoft Sans Serif", 9F);
-            spnHoraSalida.Location = new Point(228, 44);
-            spnHoraSalida.Mask = "00:00";
-            spnHoraSalida.Name = "spnHoraSalida";
-            spnHoraSalida.Size = new Size(38, 21);
-            spnHoraSalida.TabIndex = 181;
-            spnHoraSalida.ValidatingType = typeof(DateTime);
+            spnHour.Font = new Font("Microsoft Sans Serif", 9F);
+            spnHour.Location = new Point(228, 44);
+            spnHour.Mask = "00:00";
+            spnHour.Name = "spnHour";
+            spnHour.Size = new Size(38, 21);
+            spnHour.TabIndex = 181;
+            spnHour.ValidatingType = typeof(DateTime);
             // 
-            // btnTodoDistribuidor
+            // btnRemovedDistributor
             // 
-            btnTodoDistribuidor.BackgroundImage = (Image)resources.GetObject("btnTodoDistribuidor.BackgroundImage");
-            btnTodoDistribuidor.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoDistribuidor.Enabled = false;
-            btnTodoDistribuidor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoDistribuidor.Location = new Point(433, 68);
-            btnTodoDistribuidor.Name = "btnTodoDistribuidor";
-            btnTodoDistribuidor.Size = new Size(23, 23);
-            btnTodoDistribuidor.TabIndex = 178;
-            btnTodoDistribuidor.UseVisualStyleBackColor = true;
+            btnRemovedDistributor.BackgroundImage = (Image)resources.GetObject("btnRemovedDistributor.BackgroundImage");
+            btnRemovedDistributor.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedDistributor.Enabled = false;
+            btnRemovedDistributor.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedDistributor.Location = new Point(433, 68);
+            btnRemovedDistributor.Name = "btnRemovedDistributor";
+            btnRemovedDistributor.Size = new Size(23, 23);
+            btnRemovedDistributor.TabIndex = 178;
+            btnRemovedDistributor.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarDistribuidor
+            // btnSearchDistributor
             // 
-            btnBuscarDistribuidor.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarDistribuidor.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarDistribuidor.Enabled = false;
-            btnBuscarDistribuidor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarDistribuidor.Location = new Point(409, 68);
-            btnBuscarDistribuidor.Name = "btnBuscarDistribuidor";
-            btnBuscarDistribuidor.Size = new Size(23, 23);
-            btnBuscarDistribuidor.TabIndex = 177;
-            btnBuscarDistribuidor.UseVisualStyleBackColor = true;
+            btnSearchDistributor.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchDistributor.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchDistributor.Enabled = false;
+            btnSearchDistributor.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchDistributor.Location = new Point(409, 68);
+            btnSearchDistributor.Name = "btnSearchDistributor";
+            btnSearchDistributor.Size = new Size(23, 23);
+            btnSearchDistributor.TabIndex = 177;
+            btnSearchDistributor.UseVisualStyleBackColor = true;
             // 
-            // txbIdDistribuidor
+            // txbIdDistributor
             // 
-            txbIdDistribuidor.Enabled = false;
-            txbIdDistribuidor.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdDistribuidor.Location = new Point(129, 68);
-            txbIdDistribuidor.Name = "txbIdDistribuidor";
-            txbIdDistribuidor.Size = new Size(37, 21);
-            txbIdDistribuidor.TabIndex = 180;
-            txbIdDistribuidor.TextAlign = HorizontalAlignment.Center;
+            txbIdDistributor.Enabled = false;
+            txbIdDistributor.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdDistributor.Location = new Point(129, 68);
+            txbIdDistributor.Name = "txbIdDistributor";
+            txbIdDistributor.Size = new Size(37, 21);
+            txbIdDistributor.TabIndex = 180;
+            txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboDistribuidor
+            // cboDistributor
             // 
-            cboDistribuidor.Font = new Font("Microsoft Sans Serif", 9F);
-            cboDistribuidor.FormattingEnabled = true;
-            cboDistribuidor.ItemHeight = 15;
-            cboDistribuidor.Location = new Point(171, 68);
-            cboDistribuidor.Name = "cboDistribuidor";
-            cboDistribuidor.Size = new Size(235, 23);
-            cboDistribuidor.TabIndex = 176;
-            cboDistribuidor.TextChanged += cboDistribuidor_TextChanged;
+            cboDistributor.Font = new Font("Microsoft Sans Serif", 9F);
+            cboDistributor.FormattingEnabled = true;
+            cboDistributor.ItemHeight = 15;
+            cboDistributor.Location = new Point(171, 68);
+            cboDistributor.Name = "cboDistributor";
+            cboDistributor.Size = new Size(235, 23);
+            cboDistributor.TabIndex = 176;
+            cboDistributor.TextChanged += cboDistribuidor_TextChanged;
             // 
             // label3
             // 
@@ -813,50 +804,50 @@ namespace SisUvex.Archivo.Manifiesto
             label3.Text = "Distribuidor:";
             label3.TextAlign = ContentAlignment.TopRight;
             // 
-            // btnTodoConsignatario
+            // btnRemovedConsignee
             // 
-            btnTodoConsignatario.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoConsignatario.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoConsignatario.Enabled = false;
-            btnTodoConsignatario.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoConsignatario.Location = new Point(433, 93);
-            btnTodoConsignatario.Name = "btnTodoConsignatario";
-            btnTodoConsignatario.Size = new Size(23, 23);
-            btnTodoConsignatario.TabIndex = 173;
-            btnTodoConsignatario.UseVisualStyleBackColor = true;
+            btnRemovedConsignee.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedConsignee.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedConsignee.Enabled = false;
+            btnRemovedConsignee.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedConsignee.Location = new Point(433, 93);
+            btnRemovedConsignee.Name = "btnRemovedConsignee";
+            btnRemovedConsignee.Size = new Size(23, 23);
+            btnRemovedConsignee.TabIndex = 173;
+            btnRemovedConsignee.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarConsignatario
+            // btnSearchConsignee
             // 
-            btnBuscarConsignatario.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarConsignatario.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarConsignatario.Enabled = false;
-            btnBuscarConsignatario.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarConsignatario.Location = new Point(409, 93);
-            btnBuscarConsignatario.Name = "btnBuscarConsignatario";
-            btnBuscarConsignatario.Size = new Size(23, 23);
-            btnBuscarConsignatario.TabIndex = 172;
-            btnBuscarConsignatario.UseVisualStyleBackColor = true;
+            btnSearchConsignee.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchConsignee.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchConsignee.Enabled = false;
+            btnSearchConsignee.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchConsignee.Location = new Point(409, 93);
+            btnSearchConsignee.Name = "btnSearchConsignee";
+            btnSearchConsignee.Size = new Size(23, 23);
+            btnSearchConsignee.TabIndex = 172;
+            btnSearchConsignee.UseVisualStyleBackColor = true;
             // 
-            // txbIdConsignatario
+            // txbIdConsignee
             // 
-            txbIdConsignatario.Enabled = false;
-            txbIdConsignatario.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdConsignatario.Location = new Point(129, 93);
-            txbIdConsignatario.Name = "txbIdConsignatario";
-            txbIdConsignatario.Size = new Size(37, 21);
-            txbIdConsignatario.TabIndex = 175;
-            txbIdConsignatario.TextAlign = HorizontalAlignment.Center;
+            txbIdConsignee.Enabled = false;
+            txbIdConsignee.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdConsignee.Location = new Point(129, 93);
+            txbIdConsignee.Name = "txbIdConsignee";
+            txbIdConsignee.Size = new Size(37, 21);
+            txbIdConsignee.TabIndex = 175;
+            txbIdConsignee.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboConsignatario
+            // cboConsignee
             // 
-            cboConsignatario.Font = new Font("Microsoft Sans Serif", 9F);
-            cboConsignatario.FormattingEnabled = true;
-            cboConsignatario.ItemHeight = 15;
-            cboConsignatario.Location = new Point(171, 93);
-            cboConsignatario.Name = "cboConsignatario";
-            cboConsignatario.Size = new Size(235, 23);
-            cboConsignatario.TabIndex = 171;
-            cboConsignatario.TextChanged += cboConsignatario_TextChanged;
+            cboConsignee.Font = new Font("Microsoft Sans Serif", 9F);
+            cboConsignee.FormattingEnabled = true;
+            cboConsignee.ItemHeight = 15;
+            cboConsignee.Location = new Point(171, 93);
+            cboConsignee.Name = "cboConsignee";
+            cboConsignee.Size = new Size(235, 23);
+            cboConsignee.TabIndex = 171;
+            cboConsignee.TextChanged += cboConsignatario_TextChanged;
             // 
             // label16
             // 
@@ -869,146 +860,146 @@ namespace SisUvex.Archivo.Manifiesto
             label16.Text = "Consignatario:";
             label16.TextAlign = ContentAlignment.TopRight;
             // 
-            // btnTodoCiudadDestino
+            // btnRemovedCityDestination
             // 
-            btnTodoCiudadDestino.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoCiudadDestino.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoCiudadDestino.Enabled = false;
-            btnTodoCiudadDestino.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoCiudadDestino.Location = new Point(433, 218);
-            btnTodoCiudadDestino.Name = "btnTodoCiudadDestino";
-            btnTodoCiudadDestino.Size = new Size(23, 23);
-            btnTodoCiudadDestino.TabIndex = 160;
-            btnTodoCiudadDestino.UseVisualStyleBackColor = true;
+            btnRemovedCityDestination.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedCityDestination.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedCityDestination.Enabled = false;
+            btnRemovedCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedCityDestination.Location = new Point(433, 218);
+            btnRemovedCityDestination.Name = "btnRemovedCityDestination";
+            btnRemovedCityDestination.Size = new Size(23, 23);
+            btnRemovedCityDestination.TabIndex = 160;
+            btnRemovedCityDestination.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarCiudadDestino
+            // btnSearchCityDestination
             // 
-            btnBuscarCiudadDestino.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarCiudadDestino.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarCiudadDestino.Enabled = false;
-            btnBuscarCiudadDestino.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarCiudadDestino.Location = new Point(409, 218);
-            btnBuscarCiudadDestino.Name = "btnBuscarCiudadDestino";
-            btnBuscarCiudadDestino.Size = new Size(23, 23);
-            btnBuscarCiudadDestino.TabIndex = 159;
-            btnBuscarCiudadDestino.UseVisualStyleBackColor = true;
+            btnSearchCityDestination.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchCityDestination.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchCityDestination.Enabled = false;
+            btnSearchCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchCityDestination.Location = new Point(409, 218);
+            btnSearchCityDestination.Name = "btnSearchCityDestination";
+            btnSearchCityDestination.Size = new Size(23, 23);
+            btnSearchCityDestination.TabIndex = 159;
+            btnSearchCityDestination.UseVisualStyleBackColor = true;
             // 
-            // btnTodoCiudadCruce
+            // btnRemovedCityCrossPoint
             // 
-            btnTodoCiudadCruce.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoCiudadCruce.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoCiudadCruce.Enabled = false;
-            btnTodoCiudadCruce.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoCiudadCruce.Location = new Point(433, 193);
-            btnTodoCiudadCruce.Name = "btnTodoCiudadCruce";
-            btnTodoCiudadCruce.Size = new Size(23, 23);
-            btnTodoCiudadCruce.TabIndex = 158;
-            btnTodoCiudadCruce.UseVisualStyleBackColor = true;
+            btnRemovedCityCrossPoint.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedCityCrossPoint.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedCityCrossPoint.Enabled = false;
+            btnRemovedCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedCityCrossPoint.Location = new Point(433, 193);
+            btnRemovedCityCrossPoint.Name = "btnRemovedCityCrossPoint";
+            btnRemovedCityCrossPoint.Size = new Size(23, 23);
+            btnRemovedCityCrossPoint.TabIndex = 158;
+            btnRemovedCityCrossPoint.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarCiudadCruce
+            // btnSearchCityCrossPoint
             // 
-            btnBuscarCiudadCruce.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarCiudadCruce.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarCiudadCruce.Enabled = false;
-            btnBuscarCiudadCruce.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarCiudadCruce.Location = new Point(409, 193);
-            btnBuscarCiudadCruce.Name = "btnBuscarCiudadCruce";
-            btnBuscarCiudadCruce.Size = new Size(23, 23);
-            btnBuscarCiudadCruce.TabIndex = 157;
-            btnBuscarCiudadCruce.UseVisualStyleBackColor = true;
+            btnSearchCityCrossPoint.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchCityCrossPoint.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchCityCrossPoint.Enabled = false;
+            btnSearchCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchCityCrossPoint.Location = new Point(409, 193);
+            btnSearchCityCrossPoint.Name = "btnSearchCityCrossPoint";
+            btnSearchCityCrossPoint.Size = new Size(23, 23);
+            btnSearchCityCrossPoint.TabIndex = 157;
+            btnSearchCityCrossPoint.UseVisualStyleBackColor = true;
             // 
-            // btnTodoProductor
+            // btnRemovedGrower
             // 
-            btnTodoProductor.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoProductor.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoProductor.Enabled = false;
-            btnTodoProductor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoProductor.Location = new Point(433, 118);
-            btnTodoProductor.Name = "btnTodoProductor";
-            btnTodoProductor.Size = new Size(23, 23);
-            btnTodoProductor.TabIndex = 156;
-            btnTodoProductor.UseVisualStyleBackColor = true;
+            btnRemovedGrower.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedGrower.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedGrower.Enabled = false;
+            btnRemovedGrower.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedGrower.Location = new Point(433, 118);
+            btnRemovedGrower.Name = "btnRemovedGrower";
+            btnRemovedGrower.Size = new Size(23, 23);
+            btnRemovedGrower.TabIndex = 156;
+            btnRemovedGrower.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarProductor
+            // btnSearchGrower
             // 
-            btnBuscarProductor.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarProductor.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarProductor.Enabled = false;
-            btnBuscarProductor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarProductor.Location = new Point(409, 118);
-            btnBuscarProductor.Name = "btnBuscarProductor";
-            btnBuscarProductor.Size = new Size(23, 23);
-            btnBuscarProductor.TabIndex = 155;
-            btnBuscarProductor.UseVisualStyleBackColor = true;
+            btnSearchGrower.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchGrower.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchGrower.Enabled = false;
+            btnSearchGrower.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchGrower.Location = new Point(409, 118);
+            btnSearchGrower.Name = "btnSearchGrower";
+            btnSearchGrower.Size = new Size(23, 23);
+            btnSearchGrower.TabIndex = 155;
+            btnSearchGrower.UseVisualStyleBackColor = true;
             // 
-            // btnTodoAgenciaMX
+            // btnRemovedAgencyMX
             // 
-            btnTodoAgenciaMX.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoAgenciaMX.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoAgenciaMX.Enabled = false;
-            btnTodoAgenciaMX.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoAgenciaMX.Location = new Point(433, 168);
-            btnTodoAgenciaMX.Name = "btnTodoAgenciaMX";
-            btnTodoAgenciaMX.Size = new Size(23, 23);
-            btnTodoAgenciaMX.TabIndex = 154;
-            btnTodoAgenciaMX.UseVisualStyleBackColor = true;
+            btnRemovedAgencyMX.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedAgencyMX.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedAgencyMX.Enabled = false;
+            btnRemovedAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedAgencyMX.Location = new Point(433, 168);
+            btnRemovedAgencyMX.Name = "btnRemovedAgencyMX";
+            btnRemovedAgencyMX.Size = new Size(23, 23);
+            btnRemovedAgencyMX.TabIndex = 154;
+            btnRemovedAgencyMX.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarAgenciaMX
+            // btnSearchAgencyMX
             // 
-            btnBuscarAgenciaMX.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarAgenciaMX.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarAgenciaMX.Enabled = false;
-            btnBuscarAgenciaMX.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarAgenciaMX.Location = new Point(409, 168);
-            btnBuscarAgenciaMX.Name = "btnBuscarAgenciaMX";
-            btnBuscarAgenciaMX.Size = new Size(23, 23);
-            btnBuscarAgenciaMX.TabIndex = 152;
-            btnBuscarAgenciaMX.UseVisualStyleBackColor = true;
+            btnSearchAgencyMX.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchAgencyMX.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchAgencyMX.Enabled = false;
+            btnSearchAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchAgencyMX.Location = new Point(409, 168);
+            btnSearchAgencyMX.Name = "btnSearchAgencyMX";
+            btnSearchAgencyMX.Size = new Size(23, 23);
+            btnSearchAgencyMX.TabIndex = 152;
+            btnSearchAgencyMX.UseVisualStyleBackColor = true;
             // 
-            // btnTodoAgenciaUS
+            // btnRemovedAgencyUS
             // 
-            btnTodoAgenciaUS.BackgroundImage = Properties.Resources.Imagen6;
-            btnTodoAgenciaUS.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTodoAgenciaUS.Enabled = false;
-            btnTodoAgenciaUS.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTodoAgenciaUS.Location = new Point(433, 143);
-            btnTodoAgenciaUS.Name = "btnTodoAgenciaUS";
-            btnTodoAgenciaUS.Size = new Size(23, 23);
-            btnTodoAgenciaUS.TabIndex = 153;
-            btnTodoAgenciaUS.UseVisualStyleBackColor = true;
+            btnRemovedAgencyUS.BackgroundImage = Properties.Resources.Imagen6;
+            btnRemovedAgencyUS.BackgroundImageLayout = ImageLayout.Stretch;
+            btnRemovedAgencyUS.Enabled = false;
+            btnRemovedAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
+            btnRemovedAgencyUS.Location = new Point(433, 143);
+            btnRemovedAgencyUS.Name = "btnRemovedAgencyUS";
+            btnRemovedAgencyUS.Size = new Size(23, 23);
+            btnRemovedAgencyUS.TabIndex = 153;
+            btnRemovedAgencyUS.UseVisualStyleBackColor = true;
             // 
-            // btnBuscarAgenciaUS
+            // btnSearchAgencyUS
             // 
-            btnBuscarAgenciaUS.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnBuscarAgenciaUS.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarAgenciaUS.Enabled = false;
-            btnBuscarAgenciaUS.Font = new Font("Microsoft Sans Serif", 9F);
-            btnBuscarAgenciaUS.Location = new Point(409, 143);
-            btnBuscarAgenciaUS.Name = "btnBuscarAgenciaUS";
-            btnBuscarAgenciaUS.Size = new Size(23, 23);
-            btnBuscarAgenciaUS.TabIndex = 151;
-            btnBuscarAgenciaUS.UseVisualStyleBackColor = true;
+            btnSearchAgencyUS.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchAgencyUS.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchAgencyUS.Enabled = false;
+            btnSearchAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
+            btnSearchAgencyUS.Location = new Point(409, 143);
+            btnSearchAgencyUS.Name = "btnSearchAgencyUS";
+            btnSearchAgencyUS.Size = new Size(23, 23);
+            btnSearchAgencyUS.TabIndex = 151;
+            btnSearchAgencyUS.UseVisualStyleBackColor = true;
             // 
-            // txbIdCiudadDestino
+            // txbIdCityDestination
             // 
-            txbIdCiudadDestino.Enabled = false;
-            txbIdCiudadDestino.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCiudadDestino.Location = new Point(129, 218);
-            txbIdCiudadDestino.Name = "txbIdCiudadDestino";
-            txbIdCiudadDestino.Size = new Size(37, 21);
-            txbIdCiudadDestino.TabIndex = 170;
-            txbIdCiudadDestino.TextAlign = HorizontalAlignment.Center;
+            txbIdCityDestination.Enabled = false;
+            txbIdCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdCityDestination.Location = new Point(129, 218);
+            txbIdCityDestination.Name = "txbIdCityDestination";
+            txbIdCityDestination.Size = new Size(37, 21);
+            txbIdCityDestination.TabIndex = 170;
+            txbIdCityDestination.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboCiudadDestino
+            // cboCityDestination
             // 
-            cboCiudadDestino.Font = new Font("Microsoft Sans Serif", 9F);
-            cboCiudadDestino.FormattingEnabled = true;
-            cboCiudadDestino.ItemHeight = 15;
-            cboCiudadDestino.Location = new Point(171, 218);
-            cboCiudadDestino.Name = "cboCiudadDestino";
-            cboCiudadDestino.Size = new Size(235, 23);
-            cboCiudadDestino.TabIndex = 150;
-            cboCiudadDestino.TextChanged += cboCiudadDestino_TextChanged;
+            cboCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
+            cboCityDestination.FormattingEnabled = true;
+            cboCityDestination.ItemHeight = 15;
+            cboCityDestination.Location = new Point(171, 218);
+            cboCityDestination.Name = "cboCityDestination";
+            cboCityDestination.Size = new Size(235, 23);
+            cboCityDestination.TabIndex = 150;
+            cboCityDestination.TextChanged += cboCiudadDestino_TextChanged;
             // 
             // lblCiudadDestino
             // 
@@ -1021,26 +1012,26 @@ namespace SisUvex.Archivo.Manifiesto
             lblCiudadDestino.Text = "Ciudad destino:";
             lblCiudadDestino.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbIdCiudadCruce
+            // txbIdCityCrossPoint
             // 
-            txbIdCiudadCruce.Enabled = false;
-            txbIdCiudadCruce.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCiudadCruce.Location = new Point(129, 193);
-            txbIdCiudadCruce.Name = "txbIdCiudadCruce";
-            txbIdCiudadCruce.Size = new Size(37, 21);
-            txbIdCiudadCruce.TabIndex = 168;
-            txbIdCiudadCruce.TextAlign = HorizontalAlignment.Center;
+            txbIdCityCrossPoint.Enabled = false;
+            txbIdCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdCityCrossPoint.Location = new Point(129, 193);
+            txbIdCityCrossPoint.Name = "txbIdCityCrossPoint";
+            txbIdCityCrossPoint.Size = new Size(37, 21);
+            txbIdCityCrossPoint.TabIndex = 168;
+            txbIdCityCrossPoint.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboCiudadCruce
+            // cboCityCrossPoint
             // 
-            cboCiudadCruce.Font = new Font("Microsoft Sans Serif", 9F);
-            cboCiudadCruce.FormattingEnabled = true;
-            cboCiudadCruce.ItemHeight = 15;
-            cboCiudadCruce.Location = new Point(171, 193);
-            cboCiudadCruce.Name = "cboCiudadCruce";
-            cboCiudadCruce.Size = new Size(235, 23);
-            cboCiudadCruce.TabIndex = 149;
-            cboCiudadCruce.TextChanged += cboCiudadCruce_TextChanged;
+            cboCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
+            cboCityCrossPoint.FormattingEnabled = true;
+            cboCityCrossPoint.ItemHeight = 15;
+            cboCityCrossPoint.Location = new Point(171, 193);
+            cboCityCrossPoint.Name = "cboCityCrossPoint";
+            cboCityCrossPoint.Size = new Size(235, 23);
+            cboCityCrossPoint.TabIndex = 149;
+            cboCityCrossPoint.TextChanged += cboCiudadCruce_TextChanged;
             // 
             // lblCiudadCruce
             // 
@@ -1053,26 +1044,26 @@ namespace SisUvex.Archivo.Manifiesto
             lblCiudadCruce.Text = "Ciudad cruce:";
             lblCiudadCruce.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbIdProductor
+            // txbIdGrower
             // 
-            txbIdProductor.Enabled = false;
-            txbIdProductor.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdProductor.Location = new Point(129, 118);
-            txbIdProductor.Name = "txbIdProductor";
-            txbIdProductor.Size = new Size(37, 21);
-            txbIdProductor.TabIndex = 166;
-            txbIdProductor.TextAlign = HorizontalAlignment.Center;
+            txbIdGrower.Enabled = false;
+            txbIdGrower.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdGrower.Location = new Point(129, 118);
+            txbIdGrower.Name = "txbIdGrower";
+            txbIdGrower.Size = new Size(37, 21);
+            txbIdGrower.TabIndex = 166;
+            txbIdGrower.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboProductor
+            // cboGrower
             // 
-            cboProductor.Font = new Font("Microsoft Sans Serif", 9F);
-            cboProductor.FormattingEnabled = true;
-            cboProductor.ItemHeight = 15;
-            cboProductor.Location = new Point(171, 118);
-            cboProductor.Name = "cboProductor";
-            cboProductor.Size = new Size(235, 23);
-            cboProductor.TabIndex = 148;
-            cboProductor.TextChanged += cboProductor_TextChanged;
+            cboGrower.Font = new Font("Microsoft Sans Serif", 9F);
+            cboGrower.FormattingEnabled = true;
+            cboGrower.ItemHeight = 15;
+            cboGrower.Location = new Point(171, 118);
+            cboGrower.Name = "cboGrower";
+            cboGrower.Size = new Size(235, 23);
+            cboGrower.TabIndex = 148;
+            cboGrower.TextChanged += cboProductor_TextChanged;
             // 
             // lblProductor
             // 
@@ -1085,26 +1076,26 @@ namespace SisUvex.Archivo.Manifiesto
             lblProductor.Text = "Productor:";
             lblProductor.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbIdAgenciaUS
+            // txbIdAgencyUS
             // 
-            txbIdAgenciaUS.Enabled = false;
-            txbIdAgenciaUS.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdAgenciaUS.Location = new Point(129, 143);
-            txbIdAgenciaUS.Name = "txbIdAgenciaUS";
-            txbIdAgenciaUS.Size = new Size(37, 21);
-            txbIdAgenciaUS.TabIndex = 164;
-            txbIdAgenciaUS.TextAlign = HorizontalAlignment.Center;
+            txbIdAgencyUS.Enabled = false;
+            txbIdAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdAgencyUS.Location = new Point(129, 143);
+            txbIdAgencyUS.Name = "txbIdAgencyUS";
+            txbIdAgencyUS.Size = new Size(37, 21);
+            txbIdAgencyUS.TabIndex = 164;
+            txbIdAgencyUS.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboAgenciaUS
+            // cboAgencyUS
             // 
-            cboAgenciaUS.Font = new Font("Microsoft Sans Serif", 9F);
-            cboAgenciaUS.FormattingEnabled = true;
-            cboAgenciaUS.ItemHeight = 15;
-            cboAgenciaUS.Location = new Point(171, 143);
-            cboAgenciaUS.Name = "cboAgenciaUS";
-            cboAgenciaUS.Size = new Size(235, 23);
-            cboAgenciaUS.TabIndex = 146;
-            cboAgenciaUS.TextChanged += cboAgenciaUS_TextChanged;
+            cboAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
+            cboAgencyUS.FormattingEnabled = true;
+            cboAgencyUS.ItemHeight = 15;
+            cboAgencyUS.Location = new Point(171, 143);
+            cboAgencyUS.Name = "cboAgencyUS";
+            cboAgencyUS.Size = new Size(235, 23);
+            cboAgencyUS.TabIndex = 146;
+            cboAgencyUS.TextChanged += cboAgenciaUS_TextChanged;
             // 
             // lblAgenciaUS
             // 
@@ -1117,26 +1108,26 @@ namespace SisUvex.Archivo.Manifiesto
             lblAgenciaUS.Text = "Agencia US:";
             lblAgenciaUS.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbIdAgenciaMX
+            // txbIdAgencyMX
             // 
-            txbIdAgenciaMX.Enabled = false;
-            txbIdAgenciaMX.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdAgenciaMX.Location = new Point(129, 168);
-            txbIdAgenciaMX.Name = "txbIdAgenciaMX";
-            txbIdAgenciaMX.Size = new Size(37, 21);
-            txbIdAgenciaMX.TabIndex = 162;
-            txbIdAgenciaMX.TextAlign = HorizontalAlignment.Center;
+            txbIdAgencyMX.Enabled = false;
+            txbIdAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdAgencyMX.Location = new Point(129, 168);
+            txbIdAgencyMX.Name = "txbIdAgencyMX";
+            txbIdAgencyMX.Size = new Size(37, 21);
+            txbIdAgencyMX.TabIndex = 162;
+            txbIdAgencyMX.TextAlign = HorizontalAlignment.Center;
             // 
-            // cboAgenciaMX
+            // cboAgencyMX
             // 
-            cboAgenciaMX.Font = new Font("Microsoft Sans Serif", 9F);
-            cboAgenciaMX.FormattingEnabled = true;
-            cboAgenciaMX.ItemHeight = 15;
-            cboAgenciaMX.Location = new Point(171, 168);
-            cboAgenciaMX.Name = "cboAgenciaMX";
-            cboAgenciaMX.Size = new Size(235, 23);
-            cboAgenciaMX.TabIndex = 147;
-            cboAgenciaMX.TextChanged += cboAgenciaMX_TextChanged;
+            cboAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
+            cboAgencyMX.FormattingEnabled = true;
+            cboAgencyMX.ItemHeight = 15;
+            cboAgencyMX.Location = new Point(171, 168);
+            cboAgencyMX.Name = "cboAgencyMX";
+            cboAgencyMX.Size = new Size(235, 23);
+            cboAgencyMX.TabIndex = 147;
+            cboAgencyMX.TextChanged += cboAgenciaMX_TextChanged;
             // 
             // lblAcenciaMX
             // 
@@ -1169,17 +1160,17 @@ namespace SisUvex.Archivo.Manifiesto
             label18.TabIndex = 144;
             label18.Text = "Hora salida:";
             // 
-            // cboTipoEmbarque
+            // cboManifestType
             // 
-            cboTipoEmbarque.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboTipoEmbarque.Font = new Font("Microsoft Sans Serif", 9F);
-            cboTipoEmbarque.FormattingEnabled = true;
-            cboTipoEmbarque.Items.AddRange(new object[] { "E", "N" });
-            cboTipoEmbarque.Location = new Point(118, 42);
-            cboTipoEmbarque.Name = "cboTipoEmbarque";
-            cboTipoEmbarque.Size = new Size(37, 23);
-            cboTipoEmbarque.TabIndex = 142;
-            cboTipoEmbarque.TextChanged += cboTipoEmbarque_TextChanged;
+            cboManifestType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboManifestType.Font = new Font("Microsoft Sans Serif", 9F);
+            cboManifestType.FormattingEnabled = true;
+            cboManifestType.Items.AddRange(new object[] { "E", "N" });
+            cboManifestType.Location = new Point(118, 42);
+            cboManifestType.Name = "cboManifestType";
+            cboManifestType.Size = new Size(37, 23);
+            cboManifestType.TabIndex = 142;
+            cboManifestType.TextChanged += cboTipoEmbarque_TextChanged;
             // 
             // label7
             // 
@@ -1191,15 +1182,15 @@ namespace SisUvex.Archivo.Manifiesto
             label7.TabIndex = 234;
             label7.Text = "Embarcador:";
             // 
-            // txbEmbarcador
+            // txbNameShipper
             // 
-            txbEmbarcador.Font = new Font("Microsoft Sans Serif", 9F);
-            txbEmbarcador.Location = new Point(129, 652);
-            txbEmbarcador.MaxLength = 20;
-            txbEmbarcador.Name = "txbEmbarcador";
-            txbEmbarcador.Size = new Size(102, 21);
-            txbEmbarcador.TabIndex = 233;
-            txbEmbarcador.TextAlign = HorizontalAlignment.Center;
+            txbNameShipper.Font = new Font("Microsoft Sans Serif", 9F);
+            txbNameShipper.Location = new Point(129, 652);
+            txbNameShipper.MaxLength = 20;
+            txbNameShipper.Name = "txbNameShipper";
+            txbNameShipper.Size = new Size(102, 21);
+            txbNameShipper.TabIndex = 233;
+            txbNameShipper.TextAlign = HorizontalAlignment.Center;
             // 
             // label19
             // 
@@ -1211,95 +1202,95 @@ namespace SisUvex.Archivo.Manifiesto
             label19.TabIndex = 236;
             label19.Text = "Operador:";
             // 
-            // txbOperador
+            // txbNameOperator
             // 
-            txbOperador.Font = new Font("Microsoft Sans Serif", 9F);
-            txbOperador.Location = new Point(320, 656);
-            txbOperador.MaxLength = 20;
-            txbOperador.Name = "txbOperador";
-            txbOperador.Size = new Size(102, 21);
-            txbOperador.TabIndex = 235;
-            txbOperador.TextAlign = HorizontalAlignment.Center;
+            txbNameOperator.Font = new Font("Microsoft Sans Serif", 9F);
+            txbNameOperator.Location = new Point(320, 656);
+            txbNameOperator.MaxLength = 20;
+            txbNameOperator.Name = "txbNameOperator";
+            txbNameOperator.Size = new Size(102, 21);
+            txbNameOperator.TabIndex = 235;
+            txbNameOperator.TextAlign = HorizontalAlignment.Center;
             // 
-            // chkRechazado
+            // chkRejected
             // 
-            chkRechazado.AutoSize = true;
-            chkRechazado.Font = new Font("Microsoft Sans Serif", 9F);
-            chkRechazado.Location = new Point(376, 17);
-            chkRechazado.Name = "chkRechazado";
-            chkRechazado.Size = new Size(89, 19);
-            chkRechazado.TabIndex = 237;
-            chkRechazado.Text = "Rechazado";
-            chkRechazado.UseVisualStyleBackColor = true;
+            chkRejected.AutoSize = true;
+            chkRejected.Font = new Font("Microsoft Sans Serif", 9F);
+            chkRejected.Location = new Point(697, 4);
+            chkRejected.Name = "chkRejected";
+            chkRejected.Size = new Size(89, 19);
+            chkRejected.TabIndex = 237;
+            chkRejected.Text = "Rechazado";
+            chkRejected.UseVisualStyleBackColor = true;
             // 
-            // dgvListado
+            // dgvPalletList
             // 
-            dgvListado.AllowUserToAddRows = false;
-            dgvListado.AllowUserToDeleteRows = false;
-            dgvListado.AllowUserToResizeRows = false;
-            dgvListado.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvListado.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
-            dgvListado.BackgroundColor = SystemColors.ControlLightLight;
-            dgvListado.BorderStyle = BorderStyle.Fixed3D;
-            dgvListado.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dgvListado.EnableHeadersVisualStyles = false;
-            dgvListado.ImeMode = ImeMode.NoControl;
-            dgvListado.Location = new Point(462, 71);
-            dgvListado.MultiSelect = false;
-            dgvListado.Name = "dgvListado";
-            dgvListado.ReadOnly = true;
-            dgvListado.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            dgvListado.RowHeadersVisible = false;
-            dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvListado.Size = new Size(455, 576);
-            dgvListado.TabIndex = 238;
-            dgvListado.CellFormatting += dgvListado_CellFormatting;
+            dgvPalletList.AllowUserToAddRows = false;
+            dgvPalletList.AllowUserToDeleteRows = false;
+            dgvPalletList.AllowUserToResizeRows = false;
+            dgvPalletList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvPalletList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+            dgvPalletList.BackgroundColor = SystemColors.ControlLightLight;
+            dgvPalletList.BorderStyle = BorderStyle.Fixed3D;
+            dgvPalletList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvPalletList.EnableHeadersVisualStyles = false;
+            dgvPalletList.ImeMode = ImeMode.NoControl;
+            dgvPalletList.Location = new Point(463, 71);
+            dgvPalletList.MultiSelect = false;
+            dgvPalletList.Name = "dgvPalletList";
+            dgvPalletList.ReadOnly = true;
+            dgvPalletList.RightToLeft = RightToLeft.No;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvPalletList.RowHeadersVisible = false;
+            dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPalletList.Size = new Size(352, 576);
+            dgvPalletList.TabIndex = 238;
+            dgvPalletList.CellFormatting += dgvListado_CellFormatting;
             // 
             // lblPosicionPal
             // 
             lblPosicionPal.AutoSize = true;
             lblPosicionPal.Font = new Font("Microsoft Sans Serif", 8.25F);
-            lblPosicionPal.Location = new Point(544, 33);
+            lblPosicionPal.Location = new Point(510, 35);
             lblPosicionPal.Name = "lblPosicionPal";
             lblPosicionPal.Size = new Size(28, 13);
             lblPosicionPal.TabIndex = 239;
             lblPosicionPal.Text = "Pos:";
             // 
-            // txbPosicionPal
+            // txbPalletPosition
             // 
-            txbPosicionPal.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPosicionPal.Location = new Point(546, 46);
-            txbPosicionPal.MaxLength = 2;
-            txbPosicionPal.Name = "txbPosicionPal";
-            txbPosicionPal.Size = new Size(26, 21);
-            txbPosicionPal.TabIndex = 240;
+            txbPalletPosition.Font = new Font("Microsoft Sans Serif", 9F);
+            txbPalletPosition.Location = new Point(512, 48);
+            txbPalletPosition.MaxLength = 2;
+            txbPalletPosition.Name = "txbPalletPosition";
+            txbPalletPosition.Size = new Size(26, 21);
+            txbPalletPosition.TabIndex = 240;
             // 
-            // printManifestBtn
+            // btnPrintManifest
             // 
-            printManifestBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            printManifestBtn.Location = new Point(544, 652);
-            printManifestBtn.Name = "printManifestBtn";
-            printManifestBtn.Size = new Size(64, 25);
-            printManifestBtn.TabIndex = 241;
-            printManifestBtn.Text = "Imprimir";
-            printManifestBtn.UseVisualStyleBackColor = true;
-            printManifestBtn.Click += printManifestBtn_Click;
+            btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnPrintManifest.Location = new Point(544, 652);
+            btnPrintManifest.Name = "btnPrintManifest";
+            btnPrintManifest.Size = new Size(64, 25);
+            btnPrintManifest.TabIndex = 241;
+            btnPrintManifest.Text = "Imprimir";
+            btnPrintManifest.UseVisualStyleBackColor = true;
+            btnPrintManifest.Click += printManifestBtn_Click;
             // 
             // txbDieselLiters
             // 
@@ -1347,7 +1338,7 @@ namespace SisUvex.Archivo.Manifiesto
             // 
             chkBoxPackingList.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkBoxPackingList.AutoSize = true;
-            chkBoxPackingList.Location = new Point(462, 654);
+            chkBoxPackingList.Location = new Point(463, 657);
             chkBoxPackingList.Name = "chkBoxPackingList";
             chkBoxPackingList.Size = new Size(81, 17);
             chkBoxPackingList.TabIndex = 246;
@@ -1365,122 +1356,172 @@ namespace SisUvex.Archivo.Manifiesto
             label1.Text = "Fitosanitario:";
             label1.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbFitosanitario
+            // txbPhytosanitary
             // 
-            txbFitosanitario.Font = new Font("Microsoft Sans Serif", 9F);
-            txbFitosanitario.Location = new Point(129, 291);
-            txbFitosanitario.MaxLength = 30;
-            txbFitosanitario.Name = "txbFitosanitario";
-            txbFitosanitario.Size = new Size(211, 21);
-            txbFitosanitario.TabIndex = 247;
+            txbPhytosanitary.Font = new Font("Microsoft Sans Serif", 9F);
+            txbPhytosanitary.Location = new Point(129, 291);
+            txbPhytosanitary.MaxLength = 30;
+            txbPhytosanitary.Name = "txbPhytosanitary";
+            txbPhytosanitary.Size = new Size(211, 21);
+            txbPhytosanitary.TabIndex = 247;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.Font = new Font("Microsoft Sans Serif", 9F);
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.BottomRight;
+            button1.Location = new Point(792, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(24, 24);
+            button1.TabIndex = 249;
+            button1.TextAlign = ContentAlignment.TopRight;
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // cboSeason
+            // 
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.Enabled = false;
+            cboSeason.Font = new Font("Microsoft Sans Serif", 9F);
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Items.AddRange(new object[] { "E", "N" });
+            cboSeason.Location = new Point(460, 4);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(148, 23);
+            cboSeason.TabIndex = 361;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Enabled = false;
+            label2.Font = new Font("Microsoft Sans Serif", 9F);
+            label2.Location = new Point(349, 8);
+            label2.Name = "label2";
+            label2.Size = new Size(74, 15);
+            label2.TabIndex = 362;
+            label2.Text = "Temporada:";
+            label2.TextAlign = ContentAlignment.TopRight;
+            // 
+            // txbIdSeason
+            // 
+            txbIdSeason.Enabled = false;
+            txbIdSeason.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdSeason.Location = new Point(429, 5);
+            txbIdSeason.Name = "txbIdSeason";
+            txbIdSeason.Size = new Size(27, 21);
+            txbIdSeason.TabIndex = 363;
+            txbIdSeason.TextAlign = HorizontalAlignment.Center;
             // 
             // FrmManifiestoAñadir
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(918, 683);
+            ClientSize = new Size(818, 683);
+            Controls.Add(txbIdSeason);
+            Controls.Add(cboSeason);
+            Controls.Add(label2);
+            Controls.Add(button1);
             Controls.Add(chkBoxPackingList);
-            Controls.Add(printManifestBtn);
-            Controls.Add(btnAceptar);
-            Controls.Add(btnCancelar);
+            Controls.Add(btnPrintManifest);
+            Controls.Add(btnAccept);
+            Controls.Add(btnCancel);
             Controls.Add(label1);
-            Controls.Add(txbFitosanitario);
+            Controls.Add(txbPhytosanitary);
             Controls.Add(txbDieselLiters);
             Controls.Add(lblDieselInvoice);
             Controls.Add(txbDieselInvoice);
-            Controls.Add(txbPosicionPal);
+            Controls.Add(txbPalletPosition);
             Controls.Add(lblPosicionPal);
-            Controls.Add(txbPosicion);
-            Controls.Add(dgvListado);
-            Controls.Add(chkRechazado);
-            Controls.Add(txbOperador);
+            Controls.Add(txbTermoPosition);
+            Controls.Add(dgvPalletList);
+            Controls.Add(chkRejected);
+            Controls.Add(txbNameOperator);
             Controls.Add(label7);
-            Controls.Add(txbEmbarcador);
+            Controls.Add(txbNameShipper);
             Controls.Add(Mercado);
-            Controls.Add(dtpFecha);
+            Controls.Add(dtpDate);
             Controls.Add(lblObservaciones);
-            Controls.Add(txbObservaciones);
-            Controls.Add(cboManifiestoVirtual);
-            Controls.Add(btnBorrarPallet);
-            Controls.Add(btnAñadirPallet);
+            Controls.Add(txbObservations);
+            Controls.Add(btnRemovePallet);
+            Controls.Add(btnAddPallet);
             Controls.Add(txbIdPallet);
-            Controls.Add(txbSello3);
-            Controls.Add(txbSello2);
+            Controls.Add(txbSeal3);
+            Controls.Add(txbSeal2);
             Controls.Add(label14);
-            Controls.Add(txbSello1);
-            Controls.Add(cboGrados);
-            Controls.Add(txbGrados);
+            Controls.Add(txbSeal1);
+            Controls.Add(cboTemperatureUnit);
+            Controls.Add(txbTemperature);
             Controls.Add(label12);
             Controls.Add(label11);
-            Controls.Add(txbChismografo);
+            Controls.Add(txbTermograph);
             Controls.Add(label10);
-            Controls.Add(cboSegundoMedio);
+            Controls.Add(cboTransportType);
             Controls.Add(label9);
-            Controls.Add(cboMedioTransporte);
-            Controls.Add(btnTodoCaja);
-            Controls.Add(btnBuscarCaja);
-            Controls.Add(btnTodoTroque);
-            Controls.Add(btnBuscarTroque);
-            Controls.Add(btnTodoChofer);
-            Controls.Add(btnBuscarChofer);
-            Controls.Add(txbIdCaja);
-            Controls.Add(cboCaja);
+            Controls.Add(cboTransportVehicle);
+            Controls.Add(btnRemovedFreightContainer);
+            Controls.Add(btnSearchFreightContainer);
+            Controls.Add(btnRemovedTruck);
+            Controls.Add(btnSearchTruck);
+            Controls.Add(btnRemovedDriver);
+            Controls.Add(btnSearchDriver);
+            Controls.Add(txbIdFreightContainer);
+            Controls.Add(cboFreightContainer);
             Controls.Add(label5);
-            Controls.Add(txbIdTroque);
-            Controls.Add(cboTroque);
+            Controls.Add(txbIdTruck);
+            Controls.Add(cboTruck);
             Controls.Add(label6);
-            Controls.Add(txbIdChofer);
-            Controls.Add(cboChofer);
+            Controls.Add(txbIdDriver);
+            Controls.Add(cboDriver);
             Controls.Add(label8);
             Controls.Add(label4);
-            Controls.Add(txbOrden);
+            Controls.Add(txbPurchaseOrder);
             Controls.Add(lblVisa);
             Controls.Add(txbBooking);
-            Controls.Add(spnHoraSalida);
-            Controls.Add(btnTodoDistribuidor);
-            Controls.Add(btnBuscarDistribuidor);
-            Controls.Add(txbIdDistribuidor);
-            Controls.Add(cboDistribuidor);
+            Controls.Add(spnHour);
+            Controls.Add(btnRemovedDistributor);
+            Controls.Add(btnSearchDistributor);
+            Controls.Add(txbIdDistributor);
+            Controls.Add(cboDistributor);
             Controls.Add(label3);
-            Controls.Add(btnTodoConsignatario);
-            Controls.Add(btnBuscarConsignatario);
-            Controls.Add(txbIdConsignatario);
-            Controls.Add(cboConsignatario);
+            Controls.Add(btnRemovedConsignee);
+            Controls.Add(btnSearchConsignee);
+            Controls.Add(txbIdConsignee);
+            Controls.Add(cboConsignee);
             Controls.Add(label16);
-            Controls.Add(btnTodoCiudadDestino);
-            Controls.Add(btnBuscarCiudadDestino);
-            Controls.Add(btnTodoCiudadCruce);
-            Controls.Add(btnBuscarCiudadCruce);
-            Controls.Add(btnTodoProductor);
-            Controls.Add(btnBuscarProductor);
-            Controls.Add(btnTodoAgenciaMX);
-            Controls.Add(btnBuscarAgenciaMX);
-            Controls.Add(btnTodoAgenciaUS);
-            Controls.Add(btnBuscarAgenciaUS);
-            Controls.Add(txbIdCiudadDestino);
-            Controls.Add(cboCiudadDestino);
+            Controls.Add(btnRemovedCityDestination);
+            Controls.Add(btnSearchCityDestination);
+            Controls.Add(btnRemovedCityCrossPoint);
+            Controls.Add(btnSearchCityCrossPoint);
+            Controls.Add(btnRemovedGrower);
+            Controls.Add(btnSearchGrower);
+            Controls.Add(btnRemovedAgencyMX);
+            Controls.Add(btnSearchAgencyMX);
+            Controls.Add(btnRemovedAgencyUS);
+            Controls.Add(btnSearchAgencyUS);
+            Controls.Add(txbIdCityDestination);
+            Controls.Add(cboCityDestination);
             Controls.Add(lblCiudadDestino);
-            Controls.Add(txbIdCiudadCruce);
-            Controls.Add(cboCiudadCruce);
+            Controls.Add(txbIdCityCrossPoint);
+            Controls.Add(cboCityCrossPoint);
             Controls.Add(lblCiudadCruce);
-            Controls.Add(txbIdProductor);
-            Controls.Add(cboProductor);
+            Controls.Add(txbIdGrower);
+            Controls.Add(cboGrower);
             Controls.Add(lblProductor);
-            Controls.Add(txbIdAgenciaUS);
-            Controls.Add(cboAgenciaUS);
+            Controls.Add(txbIdAgencyUS);
+            Controls.Add(cboAgencyUS);
             Controls.Add(lblAgenciaUS);
-            Controls.Add(txbIdAgenciaMX);
-            Controls.Add(cboAgenciaMX);
+            Controls.Add(txbIdAgencyMX);
+            Controls.Add(cboAgencyMX);
             Controls.Add(lblAcenciaMX);
             Controls.Add(label17);
             Controls.Add(label18);
-            Controls.Add(cboTipoEmbarque);
-            Controls.Add(cboActivo);
+            Controls.Add(cboManifestType);
+            Controls.Add(cboActive);
             Controls.Add(lblLinea);
-            Controls.Add(btnTodoLinea);
-            Controls.Add(btnBuscarLinea);
-            Controls.Add(txbIdLinea);
-            Controls.Add(cboLinea);
+            Controls.Add(btnRemovedTransportLine);
+            Controls.Add(btnSearchTransportLine);
+            Controls.Add(txbIdTransportLine);
+            Controls.Add(cboTransportLine);
             Controls.Add(txbId);
             Controls.Add(lblTitulo);
             Controls.Add(lblObliId);
@@ -1490,6 +1531,7 @@ namespace SisUvex.Archivo.Manifiesto
             Controls.Add(lblDieselLiters);
             Controls.Add(label13);
             Font = new Font("Microsoft Sans Serif", 8.25F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimumSize = new Size(834, 722);
             Name = "FrmManifiestoAñadir";
@@ -1497,7 +1539,7 @@ namespace SisUvex.Archivo.Manifiesto
             Text = "Añadir Manifiesto";
             FormClosing += FrmManifiestoAñadir_FormClosing;
             Load += FrmManifiestoAñadir_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvListado).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPalletList).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1505,113 +1547,116 @@ namespace SisUvex.Archivo.Manifiesto
         #endregion
         private Label lblLinea;
         private Label lblId;
-        private Button btnCancelar;
-        private Button btnAceptar;
+        private Button btnCancel;
+        private Button btnAccept;
         public Label lblTitulo;
         public TextBox txbId;
-        private Button btnTodoLinea;
-        private Button btnBuscarLinea;
-        public TextBox txbIdLinea;
-        private ComboBox cboLinea;
+        private Button btnRemovedTransportLine;
+        private Button btnSearchTransportLine;
+        public TextBox txbIdTransportLine;
+        private ComboBox cboTransportLine;
         private Label lblObliId;
-        public ComboBox cboActivo;
+        public ComboBox cboActive;
         private Label Mercado;
         private Label lblObservaciones;
-        public ComboBox cboManifiestoVirtual;
-        private Button btnBorrarPallet;
-        private Button btnAñadirPallet;
+        private Button btnRemovePallet;
+        private Button btnAddPallet;
         private Label label15;
         public TextBox txbIdPallet;
-        public TextBox txbSello3;
-        public TextBox txbSello2;
+        public TextBox txbSeal3;
+        public TextBox txbSeal2;
         private Label label14;
-        public TextBox txbSello1;
-        public ComboBox cboGrados;
+        public TextBox txbSeal1;
+        public ComboBox cboTemperatureUnit;
         private Label label13;
-        public TextBox txbGrados;
+        public TextBox txbTemperature;
         private Label label12;
-        public TextBox txbPosicion;
+        public TextBox txbTermoPosition;
         private Label label11;
-        public TextBox txbChismografo;
+        public TextBox txbTermograph;
         private Label label10;
-        public ComboBox cboSegundoMedio;
+        public ComboBox cboTransportType;
         private Label label9;
-        public ComboBox cboMedioTransporte;
-        private Button btnTodoCaja;
-        private Button btnBuscarCaja;
-        private Button btnTodoTroque;
-        private Button btnBuscarTroque;
-        private Button btnTodoChofer;
-        private Button btnBuscarChofer;
-        public TextBox txbIdCaja;
-        private ComboBox cboCaja;
+        public ComboBox cboTransportVehicle;
+        private Button btnRemovedFreightContainer;
+        private Button btnSearchFreightContainer;
+        private Button btnRemovedTruck;
+        private Button btnSearchTruck;
+        private Button btnRemovedDriver;
+        private Button btnSearchDriver;
+        public TextBox txbIdFreightContainer;
+        private ComboBox cboFreightContainer;
         private Label label5;
-        public TextBox txbIdTroque;
-        private ComboBox cboTroque;
+        public TextBox txbIdTruck;
+        private ComboBox cboTruck;
         private Label label6;
-        public TextBox txbIdChofer;
-        public ComboBox cboChofer;
+        public TextBox txbIdDriver;
+        public ComboBox cboDriver;
         private Label label8;
         private Label label4;
-        public TextBox txbOrden;
+        public TextBox txbPurchaseOrder;
         private Label lblVisa;
         public TextBox txbBooking;
-        public MaskedTextBox spnHoraSalida;
-        private Button btnTodoDistribuidor;
-        private Button btnBuscarDistribuidor;
-        public TextBox txbIdDistribuidor;
-        private ComboBox cboDistribuidor;
+        public MaskedTextBox spnHour;
+        private Button btnRemovedDistributor;
+        private Button btnSearchDistributor;
+        public TextBox txbIdDistributor;
+        private ComboBox cboDistributor;
         private Label label3;
-        private Button btnTodoConsignatario;
-        private Button btnBuscarConsignatario;
-        public TextBox txbIdConsignatario;
-        private ComboBox cboConsignatario;
+        private Button btnRemovedConsignee;
+        private Button btnSearchConsignee;
+        public TextBox txbIdConsignee;
+        private ComboBox cboConsignee;
         private Label label16;
-        private Button btnTodoCiudadDestino;
-        private Button btnBuscarCiudadDestino;
-        private Button btnTodoCiudadCruce;
-        private Button btnBuscarCiudadCruce;
-        private Button btnTodoProductor;
-        private Button btnBuscarProductor;
-        private Button btnTodoAgenciaMX;
-        private Button btnBuscarAgenciaMX;
-        private Button btnTodoAgenciaUS;
-        private Button btnBuscarAgenciaUS;
-        public TextBox txbIdCiudadDestino;
-        private ComboBox cboCiudadDestino;
+        private Button btnRemovedCityDestination;
+        private Button btnSearchCityDestination;
+        private Button btnRemovedCityCrossPoint;
+        private Button btnSearchCityCrossPoint;
+        private Button btnRemovedGrower;
+        private Button btnSearchGrower;
+        private Button btnRemovedAgencyMX;
+        private Button btnSearchAgencyMX;
+        private Button btnRemovedAgencyUS;
+        private Button btnSearchAgencyUS;
+        public TextBox txbIdCityDestination;
+        private ComboBox cboCityDestination;
         private Label lblCiudadDestino;
-        public TextBox txbIdCiudadCruce;
-        private ComboBox cboCiudadCruce;
+        public TextBox txbIdCityCrossPoint;
+        private ComboBox cboCityCrossPoint;
         private Label lblCiudadCruce;
-        public TextBox txbIdProductor;
-        private ComboBox cboProductor;
+        public TextBox txbIdGrower;
+        private ComboBox cboGrower;
         private Label lblProductor;
-        public TextBox txbIdAgenciaUS;
-        public ComboBox cboAgenciaUS;
+        public TextBox txbIdAgencyUS;
+        public ComboBox cboAgencyUS;
         private Label lblAgenciaUS;
-        public TextBox txbIdAgenciaMX;
-        public ComboBox cboAgenciaMX;
+        public TextBox txbIdAgencyMX;
+        public ComboBox cboAgencyMX;
         private Label lblAcenciaMX;
         private Label label17;
         private Label label18;
-        public ComboBox cboTipoEmbarque;
+        public ComboBox cboManifestType;
         private Label label7;
-        public TextBox txbEmbarcador;
+        public TextBox txbNameShipper;
         private Label label19;
-        public TextBox txbOperador;
-        public DateTimePicker dtpFecha;
-        public RichTextBox txbObservaciones;
-        public CheckBox chkRechazado;
-        public DataGridView dgvListado;
+        public TextBox txbNameOperator;
+        public DateTimePicker dtpDate;
+        public RichTextBox txbObservations;
+        public CheckBox chkRejected;
+        public DataGridView dgvPalletList;
         private Label lblPosicionPal;
-        public TextBox txbPosicionPal;
-        private Button printManifestBtn;
+        public TextBox txbPalletPosition;
+        private Button btnPrintManifest;
         public TextBox txbDieselLiters;
         private Label lblDieselInvoice;
         public TextBox txbDieselInvoice;
         private Label lblDieselLiters;
         private CheckBox chkBoxPackingList;
         private Label label1;
-        public TextBox txbFitosanitario;
+        public TextBox txbPhytosanitary;
+        private Button button1;
+        public ComboBox cboSeason;
+        private Label label2;
+        public TextBox txbIdSeason;
     }
 }

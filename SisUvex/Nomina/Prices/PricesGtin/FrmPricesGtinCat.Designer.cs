@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesGtinCat));
             dgvCatalogPrices = new DataGridView();
             btnModify = new Button();
             dgvCatalogGtin = new DataGridView();
@@ -79,17 +80,16 @@
             dgvCatalogPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogPrices.RowHeadersVisible = false;
             dgvCatalogPrices.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogPrices.RowTemplate.Height = 25;
             dgvCatalogPrices.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogPrices.Size = new Size(369, 394);
-            dgvCatalogPrices.TabIndex = 25;
+            dgvCatalogPrices.TabIndex = 2;
             // 
             // btnModify
             // 
             btnModify.Location = new Point(96, 12);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 24;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -128,17 +128,16 @@
             dgvCatalogGtin.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvCatalogGtin.RowHeadersVisible = false;
             dgvCatalogGtin.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogGtin.RowTemplate.Height = 25;
             dgvCatalogGtin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogGtin.Size = new Size(391, 394);
-            dgvCatalogGtin.TabIndex = 26;
+            dgvCatalogGtin.TabIndex = 3;
             // 
             // btnSeleccionar
             // 
             btnSeleccionar.Location = new Point(15, 12);
             btnSeleccionar.Name = "btnSeleccionar";
             btnSeleccionar.Size = new Size(75, 23);
-            btnSeleccionar.TabIndex = 27;
+            btnSeleccionar.TabIndex = 0;
             btnSeleccionar.Text = "Seleccionar";
             btnSeleccionar.UseVisualStyleBackColor = true;
             btnSeleccionar.Click += btnSeleccionar_Click;
@@ -168,6 +167,7 @@
             Controls.Add(btnSeleccionar);
             Controls.Add(btnModify);
             Controls.Add(splitContainer1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPricesGtinCat";
             Text = "Catálogo precios por GTIN";
             WindowState = FormWindowState.Maximized;

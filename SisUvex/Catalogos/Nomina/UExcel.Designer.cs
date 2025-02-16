@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UExcel));
             btnBuscar = new Button();
             btnMostrar = new Button();
             btnRegistrarData = new Button();
@@ -59,7 +60,7 @@
             btnBuscar.Margin = new Padding(4, 3, 4, 3);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(84, 23);
-            btnBuscar.TabIndex = 6;
+            btnBuscar.TabIndex = 4;
             btnBuscar.Text = "Examinar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
@@ -71,7 +72,7 @@
             btnMostrar.Margin = new Padding(4, 3, 4, 3);
             btnMostrar.Name = "btnMostrar";
             btnMostrar.Size = new Size(84, 23);
-            btnMostrar.TabIndex = 8;
+            btnMostrar.TabIndex = 6;
             btnMostrar.Text = "Mostrar";
             btnMostrar.UseVisualStyleBackColor = true;
             btnMostrar.Click += btnMostrar_Click;
@@ -84,7 +85,7 @@
             btnRegistrarData.Margin = new Padding(4, 3, 4, 3);
             btnRegistrarData.Name = "btnRegistrarData";
             btnRegistrarData.Size = new Size(144, 27);
-            btnRegistrarData.TabIndex = 9;
+            btnRegistrarData.TabIndex = 8;
             btnRegistrarData.Text = "Registrar Data";
             btnRegistrarData.UseVisualStyleBackColor = true;
             btnRegistrarData.Click += btnRegistrarData_Click;
@@ -114,7 +115,7 @@
             dgvDatos.ShowEditingIcon = false;
             dgvDatos.ShowRowErrors = false;
             dgvDatos.Size = new Size(709, 367);
-            dgvDatos.TabIndex = 9;
+            dgvDatos.TabIndex = 7;
             // 
             // cboHojas
             // 
@@ -123,7 +124,7 @@
             cboHojas.Margin = new Padding(4, 3, 4, 3);
             cboHojas.Name = "cboHojas";
             cboHojas.Size = new Size(407, 23);
-            cboHojas.TabIndex = 7;
+            cboHojas.TabIndex = 5;
             // 
             // progressBar
             // 
@@ -153,7 +154,7 @@
             txtRuta.Margin = new Padding(4, 3, 4, 3);
             txtRuta.Name = "txtRuta";
             txtRuta.Size = new Size(512, 23);
-            txtRuta.TabIndex = 5;
+            txtRuta.TabIndex = 3;
             // 
             // label1
             // 
@@ -192,7 +193,7 @@
             CboIDComedor.Location = new Point(351, 40);
             CboIDComedor.Name = "CboIDComedor";
             CboIDComedor.Size = new Size(207, 23);
-            CboIDComedor.TabIndex = 2;
+            CboIDComedor.TabIndex = 1;
             // 
             // label3
             // 
@@ -230,7 +231,7 @@
             btnRegistroIndividual.Location = new Point(562, 39);
             btnRegistroIndividual.Name = "btnRegistroIndividual";
             btnRegistroIndividual.Size = new Size(146, 25);
-            btnRegistroIndividual.TabIndex = 4;
+            btnRegistroIndividual.TabIndex = 2;
             btnRegistroIndividual.Text = "REGISTRAR";
             btnRegistroIndividual.UseVisualStyleBackColor = true;
             btnRegistroIndividual.Click += btnRegistroIndividual_Click;
@@ -241,7 +242,7 @@
             txbIDEmpleado.MaxLength = 6;
             txbIDEmpleado.Name = "txbIDEmpleado";
             txbIDEmpleado.Size = new Size(100, 23);
-            txbIDEmpleado.TabIndex = 1;
+            txbIDEmpleado.TabIndex = 0;
             // 
             // groupBox1
             // 
@@ -284,6 +285,7 @@
             Controls.Add(dgvDatos);
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MinimumSize = new Size(625, 395);
             Name = "UExcel";

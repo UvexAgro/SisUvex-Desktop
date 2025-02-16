@@ -49,20 +49,16 @@ namespace SisUvex.Archivo.Manifiesto
         public string distributorCity { get; set; }
         public string distributorTAXID { get; set; }
         public string distributorPhone { get; set; }
-
         public string distributorCountry { get; set; }
-
         public string distributorShortName { get; set; }
 
         //Datos de Linea de Transporte
-
         public string carrierId { get; set; }
         public string carrierName { get; set; }
         public string carrierSCAC { get; set; }
         public string carrierSCAAT { get; set; }
 
         //Datos de troque
-
         public string truckId { get; set; }
         public string truckNoEco { get; set; }
         public string truckPlateUS { get; set; }
@@ -71,7 +67,6 @@ namespace SisUvex.Archivo.Manifiesto
         public string truckModel { get; set; }
 
         //Datos de refrigeracion
-
         public string thermoId { get; set; }
         public string thermoNoEco { get; set; }
         public string thermoPlateUS { get; set; }
@@ -82,17 +77,13 @@ namespace SisUvex.Archivo.Manifiesto
         public string thermoType { get; set; }
 
         //Datos de chofer
-
         public string driverId { get; set; }
         public string driverName { get; set; }
         public string driverLicense { get; set; }
         public string driverVisa { get; set; }
         public DateTime driverBirthday { get; set; }
 
-
-
         //Datos Aduana Mexicana
-
         public string customMXId { get; set; }
         public string customMXName { get; set; }
         public string customMXAddress { get; set; }
@@ -100,9 +91,7 @@ namespace SisUvex.Archivo.Manifiesto
         public string customMXCountry { get; set; }
         public string customMXRFC { get; set; }
 
-
         //Datos Aduana Americana
-
         public string customUSId { get; set; }
         public string customUSName { get; set; }
         public string customUSAddress { get; set; }
@@ -111,22 +100,18 @@ namespace SisUvex.Archivo.Manifiesto
         public string customUSRFC { get; set; }
 
         //Puerto de cruce
-
         public string idPort { get; set; }
         public string vNamePort { get; set; }
         public string vStatePort { get; set; }
         public string vCountryPort { get; set; }
 
         //Entry port
-
         public string idEntryPort { get; set; }
         public string vNameEntryPort { get; set; }
         public string vStateEntryPort { get; set; }
         public string vCountryEntryPort { get; set; }
 
-
         //Datos consignatario
-
         public string consigneeId { get; set; }
         public string consigneeName { get; set; }
         public string consigneeAddress { get; set; }
@@ -238,8 +223,6 @@ namespace SisUvex.Archivo.Manifiesto
                     this.consigneePhone = dr["Consignatario"].ToString();
                     this.consigneeCountry = dr["Cons País"].ToString();
                     this.consigneeStatus = dr["Activo"].ToString();
-
-                    
                 }
             }
             catch (Exception ex)
@@ -250,8 +233,6 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 sql.CloseConectionWrite();
             }   
-
-
         }
 
         public void GetManifestDetailData(string manifestNumber)
@@ -259,7 +240,7 @@ namespace SisUvex.Archivo.Manifiesto
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("USE SISUVEX SELECT * FROM vw_PackRemisionTableManifest WHERE Manifiesto = @manifestNumber", sql.cnn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM vw_PackRemisionTableManifest WHERE Manifiesto = @manifestNumber", sql.cnn);
                 cmd.Parameters.AddWithValue("@manifestNumber", manifestNumber);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(DetalleCarga);
@@ -272,7 +253,6 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 sql.CloseConectionWrite();
             }
-
         }
 
         public void GetManifestTotalData(string manifestNumber)
@@ -280,7 +260,7 @@ namespace SisUvex.Archivo.Manifiesto
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("USE SISUVEX SELECT * FROM vw_PackRemisionTotalTableManifest WHERE Manifiesto = @manifestNumber", sql.cnn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM vw_PackRemisionTotalTableManifest WHERE Manifiesto = @manifestNumber", sql.cnn);
                 cmd.Parameters.AddWithValue("@manifestNumber", manifestNumber);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(TotalesCarga);
@@ -293,12 +273,6 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 sql.CloseConectionWrite();
             }
-
         }
-
-
-
-
-
     }
 }

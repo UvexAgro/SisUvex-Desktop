@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 namespace SisUvex.Catalogos.Metods.ComboBoxes
 {
-    internal class ClsComboBoxFiles : ClsColumnName
+    internal class ClsComboBoxFiles
     {
         public static string dataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static string rutaConsultaCbo = Path.Combine(dataDirectory, "querys", "cbo");
@@ -184,6 +184,33 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.ProductionLine.Cbo:
                     queryDataTable = ClsObject.ProductionLine.QueryCbo;
                     break;
+                case ClsObject.Contractor.Cbo:
+                    queryDataTable = ClsObject.Contractor.QueryCbo;
+                    break;
+                case ClsObject.Season.Cbo:
+                    queryDataTable = ClsObject.Season.QueryCbo;
+                    break;
+                case ClsObject.City.Cbo:
+                    queryDataTable = ClsObject.City.QueryCbo;
+                    break;
+                case ClsObject.Consignee.Cbo:
+                    queryDataTable = ClsObject.Consignee.QueryCbo;
+                    break;
+                case ClsObject.AgencyTradeMX.Cbo:
+                    queryDataTable = ClsObject.AgencyTradeMX.QueryCbo;
+                    break;
+                case ClsObject.AgencyTradeUS.Cbo:
+                    queryDataTable = ClsObject.AgencyTradeUS.QueryCbo;
+                    break;
+                case ClsObject.Truck.Cbo:
+                    queryDataTable = ClsObject.Truck.QueryCbo;
+                    break;
+                case ClsObject.Driver.Cbo:
+                    queryDataTable = ClsObject.Driver.QueryCbo;
+                    break;
+                case ClsObject.TransportLine.Cbo:
+                    queryDataTable = ClsObject.TransportLine.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -217,6 +244,21 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
+                    break;
+                case ClsObject.Season.Cbo:
+                    query += " IN ('Pack_Season', 'Pack_Crop') ";
+                    break;
+                case ClsObject.Consignee.Cbo:
+                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";     
+                    break;
+                case ClsObject.Driver.Cbo:
+                    query += " IN ('Pack_TransportLine', 'Pack_Driver') ";
+                    break;
+                case ClsObject.Truck.Cbo:
+                    query += " IN ('Pack_TransportLine', 'Pack_Truck') ";
+                    break;
+                case ClsObject.FreightContainer.Cbo:
+                    query += " IN ('Pack_TransportLine', 'Pack_FreightContainer') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -264,6 +306,26 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Grower.TableName;
                 case ClsObject.ProductionLine.Cbo:
                     return ClsObject.ProductionLine.TableName;
+                case ClsObject.Contractor.Cbo:
+                    return ClsObject.Contractor.TableName;
+                case ClsObject.Season.Cbo:
+                    return ClsObject.Season.TableName;
+                case ClsObject.City.Cbo:
+                    return ClsObject.City.TableName;
+                case ClsObject.Consignee.Cbo:
+                    return ClsObject.Consignee.TableName;
+                case ClsObject.AgencyTradeMX.Cbo:
+                    return ClsObject.AgencyTradeMX.TableName;
+                case ClsObject.AgencyTradeUS.Cbo:
+                    return ClsObject.AgencyTradeUS.TableName;
+                case ClsObject.TransportLine.Cbo:
+                    return ClsObject.TransportLine.TableName;
+                case ClsObject.Driver.Cbo:
+                    return ClsObject.Driver.TableName;
+                case ClsObject.Truck.Cbo:
+                    return ClsObject.Truck.TableName;
+                case ClsObject.FreightContainer.Cbo:
+                    return ClsObject.FreightContainer.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

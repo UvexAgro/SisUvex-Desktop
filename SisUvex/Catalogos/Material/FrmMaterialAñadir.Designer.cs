@@ -31,6 +31,7 @@ namespace SisUvex.Catalogos.Material
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialAñadir));
             lblTitulo = new Label();
             lblNombre = new Label();
             txbNombre = new TextBox();
@@ -71,7 +72,7 @@ namespace SisUvex.Catalogos.Material
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Arial Black", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            lblTitulo.Font = new Font("Arial Black", 16F);
             lblTitulo.Location = new Point(9, 9);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(201, 31);
@@ -81,7 +82,7 @@ namespace SisUvex.Catalogos.Material
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNombre.Font = new Font("Segoe UI", 12F);
             lblNombre.Location = new Point(12, 93);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(71, 21);
@@ -90,17 +91,17 @@ namespace SisUvex.Catalogos.Material
             // 
             // txbNombre
             // 
-            txbNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNombre.Font = new Font("Segoe UI", 12F);
             txbNombre.Location = new Point(90, 90);
             txbNombre.MaxLength = 20;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(466, 29);
-            txbNombre.TabIndex = 3;
+            txbNombre.TabIndex = 5;
             // 
             // lblIdTipo
             // 
             lblIdTipo.AutoSize = true;
-            lblIdTipo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblIdTipo.Font = new Font("Segoe UI", 12F);
             lblIdTipo.Location = new Point(13, 58);
             lblIdTipo.Name = "lblIdTipo";
             lblIdTipo.Size = new Size(57, 21);
@@ -112,7 +113,7 @@ namespace SisUvex.Catalogos.Material
             btnCancelar.Location = new Point(611, 335);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 12;
+            btnCancelar.TabIndex = 18;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -122,7 +123,7 @@ namespace SisUvex.Catalogos.Material
             btnAceptar.Location = new Point(530, 335);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 13;
+            btnAceptar.TabIndex = 17;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -139,19 +140,19 @@ namespace SisUvex.Catalogos.Material
             // 
             // txbCantidadPorUnidad
             // 
-            txbCantidadPorUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txbCantidadPorUnidad.Location = new Point(173, 195);
+            txbCantidadPorUnidad.Font = new Font("Segoe UI", 12F);
+            txbCantidadPorUnidad.Location = new Point(173, 190);
             txbCantidadPorUnidad.MaxLength = 7;
             txbCantidadPorUnidad.Name = "txbCantidadPorUnidad";
             txbCantidadPorUnidad.Size = new Size(175, 29);
-            txbCantidadPorUnidad.TabIndex = 6;
+            txbCantidadPorUnidad.TabIndex = 8;
             txbCantidadPorUnidad.TextChanged += txbCantidadPorUnidad_TextChanged;
             txbCantidadPorUnidad.KeyPress += txbCantidadPorunidad_KeyPress;
             // 
             // lblCantidadPorUnidad
             // 
             lblCantidadPorUnidad.AutoSize = true;
-            lblCantidadPorUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCantidadPorUnidad.Font = new Font("Segoe UI", 12F);
             lblCantidadPorUnidad.Location = new Point(12, 198);
             lblCantidadPorUnidad.Name = "lblCantidadPorUnidad";
             lblCantidadPorUnidad.Size = new Size(155, 21);
@@ -170,24 +171,24 @@ namespace SisUvex.Catalogos.Material
             // 
             // cboTipoMat
             // 
-            cboTipoMat.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboTipoMat.Font = new Font("Segoe UI", 12F);
             cboTipoMat.FormattingEnabled = true;
             cboTipoMat.ItemHeight = 21;
             cboTipoMat.Location = new Point(142, 55);
             cboTipoMat.Name = "cboTipoMat";
             cboTipoMat.Size = new Size(414, 29);
-            cboTipoMat.TabIndex = 0;
+            cboTipoMat.TabIndex = 2;
             cboTipoMat.TextChanged += cboTipoMat_TextChanged;
             cboTipoMat.MouseClick += cboTipoMat_MouseClick;
             // 
             // txbIdTipo
             // 
             txbIdTipo.Enabled = false;
-            txbIdTipo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdTipo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdTipo.Location = new Point(90, 55);
             txbIdTipo.Name = "txbIdTipo";
             txbIdTipo.Size = new Size(46, 29);
-            txbIdTipo.TabIndex = 20;
+            txbIdTipo.TabIndex = 1;
             txbIdTipo.TextAlign = HorizontalAlignment.Center;
             txbIdTipo.TextChanged += txbIdTipo_TextChanged;
             // 
@@ -196,7 +197,7 @@ namespace SisUvex.Catalogos.Material
             btnBuscarMatTipo.Location = new Point(566, 55);
             btnBuscarMatTipo.Name = "btnBuscarMatTipo";
             btnBuscarMatTipo.Size = new Size(57, 29);
-            btnBuscarMatTipo.TabIndex = 1;
+            btnBuscarMatTipo.TabIndex = 3;
             btnBuscarMatTipo.Text = "Buscar";
             btnBuscarMatTipo.UseVisualStyleBackColor = true;
             btnBuscarMatTipo.Click += btnBuscarMatTipo_Click;
@@ -213,18 +214,18 @@ namespace SisUvex.Catalogos.Material
             // 
             // txbCantidad
             // 
-            txbCantidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbCantidad.Font = new Font("Segoe UI", 12F);
             txbCantidad.Location = new Point(94, 160);
             txbCantidad.MaxLength = 8;
             txbCantidad.Name = "txbCantidad";
             txbCantidad.Size = new Size(153, 29);
-            txbCantidad.TabIndex = 5;
+            txbCantidad.TabIndex = 7;
             txbCantidad.KeyPress += txbCantidad_KeyPress;
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCantidad.Font = new Font("Segoe UI", 12F);
             lblCantidad.Location = new Point(12, 163);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(75, 21);
@@ -236,7 +237,7 @@ namespace SisUvex.Catalogos.Material
             btnBuscarDistribuidor.Location = new Point(566, 265);
             btnBuscarDistribuidor.Name = "btnBuscarDistribuidor";
             btnBuscarDistribuidor.Size = new Size(57, 29);
-            btnBuscarDistribuidor.TabIndex = 9;
+            btnBuscarDistribuidor.TabIndex = 13;
             btnBuscarDistribuidor.Text = "Buscar";
             btnBuscarDistribuidor.UseVisualStyleBackColor = true;
             btnBuscarDistribuidor.Click += btnBuscarDistribuidor_Click;
@@ -244,29 +245,29 @@ namespace SisUvex.Catalogos.Material
             // txbIdDistribuidor
             // 
             txbIdDistribuidor.Enabled = false;
-            txbIdDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdDistribuidor.Location = new Point(111, 265);
             txbIdDistribuidor.Name = "txbIdDistribuidor";
             txbIdDistribuidor.Size = new Size(46, 29);
-            txbIdDistribuidor.TabIndex = 27;
+            txbIdDistribuidor.TabIndex = 11;
             txbIdDistribuidor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistribuidor
             // 
-            cboDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboDistribuidor.Font = new Font("Segoe UI", 12F);
             cboDistribuidor.FormattingEnabled = true;
             cboDistribuidor.ItemHeight = 21;
             cboDistribuidor.Location = new Point(163, 265);
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(393, 29);
-            cboDistribuidor.TabIndex = 8;
+            cboDistribuidor.TabIndex = 12;
             cboDistribuidor.TextChanged += cboDistribuidor_TextChanged;
             cboDistribuidor.MouseClick += cboDistribuidor_MouseClick;
             // 
             // lblDistribuidor
             // 
             lblDistribuidor.AutoSize = true;
-            lblDistribuidor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblDistribuidor.Font = new Font("Segoe UI", 12F);
             lblDistribuidor.Location = new Point(13, 268);
             lblDistribuidor.Name = "lblDistribuidor";
             lblDistribuidor.Size = new Size(96, 21);
@@ -286,29 +287,29 @@ namespace SisUvex.Catalogos.Material
             // txbIdColor
             // 
             txbIdColor.Enabled = false;
-            txbIdColor.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdColor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdColor.Location = new Point(90, 300);
             txbIdColor.Name = "txbIdColor";
             txbIdColor.Size = new Size(46, 29);
-            txbIdColor.TabIndex = 32;
+            txbIdColor.TabIndex = 15;
             txbIdColor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboColor
             // 
             cboColor.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboColor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboColor.Font = new Font("Segoe UI", 12F);
             cboColor.FormattingEnabled = true;
             cboColor.ItemHeight = 21;
             cboColor.Location = new Point(142, 300);
             cboColor.Name = "cboColor";
             cboColor.Size = new Size(206, 29);
-            cboColor.TabIndex = 11;
+            cboColor.TabIndex = 16;
             cboColor.TextChanged += cboColor_TextChanged;
             // 
             // lblColor
             // 
             lblColor.AutoSize = true;
-            lblColor.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblColor.Font = new Font("Segoe UI", 12F);
             lblColor.Location = new Point(13, 303);
             lblColor.Name = "lblColor";
             lblColor.Size = new Size(51, 21);
@@ -337,17 +338,17 @@ namespace SisUvex.Catalogos.Material
             // 
             // txbNombreEnEtiqueta
             // 
-            txbNombreEnEtiqueta.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txbNombreEnEtiqueta.Font = new Font("Segoe UI", 12F);
             txbNombreEnEtiqueta.Location = new Point(170, 125);
             txbNombreEnEtiqueta.MaxLength = 20;
             txbNombreEnEtiqueta.Name = "txbNombreEnEtiqueta";
             txbNombreEnEtiqueta.Size = new Size(332, 29);
-            txbNombreEnEtiqueta.TabIndex = 4;
+            txbNombreEnEtiqueta.TabIndex = 6;
             // 
             // lblNombreEtiqueta
             // 
             lblNombreEtiqueta.AutoSize = true;
-            lblNombreEtiqueta.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblNombreEtiqueta.Font = new Font("Segoe UI", 12F);
             lblNombreEtiqueta.Location = new Point(12, 128);
             lblNombreEtiqueta.Name = "lblNombreEtiqueta";
             lblNombreEtiqueta.Size = new Size(152, 21);
@@ -359,7 +360,7 @@ namespace SisUvex.Catalogos.Material
             btnTodoMatTipo.Location = new Point(629, 55);
             btnTodoMatTipo.Name = "btnTodoMatTipo";
             btnTodoMatTipo.Size = new Size(57, 29);
-            btnTodoMatTipo.TabIndex = 2;
+            btnTodoMatTipo.TabIndex = 4;
             btnTodoMatTipo.Text = "Activos";
             btnTodoMatTipo.UseVisualStyleBackColor = true;
             btnTodoMatTipo.Click += btnTodoMatTipo_Click;
@@ -369,7 +370,7 @@ namespace SisUvex.Catalogos.Material
             btnTodoDistribuidor.Location = new Point(629, 265);
             btnTodoDistribuidor.Name = "btnTodoDistribuidor";
             btnTodoDistribuidor.Size = new Size(57, 29);
-            btnTodoDistribuidor.TabIndex = 10;
+            btnTodoDistribuidor.TabIndex = 14;
             btnTodoDistribuidor.Text = "Activos";
             btnTodoDistribuidor.UseVisualStyleBackColor = true;
             btnTodoDistribuidor.Click += btnTodoDistribuidor_Click;
@@ -377,17 +378,17 @@ namespace SisUvex.Catalogos.Material
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(590, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(96, 29);
-            txbId.TabIndex = 39;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblId.Font = new Font("Segoe UI", 12F);
             lblId.Location = new Point(558, 15);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
@@ -397,29 +398,29 @@ namespace SisUvex.Catalogos.Material
             // txbIdUnidad
             // 
             txbIdUnidad.Enabled = false;
-            txbIdUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            txbIdUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdUnidad.Location = new Point(432, 195);
             txbIdUnidad.Name = "txbIdUnidad";
             txbIdUnidad.Size = new Size(46, 29);
-            txbIdUnidad.TabIndex = 43;
+            txbIdUnidad.TabIndex = 9;
             txbIdUnidad.TextAlign = HorizontalAlignment.Center;
             // 
             // cboUnidad
             // 
             cboUnidad.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cboUnidad.Font = new Font("Segoe UI", 12F);
             cboUnidad.FormattingEnabled = true;
             cboUnidad.ItemHeight = 21;
             cboUnidad.Location = new Point(487, 195);
             cboUnidad.Name = "cboUnidad";
             cboUnidad.Size = new Size(199, 29);
-            cboUnidad.TabIndex = 7;
+            cboUnidad.TabIndex = 10;
             cboUnidad.TextChanged += cboUnidad_TextChanged;
             // 
             // lblUnidad
             // 
             lblUnidad.AutoSize = true;
-            lblUnidad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblUnidad.Font = new Font("Segoe UI", 12F);
             lblUnidad.Location = new Point(354, 198);
             lblUnidad.Name = "lblUnidad";
             lblUnidad.Size = new Size(63, 21);
@@ -467,6 +468,7 @@ namespace SisUvex.Catalogos.Material
             Controls.Add(lblObliNombre);
             Controls.Add(lblObliTipoMaterial);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmMaterialAñadir";
             StartPosition = FormStartPosition.CenterScreen;

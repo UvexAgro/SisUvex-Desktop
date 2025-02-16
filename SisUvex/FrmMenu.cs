@@ -10,7 +10,6 @@ using SisUvex.Catalogos.Contratista;
 using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Distribuidor;
 using SisUvex.Catalogos.Lote;
-using SisUvex.Catalogos.Cuadrilla;
 using SisUvex.Catalogos.Chofer;
 using SisUvex.Nomina;
 using SisUvex.Catalogos.Caja;
@@ -18,7 +17,6 @@ using SisUvex.Catalogos.Troque;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
 using SisUvex.Catalogos.RegistroMaterial;
-using SisUvex.Catalogos.Nomina;
 using SisUvex.Archivo.Impresoras;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Configuracion;
@@ -50,6 +48,7 @@ using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Nomina.Comedores.DiningHall;
 using SisUvex.Nomina.Comedores.DiningReports;
 using SisUvex.Nomina.Comedores.Registers.SyncRegisters;
+using SisUvex.Catalogos.WorkGroup;
 
 namespace SisUvex
 {
@@ -161,7 +160,9 @@ namespace SisUvex
 
         private void cuadrillaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCuadrillaCat cat = new FrmCuadrillaCat();
+            //FrmCuadrillaCat cat = new FrmCuadrillaCat();
+            //AbrirVentanaHijo(cat, 1);
+            FrmWorkGroupCat cat = new FrmWorkGroupCat();
             AbrirVentanaHijo(cat, 1);
         }
 

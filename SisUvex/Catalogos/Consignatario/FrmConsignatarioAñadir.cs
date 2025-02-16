@@ -93,9 +93,12 @@ namespace SisUvex.Catalogos.Consignatario
         private void SetObligatorios()
         {
             Obligatorios.Add(txbNombre);
+            Obligatorios.Add(txbIdDistribuidor);
 
             txbNombre.SetMensajeVacio("Nombre de consignatario.");
             txbNombre.SetControlRelacionado(txbNombre);
+            txbIdDistribuidor.SetMensajeVacio("Seleccionar distribuidor.");
+            txbIdDistribuidor.SetControlRelacionado(txbIdDistribuidor);
         }
         private void cboDistribuidor_MouseClick(object sender, MouseEventArgs e)
         {

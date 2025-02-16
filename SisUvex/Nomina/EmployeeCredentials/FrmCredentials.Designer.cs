@@ -131,21 +131,24 @@
             // 
             // btnAgregarListado
             // 
+            btnAgregarListado.Image = Properties.Resources.mas_16;
             btnAgregarListado.Location = new Point(240, 74);
             btnAgregarListado.Name = "btnAgregarListado";
-            btnAgregarListado.Size = new Size(113, 23);
+            btnAgregarListado.Size = new Size(25, 25);
             btnAgregarListado.TabIndex = 5;
-            btnAgregarListado.Text = "Agregar al listado";
             btnAgregarListado.UseVisualStyleBackColor = true;
             btnAgregarListado.Click += btnAgregarListado_Click;
             // 
             // btnCargarCredenciales
             // 
+            btnCargarCredenciales.Image = Properties.Resources.credencial16;
+            btnCargarCredenciales.ImageAlign = ContentAlignment.MiddleLeft;
             btnCargarCredenciales.Location = new Point(139, 111);
             btnCargarCredenciales.Name = "btnCargarCredenciales";
-            btnCargarCredenciales.Size = new Size(55, 23);
-            btnCargarCredenciales.TabIndex = 7;
+            btnCargarCredenciales.Size = new Size(66, 23);
+            btnCargarCredenciales.TabIndex = 8;
             btnCargarCredenciales.Text = "Cargar";
+            btnCargarCredenciales.TextAlign = ContentAlignment.MiddleRight;
             btnCargarCredenciales.UseVisualStyleBackColor = true;
             btnCargarCredenciales.Click += btnCargarCredenciales_Click;
             // 
@@ -172,15 +175,18 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView1.Size = new Size(661, 352);
-            dataGridView1.TabIndex = 8;
+            dataGridView1.TabIndex = 10;
             // 
             // btnRegisterAsPrinterCards
             // 
-            btnRegisterAsPrinterCards.Location = new Point(200, 111);
+            btnRegisterAsPrinterCards.Image = Properties.Resources.editIcon16;
+            btnRegisterAsPrinterCards.ImageAlign = ContentAlignment.MiddleLeft;
+            btnRegisterAsPrinterCards.Location = new Point(211, 111);
             btnRegisterAsPrinterCards.Name = "btnRegisterAsPrinterCards";
-            btnRegisterAsPrinterCards.Size = new Size(125, 23);
-            btnRegisterAsPrinterCards.TabIndex = 8;
+            btnRegisterAsPrinterCards.Size = new Size(133, 23);
+            btnRegisterAsPrinterCards.TabIndex = 9;
             btnRegisterAsPrinterCards.Text = "Registrar impresión";
+            btnRegisterAsPrinterCards.TextAlign = ContentAlignment.MiddleRight;
             btnRegisterAsPrinterCards.UseVisualStyleBackColor = true;
             btnRegisterAsPrinterCards.Click += btnRegisterAsPrinterCards_Click;
             // 
@@ -190,7 +196,7 @@
             chbSelectAll.Location = new Point(19, 115);
             chbSelectAll.Name = "chbSelectAll";
             chbSelectAll.Size = new Size(114, 19);
-            chbSelectAll.TabIndex = 6;
+            chbSelectAll.TabIndex = 7;
             chbSelectAll.Text = "Seleccionar todo";
             chbSelectAll.UseVisualStyleBackColor = true;
             chbSelectAll.CheckedChanged += chbSelectAll_CheckedChanged;
@@ -198,11 +204,12 @@
             // btnFrmSearchEmployeeId
             // 
             btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
-            btnFrmSearchEmployeeId.Location = new Point(357, 74);
+            btnFrmSearchEmployeeId.Image = Properties.Resources.buscarIcon16;
+            btnFrmSearchEmployeeId.ImageAlign = ContentAlignment.BottomRight;
+            btnFrmSearchEmployeeId.Location = new Point(267, 74);
             btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
-            btnFrmSearchEmployeeId.Size = new Size(26, 23);
-            btnFrmSearchEmployeeId.TabIndex = 65;
-            btnFrmSearchEmployeeId.Text = "...";
+            btnFrmSearchEmployeeId.Size = new Size(25, 25);
+            btnFrmSearchEmployeeId.TabIndex = 6;
             btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
             btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
             // 

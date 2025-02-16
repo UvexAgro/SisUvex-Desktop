@@ -52,6 +52,7 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             if (dt.id.IsNullOrEmpty())
             {
                 SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se encontró el empleado con el código: " + txbCodigoEmp.Text, "Datos del empleado");
                 txbCodigoEmp.Focus();
                 txbCodigoEmp.SelectAll();
             }
@@ -63,13 +64,6 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
         }
         private void btnBuscarCodigo_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
-
-            sel.OpenSelectionForm("EmployeeBasic", "Código");
-
-            if (!sel.SelectedValue.IsNullOrEmpty())
-                txbCodigoEmp.Text = sel.SelectedValue;
-
             LoadEmployeeData(txbCodigoEmp.Text);
         }
         private void nudCantidad_KeyPress(object sender, KeyPressEventArgs e)
@@ -113,6 +107,20 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             {
                 dt.SetEmployeesTable();
                 IsFirstClick = false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                txbCodigoEmp.Text = sel.SelectedValue;
+
+                LoadEmployeeData(txbCodigoEmp.Text);
             }
         }
     }

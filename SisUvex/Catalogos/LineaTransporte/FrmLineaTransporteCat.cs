@@ -21,9 +21,9 @@ namespace SisUvex.Catalogos.LineaTransporte
         private void btnAñadir_Click(object sender, EventArgs e)
         {
             FrmLineaTransporteAñadir frmAñadir = new FrmLineaTransporteAñadir(this);
-            frmAñadir.lblTitulo.Text = "Añadir lineaTransporte";
+            frmAñadir.lblTitulo.Text = "Añadir línea de transporte";
             frmAñadir.añadirModificar = true;
-            frmAñadir.Text = "Añadir lineaTransporte";
+            frmAñadir.Text = "Añadir línea de transporte";
             frmAñadir.cboActivo.SelectedIndex = 1;
             frmAñadir.UpdateEventHandler += CatalogoActualizarHijo;
             frmAñadir.txbId.Text = cls.SiguienteLineaTransporte();
@@ -94,7 +94,7 @@ namespace SisUvex.Catalogos.LineaTransporte
             if (dgvCatalogo.Rows.Count > 0)
             {
                 FrmLineaTransporteAñadir frmAñadir = new FrmLineaTransporteAñadir(this);
-                frmAñadir.lblTitulo.Text = "Modificar productor";
+                frmAñadir.lblTitulo.Text = "Modificar línea de transporte";
                 frmAñadir.cboActivo.SelectedIndex = Int32.Parse(dgvCatalogo.SelectedRows[0].Cells[0].Value.ToString());
                 frmAñadir.txbId.Text = dgvCatalogo.SelectedRows[0].Cells[1].Value.ToString();
                 frmAñadir.txbNombre.Text = dgvCatalogo.SelectedRows[0].Cells[2].Value.ToString();
@@ -105,7 +105,7 @@ namespace SisUvex.Catalogos.LineaTransporte
                 frmAñadir.txbSCAC.Text = dgvCatalogo.SelectedRows[0].Cells[7].Value.ToString();
                 frmAñadir.txbSCAAT.Text = dgvCatalogo.SelectedRows[0].Cells[8].Value.ToString();
                 frmAñadir.añadirModificar = false;
-                frmAñadir.Text = "Modificar productor";
+                frmAñadir.Text = "Modificar línea de transporte";
                 frmAñadir.UpdateEventHandler += CatalogoActualizarHijo;
 
                 frmAñadir.ShowDialog();

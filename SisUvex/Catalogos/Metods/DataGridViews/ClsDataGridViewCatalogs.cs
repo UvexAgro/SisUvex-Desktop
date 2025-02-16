@@ -15,30 +15,33 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 {
     internal class ClsDataGridViewCatalogs : ClsCatalogos
     {
+        //EN UN FUTURO CAMBIARLO POR METERLE EL FILTRO DE UNA NUEVA COLUMNA DE ACTIVOS2 DONDE SE OCULTE ESA COLUMNA Y NO TENER QUE TENER UNA SEGUNDA TABLA PARA EL CATALOGO
         public DataTable dtCatalog;
         public DataTable dtCatalogActives;
         public DataGridView dgvCatalog;
         public Button btnRemoved;
         public string queryCatalog;
+        public string idColumn = ClsObject.Column.id;
+        public string activeColumn = ClsObject.Column.active;
 
         SQLControl sql = new SQLControl();
 
         public void DeleteInDataTable(string id)
         {
-            DataRow[] rows = dtCatalog.Select($"{ClsObject.Column.id} = '{id}'");
+            DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
             if (rows.Length > 0)
             {
-                rows[0][ClsObject.Column.active] = "0";
+                rows[0][activeColumn] = "0";
             }
             dtCatalog.AcceptChanges();
         }
 
         public void RecoverInDataTable(string id)
         {
-            DataRow[] rows = dtCatalog.Select($"{ClsObject.Column.id} = '{id}'");
+            DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
             if (rows.Length > 0)
             {
-                rows[0][ClsObject.Column.active] = "1";
+                rows[0][activeColumn] = "1";
             }
             dtCatalog.AcceptChanges();
         }
@@ -47,7 +50,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         {
             if (dgvCatalog.SelectedRows.Count > 0)
             {
-                return "1" == dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value.ToString();
+                return "1" == dgvCatalog.SelectedRows[0].Cells[activeColumn].Value.ToString();
             }
             return false;
         }
@@ -70,7 +73,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
             foreach (DataRow row in dtCatalog.Rows)
             {
-                if (row[ClsObject.Column.active].ToString() == "1")
+                if (row[activeColumn].ToString() == "1")
                 {
                     dtCatalogoActivos.ImportRow(row);
                 }
@@ -100,7 +103,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
             foreach (DataRow row in dtCatalog.Rows)
             {
-                if (row[ClsObject.Column.active].ToString() == "1")
+                if (row[activeColumn].ToString() == "1")
                 {
                     dtCatalogActives.ImportRow(row);
                 }
@@ -130,7 +133,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             {
                 if (!IsActive())
                 {
-                    string id = dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
+                    string id = dgvCatalog.SelectedRows[0].Cells[idColumn].Value.ToString();
 
                     try
                     {
@@ -142,7 +145,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
                         cmd.ExecuteNonQuery();
 
-                        dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value = "1";
+                        dgvCatalog.SelectedRows[0].Cells[activeColumn].Value = "1";
 
                         RecoverInDataTable(id);
                     }
@@ -166,7 +169,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             {
                 if (IsActive())
                 {
-                    string id = dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
+                    string id = dgvCatalog.SelectedRows[0].Cells[idColumn].Value.ToString();
 
                     try
                     {
@@ -178,7 +181,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
                         cmd.ExecuteNonQuery();
 
-                        dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value = "0";
+                        dgvCatalog.SelectedRows[0].Cells[activeColumn].Value = "0";
 
                         DeleteInDataTable(id);
                     }
@@ -198,9 +201,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         }
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView)
         {
+            DgvApplyCellFormattingEvent(dataGridView, ClsObject.Column.active);
+        }
+
+        public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
+        {
             dataGridView.CellFormatting += (sender, e) =>
             {
-                if (dataGridView.Columns[e.ColumnIndex].Name == ClsObject.Column.active)
+                if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
                 {
                     if (e.Value.ToString() == "0")
                     {

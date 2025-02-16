@@ -33,6 +33,7 @@ namespace SisUvex.Archivo.Manifiesto
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifiestoCat));
             btnAñadir = new Button();
             btnModificar = new Button();
             dgvCatalogo = new DataGridView();
@@ -101,10 +102,9 @@ namespace SisUvex.Archivo.Manifiesto
             dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogo.RowHeadersVisible = false;
             dgvCatalogo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalogo.RowTemplate.Height = 25;
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogo.Size = new Size(783, 375);
-            dgvCatalogo.TabIndex = 4;
+            dgvCatalogo.TabIndex = 10;
             dgvCatalogo.CellFormatting += dgvCatalogo_CellFormatting;
             dgvCatalogo.MouseDoubleClick += dgvCatalogo_MouseDoubleClick;
             // 
@@ -113,7 +113,7 @@ namespace SisUvex.Archivo.Manifiesto
             btnEliminados.Location = new Point(171, 9);
             btnEliminados.Name = "btnEliminados";
             btnEliminados.Size = new Size(75, 23);
-            btnEliminados.TabIndex = 8;
+            btnEliminados.TabIndex = 3;
             btnEliminados.Text = "Eliminados";
             btnEliminados.UseVisualStyleBackColor = true;
             btnEliminados.Click += btnEliminados_Click;
@@ -123,7 +123,7 @@ namespace SisUvex.Archivo.Manifiesto
             btnEliminar.Location = new Point(252, 9);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
-            btnEliminar.TabIndex = 7;
+            btnEliminar.TabIndex = 4;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
@@ -133,7 +133,7 @@ namespace SisUvex.Archivo.Manifiesto
             btnRecuperar.Location = new Point(333, 9);
             btnRecuperar.Name = "btnRecuperar";
             btnRecuperar.Size = new Size(75, 23);
-            btnRecuperar.TabIndex = 6;
+            btnRecuperar.TabIndex = 5;
             btnRecuperar.Text = "Recuperar";
             btnRecuperar.UseVisualStyleBackColor = true;
             btnRecuperar.Click += btnRecuperar_Click;
@@ -143,7 +143,7 @@ namespace SisUvex.Archivo.Manifiesto
             btnImprimir.Location = new Point(518, 9);
             btnImprimir.Name = "btnImprimir";
             btnImprimir.Size = new Size(75, 23);
-            btnImprimir.TabIndex = 9;
+            btnImprimir.TabIndex = 6;
             btnImprimir.Text = "Imprimir";
             btnImprimir.UseVisualStyleBackColor = true;
             btnImprimir.Click += btnImprimir_Click;
@@ -154,7 +154,7 @@ namespace SisUvex.Archivo.Manifiesto
             dtpDate2.Location = new Point(156, 38);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
-            dtpDate2.TabIndex = 45;
+            dtpDate2.TabIndex = 8;
             // 
             // dtpDate1
             // 
@@ -162,7 +162,7 @@ namespace SisUvex.Archivo.Manifiesto
             dtpDate1.Location = new Point(64, 38);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
-            dtpDate1.TabIndex = 44;
+            dtpDate1.TabIndex = 7;
             // 
             // btnSearch
             // 
@@ -171,7 +171,7 @@ namespace SisUvex.Archivo.Manifiesto
             btnSearch.Location = new Point(239, 38);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 43;
+            btnSearch.TabIndex = 9;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -211,6 +211,7 @@ namespace SisUvex.Archivo.Manifiesto
             Controls.Add(dgvCatalogo);
             Controls.Add(btnModificar);
             Controls.Add(btnAñadir);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifiestoCat";
             Text = "Catálogo Manifiesto";
             WindowState = FormWindowState.Maximized;

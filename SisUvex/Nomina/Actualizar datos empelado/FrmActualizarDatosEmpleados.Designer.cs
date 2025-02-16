@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmActualizarDatosEmpleados));
             textBox1 = new TextBox();
             btnCargarArchivos = new Button();
             ofdExcel = new OpenFileDialog();
@@ -51,11 +52,14 @@
             // 
             // btnCargarArchivos
             // 
-            btnCargarArchivos.Location = new Point(524, 12);
+            btnCargarArchivos.Image = Properties.Resources.guardarIcon16;
+            btnCargarArchivos.ImageAlign = ContentAlignment.TopLeft;
+            btnCargarArchivos.Location = new Point(534, 12);
             btnCargarArchivos.Name = "btnCargarArchivos";
-            btnCargarArchivos.Size = new Size(70, 23);
+            btnCargarArchivos.Size = new Size(65, 24);
             btnCargarArchivos.TabIndex = 2;
             btnCargarArchivos.Text = "Cargar";
+            btnCargarArchivos.TextAlign = ContentAlignment.TopRight;
             btnCargarArchivos.UseVisualStyleBackColor = true;
             btnCargarArchivos.Click += btnAbrirArchivos_Click;
             // 
@@ -126,21 +130,28 @@
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(600, 13);
+            btnLimpiar.Image = Properties.Resources.limpiarIcon16;
+            btnLimpiar.ImageAlign = ContentAlignment.TopLeft;
+            btnLimpiar.Location = new Point(605, 12);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(70, 23);
+            btnLimpiar.Size = new Size(70, 24);
             btnLimpiar.TabIndex = 3;
             btnLimpiar.Text = "Limpiar";
+            btnLimpiar.TextAlign = ContentAlignment.TopRight;
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnExaminar
             // 
+            btnExaminar.BackgroundImageLayout = ImageLayout.None;
+            btnExaminar.Image = (Image)resources.GetObject("btnExaminar.Image");
+            btnExaminar.ImageAlign = ContentAlignment.TopLeft;
             btnExaminar.Location = new Point(448, 12);
             btnExaminar.Name = "btnExaminar";
-            btnExaminar.Size = new Size(70, 23);
+            btnExaminar.Size = new Size(80, 24);
             btnExaminar.TabIndex = 1;
             btnExaminar.Text = "Examinar";
+            btnExaminar.TextAlign = ContentAlignment.MiddleRight;
             btnExaminar.UseVisualStyleBackColor = true;
             btnExaminar.Click += btnExaminar_Click;
             // 
@@ -170,6 +181,7 @@
             Controls.Add(dataGridView);
             Controls.Add(btnCargarArchivos);
             Controls.Add(textBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmActualizarDatosEmpleados";
             Text = "Actualizar datos empleados";
             WindowState = FormWindowState.Maximized;

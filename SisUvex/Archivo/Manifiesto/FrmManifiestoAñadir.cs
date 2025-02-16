@@ -17,19 +17,19 @@ namespace SisUvex.Archivo.Manifiesto
         public FrmManifiestoAñadir(FrmManifiestoCat catalogo)
         {
             InitializeComponent();
-            ComboBoxes.Add(cboDistribuidor);
-            ComboBoxes.Add(cboConsignatario);
-            ComboBoxes.Add(cboProductor);
-            ComboBoxes.Add(cboAgenciaUS);
-            ComboBoxes.Add(cboAgenciaMX);
-            ComboBoxes.Add(cboCiudadCruce);
-            ComboBoxes.Add(cboCiudadDestino);
-            ComboBoxes.Add(cboLinea);
-            ComboBoxes.Add(cboChofer);
-            ComboBoxes.Add(cboTroque);
-            ComboBoxes.Add(cboCaja);
+            ComboBoxes.Add(cboDistributor);
+            ComboBoxes.Add(cboConsignee);
+            ComboBoxes.Add(cboGrower);
+            ComboBoxes.Add(cboAgencyUS);
+            ComboBoxes.Add(cboAgencyMX);
+            ComboBoxes.Add(cboCityCrossPoint);
+            ComboBoxes.Add(cboCityDestination);
+            ComboBoxes.Add(cboTransportLine);
+            ComboBoxes.Add(cboDriver);
+            ComboBoxes.Add(cboTruck);
+            ComboBoxes.Add(cboFreightContainer);
             SetObligatorios();
-            cls.DgvColumnas(dgvListado);
+            cls.DgvColumnas(dgvPalletList);
         }
 
         private void FrmManifiestoAñadir_Load(object sender, EventArgs e)
@@ -40,36 +40,36 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 DesactivarTextChanged();
                 cls.CargarComboBoxes(ComboBoxes);
-                cls.CboIndiceValue(cboDistribuidor, txbIdDistribuidor);
-                cls.CboIndiceValue(cboConsignatario, txbIdConsignatario);
-                cls.CboIndiceValue(cboProductor, txbIdProductor);
-                cls.CboIndiceValue(cboAgenciaMX, txbIdAgenciaMX);
-                cls.CboIndiceValue(cboAgenciaUS, txbIdAgenciaUS);
-                cls.CboIndiceValue(cboCiudadCruce, txbIdCiudadCruce);
-                cls.CboIndiceValue(cboCiudadDestino, txbIdCiudadDestino);
-                cls.CboIndiceValue(cboLinea, txbIdLinea);
-                cls.CboIndiceValue(cboTroque, txbIdTroque);
-                cls.CboIndiceValue(cboCaja, txbIdCaja);
-                cls.CboIndiceValue(cboChofer, txbIdChofer);
+                cls.CboIndiceValue(cboDistributor, txbIdDistributor);
+                cls.CboIndiceValue(cboConsignee, txbIdConsignee);
+                cls.CboIndiceValue(cboGrower, txbIdGrower);
+                cls.CboIndiceValue(cboAgencyMX, txbIdAgencyMX);
+                cls.CboIndiceValue(cboAgencyUS, txbIdAgencyUS);
+                cls.CboIndiceValue(cboCityCrossPoint, txbIdCityCrossPoint);
+                cls.CboIndiceValue(cboCityDestination, txbIdCityDestination);
+                cls.CboIndiceValue(cboTransportLine, txbIdTransportLine);
+                cls.CboIndiceValue(cboTruck, txbIdTruck);
+                cls.CboIndiceValue(cboFreightContainer, txbIdFreightContainer);
+                cls.CboIndiceValue(cboDriver, txbIdDriver);
                 ActivarTextChanged();
 
-                cls.AñadirPalletsManifiesto(dgvListado, txbId.Text);
+                cls.AñadirPalletsManifiesto(dgvPalletList, txbId.Text);
 
-                txbPosicionPal.Text = cls.ObtenerSiguientePosicion(dgvListado);
+                txbPalletPosition.Text = cls.ObtenerSiguientePosicion(dgvPalletList);
             }
             else
             {
                 cls.CargarComboBoxes(ComboBoxes);
 
             }
-            if (txbGrados.TextLength == 0) //SI EL MANIFIESTO ESTÁ VACÍO O ALGO ASÍ
+            if (txbTemperature.TextLength == 0) //SI EL MANIFIESTO ESTÁ VACÍO O ALGO ASÍ
             {
-                txbGrados.Text = "34";
-                cboGrados.SelectedIndex = 0;
-                cboMedioTransporte.SelectedIndex = 1;
-                cboSegundoMedio.SelectedIndex = 2;
+                txbTemperature.Text = "34";
+                cboTemperatureUnit.SelectedIndex = 0;
+                cboTransportVehicle.SelectedIndex = 1;
+                cboTransportType.SelectedIndex = 2;
 
-                spnHoraSalida.Text = DateTime.Now.Minute > 45 ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 55, 0).ToString("HH:mm") : DateTime.Now.AddMinutes(15 - DateTime.Now.Minute % 15).ToString("HH:mm");
+                spnHour.Text = DateTime.Now.Minute > 45 ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 55, 0).ToString("HH:mm") : DateTime.Now.AddMinutes(15 - DateTime.Now.Minute % 15).ToString("HH:mm");
             }
 
         }
@@ -104,11 +104,11 @@ namespace SisUvex.Archivo.Manifiesto
                 string man = string.Empty;
                 if (añadirModificar)
                 {
-                    man = cls.AñadirManifiesto(cboActivo.SelectedIndex.ToString(), cboTipoEmbarque.Text, txbIdDistribuidor.Text, txbIdConsignatario.Text, txbIdProductor.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdLinea.Text, txbIdTroque.Text, txbIdCaja.Text, txbIdChofer.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbSello1.Text, txbSello2.Text, txbSello3.Text, txbChismografo.Text, txbOrden.Text, txbBooking.Text, dtpFecha.Value, spnHoraSalida.Text, txbGrados.Text, cboGrados.Text, txbOperador.Text, txbEmbarcador.Text, cboMedioTransporte.Text, cboSegundoMedio.Text, chkRechazado.Checked, txbObservaciones.Text, txbPosicion.Text, txbDieselInvoice.Text, txbDieselLiters.Text, txbFitosanitario.Text);
+                    man = cls.AñadirManifiesto(cboActive.SelectedIndex.ToString(), cboManifestType.Text, txbIdDistributor.Text, txbIdConsignee.Text, txbIdGrower.Text, txbIdAgencyUS.Text, txbIdAgencyMX.Text, txbIdTransportLine.Text, txbIdTruck.Text, txbIdFreightContainer.Text, txbIdDriver.Text, txbIdCityCrossPoint.Text, txbIdCityDestination.Text, txbSeal1.Text, txbSeal2.Text, txbSeal3.Text, txbTermograph.Text, txbPurchaseOrder.Text, txbBooking.Text, dtpDate.Value, spnHour.Text, txbTemperature.Text, cboTemperatureUnit.Text, txbNameOperator.Text, txbNameShipper.Text, cboTransportVehicle.Text, cboTransportType.Text, chkRejected.Checked, txbObservations.Text, txbTermoPosition.Text, txbDieselInvoice.Text, txbDieselLiters.Text, txbPhytosanitary.Text);
 
                     cls.ProcManifestDeletePallets(man);
 
-                    cls.ProcManifestAddPallets(dgvListado, man);
+                    cls.ProcManifestAddPallets(dgvPalletList, man);
 
                     MessageBox.Show("Se ha añadido el manifiesto: "+man, "Añadir manifiesto", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -117,11 +117,11 @@ namespace SisUvex.Archivo.Manifiesto
                 }
                 else
                 {
-                    cls.ModificarManifiesto(cboActivo.SelectedIndex.ToString(), txbId.Text, txbIdDistribuidor.Text, txbIdConsignatario.Text, txbIdProductor.Text, txbIdAgenciaUS.Text, txbIdAgenciaMX.Text, txbIdLinea.Text, txbIdTroque.Text, txbIdCaja.Text, txbIdChofer.Text, txbIdCiudadCruce.Text, txbIdCiudadDestino.Text, txbSello1.Text, txbSello2.Text, txbSello3.Text, txbChismografo.Text, txbOrden.Text, txbBooking.Text, dtpFecha.Value, spnHoraSalida.Text, txbGrados.Text, cboGrados.Text, txbOperador.Text, txbEmbarcador.Text, cboMedioTransporte.Text, cboSegundoMedio.Text, chkRechazado.Checked, txbObservaciones.Text, txbPosicion.Text, txbDieselInvoice.Text, txbDieselLiters.Text, txbFitosanitario.Text);
+                    cls.ModificarManifiesto(cboActive.SelectedIndex.ToString(), txbId.Text, txbIdDistributor.Text, txbIdConsignee.Text, txbIdGrower.Text, txbIdAgencyUS.Text, txbIdAgencyMX.Text, txbIdTransportLine.Text, txbIdTruck.Text, txbIdFreightContainer.Text, txbIdDriver.Text, txbIdCityCrossPoint.Text, txbIdCityDestination.Text, txbSeal1.Text, txbSeal2.Text, txbSeal3.Text, txbTermograph.Text, txbPurchaseOrder.Text, txbBooking.Text, dtpDate.Value, spnHour.Text, txbTemperature.Text, cboTemperatureUnit.Text, txbNameOperator.Text, txbNameShipper.Text, cboTransportVehicle.Text, cboTransportType.Text, chkRejected.Checked, txbObservations.Text, txbTermoPosition.Text, txbDieselInvoice.Text, txbDieselLiters.Text, txbPhytosanitary.Text);
 
                     cls.ProcManifestDeletePallets(txbId.Text);
 
-                    cls.ProcManifestAddPallets(dgvListado, txbId.Text);
+                    cls.ProcManifestAddPallets(dgvPalletList, txbId.Text);
                     MessageBox.Show("Se ha modificado el manifiesto: " + txbId.Text, "Añadir manifiesto", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
@@ -146,31 +146,31 @@ namespace SisUvex.Archivo.Manifiesto
         }
         private void DesactivarTextChanged()
         {
-            cboDistribuidor.TextChanged -= cboDistribuidor_TextChanged;
-            cboConsignatario.TextChanged -= cboConsignatario_TextChanged;
-            cboProductor.TextChanged -= cboProductor_TextChanged;
-            cboAgenciaMX.TextChanged -= cboAgenciaMX_TextChanged;
-            cboAgenciaUS.TextChanged -= cboAgenciaUS_TextChanged;
-            cboCiudadCruce.TextChanged -= cboCiudadCruce_TextChanged;
-            cboCiudadDestino.TextChanged -= cboCiudadDestino_TextChanged;
-            cboLinea.TextChanged -= cboLinea_TextChanged;
-            cboTroque.TextChanged -= cboTroque_TextChanged;
-            cboCaja.TextChanged -= cboCaja_TextChanged;
-            cboChofer.TextChanged -= cboChofer_TextChanged;
+            cboDistributor.TextChanged -= cboDistribuidor_TextChanged;
+            cboConsignee.TextChanged -= cboConsignatario_TextChanged;
+            cboGrower.TextChanged -= cboProductor_TextChanged;
+            cboAgencyMX.TextChanged -= cboAgenciaMX_TextChanged;
+            cboAgencyUS.TextChanged -= cboAgenciaUS_TextChanged;
+            cboCityCrossPoint.TextChanged -= cboCiudadCruce_TextChanged;
+            cboCityDestination.TextChanged -= cboCiudadDestino_TextChanged;
+            cboTransportLine.TextChanged -= cboLinea_TextChanged;
+            cboTruck.TextChanged -= cboTroque_TextChanged;
+            cboFreightContainer.TextChanged -= cboCaja_TextChanged;
+            cboDriver.TextChanged -= cboChofer_TextChanged;
         }
         private void ActivarTextChanged()
         {
-            cboDistribuidor.TextChanged += cboDistribuidor_TextChanged;
-            cboConsignatario.TextChanged += cboConsignatario_TextChanged;
-            cboProductor.TextChanged += cboProductor_TextChanged;
-            cboAgenciaMX.TextChanged += cboAgenciaMX_TextChanged;
-            cboAgenciaUS.TextChanged += cboAgenciaUS_TextChanged;
-            cboCiudadCruce.TextChanged += cboCiudadCruce_TextChanged;
-            cboCiudadDestino.TextChanged += cboCiudadDestino_TextChanged;
-            cboLinea.TextChanged += cboLinea_TextChanged;
-            cboTroque.TextChanged += cboTroque_TextChanged;
-            cboCaja.TextChanged += cboCaja_TextChanged;
-            cboChofer.TextChanged += cboChofer_TextChanged;
+            cboDistributor.TextChanged += cboDistribuidor_TextChanged;
+            cboConsignee.TextChanged += cboConsignatario_TextChanged;
+            cboGrower.TextChanged += cboProductor_TextChanged;
+            cboAgencyMX.TextChanged += cboAgenciaMX_TextChanged;
+            cboAgencyUS.TextChanged += cboAgenciaUS_TextChanged;
+            cboCityCrossPoint.TextChanged += cboCiudadCruce_TextChanged;
+            cboCityDestination.TextChanged += cboCiudadDestino_TextChanged;
+            cboTransportLine.TextChanged += cboLinea_TextChanged;
+            cboTruck.TextChanged += cboTroque_TextChanged;
+            cboFreightContainer.TextChanged += cboCaja_TextChanged;
+            cboDriver.TextChanged += cboChofer_TextChanged;
         }
         private void SetObligatorios()
         {
@@ -186,12 +186,12 @@ namespace SisUvex.Archivo.Manifiesto
             }
             else
             {
-                if (!cls.PalletRepetido(dgvListado, cls.FormatoCeros(txbIdPallet.Text, "00000")))
+                if (!cls.PalletRepetido(dgvPalletList, cls.FormatoCeros(txbIdPallet.Text, "00000")))
                 {
-                    cls.AñadirPallet(dgvListado, cls.FormatoCeros(txbIdPallet.Text, "00000"), txbId.Text, cls.FormatoCeros(txbPosicionPal.Text, "00"));
-                    txbPosicionPal.Text = cls.ObtenerSiguientePosicion(dgvListado);
+                    cls.AñadirPallet(dgvPalletList, cls.FormatoCeros(txbIdPallet.Text, "00000"), txbId.Text, cls.FormatoCeros(txbPalletPosition.Text, "00"));
+                    txbPalletPosition.Text = cls.ObtenerSiguientePosicion(dgvPalletList);
 
-                    dgvListado.Sort(dgvListado.Columns["Posicion"], ListSortDirection.Ascending);
+                    dgvPalletList.Sort(dgvPalletList.Columns["Posicion"], ListSortDirection.Ascending);
                 }
             }
             txbIdPallet.Focus();
@@ -202,77 +202,77 @@ namespace SisUvex.Archivo.Manifiesto
         #region LINEA -----------------------------------------------------------------------------
         private void cboLinea_MouseClick(object sender, MouseEventArgs e)
         {
-            cls.CboPrimerClic(cboLinea);
+            cls.CboPrimerClic(cboTransportLine);
         }
         private void btnBuscarLinea_Click(object sender, EventArgs e)
         {
-            cls.BtnBuscarLinea(cboLinea);
+            cls.BtnBuscarLinea(cboTransportLine);
         }
         private void btnTodoLinea_Click(object sender, EventArgs e)
         {
-            txbIdLinea.Text = cls.BtnTodoLinea(cboLinea);
+            txbIdTransportLine.Text = cls.BtnTodoLinea(cboTransportLine);
             if (cls.ActLin)
-                btnTodoLinea.Text = "Activo";
+                btnRemovedTransportLine.Text = "Activo";
             else
-                btnTodoLinea.Text = "Todo";
+                btnRemovedTransportLine.Text = "Todo";
         }
         private void cboLinea_TextChanged(object sender, EventArgs e)
         {
-            txbIdLinea.Text = cls.CboValueDelSeleccionado(cboLinea);
+            txbIdTransportLine.Text = cls.CboValueDelSeleccionado(cboTransportLine);
         }
         #endregion
 
         private void txbIdLinea_TextChanged(object sender, EventArgs e)
         {
-            cls.CboCargarEnBlanco(cboChofer, cls.CboChofer("", "0", txbIdLinea.Text));
-            cls.CboCargarEnBlanco(cboTroque, cls.CboTroque("", "0", txbIdLinea.Text));
-            cls.CboCargarEnBlanco(cboCaja, cls.CboCaja("", "0", txbIdLinea.Text));
+            cls.CboCargarEnBlanco(cboDriver, cls.CboChofer("", "0", txbIdTransportLine.Text));
+            cls.CboCargarEnBlanco(cboTruck, cls.CboTroque("", "0", txbIdTransportLine.Text));
+            cls.CboCargarEnBlanco(cboFreightContainer, cls.CboCaja("", "0", txbIdTransportLine.Text));
         }
         private void cboChofer_TextChanged(object sender, EventArgs e)
         {
-            txbIdChofer.Text = cls.CboValueDelSeleccionado(cboChofer);
+            txbIdDriver.Text = cls.CboValueDelSeleccionado(cboDriver);
         }
 
         private void cboTroque_TextChanged(object sender, EventArgs e)
         {
-            txbIdTroque.Text = cls.CboValueDelSeleccionado(cboTroque);
+            txbIdTruck.Text = cls.CboValueDelSeleccionado(cboTruck);
         }
         private void cboCaja_TextChanged(object sender, EventArgs e)
         {
-            txbIdCaja.Text = cls.CboValueDelSeleccionado(cboCaja);
+            txbIdFreightContainer.Text = cls.CboValueDelSeleccionado(cboFreightContainer);
         }
         private void cboDistribuidor_TextChanged(object sender, EventArgs e)
         {
-            txbIdDistribuidor.Text = cls.CboValueDelSeleccionado(cboDistribuidor);
-            cls.CboManifiestoDistribuidor(txbIdDistribuidor, cboConsignatario, cboProductor, cboAgenciaUS, cboAgenciaMX, cboCiudadCruce, cboCiudadDestino);
+            txbIdDistributor.Text = cls.CboValueDelSeleccionado(cboDistributor);
+            cls.CboManifiestoDistribuidor(txbIdDistributor, cboConsignee, cboGrower, cboAgencyUS, cboAgencyMX, cboCityCrossPoint, cboCityDestination);
         }
         private void cboConsignatario_TextChanged(object sender, EventArgs e)
         {
-            txbIdConsignatario.Text = cls.CboValueDelSeleccionado(cboConsignatario);
+            txbIdConsignee.Text = cls.CboValueDelSeleccionado(cboConsignee);
         }
         private void cboProductor_TextChanged(object sender, EventArgs e)
         {
-            txbIdProductor.Text = cls.CboValueDelSeleccionado(cboProductor);
+            txbIdGrower.Text = cls.CboValueDelSeleccionado(cboGrower);
         }
 
         private void cboAgenciaUS_TextChanged(object sender, EventArgs e)
         {
-            txbIdAgenciaUS.Text = cls.CboValueDelSeleccionado(cboAgenciaUS);
+            txbIdAgencyUS.Text = cls.CboValueDelSeleccionado(cboAgencyUS);
         }
 
         private void cboAgenciaMX_TextChanged(object sender, EventArgs e)
         {
-            txbIdAgenciaMX.Text = cls.CboValueDelSeleccionado(cboAgenciaMX);
+            txbIdAgencyMX.Text = cls.CboValueDelSeleccionado(cboAgencyMX);
         }
 
         private void cboCiudadCruce_TextChanged(object sender, EventArgs e)
         {
-            txbIdCiudadCruce.Text = cls.CboValueDelSeleccionado(cboCiudadCruce);
+            txbIdCityCrossPoint.Text = cls.CboValueDelSeleccionado(cboCityCrossPoint);
         }
 
         private void cboCiudadDestino_TextChanged(object sender, EventArgs e)
         {
-            txbIdCiudadDestino.Text = cls.CboValueDelSeleccionado(cboCiudadDestino);
+            txbIdCityDestination.Text = cls.CboValueDelSeleccionado(cboCityDestination);
         }
 
         private void txbPosicion_KeyPress(object sender, KeyPressEventArgs e)
@@ -287,7 +287,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void cboTipoEmbarque_TextChanged(object sender, EventArgs e)
         {
-            txbId.Text = cls.SiguienteManifiesto(cboTipoEmbarque.Text);
+            txbId.Text = cls.SiguienteManifiesto(cboManifestType.Text);
         }
 
 
@@ -299,8 +299,8 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnBorrarPallet_Click(object sender, EventArgs e)
         {
-            cls.BorrarPallet(dgvListado);
-            txbPosicionPal.Text = cls.ObtenerSiguientePosicion(dgvListado);
+            cls.BorrarPallet(dgvPalletList);
+            txbPalletPosition.Text = cls.ObtenerSiguientePosicion(dgvPalletList);
         }
 
         private void txbIdPallet_KeyPress(object sender, KeyPressEventArgs e)
@@ -313,12 +313,12 @@ namespace SisUvex.Archivo.Manifiesto
                 }
                 else
                 {
-                    if (!cls.PalletRepetido(dgvListado, cls.FormatoCeros(txbIdPallet.Text, "00000")))
+                    if (!cls.PalletRepetido(dgvPalletList, cls.FormatoCeros(txbIdPallet.Text, "00000")))
                     {
-                        cls.AñadirPallet(dgvListado, cls.FormatoCeros(txbIdPallet.Text, "00000"), txbId.Text, cls.FormatoCeros(txbPosicionPal.Text, "00"));
-                        txbPosicionPal.Text = cls.ObtenerSiguientePosicion(dgvListado);
+                        cls.AñadirPallet(dgvPalletList, cls.FormatoCeros(txbIdPallet.Text, "00000"), txbId.Text, cls.FormatoCeros(txbPalletPosition.Text, "00"));
+                        txbPalletPosition.Text = cls.ObtenerSiguientePosicion(dgvPalletList);
 
-                        dgvListado.Sort(dgvListado.Columns["Posicion"], ListSortDirection.Ascending);
+                        dgvPalletList.Sort(dgvPalletList.Columns["Posicion"], ListSortDirection.Ascending);
                     }
                 }
                 txbIdPallet.Focus();
@@ -330,7 +330,8 @@ namespace SisUvex.Archivo.Manifiesto
         {
             if(txbId.Text != "")
             {
-                ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
                 pdf.CreatePDFManifest(txbId.Text);
                 ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
                 pdfMap.CreatePDFMaping(txbId.Text);

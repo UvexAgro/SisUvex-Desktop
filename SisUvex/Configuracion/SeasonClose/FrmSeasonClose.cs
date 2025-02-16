@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SisUvex.Archivo.CodigoEmp
+namespace SisUvex.Configuracion.SeasonClose
 {
-    public partial class FrmCodeEmp : Form
+    public partial class FrmSeasonClose : Form
     {
-        public FrmCodeEmp()
+        public FrmSeasonClose()
         {
             InitializeComponent();
+        }
+
+        private void FrmSeasonClose_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

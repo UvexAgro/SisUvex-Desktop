@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCategoriaAñadir));
             txbId = new TextBox();
             txbNombre = new TextBox();
             lblNombre = new Label();
@@ -49,7 +50,7 @@
             txbId.MaxLength = 2;
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 55;
+            txbId.TabIndex = 1;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbNombre
@@ -59,7 +60,7 @@
             txbNombre.MaxLength = 15;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(294, 29);
-            txbNombre.TabIndex = 52;
+            txbNombre.TabIndex = 2;
             // 
             // lblNombre
             // 
@@ -106,7 +107,7 @@
             btnAceptar.Location = new Point(229, 118);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 66;
+            btnAceptar.TabIndex = 3;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -116,7 +117,7 @@
             btnCancelar.Location = new Point(310, 118);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 67;
+            btnCancelar.TabIndex = 4;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -130,7 +131,7 @@
             cboActivo.Location = new Point(339, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 69;
+            cboActivo.TabIndex = 0;
             // 
             // lblActivo
             // 
@@ -179,6 +180,7 @@
             Controls.Add(lblActivo);
             Controls.Add(label2);
             Controls.Add(lblId);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmCategoriaAñadir";
             Text = "Añadir categoría";
             ResumeLayout(false);

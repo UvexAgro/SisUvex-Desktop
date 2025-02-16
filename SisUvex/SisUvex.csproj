@@ -111,8 +111,6 @@
     <Compile Update="Catalogos\Consignatario\FrmConsignatarioCat.cs" />
     <Compile Update="Catalogos\Contratista\FrmContratistaAñadir.cs" />
     <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
-    <Compile Update="Catalogos\Cuadrilla\FrmCuadrillaAñadir.cs" />
-    <Compile Update="Catalogos\Cuadrilla\FrmCuadrillaCat.cs" />
     <Compile Update="Catalogos\Distribuidor\FrmDistribuidorAñadir.cs" />
     <Compile Update="Catalogos\Distribuidor\FrmDistribuidorCat.cs" />
     <Compile Update="Catalogos\LineaTransporte\FrmLineaTransporteAñadir.cs" />

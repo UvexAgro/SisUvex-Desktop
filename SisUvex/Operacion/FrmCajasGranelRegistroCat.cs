@@ -48,10 +48,14 @@ namespace SisUvex.Operacion
 
         private void dtpFecha_ValueChanged(object sender, EventArgs e)
         {
-            dgvCatalogo.DataSource = cls.CatalogoActivos();
         }
 
         private void FrmCajasGranelRegistroCat_Load(object sender, EventArgs e)
+        {
+            dgvCatalogo.DataSource = cls.CatalogoActivos();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             dgvCatalogo.DataSource = cls.CatalogoActivos();
         }
