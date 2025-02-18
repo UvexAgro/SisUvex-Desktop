@@ -145,7 +145,7 @@ namespace SisUvex.Archivo.Manifiesto
             Paragraph manifestParagraph = new Paragraph("MANIFIESTO: ")
                 .Add(new Text(queryManifest.manifestNumber).SetFontColor(ColorConstants.RED).SetFont(boldFont))
                 .Add("\n")
-                .Add(queryManifest.manifestDate.ToString("dd 'de' MMMM 'de' yyyy"))
+                .Add(queryManifest.manifestDate?.ToString("dd 'de' MMMM 'de' yyyy"))
                 .Add("\n")
                 .Add("Hora de salida: ")
                 .Add(queryManifest.manifestShipmentTime.ToString())
@@ -534,7 +534,7 @@ namespace SisUvex.Archivo.Manifiesto
             if (queryManifest.driverBirthday != null)
             {
                 carrierDriverBirthdayParagraph
-                    .Add(queryManifest.driverBirthday.ToString("yyyy-MMMM-dd"))
+                    .Add(queryManifest.driverBirthday?.ToString("yyyy-MMMM-dd"))
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                     .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                     .SetFont(font);

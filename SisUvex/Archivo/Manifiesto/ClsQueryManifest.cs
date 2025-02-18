@@ -14,114 +14,114 @@ namespace SisUvex.Archivo.Manifiesto
 
         SQLControl sql = new SQLControl();
         //Datos generales de Manifiesto
-        public string manifestNumber { get; set; }
-        public DateTime manifestDate { get; set; }
-        public TimeSpan manifestShipmentTime { get; set; }
-        public string manifestSeal1 { get; set; }
-        public string manifestSeal2 { get; set; }
-        public string manifestSeal3 { get; set; }
-        public string manifestThermometer { get; set; }
-        public string manifestThermometerPosition { get; set; }
-        public string manifestPO { get; set; }
-        public string manifestBooking { get; set; }
-        public string manifestLiftDriver { get; set; }
-        public string manifestScannedBy { get; set; }
-        public string manifestVehiculeType { get; set; }
-        public string manifestTransportPlatformType { get; set; }
-        public string manifestStatus { get; set; }
-        public string manifestComments { get; set; }
+        public string? manifestNumber { get; set; }
+        public DateTime? manifestDate { get; set; }
+        public TimeSpan? manifestShipmentTime { get; set; }
+        public string? manifestSeal1 { get; set; }
+        public string? manifestSeal2 { get; set; }
+        public string? manifestSeal3 { get; set; }
+        public string? manifestThermometer { get; set; }
+        public string? manifestThermometerPosition { get; set; }
+        public string? manifestPO { get; set; }
+        public string? manifestBooking { get; set; }
+        public string? manifestLiftDriver { get; set; }
+        public string? manifestScannedBy { get; set; }
+        public string? manifestVehiculeType { get; set; }
+        public string? manifestTransportPlatformType { get; set; }
+        public string? manifestStatus { get; set; }
+        public string? manifestComments { get; set; }
 
 
         //Datos de Embarcador
-        public string shipperId { get; set; }
-        public string shipperName { get; set; }
-        public string shipperAddress { get; set; }
-        public string shipperCity { get; set; }
-        public string shipperRFC { get; set; }
-        public string shipperPhone { get; set; }
-        public string shipperGGN { get; set; }
-        public string shipperLogo { get; set; }
+        public string? shipperId { get; set; }
+        public string? shipperName { get; set; }
+        public string? shipperAddress { get; set; }
+        public string? shipperCity { get; set; }
+        public string? shipperRFC { get; set; }
+        public string? shipperPhone { get; set; }
+        public string? shipperGGN { get; set; }
+        public string? shipperLogo { get; set; }
 
         //Datos de Distribuidor
-        public string distributorId { get; set; }
-        public string distributorName { get; set; }
-        public string distributorAddress { get; set; }
-        public string distributorCity { get; set; }
-        public string distributorTAXID { get; set; }
-        public string distributorPhone { get; set; }
-        public string distributorCountry { get; set; }
-        public string distributorShortName { get; set; }
+        public string? distributorId { get; set; }
+        public string? distributorName { get; set; }
+        public string? distributorAddress { get; set; }
+        public string? distributorCity { get; set; }
+        public string? distributorTAXID { get; set; }
+        public string? distributorPhone { get; set; }
+        public string? distributorCountry { get; set; }
+        public string? distributorShortName { get; set; }
 
         //Datos de Linea de Transporte
-        public string carrierId { get; set; }
-        public string carrierName { get; set; }
-        public string carrierSCAC { get; set; }
-        public string carrierSCAAT { get; set; }
+        public string? carrierId { get; set; }
+        public string? carrierName { get; set; }
+        public string? carrierSCAC { get; set; }
+        public string? carrierSCAAT { get; set; }
 
         //Datos de troque
-        public string truckId { get; set; }
-        public string truckNoEco { get; set; }
-        public string truckPlateUS { get; set; }
-        public string truckPlateMX { get; set; }
-        public string truckBrand { get; set; }
-        public string truckModel { get; set; }
+        public string? truckId { get; set; }
+        public string? truckNoEco { get; set; }
+        public string? truckPlateUS { get; set; }
+        public string? truckPlateMX { get; set; }
+        public string? truckBrand { get; set; }
+        public string? truckModel { get; set; }
 
         //Datos de refrigeracion
-        public string thermoId { get; set; }
-        public string thermoNoEco { get; set; }
-        public string thermoPlateUS { get; set; }
-        public string thermoPlateMX { get; set; }
-        public string thermoTemperature { get; set; }
-        public string thermoUnitTemperature { get; set; }
-        public string thermoLength { get; set; }
-        public string thermoType { get; set; }
+        public string? thermoId { get; set; }
+        public string? thermoNoEco { get; set; }
+        public string? thermoPlateUS { get; set; }
+        public string? thermoPlateMX { get; set; }
+        public string? thermoTemperature { get; set; }
+        public string? thermoUnitTemperature { get; set; }
+        public string? thermoLength { get; set; }
+        public string? thermoType { get; set; }
 
         //Datos de chofer
-        public string driverId { get; set; }
-        public string driverName { get; set; }
-        public string driverLicense { get; set; }
-        public string driverVisa { get; set; }
-        public DateTime driverBirthday { get; set; }
+        public string? driverId { get; set; }
+        public string? driverName { get; set; }
+        public string? driverLicense { get; set; }
+        public string? driverVisa { get; set; }
+        public DateTime? driverBirthday { get; set; }
 
         //Datos Aduana Mexicana
-        public string customMXId { get; set; }
-        public string customMXName { get; set; }
-        public string customMXAddress { get; set; }
-        public string customMXCity { get; set; }
-        public string customMXCountry { get; set; }
-        public string customMXRFC { get; set; }
+        public string? customMXId { get; set; }
+        public string? customMXName { get; set; }
+        public string? customMXAddress { get; set; }
+        public string? customMXCity { get; set; }
+        public string? customMXCountry { get; set; }
+        public string? customMXRFC { get; set; }
 
         //Datos Aduana Americana
-        public string customUSId { get; set; }
-        public string customUSName { get; set; }
-        public string customUSAddress { get; set; }
-        public string customUSCity { get; set; }
-        public string customUSCountry { get; set; }
-        public string customUSRFC { get; set; }
+        public string? customUSId { get; set; }
+        public string? customUSName { get; set; }
+        public string? customUSAddress { get; set; }
+        public string? customUSCity { get; set; }
+        public string? customUSCountry { get; set; }
+        public string? customUSRFC { get; set; }
 
         //Puerto de cruce
-        public string idPort { get; set; }
-        public string vNamePort { get; set; }
-        public string vStatePort { get; set; }
-        public string vCountryPort { get; set; }
+        public string? idPort { get; set; }
+        public string? vNamePort { get; set; }
+        public string? vStatePort { get; set; }
+        public string? vCountryPort { get; set; }
 
         //Entry port
-        public string idEntryPort { get; set; }
-        public string vNameEntryPort { get; set; }
-        public string vStateEntryPort { get; set; }
-        public string vCountryEntryPort { get; set; }
+        public string? idEntryPort { get; set; }
+        public string? vNameEntryPort { get; set; }
+        public string? vStateEntryPort { get; set; }
+        public string? vCountryEntryPort { get; set; }
 
         //Datos consignatario
-        public string consigneeId { get; set; }
-        public string consigneeName { get; set; }
-        public string consigneeAddress { get; set; }
-        public string consigneeCity { get; set; }
-        public string consigneeTAXID { get; set; }
-        public string consigneePhone { get; set; }
-        public string consigneeCountry { get; set; }
-        public string consigneeStatus { get; set; }
-        public DataTable DetalleCarga { get; set; }
-        public DataTable TotalesCarga { get; set; }
+        public string? consigneeId { get; set; }
+        public string? consigneeName { get; set; }
+        public string? consigneeAddress { get; set; }
+        public string? consigneeCity { get; set; }
+        public string? consigneeTAXID { get; set; }
+        public string? consigneePhone { get; set; }
+        public string? consigneeCountry { get; set; }
+        public string? consigneeStatus { get; set; }
+        public DataTable? DetalleCarga { get; set; }
+        public DataTable? TotalesCarga { get; set; }
 
         public ClsQueryManifest()
         {
@@ -194,7 +194,10 @@ namespace SisUvex.Archivo.Manifiesto
                     this.driverName = dr["Conductor"].ToString();
                     this.driverLicense = dr["dri Licencia"].ToString();
                     this.driverVisa = dr["dri Visa"].ToString();
-                    this.driverBirthday = Convert.ToDateTime(dr["dri Nacimiento"]);
+                    if (DateTime.TryParse(dr["dri Nacimiento"].ToString(), out DateTime driverBirthday))
+                    {
+                        this.driverBirthday = driverBirthday;
+                    }
                     this.customMXId = dr["idMXAg"].ToString();
                     this.customMXName = dr["Agencia nacional"].ToString();
                     this.customMXAddress = dr["agMX Direccion"].ToString();
@@ -232,7 +235,7 @@ namespace SisUvex.Archivo.Manifiesto
             finally
             {
                 sql.CloseConectionWrite();
-            }   
+            }
         }
 
         public void GetManifestDetailData(string manifestNumber)

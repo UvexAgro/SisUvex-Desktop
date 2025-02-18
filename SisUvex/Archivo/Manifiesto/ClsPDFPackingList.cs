@@ -128,7 +128,7 @@ namespace SisUvex.Archivo.Manifiesto
             Paragraph manifestParagraph = new Paragraph("PK LIST: ")
                 .Add(new Text(queryManifest.manifestNumber).SetFontColor(ColorConstants.RED).SetFont(boldFont))
                 .Add("\n")
-                .Add(queryManifest.manifestDate.ToString("dd 'de' MMMM 'de' yyyy"))
+                .Add(queryManifest.manifestDate?.ToString("dd 'de' MMMM 'de' yyyy"))
                 .Add("\n")
                 .Add("Hora de salida: ")
                 .Add(queryManifest.manifestShipmentTime.ToString())

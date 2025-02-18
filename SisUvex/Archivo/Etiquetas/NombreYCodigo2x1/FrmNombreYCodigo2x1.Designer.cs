@@ -39,6 +39,7 @@
             btnBuscarCodigo = new Button();
             lblApellido = new Label();
             btnSelectEmployeeFrm = new Button();
+            lblApellido2 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
             // 
@@ -70,8 +71,9 @@
             lblNombre.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
             lblNombre.Location = new Point(186, 9);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(0, 25);
+            lblNombre.Size = new Size(17, 25);
             lblNombre.TabIndex = 19;
+            lblNombre.Text = ".";
             // 
             // nudCantidad
             // 
@@ -134,8 +136,9 @@
             lblApellido.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
             lblApellido.Location = new Point(186, 34);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(0, 25);
+            lblApellido.Size = new Size(17, 25);
             lblApellido.TabIndex = 28;
+            lblApellido.Text = ".";
             // 
             // btnSelectEmployeeFrm
             // 
@@ -149,11 +152,22 @@
             btnSelectEmployeeFrm.UseVisualStyleBackColor = true;
             btnSelectEmployeeFrm.Click += btnSelectEmployeeFrm_Click;
             // 
+            // lblApellido2
+            // 
+            lblApellido2.AutoSize = true;
+            lblApellido2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
+            lblApellido2.Location = new Point(186, 60);
+            lblApellido2.Name = "lblApellido2";
+            lblApellido2.Size = new Size(17, 25);
+            lblApellido2.TabIndex = 29;
+            lblApellido2.Text = ".";
+            // 
             // FrmNombreYCodigo2x1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(525, 244);
+            Controls.Add(lblApellido2);
             Controls.Add(lblApellido);
             Controls.Add(lblCantidad);
             Controls.Add(btnImprimir);
@@ -188,5 +202,6 @@
         private Label lblApellido;
         private Button button1;
         private Button btnSelectEmployeeFrm;
+        private Label lblApellido2;
     }
 }
