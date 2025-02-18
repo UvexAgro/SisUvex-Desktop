@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Archivo\Reimprimir\**" />
+    <EmbeddedResource Remove="Archivo\Reimprimir\**" />
+    <None Remove="Archivo\Reimprimir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\DESERTLogo.png" />
     <None Remove="Resources\UVEXLogo.png" />
   </ItemGroup>
@@ -165,9 +171,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Archivo\Reimprimir\" />
   </ItemGroup>
 
 </Project>

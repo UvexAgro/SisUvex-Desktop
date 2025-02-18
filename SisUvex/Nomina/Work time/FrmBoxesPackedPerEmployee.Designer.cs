@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmBoxesPackedPerEmployee));
             dgvCatalog = new DataGridView();
             lblTitle = new Label();
             lblSubTitle = new Label();
@@ -70,7 +71,6 @@
             dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvCatalog.RowTemplate.Height = 25;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 396);
             dgvCatalog.TabIndex = 24;
@@ -104,6 +104,7 @@
             Controls.Add(lblSubTitle);
             Controls.Add(lblTitle);
             Controls.Add(dgvCatalog);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmBoxesPackedPerEmployee";
             Text = "Cajas empacadas por empleados";
             Load += FrmBoxesPackedPerEmployee_Load;

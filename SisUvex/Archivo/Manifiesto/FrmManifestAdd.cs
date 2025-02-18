@@ -31,7 +31,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void FrmManifestAdd_Load(object sender, EventArgs e)
         {
-
+            cls.BeginFormAdd();
         }
 
         private void chbRemovedDistributor_CheckedChanged(object sender, EventArgs e)

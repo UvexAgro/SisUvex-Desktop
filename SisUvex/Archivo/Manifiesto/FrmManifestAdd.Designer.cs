@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestAdd));
             chkBoxPackingList = new CheckBox();
             btnPrintManifest = new Button();
@@ -277,14 +277,14 @@
             dgvPalletList.BackgroundColor = SystemColors.ControlLightLight;
             dgvPalletList.BorderStyle = BorderStyle.Fixed3D;
             dgvPalletList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvPalletList.EnableHeadersVisualStyles = false;
             dgvPalletList.ImeMode = ImeMode.NoControl;
             dgvPalletList.Location = new Point(448, 51);
@@ -292,14 +292,14 @@
             dgvPalletList.Name = "dgvPalletList";
             dgvPalletList.ReadOnly = true;
             dgvPalletList.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPalletList.Size = new Size(347, 594);
@@ -527,7 +527,6 @@
             // 
             // cboTransportType
             // 
-            cboTransportType.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportType.Font = new Font("Microsoft Sans Serif", 9F);
             cboTransportType.FormattingEnabled = true;
             cboTransportType.Items.AddRange(new object[] { "", "TRAILER", "CAJA REFRIGERADA", "CONTENEDOR", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
@@ -549,7 +548,6 @@
             // 
             // cboTransportVehicle
             // 
-            cboTransportVehicle.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportVehicle.Font = new Font("Microsoft Sans Serif", 9F);
             cboTransportVehicle.FormattingEnabled = true;
             cboTransportVehicle.Items.AddRange(new object[] { "", "TRAILER", "CONTENEDOR", "CAJA REFRIGERADA", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
@@ -606,6 +604,7 @@
             // 
             // cboFreightContainer
             // 
+            cboFreightContainer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
             cboFreightContainer.FormattingEnabled = true;
             cboFreightContainer.ItemHeight = 15;
@@ -636,6 +635,7 @@
             // 
             // cboTruck
             // 
+            cboTruck.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTruck.Font = new Font("Microsoft Sans Serif", 9F);
             cboTruck.FormattingEnabled = true;
             cboTruck.ItemHeight = 15;
@@ -667,6 +667,7 @@
             // 
             // cboDriver
             // 
+            cboDriver.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDriver.Font = new Font("Microsoft Sans Serif", 9F);
             cboDriver.FormattingEnabled = true;
             cboDriver.ItemHeight = 15;
@@ -760,6 +761,7 @@
             // 
             // cboDistributor
             // 
+            cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDistributor.Font = new Font("Microsoft Sans Serif", 9F);
             cboDistributor.FormattingEnabled = true;
             cboDistributor.ItemHeight = 15;
@@ -803,6 +805,7 @@
             // 
             // cboConsignee
             // 
+            cboConsignee.DropDownStyle = ComboBoxStyle.DropDownList;
             cboConsignee.Font = new Font("Microsoft Sans Serif", 9F);
             cboConsignee.FormattingEnabled = true;
             cboConsignee.ItemHeight = 15;
@@ -894,6 +897,7 @@
             // 
             // cboCityDestination
             // 
+            cboCityDestination.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
             cboCityDestination.FormattingEnabled = true;
             cboCityDestination.ItemHeight = 15;
@@ -925,6 +929,7 @@
             // 
             // cboCityCrossPoint
             // 
+            cboCityCrossPoint.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
             cboCityCrossPoint.FormattingEnabled = true;
             cboCityCrossPoint.ItemHeight = 15;
@@ -956,6 +961,7 @@
             // 
             // cboGrower
             // 
+            cboGrower.DropDownStyle = ComboBoxStyle.DropDownList;
             cboGrower.Font = new Font("Microsoft Sans Serif", 9F);
             cboGrower.FormattingEnabled = true;
             cboGrower.ItemHeight = 15;
@@ -987,6 +993,7 @@
             // 
             // cboAgencyUS
             // 
+            cboAgencyUS.DropDownStyle = ComboBoxStyle.DropDownList;
             cboAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
             cboAgencyUS.FormattingEnabled = true;
             cboAgencyUS.ItemHeight = 15;
@@ -1018,6 +1025,7 @@
             // 
             // cboAgencyMX
             // 
+            cboAgencyMX.DropDownStyle = ComboBoxStyle.DropDownList;
             cboAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
             cboAgencyMX.FormattingEnabled = true;
             cboAgencyMX.ItemHeight = 15;
@@ -1114,6 +1122,7 @@
             // 
             // cboTransportLine
             // 
+            cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
             cboTransportLine.FormattingEnabled = true;
             cboTransportLine.ItemHeight = 15;

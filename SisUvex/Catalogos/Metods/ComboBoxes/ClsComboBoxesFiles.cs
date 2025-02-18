@@ -211,6 +211,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.TransportLine.Cbo:
                     queryDataTable = ClsObject.TransportLine.QueryCbo;
                     break;
+                case ClsObject.FreightContainer.Cbo:
+                    queryDataTable = ClsObject.FreightContainer.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
