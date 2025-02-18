@@ -145,7 +145,7 @@ namespace SisUvex.Archivo.Manifiesto
             Paragraph manifestParagraph = new Paragraph("MANIFIESTO: ")
                 .Add(new Text(queryManifest.manifestNumber).SetFontColor(ColorConstants.RED).SetFont(boldFont))
                 .Add("\n")
-                .Add(queryManifest.manifestDate.ToString("dd 'de' MMMM 'de' yyyy"))
+                .Add(queryManifest.manifestDate?.ToString("dd 'de' MMMM 'de' yyyy"))
                 .Add("\n")
                 .Add("Hora de salida: ")
                 .Add(queryManifest.manifestShipmentTime.ToString())
@@ -267,29 +267,29 @@ namespace SisUvex.Archivo.Manifiesto
 
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
-            Paragraph consigneNameParagraph = new Paragraph(queryManifest.consigneeName)
+            Paragraph consigneNameParagraph = new Paragraph(queryManifest.consigneeName ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(boldFont);
 
             // Crear nuevos párrafos para la dirección, la ciudad y el RFC del embarcador con un tamaño de fuente menor
-            Paragraph consigneAddressParagraph = new Paragraph(queryManifest.consigneeAddress)
+            Paragraph consigneAddressParagraph = new Paragraph(queryManifest.consigneeAddress ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph consigneCityParagraph = new Paragraph(queryManifest.consigneeCity)
+            Paragraph consigneCityParagraph = new Paragraph(queryManifest.consigneeCity ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            Paragraph consigneCountryParagraph = new Paragraph(queryManifest.consigneeCountry)
+            Paragraph consigneCountryParagraph = new Paragraph(queryManifest.consigneeCountry ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
 
-            Paragraph consigneRFCParagraph = new Paragraph(queryManifest.consigneeTAXID)
+            Paragraph consigneRFCParagraph = new Paragraph(queryManifest.consigneeTAXID ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
@@ -355,18 +355,18 @@ namespace SisUvex.Archivo.Manifiesto
             tableCustoms.AddCell(customUSTitleCell);
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
-            Paragraph customMXNameParagraph = new Paragraph(queryManifest.customMXName)
+            Paragraph customMXNameParagraph = new Paragraph(queryManifest.customMXName ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(boldFont);
 
             // Crear nuevos párrafos para la dirección, la ciudad y el RFC del embarcador con un tamaño de fuente menor
-            Paragraph customMXAddressParagraph = new Paragraph(queryManifest.customMXAddress)
+            Paragraph customMXAddressParagraph = new Paragraph(queryManifest.customMXAddress ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            string MXCity = $"{queryManifest.customMXCity}, {queryManifest.customMXCountry}".Trim(',', ' ');
+            string MXCity = $"{queryManifest.customMXCity}, {queryManifest.customMXCountry}".Trim(',', ' ') ?? "";
             Paragraph customMXCityParagraph = new Paragraph(MXCity)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
@@ -377,7 +377,7 @@ namespace SisUvex.Archivo.Manifiesto
             //    .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
             //    .SetFont(font);
 
-            Paragraph customMXRFCParagraph = new Paragraph(queryManifest.customMXRFC)
+            Paragraph customMXRFCParagraph = new Paragraph(queryManifest.customMXRFC ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
@@ -396,18 +396,18 @@ namespace SisUvex.Archivo.Manifiesto
             tableCustoms.AddCell(customMXCell);
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
-            Paragraph customUSNameParagraph = new Paragraph(queryManifest.customUSName)
+            Paragraph customUSNameParagraph = new Paragraph(queryManifest.customUSName ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 14
                 .SetFont(boldFont);
 
             // Crear nuevos párrafos para la dirección, la ciudad y el RFC del embarcador con un tamaño de fuente menor
-            Paragraph customUSAddressParagraph = new Paragraph(queryManifest.customUSAddress)
+            Paragraph customUSAddressParagraph = new Paragraph(queryManifest.customUSAddress ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
 
-            string USCity = $"{queryManifest.customUSCity}, {queryManifest.customUSCountry}".Trim(',', ' ');
+            string USCity = $"{queryManifest.customUSCity}, {queryManifest.customUSCountry}".Trim(',', ' ') ?? "";
 
             Paragraph customUSCityParagraph = new Paragraph(USCity)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
@@ -419,7 +419,7 @@ namespace SisUvex.Archivo.Manifiesto
             //    .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
             //    .SetFont(font);
 
-            Paragraph customUSRFCParagraph = new Paragraph(queryManifest.customUSRFC)
+            Paragraph customUSRFCParagraph = new Paragraph(queryManifest.customUSRFC ?? "")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
@@ -536,7 +536,7 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 Paragraph carrierDriverBirthdayParagraph = new Paragraph("Fecha de nacimiento: ");
                 carrierDriverBirthdayParagraph
-                    .Add(queryManifest.driverBirthday.ToString("yyyy-MMMM-dd"))
+                    .Add(queryManifest.driverBirthday?.ToString("yyyy-MMMM-dd"))
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                     .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                     .SetFont(font);

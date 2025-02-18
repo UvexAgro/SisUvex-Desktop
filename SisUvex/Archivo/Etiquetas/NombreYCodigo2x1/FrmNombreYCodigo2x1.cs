@@ -40,9 +40,9 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
 
         private void ImprimirEtiquetaEmpleado()
         {
-            if (cls.DatosEmpleado(ref lblNombre, ref lblApellido, ref txbCodigoEmp))
+            if (cls.DatosEmpleado(ref lblNombre, ref lblApellido, ref lblApellido2, ref txbCodigoEmp))
             {
-                cls.ImprimirCajaEmpleado(txbCodigoEmp.Text, Convert.ToInt32(nudCantidad.Value), lblNombre.Text, lblApellido.Text);
+                cls.ImprimirCajaEmpleado(txbCodigoEmp.Text, Convert.ToInt32(nudCantidad.Value), lblNombre.Text, lblApellido.Text, lblApellido2.Text);
             }
             else
             {
@@ -57,10 +57,11 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
 
         private void BuscarEmpleadoCodigo()
         {
-            if (!cls.DatosEmpleado(ref lblNombre, ref lblApellido, ref txbCodigoEmp))
+            if (!cls.DatosEmpleado(ref lblNombre, ref lblApellido, ref lblApellido2, ref txbCodigoEmp))
             {
                 lblNombre.Text = string.Empty;
                 lblApellido.Text = string.Empty;
+                lblApellido2.Text = string.Empty;
 
                 MessageBox.Show("No se encontró el empleado con el código: " + txbCodigoEmp.Text, "Datos del empleado");
 
@@ -93,6 +94,10 @@ namespace SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1
         private void FrmNombreYCodigo2x1_Load(object sender, EventArgs e)
         {
             ClsConfPrinter.Leer();
+
+            lblApellido.Text = string.Empty;
+            lblApellido2.Text = string.Empty;
+            lblNombre.Text = string.Empty;
         }
 
         private void txbCodigoEmp_Enter(object sender, EventArgs e)

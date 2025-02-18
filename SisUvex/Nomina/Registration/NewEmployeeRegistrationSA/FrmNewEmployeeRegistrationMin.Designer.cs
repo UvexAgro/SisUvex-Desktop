@@ -67,7 +67,6 @@
             txbLastNamePat.Name = "txbLastNamePat";
             txbLastNamePat.Size = new Size(219, 23);
             txbLastNamePat.TabIndex = 2;
-            txbLastNamePat.Text = "LIMON";
             // 
             // txbLastNameMat
             // 
@@ -76,7 +75,6 @@
             txbLastNameMat.Name = "txbLastNameMat";
             txbLastNameMat.Size = new Size(219, 23);
             txbLastNameMat.TabIndex = 3;
-            txbLastNameMat.Text = "SOLANO";
             // 
             // txbName
             // 
@@ -85,7 +83,6 @@
             txbName.Name = "txbName";
             txbName.Size = new Size(219, 23);
             txbName.TabIndex = 4;
-            txbName.Text = "ANGEL DANIEL";
             // 
             // label1
             // 
@@ -155,7 +152,6 @@
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(95, 23);
             txbIdEmployee.TabIndex = 1;
-            txbIdEmployee.Text = "MD0001";
             // 
             // dtpDateRegister
             // 

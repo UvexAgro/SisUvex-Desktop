@@ -18,13 +18,13 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
         SQLControl sql = new SQLControl();
         private string? _impresoraNombre = null;
 
-        public bool DatosEmpleado (ref Label lblNombre, ref Label lblApellido, ref TextBox txbIdEmpleado)
+        public bool DatosEmpleado (ref Label lblNombre, ref Label lblApellido, ref Label lblApellido2, ref TextBox txbIdEmpleado)
         {            
             try
             {
                 sql.OpenConectionWrite();
                 DataTable dt = new DataTable();
-                SqlCommand cmd = new SqlCommand($"SELECT id_employee AS 'Código', CONCAT(v_lastNamePat,' ',v_lastNameMat) AS 'Apellidos', v_name AS 'Nombre' FROM Nom_Employees WHERE id_employee = @codigo", sql.cnn);
+                SqlCommand cmd = new SqlCommand($"SELECT id_employee AS 'Código', v_lastNamePat AS 'Apellido', v_lastNameMat AS 'Apellido2', v_name AS 'Nombre' FROM Nom_Employees WHERE id_employee = @codigo", sql.cnn);
                 cmd.Parameters.AddWithValue("@codigo", txbIdEmpleado.Text);
 
                 SqlDataReader rd = cmd.ExecuteReader();
@@ -33,8 +33,9 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
                 {
                     lblNombre.Text = rd["Nombre"].ToString();
 
-                    lblApellido.Text = rd["Apellidos"].ToString();
+                    lblApellido.Text = rd["Apellido"].ToString();
 
+                    lblApellido2.Text = rd["Apellido2"].ToString();
 
                     txbIdEmpleado.Text = FormatoCeros(rd["Código"].ToString(),"000000");
 
@@ -54,7 +55,7 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
             }
         }
 
-        public string ImprimirSuperString(string codigo, int cantidad, string nombre, string apellido)
+        public string ImprimirSuperString(string codigo, int cantidad, string nombre, string apellido, string apellido2)
         {
             string superString = "";
             cantidad = (int)Math.Ceiling(cantidad / 2.0);
@@ -70,6 +71,7 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
                     $"^CF0,30\r\n" +
                     $"^FO185,70^FD{nombre}^FS\r\n" +
                     $"^FO185,110^FD{apellido}^FS\r\n" +
+                    $"^FO185,110^FD{apellido2}^FS\r\n" +
                     $"\r\n" +
                     $"^FX QR derecho\r\n" +
                     $"^FO490,35^BY2,2.0,10^BQN,2,5^FD230{codigo}^FS\r\n" +
@@ -77,21 +79,21 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
                     $"\r\n" +
                     $"^FX Nombre derecho\r\n" +
                     $"^CF0,30\r\n" +
-                    $"^FO620,70^FD{nombre}^FS\r\n" +
-                    $"^FO620,110^FD{apellido}^FS\r\n" +
+                    $"^FO620,50^FD{nombre}^FS\r\n" +
+                    $"^FO620,90^FD{apellido}^FS\r\n" +
+                    $"^FO620,130^FD{apellido2}^FS\r\n" +
                     $"^XZ\r\n";
-
 
                 superString += print;
             }
             return superString;
         }
 
-        public void ImprimirCajaEmpleado(string codigo, int cantidad, string nombre, string apellido)
+        public void ImprimirCajaEmpleado(string codigo, int cantidad, string nombre, string apellido, string apellido2)
         {
             if (ClsConfPrinter.PrintCode.Length > 0)
             {
-                RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.PrintCode, ImprimirSuperString(codigo, cantidad, nombre, apellido));
+                RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.PrintCode, ImprimirSuperString(codigo, cantidad, nombre, apellido, apellido2));
             }
             else
             {

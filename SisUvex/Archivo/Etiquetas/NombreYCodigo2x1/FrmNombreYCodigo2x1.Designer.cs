@@ -39,6 +39,7 @@
             btnBuscarCodigo = new Button();
             lblApellido = new Label();
             btnSelectEmployeeFrm = new Button();
+            lblApellido2 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             // 
             lblCantidad.AutoSize = true;
             lblCantidad.Font = new Font("Segoe UI", 14F);
-            lblCantidad.Location = new Point(12, 186);
+            lblCantidad.Location = new Point(12, 191);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(200, 25);
             lblCantidad.TabIndex = 21;
@@ -57,7 +58,7 @@
             btnImprimir.BackgroundImageLayout = ImageLayout.Stretch;
             btnImprimir.Font = new Font("Segoe UI", 14F);
             btnImprimir.Image = Properties.Resources.imprimirIcon321;
-            btnImprimir.Location = new Point(297, 177);
+            btnImprimir.Location = new Point(297, 183);
             btnImprimir.Name = "btnImprimir";
             btnImprimir.Size = new Size(40, 40);
             btnImprimir.TabIndex = 4;
@@ -68,15 +69,16 @@
             // 
             lblNombre.AutoSize = true;
             lblNombre.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
-            lblNombre.Location = new Point(186, 9);
+            lblNombre.Location = new Point(186, 14);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(0, 25);
+            lblNombre.Size = new Size(17, 25);
             lblNombre.TabIndex = 19;
+            lblNombre.Text = ".";
             // 
             // nudCantidad
             // 
             nudCantidad.Font = new Font("Segoe UI", 17F);
-            nudCantidad.Location = new Point(220, 179);
+            nudCantidad.Location = new Point(220, 184);
             nudCantidad.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
@@ -90,7 +92,7 @@
             // 
             lblCodigoEmp.AutoSize = true;
             lblCodigoEmp.Font = new Font("Segoe UI", 14F);
-            lblCodigoEmp.Location = new Point(14, 102);
+            lblCodigoEmp.Location = new Point(14, 107);
             lblCodigoEmp.Name = "lblCodigoEmp";
             lblCodigoEmp.Size = new Size(166, 25);
             lblCodigoEmp.TabIndex = 17;
@@ -99,7 +101,7 @@
             // txbCodigoEmp
             // 
             txbCodigoEmp.Font = new Font("Segoe UI", 17F);
-            txbCodigoEmp.Location = new Point(186, 95);
+            txbCodigoEmp.Location = new Point(186, 100);
             txbCodigoEmp.MaxLength = 6;
             txbCodigoEmp.Name = "txbCodigoEmp";
             txbCodigoEmp.Size = new Size(105, 38);
@@ -111,7 +113,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14F);
-            label1.Location = new Point(14, 9);
+            label1.Location = new Point(14, 14);
             label1.Name = "label1";
             label1.Size = new Size(174, 25);
             label1.TabIndex = 25;
@@ -121,7 +123,7 @@
             // 
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
             btnBuscarCodigo.Image = Properties.Resources.buscarIcon32;
-            btnBuscarCodigo.Location = new Point(334, 94);
+            btnBuscarCodigo.Location = new Point(334, 99);
             btnBuscarCodigo.Name = "btnBuscarCodigo";
             btnBuscarCodigo.Size = new Size(40, 40);
             btnBuscarCodigo.TabIndex = 2;
@@ -132,28 +134,41 @@
             // 
             lblApellido.AutoSize = true;
             lblApellido.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
-            lblApellido.Location = new Point(186, 34);
+            lblApellido.Location = new Point(186, 39);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(0, 25);
+            lblApellido.Size = new Size(17, 25);
             lblApellido.TabIndex = 28;
+            lblApellido.Text = ".";
             // 
             // btnSelectEmployeeFrm
             // 
             btnSelectEmployeeFrm.BackgroundImageLayout = ImageLayout.None;
             btnSelectEmployeeFrm.Font = new Font("Segoe UI", 14F);
             btnSelectEmployeeFrm.Image = Properties.Resources.guardarIcon321;
-            btnSelectEmployeeFrm.Location = new Point(289, 94);
+            btnSelectEmployeeFrm.Location = new Point(289, 99);
             btnSelectEmployeeFrm.Name = "btnSelectEmployeeFrm";
             btnSelectEmployeeFrm.Size = new Size(40, 40);
             btnSelectEmployeeFrm.TabIndex = 1;
             btnSelectEmployeeFrm.UseVisualStyleBackColor = true;
             btnSelectEmployeeFrm.Click += btnSelectEmployeeFrm_Click;
             // 
+            // lblApellido2
+            // 
+            lblApellido2.AutoSize = true;
+            lblApellido2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
+            lblApellido2.Location = new Point(186, 65);
+            lblApellido2.Name = "lblApellido2";
+            lblApellido2.Size = new Size(17, 25);
+            lblApellido2.TabIndex = 29;
+            lblApellido2.Text = ".";
+            // 
             // FrmNombreYCodigo2x1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(525, 244);
+            Controls.Add(lblApellido2);
             Controls.Add(lblApellido);
             Controls.Add(lblCantidad);
             Controls.Add(btnImprimir);
@@ -169,7 +184,8 @@
             MaximizeBox = false;
             MaximumSize = new Size(541, 283);
             Name = "FrmNombreYCodigo2x1";
-            Text = "Imprimir código de empleado con nombre QR";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Espárrago - Imprimir código de empleado con nombre QR";
             Load += FrmNombreYCodigo2x1_Load;
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
             ResumeLayout(false);
@@ -188,5 +204,6 @@
         private Label lblApellido;
         private Button button1;
         private Button btnSelectEmployeeFrm;
+        private Label lblApellido2;
     }
 }
