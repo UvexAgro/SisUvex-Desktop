@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PantallaCarga));
             lblCadenaConexion = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
@@ -61,6 +62,7 @@
             Controls.Add(lblCadenaConexion);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PantallaCarga";
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterScreen;

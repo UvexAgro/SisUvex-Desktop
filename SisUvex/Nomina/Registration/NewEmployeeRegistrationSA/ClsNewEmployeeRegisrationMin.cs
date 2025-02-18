@@ -101,8 +101,6 @@ namespace SisUvex.Nomina.Registration.NewEmployeeRegistrationSA
 
                         SqlCommand cmd = new SqlCommand(qry, sql.cnn, sql.transaction);
 
-                        MessageBox.Show(employee["CODIGO"].ToString() +"\n"+employee["FECHA REGISTRO"].ToString(), "INSERT");
-
                         cmd.Parameters.AddWithValue("@codigo", employee["CODIGO"]);
                         cmd.Parameters.AddWithValue("@apellidop", employee["APELLIDO PATERNO"].ToString().ToUpper());
                         cmd.Parameters.AddWithValue("@apellidom", employee["APELLIDO MATERNO"].ToString().ToUpper());

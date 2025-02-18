@@ -108,6 +108,18 @@ namespace SisUvex.Archivo.Manifiesto
         {
             dgv.ProcedureRecover("sp_PackManifestRecover");
         }
+        public void OpenFrmAdd()
+        {
+            _frmAdd = new FrmManifestAdd();
+            _frmAdd.cls = this;
+            _frmAdd.Text = "Añadir manifiesto";
+            _frmAdd.lblTitle.Text = "Añadir manifiesto";
+            _frmAdd.IsAddModify = true;
+
+            _frmAdd.ShowDialog();
+
+            dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+        }
 
         public void BeginFormAdd()
         {
@@ -125,6 +137,7 @@ namespace SisUvex.Archivo.Manifiesto
                 LoadControlsModify();
             }
         }
+
         private void CargarComboBoxes()
         {
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);

@@ -53,7 +53,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void txbIdManifest_KeyPress(object sender, KeyPressEventArgs e)
@@ -62,6 +62,11 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 cls.btnSearchManifest(txbIdManifest.Text);
             }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            cls.OpenFrmAdd();
         }
     }
 }

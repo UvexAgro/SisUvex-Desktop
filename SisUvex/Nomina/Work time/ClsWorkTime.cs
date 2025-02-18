@@ -231,7 +231,11 @@ namespace SisUvex.Nomina.Work_time
                 priceType = "Empaque";
 
             frmReport.lblSubTitle.Text = $"Banda: {frmReport.idProductionLine}       Fecha: {date}       Precios para: {priceType}";
-            frmReport.dgvCatalog.DataSource = ClsQuerysDB.GetDataTable($"EXEC sp_NomPackedBoxEmployeePerDay '{frmReport.idProductionLine}', '{frmReport.dWorkTime}', '{rType}'");
+
+            //string qryNameProc = "sp_NomPackedBoxEmployeePerDay"; //PARA LA TEMPORADA DE UVA
+            string qryNameProc = "sp_NomPackedUniqueBoxEmployeePerDay"; //PARA LA TEMPORADA DE ESPARRAGO
+
+            frmReport.dgvCatalog.DataSource = ClsQuerysDB.GetDataTable($"EXEC {qryNameProc} '{frmReport.idProductionLine}', '{frmReport.dWorkTime}', '{rType}'");
         }
 
         private bool IsWorkTimeEnable()

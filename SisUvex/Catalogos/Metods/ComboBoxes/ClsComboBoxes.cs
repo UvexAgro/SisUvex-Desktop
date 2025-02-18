@@ -107,5 +107,36 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 }
             }
         }
+
+        public static void CboApplyEventCboSelectedValueChangedAndFilterCboDependens(ComboBox cbo, List<Tuple<ComboBox, CheckBox>> cboFilterCboDependens, string columnFilterName)
+        {
+            cbo.SelectedValueChanged += (sender, e) =>
+            {
+                if (cbo.SelectedIndex > 0)
+                {
+                    foreach (var item in cboFilterCboDependens)
+                    {
+                        ComboBox dependentCbo = item.Item1;
+                        CheckBox filterCheckBox = item.Item2;
+
+                        DataTable dt = (DataTable)dependentCbo.DataSource;
+                        if (dt != null)
+                        {
+                            if (filterCheckBox.Checked)
+                            {
+                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}'";
+                            }
+                            else
+                            {
+                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' AND {ClsObject.Column.active} = '1'";
+                            }
+
+                            dependentCbo.DataSource = dt;
+                            dependentCbo.SelectedIndex = 0;
+                        }
+                    }
+                }
+            };
+        }
     }
 }
