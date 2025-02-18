@@ -28,6 +28,7 @@ namespace SisUvex
         public string dbWrite;
         public string userWrite;
         public string passWrite;
+        public string dbEmployees;
         public SQLControl()
         {
             if (ClsConfig.Server == null)
@@ -52,6 +53,7 @@ namespace SisUvex
             dbWrite = ClsConfig.DbWrite;
             userWrite = ClsConfig.UserWrite;
             passWrite = ClsConfig.PassWrite;
+            dbEmployees = ClsConfig.DbEmployees;
         }
 
         public string WriteSvr()

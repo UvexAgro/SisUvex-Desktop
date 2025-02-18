@@ -104,7 +104,6 @@
             // chbRevesePalletTag
             // 
             chbRevesePalletTag.AutoSize = true;
-            chbRevesePalletTag.Enabled = false;
             chbRevesePalletTag.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             chbRevesePalletTag.Location = new Point(141, 283);
             chbRevesePalletTag.Name = "chbRevesePalletTag";

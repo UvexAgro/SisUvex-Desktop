@@ -115,6 +115,39 @@ namespace SisUvex.Catalogos.Metods.Querys
 
             return dataTable;
         }
+
+        public static string GetStringExecuteParameterizedQuery(string query, Dictionary<string, object> parameters)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+                foreach (var param in parameters)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                object queryResult = cmd.ExecuteScalar();
+                if (queryResult != null && queryResult != DBNull.Value)
+                {
+                    result = queryResult.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Ejecutar consulta parametrizada.");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+
+            return result;
+        }
+
         public static DataTable GetEmployees(string lastNamePat, string lastNameMat, string name, string line, string workGroup, string paymentPlace)
         {
             string query = @"SELECT id_employee AS 'Código', v_lastNamePat AS 'A. paterno', v_lastNameMat AS 'A. materno', v_name AS 'Nombre', 

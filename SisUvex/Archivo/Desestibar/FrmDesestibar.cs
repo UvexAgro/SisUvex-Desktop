@@ -16,18 +16,15 @@ namespace SisUvex.Archivo.Desestibar
     public partial class FrmDesestibar : Form
     {
         ClsDesestibar cls = new ClsDesestibar();
+        string? _idEstiba;
+
         public FrmDesestibar()
         {
             InitializeComponent();
         }
-        string _idEstiba;
         private void btnBuscarEstiba_Click(object sender, EventArgs e)
         {
-            dgvEstiba.DataSource = cls.BuscarEstiba(txbIdEstiba.Text);
-            if (dgvEstiba.Rows.Count > 0)
-            {
-                _idEstiba = ClsValues.FormatZeros(txbIdEstiba.Text, "0000");
-            }
+            SearchByStowage();
         }
 
         private void btnDesestibar_Click(object sender, EventArgs e)
@@ -36,21 +33,88 @@ namespace SisUvex.Archivo.Desestibar
             if (dgvEstiba.Rows.Count > 0)
             {
                 if (cls.EnColumna(dgvEstiba, "Manifiesto"))
-                {
                     advertencia += "-los pallets de la estiba estan en un manifiesto.";
-                }
+
                 if (cls.EnColumna(dgvEstiba, "Rack"))
-                {
                     advertencia += "\n-Los pallets de la estiba estan en un rack.";
-                }
 
                 DialogResult result = MessageBox.Show(advertencia + $"\n\n¿Seguro que desea desestibar la estiba {_idEstiba}?", "Desestibar estiba", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
                     cls.ProcDesestibarEstiba(_idEstiba);
-                    dgvEstiba.DataSource = null;
+                    _idEstiba = string.Empty;
+
+                    foreach (DataGridViewRow row in dgvEstiba.Rows)
+                    {
+                        row.Cells["Estiba"].Value = string.Empty;
+                    }
                 }
+            }
+            else
+            {
+                System.Media.SystemSounds.Beep.Play();
+            }
+        }
+
+        private void btnSearchPallet_Click(object sender, EventArgs e)
+        {
+            SearchByPallet();
+        }
+
+        private void txbIdEstiba_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SearchByStowage();
+            }
+        }
+
+        private void txbIdPallet_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SearchByPallet();
+            }
+        }
+
+        private void SearchByStowage()
+        {
+            if (int.TryParse(txbIdEstiba.Text, out int intEstiba))
+            {
+                _idEstiba = ClsValues.FormatZeros(intEstiba.ToString(), "0000");
+
+                txbIdEstiba.Text = _idEstiba;
+
+                dgvEstiba.DataSource = cls.BuscarEstiba(_idEstiba);
+
+                txbIdPallet.Text = string.Empty;
+            }
+            else
+            {
+                System.Media.SystemSounds.Beep.Play();
+                dgvEstiba.DataSource = null;
+                _idEstiba = string.Empty;
+            }
+        }
+
+        private void SearchByPallet()
+        {
+            if (int.TryParse(txbIdPallet.Text, out int intPallet))
+            {
+                txbIdPallet.Text = ClsValues.FormatZeros(intPallet.ToString(), "00000");
+
+                _idEstiba = cls.SearchPalletStowage(txbIdPallet.Text);
+
+                dgvEstiba.DataSource = cls.BuscarEstiba(_idEstiba);
+
+                txbIdEstiba.Text = string.Empty;
+            }
+            else
+            {
+                System.Media.SystemSounds.Beep.Play();
+                dgvEstiba.DataSource = null;
+                _idEstiba = string.Empty;
             }
         }
     }
