@@ -49,6 +49,7 @@ using SisUvex.Nomina.Comedores.DiningHall;
 using SisUvex.Nomina.Comedores.DiningReports;
 using SisUvex.Nomina.Comedores.Registers.SyncRegisters;
 using SisUvex.Catalogos.WorkGroup;
+using SisUvex.Nomina.Registration.NewEmployeeRegistrationSA;
 
 namespace SisUvex
 {
@@ -353,10 +354,6 @@ namespace SisUvex
 
         private void asistenciaEmpaqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsAsistenciaEmpaque cls = new ClsAsistenciaEmpaque();
-            cls.frmMenu = this;
-
-            cls.AbrirFrmAsistenciaEmpaque();
         }
 
         private void presentaciónToolStripMenuItem_Click(object sender, EventArgs e)
@@ -472,6 +469,25 @@ namespace SisUvex
         {
             FrmSyncRegisters cat = new FrmSyncRegisters();
             AbrirFormularioDialog(cat, 1);
+        }
+
+        private void proveedoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ClsAsistenciaEmpaque cls = new ClsAsistenciaEmpaque();
+            cls.frmMenu = this;
+
+            cls.AbrirFrmAsistenciaEmpaque();
+        }
+
+        private void altaDeEmpleadosSinRegistroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmNewEmployeeRegistrationMin cat = new FrmNewEmployeeRegistrationMin();
+            AbrirVentanaHijo(cat, 3);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using SisUvex.Archivo.Etiquetas.LabelInterface;
 using SisUvex.Catalogos;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Archivo.Desestibar
 {
@@ -9,25 +11,11 @@ namespace SisUvex.Archivo.Desestibar
         SQLControl sql = new SQLControl();
 
         public DataTable BuscarEstiba(string idEstiba)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter($"SELECT Pallet, Mix, Estiba, Programa, Cajas, Libras, Tamaño, Presentación, Variedad, Distribuidor, Manifiesto, Rack, Fecha, Lote ,[Libras Pallet] ,Contenedor, gtn.i_palletBoxes AS 'Cajas por pallet' FROM vw_PackPalletCon vpal LEFT JOIN gtn ON gtn.id_GTIN = vpal.Programa WHERE Estiba =  {idEstiba}", sql.cnn);
-                da.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Destibar estiba");
-                return dt;
-            }
-
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
+        {   
+            string qry = " SELECT Pallet, Mix, Estiba, Programa, Cajas, Contenedor, Libras, Tamaño, Pre, Presentación, Pos, Variedad, Distribuidor, Manifiesto, Rack, Fecha, Lote ,[Libras Pallet] , gtn.i_palletBoxes AS 'Cajas por pallet' FROM vw_PackPalletCon vpal LEFT JOIN gtn ON gtn.id_GTIN = vpal.Programa WHERE Estiba =  @idEstiba ";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idEstiba", idEstiba);
+            return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
         }
 
         public void ProcDesestibarEstiba(string idEstiba)
@@ -67,6 +55,14 @@ namespace SisUvex.Archivo.Desestibar
             }
 
             return false;
+        }
+
+        public string SearchPalletStowage(string idPallet)
+        {
+            string qry = " SELECT c_stowage FROM Pack_Pallet WHERE id_pallet = @idPallet ";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idPallet", idPallet);
+            return ClsQuerysDB.GetStringExecuteParameterizedQuery(qry, parameters);
         }
     }
 }

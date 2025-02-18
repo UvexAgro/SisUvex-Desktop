@@ -38,6 +38,9 @@
             btnBuscarEstiba = new Button();
             btnDesestibar = new Button();
             lblNota = new Label();
+            btnSearchPallet = new Button();
+            label1 = new Label();
+            txbIdPallet = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dgvEstiba).BeginInit();
             SuspendLayout();
             // 
@@ -64,8 +67,9 @@
             // 
             txbIdEstiba.Location = new Point(57, 43);
             txbIdEstiba.Name = "txbIdEstiba";
-            txbIdEstiba.Size = new Size(108, 23);
+            txbIdEstiba.Size = new Size(67, 23);
             txbIdEstiba.TabIndex = 0;
+            txbIdEstiba.KeyPress += txbIdEstiba_KeyPress;
             // 
             // dgvEstiba
             // 
@@ -108,7 +112,7 @@
             // 
             btnBuscarEstiba.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnBuscarEstiba.BackgroundImageLayout = ImageLayout.Stretch;
-            btnBuscarEstiba.Location = new Point(171, 43);
+            btnBuscarEstiba.Location = new Point(130, 43);
             btnBuscarEstiba.Name = "btnBuscarEstiba";
             btnBuscarEstiba.Size = new Size(23, 23);
             btnBuscarEstiba.TabIndex = 1;
@@ -128,6 +132,7 @@
             // 
             // lblNota
             // 
+            lblNota.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblNota.AutoSize = true;
             lblNota.ForeColor = Color.Red;
             lblNota.Location = new Point(12, 419);
@@ -136,11 +141,42 @@
             lblNota.TabIndex = 25;
             lblNota.Text = "Saca a TODOS los pallets en la lista de la estiba seleccionada (Si se van a volver a estibar, tome nota de cuales antes de desestibarlos).";
             // 
+            // btnSearchPallet
+            // 
+            btnSearchPallet.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchPallet.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchPallet.Location = new Point(332, 43);
+            btnSearchPallet.Name = "btnSearchPallet";
+            btnSearchPallet.Size = new Size(23, 23);
+            btnSearchPallet.TabIndex = 27;
+            btnSearchPallet.UseVisualStyleBackColor = true;
+            btnSearchPallet.Click += btnSearchPallet_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(214, 46);
+            label1.Name = "label1";
+            label1.Size = new Size(39, 15);
+            label1.TabIndex = 28;
+            label1.Text = "Pallet:";
+            // 
+            // txbIdPallet
+            // 
+            txbIdPallet.Location = new Point(259, 43);
+            txbIdPallet.Name = "txbIdPallet";
+            txbIdPallet.Size = new Size(67, 23);
+            txbIdPallet.TabIndex = 26;
+            txbIdPallet.KeyPress += txbIdPallet_KeyPress;
+            // 
             // FrmDesestibar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnSearchPallet);
+            Controls.Add(label1);
+            Controls.Add(txbIdPallet);
             Controls.Add(lblNota);
             Controls.Add(btnDesestibar);
             Controls.Add(btnBuscarEstiba);
@@ -167,5 +203,8 @@
         private Button btnBuscarEstiba;
         private Button btnDesestibar;
         private Label lblNota;
+        private Button btnSearchPallet;
+        private Label label1;
+        private TextBox txbIdPallet;
     }
 }
