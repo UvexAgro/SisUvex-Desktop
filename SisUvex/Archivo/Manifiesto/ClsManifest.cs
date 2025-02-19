@@ -133,6 +133,11 @@ namespace SisUvex.Archivo.Manifiesto
                 _frmAdd.cboActive.SelectedIndex = 1;
                 _frmAdd.cboMarket.SelectedIndex = 0;
                 _frmAdd.txbId.Text = GetIdNextManifest(_frmAdd.cboMarket.Text);
+                _frmAdd.txbTemperature.Text = "34";
+                _frmAdd.cboTemperatureUnit.SelectedIndex = 0;
+                _frmAdd.cboTransportVehicle.SelectedIndex = 1;
+                _frmAdd.cboTransportType.SelectedIndex = 2;
+                _frmAdd.spnHour.Text = DateTime.Now.AddMinutes((15 - DateTime.Now.Minute % 15) % 15).ToString("HH:mm");
             }
             else
             {
@@ -239,9 +244,6 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
-
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
         }
     }
 }

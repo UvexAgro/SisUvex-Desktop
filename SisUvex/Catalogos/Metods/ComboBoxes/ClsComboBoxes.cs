@@ -179,7 +179,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                         dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
                 }
 
-
                 comboBox.DataSource = dt;
                 comboBox.SelectedIndex = 0;
                 comboBox.DroppedDown = true;
