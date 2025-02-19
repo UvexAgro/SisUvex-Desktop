@@ -48,6 +48,7 @@
             btnResume = new Button();
             btnExcel = new Button();
             btnFrmSearchEmployeeId = new Button();
+            btnDaysEmployee = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvQuery).BeginInit();
             SuspendLayout();
             // 
@@ -215,7 +216,7 @@
             // 
             // btnResume
             // 
-            btnResume.Location = new Point(85, 127);
+            btnResume.Location = new Point(142, 127);
             btnResume.Name = "btnResume";
             btnResume.Size = new Size(92, 23);
             btnResume.TabIndex = 9;
@@ -228,7 +229,7 @@
             btnExcel.BackgroundImageLayout = ImageLayout.Stretch;
             btnExcel.Image = (Image)resources.GetObject("btnExcel.Image");
             btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(183, 127);
+            btnExcel.Location = new Point(240, 127);
             btnExcel.Name = "btnExcel";
             btnExcel.Size = new Size(56, 23);
             btnExcel.TabIndex = 10;
@@ -248,11 +249,22 @@
             btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
             btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
             // 
+            // btnDaysEmployee
+            // 
+            btnDaysEmployee.Location = new Point(84, 127);
+            btnDaysEmployee.Name = "btnDaysEmployee";
+            btnDaysEmployee.Size = new Size(52, 23);
+            btnDaysEmployee.TabIndex = 61;
+            btnDaysEmployee.Text = "Días";
+            btnDaysEmployee.UseVisualStyleBackColor = true;
+            btnDaysEmployee.Click += btnDaysEmployee_Click;
+            // 
             // FrmDiningReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(602, 450);
+            Controls.Add(btnDaysEmployee);
             Controls.Add(btnFrmSearchEmployeeId);
             Controls.Add(btnExcel);
             Controls.Add(btnResume);
@@ -298,5 +310,6 @@
         private Button btnResume;
         private Button btnExcel;
         private Button btnFrmSearchEmployeeId;
+        private Button btnDaysEmployee;
     }
 }

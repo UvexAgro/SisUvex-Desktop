@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Presentation;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
@@ -18,7 +19,7 @@ namespace SisUvex.Nomina.Comedores.DiningReports
     internal class ClsDiningReports
     {
         public FrmDiningReport frm;
-        public DataTable? dtReport1, dtResume1;
+        public DataTable? dtReport1, dtResume1, dtReportColumnDays;
         string queryReport1 = " SELECT fdr.c_codigo_emp AS 'ID', CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS 'Nombre', lp.id_placePayment AS 'LP', dpr.v_nameDinerProvider AS 'Comedor', FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS 'Fecha', COUNT(fdr.c_servedAgain) AS 'Total', SUM(CASE WHEN fdr.c_dinnerType = '1' THEN 1 ELSE 0 END) AS 'Desayuno', SUM(CASE WHEN fdr.c_dinnerType = '2' THEN 1 ELSE 0 END) AS 'Comida', SUM(CASE WHEN fdr.c_dinnerType = '3' THEN 1 ELSE 0 END) AS 'Cena' FROM Nom_FoodRegister fdr LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace ";
         string groupByReport1 = " GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider ";
         string whereQuery1 = " WHERE ";
@@ -36,39 +37,49 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             if (dtPlacePayment == null || dtPlacePayment.Rows.Count == 0)
                 return;
 
+            // Insertar la fila especial en el índice 1 (PARA QUE SE PUEDAN SELECCIONAR LOS EMPLEADOS QUE AUN NO SE LE HA ASIGNADO UN LUGAR DE TRABAJO)
+            DataRow newRow = dtPlacePayment.NewRow();
+            newRow[ClsObject.Column.id] = null;
+            newRow[ClsObject.Column.active] = "1";
+            newRow[ClsObject.Column.name] = "*Sin lugar de pago*";
+            dtPlacePayment.Rows.InsertAt(newRow, 0);
+
             dtPlacePayment.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboPaymentPlace, dtPlacePayment);
-
 
             DataTable dtProvider = ClsQuerysDB.GetDataTable(ClsObject.DinerProvider.QueryCbo);
             dtProvider.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboDinerProvider, dtProvider);
-
-            ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbIdEmployee);
-
-            frm.txbIdEmployee.KeyPress += (sender, e) =>
-            {
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                {
-                    e.Handled = true;
-                }
-                else if (e.KeyChar == (char)Keys.Enter)
-                {
-                    BtnSearchEmployee();
-                }
-            };
         }
 
         public void SetDGVReportBeetweenDays()
         {
-            string where = whereQuery1 + $" fdr.d_datetime BETWEEN '{GetDay1()}' AND '{GetDay2()}' ";
+            Dictionary<string, object?> dicDateTables = new();
+
+            string where = " WHERE fdr.d_datetime BETWEEN @Day1 AND @Day2 ";
+            dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
+
             if (frm.cboDinerProvider.SelectedIndex > 0)
-                where += " AND fdr.id_dinerProvider = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+            }
 
             if (frm.cboPaymentPlace.SelectedIndex > 0)
-                where += " AND emp.id_paymentPlace = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                {
+                    where += " AND emp.id_paymentPlace IS NULL ";
+                }
+                else
+                {
+                    where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                    dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                }
+            }
 
-            dtReport1 = ClsQuerysDB.GetDataTable(queryReport1 + where + groupByReport1);
+            dtReport1 = ClsQuerysDB.ExecuteParameterizedQuery(queryReport1 + where + groupByReport1, dicDateTables);
         }
 
         public void SetDGVEmployeeReportBeetweenDays()
@@ -79,15 +90,32 @@ namespace SisUvex.Nomina.Comedores.DiningReports
         }
         public void SetDGVResume()
         {
-            string where = whereQuery1 + " fdr.d_datetime BETWEEN '" + GetDay1() + "' AND '" + GetDay2() + "' ";
+            Dictionary<string, object?> dicDateTables = new();
+
+            string where = " WHERE fdr.d_datetime BETWEEN @Day1 AND @Day2 ";
+            dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
 
             if (frm.cboDinerProvider.SelectedIndex > 0)
-                where += " AND fdr.id_dinerProvider = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+            }
 
             if (frm.cboPaymentPlace.SelectedIndex > 0)
-                where += " AND emp.id_paymentPlace = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                {
+                    where += " AND emp.id_paymentPlace IS NULL ";
+                }
+                else
+                {
+                    where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                    dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                }
+            }
 
-            dtResume1 = ClsQuerysDB.GetDataTable(queryReportResume + where + groupByResume);
+            dtResume1 = ClsQuerysDB.ExecuteParameterizedQuery(queryReportResume + where + groupByResume, dicDateTables);
         }
 
         public void SetDGVEmployeeResume()
@@ -108,17 +136,19 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
         public void BtnSearchEmployee()
         {
-            if (int.TryParse(frm.txbIdEmployee.Text, out _))
+            if (!frm.txbIdEmployee.Text.IsNullOrEmpty())
             {
                 ClsValues.FormatZeros(frm.txbIdEmployee.Text, "000000");
                 SetDGVEmployeeReportBeetweenDays();
                 SetDGVEmployeeResume();
+                SetDGVReportBetweenDaysColumnDaysIdEmployee(frm.txbIdEmployee.Text);
                 frm.dgvQuery.DataSource = dtReport1;
+
+                frm.txbIdEmployee.SelectAll();
             }
             else
             {
                 System.Media.SystemSounds.Hand.Play();
-                frm.txbIdEmployee.SelectAll();
             }
         }
         public void ExportDataGridViewExcel(DataGridView dataGridView)
@@ -135,6 +165,9 @@ namespace SisUvex.Nomina.Comedores.DiningReports
                         DataTable dataTableW = GetDataTableFromDataTable(dtReport1);
                         workbook.Worksheets.Add(dataTableW, "Trabajador");
 
+                        DataTable dataTableDC = GetDataTableFromDataTable(dtReportColumnDays);
+                        workbook.Worksheets.Add(dataTableDC, "Columnas dia");
+
                         DataTable dataTablePP = GetDataTableFromDataTable(dtResume1);
                         workbook.Worksheets.Add(dataTablePP, "Lugar de pago");
 
@@ -149,30 +182,6 @@ namespace SisUvex.Nomina.Comedores.DiningReports
                 }
             }
         }
-
-        //private DataTable GetDataTableFromDataGridView(DataGridView dataGridView)
-        //{
-        //    DataTable dataTable = new DataTable();
-
-        //    // Agregar las columnas al DataTable
-        //    foreach (DataGridViewColumn column in dataGridView.Columns)
-        //    {
-        //        dataTable.Columns.Add(column.HeaderText);
-        //    }
-
-        //    // Agregar las filas al DataTable
-        //    foreach (DataGridViewRow row in dataGridView.Rows)
-        //    {
-        //        DataRow dataRow = dataTable.NewRow();
-        //        for (int i = 0; i < dataGridView.Columns.Count; i++)
-        //        {
-        //            dataRow[i] = row.Cells[i].Value;
-        //        }
-        //        dataTable.Rows.Add(dataRow);
-        //    }
-
-        //    return dataTable;
-        //}
         private DataTable GetDataTableFromDataTable(DataTable dataTable)
         {
             DataTable resultTable = new DataTable();
@@ -231,65 +240,94 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             return resultTable;
         }
 
-        //private DataTable GetDataTableFromDataGridView(DataGridView dataGridView)
-        //{
-        //    DataTable dataTable = new DataTable();
+        public void SetDGVReportBetweenDaysColumnDays()
+        {
+            SetDGVReportBetweenDaysColumnDaysIdEmployee(null);
+        }
 
-        //    // Agregar las columnas al DataTable con los tipos de datos personalizados
-        //    foreach (DataGridViewColumn column in dataGridView.Columns)
-        //    {
-        //        Type columnType = typeof(string); // Por defecto, texto
+        public void SetDGVReportBetweenDaysColumnDaysIdEmployee(string? idEmployee)
+        {
+            Dictionary<string, object?> dicDateTables = new();
 
-        //        // Configurar el tipo de datos basado en el nombre de la columna
-        //        if (column.HeaderText == "Total" || column.HeaderText == "Desayuno" || column.HeaderText == "Comida" || column.HeaderText == "Cena")
-        //        {
-        //            columnType = typeof(decimal); // Tipo numérico (puede usar int si son enteros)
-        //        }
-        //        else if (column.HeaderText == "Fecha")
-        //        {
-        //            columnType = typeof(DateTime); // Tipo fecha
-        //        }
-        //        else if (column.ValueType != null)
-        //        {
-        //            columnType = column.ValueType; // Detectar el tipo original
-        //        }
+            // Construcción del WHERE dinámico
+            string where = " WHERE fdr.d_datetime BETWEEN @Day1 AND @Day2 ";
+            dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
 
-        //        dataTable.Columns.Add(column.HeaderText, columnType);
-        //    }
+            if (!string.IsNullOrEmpty(idEmployee))
+            {
+                where += " AND fdr.c_codigo_emp = @IdEmployee ";
+                dicDateTables.Add("@IdEmployee", idEmployee);
+            }
+            else
+            {
+                if (frm.cboDinerProvider.SelectedIndex > 0)
+                {
+                    where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                    dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+                }
 
-        //    // Agregar las filas al DataTable
-        //    foreach (DataGridViewRow row in dataGridView.Rows)
-        //    {
-        //        if (!row.IsNewRow) // Ignorar la fila nueva
-        //        {
-        //            DataRow dataRow = dataTable.NewRow();
-        //            for (int i = 0; i < dataGridView.Columns.Count; i++)
-        //            {
-        //                object cellValue = row.Cells[i].Value ?? DBNull.Value;
+                if (frm.cboPaymentPlace.SelectedIndex > 0)
+                {
+                    if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                    {
+                        where += " AND emp.id_paymentPlace IS NULL ";
+                    }
+                    else
+                    {
+                        where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                        dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                    }
+                }
+            }
 
-        //                // Validar y convertir valores al tipo especificado si es necesario
-        //                if (dataTable.Columns[i].DataType == typeof(decimal) && cellValue is string strValue)
-        //                {
-        //                    if (decimal.TryParse(strValue, out decimal parsedDecimal))
-        //                    {
-        //                        cellValue = parsedDecimal;
-        //                    }
-        //                }
-        //                else if (dataTable.Columns[i].DataType == typeof(DateTime) && cellValue is string dateStr)
-        //                {
-        //                    if (DateTime.TryParse(dateStr, out DateTime parsedDate))
-        //                    {
-        //                        cellValue = parsedDate;
-        //                    }
-        //                }
+            // 1️⃣ Obtener las fechas dinámicamente (evitar errores con comillas)
+            string queryDates = @" SELECT DISTINCT FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha 
+                                   FROM Nom_FoodRegister fdr 
+                                   LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp
+                                   " + where;
 
-        //                dataRow[i] = cellValue;
-        //            }
-        //            dataTable.Rows.Add(dataRow);
-        //        }
-        //    }
+            DataTable dtDates = ClsQuerysDB.ExecuteParameterizedQuery(queryDates, dicDateTables);
 
-        //    return dataTable;
-        //}
+            List<string> fechas = new List<string>();
+            foreach (DataRow row in dtDates.Rows)
+            {
+                fechas.Add("[" + row["Fecha"].ToString() + "]");
+            }
+
+            string columnas = string.Join(",", fechas);
+
+            if (columnas.IsNullOrEmpty())
+            {
+                dtReportColumnDays = null;
+                return;
+            }
+
+            // Construcción de la consulta PIVOT con los filtros aplicados
+            string queryReport = $@"
+                                    SELECT ID, Nombre, LP, Comedor, {columnas}
+                                    FROM (
+                                        SELECT 
+                                            fdr.c_codigo_emp AS ID, 
+                                            CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS Nombre, 
+                                            lp.id_placePayment AS LP, 
+                                            dpr.v_nameDinerProvider AS Comedor, 
+                                            FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha, 
+                                            COUNT(fdr.c_servedAgain) AS Total
+                                        FROM Nom_FoodRegister fdr 
+                                        LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp 
+                                        LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall 
+                                        LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider 
+                                        LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace
+                                        {where}
+                                        GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider
+                                    ) AS SourceTable
+                                    PIVOT (
+                                        SUM(Total) FOR Fecha IN ({columnas})
+                                    ) AS PivotTable
+                                    ORDER BY ID;";
+
+            dtReportColumnDays = ClsQuerysDB.ExecuteParameterizedQuery(queryReport, dicDateTables);
+        }
     }
 }
