@@ -37,41 +37,49 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             if (dtPlacePayment == null || dtPlacePayment.Rows.Count == 0)
                 return;
 
+            // Insertar la fila especial en el índice 1 (PARA QUE SE PUEDAN SELECCIONAR LOS EMPLEADOS QUE AUN NO SE LE HA ASIGNADO UN LUGAR DE TRABAJO)
+            DataRow newRow = dtPlacePayment.NewRow();
+            newRow[ClsObject.Column.id] = null;
+            newRow[ClsObject.Column.active] = "1";
+            newRow[ClsObject.Column.name] = "*Sin lugar de pago*";
+            dtPlacePayment.Rows.InsertAt(newRow, 0);
+
             dtPlacePayment.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboPaymentPlace, dtPlacePayment);
-
 
             DataTable dtProvider = ClsQuerysDB.GetDataTable(ClsObject.DinerProvider.QueryCbo);
             dtProvider.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboDinerProvider, dtProvider);
-
-            ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbIdEmployee);
-
-            frm.txbIdEmployee.KeyPress += (sender, e) =>
-            {
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                {
-                    e.Handled = true;
-                }
-                else if (e.KeyChar == (char)Keys.Enter)
-                {
-                    BtnSearchEmployee();
-                }
-            };
         }
 
         public void SetDGVReportBeetweenDays()
         {
-            string where = whereQuery1 + $" fdr.d_datetime BETWEEN '{GetDay1()}' AND '{GetDay2()}' ";
+            Dictionary<string, object?> dicDateTables = new();
+
+            string where = " WHERE fdr.d_datetime BETWEEN @Day1 AND @Day2 ";
+            dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
+
             if (frm.cboDinerProvider.SelectedIndex > 0)
-                where += " AND fdr.id_dinerProvider = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+            }
 
             if (frm.cboPaymentPlace.SelectedIndex > 0)
-                where += " AND emp.id_paymentPlace = '" + frm.cboPaymentPlace.SelectedValue + "' ";
+            {
+                if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                {
+                    where += " AND emp.id_paymentPlace IS NULL ";
+                }
+                else
+                {
+                    where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                    dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                }
+            }
 
-            //Clipboard.SetText(queryReport1 + where + groupByReport1);
-
-            dtReport1 = ClsQuerysDB.GetDataTable(queryReport1 + where + groupByReport1);
+            dtReport1 = ClsQuerysDB.ExecuteParameterizedQuery(queryReport1 + where + groupByReport1, dicDateTables);
         }
 
         public void SetDGVEmployeeReportBeetweenDays()
@@ -82,15 +90,32 @@ namespace SisUvex.Nomina.Comedores.DiningReports
         }
         public void SetDGVResume()
         {
-            string where = whereQuery1 + " fdr.d_datetime BETWEEN '" + GetDay1() + "' AND '" + GetDay2() + "' ";
+            Dictionary<string, object?> dicDateTables = new();
+
+            string where = " WHERE fdr.d_datetime BETWEEN @Day1 AND @Day2 ";
+            dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
 
             if (frm.cboDinerProvider.SelectedIndex > 0)
-                where += " AND fdr.id_dinerProvider = '" + frm.cboDinerProvider.SelectedValue + "' ";
+            {
+                where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+            }
 
             if (frm.cboPaymentPlace.SelectedIndex > 0)
-                where += " AND emp.id_paymentPlace = '" + frm.cboPaymentPlace.SelectedValue + "' ";
+            {
+                if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                {
+                    where += " AND emp.id_paymentPlace IS NULL ";
+                }
+                else
+                {
+                    where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                    dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                }
+            }
 
-            dtResume1 = ClsQuerysDB.GetDataTable(queryReportResume + where + groupByResume);
+            dtResume1 = ClsQuerysDB.ExecuteParameterizedQuery(queryReportResume + where + groupByResume, dicDateTables);
         }
 
         public void SetDGVEmployeeResume()
@@ -111,18 +136,19 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
         public void BtnSearchEmployee()
         {
-            if (int.TryParse(frm.txbIdEmployee.Text, out _))
+            if (!frm.txbIdEmployee.Text.IsNullOrEmpty())
             {
                 ClsValues.FormatZeros(frm.txbIdEmployee.Text, "000000");
                 SetDGVEmployeeReportBeetweenDays();
                 SetDGVEmployeeResume();
                 SetDGVReportBetweenDaysColumnDaysIdEmployee(frm.txbIdEmployee.Text);
                 frm.dgvQuery.DataSource = dtReport1;
+
+                frm.txbIdEmployee.SelectAll();
             }
             else
             {
                 System.Media.SystemSounds.Hand.Play();
-                frm.txbIdEmployee.SelectAll();
             }
         }
         public void ExportDataGridViewExcel(DataGridView dataGridView)
@@ -228,22 +254,31 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             dicDateTables.Add("@Day1", frm.dtpDate1.Value.ToString("yyyy-MM-dd"));
             dicDateTables.Add("@Day2", frm.dtpDate2.Value.ToString("yyyy-MM-dd"));
 
-            if (frm.cboDinerProvider.SelectedIndex > 0)
-            {
-                where += " AND fdr.id_dinerProvider = @DinerProvider ";
-                dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
-            }
-
-            if (frm.cboPaymentPlace.SelectedIndex > 0)
-            {
-                where += " AND emp.id_paymentPlace = @PaymentPlace ";
-                dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
-            }
-
             if (!string.IsNullOrEmpty(idEmployee))
             {
                 where += " AND fdr.c_codigo_emp = @IdEmployee ";
                 dicDateTables.Add("@IdEmployee", idEmployee);
+            }
+            else
+            {
+                if (frm.cboDinerProvider.SelectedIndex > 0)
+                {
+                    where += " AND fdr.id_dinerProvider = @DinerProvider ";
+                    dicDateTables.Add("@DinerProvider", frm.cboDinerProvider.SelectedValue);
+                }
+
+                if (frm.cboPaymentPlace.SelectedIndex > 0)
+                {
+                    if (frm.cboPaymentPlace.SelectedValue.ToString().IsNullOrEmpty())
+                    {
+                        where += " AND emp.id_paymentPlace IS NULL ";
+                    }
+                    else
+                    {
+                        where += " AND emp.id_paymentPlace = @PaymentPlace ";
+                        dicDateTables.Add("@PaymentPlace", frm.cboPaymentPlace.SelectedValue);
+                    }
+                }
             }
 
             // 1️⃣ Obtener las fechas dinámicamente (evitar errores con comillas)
