@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -108,7 +109,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
         }
 
-        public static void CboApplyEventCboSelectedValueChangedAndFilterCboDependens(ComboBox cbo, List<Tuple<ComboBox, CheckBox>> cboFilterCboDependens, string columnFilterName)
+        public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumn(ComboBox cbo, List<Tuple<ComboBox, CheckBox?>> cboFilterCboDependens, string columnFilterName, TextBox idTextBox)
         {
             cbo.SelectedValueChanged += (sender, e) =>
             {
@@ -117,25 +118,71 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     foreach (var item in cboFilterCboDependens)
                     {
                         ComboBox dependentCbo = item.Item1;
-                        CheckBox filterCheckBox = item.Item2;
+                        CheckBox? filterCheckBox = item.Item2;
 
-                        DataTable dt = (DataTable)dependentCbo.DataSource;
+                        DataTable? dt = (DataTable?)dependentCbo.DataSource;
                         if (dt != null)
                         {
-                            if (filterCheckBox.Checked)
-                            {
-                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}'";
-                            }
+                            if (filterCheckBox == null || !filterCheckBox.Checked)
+                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
                             else
-                            {
-                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' AND {ClsObject.Column.active} = '1'";
-                            }
+                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' OR {ClsObject.Column.name} = '{textSelect}'";
 
                             dependentCbo.DataSource = dt;
                             dependentCbo.SelectedIndex = 0;
                         }
                     }
                 }
+                else
+                {
+                    foreach (var item in cboFilterCboDependens)
+                    {
+                        ComboBox dependentCbo = item.Item1;
+                        CheckBox? filterCheckBox = item.Item2;
+
+                        DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                        if (dt != null)
+                        {
+                            if (filterCheckBox == null || !filterCheckBox.Checked)
+                                dt.DefaultView.RowFilter = null;
+                            else
+                                dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+
+                            dependentCbo.DataSource = dt;
+                            dependentCbo.SelectedIndex = 0;
+                        }
+                    }
+                }
+
+                idTextBox.Text = cbo.SelectedValue?.ToString();
+            };
+        }
+
+        public static void CboApplyChbClickEventWithCboDependensColumn(ComboBox comboBox, CheckBox checkBox, string columnFilterName, TextBox textBoxIdFilter)
+        {
+            checkBox.Click += (sender, e) =>
+            {
+                DataTable dt = (DataTable)comboBox.DataSource;
+
+                if (!textBoxIdFilter.Text.IsNullOrEmpty())
+                {
+                    if (checkBox.Checked)
+                        dt.DefaultView.RowFilter = $"{columnFilterName} = '{textBoxIdFilter.Text}' OR {ClsObject.Column.name} = '{textSelect}'";
+                    else
+                        dt.DefaultView.RowFilter = $"{columnFilterName} = '{textBoxIdFilter.Text}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
+                }
+                else
+                {
+                    if (checkBox.Checked)
+                        dt.DefaultView.RowFilter = null;
+                    else
+                        dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+                }
+
+
+                comboBox.DataSource = dt;
+                comboBox.SelectedIndex = 0;
+                comboBox.DroppedDown = true;
             };
         }
     }

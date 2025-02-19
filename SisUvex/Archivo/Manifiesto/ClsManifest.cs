@@ -9,6 +9,7 @@ using SisUvex.Catalogos.Metods.Querys;
 using Microsoft.Identity.Client;
 using iText.Kernel.Pdf.Canvas.Wmf;
 using SisUvex.Catalogos.WorkGroup;
+using System.Collections.Generic;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -130,7 +131,8 @@ namespace SisUvex.Archivo.Manifiesto
             if (_frmAdd.IsAddModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
-                _frmAdd.txbId.Text = GetIdNextManifest("E");
+                _frmAdd.cboMarket.SelectedIndex = 0;
+                _frmAdd.txbId.Text = GetIdNextManifest(_frmAdd.cboMarket.Text);
             }
             else
             {
@@ -160,10 +162,17 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboAgencyMX, _frmAdd.txbIdAgencyMX);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityCrossPoint, _frmAdd.txbIdCityCrossPoint);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityDestination, _frmAdd.txbIdCityDestination);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTransportLine, _frmAdd.txbIdTransportLine);
+            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTransportLine, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDriver, _frmAdd.txbIdDriver);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTruck, _frmAdd.txbIdTruck);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
+
+            List<Tuple<ComboBox, CheckBox?>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?>>();
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer));
+
+            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
@@ -173,9 +182,12 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityCrossPoint, _frmAdd.chbRemovedCityCrossPoint);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityDestination, _frmAdd.chbRemovedCityDestination);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTransportLine, _frmAdd.chbRemovedTransportLine);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer);
+            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver);
+            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck);
+            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer);
+            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
+            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
+            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
         }
 
         public string GetIdNextManifest(string market)
