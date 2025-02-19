@@ -33,6 +33,8 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
             cls.SetDGVResume();
 
+            cls.SetDGVReportBetweenDaysColumnDays();
+
             if (!AreReportsTablesNull())
                 dgvQuery.DataSource = cls.dtReport1;
         }
@@ -56,7 +58,11 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
         private void txbIdEmployee_KeyPress(object sender, KeyPressEventArgs e)
         {
-            cls.BtnSearchEmployee();
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                cls.BtnSearchEmployee();
+                e.Handled = true;
+            }
         }
 
         private void btnExcel_Click(object sender, EventArgs e)
@@ -88,6 +94,12 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             txbIdEmployee.Focus();
 
             txbIdEmployee.SelectAll();
+        }
+
+        private void btnDaysEmployee_Click(object sender, EventArgs e)
+        {
+            if (!AreReportsTablesNull())
+                dgvQuery.DataSource = cls.dtReportColumnDays;
         }
     }
 }
