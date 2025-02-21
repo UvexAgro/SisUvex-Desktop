@@ -42,7 +42,6 @@
             txbDieselInvoice = new TextBox();
             txbPalletPosition = new TextBox();
             lblPosicionPal = new Label();
-            txbTermoPosition = new TextBox();
             dgvPalletList = new DataGridView();
             chbRejected = new CheckBox();
             txbNameOperator = new TextBox();
@@ -143,6 +142,9 @@
             chbRemovedDriver = new CheckBox();
             chbRemovedTransportLine = new CheckBox();
             chbRemovedDistributor = new CheckBox();
+            txbTermoPosition = new TextBox();
+            btnMovePalletDown = new Button();
+            btnMovePalletUp = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -176,6 +178,7 @@
             btnAccept.TabIndex = 254;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
             // 
             // btnCancel
             // 
@@ -246,6 +249,7 @@
             txbPalletPosition.Name = "txbPalletPosition";
             txbPalletPosition.Size = new Size(26, 21);
             txbPalletPosition.TabIndex = 349;
+            txbPalletPosition.KeyPress += txbPalletPosition_KeyPress;
             // 
             // lblPosicionPal
             // 
@@ -257,20 +261,11 @@
             lblPosicionPal.TabIndex = 348;
             lblPosicionPal.Text = "Pos:";
             // 
-            // txbTermoPosition
-            // 
-            txbTermoPosition.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTermoPosition.Location = new Point(276, 448);
-            txbTermoPosition.MaxLength = 2;
-            txbTermoPosition.Name = "txbTermoPosition";
-            txbTermoPosition.Size = new Size(32, 21);
-            txbTermoPosition.TabIndex = 325;
-            txbTermoPosition.TextAlign = HorizontalAlignment.Center;
-            // 
             // dgvPalletList
             // 
             dgvPalletList.AllowUserToAddRows = false;
             dgvPalletList.AllowUserToDeleteRows = false;
+            dgvPalletList.AllowUserToOrderColumns = true;
             dgvPalletList.AllowUserToResizeRows = false;
             dgvPalletList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvPalletList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
@@ -393,12 +388,13 @@
             btnRemovePallet.Font = new Font("Microsoft Sans Serif", 8.25F);
             btnRemovePallet.Image = Properties.Resources.basuraIcon16;
             btnRemovePallet.ImageAlign = ContentAlignment.MiddleRight;
-            btnRemovePallet.Location = new Point(558, 26);
+            btnRemovePallet.Location = new Point(600, 26);
             btnRemovePallet.Name = "btnRemovePallet";
             btnRemovePallet.Size = new Size(23, 23);
             btnRemovePallet.TabIndex = 337;
             btnRemovePallet.TextAlign = ContentAlignment.TopCenter;
             btnRemovePallet.UseVisualStyleBackColor = true;
+            btnRemovePallet.Click += btnRemovePallet_Click;
             // 
             // btnAddPallet
             // 
@@ -411,6 +407,7 @@
             btnAddPallet.TabIndex = 336;
             btnAddPallet.TextAlign = ContentAlignment.TopRight;
             btnAddPallet.UseVisualStyleBackColor = true;
+            btnAddPallet.Click += btnAddPallet_Click;
             // 
             // txbIdPallet
             // 
@@ -420,6 +417,7 @@
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(47, 21);
             txbIdPallet.TabIndex = 334;
+            txbIdPallet.KeyPress += txbIdPallet_KeyPress;
             // 
             // txbSeal3
             // 
@@ -1401,11 +1399,49 @@
             chbRemovedDistributor.Text = "  ";
             chbRemovedDistributor.UseVisualStyleBackColor = true;
             // 
+            // txbTermoPosition
+            // 
+            txbTermoPosition.Font = new Font("Microsoft Sans Serif", 9F);
+            txbTermoPosition.Location = new Point(276, 448);
+            txbTermoPosition.MaxLength = 2;
+            txbTermoPosition.Name = "txbTermoPosition";
+            txbTermoPosition.Size = new Size(32, 21);
+            txbTermoPosition.TabIndex = 325;
+            txbTermoPosition.TextAlign = HorizontalAlignment.Center;
+            // 
+            // btnMovePalletDown
+            // 
+            btnMovePalletDown.Font = new Font("Microsoft Sans Serif", 9F);
+            btnMovePalletDown.Image = Properties.Resources.downIcon16;
+            btnMovePalletDown.ImageAlign = ContentAlignment.TopLeft;
+            btnMovePalletDown.Location = new Point(577, 26);
+            btnMovePalletDown.Name = "btnMovePalletDown";
+            btnMovePalletDown.Size = new Size(23, 23);
+            btnMovePalletDown.TabIndex = 375;
+            btnMovePalletDown.TextAlign = ContentAlignment.TopRight;
+            btnMovePalletDown.UseVisualStyleBackColor = true;
+            btnMovePalletDown.Click += btnMovePalletDown_Click;
+            // 
+            // btnMovePalletUp
+            // 
+            btnMovePalletUp.Font = new Font("Microsoft Sans Serif", 9F);
+            btnMovePalletUp.Image = Properties.Resources.upIcon16;
+            btnMovePalletUp.ImageAlign = ContentAlignment.TopLeft;
+            btnMovePalletUp.Location = new Point(555, 26);
+            btnMovePalletUp.Name = "btnMovePalletUp";
+            btnMovePalletUp.Size = new Size(23, 23);
+            btnMovePalletUp.TabIndex = 376;
+            btnMovePalletUp.TextAlign = ContentAlignment.TopRight;
+            btnMovePalletUp.UseVisualStyleBackColor = true;
+            btnMovePalletUp.Click += btnMovePalletUp_Click;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(797, 678);
+            Controls.Add(btnMovePalletUp);
+            Controls.Add(btnMovePalletDown);
             Controls.Add(chbRemovedDistributor);
             Controls.Add(chbRemovedCityDestination);
             Controls.Add(chbRemovedFreightContainer);
@@ -1537,7 +1573,6 @@
         public TextBox txbDieselInvoice;
         public TextBox txbPalletPosition;
         private Label lblPosicionPal;
-        public TextBox txbTermoPosition;
         public DataGridView dgvPalletList;
         public CheckBox chbRejected;
         public TextBox txbNameOperator;
@@ -1639,5 +1674,8 @@
         public CheckBox chbRemovedDriver;
         public CheckBox chbRemovedTransportLine;
         public CheckBox chbRemovedDistributor;
+        public TextBox txbTermoPosition;
+        private Button btnMovePalletDown;
+        private Button btnMovePalletUp;
     }
 }

@@ -1,4 +1,6 @@
-﻿using SisUvex.Catalogos.WorkGroup;
+﻿using DocumentFormat.OpenXml.Drawing;
+using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.WorkGroup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,11 +34,64 @@ namespace SisUvex.Archivo.Manifiesto
         private void FrmManifestAdd_Load(object sender, EventArgs e)
         {
             cls.BeginFormAdd();
+
         }
 
         private void chbRemovedDistributor_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnAddPallet_Click(object sender, EventArgs e)
+        {
+            AddPalletToList();
+        }
+
+        private void btnRemovePallet_Click(object sender, EventArgs e)
+        {
+            cls.BtnRemovePallet();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txbIdPallet_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                AddPalletToList();
+                e.Handled = true;
+            }
+        }
+        private void txbPalletPosition_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                AddPalletToList();
+                e.Handled = true;
+            }
+        }
+
+        private void AddPalletToList()
+        {
+            if (int.TryParse(txbPalletPosition.Text, out int Position))
+
+                if (txbIdPallet.Text.IsNullOrEmpty())
+                    System.Media.SystemSounds.Hand.Play();
+                else
+                    cls.BtnAddPallet();
+        }
+
+        private void btnMovePalletUp_Click(object sender, EventArgs e)
+        {
+            cls.BtnMovePalletUp();
+        }
+
+        private void btnMovePalletDown_Click(object sender, EventArgs e)
+        {
+            cls.BtnMovePalletDown();
         }
     }
 }

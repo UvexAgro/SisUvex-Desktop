@@ -10,6 +10,7 @@ using Microsoft.Identity.Client;
 using iText.Kernel.Pdf.Canvas.Wmf;
 using SisUvex.Catalogos.WorkGroup;
 using System.Collections.Generic;
+using SisUvex.Catalogos.Metods.Values;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -21,6 +22,8 @@ namespace SisUvex.Archivo.Manifiesto
         public FrmManifestCat _frmCat;
         public EManifest eManifest;
         public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
+        ClsManifestPalletList clsPallets = new ClsManifestPalletList();
+
         private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Hora, vw.Distribuidor, vw.Consignatario, vw.Productor, vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
         private string queryCatalogOrderBy = " ORDER BY Manifiesto Desc ";
         public DataTable dtCatalogo;
@@ -124,6 +127,9 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BeginFormAdd()
         {
+            clsPallets.columnPosition = "Posicion";
+            clsPallets.dataGridView = _frmAdd.dgvPalletList;
+            clsPallets.AddColumnsToDGVPalletList();
             //AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
 
             CargarComboBoxes();
@@ -143,6 +149,8 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 LoadControlsModify();
             }
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
         }
 
         private void CargarComboBoxes()
@@ -244,6 +252,43 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
+        }
+
+        public void BtnAddPallet()
+        {
+            if(!int.TryParse(_frmAdd.txbPalletPosition.Text, out int position))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+            else if (position == 0)
+            {
+                position = clsPallets.GetNextPalletPosition();
+            }
+
+            bool isPalletAdd = clsPallets.AddPalletToDGVPalletList(ClsValues.FormatZeros(_frmAdd.txbIdPallet.Text,"00000"), position);
+
+            if (isPalletAdd)
+            {
+                _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+                _frmAdd.txbIdPallet.Focus();
+                _frmAdd.txbIdPallet.SelectAll();
+            }
+        }
+
+        public void BtnRemovePallet()
+        {
+            clsPallets.RemovePalletFromDGVPalletList();
+        }
+
+        public void BtnMovePalletUp()
+        {
+            clsPallets.MoveSelectedPalletPosition(1);
+        }
+
+        public void BtnMovePalletDown()
+        {
+            clsPallets.MoveSelectedPalletPosition(-1);
         }
     }
 }
