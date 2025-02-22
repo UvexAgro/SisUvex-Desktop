@@ -123,6 +123,7 @@
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+            relaciónEmpleadoscomedorToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -645,7 +646,7 @@
             // 
             // comedorToolStripMenuItem
             // 
-            comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, catálogoVentanillasToolStripMenuItem, sincronizarRegistrosToolStripMenuItem, proveedoresToolStripMenuItem1 });
+            comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, catálogoVentanillasToolStripMenuItem, sincronizarRegistrosToolStripMenuItem, proveedoresToolStripMenuItem1, relaciónEmpleadoscomedorToolStripMenuItem });
             comedorToolStripMenuItem.Name = "comedorToolStripMenuItem";
             comedorToolStripMenuItem.Size = new Size(189, 22);
             comedorToolStripMenuItem.Text = "Comedor";
@@ -653,42 +654,42 @@
             // áreaComedorToolStripMenuItem1
             // 
             áreaComedorToolStripMenuItem1.Name = "áreaComedorToolStripMenuItem1";
-            áreaComedorToolStripMenuItem1.Size = new Size(181, 22);
+            áreaComedorToolStripMenuItem1.Size = new Size(233, 22);
             áreaComedorToolStripMenuItem1.Text = "Área comedor";
             áreaComedorToolStripMenuItem1.Click += áreaComedorToolStripMenuItem1_Click;
             // 
             // asignarComedorToolStripMenuItem1
             // 
             asignarComedorToolStripMenuItem1.Name = "asignarComedorToolStripMenuItem1";
-            asignarComedorToolStripMenuItem1.Size = new Size(181, 22);
+            asignarComedorToolStripMenuItem1.Size = new Size(233, 22);
             asignarComedorToolStripMenuItem1.Text = "Asignar comedor";
             asignarComedorToolStripMenuItem1.Click += asignarComedorToolStripMenuItem1_Click;
             // 
             // reportesComedorToolStripMenuItem1
             // 
             reportesComedorToolStripMenuItem1.Name = "reportesComedorToolStripMenuItem1";
-            reportesComedorToolStripMenuItem1.Size = new Size(181, 22);
+            reportesComedorToolStripMenuItem1.Size = new Size(233, 22);
             reportesComedorToolStripMenuItem1.Text = "Reportes comedor";
             reportesComedorToolStripMenuItem1.Click += reportesComedorToolStripMenuItem1_Click;
             // 
             // catálogoVentanillasToolStripMenuItem
             // 
             catálogoVentanillasToolStripMenuItem.Name = "catálogoVentanillasToolStripMenuItem";
-            catálogoVentanillasToolStripMenuItem.Size = new Size(181, 22);
+            catálogoVentanillasToolStripMenuItem.Size = new Size(233, 22);
             catálogoVentanillasToolStripMenuItem.Text = "Catálogo ventanillas";
             catálogoVentanillasToolStripMenuItem.Click += catálogoVentanillasToolStripMenuItem_Click;
             // 
             // sincronizarRegistrosToolStripMenuItem
             // 
             sincronizarRegistrosToolStripMenuItem.Name = "sincronizarRegistrosToolStripMenuItem";
-            sincronizarRegistrosToolStripMenuItem.Size = new Size(181, 22);
+            sincronizarRegistrosToolStripMenuItem.Size = new Size(233, 22);
             sincronizarRegistrosToolStripMenuItem.Text = "Sincronizar registros";
             sincronizarRegistrosToolStripMenuItem.Click += sincronizarRegistrosToolStripMenuItem_Click;
             // 
             // proveedoresToolStripMenuItem1
             // 
             proveedoresToolStripMenuItem1.Name = "proveedoresToolStripMenuItem1";
-            proveedoresToolStripMenuItem1.Size = new Size(181, 22);
+            proveedoresToolStripMenuItem1.Size = new Size(233, 22);
             proveedoresToolStripMenuItem1.Text = "Proveedores";
             // 
             // consultasToolStripMenuItem
@@ -766,6 +767,13 @@
             // 
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
+            // 
+            // relaciónEmpleadoscomedorToolStripMenuItem
+            // 
+            relaciónEmpleadoscomedorToolStripMenuItem.Name = "relaciónEmpleadoscomedorToolStripMenuItem";
+            relaciónEmpleadoscomedorToolStripMenuItem.Size = new Size(233, 22);
+            relaciónEmpleadoscomedorToolStripMenuItem.Text = "Relación empleados-comedor";
+            relaciónEmpleadoscomedorToolStripMenuItem.Click += relaciónEmpleadoscomedorToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
@@ -887,5 +895,6 @@
         private ToolStripMenuItem altaDeEmpleadosSinRegistroToolStripMenuItem;
         private ToolStripMenuItem proveedoresToolStripMenuItem1;
         private ToolStripMenuItem asistenciaEmpaqueToolStripMenuItem1;
+        private ToolStripMenuItem relaciónEmpleadoscomedorToolStripMenuItem;
     }
 }

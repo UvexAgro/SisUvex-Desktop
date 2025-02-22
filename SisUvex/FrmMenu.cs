@@ -50,6 +50,7 @@ using SisUvex.Nomina.Comedores.DiningReports;
 using SisUvex.Nomina.Comedores.Registers.SyncRegisters;
 using SisUvex.Catalogos.WorkGroup;
 using SisUvex.Nomina.Registration.NewEmployeeRegistrationSA;
+using SisUvex.Nomina.Comedores.EmployeeDiningHallAssignment;
 
 namespace SisUvex
 {
@@ -487,6 +488,12 @@ namespace SisUvex
         private void altaDeEmpleadosSinRegistroToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmNewEmployeeRegistrationMin cat = new FrmNewEmployeeRegistrationMin();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void relaciónEmpleadoscomedorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmEmployeeDiningHallAsingment cat = new FrmEmployeeDiningHallAsingment();
             AbrirVentanaHijo(cat, 3);
         }
     }

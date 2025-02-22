@@ -73,7 +73,7 @@
             // 
             // btnSearchEmployee
             // 
-            btnSearchEmployee.BackgroundImage = Properties.Resources.guardarIcon16;
+            btnSearchEmployee.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchEmployee.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchEmployee.Location = new Point(88, 89);
             btnSearchEmployee.Name = "btnSearchEmployee";
@@ -240,7 +240,7 @@
             // 
             // btnFrmSearchEmployeeId
             // 
-            btnFrmSearchEmployeeId.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnFrmSearchEmployeeId.BackgroundImage = Properties.Resources.personIcon16;
             btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
             btnFrmSearchEmployeeId.Location = new Point(113, 89);
             btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
