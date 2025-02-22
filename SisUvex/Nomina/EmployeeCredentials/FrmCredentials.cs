@@ -30,7 +30,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
         private void btnAgregarListado_Click(object sender, EventArgs e)
         {
-            InsertOneEmployee();
+            InsertTxbEmployees();
         }
 
         private void btnCargarCredenciales_Click(object sender, EventArgs e)
@@ -48,20 +48,11 @@ namespace SisUvex.Nomina.EmployeeCredentials
             cls.SetImprimirColumnValues(chbSelectAll.Checked);
         }
 
-        private void InsertOneEmployee()
+        private void InsertTxbEmployees()
         {
-            cls.btnAddOneEmployeeToList();
+            cls.btnAddTxbEmployeesToList();
             txbCodigoEmpleado.Focus();
             txbCodigoEmpleado.SelectAll();
-        }
-
-        private void txbCodigoEmpleado_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                InsertOneEmployee();
-                e.Handled = true;
-            }
         }
 
         private void FrmCredentials_FormClosing(object sender, FormClosingEventArgs e)
@@ -81,6 +72,11 @@ namespace SisUvex.Nomina.EmployeeCredentials
             txbCodigoEmpleado.Focus();
 
             txbCodigoEmpleado.SelectAll();
+        }
+
+        private void btnShowList_Click(object sender, EventArgs e)
+        {
+            cls.BtnShowEmployeeList();
         }
     }
 }

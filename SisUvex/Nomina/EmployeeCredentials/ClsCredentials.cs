@@ -176,9 +176,13 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
             }
 
-            Paragraph reingreso = new Paragraph("Ingreso: " + Convert.ToDateTime(empleado["Ingreso"]).ToString("dd-MMM-yyyy")).SetFontSize(fontSubtitles)
+            string? _Ingreso = empleado["Ingreso"].ToString();
+            if (!string.IsNullOrEmpty(_Ingreso))
+            {
+                Paragraph reingreso = new Paragraph("Ingreso: " + Convert.ToDateTime(empleado["Ingreso"]).ToString("dd-MMM-yyyy")).SetFontSize(fontSubtitles)
                 .SetFixedPosition(reingresoX, reingresoY, 200);
-            document.Add(reingreso);
+                document.Add(reingreso);
+            }
 
             string? _Impresion = empleado["Impresion"].ToString();
             if (!string.IsNullOrEmpty(_Impresion))
@@ -189,7 +193,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
             }
 
             string? _nSS = empleado["NSS"].ToString();
-            if (!string.IsNullOrEmpty(_nSS))
+            if (!string.IsNullOrEmpty(_nSS.Trim()))
             {
                 Paragraph nSS = new Paragraph("NSS: " + _nSS).SetFontSize(nSSFont)
                 .SetTextAlignment(TextAlignment.CENTER) // Alineación centrada
@@ -247,14 +251,39 @@ namespace SisUvex.Nomina.EmployeeCredentials
             return dt;
         }
 
-        private DataTable GetDataTableToAddOneEmployee()
+        private DataTable GetDataTableToAddTxbEmployees()
         {
-            string query = queryColumns + $" WHERE emp.id_employee = '{ClsValues.FormatZeros(frm.txbCodigoEmpleado.Text, "000000")}' ";
-
-            //ES LA VISTA DEL DATAGRIDVIEW, NO LA TABLA DE LOS DATOS DE LA CREDENCIAL
+            string datosPegados = frm.txbCodigoEmpleado.Text;
             DataTable dt = new DataTable();
 
-            dt = ClsQuerysDB.GetDataTable(query);
+            if (string.IsNullOrWhiteSpace(datosPegados))
+            {
+                SystemSounds.Exclamation.Play();
+                return dt;
+            }
+
+            // Procesar los datos, eliminando espacios y saltos de línea
+            var valores = datosPegados.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(v => v.Trim())
+                                      .Where(v => !string.IsNullOrEmpty(v))
+                                      .ToArray();
+
+            if (valores.Length == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return dt;
+            }
+
+            Dictionary<string, object?> parameters = new();
+            string query = queryColumns + " WHERE id_employee IN (" + string.Join(", ", valores.Select((v, i) =>
+            {
+                string paramName = $"@id{i}";
+                parameters.Add(paramName, v);
+                return paramName;
+            })) + ")";
+
+            // Ejecutar la consulta con parámetros
+            dt = ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
 
             if (dt.Rows.Count == 0)
                 SystemSounds.Exclamation.Play();
@@ -319,14 +348,14 @@ namespace SisUvex.Nomina.EmployeeCredentials
             frm.dataGridView1.ResumeLayout();
         }
 
-        public void btnAddOneEmployeeToList()
+        public void btnAddTxbEmployeesToList()
         {
             ShowDgvEmployeesList();
 
             if (frm.dataGridView1.ColumnCount == 0)
                 LoadDgvColumns();
 
-            DataTable dt = GetDataTableToAddOneEmployee();
+            DataTable dt = GetDataTableToAddTxbEmployees();
 
             if (dt.Rows.Count == 0)
             {
@@ -334,27 +363,24 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 return;
             }
 
-            // Verificar si el empleado ya está en la lista
-            foreach (DataGridViewRow fila in frm.dataGridView1.Rows)
+            foreach (DataRow row in dt.Rows)
             {
-                if (fila.Cells["Código"].Value?.ToString() == ClsValues.FormatZeros(frm.txbCodigoEmpleado.Text, "000000"))
+                bool employeeExists = false;
+
+                foreach (DataGridViewRow fila in frm.dataGridView1.Rows)
                 {
-                    SystemSounds.Exclamation.Play();
-                    return;
+                    if (fila.Cells["Código"].Value?.ToString() == row["Código"].ToString())
+                    {
+                        employeeExists = true;
+                        break;
+                    }
+                }
+
+                if (!employeeExists)
+                {
+                    frm.dataGridView1.Rows.Add(row["Imprimir"], row["Código"], row["A. Paterno"], row["A. Materno"], row["Nombre"], row["F. Nacimiento"], row["F. Ingreso"], row["F. Impresion"]);
                 }
             }
-
-            DataRow row = dt.Rows[0];
-            int rowIndex = frm.dataGridView1.Rows.Add();
-            DataGridViewRow dgvRow = frm.dataGridView1.Rows[rowIndex];
-            dgvRow.Cells["Imprimir"].Value = row["Imprimir"];
-            dgvRow.Cells["Código"].Value = row["Código"];
-            dgvRow.Cells["A. Paterno"].Value = row["A. Paterno"];
-            dgvRow.Cells["A. Materno"].Value = row["A. Materno"];
-            dgvRow.Cells["Nombre"].Value = row["Nombre"];
-            dgvRow.Cells["F. Nacimiento"].Value = row["F. Nacimiento"];
-            dgvRow.Cells["F. Ingreso"].Value = row["F. Ingreso"];
-            dgvRow.Cells["F. Impresion"].Value = row["F. Impresion"];
 
             HidePdfViewer();
         }
@@ -517,6 +543,13 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 pdfViewer.Dispose();
                 pdfViewer = null;
             }
+        }
+
+        public void BtnShowEmployeeList()
+        {
+            HidePdfViewer();
+
+            ShowDgvEmployeesList();
         }
     }
 }
