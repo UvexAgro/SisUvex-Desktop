@@ -12,9 +12,9 @@ namespace SisUvex.Archivo.Manifiesto
 {
     internal class ClsManifestPalletList
     {
-        public string columnPosition = "Posicion";
+        public static string columnPosition = "Posicion";
         public DataGridView dataGridView;
-        string qryPal = " SELECT Activo, Posicion, Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack FROM vw_PackPalletDetails ";
+        string qryPal = $" SELECT Activo, Posicion AS [{columnPosition}], Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack FROM vw_PackPalletDetails ";
         public int GetNextPalletPosition()
         {
             int maxPosition = 0;
@@ -93,29 +93,32 @@ namespace SisUvex.Archivo.Manifiesto
 
             foreach (DataRow row in dtPallet.Rows) //Añadirle la posición del txbPosition
             {
-                row["Posicion"] = position;
+                row[columnPosition] = position;
             }
 
             MovePalletsPositions(position, 1);
 
-            AddDTPalletToDGVList(dtPallet);
+            AddDTPalletsToDGVList(dtPallet);
 
             return true;
         }
 
-        private void AddDTPalletToDGVList(DataTable dtPallets)
+        private void AddDTPalletsToDGVList(DataTable dtPallets)
         {
-            int position = int.Parse(dtPallets.Rows[0]["Posicion"].ToString());
+            if (dtPallets.Rows.Count == 0)
+                return;
+
+            int position = int.Parse(dtPallets.Rows[0][columnPosition].ToString());
             List<DataGridViewRow> rowsToInsert = new List<DataGridViewRow>();
 
             foreach (DataRow row in dtPallets.Rows)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
-                newRow.CreateCells(dataGridView, row["Posicion"], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"]);
+                newRow.CreateCells(dataGridView, row[columnPosition], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"]);
                 rowsToInsert.Add(newRow);
             }
 
-            int insertIndex = dataGridView.Rows.Cast<DataGridViewRow>().Where(r => int.Parse(r.Cells["Posicion"].Value.ToString()) == position - 1).LastOrDefault()?.Index + 1 ?? 0;
+            int insertIndex = dataGridView.Rows.Cast<DataGridViewRow>().Where(r => int.Parse(r.Cells[columnPosition].Value.ToString()) == position - 1).LastOrDefault()?.Index + 1 ?? 0;
 
             foreach (var newRow in rowsToInsert)
             {
@@ -128,10 +131,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                if (int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition) && comparePosition >= 1 && comparePosition >= palletPosition)
+                if (int.TryParse(row.Cells[columnPosition].Value.ToString(), out int comparePosition) && comparePosition >= 1 && comparePosition >= palletPosition)
                 {
                     comparePosition = comparePosition + unit;
-                    row.Cells["Posicion"].Value = comparePosition;
+                    row.Cells[columnPosition].Value = comparePosition;
                 }
             }
         }
@@ -140,10 +143,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             if (dataGridView.Rows.Count > 0)
             {
-                int selectedPosition = int.Parse(dataGridView.SelectedRows[0].Cells["Posicion"].Value.ToString());
+                int selectedPosition = int.Parse(dataGridView.SelectedRows[0].Cells[columnPosition].Value.ToString());
 
                 var rowsToRemove = dataGridView.Rows.Cast<DataGridViewRow>()
-                    .Where(row => int.Parse(row.Cells["Posicion"].Value.ToString()) == selectedPosition)
+                    .Where(row => int.Parse(row.Cells[columnPosition].Value.ToString()) == selectedPosition)
                     .ToList();
 
                 foreach (var row in rowsToRemove)
@@ -210,12 +213,13 @@ namespace SisUvex.Archivo.Manifiesto
 
             return true;
         }
+
         public void MoveUpSelectedPalletPosition()
         {
             if (dataGridView.SelectedRows.Count == 0)
                 return;
 
-            if (!int.TryParse(dataGridView.SelectedRows[0].Cells["Posicion"].Value.ToString(), out int selectedPosition))
+            if (!int.TryParse(dataGridView.SelectedRows[0].Cells[columnPosition].Value.ToString(), out int selectedPosition))
             {
                 System.Media.SystemSounds.Beep.Play();
                 return;
@@ -225,25 +229,26 @@ namespace SisUvex.Archivo.Manifiesto
 
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                if (!int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition))
+                if (!int.TryParse(row.Cells[columnPosition].Value.ToString(), out int comparePosition))
                     continue;
 
                 if (comparePosition == selectedPosition + 1)
                 {
-                    row.Cells["Posicion"].Value = selectedPosition;
+                    row.Cells[columnPosition].Value = selectedPosition;
                 }
                 else if (comparePosition == selectedPosition)
                 {
-                    row.Cells["Posicion"].Value = selectedPosition + 1;
+                    row.Cells[columnPosition].Value = selectedPosition + 1;
                 }
             }
         }
+
         public void MoveDownSelectedPalletPosition()
         {
             if (dataGridView.SelectedRows.Count == 0)
                 return;
 
-            if (!int.TryParse(dataGridView.SelectedRows[0].Cells["Posicion"].Value.ToString(), out int selectedPosition) || selectedPosition <= 1)
+            if (!int.TryParse(dataGridView.SelectedRows[0].Cells[columnPosition].Value.ToString(), out int selectedPosition) || selectedPosition <= 1)
             {
                 System.Media.SystemSounds.Beep.Play();
                 return;
@@ -253,18 +258,35 @@ namespace SisUvex.Archivo.Manifiesto
 
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                if (!int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition))
+                if (!int.TryParse(row.Cells[columnPosition].Value.ToString(), out int comparePosition))
                     continue;
 
                 if (comparePosition == selectedPosition - 1)
                 {
-                    row.Cells["Posicion"].Value = selectedPosition;
+                    row.Cells[columnPosition].Value = selectedPosition;
                 }
                 else if (comparePosition == selectedPosition)
                 {
-                    row.Cells["Posicion"].Value = selectedPosition - 1;
+                    row.Cells[columnPosition].Value = selectedPosition - 1;
                 }
             }
+        }
+
+        public void AddManifestPalletsToDGVPalletList(string? idManifest)
+        {
+            if(string.IsNullOrEmpty(idManifest))
+                return;
+            
+            string qryWherePallet = $" WHERE Manifiesto = @idManifest ORDER BY Posicion, Mix";
+
+            Dictionary<string, object> idPalParameter = new()
+            {
+                { "@idManifest", idManifest }
+            };
+
+            DataTable dtManifestPallets = ClsQuerysDB.ExecuteParameterizedQuery(qryPal + qryWherePallet, idPalParameter);
+
+            AddDTPalletsToDGVList(dtManifestPallets);
         }
     }
 }

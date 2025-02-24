@@ -54,7 +54,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-
+            cls.btnAcceptAddModify();
         }
 
         private void txbIdPallet_KeyPress(object sender, KeyPressEventArgs e)
@@ -92,6 +92,11 @@ namespace SisUvex.Archivo.Manifiesto
         private void btnMovePalletDown_Click(object sender, EventArgs e)
         {
             cls.BtnMovePalletDown();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
