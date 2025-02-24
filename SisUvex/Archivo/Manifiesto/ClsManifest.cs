@@ -11,6 +11,8 @@ using iText.Kernel.Pdf.Canvas.Wmf;
 using SisUvex.Catalogos.WorkGroup;
 using System.Collections.Generic;
 using SisUvex.Catalogos.Metods.Values;
+using System.Media;
+using System.ComponentModel;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -124,7 +126,25 @@ namespace SisUvex.Archivo.Manifiesto
 
             dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
         }
+        public void OpenFrmModify()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
+            {
+                _frmAdd = new FrmManifestAdd();
+                _frmAdd.Text = "Modificar manifiesto";
+                _frmAdd.lblTitle.Text = "Modificar manifiesto";
+                _frmAdd.IsAddModify = false;
 
+                _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString();
+                _frmAdd.ShowDialog();
+
+                dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+            }
+        }
         public void BeginFormAdd()
         {
             clsPallets.columnPosition = "Posicion";
@@ -147,6 +167,8 @@ namespace SisUvex.Archivo.Manifiesto
             }
             else
             {
+                _frmAdd.cboMarket.Enabled = false;
+
                 LoadControlsModify();
             }
 
@@ -218,40 +240,40 @@ namespace SisUvex.Archivo.Manifiesto
 
             _frmAdd.txbId.Text = eManifest.idManifest;
             //_frmAdd.cboSeason = eManifest.idSeason;
-            _frmAdd.cboActive.SelectedIndex = eManifest.active;
-            _frmAdd.cboMarket.Text = eManifest.idManifest.Substring(0, 1);
-            _frmAdd.dtpDate.Value = eManifest.shipmentDate;
+            _frmAdd.cboActive.SelectedIndex = eManifest.active ?? 1;
+            _frmAdd.cboMarket.SelectedIndex = eManifest.idManifest?.Substring(0, 1) == "E" ? 0 : 1;
+            _frmAdd.dtpDate.Value = eManifest.shipmentDate ?? DateTime.Now;
             _frmAdd.spnHour.Text = eManifest.shipmentHour;
-            _frmAdd.txbIdDistributor.Text = eManifest.idDistributor;
-            _frmAdd.txbIdConsignee.Text = eManifest.idConsignee;
-            _frmAdd.txbIdGrower.Text = eManifest.idGrower;
-            _frmAdd.txbIdAgencyUS.Text = eManifest.idUSAgencyTrade;
-            _frmAdd.txbIdAgencyMX.Text = eManifest.idMXAgencyTrade;
-            _frmAdd.txbIdCityCrossPoint.Text = eManifest.idCityCrossPoint;
-            _frmAdd.txbIdCityDestination.Text = eManifest.idCityDestiny;
             _frmAdd.txbPurchaseOrder.Text = eManifest.purchaseOrder;
             _frmAdd.txbBooking.Text = eManifest.booking;
             _frmAdd.txbPhytosanitary.Text = eManifest.phytosanitary;
-            _frmAdd.txbIdTransportLine.Text = eManifest.idTransportLine;
-            _frmAdd.txbIdDriver.Text = eManifest.idDriver;
-            _frmAdd.txbIdTruck.Text = eManifest.idTruck;
-            _frmAdd.txbIdFreightContainer.Text = eManifest.idFreightContainer;
             _frmAdd.cboTransportVehicle.Text = eManifest.transportVehicle;
             _frmAdd.cboTransportType.Text = eManifest.transportType;
             _frmAdd.txbTermograph.Text = eManifest.termograph;
-            _frmAdd.txbTermoPosition.Text = eManifest.termoPosition.ToString();
-            _frmAdd.txbTemperature.Text = eManifest.temperature.ToString();
+            _frmAdd.txbTermoPosition.Text = eManifest.termoPosition;
+            _frmAdd.txbTemperature.Text = eManifest.temperature;
             _frmAdd.cboTemperatureUnit.Text = eManifest.temperatureUnit;
             _frmAdd.txbSeal1.Text = eManifest.seal1;
             _frmAdd.txbSeal2.Text = eManifest.seal2;
             _frmAdd.txbSeal3.Text = eManifest.seal3;
             _frmAdd.txbDieselInvoice.Text = eManifest.dieselInvoice;
-            _frmAdd.txbDieselLiters.Text = eManifest.dieselLts.ToString();
+            _frmAdd.txbDieselLiters.Text = eManifest.dieselLts;
             _frmAdd.txbNameShipper.Text = eManifest.nameShipper;
             _frmAdd.txbNameOperator.Text = eManifest.nameOperator;
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
 
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, eManifest.idConsignee ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, eManifest.idGrower ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, eManifest.idUSAgencyTrade ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, eManifest.idMXAgencyTrade ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, eManifest.idCityCrossPoint ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, eManifest.idCityDestiny ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, eManifest.idTransportLine ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, eManifest.idDriver ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTruck, eManifest.idTruck ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, eManifest.idFreightContainer ?? "");
         }
 
         public void BtnAddPallet()
@@ -279,16 +301,26 @@ namespace SisUvex.Archivo.Manifiesto
         public void BtnRemovePallet()
         {
             clsPallets.RemovePalletFromDGVPalletList();
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
         }
 
         public void BtnMovePalletUp()
         {
-            clsPallets.MoveSelectedPalletPosition(1);
+            clsPallets.MoveUpSelectedPalletPosition();
+
+            _frmAdd.dgvPalletList.Sort(_frmAdd.dgvPalletList.Columns["Posicion"], System.ComponentModel.ListSortDirection.Ascending);
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
         }
 
         public void BtnMovePalletDown()
         {
-            clsPallets.MoveSelectedPalletPosition(-1);
+            clsPallets.MoveDownSelectedPalletPosition();
+
+            _frmAdd.dgvPalletList.Sort(_frmAdd.dgvPalletList.Columns["Posicion"], System.ComponentModel.ListSortDirection.Ascending);
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
         }
     }
 }

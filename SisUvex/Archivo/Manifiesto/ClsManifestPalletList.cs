@@ -1,4 +1,5 @@
-﻿using SisUvex.Archivo.Etiquetas.LabelInterface;
+﻿using Microsoft.Data.SqlClient.DataClassification;
+using SisUvex.Archivo.Etiquetas.LabelInterface;
 using SisUvex.Catalogos.Metods.Querys;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,10 @@ namespace SisUvex.Archivo.Manifiesto
             dataGridView.Columns.Add("Plan", "Plan");
             dataGridView.Columns.Add("GTIN", "GTIN");
 
+
+            dataGridView.Columns[columnPosition].ValueType = typeof(int);
+            dataGridView.Columns[columnPosition].DefaultCellStyle.Format = "00";
+
             dataGridView.Columns[columnPosition].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView.Columns["Fecha"].DefaultCellStyle.Format = "MMM-dd";
             dataGridView.Columns["Pallet"].DefaultCellStyle.Font = new Font(dataGridView.DefaultCellStyle.Font, FontStyle.Bold);
@@ -88,7 +93,7 @@ namespace SisUvex.Archivo.Manifiesto
 
             foreach (DataRow row in dtPallet.Rows) //Añadirle la posición del txbPosition
             {
-                row["Posicion"] = position.ToString();
+                row["Posicion"] = position;
             }
 
             MovePalletsPositions(position, 1);
@@ -123,10 +128,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                if (int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition) && comparePosition > 1 && comparePosition >= palletPosition)
+                if (int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition) && comparePosition >= 1 && comparePosition >= palletPosition)
                 {
                     comparePosition = comparePosition + unit;
-                    row.Cells["Posicion"].Value = comparePosition.ToString();
+                    row.Cells["Posicion"].Value = comparePosition;
                 }
             }
         }
@@ -152,7 +157,19 @@ namespace SisUvex.Archivo.Manifiesto
 
         public bool IsPalletValid(DataTable dtPallet)
         {
-            string palletId = dtPallet.Rows[0]["Pallet"].ToString();
+            if (dtPallet.Rows.Count == 0)
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return false;
+            }
+
+            string? palletId = dtPallet.Rows[0]["Pallet"].ToString();
+
+            if (string.IsNullOrEmpty(palletId))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return false;
+            }
 
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
@@ -161,12 +178,6 @@ namespace SisUvex.Archivo.Manifiesto
                     System.Media.SystemSounds.Beep.Play();
                     return false;
                 }
-            }
-
-            if (dtPallet.Rows.Count == 0)
-            {
-                System.Media.SystemSounds.Beep.Play();
-                return false;
             }
 
             string? idManifest = dtPallet.Rows[0]["Manifiesto"].ToString();
@@ -199,34 +210,60 @@ namespace SisUvex.Archivo.Manifiesto
 
             return true;
         }
-        public void MoveSelectedPalletPosition(int direction)
+        public void MoveUpSelectedPalletPosition()
         {
             if (dataGridView.SelectedRows.Count == 0)
                 return;
 
-            DataGridViewRow selectedRow = dataGridView.SelectedRows[0];
-            int selectedPosition = int.Parse(selectedRow.Cells["Posicion"].Value.ToString());
-            int targetPosition = selectedPosition + direction;
-
-            var rowsToMove = dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => int.Parse(row.Cells["Posicion"].Value.ToString()) == selectedPosition)
-                .ToList();
-
-            var targetRows = dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => int.Parse(row.Cells["Posicion"].Value.ToString()) == targetPosition)
-                .ToList();
-
-            if (!targetRows.Any())
-                return;
-
-            foreach (var row in rowsToMove)
+            if (!int.TryParse(dataGridView.SelectedRows[0].Cells["Posicion"].Value.ToString(), out int selectedPosition))
             {
-                row.Cells["Posicion"].Value = targetPosition.ToString();
+                System.Media.SystemSounds.Beep.Play();
+                return;
             }
 
-            foreach (var row in targetRows)
+            int selectedIndex = dataGridView.SelectedRows[0].Index;
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                row.Cells["Posicion"].Value = selectedPosition.ToString();
+                if (!int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition))
+                    continue;
+
+                if (comparePosition == selectedPosition + 1)
+                {
+                    row.Cells["Posicion"].Value = selectedPosition;
+                }
+                else if (comparePosition == selectedPosition)
+                {
+                    row.Cells["Posicion"].Value = selectedPosition + 1;
+                }
+            }
+        }
+        public void MoveDownSelectedPalletPosition()
+        {
+            if (dataGridView.SelectedRows.Count == 0)
+                return;
+
+            if (!int.TryParse(dataGridView.SelectedRows[0].Cells["Posicion"].Value.ToString(), out int selectedPosition) || selectedPosition <= 1)
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+
+            int selectedIndex = dataGridView.SelectedRows[0].Index;
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (!int.TryParse(row.Cells["Posicion"].Value.ToString(), out int comparePosition))
+                    continue;
+
+                if (comparePosition == selectedPosition - 1)
+                {
+                    row.Cells["Posicion"].Value = selectedPosition;
+                }
+                else if (comparePosition == selectedPosition)
+                {
+                    row.Cells["Posicion"].Value = selectedPosition - 1;
+                }
             }
         }
     }
