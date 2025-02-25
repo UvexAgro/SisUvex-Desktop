@@ -98,5 +98,26 @@ namespace SisUvex.Archivo.Manifiesto
         {
             this.Close();
         }
+
+        private void btnPrintManifest_Click(object sender, EventArgs e)
+        {
+            if (txbId.Text != "")
+            {
+                //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
+                pdf.CreatePDFManifest(txbId.Text);
+                ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
+                pdfMap.CreatePDFMaping(txbId.Text);
+            }
+            else
+            {
+                MessageBox.Show("Debe guardar el manifiesto antes de imprimirlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txbDieselLiters_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
     }
 }

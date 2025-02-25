@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Office2010.Drawing.Charts;
 
 namespace SisUvex.Catalogos.Metods.Querys
 {
@@ -114,6 +115,38 @@ namespace SisUvex.Catalogos.Metods.Querys
             }
 
             return dataTable;
+        }
+        public static bool GetBoolExecuteParameterizedQuery(string query, Dictionary<string, object> parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+                foreach (var param in parameters)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                int rowsAfected = cmd.ExecuteNonQuery();
+
+                if (rowsAfected > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Ejecutar consulta parametrizada.");
+                return false;
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+
         }
 
         public static string GetStringExecuteParameterizedQuery(string query, Dictionary<string, object> parameters)

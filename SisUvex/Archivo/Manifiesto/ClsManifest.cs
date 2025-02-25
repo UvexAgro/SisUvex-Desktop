@@ -7,6 +7,7 @@ using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
 using System.Media;
 using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.TextBoxes;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -224,6 +225,10 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
+
+            ClsTextBoxes.TxbApplyKeyPressEventNumericWithLimit(_frmAdd.txbDieselLiters, 9, 2);
+            ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTermoPosition);
+            ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTemperature);
         }
 
         public string GetIdNextManifest(string market)
