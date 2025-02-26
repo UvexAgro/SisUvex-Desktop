@@ -25,6 +25,8 @@ using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Grow.PlantsRowLot;
 using SisUvex.Grow.PlantsRowLotLoadExcel;
 using SisUvex.Nomina.Comedores.DiningReports;
+using SisUvex.Archivo.Manifiesto.ConfManifest;
+using SisUvex.Catalogos.Lot;
 
 namespace SisUvex
 {

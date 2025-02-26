@@ -165,6 +165,8 @@ namespace SisUvex.Catalogos.WorkGroup
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
                 cmd.ExecuteNonQuery();
+
+
             }
             catch (Exception ex)
             {

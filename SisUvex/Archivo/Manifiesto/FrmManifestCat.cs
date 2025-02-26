@@ -68,5 +68,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             cls.OpenFrmAdd();
         }
+
+        private void btnModify_Click(object sender, EventArgs e)
+        {
+            cls.OpenFrmModify();
+        }
     }
 }

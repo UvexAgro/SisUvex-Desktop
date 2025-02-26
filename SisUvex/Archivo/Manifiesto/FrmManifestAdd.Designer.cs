@@ -31,7 +31,6 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestAdd));
-            chkBoxPackingList = new CheckBox();
             btnPrintManifest = new Button();
             btnAccept = new Button();
             btnCancel = new Button();
@@ -148,17 +147,6 @@
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
-            // chkBoxPackingList
-            // 
-            chkBoxPackingList.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            chkBoxPackingList.AutoSize = true;
-            chkBoxPackingList.Location = new Point(447, 651);
-            chkBoxPackingList.Name = "chkBoxPackingList";
-            chkBoxPackingList.Size = new Size(86, 19);
-            chkBoxPackingList.TabIndex = 355;
-            chkBoxPackingList.Text = "PackingList";
-            chkBoxPackingList.UseVisualStyleBackColor = true;
-            // 
             // btnPrintManifest
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -168,6 +156,7 @@
             btnPrintManifest.TabIndex = 350;
             btnPrintManifest.Text = "Imprimir";
             btnPrintManifest.UseVisualStyleBackColor = true;
+            btnPrintManifest.Click += btnPrintManifest_Click;
             // 
             // btnAccept
             // 
@@ -189,6 +178,7 @@
             btnCancel.TabIndex = 253;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // label1
             // 
@@ -219,6 +209,7 @@
             txbDieselLiters.Size = new Size(102, 21);
             txbDieselLiters.TabIndex = 353;
             txbDieselLiters.TextAlign = HorizontalAlignment.Center;
+            txbDieselLiters.KeyPress += txbDieselLiters_KeyPress;
             // 
             // lblDieselInvoice
             // 
@@ -304,7 +295,7 @@
             // 
             chbRejected.AutoSize = true;
             chbRejected.Font = new Font("Microsoft Sans Serif", 9F);
-            chbRejected.Location = new Point(711, 33);
+            chbRejected.Location = new Point(696, 28);
             chbRejected.Name = "chbRejected";
             chbRejected.Size = new Size(89, 19);
             chbRejected.TabIndex = 346;
@@ -1456,7 +1447,6 @@
             Controls.Add(cboSeason);
             Controls.Add(btnPrintManifest);
             Controls.Add(button1);
-            Controls.Add(chkBoxPackingList);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(txbPhytosanitary);
@@ -1640,7 +1630,6 @@
         private Label lblDieselLiters;
         private Label label13;
         private Button button1;
-        public CheckBox chkBoxPackingList;
         public ComboBox cboFreightContainer;
         public ComboBox cboTruck;
         public ComboBox cboDistributor;

@@ -108,6 +108,34 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 }
             }
         }
+        public static void CboSelectIndexWithTextInDisplayMember(ComboBox cbo, string DisplayMemberText)
+        {
+            if (cbo.DataSource != null && DisplayMemberText != string.Empty)
+            {
+                DataTable dt = (DataTable)cbo.DataSource;
+                string columnNameDisplayMember = cbo.DisplayMember;
+
+                if (dt.Columns.Contains(ClsObject.Column.active))
+                {
+                    dt.DefaultView.RowFilter = $"{columnNameDisplayMember} = '{DisplayMemberText}' OR {ClsObject.Column.active} = '1'";
+                }
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i][columnNameDisplayMember].ToString() == DisplayMemberText)
+                    {
+                        string valorBuscado = dt.Rows[i][ClsObject.Column.name].ToString();
+
+                        int indice = cbo.FindStringExact(valorBuscado);
+
+                        if (indice != -1)
+                        {
+                            cbo.SelectedIndex = indice;
+                        }
+                    }
+                }
+            }
+        }
 
         public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumn(ComboBox cbo, List<Tuple<ComboBox, CheckBox?>> cboFilterCboDependens, string columnFilterName, TextBox idTextBox)
         {

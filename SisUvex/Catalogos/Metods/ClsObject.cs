@@ -346,7 +346,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveDriver";
             public const string Cbo = "CboDriver";
             public const string DgvCatalog = "DgvCatalogDriver";
-            public const string QueryCbo = $" SELECT id_driver AS '{Column.id}', CONCAT(v_lastNameDriver, v_nameDriver, ' | ', id_driver, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}', id_transportLine AS '{TransportLine.ColumnId}' FROM Pack_Driver ORDER BY '{Column.name}' ";
+            public const string QueryCbo = $" SELECT id_driver AS '{Column.id}', CONCAT(v_lastNameDriver, ' ',v_nameDriver, ' | ', id_driver, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}', id_transportLine AS '{TransportLine.ColumnId}' FROM Pack_Driver ORDER BY '{Column.name}' ";
         }
 
         public static class Truck
