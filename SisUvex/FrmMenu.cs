@@ -51,6 +51,7 @@ using SisUvex.Nomina.Comedores.Registers.SyncRegisters;
 using SisUvex.Catalogos.WorkGroup;
 using SisUvex.Nomina.Registration.NewEmployeeRegistrationSA;
 using SisUvex.Nomina.Comedores.EmployeeDiningHallAssignment;
+using SisUvex.Catalogos.Lot;
 
 namespace SisUvex
 {
@@ -156,7 +157,7 @@ namespace SisUvex
 
         private void lotesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLoteCat cat = new FrmLoteCat();
+            FrmLotCat cat = new FrmLotCat();
             AbrirVentanaHijo(cat, 1);
         }
 

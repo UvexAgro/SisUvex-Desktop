@@ -34,7 +34,6 @@ namespace SisUvex.Catalogos.Metods.Controls
                     {
                         isValid = false;
                         showMessage += "\n    " + message;
-
                     }
                 }
                 else if (control is ComboBox comboBox)
@@ -53,12 +52,28 @@ namespace SisUvex.Catalogos.Metods.Controls
                         showMessage += "\n    " + message;
                     }
                 }
+                else if (control is NumericUpDown numericUpDown)
+                {
+                    if (numericUpDown.Value == 0)
+                    {
+                        isValid = false;
+                        showMessage += "\n    " + message;
+                    }
+                }
+                else if (control is MaskedTextBox maskedTextBox && maskedTextBox.Tag?.ToString() == "fourInts")
+                {
+                    if (maskedTextBox.Text.Length != 4 || !maskedTextBox.Text.All(char.IsDigit))
+                    {
+                        isValid = false;
+                        showMessage += "\n    " + message;
+                    }
+                }
                 // Add more control types if needed
             }
 
             if (!isValid)
             {
-                MessageBox.Show(errorMessage + showMessage , "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(errorMessage + showMessage, "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return isValid;

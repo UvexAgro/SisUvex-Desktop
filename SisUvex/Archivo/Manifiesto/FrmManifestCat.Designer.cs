@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestCat));
             dtpDate2 = new DateTimePicker();
             dtpDate1 = new DateTimePicker();
             btnSearchDate = new Button();
@@ -53,6 +54,7 @@
             btnSearchManifest = new Button();
             txbIdManifest = new TextBox();
             label6 = new Label();
+            btnConfigManifest = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -305,11 +307,25 @@
             label6.TabIndex = 33;
             label6.Text = "Manifiesto";
             // 
+            // btnConfigManifest
+            // 
+            btnConfigManifest.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
+            btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
+            btnConfigManifest.ImageAlign = ContentAlignment.BottomLeft;
+            btnConfigManifest.Location = new Point(498, 115);
+            btnConfigManifest.Name = "btnConfigManifest";
+            btnConfigManifest.Size = new Size(24, 23);
+            btnConfigManifest.TabIndex = 359;
+            btnConfigManifest.TextAlign = ContentAlignment.TopRight;
+            btnConfigManifest.UseVisualStyleBackColor = true;
+            // 
             // FrmManifestCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnConfigManifest);
             Controls.Add(cboGrower);
             Controls.Add(dtpDate2);
             Controls.Add(label5);
@@ -366,5 +382,6 @@
         public ComboBox cboConsignee;
         public ComboBox cboDestination;
         public ComboBox cboGrower;
+        private Button btnConfigManifest;
     }
 }
