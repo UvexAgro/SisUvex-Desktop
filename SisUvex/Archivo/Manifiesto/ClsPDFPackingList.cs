@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using iText.Layout.Borders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -38,6 +39,8 @@ namespace SisUvex.Archivo.Manifiesto
         float cellHeight = 68;
         int thermoPos = 0;
 
+        public string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
         public void CreatePDFPackingList(string manifestNumber)
         {
             queryManifest.GetManifestData(manifestNumber);
@@ -46,9 +49,13 @@ namespace SisUvex.Archivo.Manifiesto
             queryLoadingMap.GetLoadingMapData(manifestNumber);
 
             // Crear un nuevo documento PDF
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
 
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
+            if (!queryManifest.distributorShortName.IsNullOrEmpty())
+            {
+                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
+            }
+
             if (!Directory.Exists(manifestDirectory))
             {
                 Directory.CreateDirectory(manifestDirectory);

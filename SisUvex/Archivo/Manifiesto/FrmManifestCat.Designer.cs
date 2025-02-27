@@ -309,16 +309,16 @@
             // 
             // btnConfigManifest
             // 
-            btnConfigManifest.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
             btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
-            btnConfigManifest.ImageAlign = ContentAlignment.BottomLeft;
+            btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
             btnConfigManifest.Location = new Point(498, 115);
             btnConfigManifest.Name = "btnConfigManifest";
             btnConfigManifest.Size = new Size(24, 23);
             btnConfigManifest.TabIndex = 359;
             btnConfigManifest.TextAlign = ContentAlignment.TopRight;
             btnConfigManifest.UseVisualStyleBackColor = true;
+            btnConfigManifest.Click += btnConfigManifest_Click;
             // 
             // FrmManifestCat
             // 
@@ -350,7 +350,8 @@
             Controls.Add(label1);
             Controls.Add(label6);
             Name = "FrmManifestCat";
-            Text = "FrmManifestCat";
+            Text = "Catálogo manifiesto";
+            WindowState = FormWindowState.Maximized;
             Load += FrmManifestCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);

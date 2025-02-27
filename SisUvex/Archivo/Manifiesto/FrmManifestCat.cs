@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SisUvex.Archivo.Manifiesto.ConfManifest;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -53,7 +54,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-
+            cls.BtnPrintManifestFrmCat();
         }
 
         private void txbIdManifest_KeyPress(object sender, KeyPressEventArgs e)
@@ -72,6 +73,12 @@ namespace SisUvex.Archivo.Manifiesto
         private void btnModify_Click(object sender, EventArgs e)
         {
             cls.OpenFrmModify();
+        }
+
+        private void btnConfigManifest_Click(object sender, EventArgs e)
+        {
+            FrmConfManifest frm = new FrmConfManifest();
+            frm.ShowDialog();
         }
     }
 }

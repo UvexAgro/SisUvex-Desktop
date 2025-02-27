@@ -10,6 +10,7 @@ using iText.Kernel.Colors;
 using iText.Kernel.Pdf.Canvas.Draw;
 using System.Data;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -31,7 +32,7 @@ namespace SisUvex.Archivo.Manifiesto
         int heigthCarrier = 120;
         float maxWidthLogo = 72;
 
-
+        public string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         public void CreatePDFManifest(string manifestNumber)
         {
@@ -40,8 +41,13 @@ namespace SisUvex.Archivo.Manifiesto
             queryManifest.GetManifestTotalData(manifestNumber);
 
             // Crear un nuevo documento PDF
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos",queryManifest.distributorShortName, $"{manifestNumber}");
+            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
+
+            if (!queryManifest.distributorShortName.IsNullOrEmpty())
+            {
+                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
+            }
+
             if (!Directory.Exists(manifestDirectory))
             {
                 Directory.CreateDirectory(manifestDirectory);
@@ -78,7 +84,6 @@ namespace SisUvex.Archivo.Manifiesto
             if (queryManifest.shipperLogo != null)
             {
                 //string dataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
                 logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", queryManifest.shipperLogo + "Logo.png");
                 iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 

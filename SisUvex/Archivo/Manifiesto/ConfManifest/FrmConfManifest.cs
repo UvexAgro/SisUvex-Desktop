@@ -18,29 +18,46 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
         public FrmConfManifest()
         {
             InitializeComponent();
-
-            cls ??= new ClsConfigManifest();
-
-            cls.GetParameters();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            cls.idSeason = txbIdSeason.Text;
-            cls.market = cboMarket.Text.Substring(0,1);
-            cls.temperature = (int)nudTemperature.Value;
-            cls.temperatureUnit = cboTemperatureUnit.Text;
-            cls.printManifest = chbPrintManifest.Checked;
-            cls.printMaping = chbPrintMaping.Checked;
-            cls.printPackingList = chbPrintPackingList.Checked;
-            cls.transportVehicle = cboTransportVehicle.Text;
-            cls.transportTransportType = cboTransportType.Text;
+            try
+            {
+                cls.idSeason = txbIdSeason.Text;
+                cls.market = cboMarket.Text.Substring(0, 1);
+                cls.temperature = (int)nudTemperature.Value;
+                cls.temperatureUnit = cboTemperatureUnit.Text;
+                cls.printManifest = chbPrintManifest.Checked;
+                cls.printMaping = chbPrintMaping.Checked;
+                cls.printPackingList = chbPrintPackingList.Checked;
+                cls.transportVehicle = cboTransportVehicle.Text;
+                cls.transportTransportType = cboTransportType.Text;
 
-            cls.SetParameters();
+                cls.SetParameters();
+
+                cls.manifestFolderPath = txbManifestFolderPath.Text;
+
+                if(Directory.Exists(txbManifestFolderPath.Text))
+                    cls.SetManifestPath(txbManifestFolderPath.Text);
+                else
+                    throw new Exception("La ruta para la carpeta de los manifiestos no existe");
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void FrmConfManifest_Load(object sender, EventArgs e)
         {
+
+            cls ??= new ClsConfigManifest();
+
+            cls.GetParameters();
+
             txbIdSeason.Text = cls.idSeason;
             ClsComboBoxes.CboLoadActives(cboSeason, ClsObject.Season.Cbo);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboSeason, cls.idSeason ?? "");
@@ -50,7 +67,6 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMarket, cls.market ?? "E");
 
             nudTemperature.Value = cls.temperature ?? 34;
-            //ClsComboBoxes.CboSelectIndexWithTextInDisplayMember(cboTemperatureUnit, cls.temperatureUnit ?? "F");
             cboTemperatureUnit.Text = cls.temperatureUnit ?? "F";
 
             chbPrintManifest.Checked = cls.printManifest;
@@ -58,6 +74,8 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             chbPrintPackingList.Checked = cls.printPackingList;
             cboTransportVehicle.Text = cls.transportVehicle;
             cboTransportType.Text = cls.transportTransportType;
+
+            txbManifestFolderPath.Text = cls.manifestFolderPath;
         }
 
         private void SetMarketCbo()
@@ -72,6 +90,21 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             cboMarket.DataSource = dt;
             cboMarket.DisplayMember = ClsObject.Column.name;
             cboMarket.ValueMember = ClsObject.Column.id;
+        }
+
+        private void btnManifestFolderPath_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Seleccione una carpeta";
+                folderDialog.ShowNewFolderButton = true; // Permite crear nuevas carpetas
+
+                // Mostrar el diálogo y verificar si el usuario seleccionó una carpeta
+                if (folderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    txbManifestFolderPath.Text = folderDialog.SelectedPath; // Mostrar la ruta en el TextBox
+                }
+            }
         }
     }
 }
