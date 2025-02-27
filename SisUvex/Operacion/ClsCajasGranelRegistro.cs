@@ -67,7 +67,7 @@ namespace SisUvex.Operacion
 
             ClsComboBoxes.CboApplyTextChangedEvent(frmAdd.cboLote, frmAdd.txbIdLote);
             ClsComboBoxes.CboApplyTextChangedEvent(frmAdd.cboWorkGroup, frmAdd.txbIdWorkGroup);
-            ClsTextBoxes.TxbApplyKeyPressEventInt(frmAdd.txbCajasRegistro);
+            ClsTextBoxes.TxbApplyKeyPressEventDecimal(frmAdd.txbCajasRegistro);
             ClsTextBoxes.TxbApplyKeyPressEventDecimal(frmAdd.txbKgTotales);
             ClsTextBoxes.TxbApplyKeyPressEventDecimal(frmAdd.txbTaraTarima);
             ClsTextBoxes.TxbApplyKeyPressEventDecimal(frmAdd.txbTaraCaja);
@@ -88,7 +88,7 @@ namespace SisUvex.Operacion
         public void AddItemAlDGV()
         {
             decimal tKgTotalesNetos, tKgTotales = decimal.Parse(frmAdd.txbKgTotales.Text), tTaraTarima = decimal.Parse(frmAdd.txbTaraTarima.Text), tTaraCaja = decimal.Parse(frmAdd.txbTaraCaja.Text);
-            int tCajasFila = int.Parse(frmAdd.txbCajasRegistro.Text), tCajasTotales = int.Parse(frmAdd.txbCajasTotales.Text);
+            decimal tCajasFila = decimal.Parse(frmAdd.txbCajasRegistro.Text), tCajasTotales = decimal.Parse(frmAdd.txbCajasTotales.Text);
 
             tKgTotalesNetos = tKgTotales - tTaraTarima - tTaraCaja * (tCajasTotales + tCajasFila);
 
@@ -135,7 +135,7 @@ namespace SisUvex.Operacion
             if (frmAdd.dgvRegistros.SelectedRows.Count > 0)
             {
                 DataGridViewCell celdaCajas = frmAdd.dgvRegistros.SelectedRows[0].Cells["Cajas"];
-                frmAdd._CajasFila = int.Parse(celdaCajas.Value.ToString());
+                frmAdd._CajasFila = decimal.Parse(celdaCajas.Value.ToString());
 
                 frmAdd.dgvRegistros.Rows.RemoveAt(frmAdd.dgvRegistros.SelectedRows[0].Index);
 
@@ -188,9 +188,9 @@ namespace SisUvex.Operacion
         {
             foreach (DataGridViewRow row in frmAdd.dgvRegistros.Rows)
             {
-                int cajas;
+                decimal cajas;
 
-                if (int.TryParse(row.Cells["Cajas"].Value.ToString(), out cajas))
+                if (decimal.TryParse(row.Cells["Cajas"].Value.ToString(), out cajas))
                 {
                     decimal kilogramos = Math.Round(cajas * frmAdd._KgPorCaja,2);
 
@@ -259,7 +259,7 @@ namespace SisUvex.Operacion
             {
                 string idLot = row.Cells["Lote"].Value.ToString().Substring(0, 4);
                 string idVariety = row.Cells["Lote"].Value.ToString().Substring(5, 2);
-                int boxes = int.Parse(row.Cells["Cajas"].Value.ToString());
+                decimal boxes = decimal.Parse(row.Cells["Cajas"].Value.ToString());
                 decimal kgBox = decimal.Parse(row.Cells["Kilogramos"].Value.ToString());
 
                 ProcAñadirRegistrosMenor(idLot, idVariety, boxes, kgBox);
@@ -307,7 +307,7 @@ namespace SisUvex.Operacion
                 sql.CloseConectionWrite();
             }
         }
-        public void ProcAñadirRegistrosMenor(string idLot, string idVariety, int boxes, decimal kgBox)
+        public void ProcAñadirRegistrosMenor(string idLot, string idVariety, decimal boxes, decimal kgBox)
         {
             try
             {
@@ -403,7 +403,7 @@ namespace SisUvex.Operacion
                 {
                     string lote = fila["Lote"].ToString();
                     string nombre = fila["Nombre"].ToString();
-                    int cajas = Convert.ToInt32(fila["Cajas"]);
+                    decimal cajas = Convert.ToDecimal(fila["Cajas"]);
                     decimal kilogramos = Convert.ToDecimal(fila["Kilogramos"]);
 
                     frmAdd.dgvRegistros.Rows.Add(cajas, kilogramos, lote, nombre);
@@ -429,7 +429,7 @@ namespace SisUvex.Operacion
             frmAdd._TaraTarima = decimal.Parse(frmAdd.txbTaraTarima.Text);
             frmAdd._TaraCaja = decimal.Parse(frmAdd.txbTaraCaja.Text);
 
-            frmAdd._CajasTotales = int.Parse(frmAdd.txbCajasTotales.Text);
+            frmAdd._CajasTotales = decimal.Parse(frmAdd.txbCajasTotales.Text);
             frmAdd._KgPorCaja = decimal.Parse(frmAdd.txbKgPorCaja.Text);
             frmAdd._KgTotalesNetos = frmAdd._KgTotales - frmAdd._TaraTarima - frmAdd._TaraCaja * frmAdd._CajasTotales;
         }
@@ -464,7 +464,7 @@ namespace SisUvex.Operacion
             {
                 string idLot = row.Cells["Lote"].Value.ToString().Substring(0, 4);
                 string idVariety = row.Cells["Lote"].Value.ToString().Substring(5, 2);
-                int boxes = int.Parse(row.Cells["Cajas"].Value.ToString());
+                decimal boxes = decimal.Parse(row.Cells["Cajas"].Value.ToString());
                 decimal kgBox = decimal.Parse(row.Cells["Kilogramos"].Value.ToString());
 
                 ProcModificarRegistrosMenor(id, idLot, idVariety, boxes, kgBox);
@@ -517,7 +517,7 @@ namespace SisUvex.Operacion
                 sql.CloseConectionWrite();
             }
         }
-        public void ProcModificarRegistrosMenor(string id, string idLot, string idVariety, int boxes, decimal kgBox)
+        public void ProcModificarRegistrosMenor(string id, string idLot, string idVariety, decimal boxes, decimal kgBox)
         {
             try
             {
