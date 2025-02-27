@@ -53,7 +53,7 @@ namespace SisUvex.Archivo.Manifiesto
                 Directory.CreateDirectory(manifestDirectory);
             }
 
-            string manifestPath = Path.Combine(manifestDirectory, $"pruebaMAN {manifestNumber}.pdf");
+            string manifestPath = Path.Combine(manifestDirectory, $"MAN {manifestNumber}.pdf");
             PdfWriter writer = new PdfWriter(manifestPath);
             PdfDocument pdf = new PdfDocument(writer);
             iText.Layout.Document document = new iText.Layout.Document(pdf);
@@ -68,8 +68,6 @@ namespace SisUvex.Archivo.Manifiesto
 
             // Cerrar el documento
             document.Close();
-
-            MessageBox.Show($"Manifiesto generado correctamente en: \n {manifestPath}", "Manifiesto", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public void DesignPDFManifestHeader(iText.Layout.Document document, string manifestNumber)

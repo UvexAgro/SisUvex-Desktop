@@ -602,7 +602,8 @@ namespace SisUvex.Archivo.Manifiesto
                         isPrint = true;
                     }
 
-                    OpenManifestFolderPath();
+                    if (isPrint)
+                        OpenManifestFolderPath(idManifest);
                 }
                 else
                 {
@@ -616,16 +617,20 @@ namespace SisUvex.Archivo.Manifiesto
             }
         }
 
-        private void OpenManifestFolderPath()
+        private void OpenManifestFolderPath(string idManifest)
         {
-            string ruta = Properties.Settings.Default.ManifestsFolderPath;
+            string distributorShortName = ClsQuerysDB.GetData($"SELECT v_nameDistShort FROM Pack_Distributor WHERE id_distributor = (SELECT id_distributor FROM Pack_Manifest WHERE id_manifest = '{idManifest}')");
 
-            DialogResult result = MessageBox.Show($"Archivos guardados en: {ruta}\n\n¿Desea abrir la carpeta?",
+            string manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
+
+            string path = Path.Combine(manifestFolderPath, "Manifiestos", distributorShortName, $"{idManifest}");
+
+            DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
                 "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (result == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start("explorer.exe", ruta);
+                System.Diagnostics.Process.Start("explorer.exe", path);
             }
         }
     }
