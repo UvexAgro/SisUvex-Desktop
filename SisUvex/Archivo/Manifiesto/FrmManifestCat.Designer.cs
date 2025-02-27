@@ -61,7 +61,7 @@
             // dtpDate2
             // 
             dtpDate2.Format = DateTimePickerFormat.Short;
-            dtpDate2.Location = new Point(104, 86);
+            dtpDate2.Location = new Point(104, 91);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
             dtpDate2.TabIndex = 55;
@@ -69,7 +69,7 @@
             // dtpDate1
             // 
             dtpDate1.Format = DateTimePickerFormat.Short;
-            dtpDate1.Location = new Point(12, 86);
+            dtpDate1.Location = new Point(12, 91);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
             dtpDate1.TabIndex = 54;
@@ -78,7 +78,7 @@
             // 
             btnSearchDate.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchDate.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchDate.Location = new Point(187, 86);
+            btnSearchDate.Location = new Point(187, 91);
             btnSearchDate.Name = "btnSearchDate";
             btnSearchDate.Size = new Size(23, 23);
             btnSearchDate.TabIndex = 56;
@@ -88,7 +88,7 @@
             // lblY
             // 
             lblY.AutoSize = true;
-            lblY.Location = new Point(92, 92);
+            lblY.Location = new Point(92, 97);
             lblY.Name = "lblY";
             lblY.Size = new Size(13, 15);
             lblY.TabIndex = 58;
@@ -98,7 +98,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 6.75F);
-            label4.Location = new Point(12, 73);
+            label4.Location = new Point(12, 78);
             label4.Name = "label4";
             label4.Size = new Size(56, 12);
             label4.TabIndex = 59;
@@ -106,7 +106,7 @@
             // 
             // btnPrint
             // 
-            btnPrint.Location = new Point(417, 115);
+            btnPrint.Location = new Point(417, 120);
             btnPrint.Name = "btnPrint";
             btnPrint.Size = new Size(75, 23);
             btnPrint.TabIndex = 53;
@@ -116,7 +116,7 @@
             // 
             // btnRemoved
             // 
-            btnRemoved.Location = new Point(174, 115);
+            btnRemoved.Location = new Point(174, 120);
             btnRemoved.Name = "btnRemoved";
             btnRemoved.Size = new Size(75, 23);
             btnRemoved.TabIndex = 50;
@@ -126,7 +126,7 @@
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(255, 115);
+            btnRemove.Location = new Point(255, 120);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
             btnRemove.TabIndex = 51;
@@ -136,7 +136,7 @@
             // 
             // btnRecover
             // 
-            btnRecover.Location = new Point(336, 115);
+            btnRecover.Location = new Point(336, 120);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
             btnRecover.TabIndex = 52;
@@ -164,7 +164,7 @@
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
-            dgvCatalog.Location = new Point(12, 144);
+            dgvCatalog.Location = new Point(12, 149);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -178,12 +178,12 @@
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalog.Size = new Size(776, 294);
+            dgvCatalog.Size = new Size(776, 289);
             dgvCatalog.TabIndex = 57;
             // 
             // btnModify
             // 
-            btnModify.Location = new Point(93, 115);
+            btnModify.Location = new Point(93, 120);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
             btnModify.TabIndex = 49;
@@ -193,7 +193,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(12, 115);
+            btnAdd.Location = new Point(12, 120);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
             btnAdd.TabIndex = 48;
@@ -205,7 +205,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 6.75F);
-            label1.Location = new Point(12, -1);
+            label1.Location = new Point(12, 6);
             label1.Name = "label1";
             label1.Size = new Size(50, 12);
             label1.TabIndex = 30;
@@ -215,7 +215,7 @@
             // 
             cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDistributor.FormattingEnabled = true;
-            cboDistributor.Location = new Point(12, 11);
+            cboDistributor.Location = new Point(12, 18);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
             cboDistributor.TabIndex = 0;
@@ -224,7 +224,7 @@
             // 
             cboConsignee.DropDownStyle = ComboBoxStyle.DropDownList;
             cboConsignee.FormattingEnabled = true;
-            cboConsignee.Location = new Point(221, 11);
+            cboConsignee.Location = new Point(221, 18);
             cboConsignee.Name = "cboConsignee";
             cboConsignee.Size = new Size(203, 23);
             cboConsignee.TabIndex = 2;
@@ -233,7 +233,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 6.75F);
-            label2.Location = new Point(221, -1);
+            label2.Location = new Point(221, 6);
             label2.Name = "label2";
             label2.Size = new Size(60, 12);
             label2.TabIndex = 31;
@@ -243,7 +243,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 6.75F);
-            label3.Location = new Point(221, 35);
+            label3.Location = new Point(221, 42);
             label3.Name = "label3";
             label3.Size = new Size(35, 12);
             label3.TabIndex = 39;
@@ -253,7 +253,7 @@
             // 
             cboDestination.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDestination.FormattingEnabled = true;
-            cboDestination.Location = new Point(221, 47);
+            cboDestination.Location = new Point(221, 54);
             cboDestination.Name = "cboDestination";
             cboDestination.Size = new Size(203, 23);
             cboDestination.TabIndex = 38;
@@ -262,7 +262,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 6.75F);
-            label5.Location = new Point(12, 35);
+            label5.Location = new Point(12, 42);
             label5.Name = "label5";
             label5.Size = new Size(43, 12);
             label5.TabIndex = 41;
@@ -272,7 +272,7 @@
             // 
             cboGrower.DropDownStyle = ComboBoxStyle.DropDownList;
             cboGrower.FormattingEnabled = true;
-            cboGrower.Location = new Point(12, 47);
+            cboGrower.Location = new Point(12, 54);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(203, 23);
             cboGrower.TabIndex = 1;
@@ -281,7 +281,7 @@
             // 
             btnSearchManifest.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchManifest.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchManifest.Location = new Point(401, 86);
+            btnSearchManifest.Location = new Point(401, 91);
             btnSearchManifest.Name = "btnSearchManifest";
             btnSearchManifest.Size = new Size(23, 23);
             btnSearchManifest.TabIndex = 9;
@@ -290,7 +290,7 @@
             // 
             // txbIdManifest
             // 
-            txbIdManifest.Location = new Point(325, 86);
+            txbIdManifest.Location = new Point(325, 91);
             txbIdManifest.MaxLength = 5;
             txbIdManifest.Name = "txbIdManifest";
             txbIdManifest.Size = new Size(75, 23);
@@ -301,7 +301,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(325, 73);
+            label6.Location = new Point(325, 78);
             label6.Name = "label6";
             label6.Size = new Size(47, 12);
             label6.TabIndex = 33;
@@ -312,7 +312,7 @@
             btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
             btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
             btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(498, 115);
+            btnConfigManifest.Location = new Point(498, 120);
             btnConfigManifest.Name = "btnConfigManifest";
             btnConfigManifest.Size = new Size(24, 23);
             btnConfigManifest.TabIndex = 359;
@@ -349,6 +349,7 @@
             Controls.Add(btnAdd);
             Controls.Add(label1);
             Controls.Add(label6);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifestCat";
             Text = "Catálogo manifiesto";
             WindowState = FormWindowState.Maximized;

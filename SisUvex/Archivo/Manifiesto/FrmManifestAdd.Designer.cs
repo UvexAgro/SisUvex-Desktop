@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestAdd));
             btnPrintManifest = new Button();
             btnAccept = new Button();
@@ -126,7 +126,7 @@
             label19 = new Label();
             lblDieselLiters = new Label();
             label13 = new Label();
-            button1 = new Button();
+            btnConfManifest = new Button();
             cboSeason = new ComboBox();
             label2 = new Label();
             label20 = new Label();
@@ -151,18 +151,18 @@
             // btnPrintManifest
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnPrintManifest.Location = new Point(532, 647);
+            btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
+            btnPrintManifest.Location = new Point(447, 648);
             btnPrintManifest.Name = "btnPrintManifest";
-            btnPrintManifest.Size = new Size(64, 25);
+            btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 350;
-            btnPrintManifest.Text = "Imprimir";
             btnPrintManifest.UseVisualStyleBackColor = true;
             btnPrintManifest.Click += btnPrintManifest_Click;
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(602, 647);
+            btnAccept.Location = new Point(475, 648);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 254;
@@ -173,7 +173,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(672, 647);
+            btnCancel.Location = new Point(541, 648);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 253;
@@ -204,7 +204,7 @@
             // txbDieselLiters
             // 
             txbDieselLiters.Font = new Font("Microsoft Sans Serif", 9F);
-            txbDieselLiters.Location = new Point(307, 624);
+            txbDieselLiters.Location = new Point(327, 625);
             txbDieselLiters.MaxLength = 15;
             txbDieselLiters.Name = "txbDieselLiters";
             txbDieselLiters.Size = new Size(102, 21);
@@ -216,7 +216,7 @@
             // 
             lblDieselInvoice.AutoSize = true;
             lblDieselInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            lblDieselInvoice.Location = new Point(40, 627);
+            lblDieselInvoice.Location = new Point(45, 630);
             lblDieselInvoice.Name = "lblDieselInvoice";
             lblDieselInvoice.Size = new Size(73, 15);
             lblDieselInvoice.TabIndex = 352;
@@ -226,7 +226,7 @@
             // txbDieselInvoice
             // 
             txbDieselInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            txbDieselInvoice.Location = new Point(116, 624);
+            txbDieselInvoice.Location = new Point(115, 625);
             txbDieselInvoice.MaxLength = 15;
             txbDieselInvoice.Name = "txbDieselInvoice";
             txbDieselInvoice.Size = new Size(102, 21);
@@ -236,7 +236,7 @@
             // txbPalletPosition
             // 
             txbPalletPosition.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPalletPosition.Location = new Point(498, 29);
+            txbPalletPosition.Location = new Point(496, 29);
             txbPalletPosition.MaxLength = 2;
             txbPalletPosition.Name = "txbPalletPosition";
             txbPalletPosition.Size = new Size(26, 21);
@@ -247,7 +247,7 @@
             // 
             lblPosicionPal.AutoSize = true;
             lblPosicionPal.Font = new Font("Microsoft Sans Serif", 8.25F);
-            lblPosicionPal.Location = new Point(496, 16);
+            lblPosicionPal.Location = new Point(494, 16);
             lblPosicionPal.Name = "lblPosicionPal";
             lblPosicionPal.Size = new Size(28, 13);
             lblPosicionPal.TabIndex = 348;
@@ -264,14 +264,14 @@
             dgvPalletList.BackgroundColor = SystemColors.ControlLightLight;
             dgvPalletList.BorderStyle = BorderStyle.Fixed3D;
             dgvPalletList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvPalletList.EnableHeadersVisualStyles = false;
             dgvPalletList.ImeMode = ImeMode.NoControl;
             dgvPalletList.Location = new Point(448, 54);
@@ -279,14 +279,14 @@
             dgvPalletList.Name = "dgvPalletList";
             dgvPalletList.ReadOnly = true;
             dgvPalletList.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPalletList.Size = new Size(347, 591);
@@ -296,7 +296,7 @@
             // 
             chbRejected.AutoSize = true;
             chbRejected.Font = new Font("Microsoft Sans Serif", 9F);
-            chbRejected.Location = new Point(696, 30);
+            chbRejected.Location = new Point(706, 30);
             chbRejected.Name = "chbRejected";
             chbRejected.Size = new Size(89, 19);
             chbRejected.TabIndex = 346;
@@ -306,7 +306,7 @@
             // txbNameOperator
             // 
             txbNameOperator.Font = new Font("Microsoft Sans Serif", 9F);
-            txbNameOperator.Location = new Point(307, 651);
+            txbNameOperator.Location = new Point(327, 651);
             txbNameOperator.MaxLength = 20;
             txbNameOperator.Name = "txbNameOperator";
             txbNameOperator.Size = new Size(102, 21);
@@ -317,7 +317,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Microsoft Sans Serif", 9F);
-            label7.Location = new Point(33, 650);
+            label7.Location = new Point(40, 654);
             label7.Name = "label7";
             label7.Size = new Size(78, 15);
             label7.TabIndex = 343;
@@ -326,7 +326,7 @@
             // txbNameShipper
             // 
             txbNameShipper.Font = new Font("Microsoft Sans Serif", 9F);
-            txbNameShipper.Location = new Point(116, 647);
+            txbNameShipper.Location = new Point(115, 651);
             txbNameShipper.MaxLength = 20;
             txbNameShipper.Name = "txbNameShipper";
             txbNameShipper.Size = new Size(102, 21);
@@ -371,7 +371,7 @@
             txbObservations.Location = new Point(115, 523);
             txbObservations.MaxLength = 200;
             txbObservations.Name = "txbObservations";
-            txbObservations.Size = new Size(314, 88);
+            txbObservations.Size = new Size(314, 96);
             txbObservations.TabIndex = 338;
             txbObservations.Text = "";
             // 
@@ -393,7 +393,7 @@
             btnAddPallet.Font = new Font("Microsoft Sans Serif", 9F);
             btnAddPallet.Image = Properties.Resources.mas_16;
             btnAddPallet.ImageAlign = ContentAlignment.BottomRight;
-            btnAddPallet.Location = new Point(526, 28);
+            btnAddPallet.Location = new Point(523, 28);
             btnAddPallet.Name = "btnAddPallet";
             btnAddPallet.Size = new Size(23, 23);
             btnAddPallet.TabIndex = 336;
@@ -1165,7 +1165,7 @@
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Microsoft Sans Serif", 9F);
-            label19.Location = new Point(249, 654);
+            label19.Location = new Point(268, 654);
             label19.Name = "label19";
             label19.Size = new Size(62, 15);
             label19.TabIndex = 345;
@@ -1175,7 +1175,7 @@
             // 
             lblDieselLiters.AutoSize = true;
             lblDieselLiters.Font = new Font("Microsoft Sans Serif", 9F);
-            lblDieselLiters.Location = new Point(233, 627);
+            lblDieselLiters.Location = new Point(254, 628);
             lblDieselLiters.Name = "lblDieselLiters";
             lblDieselLiters.Size = new Size(76, 15);
             lblDieselLiters.TabIndex = 354;
@@ -1192,18 +1192,19 @@
             label13.TabIndex = 328;
             label13.Text = "Grados:";
             // 
-            // button1
+            // btnConfManifest
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Font = new Font("Microsoft Sans Serif", 9F);
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.BottomRight;
-            button1.Location = new Point(771, 2);
-            button1.Name = "button1";
-            button1.Size = new Size(24, 24);
-            button1.TabIndex = 358;
-            button1.TextAlign = ContentAlignment.TopRight;
-            button1.UseVisualStyleBackColor = true;
+            btnConfManifest.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnConfManifest.Font = new Font("Microsoft Sans Serif", 9F);
+            btnConfManifest.Image = (Image)resources.GetObject("btnConfManifest.Image");
+            btnConfManifest.ImageAlign = ContentAlignment.BottomRight;
+            btnConfManifest.Location = new Point(771, 2);
+            btnConfManifest.Name = "btnConfManifest";
+            btnConfManifest.Size = new Size(24, 24);
+            btnConfManifest.TabIndex = 358;
+            btnConfManifest.TextAlign = ContentAlignment.TopRight;
+            btnConfManifest.UseVisualStyleBackColor = true;
+            btnConfManifest.Click += btnConfManifest_Click;
             // 
             // cboSeason
             // 
@@ -1458,12 +1459,11 @@
             Controls.Add(chbRemovedConsignee);
             Controls.Add(cboSeason);
             Controls.Add(btnPrintManifest);
-            Controls.Add(button1);
+            Controls.Add(btnConfManifest);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(txbPhytosanitary);
             Controls.Add(txbDieselLiters);
-            Controls.Add(lblDieselInvoice);
             Controls.Add(txbDieselInvoice);
             Controls.Add(txbPalletPosition);
             Controls.Add(lblPosicionPal);
@@ -1471,7 +1471,6 @@
             Controls.Add(dgvPalletList);
             Controls.Add(chbRejected);
             Controls.Add(txbNameOperator);
-            Controls.Add(label7);
             Controls.Add(txbNameShipper);
             Controls.Add(txbObservations);
             Controls.Add(btnRemovePallet);
@@ -1528,8 +1527,6 @@
             Controls.Add(txbId);
             Controls.Add(lblTitle);
             Controls.Add(label15);
-            Controls.Add(label19);
-            Controls.Add(lblDieselLiters);
             Controls.Add(label13);
             Controls.Add(lblId);
             Controls.Add(Mercado);
@@ -1556,6 +1553,11 @@
             Controls.Add(label17);
             Controls.Add(label20);
             Controls.Add(label2);
+            Controls.Add(lblDieselInvoice);
+            Controls.Add(label7);
+            Controls.Add(label19);
+            Controls.Add(lblDieselLiters);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifestAdd";
             Text = "Añadir manifiesto";
             Load += FrmManifestAdd_Load;
@@ -1641,7 +1643,7 @@
         private Label label19;
         private Label lblDieselLiters;
         private Label label13;
-        private Button button1;
+        private Button btnConfManifest;
         public ComboBox cboFreightContainer;
         public ComboBox cboTruck;
         public ComboBox cboDistributor;

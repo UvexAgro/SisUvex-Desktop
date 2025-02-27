@@ -109,5 +109,11 @@ namespace SisUvex.Archivo.Manifiesto
         {
 
         }
+
+        private void btnConfManifest_Click(object sender, EventArgs e)
+        {
+            FrmConfManifest frm = new FrmConfManifest();
+            frm.ShowDialog();
+        }
     }
 }
