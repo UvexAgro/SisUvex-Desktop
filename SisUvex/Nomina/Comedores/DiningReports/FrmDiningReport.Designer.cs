@@ -285,6 +285,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmDiningReport";
             Text = "Reportes comedor";
+            WindowState = FormWindowState.Maximized;
             Load += FrmDiningReport_Load;
             ((System.ComponentModel.ISupportInitialize)dgvQuery).EndInit();
             ResumeLayout(false);
