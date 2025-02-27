@@ -58,6 +58,6 @@ namespace SisUvex.Operacion
         private void txbValoresKilogramos_TextChanged(object sender, EventArgs e)
         {
             
-        }
+        }                                                                        
     }
 }
