@@ -243,7 +243,7 @@ namespace SisUvex
 
         private void manifiestoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmManifiestoCat cat = new FrmManifiestoCat();
+            FrmManifestCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
 

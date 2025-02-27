@@ -264,7 +264,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
             // Procesar los datos, eliminando espacios y saltos de línea
             var valores = datosPegados.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                                      .Select(v => v.Trim())
+                                      .Select(v => v.Trim().PadLeft(6, '0')) // Asegurar que el valor tenga 6 dígitos
                                       .Where(v => !string.IsNullOrEmpty(v))
                                       .ToArray();
 

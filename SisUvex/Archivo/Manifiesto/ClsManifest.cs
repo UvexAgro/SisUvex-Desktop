@@ -8,6 +8,7 @@ using SisUvex.Catalogos.Metods.Values;
 using System.Media;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Archivo.Manifiesto.ConfManifest;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -153,14 +154,23 @@ namespace SisUvex.Archivo.Manifiesto
 
             if (_frmAdd.IsAddModify)
             {
+                ClsConfigManifest clsConfManifest = new ClsConfigManifest();
+                clsConfManifest.GetParameters();
+                _frmAdd.txbTemperature.Text = clsConfManifest.temperature.ToString();
+                _frmAdd.cboTemperatureUnit.Text = clsConfManifest.temperatureUnit;
+                _frmAdd.cboTransportVehicle.Text = clsConfManifest.transportVehicle;
+                _frmAdd.cboTransportType.Text = clsConfManifest.transportTransportType;
+
+                _frmAdd.txbIdSeason.Text = clsConfManifest.idSeason;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, clsConfManifest.idSeason ?? "");
+
                 _frmAdd.cboActive.SelectedIndex = 1;
-                _frmAdd.cboMarket.SelectedIndex = 0;
+
+                _frmAdd.cboMarket.Text = clsConfManifest.market ?? "E";
                 _frmAdd.txbId.Text = GetIdNextManifest(_frmAdd.cboMarket.Text);
-                _frmAdd.txbTemperature.Text = "34";
-                _frmAdd.cboTemperatureUnit.SelectedIndex = 0;
-                _frmAdd.cboTransportVehicle.SelectedIndex = 1;
-                _frmAdd.cboTransportType.SelectedIndex = 2;
                 _frmAdd.spnHour.Text = DateTime.Now.AddMinutes((15 - DateTime.Now.Minute % 15) % 15).ToString("HH:mm");
+
+                
 
                 _frmAdd.cboMarket.SelectedIndexChanged += (sender, e) =>
                 {
@@ -203,6 +213,7 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDriver, _frmAdd.txbIdDriver);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTruck, _frmAdd.txbIdTruck);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
 
             List<Tuple<ComboBox, CheckBox?>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?>>();
             cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver));
@@ -524,6 +535,103 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
             cmd.ExecuteNonQuery();
+        }
+
+        public void BtnPrintManifestFrmAdd()
+        {
+            PrintManifest(_frmAdd.txbId.Text);
+        }
+
+        public void BtnPrintManifestFrmCat()
+        {
+            if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
+            {
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+            }
+        }
+
+        private void PrintManifest(string idManifest)
+        {
+            try
+            {
+                if (!idManifest.IsNullOrEmpty())
+                {
+                    bool isPrint = false;
+
+                    ClsConfigManifest conf = new ClsConfigManifest();
+                    conf.GetParameters();
+
+                    if (conf.printManifest)
+                    {
+                        ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
+                        pdf.desktopPath = conf.manifestFolderPath;
+                        pdf.CreatePDFManifest(idManifest);
+
+                        isPrint = true;
+                    }
+
+
+                    //if (conf.printManifest)
+                    //{
+                    //    ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+                    //    pdf.desktopPath = conf.manifestFolderPath;
+                    //    pdf.CreatePDFManifest(idManifest);
+                    //}
+
+                    if (conf.printMaping)
+                    {
+                        ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
+                        pdfMap.desktopPath = conf.manifestFolderPath;
+                        pdfMap.CreatePDFMaping(idManifest);
+
+                        isPrint = true;
+                    }
+
+                    //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
+
+                    if (conf.printPackingList)
+                    {
+                        ClsPDFPackingList pdfPacking = new ClsPDFPackingList();
+                        pdfPacking.desktopPath = conf.manifestFolderPath;
+                        pdfPacking.CreatePDFPackingList(idManifest);
+
+                        isPrint = true;
+                    }
+
+                    if (isPrint)
+                        OpenManifestFolderPath(idManifest);
+                }
+                else
+                {
+                    MessageBox.Show("Debe guardar el manifiesto antes de imprimirlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void OpenManifestFolderPath(string idManifest)
+        {
+            string distributorShortName = ClsQuerysDB.GetData($"SELECT v_nameDistShort FROM Pack_Distributor WHERE id_distributor = (SELECT id_distributor FROM Pack_Manifest WHERE id_manifest = '{idManifest}')");
+
+            string manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
+
+            string path = Path.Combine(manifestFolderPath, "Manifiestos", distributorShortName, $"{idManifest}");
+
+            DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
+                "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (result == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start("explorer.exe", path);
+            }
         }
     }
 }

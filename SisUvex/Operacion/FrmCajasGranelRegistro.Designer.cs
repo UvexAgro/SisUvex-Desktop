@@ -241,7 +241,7 @@
             txbCajasRegistro.Location = new Point(67, 228);
             txbCajasRegistro.MaxLength = 10;
             txbCajasRegistro.Name = "txbCajasRegistro";
-            txbCajasRegistro.Size = new Size(46, 29);
+            txbCajasRegistro.Size = new Size(78, 29);
             txbCajasRegistro.TabIndex = 10;
             // 
             // cboPosicion
@@ -292,7 +292,6 @@
             dgvRegistros.Name = "dgvRegistros";
             dgvRegistros.ReadOnly = true;
             dgvRegistros.RowHeadersVisible = false;
-            dgvRegistros.RowTemplate.Height = 25;
             dgvRegistros.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRegistros.Size = new Size(669, 181);
             dgvRegistros.TabIndex = 15;

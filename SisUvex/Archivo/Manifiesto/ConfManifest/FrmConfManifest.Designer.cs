@@ -49,13 +49,16 @@
             chbPrintPackingList = new CheckBox();
             txbIdSeason = new TextBox();
             nudTemperature = new NumericUpDown();
+            txbManifestFolderPath = new TextBox();
+            label4 = new Label();
+            btnManifestFolderPath = new Button();
             ((System.ComponentModel.ISupportInitialize)nudTemperature).BeginInit();
             SuspendLayout();
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(124, 367);
+            btnAccept.Location = new Point(124, 433);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 395;
@@ -66,7 +69,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(194, 367);
+            btnCancel.Location = new Point(194, 433);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 394;
@@ -215,12 +218,12 @@
             // cboTemperatureUnit
             // 
             cboTemperatureUnit.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboTemperatureUnit.Font = new Font("Microsoft Sans Serif", 9F);
+            cboTemperatureUnit.Font = new Font("Microsoft Sans Serif", 9.5F);
             cboTemperatureUnit.FormattingEnabled = true;
             cboTemperatureUnit.Items.AddRange(new object[] { "F", "C", "K" });
             cboTemperatureUnit.Location = new Point(63, 164);
             cboTemperatureUnit.Name = "cboTemperatureUnit";
-            cboTemperatureUnit.Size = new Size(33, 23);
+            cboTemperatureUnit.Size = new Size(33, 24);
             cboTemperatureUnit.TabIndex = 379;
             // 
             // label13
@@ -256,17 +259,50 @@
             // 
             // nudTemperature
             // 
-            nudTemperature.Location = new Point(15, 164);
+            nudTemperature.BorderStyle = BorderStyle.FixedSingle;
+            nudTemperature.Font = new Font("Segoe UI", 9.5F);
+            nudTemperature.Location = new Point(13, 164);
             nudTemperature.Name = "nudTemperature";
-            nudTemperature.Size = new Size(42, 23);
+            nudTemperature.Size = new Size(45, 24);
             nudTemperature.TabIndex = 397;
             nudTemperature.TextAlign = HorizontalAlignment.Right;
+            // 
+            // txbManifestFolderPath
+            // 
+            txbManifestFolderPath.Location = new Point(13, 391);
+            txbManifestFolderPath.Name = "txbManifestFolderPath";
+            txbManifestFolderPath.Size = new Size(214, 23);
+            txbManifestFolderPath.TabIndex = 398;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Microsoft Sans Serif", 9F);
+            label4.Location = new Point(11, 375);
+            label4.Name = "label4";
+            label4.Size = new Size(146, 15);
+            label4.TabIndex = 399;
+            label4.Text = "Ruta carpeta manifiestos:";
+            label4.TextAlign = ContentAlignment.TopRight;
+            // 
+            // btnManifestFolderPath
+            // 
+            btnManifestFolderPath.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnManifestFolderPath.Image = Properties.Resources.fileIcon16;
+            btnManifestFolderPath.Location = new Point(233, 390);
+            btnManifestFolderPath.Name = "btnManifestFolderPath";
+            btnManifestFolderPath.Size = new Size(26, 26);
+            btnManifestFolderPath.TabIndex = 400;
+            btnManifestFolderPath.UseVisualStyleBackColor = true;
+            btnManifestFolderPath.Click += btnManifestFolderPath_Click;
             // 
             // FrmConfManifest
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(270, 404);
+            ClientSize = new Size(272, 470);
+            Controls.Add(btnManifestFolderPath);
+            Controls.Add(txbManifestFolderPath);
             Controls.Add(nudTemperature);
             Controls.Add(txbIdSeason);
             Controls.Add(btnAccept);
@@ -287,6 +323,8 @@
             Controls.Add(cboTemperatureUnit);
             Controls.Add(label13);
             Controls.Add(chbPrintPackingList);
+            Controls.Add(label4);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -320,5 +358,8 @@
         public CheckBox chbPrintPackingList;
         public TextBox txbIdSeason;
         private NumericUpDown nudTemperature;
+        private TextBox txbManifestFolderPath;
+        private Label label4;
+        private Button btnManifestFolderPath;
     }
 }

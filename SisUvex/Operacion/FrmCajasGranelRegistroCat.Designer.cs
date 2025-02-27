@@ -140,7 +140,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmCajasGranelRegistroCat";
             Text = "Registros granel";
-            WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Maximized;
             Load += FrmCajasGranelRegistroCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalogo).EndInit();
             ResumeLayout(false);

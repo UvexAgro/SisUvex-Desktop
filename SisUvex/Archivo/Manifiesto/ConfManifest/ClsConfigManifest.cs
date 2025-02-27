@@ -15,12 +15,35 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
         public string? market { get; set; }
         public int? temperature { get; set; }
         public string? temperatureUnit { get; set; }
-
         public bool printManifest { get; set; }
         public bool printMaping { get; set; }
         public bool printPackingList { get; set; }
         public string? transportVehicle { get; set; }
         public string? transportTransportType { get; set; }
+
+        public string? manifestFolderPath { get; set; }
+
+        public ClsConfigManifest()
+        {
+            if (string.IsNullOrEmpty(Properties.Settings.Default.ManifestsFolderPath))
+            {
+                // Obtener la ruta del escritorio
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                Properties.Settings.Default.ManifestsFolderPath = desktopPath;
+                Properties.Settings.Default.Save();
+            }
+
+            manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
+        }
+
+        public void SetManifestPath(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                Properties.Settings.Default.ManifestsFolderPath = path;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         public void GetParameters()
         {
@@ -64,7 +87,6 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
 
             if (dt.Rows.Count == 0 || (int)dt.Rows[0][0] == 0)
             {
-                MessageBox.Show("0");
                 string qry = @"INSERT INTO Pack_ConfManifest ( 
                                  id_season, 
                                  c_market, 
@@ -90,8 +112,6 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             }
             else
             {
-                MessageBox.Show("+0");
-
                 string qry = @"UPDATE Pack_ConfManifest SET 
                                 id_season = @idSeason, 
                                 c_market = @market, 

@@ -7,8 +7,7 @@ namespace SisUvex.Operacion
         public ClsCajasGranelRegistro cls;
         bool isFormModificar = false;
 
-        public decimal _KgTotalesNetos, _KgTotales, _KgPorCaja, _TaraTarima, _TaraCaja;
-        public int _CajasFila, _CajasTotales;
+        public decimal _KgTotalesNetos, _KgTotales, _KgPorCaja, _TaraTarima, _TaraCaja, _CajasFila, _CajasTotales;
 
         public FrmCajasGranelRegistro()
         {
@@ -40,8 +39,6 @@ namespace SisUvex.Operacion
         }
         public bool IsRegistroValido()
         {
-            int cajasRegistro, kgTotales;
-
             if (txbIdLote.Text != string.Empty && txbCajasRegistro.Text != string.Empty && txbPapeleta.Text != string.Empty && txbKgTotales.Text != string.Empty)
                 return true;
             else
@@ -61,6 +58,6 @@ namespace SisUvex.Operacion
         private void txbValoresKilogramos_TextChanged(object sender, EventArgs e)
         {
             
-        }
+        }                                                                        
     }
 }
