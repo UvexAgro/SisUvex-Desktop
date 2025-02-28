@@ -68,6 +68,14 @@ namespace SisUvex.Catalogos.Metods.Controls
                         showMessage += "\n    " + message;
                     }
                 }
+                else if (control is CheckBox checkBox)
+                {
+                    if (!checkBox.Checked)
+                    {
+                        isValid = false;
+                        showMessage += "\n    " + message;
+                    }
+                }
                 // Add more control types if needed
             }
 

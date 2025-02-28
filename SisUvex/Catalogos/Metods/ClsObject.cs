@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Identity.Client;
+using System.Web;
 
 namespace SisUvex.Catalogos.Metods
 {
@@ -292,6 +293,10 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboCity";
             public const string DgvCatalog = "DgvCatalogCity";
             public const string QueryCbo = $" SELECT id_city AS '{Column.id}', CONCAT_WS(', ',v_nameCity, v_state, v_country) + CONCAT(' | ', id_city, ' | (', c_active, ')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_City ORDER BY '{Column.name}' ";
+            public const string ColumnNameCrossPoint = "Ciudad de cruce";
+            public const string ColumnIdCrossPoint = "idCityCrossPoint";
+            public const string ColumnNameDestiny = "Ciudad de destino";
+            public const string ColumnIdDestiny = "idCityDestiny";
         }
 
         public static class Consignee
@@ -369,6 +374,16 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboFreightContainer";
             public const string DgvCatalog = "DgvCatalogFreightContainer";
             public const string QueryCbo = $"  SELECT id_freightContainer AS '{Column.id}', CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_freightContainer + ')', '(' + c_active + ')' ) AS '{Column.name}', c_active AS '{Column.active}', id_transportLine AS '{TransportLine.ColumnId}'  FROM Pack_FreightContainer ORDER BY '{Column.name}' ";
+        }
+
+        public static class ManifestTemplate
+        {
+            public const string TableName = "Pack_ManifestTemplates";
+            public const string ColumnName = "Plantilla de manifiesto";
+            public const string ColumnId = "idManifestTemplate";
+            public const string Cbo = "CboManifestTemplate";
+            public const string DgvCatalog = "DgvCatalogManifestTemplate";
+            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], '1' AS [{ClsObject.Column.active}] FROM Pack_ManifestTemplates ";
         }
     }
 }

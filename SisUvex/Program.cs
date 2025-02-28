@@ -27,6 +27,7 @@ using SisUvex.Grow.PlantsRowLotLoadExcel;
 using SisUvex.Nomina.Comedores.DiningReports;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Lot;
+using SisUvex.Archivo.Manifiesto.ManifestTemplates;
 
 namespace SisUvex
 {
@@ -41,7 +42,7 @@ namespace SisUvex
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new PantallaCarga());
+            Application.Run(new FrmManifestCat());
             //Application.Run(new FrmMenu());
         }
     }
