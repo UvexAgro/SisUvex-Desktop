@@ -20,12 +20,12 @@ namespace SisUvex.Nomina.Comedores.DiningReports
     {
         public FrmDiningReport frm;
         public DataTable? dtReport1, dtResume1, dtReportColumnDays;
-        string queryReport1 = " SELECT fdr.c_codigo_emp AS 'ID', CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS 'Nombre', lp.id_placePayment AS 'LP', dpr.v_nameDinerProvider AS 'Comedor', FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS 'Fecha', COUNT(fdr.c_servedAgain) AS 'Total', SUM(CASE WHEN fdr.c_dinnerType = '1' THEN 1 ELSE 0 END) AS 'Desayuno', SUM(CASE WHEN fdr.c_dinnerType = '2' THEN 1 ELSE 0 END) AS 'Comida', SUM(CASE WHEN fdr.c_dinnerType = '3' THEN 1 ELSE 0 END) AS 'Cena' FROM Nom_FoodRegister fdr LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace ";
+        string queryReport1 = " DECLARE @DesayunoHora TIME, @ComidaHora TIME, @CenaHora TIME;\r\n\r\n-- Obtener los horarios desde Conf_Parameters\r\nSELECT @DesayunoHora = v_valueParameters \r\nFROM Conf_Parameters \r\nWHERE id_typeParameter = '01' AND id_parameter = '011';\r\n\r\nSELECT @ComidaHora = v_valueParameters \r\nFROM Conf_Parameters \r\nWHERE id_typeParameter = '01' AND id_parameter = '012';\r\n\r\nSELECT @CenaHora = v_valueParameters \r\nFROM Conf_Parameters \r\nWHERE id_typeParameter = '01' AND id_parameter = '013';\r\n\r\n-- Consulta principal con lógica ajustada\r\nSELECT \r\n    fdr.c_codigo_emp AS 'ID', \r\n    CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS 'Nombre', \r\n    lp.id_placePayment AS 'LP', \r\n    dpr.v_nameDinerProvider AS 'Comedor', \r\n    FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS 'Fecha', \r\n    COUNT(fdr.c_servedAgain) AS 'Total', \r\n    SUM(CASE \r\n            WHEN fdr.d_time >= @DesayunoHora \r\n             AND fdr.d_time < @ComidaHora THEN 1 \r\n            ELSE 0 \r\n        END) AS 'Desayuno',\r\n    SUM(CASE \r\n            WHEN fdr.d_time >= @ComidaHora \r\n             AND fdr.d_time < @CenaHora THEN 1 \r\n            ELSE 0 \r\n        END) AS 'Comida',\r\n    SUM(CASE \r\n            WHEN fdr.d_time >= @CenaHora \r\n             OR fdr.d_time < @DesayunoHora THEN 1  -- Si es después de la Cena o antes del Desayuno, es Cena\r\n            ELSE 0 \r\n        END) AS 'Cena'\r\nFROM Nom_FoodRegister fdr\r\nLEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp \r\nLEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall \r\nLEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider \r\nLEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace ";
         string groupByReport1 = " GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider ";
         string whereQuery1 = " WHERE ";
 
-        string queryReportResume = " SELECT \r\n\tdpr.v_nameDinerProvider AS 'COMEDOR',\r\n    FORMAT(fdr.d_datetime, 'yyyy-MM-dd, dddd', 'es-ES') AS 'Fecha',\r\n    COUNT(fdr.c_codigo_emp) AS 'Trabajadores',\r\n    lp.id_placePayment AS 'LP',\r\n    CASE \r\n        WHEN fdr.c_dinnerType = '1' THEN 'Desayuno'\r\n        WHEN fdr.c_dinnerType = '2' THEN 'Comida'\r\n        WHEN fdr.c_dinnerType = '3' THEN 'Cena'\r\n    END AS 'T. Comida'\r\nFROM Nom_FoodRegister fdr\r\nLEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp\r\nLEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall\r\nLEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider\r\nLEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace ";
-        string groupByResume = " GROUP BY dpr.v_nameDinerProvider, lp.id_placePayment, fdr.d_datetime, fdr.c_dinnertype ";
+        string queryReportResume = @" DECLARE @DesayunoHora TIME, @ComidaHora TIME, @CenaHora TIME; SELECT @DesayunoHora = v_valueParameters  FROM Conf_Parameters  WHERE id_typeParameter = '01' AND id_parameter = '011';  SELECT @ComidaHora = v_valueParameters  FROM Conf_Parameters  WHERE id_typeParameter = '01' AND id_parameter = '012';  SELECT @CenaHora = v_valueParameters  FROM Conf_Parameters  WHERE id_typeParameter = '01' AND id_parameter = '013'; SELECT  dpr.v_nameDinerProvider AS 'COMEDOR', FORMAT(fdr.d_datetime, 'yyyy-MM-dd, dddd', 'es-ES') AS 'Fecha', lp.id_placePayment AS 'LP', CASE  WHEN fdr.d_time >= @DesayunoHora AND fdr.d_time < @ComidaHora THEN 'Desayuno' WHEN fdr.d_time >= @ComidaHora AND fdr.d_time < @CenaHora THEN 'Comida' WHEN fdr.d_time >= @CenaHora OR fdr.d_time < @DesayunoHora THEN 'Cena'     END AS 'T. Comida',     COUNT(fdr.c_codigo_emp) AS 'Trabajadores' FROM Nom_FoodRegister fdr LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace ";
+        string groupByResume = " GROUP BY \r\n    dpr.v_nameDinerProvider, \r\n    lp.id_placePayment, \r\n    FORMAT(fdr.d_datetime, 'yyyy-MM-dd, dddd', 'es-ES'),\r\n    CASE \r\n        WHEN fdr.d_time >= @DesayunoHora AND fdr.d_time < @ComidaHora THEN 'Desayuno'\r\n        WHEN fdr.d_time >= @ComidaHora AND fdr.d_time < @CenaHora THEN 'Comida'\r\n        WHEN fdr.d_time >= @CenaHora OR fdr.d_time < @DesayunoHora THEN 'Cena'\r\n    END; ";
 
 
         string? breakfastTime = null, lunchTime = null, dinnerTime = null;
@@ -281,7 +281,7 @@ namespace SisUvex.Nomina.Comedores.DiningReports
                 }
             }
 
-            // 1️⃣ Obtener las fechas dinámicamente (evitar errores con comillas)
+            // Obtener las fechas disponibles en el rango de búsqueda
             string queryDates = @" SELECT DISTINCT FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha 
                                    FROM Nom_FoodRegister fdr 
                                    LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp
@@ -303,31 +303,47 @@ namespace SisUvex.Nomina.Comedores.DiningReports
                 return;
             }
 
-            // Construcción de la consulta PIVOT con los filtros aplicados
+            // Construcción de la consulta PIVOT con horarios dinámicos desde Conf_Parameters
             string queryReport = $@"
-                                    SELECT ID, Nombre, LP, Comedor, {columnas}
-                                    FROM (
-                                        SELECT 
-                                            fdr.c_codigo_emp AS ID, 
-                                            CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS Nombre, 
-                                            lp.id_placePayment AS LP, 
-                                            dpr.v_nameDinerProvider AS Comedor, 
-                                            FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha, 
-                                            COUNT(fdr.c_servedAgain) AS Total
-                                        FROM Nom_FoodRegister fdr 
-                                        LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp 
-                                        LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall 
-                                        LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider 
-                                        LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace
-                                        {where}
-                                        GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider
-                                    ) AS SourceTable
-                                    PIVOT (
-                                        SUM(Total) FOR Fecha IN ({columnas})
-                                    ) AS PivotTable
-                                    ORDER BY ID;";
+                                DECLARE @DesayunoHora TIME, @ComidaHora TIME, @CenaHora TIME;
 
+                                -- Obtener los horarios desde la tabla Conf_Parameters
+                                SELECT @DesayunoHora = v_valueParameters 
+                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '011';
+
+                                SELECT @ComidaHora = v_valueParameters 
+                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '012';
+
+                                SELECT @CenaHora = v_valueParameters 
+                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '013';
+
+                                -- Consulta principal con PIVOT
+                                SELECT ID, Nombre, LP, Comedor, {columnas}
+                                FROM (
+                                    SELECT 
+                                        fdr.c_codigo_emp AS ID, 
+                                        CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS Nombre, 
+                                        lp.id_placePayment AS LP, 
+                                        dpr.v_nameDinerProvider AS Comedor, 
+                                        FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha,
+                                        -- Sumar todas las comidas sin separarlas por tipo
+                                        COUNT(*) AS Total
+                                    FROM Nom_FoodRegister fdr 
+                                    LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp 
+                                    LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall 
+                                    LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider 
+                                    LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace
+                                    {where}
+                                    GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider
+                                ) AS SourceTable
+                                PIVOT (
+                                    SUM(Total) FOR Fecha IN ({columnas})
+                                ) AS PivotTable
+                                ORDER BY ID;";
+
+            Clipboard.SetText(queryReport);
             dtReportColumnDays = ClsQuerysDB.ExecuteParameterizedQuery(queryReport, dicDateTables);
         }
+
     }
 }
