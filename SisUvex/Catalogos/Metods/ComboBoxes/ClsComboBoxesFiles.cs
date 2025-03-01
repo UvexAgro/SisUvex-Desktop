@@ -214,6 +214,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.FreightContainer.Cbo:
                     queryDataTable = ClsObject.FreightContainer.QueryCbo;
                     break;
+                case ClsObject.ManifestTemplate.Cbo:
+                    queryDataTable = ClsObject.ManifestTemplate.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -262,6 +265,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.FreightContainer.Cbo:
                     query += " IN ('Pack_TransportLine', 'Pack_FreightContainer') ";
+                    break;
+                case ClsObject.ManifestTemplate.Cbo:
+                    query += " IN ('Pack_ManifestTemplates', 'Pack_Distributor', 'Pack_Grower', 'Pack_Consignee', 'Pack_AgencyTrade', 'Pack_City') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -329,6 +335,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Truck.TableName;
                 case ClsObject.FreightContainer.Cbo:
                     return ClsObject.FreightContainer.TableName;
+                case ClsObject.ManifestTemplate.Cbo:
+                    return ClsObject.ManifestTemplate.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

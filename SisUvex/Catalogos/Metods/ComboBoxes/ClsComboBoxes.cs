@@ -186,6 +186,51 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             };
         }
 
+        public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(ComboBox cboPrincipal, Dictionary<ComboBox, string> dicCboDependends, TextBox txbId)
+        {
+            cboPrincipal.SelectedValueChanged += (sender, e) =>
+            {
+                if (cboPrincipal.SelectedItem == null) return;
+
+                // Si el ComboBox principal está en el índice 0, todos los dependientes también se ponen en 0
+                if (cboPrincipal.SelectedIndex == 0)
+                {
+                    txbId.Text = string.Empty; // Limpia el TextBox
+
+                    foreach (var cmbDepended in dicCboDependends.Keys)
+                    {
+                        cmbDepended.SelectedIndex = 0; // Reinicia los ComboBox secundarios
+                    }
+                    return; // Sale de la función
+                }
+
+                // Obtener la fila seleccionada del ComboBox principal
+                DataRowView selectedRow = cboPrincipal.SelectedItem as DataRowView;
+
+                if (selectedRow != null)
+                {
+                    // Asignar el ID seleccionado al TextBox
+                    txbId.Text = selectedRow[cboPrincipal.ValueMember].ToString();
+
+                    // Actualizar los ComboBox dependientes
+                    foreach (var kvp in dicCboDependends)
+                    {
+                        ComboBox cmbSecundario = kvp.Key;
+                        string column = kvp.Value;
+
+                        // Verificar si la columna existe en la fila seleccionada
+                        if (selectedRow.Row.Table.Columns.Contains(column))
+                        {
+                            object value = selectedRow[column]; // Obtener el valor correspondiente
+                            cmbSecundario.SelectedValue = value; // Seleccionar el valor en el ComboBox dependiente
+                        }
+                    }
+                }
+            };
+        }
+
+
+
         public static void CboApplyChbClickEventWithCboDependensColumn(ComboBox comboBox, CheckBox checkBox, string columnFilterName, TextBox textBoxIdFilter)
         {
             checkBox.Click += (sender, e) =>

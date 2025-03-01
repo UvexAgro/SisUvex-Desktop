@@ -145,6 +145,9 @@
             btnMovePalletDown = new Button();
             btnMovePalletUp = new Button();
             txbIdSeason = new TextBox();
+            cboTemplate = new ComboBox();
+            txbIdTemplate = new TextBox();
+            label21 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -185,7 +188,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 9F);
-            label1.Location = new Point(41, 304);
+            label1.Location = new Point(41, 329);
             label1.Name = "label1";
             label1.Size = new Size(77, 15);
             label1.TabIndex = 357;
@@ -195,7 +198,7 @@
             // txbPhytosanitary
             // 
             txbPhytosanitary.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPhytosanitary.Location = new Point(115, 301);
+            txbPhytosanitary.Location = new Point(115, 326);
             txbPhytosanitary.MaxLength = 30;
             txbPhytosanitary.Name = "txbPhytosanitary";
             txbPhytosanitary.Size = new Size(211, 21);
@@ -358,7 +361,7 @@
             // 
             lblObservaciones.AutoSize = true;
             lblObservaciones.Font = new Font("Microsoft Sans Serif", 9F);
-            lblObservaciones.Location = new Point(27, 523);
+            lblObservaciones.Location = new Point(27, 548);
             lblObservaciones.Name = "lblObservaciones";
             lblObservaciones.Size = new Size(91, 15);
             lblObservaciones.TabIndex = 339;
@@ -368,10 +371,10 @@
             // txbObservations
             // 
             txbObservations.Font = new Font("Microsoft Sans Serif", 9F);
-            txbObservations.Location = new Point(115, 523);
+            txbObservations.Location = new Point(115, 548);
             txbObservations.MaxLength = 200;
             txbObservations.Name = "txbObservations";
-            txbObservations.Size = new Size(314, 96);
+            txbObservations.Size = new Size(314, 71);
             txbObservations.TabIndex = 338;
             txbObservations.Text = "";
             // 
@@ -414,7 +417,7 @@
             // txbSeal3
             // 
             txbSeal3.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSeal3.Location = new Point(327, 500);
+            txbSeal3.Location = new Point(327, 525);
             txbSeal3.MaxLength = 10;
             txbSeal3.Name = "txbSeal3";
             txbSeal3.Size = new Size(102, 21);
@@ -424,7 +427,7 @@
             // txbSeal2
             // 
             txbSeal2.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSeal2.Location = new Point(222, 500);
+            txbSeal2.Location = new Point(222, 525);
             txbSeal2.MaxLength = 10;
             txbSeal2.Name = "txbSeal2";
             txbSeal2.Size = new Size(102, 21);
@@ -435,7 +438,7 @@
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Microsoft Sans Serif", 9F);
-            label14.Location = new Point(74, 503);
+            label14.Location = new Point(74, 528);
             label14.Name = "label14";
             label14.Size = new Size(44, 15);
             label14.TabIndex = 331;
@@ -445,7 +448,7 @@
             // txbSeal1
             // 
             txbSeal1.Font = new Font("Microsoft Sans Serif", 9F);
-            txbSeal1.Location = new Point(115, 500);
+            txbSeal1.Location = new Point(115, 525);
             txbSeal1.MaxLength = 10;
             txbSeal1.Name = "txbSeal1";
             txbSeal1.Size = new Size(102, 21);
@@ -458,7 +461,7 @@
             cboTemperatureUnit.Font = new Font("Microsoft Sans Serif", 9F);
             cboTemperatureUnit.FormattingEnabled = true;
             cboTemperatureUnit.Items.AddRange(new object[] { "F", "C", "K" });
-            cboTemperatureUnit.Location = new Point(391, 475);
+            cboTemperatureUnit.Location = new Point(391, 500);
             cboTemperatureUnit.Name = "cboTemperatureUnit";
             cboTemperatureUnit.Size = new Size(33, 23);
             cboTemperatureUnit.TabIndex = 329;
@@ -466,7 +469,7 @@
             // txbTemperature
             // 
             txbTemperature.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTemperature.Location = new Point(358, 476);
+            txbTemperature.Location = new Point(358, 501);
             txbTemperature.MaxLength = 3;
             txbTemperature.Name = "txbTemperature";
             txbTemperature.Size = new Size(28, 21);
@@ -477,7 +480,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Microsoft Sans Serif", 9F);
-            label12.Location = new Point(220, 479);
+            label12.Location = new Point(220, 504);
             label12.Name = "label12";
             label12.Size = new Size(57, 15);
             label12.TabIndex = 326;
@@ -487,7 +490,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Microsoft Sans Serif", 9F);
-            label11.Location = new Point(38, 479);
+            label11.Location = new Point(38, 504);
             label11.Name = "label11";
             label11.Size = new Size(80, 15);
             label11.TabIndex = 324;
@@ -497,7 +500,7 @@
             // txbTermograph
             // 
             txbTermograph.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTermograph.Location = new Point(115, 476);
+            txbTermograph.Location = new Point(115, 501);
             txbTermograph.MaxLength = 20;
             txbTermograph.Name = "txbTermograph";
             txbTermograph.Size = new Size(102, 21);
@@ -508,7 +511,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Microsoft Sans Serif", 9F);
-            label10.Location = new Point(20, 454);
+            label10.Location = new Point(20, 479);
             label10.Name = "label10";
             label10.Size = new Size(98, 15);
             label10.TabIndex = 322;
@@ -520,7 +523,7 @@
             cboTransportType.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportType.FormattingEnabled = true;
             cboTransportType.Items.AddRange(new object[] { "", "TRAILER", "CAJA REFRIGERADA", "CONTENEDOR", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboTransportType.Location = new Point(115, 452);
+            cboTransportType.Location = new Point(115, 477);
             cboTransportType.Name = "cboTransportType";
             cboTransportType.Size = new Size(211, 21);
             cboTransportType.TabIndex = 321;
@@ -529,7 +532,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Microsoft Sans Serif", 9F);
-            label9.Location = new Point(-2, 429);
+            label9.Location = new Point(-2, 454);
             label9.Name = "label9";
             label9.Size = new Size(120, 15);
             label9.TabIndex = 320;
@@ -541,7 +544,7 @@
             cboTransportVehicle.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportVehicle.FormattingEnabled = true;
             cboTransportVehicle.Items.AddRange(new object[] { "", "TRAILER", "CONTENEDOR", "CAJA REFRIGERADA", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboTransportVehicle.Location = new Point(115, 427);
+            cboTransportVehicle.Location = new Point(115, 452);
             cboTransportVehicle.Name = "cboTransportVehicle";
             cboTransportVehicle.Size = new Size(211, 21);
             cboTransportVehicle.TabIndex = 319;
@@ -552,7 +555,7 @@
             btnSearchFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchFreightContainer.Enabled = false;
             btnSearchFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchFreightContainer.Location = new Point(395, 402);
+            btnSearchFreightContainer.Location = new Point(395, 427);
             btnSearchFreightContainer.Name = "btnSearchFreightContainer";
             btnSearchFreightContainer.Size = new Size(23, 23);
             btnSearchFreightContainer.TabIndex = 311;
@@ -564,7 +567,7 @@
             btnSearchTruck.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchTruck.Enabled = false;
             btnSearchTruck.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchTruck.Location = new Point(395, 376);
+            btnSearchTruck.Location = new Point(395, 401);
             btnSearchTruck.Name = "btnSearchTruck";
             btnSearchTruck.Size = new Size(23, 23);
             btnSearchTruck.TabIndex = 309;
@@ -576,7 +579,7 @@
             btnSearchDriver.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchDriver.Enabled = false;
             btnSearchDriver.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchDriver.Location = new Point(395, 350);
+            btnSearchDriver.Location = new Point(395, 375);
             btnSearchDriver.Name = "btnSearchDriver";
             btnSearchDriver.Size = new Size(23, 23);
             btnSearchDriver.TabIndex = 307;
@@ -586,7 +589,7 @@
             // 
             txbIdFreightContainer.Enabled = false;
             txbIdFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdFreightContainer.Location = new Point(115, 402);
+            txbIdFreightContainer.Location = new Point(115, 427);
             txbIdFreightContainer.Name = "txbIdFreightContainer";
             txbIdFreightContainer.Size = new Size(37, 21);
             txbIdFreightContainer.TabIndex = 318;
@@ -598,7 +601,7 @@
             cboFreightContainer.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboFreightContainer.FormattingEnabled = true;
             cboFreightContainer.ItemHeight = 13;
-            cboFreightContainer.Location = new Point(157, 402);
+            cboFreightContainer.Location = new Point(157, 427);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(235, 21);
             cboFreightContainer.TabIndex = 306;
@@ -607,7 +610,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Microsoft Sans Serif", 9F);
-            label5.Location = new Point(83, 405);
+            label5.Location = new Point(83, 430);
             label5.Name = "label5";
             label5.Size = new Size(35, 15);
             label5.TabIndex = 317;
@@ -617,7 +620,7 @@
             // 
             txbIdTruck.Enabled = false;
             txbIdTruck.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdTruck.Location = new Point(115, 376);
+            txbIdTruck.Location = new Point(115, 401);
             txbIdTruck.Name = "txbIdTruck";
             txbIdTruck.Size = new Size(37, 21);
             txbIdTruck.TabIndex = 316;
@@ -629,7 +632,7 @@
             cboTruck.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTruck.FormattingEnabled = true;
             cboTruck.ItemHeight = 13;
-            cboTruck.Location = new Point(157, 377);
+            cboTruck.Location = new Point(157, 402);
             cboTruck.Name = "cboTruck";
             cboTruck.Size = new Size(235, 21);
             cboTruck.TabIndex = 305;
@@ -638,7 +641,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Microsoft Sans Serif", 9F);
-            label6.Location = new Point(69, 379);
+            label6.Location = new Point(69, 404);
             label6.Name = "label6";
             label6.Size = new Size(49, 15);
             label6.TabIndex = 315;
@@ -649,7 +652,7 @@
             // 
             txbIdDriver.Enabled = false;
             txbIdDriver.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdDriver.Location = new Point(115, 350);
+            txbIdDriver.Location = new Point(115, 375);
             txbIdDriver.Name = "txbIdDriver";
             txbIdDriver.Size = new Size(37, 21);
             txbIdDriver.TabIndex = 314;
@@ -661,7 +664,7 @@
             cboDriver.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboDriver.FormattingEnabled = true;
             cboDriver.ItemHeight = 13;
-            cboDriver.Location = new Point(157, 351);
+            cboDriver.Location = new Point(157, 376);
             cboDriver.Name = "cboDriver";
             cboDriver.Size = new Size(235, 21);
             cboDriver.TabIndex = 304;
@@ -670,7 +673,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Microsoft Sans Serif", 9F);
-            label8.Location = new Point(72, 353);
+            label8.Location = new Point(72, 378);
             label8.Name = "label8";
             label8.Size = new Size(46, 15);
             label8.TabIndex = 313;
@@ -681,7 +684,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft Sans Serif", 9F);
-            label4.Location = new Point(12, 280);
+            label4.Location = new Point(12, 305);
             label4.Name = "label4";
             label4.Size = new Size(106, 15);
             label4.TabIndex = 303;
@@ -691,7 +694,7 @@
             // txbPurchaseOrder
             // 
             txbPurchaseOrder.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPurchaseOrder.Location = new Point(115, 277);
+            txbPurchaseOrder.Location = new Point(115, 302);
             txbPurchaseOrder.MaxLength = 30;
             txbPurchaseOrder.Name = "txbPurchaseOrder";
             txbPurchaseOrder.Size = new Size(211, 21);
@@ -701,7 +704,7 @@
             // 
             lblVisa.AutoSize = true;
             lblVisa.Font = new Font("Microsoft Sans Serif", 9F);
-            lblVisa.Location = new Point(63, 257);
+            lblVisa.Location = new Point(63, 282);
             lblVisa.Name = "lblVisa";
             lblVisa.Size = new Size(55, 15);
             lblVisa.TabIndex = 301;
@@ -711,7 +714,7 @@
             // txbBooking
             // 
             txbBooking.Font = new Font("Microsoft Sans Serif", 9F);
-            txbBooking.Location = new Point(115, 254);
+            txbBooking.Location = new Point(115, 279);
             txbBooking.MaxLength = 30;
             txbBooking.Name = "txbBooking";
             txbBooking.Size = new Size(211, 21);
@@ -733,7 +736,7 @@
             btnSearchDistributor.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchDistributor.Enabled = false;
             btnSearchDistributor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchDistributor.Location = new Point(395, 79);
+            btnSearchDistributor.Location = new Point(395, 104);
             btnSearchDistributor.Name = "btnSearchDistributor";
             btnSearchDistributor.Size = new Size(23, 23);
             btnSearchDistributor.TabIndex = 295;
@@ -743,7 +746,7 @@
             // 
             txbIdDistributor.Enabled = false;
             txbIdDistributor.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdDistributor.Location = new Point(115, 79);
+            txbIdDistributor.Location = new Point(115, 104);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(37, 21);
             txbIdDistributor.TabIndex = 298;
@@ -755,7 +758,7 @@
             cboDistributor.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboDistributor.FormattingEnabled = true;
             cboDistributor.ItemHeight = 13;
-            cboDistributor.Location = new Point(157, 79);
+            cboDistributor.Location = new Point(157, 104);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(235, 21);
             cboDistributor.TabIndex = 294;
@@ -764,7 +767,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Microsoft Sans Serif", 9F);
-            label3.Location = new Point(45, 81);
+            label3.Location = new Point(45, 106);
             label3.Name = "label3";
             label3.Size = new Size(73, 15);
             label3.TabIndex = 297;
@@ -777,7 +780,7 @@
             btnSearchConsignee.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchConsignee.Enabled = false;
             btnSearchConsignee.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchConsignee.Location = new Point(395, 104);
+            btnSearchConsignee.Location = new Point(395, 129);
             btnSearchConsignee.Name = "btnSearchConsignee";
             btnSearchConsignee.Size = new Size(23, 23);
             btnSearchConsignee.TabIndex = 290;
@@ -787,7 +790,7 @@
             // 
             txbIdConsignee.Enabled = false;
             txbIdConsignee.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdConsignee.Location = new Point(115, 104);
+            txbIdConsignee.Location = new Point(115, 129);
             txbIdConsignee.Name = "txbIdConsignee";
             txbIdConsignee.Size = new Size(37, 21);
             txbIdConsignee.TabIndex = 293;
@@ -799,7 +802,7 @@
             cboConsignee.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboConsignee.FormattingEnabled = true;
             cboConsignee.ItemHeight = 13;
-            cboConsignee.Location = new Point(157, 104);
+            cboConsignee.Location = new Point(157, 129);
             cboConsignee.Name = "cboConsignee";
             cboConsignee.Size = new Size(235, 21);
             cboConsignee.TabIndex = 289;
@@ -808,7 +811,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Microsoft Sans Serif", 9F);
-            label16.Location = new Point(32, 106);
+            label16.Location = new Point(32, 131);
             label16.Name = "label16";
             label16.Size = new Size(86, 15);
             label16.TabIndex = 292;
@@ -821,7 +824,7 @@
             btnSearchCityDestination.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchCityDestination.Enabled = false;
             btnSearchCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchCityDestination.Location = new Point(395, 229);
+            btnSearchCityDestination.Location = new Point(395, 254);
             btnSearchCityDestination.Name = "btnSearchCityDestination";
             btnSearchCityDestination.Size = new Size(23, 23);
             btnSearchCityDestination.TabIndex = 277;
@@ -833,7 +836,7 @@
             btnSearchCityCrossPoint.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchCityCrossPoint.Enabled = false;
             btnSearchCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchCityCrossPoint.Location = new Point(395, 204);
+            btnSearchCityCrossPoint.Location = new Point(395, 229);
             btnSearchCityCrossPoint.Name = "btnSearchCityCrossPoint";
             btnSearchCityCrossPoint.Size = new Size(23, 23);
             btnSearchCityCrossPoint.TabIndex = 275;
@@ -845,7 +848,7 @@
             btnSearchGrower.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchGrower.Enabled = false;
             btnSearchGrower.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchGrower.Location = new Point(395, 129);
+            btnSearchGrower.Location = new Point(395, 154);
             btnSearchGrower.Name = "btnSearchGrower";
             btnSearchGrower.Size = new Size(23, 23);
             btnSearchGrower.TabIndex = 273;
@@ -857,7 +860,7 @@
             btnSearchAgencyMX.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchAgencyMX.Enabled = false;
             btnSearchAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchAgencyMX.Location = new Point(395, 179);
+            btnSearchAgencyMX.Location = new Point(395, 204);
             btnSearchAgencyMX.Name = "btnSearchAgencyMX";
             btnSearchAgencyMX.Size = new Size(23, 23);
             btnSearchAgencyMX.TabIndex = 270;
@@ -869,7 +872,7 @@
             btnSearchAgencyUS.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchAgencyUS.Enabled = false;
             btnSearchAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchAgencyUS.Location = new Point(395, 154);
+            btnSearchAgencyUS.Location = new Point(395, 179);
             btnSearchAgencyUS.Name = "btnSearchAgencyUS";
             btnSearchAgencyUS.Size = new Size(23, 23);
             btnSearchAgencyUS.TabIndex = 269;
@@ -879,7 +882,7 @@
             // 
             txbIdCityDestination.Enabled = false;
             txbIdCityDestination.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCityDestination.Location = new Point(115, 229);
+            txbIdCityDestination.Location = new Point(115, 254);
             txbIdCityDestination.Name = "txbIdCityDestination";
             txbIdCityDestination.Size = new Size(37, 21);
             txbIdCityDestination.TabIndex = 288;
@@ -891,7 +894,7 @@
             cboCityDestination.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboCityDestination.FormattingEnabled = true;
             cboCityDestination.ItemHeight = 13;
-            cboCityDestination.Location = new Point(157, 229);
+            cboCityDestination.Location = new Point(157, 254);
             cboCityDestination.Name = "cboCityDestination";
             cboCityDestination.Size = new Size(235, 21);
             cboCityDestination.TabIndex = 268;
@@ -900,7 +903,7 @@
             // 
             lblCiudadDestino.AutoSize = true;
             lblCiudadDestino.Font = new Font("Microsoft Sans Serif", 9F);
-            lblCiudadDestino.Location = new Point(26, 232);
+            lblCiudadDestino.Location = new Point(26, 257);
             lblCiudadDestino.Name = "lblCiudadDestino";
             lblCiudadDestino.Size = new Size(92, 15);
             lblCiudadDestino.TabIndex = 287;
@@ -911,7 +914,7 @@
             // 
             txbIdCityCrossPoint.Enabled = false;
             txbIdCityCrossPoint.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCityCrossPoint.Location = new Point(115, 204);
+            txbIdCityCrossPoint.Location = new Point(115, 229);
             txbIdCityCrossPoint.Name = "txbIdCityCrossPoint";
             txbIdCityCrossPoint.Size = new Size(37, 21);
             txbIdCityCrossPoint.TabIndex = 286;
@@ -923,7 +926,7 @@
             cboCityCrossPoint.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboCityCrossPoint.FormattingEnabled = true;
             cboCityCrossPoint.ItemHeight = 13;
-            cboCityCrossPoint.Location = new Point(157, 204);
+            cboCityCrossPoint.Location = new Point(157, 229);
             cboCityCrossPoint.Name = "cboCityCrossPoint";
             cboCityCrossPoint.Size = new Size(235, 21);
             cboCityCrossPoint.TabIndex = 267;
@@ -932,7 +935,7 @@
             // 
             lblCiudadCruce.AutoSize = true;
             lblCiudadCruce.Font = new Font("Microsoft Sans Serif", 9F);
-            lblCiudadCruce.Location = new Point(36, 207);
+            lblCiudadCruce.Location = new Point(36, 232);
             lblCiudadCruce.Name = "lblCiudadCruce";
             lblCiudadCruce.Size = new Size(82, 15);
             lblCiudadCruce.TabIndex = 285;
@@ -943,7 +946,7 @@
             // 
             txbIdGrower.Enabled = false;
             txbIdGrower.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdGrower.Location = new Point(115, 129);
+            txbIdGrower.Location = new Point(115, 154);
             txbIdGrower.Name = "txbIdGrower";
             txbIdGrower.Size = new Size(37, 21);
             txbIdGrower.TabIndex = 284;
@@ -955,7 +958,7 @@
             cboGrower.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboGrower.FormattingEnabled = true;
             cboGrower.ItemHeight = 13;
-            cboGrower.Location = new Point(157, 129);
+            cboGrower.Location = new Point(157, 154);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(235, 21);
             cboGrower.TabIndex = 266;
@@ -964,7 +967,7 @@
             // 
             lblProductor.AutoSize = true;
             lblProductor.Font = new Font("Microsoft Sans Serif", 9F);
-            lblProductor.Location = new Point(55, 132);
+            lblProductor.Location = new Point(55, 157);
             lblProductor.Name = "lblProductor";
             lblProductor.Size = new Size(63, 15);
             lblProductor.TabIndex = 283;
@@ -975,7 +978,7 @@
             // 
             txbIdAgencyUS.Enabled = false;
             txbIdAgencyUS.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdAgencyUS.Location = new Point(115, 154);
+            txbIdAgencyUS.Location = new Point(115, 179);
             txbIdAgencyUS.Name = "txbIdAgencyUS";
             txbIdAgencyUS.Size = new Size(37, 21);
             txbIdAgencyUS.TabIndex = 282;
@@ -987,7 +990,7 @@
             cboAgencyUS.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboAgencyUS.FormattingEnabled = true;
             cboAgencyUS.ItemHeight = 13;
-            cboAgencyUS.Location = new Point(157, 154);
+            cboAgencyUS.Location = new Point(157, 179);
             cboAgencyUS.Name = "cboAgencyUS";
             cboAgencyUS.Size = new Size(235, 21);
             cboAgencyUS.TabIndex = 264;
@@ -996,7 +999,7 @@
             // 
             lblAgenciaUS.AutoSize = true;
             lblAgenciaUS.Font = new Font("Microsoft Sans Serif", 9F);
-            lblAgenciaUS.Location = new Point(44, 157);
+            lblAgenciaUS.Location = new Point(44, 182);
             lblAgenciaUS.Name = "lblAgenciaUS";
             lblAgenciaUS.Size = new Size(74, 15);
             lblAgenciaUS.TabIndex = 281;
@@ -1007,7 +1010,7 @@
             // 
             txbIdAgencyMX.Enabled = false;
             txbIdAgencyMX.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdAgencyMX.Location = new Point(115, 179);
+            txbIdAgencyMX.Location = new Point(115, 204);
             txbIdAgencyMX.Name = "txbIdAgencyMX";
             txbIdAgencyMX.Size = new Size(37, 21);
             txbIdAgencyMX.TabIndex = 280;
@@ -1019,7 +1022,7 @@
             cboAgencyMX.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboAgencyMX.FormattingEnabled = true;
             cboAgencyMX.ItemHeight = 13;
-            cboAgencyMX.Location = new Point(157, 179);
+            cboAgencyMX.Location = new Point(157, 204);
             cboAgencyMX.Name = "cboAgencyMX";
             cboAgencyMX.Size = new Size(235, 21);
             cboAgencyMX.TabIndex = 265;
@@ -1028,7 +1031,7 @@
             // 
             lblAcenciaMX.AutoSize = true;
             lblAcenciaMX.Font = new Font("Microsoft Sans Serif", 9F);
-            lblAcenciaMX.Location = new Point(42, 182);
+            lblAcenciaMX.Location = new Point(42, 207);
             lblAcenciaMX.Name = "lblAcenciaMX";
             lblAcenciaMX.Size = new Size(76, 15);
             lblAcenciaMX.TabIndex = 279;
@@ -1081,7 +1084,7 @@
             // 
             lblLinea.AutoSize = true;
             lblLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            lblLinea.Location = new Point(2, 328);
+            lblLinea.Location = new Point(2, 353);
             lblLinea.Name = "lblLinea";
             lblLinea.Size = new Size(116, 15);
             lblLinea.TabIndex = 250;
@@ -1094,7 +1097,7 @@
             btnSearchTransportLine.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchTransportLine.Enabled = false;
             btnSearchTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchTransportLine.Location = new Point(395, 325);
+            btnSearchTransportLine.Location = new Point(395, 350);
             btnSearchTransportLine.Name = "btnSearchTransportLine";
             btnSearchTransportLine.Size = new Size(23, 23);
             btnSearchTransportLine.TabIndex = 257;
@@ -1104,7 +1107,7 @@
             // 
             txbIdTransportLine.Enabled = false;
             txbIdTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdTransportLine.Location = new Point(115, 326);
+            txbIdTransportLine.Location = new Point(115, 351);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(37, 21);
             txbIdTransportLine.TabIndex = 259;
@@ -1116,7 +1119,7 @@
             cboTransportLine.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportLine.FormattingEnabled = true;
             cboTransportLine.ItemHeight = 13;
-            cboTransportLine.Location = new Point(157, 326);
+            cboTransportLine.Location = new Point(157, 351);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(235, 21);
             cboTransportLine.TabIndex = 256;
@@ -1135,7 +1138,7 @@
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Arial Black", 12F);
-            lblTitle.Location = new Point(0, -1);
+            lblTitle.Location = new Point(3, 2);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(164, 23);
             lblTitle.TabIndex = 249;
@@ -1186,7 +1189,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Microsoft Sans Serif", 9F);
-            label13.Location = new Point(309, 479);
+            label13.Location = new Point(309, 504);
             label13.Name = "label13";
             label13.Size = new Size(50, 15);
             label13.TabIndex = 328;
@@ -1245,7 +1248,7 @@
             chbRemovedConsignee.Font = new Font("Segoe UI", 7.8F);
             chbRemovedConsignee.ForeColor = Color.DarkGray;
             chbRemovedConsignee.Image = Properties.Resources.removedList16;
-            chbRemovedConsignee.Location = new Point(420, 104);
+            chbRemovedConsignee.Location = new Point(420, 129);
             chbRemovedConsignee.Name = "chbRemovedConsignee";
             chbRemovedConsignee.Size = new Size(23, 23);
             chbRemovedConsignee.TabIndex = 363;
@@ -1259,7 +1262,7 @@
             chbRemovedAgencyUS.Font = new Font("Segoe UI", 7.8F);
             chbRemovedAgencyUS.ForeColor = Color.DarkGray;
             chbRemovedAgencyUS.Image = Properties.Resources.removedList16;
-            chbRemovedAgencyUS.Location = new Point(420, 154);
+            chbRemovedAgencyUS.Location = new Point(420, 179);
             chbRemovedAgencyUS.Name = "chbRemovedAgencyUS";
             chbRemovedAgencyUS.Size = new Size(23, 23);
             chbRemovedAgencyUS.TabIndex = 365;
@@ -1273,7 +1276,7 @@
             chbRemovedGrower.Font = new Font("Segoe UI", 7.8F);
             chbRemovedGrower.ForeColor = Color.DarkGray;
             chbRemovedGrower.Image = Properties.Resources.removedList16;
-            chbRemovedGrower.Location = new Point(420, 129);
+            chbRemovedGrower.Location = new Point(420, 154);
             chbRemovedGrower.Name = "chbRemovedGrower";
             chbRemovedGrower.Size = new Size(23, 23);
             chbRemovedGrower.TabIndex = 364;
@@ -1287,7 +1290,7 @@
             chbRemovedCityCrossPoint.Font = new Font("Segoe UI", 7.8F);
             chbRemovedCityCrossPoint.ForeColor = Color.DarkGray;
             chbRemovedCityCrossPoint.Image = Properties.Resources.removedList16;
-            chbRemovedCityCrossPoint.Location = new Point(420, 204);
+            chbRemovedCityCrossPoint.Location = new Point(420, 229);
             chbRemovedCityCrossPoint.Name = "chbRemovedCityCrossPoint";
             chbRemovedCityCrossPoint.Size = new Size(23, 23);
             chbRemovedCityCrossPoint.TabIndex = 367;
@@ -1301,7 +1304,7 @@
             chbRemovedAgencyMX.Font = new Font("Segoe UI", 7.8F);
             chbRemovedAgencyMX.ForeColor = Color.DarkGray;
             chbRemovedAgencyMX.Image = Properties.Resources.removedList16;
-            chbRemovedAgencyMX.Location = new Point(420, 179);
+            chbRemovedAgencyMX.Location = new Point(420, 204);
             chbRemovedAgencyMX.Name = "chbRemovedAgencyMX";
             chbRemovedAgencyMX.Size = new Size(23, 23);
             chbRemovedAgencyMX.TabIndex = 366;
@@ -1315,7 +1318,7 @@
             chbRemovedCityDestination.Font = new Font("Segoe UI", 7.8F);
             chbRemovedCityDestination.ForeColor = Color.DarkGray;
             chbRemovedCityDestination.Image = Properties.Resources.removedList16;
-            chbRemovedCityDestination.Location = new Point(420, 229);
+            chbRemovedCityDestination.Location = new Point(420, 254);
             chbRemovedCityDestination.Name = "chbRemovedCityDestination";
             chbRemovedCityDestination.Size = new Size(23, 23);
             chbRemovedCityDestination.TabIndex = 372;
@@ -1329,7 +1332,7 @@
             chbRemovedFreightContainer.Font = new Font("Segoe UI", 7.8F);
             chbRemovedFreightContainer.ForeColor = Color.DarkGray;
             chbRemovedFreightContainer.Image = Properties.Resources.removedList16;
-            chbRemovedFreightContainer.Location = new Point(420, 402);
+            chbRemovedFreightContainer.Location = new Point(420, 427);
             chbRemovedFreightContainer.Name = "chbRemovedFreightContainer";
             chbRemovedFreightContainer.Size = new Size(23, 23);
             chbRemovedFreightContainer.TabIndex = 371;
@@ -1343,7 +1346,7 @@
             chbRemovedTruck.Font = new Font("Segoe UI", 7.8F);
             chbRemovedTruck.ForeColor = Color.DarkGray;
             chbRemovedTruck.Image = Properties.Resources.removedList16;
-            chbRemovedTruck.Location = new Point(420, 376);
+            chbRemovedTruck.Location = new Point(420, 401);
             chbRemovedTruck.Name = "chbRemovedTruck";
             chbRemovedTruck.Size = new Size(23, 23);
             chbRemovedTruck.TabIndex = 370;
@@ -1357,7 +1360,7 @@
             chbRemovedDriver.Font = new Font("Segoe UI", 7.8F);
             chbRemovedDriver.ForeColor = Color.DarkGray;
             chbRemovedDriver.Image = Properties.Resources.removedList16;
-            chbRemovedDriver.Location = new Point(420, 351);
+            chbRemovedDriver.Location = new Point(420, 376);
             chbRemovedDriver.Name = "chbRemovedDriver";
             chbRemovedDriver.Size = new Size(23, 23);
             chbRemovedDriver.TabIndex = 369;
@@ -1371,7 +1374,7 @@
             chbRemovedTransportLine.Font = new Font("Segoe UI", 7.8F);
             chbRemovedTransportLine.ForeColor = Color.DarkGray;
             chbRemovedTransportLine.Image = Properties.Resources.removedList16;
-            chbRemovedTransportLine.Location = new Point(420, 325);
+            chbRemovedTransportLine.Location = new Point(420, 350);
             chbRemovedTransportLine.Name = "chbRemovedTransportLine";
             chbRemovedTransportLine.Size = new Size(23, 23);
             chbRemovedTransportLine.TabIndex = 368;
@@ -1385,7 +1388,7 @@
             chbRemovedDistributor.Font = new Font("Segoe UI", 7.8F);
             chbRemovedDistributor.ForeColor = Color.DarkGray;
             chbRemovedDistributor.Image = Properties.Resources.removedList16;
-            chbRemovedDistributor.Location = new Point(420, 79);
+            chbRemovedDistributor.Location = new Point(420, 104);
             chbRemovedDistributor.Name = "chbRemovedDistributor";
             chbRemovedDistributor.Size = new Size(23, 23);
             chbRemovedDistributor.TabIndex = 373;
@@ -1395,7 +1398,7 @@
             // txbTermoPosition
             // 
             txbTermoPosition.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTermoPosition.Location = new Point(275, 476);
+            txbTermoPosition.Location = new Point(275, 501);
             txbTermoPosition.MaxLength = 2;
             txbTermoPosition.Name = "txbTermoPosition";
             txbTermoPosition.Size = new Size(32, 21);
@@ -1438,11 +1441,45 @@
             txbIdSeason.TabIndex = 377;
             txbIdSeason.TextAlign = HorizontalAlignment.Center;
             // 
+            // cboTemplate
+            // 
+            cboTemplate.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTemplate.Font = new Font("Microsoft Sans Serif", 8.25F);
+            cboTemplate.FormattingEnabled = true;
+            cboTemplate.ItemHeight = 13;
+            cboTemplate.Location = new Point(157, 79);
+            cboTemplate.Name = "cboTemplate";
+            cboTemplate.Size = new Size(235, 21);
+            cboTemplate.TabIndex = 378;
+            // 
+            // txbIdTemplate
+            // 
+            txbIdTemplate.Enabled = false;
+            txbIdTemplate.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdTemplate.Location = new Point(115, 79);
+            txbIdTemplate.Name = "txbIdTemplate";
+            txbIdTemplate.Size = new Size(37, 21);
+            txbIdTemplate.TabIndex = 379;
+            txbIdTemplate.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Font = new Font("Microsoft Sans Serif", 9F);
+            label21.Location = new Point(64, 80);
+            label21.Name = "label21";
+            label21.Size = new Size(54, 15);
+            label21.TabIndex = 380;
+            label21.Text = "Plantilla:";
+            label21.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(797, 678);
+            Controls.Add(txbIdTemplate);
+            Controls.Add(cboTemplate);
             Controls.Add(txbIdSeason);
             Controls.Add(btnMovePalletUp);
             Controls.Add(btnMovePalletDown);
@@ -1557,6 +1594,7 @@
             Controls.Add(label7);
             Controls.Add(label19);
             Controls.Add(lblDieselLiters);
+            Controls.Add(label21);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifestAdd";
             Text = "Añadir manifiesto";
@@ -1681,5 +1719,8 @@
         private Button btnMovePalletDown;
         private Button btnMovePalletUp;
         public TextBox txbIdSeason;
+        public ComboBox cboTemplate;
+        public TextBox txbIdTemplate;
+        private Label label21;
     }
 }

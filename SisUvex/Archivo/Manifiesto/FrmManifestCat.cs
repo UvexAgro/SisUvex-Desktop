@@ -1,4 +1,5 @@
 ﻿using SisUvex.Archivo.Manifiesto.ConfManifest;
+using SisUvex.Archivo.Manifiesto.ManifestTemplates;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -79,6 +80,13 @@ namespace SisUvex.Archivo.Manifiesto
         {
             FrmConfManifest frm = new FrmConfManifest();
             frm.ShowDialog();
+        }
+
+        private void btnTemplates_Click(object sender, EventArgs e)
+        {
+            FrmManifestTemplatesCat frm = new FrmManifestTemplatesCat();
+            frm.MdiParent = this.MdiParent; // Set the MdiParent to the parent of the current form
+            frm.Show();
         }
     }
 }

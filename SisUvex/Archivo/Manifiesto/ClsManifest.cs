@@ -9,6 +9,8 @@ using System.Media;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
+using SisUvex.Catalogos.Distribuidor;
+using SisUvex.Catalogos.Productor;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -201,6 +203,7 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboLoadActives(_frmAdd.cboTruck, ClsObject.Truck.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, ClsObject.FreightContainer.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, ClsObject.Season.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboTemplate, ClsObject.ManifestTemplate.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboConsignee, _frmAdd.txbIdConsignee);
@@ -214,6 +217,20 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTruck, _frmAdd.txbIdTruck);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTemplate, _frmAdd.txbIdTemplate);
+
+            // Diccionario para asignar columnas del DataTable del cmbPrincipal a cada ComboBox secundario
+            Dictionary<ComboBox, string> columnasRelacionadas = new Dictionary<ComboBox, string>
+            {
+                { _frmAdd.cboDistributor, ClsObject.Distributor.ColumnId },
+                { _frmAdd.cboConsignee, ClsObject.Consignee.ColumnId },
+                { _frmAdd.cboGrower, ClsObject.Grower.ColumnId },
+                { _frmAdd.cboAgencyUS, ClsObject.AgencyTradeUS.ColumnId },
+                { _frmAdd.cboAgencyMX, ClsObject.AgencyTradeMX.ColumnId },
+                { _frmAdd.cboCityCrossPoint, ClsObject.City.ColumnIdCrossPoint },
+                { _frmAdd.cboCityDestination, ClsObject.City.ColumnIdDestiny }
+            };
+            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(_frmAdd.cboTemplate, columnasRelacionadas, _frmAdd.txbIdTemplate);
 
             List<Tuple<ComboBox, CheckBox?>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?>>();
             cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver));
