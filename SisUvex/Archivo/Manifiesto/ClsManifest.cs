@@ -478,10 +478,16 @@ namespace SisUvex.Archivo.Manifiesto
 
             SqlDataReader dr = cmd.ExecuteReader();
 
-            if (dr.Read())
-                return (string)dr["id_manifest"];
+            string idManifest = string.Empty;
 
-            return string.Empty;
+            if (dr.Read())
+            {
+                idManifest = (string)dr["id_manifest"];
+
+                dr.Close();
+            }
+
+            return idManifest;
         }
 
         public void ModifyDetailsToManifest()
