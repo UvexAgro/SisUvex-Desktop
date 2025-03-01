@@ -341,7 +341,7 @@ namespace SisUvex.Nomina.Comedores.DiningReports
                                 ) AS PivotTable
                                 ORDER BY ID;";
 
-            Clipboard.SetText(queryReport);
+            //Clipboard.SetText(queryReport);
             dtReportColumnDays = ClsQuerysDB.ExecuteParameterizedQuery(queryReport, dicDateTables);
         }
 
