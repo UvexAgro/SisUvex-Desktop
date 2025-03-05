@@ -125,21 +125,54 @@ namespace SisUvex.Nomina.EmployeeCredentials
             iText.Kernel.Colors.Color UvexRed = new DeviceRgb(138, 56, 64);     // Valores RGB para #8A3840
             iText.Kernel.Colors.Color UvexGreen = new DeviceRgb(163, 214, 93);  // Valores RGB para #A3D65D
 
-            string _logoPath = GetLogoPath(empleado["logo"].ToString());
-
-            iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(_logoPath))
-                .ScaleToFit(50, 25).SetFixedPosition(logoX, logoY);
-            document.Add(logo);
+            
 
             string _idEmployee = empleado["Id"].ToString();
 
-            iText.Layout.Element.Image photo;
-            string photoFilePath = System.IO.Path.Combine(photoPath, $"{_idEmployee}.jpg");
-            if (System.IO.File.Exists(photoFilePath))
+            if (int.TryParse(_idEmployee, out int _int))
             {
-                photo = new iText.Layout.Element.Image(ImageDataFactory.Create(photoFilePath)).ScaleAbsolute(70, 70).SetFixedPosition(photoX, photoY);
-                document.Add(photo);
+                string _logoPath = GetLogoPath(empleado["logo"].ToString());
+
+                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(_logoPath))
+                    .ScaleToFit(50, 25).SetFixedPosition(logoX, logoY);
+                document.Add(logo);
+
+                //EMPRESA
+                string? _Empresa = empleado["Empresa"].ToString();
+                if (!string.IsNullOrEmpty(_Empresa))
+                {
+                    PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD); //Fuente en negritas
+                    Text empresaText = new Text(_Empresa)
+                        .SetFont(boldFont)      // Aplicar negritas
+                        .SetFontSize(10)        // Tamaño de fuente
+                        .SetFontColor(UvexRed); // Aplicar color
+
+                    Paragraph empresa = new Paragraph(empresaText)          // Crear el párrafo y agregar el texto
+                    .SetTextAlignment(TextAlignment.RIGHT)              // Alineación a la derecha
+                    .SetFixedPosition(empresaX, empresaY, anchoTexto);  // Posición fija con ancho específico
+                    document.Add(empresa);
+
+                    string? _RP = empleado["RegistroPatronal"].ToString();
+                    if (!string.IsNullOrEmpty(_RP))
+                    {
+                        Paragraph registroPatronal = new Paragraph("RP: " + _RP).SetFontSize(registroPatronalFont)
+                        .SetTextAlignment(TextAlignment.RIGHT)
+                        .SetFixedPosition(registroPatronalX, registroPatronalY, anchoRegistroPatronal);
+                        document.Add(registroPatronal);
+                    }
+
+                    //FOTOGRAFÍA EMPLEADO
+                    iText.Layout.Element.Image photo;
+                    string photoFilePath = System.IO.Path.Combine(photoPath, $"{_idEmployee}.jpg");
+                    if (System.IO.File.Exists(photoFilePath))
+                    {
+                        photo = new iText.Layout.Element.Image(ImageDataFactory.Create(photoFilePath)).ScaleAbsolute(70, 70).SetFixedPosition(photoX, photoY);
+                        document.Add(photo);
+                    }
+                }
             }
+
+            
 
             Paragraph nombre = new Paragraph(empleado["Nombre"].ToString()).SetFontSize(fontName)
                 .SetTextAlignment(TextAlignment.CENTER) // Alineación centrada
@@ -151,30 +184,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 .SetFixedPosition(nombre2X, nombre2Y, anchoNombre);
             document.Add(nombre2);
 
-            string? _Empresa = empleado["Empresa"].ToString();
-            if (!string.IsNullOrEmpty(_Empresa))
-            {
-                PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD); //Fuente en negritas
-                Text empresaText = new Text(_Empresa)
-                    .SetFont(boldFont)      // Aplicar negritas
-                    .SetFontSize(10)        // Tamaño de fuente
-                    .SetFontColor(UvexRed); // Aplicar color
-
-                Paragraph empresa = new Paragraph(empresaText)          // Crear el párrafo y agregar el texto
-                .SetTextAlignment(TextAlignment.RIGHT)              // Alineación a la derecha
-                .SetFixedPosition(empresaX, empresaY, anchoTexto);  // Posición fija con ancho específico
-                document.Add(empresa);
-
-                string? _RP = empleado["RegistroPatronal"].ToString();
-                if (!string.IsNullOrEmpty(_RP))
-                {
-                    Paragraph registroPatronal = new Paragraph("RP: " + _RP).SetFontSize(registroPatronalFont)
-                    .SetTextAlignment(TextAlignment.RIGHT)
-                    .SetFixedPosition(registroPatronalX, registroPatronalY, anchoRegistroPatronal);
-                    document.Add(registroPatronal);
-                }
-
-            }
+            
 
             string? _Ingreso = empleado["Ingreso"].ToString();
             if (!string.IsNullOrEmpty(_Ingreso))
