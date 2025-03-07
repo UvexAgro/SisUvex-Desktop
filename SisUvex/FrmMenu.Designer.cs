@@ -97,6 +97,7 @@
             actualizarEmpleadosSisUvexToolStripMenuItem = new ToolStripMenuItem();
             actualizarDatosDeEmpleadosPorExcelAgrosmartToolStripMenuItem = new ToolStripMenuItem();
             altaDeEmpleadosSinRegistroToolStripMenuItem = new ToolStripMenuItem();
+            sUAToolStripMenuItem = new ToolStripMenuItem();
             desertGhostToolStripMenuItem = new ToolStripMenuItem();
             cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
             empaqueToolStripMenuItem = new ToolStripMenuItem();
@@ -124,7 +125,6 @@
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            sUAToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -589,6 +589,13 @@
             altaDeEmpleadosSinRegistroToolStripMenuItem.Text = "Alta de empleados sin registro";
             altaDeEmpleadosSinRegistroToolStripMenuItem.Click += altaDeEmpleadosSinRegistroToolStripMenuItem_Click;
             // 
+            // sUAToolStripMenuItem
+            // 
+            sUAToolStripMenuItem.Name = "sUAToolStripMenuItem";
+            sUAToolStripMenuItem.Size = new Size(352, 22);
+            sUAToolStripMenuItem.Text = "SUA";
+            sUAToolStripMenuItem.Click += sUAToolStripMenuItem_Click;
+            // 
             // desertGhostToolStripMenuItem
             // 
             desertGhostToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cargarEmpleadosToolStripMenuItem });
@@ -599,7 +606,7 @@
             // cargarEmpleadosToolStripMenuItem
             // 
             cargarEmpleadosToolStripMenuItem.Name = "cargarEmpleadosToolStripMenuItem";
-            cargarEmpleadosToolStripMenuItem.Size = new Size(170, 22);
+            cargarEmpleadosToolStripMenuItem.Size = new Size(180, 22);
             cargarEmpleadosToolStripMenuItem.Text = "Cargar empleados";
             cargarEmpleadosToolStripMenuItem.Click += cargarEmpleadosToolStripMenuItem_Click;
             // 
@@ -710,7 +717,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -718,7 +725,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -775,12 +782,6 @@
             // 
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
-            // 
-            // sUAToolStripMenuItem
-            // 
-            sUAToolStripMenuItem.Name = "sUAToolStripMenuItem";
-            sUAToolStripMenuItem.Size = new Size(352, 22);
-            sUAToolStripMenuItem.Text = "SUA";
             // 
             // FrmMenu
             // 

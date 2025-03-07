@@ -497,5 +497,10 @@ namespace SisUvex
             FrmEmployeeDiningHallAsingment cat = new FrmEmployeeDiningHallAsingment();
             AbrirVentanaHijo(cat, 3);
         }
+
+        private void sUAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

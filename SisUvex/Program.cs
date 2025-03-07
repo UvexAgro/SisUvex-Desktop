@@ -28,6 +28,7 @@ using SisUvex.Nomina.Comedores.DiningReports;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Lot;
 using SisUvex.Archivo.Manifiesto.ManifestTemplates;
+using SisUvex.Nomina.Padron.SUA;
 
 namespace SisUvex
 {
