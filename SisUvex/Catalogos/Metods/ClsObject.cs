@@ -42,9 +42,10 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveGrower";
             public const string ColumnAddress = "Dirección";
             public const string ColumnCity = "Ciudad";
+            public const string ColumnRegPat = "RegPat";
             public const string Cbo = "CboGrower";
             public const string DgvCatalog = "DgvCatalogGrower";
-            public const string QueryCbo = $" SELECT id_grower AS '{Column.id}', CONCAT(v_nameGrower, ' | ', id_grower, ' | (',c_active,')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_Grower ORDER BY '{Column.name}' ";
+            public const string QueryCbo = $"SELECT id_grower AS [{Column.id}], CONCAT(v_nameGrower, ' | ', id_grower, ' | (',c_active,')') AS [{Column.name}], c_active AS [{Column.active}], v_regPat AS [{ColumnRegPat}] FROM Pack_Grower ORDER BY '{Column.name}' ";
             public const string QueryDgvCatalog = "queryGrower";
         }
         public static class Gtin

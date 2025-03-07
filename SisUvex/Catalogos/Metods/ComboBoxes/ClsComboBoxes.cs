@@ -17,8 +17,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             DataRow defaultRow = dt.NewRow();
             defaultRow[ClsObject.Column.name] = textSelect;
             defaultRow[ClsObject.Column.id] = string.Empty;
-            defaultRow[ClsObject.Column.active] = "1";
-            
+            if (dt.Columns.Contains(ClsObject.Column.active))
+                defaultRow[ClsObject.Column.active] = "1";
+
             dt.Rows.InsertAt(defaultRow, 0);
 
             comboBox.DataSource = dt;
