@@ -12,7 +12,8 @@ namespace SisUvex.Nomina.Padron.SUA
 {
     public partial class FrmNSSDuplicates : Form
     {
-        public DataTable? dtNSSDuplicatesEmployees;
+        public DataTable? dtEmployeesInput;
+        private DataTable? dtNSSDuplicatesEmployees;
         public bool isDataValidated = false;
         public FrmNSSDuplicates()
         {
@@ -21,6 +22,9 @@ namespace SisUvex.Nomina.Padron.SUA
 
         private void FrmNSSDuplicates_Load(object sender, EventArgs e)
         {
+            if (dtEmployeesInput != null)
+                dtNSSDuplicatesEmployees = FilterNSSDuplicatesRows(dtEmployeesInput);
+
             if (dtNSSDuplicatesEmployees != null)
             {
                 DataGridViewCheckBoxColumn chkColumn = new DataGridViewCheckBoxColumn();
@@ -64,9 +68,86 @@ namespace SisUvex.Nomina.Padron.SUA
             }
             else
             {
+                List<string> uncheckedEmployeesCodes = GetUncheckedEmployeesCodes();
+
+                RemoveListEmployeesFromInput(uncheckedEmployeesCodes);
+
                 isDataValidated = true;
+
                 this.Close();
             }
         }
+
+        private void btnIgnore_Click(object sender, EventArgs e)
+        {
+            List<string> allEmployeesCodes = GetAllEmployeesCodes();
+
+            RemoveListEmployeesFromInput(allEmployeesCodes);
+
+            isDataValidated = true;
+
+            this.Close();
+        }
+
+        private List<string> GetAllEmployeesCodes()
+        {
+            var allRows = dgvDuplicatesEmployees.Rows
+                .Cast<DataGridViewRow>()
+                .ToList();
+
+            var employeeCodes = allRows
+                .Select(row => row.Cells["Código"].Value.ToString())
+                .ToList();
+
+            return employeeCodes;
+        }
+
+        public DataTable FilterNSSDuplicatesRows(DataTable dtEmployees)
+        {
+            DataTable duplicatesRowsTable = dtEmployees.Clone(); // Clona la estructura del DataTable original
+
+            foreach (DataRow row in dtEmployees.Rows)
+            {
+                if (int.TryParse(row["Repeticiones"].ToString(), out int repetidos) && repetidos > 1)
+                {
+                    duplicatesRowsTable.ImportRow(row);
+                }
+            }
+
+            return duplicatesRowsTable;
+        }
+
+        private List<string> GetUncheckedEmployeesCodes()
+        {
+            var uncheckedRows = dgvDuplicatesEmployees.Rows
+                .Cast<DataGridViewRow>()
+                .Where(row => Convert.ToBoolean(row.Cells["Sel."].Value) == false)
+                .ToList();
+
+            var employeeCodes = uncheckedRows
+                .Select(row => row.Cells["Código"].Value.ToString())
+                .ToList();
+
+            return employeeCodes;
+        }
+
+        private void RemoveListEmployeesFromInput(List<string> uncheckedEmployeesCodes)
+        {
+            if (dtEmployeesInput != null)
+            {
+                foreach (var code in uncheckedEmployeesCodes)
+                {
+                    var rowsToDelete = dtEmployeesInput.AsEnumerable()
+                        .Where(row => row.Field<string>("Código") == code)
+                        .ToList();
+
+                    foreach (var row in rowsToDelete)
+                    {
+                        dtEmployeesInput.Rows.Remove(row);
+                    }
+                }
+            }
+        }
+
     }
 }

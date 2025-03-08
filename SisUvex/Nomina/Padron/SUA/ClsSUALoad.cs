@@ -96,9 +96,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
                     string nssInClause = string.Join(", ", nssList);
 
-                    //string qry = $"SELECT id_employee AS [Código], v_lastNamePat AS [A. Paterno], v_lastNameMat AS [A. Materno], v_name AS [Nombre], c_numimss AS NSS, (SELECT COUNT(*) FROM Nom_Employees AS sub WHERE sub.c_numimss = main.c_numimss) AS [Repeticiones] FROM Nom_Employees AS main WHERE c_numimss IN ({nssInClause}) ORDER BY NSS, v_lastNamePat, v_lastNameMat, v_name;";
-
-                    string qry = "SELECT id_employee AS [Código], v_lastNamePat AS [A. Paterno], v_lastNameMat AS [A. Materno], v_name AS [Nombre], c_numimss AS NSS, (SELECT COUNT(*) FROM Nom_Employees AS sub WHERE sub.c_numimss = main.c_numimss) AS [Repeticiones] FROM Nom_Employees AS main WHERE c_numimss IN ('10139462013', '11169447031', '11169462345', '12160447129', '15160392658', \r\n                        '16160299000', '16160645707', '17159414022', '19148681026', '19220409171', \r\n                        '20160675904', '21160550600', '22160188987', '22160646901', '27159291700', \r\n                        '28160494549', '30160612062', '42169774462', '44220447005', '48048324122', \r\n                        '50210322876', '50220484906', '52190337593', '71149902398', '82119421863', \r\n                        '82129125678', '84078412487', '84200537839', '92169835912', '93169886004', \r\n                        '95169969243', '96169977491', '96169993456', '11139431131', '24129312385', ' 24129312385', '27149579313', '27149579313', '30190117942', '30190117942', '37169959139', '37169959139', '38179957758') ORDER BY NSS, v_lastNamePat, v_lastNameMat, v_name;";
+                    string qry = $"SELECT id_employee AS [Código], v_lastNamePat AS [A. Paterno], v_lastNameMat AS [A. Materno], v_name AS [Nombre], c_numimss AS NSS, (SELECT COUNT(*) FROM Nom_Employees AS sub WHERE sub.c_numimss = main.c_numimss) AS [Repeticiones] FROM Nom_Employees AS main WHERE c_numimss IN ({nssInClause}) ORDER BY NSS, v_lastNamePat, v_lastNameMat, v_name;";
 
                     DataTable dtEmployeesData = ClsQuerysDB.GetDataTable(qry);
 
@@ -135,26 +133,17 @@ namespace SisUvex.Nomina.Padron.SUA
 
                     _frm.dgvQuery.DataSource = dtErrors;
                 }
+                else
+                {
+                    System.Media.SystemSounds.Hand.Play();
+
+                    MessageBox.Show("No se encontraron fallas en la ruta de SUA.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else
             {
                 System.Media.SystemSounds.Hand.Play();
             }
-        }
-
-        public DataTable FilterNSSDuplicatesRows(DataTable dtEmployees)
-        {
-            DataTable duplicatesRowsTable = dtEmployees.Clone(); // Clona la estructura del DataTable original
-
-            foreach (DataRow row in dtEmployees.Rows)
-            {
-                if (int.TryParse(row["Repeticiones"].ToString(), out int repetidos) && repetidos > 1)
-                {
-                    duplicatesRowsTable.ImportRow(row);
-                }
-            }
-
-            return duplicatesRowsTable;
         }
 
         public bool ValidateNSSDuplicates(DataTable dtEmployees)
@@ -163,7 +152,7 @@ namespace SisUvex.Nomina.Padron.SUA
             {
                 FrmNSSDuplicates frmNSSDuplicates = new FrmNSSDuplicates();
 
-                frmNSSDuplicates.dtNSSDuplicatesEmployees = FilterNSSDuplicatesRows(dtEmployees);
+                frmNSSDuplicates.dtEmployeesInput = dtEmployees;
 
                 frmNSSDuplicates.ShowDialog();
 
@@ -171,6 +160,77 @@ namespace SisUvex.Nomina.Padron.SUA
             }
 
             return true;
+        }
+
+        public void CreateTxtFiles()
+        {
+            string suaPath = _frm.txbSUAPath.Text;
+            string folderPath = System.IO.Path.GetDirectoryName(suaPath);
+
+            var codigoList = _frm.dgvQuery.Rows.Cast<DataGridViewRow>()
+                                               .Where(row => row.Cells["Código"].Value != null)
+                                               .Select(row => $"'{row.Cells["Código"].Value.ToString()}'")
+                                               .ToList();
+
+            string codigoInClause = string.Join(", ", codigoList);
+
+            string qryAfil = $"SELECT * FROM Table1 WHERE Código IN ({codigoInClause})"; // Reemplazar con la consulta real
+            string qryAseg = $"SELECT * FROM Table2 WHERE Código IN ({codigoInClause})"; // Reemplazar con la consulta real
+
+            DataTable dtAfil = ClsQuerysDB.GetDataTable(qryAfil);
+            DataTable dtAseg = ClsQuerysDB.GetDataTable(qryAseg);
+
+            string outputFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SUA archivos");
+            Directory.CreateDirectory(outputFolder);
+
+            bool isFileGenerated = false;
+
+            if (_frm.chbAfil.Checked)
+            {
+                DataTable filteredDtAfil = FilterDataTable(dtAfil);
+                if (filteredDtAfil.Rows.Count > 0)
+                {
+                    string filePathAfil = Path.Combine(outputFolder, "Afil.txt");
+                    WriteDataTableToTxt(filteredDtAfil, filePathAfil);
+                    isFileGenerated = true;
+                }
+            }
+
+            if (_frm.chbAseg.Checked)
+            {
+                DataTable filteredDtAseg = FilterDataTable(dtAseg);
+                if (filteredDtAseg.Rows.Count > 0)
+                {
+                    string filePathAseg = Path.Combine(outputFolder, "Aseg.txt");
+                    WriteDataTableToTxt(filteredDtAseg, filePathAseg);
+                    isFileGenerated = true;
+                }
+            }
+        }
+
+        private DataTable FilterDataTable(DataTable dataTable)
+        {
+            DataTable filteredTable = dataTable.Clone();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (!string.IsNullOrEmpty(row["Código"].ToString()) && !string.IsNullOrEmpty(row["NSS"].ToString()))
+                {
+                    filteredTable.ImportRow(row);
+                }
+            }
+            return filteredTable;
+        }
+        
+        private void WriteDataTableToTxt(DataTable dataTable, string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string line = string.Join("", row.ItemArray.Select(item => item.ToString()));
+                    writer.WriteLine(line);
+                }
+            }
         }
     }
 }
