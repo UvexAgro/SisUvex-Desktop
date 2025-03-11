@@ -39,7 +39,7 @@ namespace SisUvex.Configuracion
             else
             {
 
-                MessageBox.Show("No hay impresoras condiguradas", "[Print Config]", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No hay impresoras configuradas", "[Print Config]", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }   
         }
 

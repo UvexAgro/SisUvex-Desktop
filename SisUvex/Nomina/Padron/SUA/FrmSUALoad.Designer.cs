@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             btnErrors = new Button();
             label6 = new Label();
             txbComputer = new TextBox();
@@ -51,35 +48,11 @@
             btnDeleteSUAConfig = new Button();
             txbGrower = new TextBox();
             lblTitle = new Label();
+            chbAfil = new CheckBox();
+            chbAseg = new CheckBox();
+            btnDocs = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvQuery).BeginInit();
             SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new Point(12, 594);
-            button1.Name = "button1";
-            button1.Size = new Size(54, 23);
-            button1.TabIndex = 0;
-            button1.Text = "Movt";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(72, 594);
-            button2.Name = "button2";
-            button2.Size = new Size(54, 23);
-            button2.TabIndex = 1;
-            button2.Text = "Afil";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            button3.Location = new Point(132, 594);
-            button3.Name = "button3";
-            button3.Size = new Size(54, 23);
-            button3.TabIndex = 2;
-            button3.Text = "Aseg";
-            button3.UseVisualStyleBackColor = true;
             // 
             // btnErrors
             // 
@@ -191,28 +164,28 @@
             dgvQuery.BackgroundColor = SystemColors.ControlLightLight;
             dgvQuery.BorderStyle = BorderStyle.Fixed3D;
             dgvQuery.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvQuery.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvQuery.EnableHeadersVisualStyles = false;
             dgvQuery.ImeMode = ImeMode.NoControl;
             dgvQuery.Location = new Point(13, 203);
             dgvQuery.Name = "dgvQuery";
             dgvQuery.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -273,9 +246,40 @@
             lblTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.Location = new Point(11, 9);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(143, 21);
+            lblTitle.Size = new Size(174, 21);
             lblTitle.TabIndex = 32;
-            lblTitle.Text = "Añadir datos SUA";
+            lblTitle.Text = "Generar archivos SUA";
+            // 
+            // chbAfil
+            // 
+            chbAfil.AutoSize = true;
+            chbAfil.Location = new Point(297, 178);
+            chbAfil.Name = "chbAfil";
+            chbAfil.Size = new Size(49, 19);
+            chbAfil.TabIndex = 33;
+            chbAfil.Text = "AFIL";
+            chbAfil.UseVisualStyleBackColor = true;
+            // 
+            // chbAseg
+            // 
+            chbAseg.AutoSize = true;
+            chbAseg.Location = new Point(345, 178);
+            chbAseg.Name = "chbAseg";
+            chbAseg.Size = new Size(54, 19);
+            chbAseg.TabIndex = 34;
+            chbAseg.Text = "ASEG";
+            chbAseg.UseVisualStyleBackColor = true;
+            // 
+            // btnDocs
+            // 
+            btnDocs.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnDocs.Location = new Point(395, 174);
+            btnDocs.Name = "btnDocs";
+            btnDocs.Size = new Size(108, 23);
+            btnDocs.TabIndex = 0;
+            btnDocs.Text = "Generar archivos";
+            btnDocs.UseVisualStyleBackColor = true;
+            btnDocs.Click += btnDocs_Click;
             // 
             // FrmSUALoad
             // 
@@ -300,9 +304,9 @@
             Controls.Add(label1);
             Controls.Add(txbSUAPath);
             Controls.Add(btnErrors);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(btnDocs);
+            Controls.Add(chbAseg);
+            Controls.Add(chbAfil);
             Name = "FrmSUALoad";
             Text = "FrmSUALoad";
             Load += FrmSUALoad_Load;
@@ -312,10 +316,6 @@
         }
 
         #endregion
-
-        private Button button1;
-        private Button button2;
-        private Button button3;
         private Button btnErrors;
         private Label label6;
         public TextBox txbComputer;
@@ -334,5 +334,8 @@
         private Button btnDeleteSUAConfig;
         public TextBox txbGrower;
         public Label lblTitle;
+        private Button btnDocs;
+        public CheckBox chbAfil;
+        public CheckBox chbAseg;
     }
 }

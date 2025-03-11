@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmNSSDuplicates));
             dgvDuplicatesEmployees = new DataGridView();
             btnAccept = new Button();
             btnIgnore = new Button();
@@ -95,6 +96,7 @@
             btnIgnore.TabIndex = 29;
             btnIgnore.Text = "Ignorar";
             btnIgnore.UseVisualStyleBackColor = true;
+            btnIgnore.Click += btnIgnore_Click;
             // 
             // lblTitle
             // 
@@ -126,10 +128,11 @@
             Controls.Add(btnIgnore);
             Controls.Add(dgvDuplicatesEmployees);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmNSSDuplicates";
-            Text = "FrmNSSDuplicates";
+            Text = "Empleados con el mismo número de seguro social";
             Load += FrmNSSDuplicates_Load;
             ((System.ComponentModel.ISupportInitialize)dgvDuplicatesEmployees).EndInit();
             ResumeLayout(false);

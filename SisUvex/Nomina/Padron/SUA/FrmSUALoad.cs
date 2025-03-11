@@ -84,5 +84,13 @@ namespace SisUvex.Nomina.Padron.SUA
             else
                 System.Media.SystemSounds.Hand.Play();
         }
+
+        private void btnDocs_Click(object sender, EventArgs e)
+        {
+            if (!chbAfil.Checked || !chbAseg.Checked)
+                cls.CreateTxtFiles();
+            else
+                MessageBox.Show("No se ha seleccionado ningún archivo para generar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
     }
 }
