@@ -101,5 +101,13 @@ namespace SisUvex.Nomina.Comedores.DiningReports
             if (!AreReportsTablesNull())
                 dgvQuery.DataSource = cls.dtReportColumnDays;
         }
+
+        private void dgvQuery_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value == null || string.IsNullOrEmpty(e.Value.ToString()))
+            {
+                e.CellStyle.BackColor = Color.Yellow;
+            }
+        }
     }
 }

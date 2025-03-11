@@ -26,7 +26,8 @@ namespace SisUvex.Nomina.Comedores.DiningReports.AbsenceReport
 	                            emp.v_lastNamePat AS [A. Paterno],
 	                            emp.v_lastNameMat AS [A. Materno],
 	                            emp.v_name AS [Nombre],
-                                MAX(d_datetime) AS [Último registro]
+                                emp.id_paymentPlace AS [LP],
+                                MAX(CAST(frg.d_datetime AS datetime) + CAST(frg.d_time AS datetime)) AS [Último registro]
                             FROM 
                                 Hist_Nom_FoodRegister frg
 	                            LEFT JOIN Nom_Employees emp ON emp.id_employee = frg.c_codigo_emp
@@ -38,7 +39,7 @@ namespace SisUvex.Nomina.Comedores.DiningReports.AbsenceReport
                                     WHERE d_datetime BETWEEN @d2 AND @d3
                                 )
                             GROUP BY 
-                                c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name;";
+                                c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, emp.id_paymentPlace;";
 
             string d1 = dtpDate1.Value.ToString("yyyy-MM-dd");
             string d2 = dtpDate2.Value.ToString("yyyy-MM-dd");
