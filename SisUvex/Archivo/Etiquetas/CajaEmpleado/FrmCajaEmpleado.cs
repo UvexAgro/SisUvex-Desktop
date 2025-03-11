@@ -118,7 +118,7 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
         {
             ClsSelectionForm sel = new ClsSelectionForm();
 
-            sel.OpenSelectionForm("EmployeeBasic", "Código");
+            sel.OpenSelectionForm("TransportLine", "Código");
 
             if (!sel.SelectedValue.IsNullOrEmpty())
             {

@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Drawing;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.WorkGroup;
 using System;
 using System.Collections.Generic;
@@ -114,6 +116,18 @@ namespace SisUvex.Archivo.Manifiesto
         {
             FrmConfManifest frm = new FrmConfManifest();
             frm.ShowDialog();
+        }
+
+        private void btnSearchTransportLine_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("TransportLine", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboTransportLine, sel.SelectedValue);
+            }
         }
     }
 }
