@@ -553,6 +553,7 @@
             // 
             btnSearchFreightContainer.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFreightContainer.Enabled = false;
             btnSearchFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchFreightContainer.Location = new Point(395, 427);
             btnSearchFreightContainer.Name = "btnSearchFreightContainer";
@@ -564,6 +565,7 @@
             // 
             btnSearchTruck.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchTruck.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchTruck.Enabled = false;
             btnSearchTruck.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchTruck.Location = new Point(395, 401);
             btnSearchTruck.Name = "btnSearchTruck";
@@ -575,6 +577,7 @@
             // 
             btnSearchDriver.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchDriver.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchDriver.Enabled = false;
             btnSearchDriver.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchDriver.Location = new Point(395, 375);
             btnSearchDriver.Name = "btnSearchDriver";
