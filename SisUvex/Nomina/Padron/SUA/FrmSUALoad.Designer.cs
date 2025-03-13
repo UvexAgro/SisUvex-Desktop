@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSUALoad));
             btnErrors = new Button();
             label6 = new Label();
             txbComputer = new TextBox();
@@ -58,6 +59,7 @@
             groupBox1 = new GroupBox();
             button1 = new Button();
             btnOpenFolderFiles = new Button();
+            txbGrowerShortName = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dgvQuery).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -141,7 +143,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(395, 105);
+            label2.Location = new Point(449, 105);
             label2.Name = "label2";
             label2.Size = new Size(97, 15);
             label2.TabIndex = 23;
@@ -150,7 +152,7 @@
             // txbRegPatGrower
             // 
             txbRegPatGrower.Enabled = false;
-            txbRegPatGrower.Location = new Point(498, 102);
+            txbRegPatGrower.Location = new Point(552, 102);
             txbRegPatGrower.Name = "txbRegPatGrower";
             txbRegPatGrower.Size = new Size(97, 23);
             txbRegPatGrower.TabIndex = 24;
@@ -175,28 +177,28 @@
             dgvQuery.BackgroundColor = SystemColors.ControlLightLight;
             dgvQuery.BorderStyle = BorderStyle.Fixed3D;
             dgvQuery.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvQuery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvQuery.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvQuery.EnableHeadersVisualStyles = false;
             dgvQuery.ImeMode = ImeMode.NoControl;
             dgvQuery.Location = new Point(12, 242);
             dgvQuery.Name = "dgvQuery";
             dgvQuery.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvQuery.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -248,7 +250,7 @@
             txbGrower.Location = new Point(91, 102);
             txbGrower.MaxLength = 200;
             txbGrower.Name = "txbGrower";
-            txbGrower.Size = new Size(299, 23);
+            txbGrower.Size = new Size(287, 23);
             txbGrower.TabIndex = 31;
             // 
             // lblTitle
@@ -369,11 +371,21 @@
             btnOpenFolderFiles.UseVisualStyleBackColor = true;
             btnOpenFolderFiles.Click += btnOpenFolderFiles_Click;
             // 
+            // txbGrowerShortName
+            // 
+            txbGrowerShortName.Enabled = false;
+            txbGrowerShortName.Location = new Point(380, 102);
+            txbGrowerShortName.MaxLength = 200;
+            txbGrowerShortName.Name = "txbGrowerShortName";
+            txbGrowerShortName.Size = new Size(63, 23);
+            txbGrowerShortName.TabIndex = 41;
+            // 
             // FrmSUALoad
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(661, 629);
+            Controls.Add(txbGrowerShortName);
             Controls.Add(btnOpenFolderFiles);
             Controls.Add(groupBox1);
             Controls.Add(lblTitle);
@@ -397,8 +409,10 @@
             Controls.Add(btnDocs);
             Controls.Add(chbAseg);
             Controls.Add(chbAfil);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmSUALoad";
-            Text = "FrmSUALoad";
+            Text = "Generar archivos SUA";
+            WindowState = FormWindowState.Maximized;
             Load += FrmSUALoad_Load;
             ((System.ComponentModel.ISupportInitialize)dgvQuery).EndInit();
             groupBox1.ResumeLayout(false);
@@ -437,5 +451,6 @@
         private GroupBox groupBox1;
         private Button button1;
         private Button btnOpenFolderFiles;
+        public TextBox txbGrowerShortName;
     }
 }

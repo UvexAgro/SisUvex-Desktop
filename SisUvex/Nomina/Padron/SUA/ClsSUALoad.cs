@@ -50,7 +50,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
         public void CboSUAConfig()
         {
-            string qry = $" SELECT sua.id_SUAConfig AS [Código], CONCAT_WS(' | ', sua.id_SUAConfig, sua.v_SUAType, gro.v_shortName, sua.v_SUAPath) AS [Nombre], sua.id_grower AS [idGrower],sua.v_SUAPath AS [Path], sua.v_SUAType AS [Type], sua.v_computerName AS [Computer], gro.v_regPat AS [RegPat], gro.v_nameGrower AS [Grower] FROM Nom_SUAConfig sua LEFT JOIN Pack_Grower gro ON gro.id_grower = sua.id_grower WHERE sua.v_computerName = @computerName ";
+            string qry = $" SELECT sua.id_SUAConfig AS [Código], CONCAT_WS(' | ', sua.id_SUAConfig, sua.v_SUAType, gro.v_shortName, sua.v_SUAPath) AS [Nombre], sua.id_grower AS [idGrower],sua.v_SUAPath AS [Path], sua.v_SUAType AS [Type], sua.v_computerName AS [Computer], gro.v_regPat AS [RegPat], gro.v_nameGrower AS [Grower], gro.v_shortName AS [GrowerShortName] FROM Nom_SUAConfig sua LEFT JOIN Pack_Grower gro ON gro.id_grower = sua.id_grower WHERE sua.v_computerName = @computerName ";
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@computerName", Environment.MachineName);
@@ -69,6 +69,7 @@ namespace SisUvex.Nomina.Padron.SUA
                     _frm.txbRegPatGrower.Text = dr["RegPat"].ToString();
                     _frm.txbSUAType.Text = dr["Type"].ToString();
                     _frm.txbComputer.Text = dr["Computer"].ToString();
+                    _frm.txbGrowerShortName.Text = dr["GrowerShortName"].ToString();
 
                     _frm.dgvQuery.DataSource = null;
                 }
@@ -95,7 +96,8 @@ namespace SisUvex.Nomina.Padron.SUA
 
                     DataTable dtEmployeesData = ClsQuerysDB.GetDataTable(qry);
 
-                    ValidateNSSDuplicates(dtEmployeesData);
+                    if (!ValidateNSSDuplicates(dtEmployeesData))
+                        return;
 
                     if (!dtErrors.Columns.Contains("Código"))
                         dtErrors.Columns.Add("Código", typeof(int)).SetOrdinal(0);
@@ -174,6 +176,8 @@ namespace SisUvex.Nomina.Padron.SUA
 
             bool isFileGenerated = false;
 
+            string growerShortName = _frm.txbGrowerShortName.Text + " " + _frm.txbSUAType.Text + " " + _frm.dtpHireDate.Value.ToString("yyyy-MM-dd");
+
             if (_frm.chbAfil.Checked)
             {
                 string qryAfil = $" SELECT  EMP.id_employee, EMP.c_numimss, EMP.d_dateBirth, EMP.v_stateName, EMP.c_stateCode, EMP.c_gender FROM Nom_Employees AS EMP WHERE EMP.id_employee IN ({idEmployeeInClause}) ORDER BY EMP.v_lastNamePat, EMP.v_lastNameMat, EMP.v_name ";
@@ -186,7 +190,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
                 if (filteredDtAfil.Rows.Count > 0)
                 {
-                    string filePathAfil = Path.Combine(folderFilesPath, "Afil.txt");
+                    string filePathAfil = Path.Combine(folderFilesPath, $"{growerShortName} Afil.txt");
                     WriteDataTableToTxt(dtCompleteAfil, filePathAfil);
                     isFileGenerated = true;
                 }
@@ -204,7 +208,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
                 if (filteredDtAseg.Rows.Count > 0)
                 {
-                    string filePathAseg = Path.Combine(folderFilesPath, "Aseg.txt");
+                    string filePathAseg = Path.Combine(folderFilesPath, $"{growerShortName} Aseg.txt");
                     WriteDataTableToTxt(dtCompleteAseg, filePathAseg);
                     isFileGenerated = true;
                 }
