@@ -19,11 +19,6 @@ namespace SisUvex.Nomina.Padron.SUA
             InitializeComponent();
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void FrmSUALoad_Load(object sender, EventArgs e)
         {
             cls ??= new ClsSUALoad();
@@ -45,8 +40,6 @@ namespace SisUvex.Nomina.Padron.SUA
         private void btnErrors_Click(object sender, EventArgs e)
         {
             cls.BtnErrors();
-
-
         }
 
         private void btnModifySUAConfig_Click(object sender, EventArgs e)
@@ -87,10 +80,27 @@ namespace SisUvex.Nomina.Padron.SUA
 
         private void btnDocs_Click(object sender, EventArgs e)
         {
-            if (!chbAfil.Checked || !chbAseg.Checked)
+            if (dgvQuery.Rows.Count == 0)
+            {
+                System.Media.SystemSounds.Hand.Play();
+                return;
+            }
+
+            if (chbAfil.Checked || chbAseg.Checked)
                 cls.CreateTxtFiles();
             else
-                MessageBox.Show("No se ha seleccionado ningún archivo para generar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                System.Media.SystemSounds.Hand.Play();
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txbIntegratedDaylyWage.Enabled = !txbIntegratedDaylyWage.Enabled;
+        }
+
+        private void btnOpenFolderFiles_Click(object sender, EventArgs e)
+        {
+            cls.OpenFolderPath();
         }
     }
 }

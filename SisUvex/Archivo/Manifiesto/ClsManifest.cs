@@ -371,8 +371,8 @@ namespace SisUvex.Archivo.Manifiesto
             else
                 ModifyProcedures();
 
-            if (_frmAdd.AddIsUpdate)
-                _frmAdd.Close();
+            //if (_frmAdd.AddIsUpdate)
+            //    _frmAdd.Close();
         }
 
         public void AddProcedures()
