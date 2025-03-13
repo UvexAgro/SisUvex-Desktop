@@ -37,7 +37,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
                 dgvDuplicatesEmployees.DataSource = dtNSSDuplicatesEmployees;
             }
-            else
+            else //EN CASO DE QUE HABRA SIN DATOS
             {
                 isDataValidated = true;
 
@@ -148,6 +148,5 @@ namespace SisUvex.Nomina.Padron.SUA
                 }
             }
         }
-
     }
 }
