@@ -553,37 +553,37 @@
             // 
             btnSearchFreightContainer.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchFreightContainer.Enabled = false;
             btnSearchFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchFreightContainer.Location = new Point(395, 427);
             btnSearchFreightContainer.Name = "btnSearchFreightContainer";
             btnSearchFreightContainer.Size = new Size(23, 23);
             btnSearchFreightContainer.TabIndex = 311;
             btnSearchFreightContainer.UseVisualStyleBackColor = true;
+            btnSearchFreightContainer.Click += btnSearchFreightContainer_Click;
             // 
             // btnSearchTruck
             // 
             btnSearchTruck.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchTruck.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchTruck.Enabled = false;
             btnSearchTruck.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchTruck.Location = new Point(395, 401);
             btnSearchTruck.Name = "btnSearchTruck";
             btnSearchTruck.Size = new Size(23, 23);
             btnSearchTruck.TabIndex = 309;
             btnSearchTruck.UseVisualStyleBackColor = true;
+            btnSearchTruck.Click += btnSearchTruck_Click;
             // 
             // btnSearchDriver
             // 
             btnSearchDriver.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchDriver.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchDriver.Enabled = false;
             btnSearchDriver.Font = new Font("Microsoft Sans Serif", 9F);
             btnSearchDriver.Location = new Point(395, 375);
             btnSearchDriver.Name = "btnSearchDriver";
             btnSearchDriver.Size = new Size(23, 23);
             btnSearchDriver.TabIndex = 307;
             btnSearchDriver.UseVisualStyleBackColor = true;
+            btnSearchDriver.Click += btnSearchDriver_Click;
             // 
             // txbIdFreightContainer
             // 

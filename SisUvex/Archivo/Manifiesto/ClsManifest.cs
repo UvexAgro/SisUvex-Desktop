@@ -306,9 +306,9 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, eManifest.idCityCrossPoint ?? "");
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, eManifest.idCityDestiny ?? "");
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, eManifest.idTransportLine ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, eManifest.idDriver ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTruck, eManifest.idTruck ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, eManifest.idFreightContainer ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboDriver, eManifest.idDriver ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboTruck, eManifest.idTruck ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboFreightContainer, eManifest.idFreightContainer ?? "");
 
             clsPallets.AddManifestPalletsToDGVPalletList(eManifest.idManifest);
         }
