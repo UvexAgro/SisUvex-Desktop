@@ -10,7 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7485f1080611972d2a4abd696643f45bf95a2d1e
 
 namespace SisUvex.Catalogos.Ciudad
 {

@@ -21,6 +21,9 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 { "EmployeeBasic", (" SELECT id_employee AS 'Código', v_lastNamePat AS 'A. paterno', v_lastNameMat AS 'A. materno', v_name AS 'Nombre', id_paymentPlace AS 'LP', id_workGroup AS 'Cuadrilla', id_productionLine AS 'Línea', dpr.v_nameDinerProvider AS 'Comedor' ,FORMAT(emp.d_dateBirth, 'yyyy-MM-dd') AS 'F. nacimiento' FROM Nom_Employees emp LEFT JOIN Nom_DinerProvider AS dpr ON dpr.id_dinerProvider = emp.id_dinerProvider WHERE CONCAT_WS(' ', v_lastNamePat, v_lastNameMat, v_name, id_employee) LIKE @parameter ", "@parameter") },
                 {"Contractor", (" SELECT cat.* FROM vw_PackContractorCat cat JOIN Pack_Contractor ctr ON ctr.id_contractor = cat.Código WHERE CONCAT(v_nameContractor,' ',id_contractor) LIKE @parameter ", "@parameter")},
                 {"TransportLine", (" SELECT * FROM vw_PackTransportLineCat WHERE CONCAT_WS(' ', Código, Nombre, SCAC, SCAAT) LIKE @parameter ", "@parameter")},
+                {"Driver", (" SELECT * FROM vw_PackDriverCat WHERE CONCAT_WS(' ', Código, Nombre, [Línea de transporte]) LIKE @parameter ", "@parameter")},
+                {"Truck", (" SELECT * FROM vw_PackTruckCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', Código, [N. Económico], [Placas US], [Placas MX], [Línea de transporte])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"FreightContainer", (" SELECT * FROM vw_PackFreightContainerCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', Código, [N. Económico], [Placas US], [Placas MX], [Línea de transporte])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter ")},
                 // Add more predefined queries here
             };
 
@@ -32,7 +35,7 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
 
             InitializeForm();
         }
-
+        //[ENTRAN LOS PARÁMETROS PARA MOSTRAR LA QUERY CORRESPONDIENE DEL DICTIONARY Y DE EL NOMBRE DE LA COLUMNA DE DONDE VA A SACAR EL VALOR]
         public void OpenSelectionForm(string QueryKey, string columnNameResult)
         {
             if (predefinedQueries.TryGetValue(QueryKey, out var queryDetails))

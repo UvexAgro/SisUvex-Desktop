@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DocumentFormat.OpenXml.Presentation;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -91,6 +92,35 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 if (dt.Columns.Contains(ClsObject.Column.active))
                 {
                     dt.DefaultView.RowFilter = $"{columnNameValueMember} = '{ValueMemberText}' OR {ClsObject.Column.active} = '1'";
+                }
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i][columnNameValueMember].ToString() == ValueMemberText)
+                    {
+                        string valorBuscado = dt.Rows[i][ClsObject.Column.name].ToString();
+
+                        int indice = cbo.FindStringExact(valorBuscado);
+
+                        if (indice != -1)
+                        {
+                            cbo.SelectedIndex = indice;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void CboSelectIndexWithTextInValueMemberKeepingFilter(ComboBox cbo, string ValueMemberText)
+        {
+            if (cbo.DataSource != null && ValueMemberText != string.Empty)
+            {
+                DataTable dt = (DataTable)cbo.DataSource;
+                string columnNameValueMember = cbo.ValueMember;
+
+                if (dt.Columns.Contains(ClsObject.Column.active))
+                {
+                    dt.DefaultView.RowFilter += $" OR {columnNameValueMember} = '{ValueMemberText}'";
                 }
 
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -223,7 +253,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                         if (selectedRow.Row.Table.Columns.Contains(column))
                         {
                             object value = selectedRow[column]; // Obtener el valor correspondiente
-                            cmbSecundario.SelectedValue = value; // Seleccionar el valor en el ComboBox dependiente
+                            CboSelectIndexWithTextInValueMember(cmbSecundario, value.ToString() ?? "");
+                            //cmbSecundario.SelectedValue = value; // Seleccionar el valor en el ComboBox dependiente
                         }
                     }
                 }

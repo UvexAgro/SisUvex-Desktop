@@ -121,9 +121,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (rows.Length > 0)
             {
                 if (DateTime.TryParse(rows[0][ClsObject.WorkPlan.ColumnDate].ToString(), out DateTime dateWorkPlan))
-                        eTagInfo.dateWorkPlan = dateWorkPlan;
+                        eTag.dateWorkPlan = dateWorkPlan;
                     else
-                        eTagInfo.dateWorkPlan = null;
+                        eTag.dateWorkPlan = null;
 
                 eTag.nameProduct            = rows[0][Column.name].ToString();
                 eTag.active                 = rows[0][Column.active].ToString();

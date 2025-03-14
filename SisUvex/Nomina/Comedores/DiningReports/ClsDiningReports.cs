@@ -283,19 +283,33 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
             // Obtener las fechas disponibles en el rango de búsqueda
             string queryDates = @" SELECT DISTINCT FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha 
-                                   FROM Hist_Nom_FoodRegister fdr 
-                                   LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp
-                                   " + where;
+                           FROM Hist_Nom_FoodRegister fdr 
+                           LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp
+                           " + where;
 
             DataTable dtDates = ClsQuerysDB.ExecuteParameterizedQuery(queryDates, dicDateTables);
 
-            List<string> fechas = new List<string>();
+            // Convertir las fechas a DateTime para ordenarlas
+            List<DateTime> fechasOrdenadas = new List<DateTime>();
             foreach (DataRow row in dtDates.Rows)
             {
-                fechas.Add("[" + row["Fecha"].ToString() + "]");
+                if (DateTime.TryParse(row["Fecha"].ToString(), out DateTime fecha))
+                {
+                    fechasOrdenadas.Add(fecha);
+                }
             }
 
-            string columnas = string.Join(",", fechas);
+            // Ordenar las fechas
+            fechasOrdenadas.Sort();
+
+            // Reconstruir la lista de fechas en el formato necesario para la consulta PIVOT
+            List<string> fechasFormateadas = new List<string>();
+            foreach (DateTime fecha in fechasOrdenadas)
+            {
+                fechasFormateadas.Add("[" + fecha.ToString("yyyy-MM-dd") + "]");
+            }
+
+            string columnas = string.Join(",", fechasFormateadas);
 
             if (columnas.IsNullOrEmpty())
             {
@@ -305,41 +319,41 @@ namespace SisUvex.Nomina.Comedores.DiningReports
 
             // Construcción de la consulta PIVOT con horarios dinámicos desde Conf_Parameters
             string queryReport = $@"
-                                DECLARE @DesayunoHora TIME, @ComidaHora TIME, @CenaHora TIME;
+                        DECLARE @DesayunoHora TIME, @ComidaHora TIME, @CenaHora TIME;
 
-                                -- Obtener los horarios desde la tabla Conf_Parameters
-                                SELECT @DesayunoHora = v_valueParameters 
-                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '011';
+                        -- Obtener los horarios desde la tabla Conf_Parameters
+                        SELECT @DesayunoHora = v_valueParameters 
+                        FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '011';
 
-                                SELECT @ComidaHora = v_valueParameters 
-                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '012';
+                        SELECT @ComidaHora = v_valueParameters 
+                        FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '012';
 
-                                SELECT @CenaHora = v_valueParameters 
-                                FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '013';
+                        SELECT @CenaHora = v_valueParameters 
+                        FROM Conf_Parameters WHERE id_typeParameter = '01' AND id_parameter = '013';
 
-                                -- Consulta principal con PIVOT
-                                SELECT ID, Nombre, LP, Comedor, {columnas}
-                                FROM (
-                                    SELECT 
-                                        fdr.c_codigo_emp AS ID, 
-                                        CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS Nombre, 
-                                        lp.id_placePayment AS LP, 
-                                        dpr.v_nameDinerProvider AS Comedor, 
-                                        FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha,
-                                        -- Sumar todas las comidas sin separarlas por tipo
-                                        COUNT(*) AS Total
-                                    FROM Hist_Nom_FoodRegister fdr 
-                                    LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp 
-                                    LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall 
-                                    LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider 
-                                    LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace
-                                    {where}
-                                    GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider
-                                ) AS SourceTable
-                                PIVOT (
-                                    SUM(Total) FOR Fecha IN ({columnas})
-                                ) AS PivotTable
-                                ORDER BY ID;";
+                        -- Consulta principal con PIVOT
+                        SELECT ID, Nombre, LP, Comedor, {columnas}
+                        FROM (
+                            SELECT 
+                                fdr.c_codigo_emp AS ID, 
+                                CONCAT_WS(' ', emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS Nombre, 
+                                lp.id_placePayment AS LP, 
+                                dpr.v_nameDinerProvider AS Comedor, 
+                                FORMAT(fdr.d_datetime, 'yyyy-MM-dd') AS Fecha,
+                                -- Sumar todas las comidas sin separarlas por tipo
+                                COUNT(*) AS Total
+                            FROM Hist_Nom_FoodRegister fdr 
+                            LEFT JOIN Nom_Employees emp ON emp.id_employee = fdr.c_codigo_emp 
+                            LEFT JOIN Nom_DiningHall dhl ON dhl.id_dinningHall = fdr.id_dinningHall 
+                            LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = fdr.id_dinerProvider 
+                            LEFT JOIN Nom_PlacePayment lp ON lp.id_placePayment = emp.id_paymentPlace
+                            {where}
+                            GROUP BY fdr.c_codigo_emp, emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name, lp.id_placePayment, fdr.d_datetime, dpr.v_nameDinerProvider
+                        ) AS SourceTable
+                        PIVOT (
+                            SUM(Total) FOR Fecha IN ({columnas})
+                        ) AS PivotTable
+                        ORDER BY ID;";
 
             //Clipboard.SetText(queryReport);
             dtReportColumnDays = ClsQuerysDB.ExecuteParameterizedQuery(queryReport, dicDateTables);

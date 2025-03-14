@@ -53,6 +53,7 @@ using SisUvex.Nomina.Registration.NewEmployeeRegistrationSA;
 using SisUvex.Nomina.Comedores.EmployeeDiningHallAssignment;
 using SisUvex.Catalogos.Lot;
 using SisUvex.Nomina.Comedores.DiningReports.AbsenceReport;
+using SisUvex.Nomina.Padron.SUA;
 
 namespace SisUvex
 {
@@ -501,7 +502,8 @@ namespace SisUvex
 
         private void sUAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            FrmSUALoad cat = new FrmSUALoad();
+            AbrirVentanaHijo(cat, 3);
         }
 
         private void reporteAucensiasToolStripMenuItem_Click(object sender, EventArgs e)

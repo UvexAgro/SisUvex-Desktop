@@ -160,9 +160,10 @@
             dgvQuery.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvQuery.RowHeadersVisible = false;
             dgvQuery.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvQuery.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvQuery.Size = new Size(585, 282);
             dgvQuery.TabIndex = 11;
+            dgvQuery.CellFormatting += dgvQuery_CellFormatting;
             // 
             // btnSearch
             // 
