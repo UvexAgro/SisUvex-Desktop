@@ -126,7 +126,43 @@ namespace SisUvex.Archivo.Manifiesto
 
             if (!sel.SelectedValue.IsNullOrEmpty())
             {
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboTransportLine, sel.SelectedValue);
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
+            }
+        }
+
+        private void btnSearchDriver_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("Driver", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboDriver, sel.SelectedValue);
+            }
+        }
+
+        private void btnSearchTruck_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("Truck", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTruck, sel.SelectedValue);
+            }
+        }
+
+        private void btnSearchFreightContainer_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("FreightContainer", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboFreightContainer, sel.SelectedValue);
             }
         }
     }
