@@ -215,6 +215,7 @@
             Controls.Add(label1);
             Controls.Add(txbSUAPath);
             Controls.Add(lblid);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
