@@ -1,5 +1,6 @@
 ﻿using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Values;
 using System.Data;
 using System.Data.OleDb;
 using System.Numerics;
@@ -100,7 +101,7 @@ namespace SisUvex.Nomina.Padron.SUA
                         return;
 
                     if (!dtErrors.Columns.Contains("Código"))
-                        dtErrors.Columns.Add("Código", typeof(int)).SetOrdinal(0);
+                        dtErrors.Columns.Add("Código", typeof(string)).SetOrdinal(0);
                     if (!dtErrors.Columns.Contains("A. Paterno"))
                         dtErrors.Columns.Add("A. Paterno", typeof(string)).SetOrdinal(1);
                     if (!dtErrors.Columns.Contains("A. Materno"))
@@ -119,7 +120,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
                                 if (errorNss == employeeNss)
                                 {
-                                    errorRow["Código"] = employeeRow["Código"];
+                                    errorRow["Código"] = ClsValues.FormatZeros(employeeRow["Código"].ToString(),"000000");
                                     errorRow["A. Paterno"] = employeeRow["A. Paterno"];
                                     errorRow["A. Materno"] = employeeRow["A. Materno"];
                                     errorRow["Nombre"] = employeeRow["Nombre"];
@@ -198,7 +199,7 @@ namespace SisUvex.Nomina.Padron.SUA
 
             if (_frm.chbAseg.Checked)
             {
-                string qryAseg = $" SELECT EMP.id_employee, EMP.v_lastNamePat,EMP.v_lastNameMat, EMP.v_name, GRO.v_regPat, EMP.c_numimss, EMP.v_rfcEmp, EMP.v_curp FROM Nom_Employees AS EMP JOIN Nom_PlacePayment AS PLAC ON EMP.id_paymentPlace = PLAC.id_placePayment JOIN Pack_Grower AS GRO ON GRO.id_grower = PLAC.id_grower WHERE EMP.id_employee IN ({idEmployeeInClause}) ORDER BY Emp.v_lastNamePat, Emp.v_lastNameMat, Emp.v_name";
+                string qryAseg = $" SELECT EMP.id_employee, EMP.v_lastNamePat,EMP.v_lastNameMat, EMP.v_name, EMP.c_numimss, EMP.v_rfcEmp, EMP.v_curp FROM Nom_Employees AS EMP WHERE EMP.id_employee IN ({idEmployeeInClause}) ORDER BY Emp.v_lastNamePat, Emp.v_lastNameMat, Emp.v_name";
 
                 DataTable dtAseg = ClsQuerysDB.GetDataTable(qryAseg);
 
