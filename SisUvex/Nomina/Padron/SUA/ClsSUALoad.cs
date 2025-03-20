@@ -101,7 +101,7 @@ namespace SisUvex.Nomina.Padron.SUA
                         return;
 
                     if (!dtErrors.Columns.Contains("Código"))
-                        dtErrors.Columns.Add("Código", typeof(int)).SetOrdinal(0);
+                        dtErrors.Columns.Add("Código", typeof(string)).SetOrdinal(0);
                     if (!dtErrors.Columns.Contains("A. Paterno"))
                         dtErrors.Columns.Add("A. Paterno", typeof(string)).SetOrdinal(1);
                     if (!dtErrors.Columns.Contains("A. Materno"))
