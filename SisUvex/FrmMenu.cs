@@ -54,6 +54,7 @@ using SisUvex.Nomina.Comedores.EmployeeDiningHallAssignment;
 using SisUvex.Catalogos.Lot;
 using SisUvex.Nomina.Comedores.DiningReports.AbsenceReport;
 using SisUvex.Nomina.Padron.SUA;
+using SisUvex.Packing.Maintenance;
 
 namespace SisUvex
 {
@@ -82,6 +83,28 @@ namespace SisUvex
                 if (!va)
                 {
                     f.MdiParent = this;
+                    f.Show();
+                }
+            }
+        }
+        private void AbrirFormulario(Form f, int acs)
+        {
+            if (User.GetAccessLevel() >= acs)
+            {
+                bool va = false;
+
+                foreach (Form ven in Application.OpenForms)
+                {
+                    if (ven.Name.Equals(f.Name))
+                    {
+                        ven.Focus();
+                        va = true;
+                        break;
+                    }
+                }
+
+                if (!va)
+                {
                     f.Show();
                 }
             }
@@ -291,28 +314,6 @@ namespace SisUvex
             FrmActualizarDatosEmpleados cat = new FrmActualizarDatosEmpleados();
             AbrirVentanaHijo(cat, 4);
         }
-        private void AbrirFormulario(Form f, int acs)
-        {
-            if (User.GetAccessLevel() >= acs)
-            {
-                bool va = false;
-
-                foreach (Form ven in Application.OpenForms)
-                {
-                    if (ven.Name.Equals(f.Name))
-                    {
-                        ven.Focus();
-                        va = true;
-                        break;
-                    }
-                }
-
-                if (!va)
-                {
-                    f.Show();
-                }
-            }
-        }
         public void AbrirFormularioDialog(Form f, int acs)
         {
             if (User.GetAccessLevel() >= acs)
@@ -510,6 +511,12 @@ namespace SisUvex
         {
             FrmAbsenceReport cat = new FrmAbsenceReport();
             AbrirVentanaHijo(cat, 3);
+        }
+
+        private void mantenimientoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmPackingMaintenance cat = new FrmPackingMaintenance();
+            AbrirFormularioDialog(cat, 1);
         }
     }
 }
