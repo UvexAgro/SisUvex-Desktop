@@ -31,11 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAddEmployees));
             btnExaminar = new Button();
             btnLimpiar = new Button();
-            dataGridView = new DataGridView();
-            textBox1 = new TextBox();
+            dgvEmployees = new DataGridView();
+            txbExcelPath = new TextBox();
             ofdExcel = new OpenFileDialog();
             btnGuardarEmpleados = new Button();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            cboSheets = new ComboBox();
+            btnSheets = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvEmployees).BeginInit();
             SuspendLayout();
             // 
             // btnExaminar
@@ -44,7 +46,8 @@
             btnExaminar.ImageAlign = ContentAlignment.MiddleLeft;
             btnExaminar.Location = new Point(448, 12);
             btnExaminar.Name = "btnExaminar";
-            btnExaminar.Size = new Size(79, 23);
+            btnExaminar.Padding = new Padding(3, 0, 3, 0);
+            btnExaminar.Size = new Size(86, 23);
             btnExaminar.TabIndex = 1;
             btnExaminar.Text = "Examinar";
             btnExaminar.TextAlign = ContentAlignment.MiddleRight;
@@ -55,36 +58,37 @@
             // 
             btnLimpiar.Image = Properties.Resources.limpiarIcon16;
             btnLimpiar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLimpiar.Location = new Point(533, 12);
+            btnLimpiar.Location = new Point(540, 12);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(70, 23);
+            btnLimpiar.Padding = new Padding(3, 0, 3, 0);
+            btnLimpiar.Size = new Size(77, 23);
             btnLimpiar.TabIndex = 12;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.TextAlign = ContentAlignment.MiddleRight;
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
-            // dataGridView
+            // dgvEmployees
             // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView.BackgroundColor = SystemColors.Control;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Location = new Point(12, 70);
-            dataGridView.Name = "dataGridView";
-            dataGridView.ReadOnly = true;
-            dataGridView.RowHeadersVisible = false;
-            dataGridView.Size = new Size(853, 368);
-            dataGridView.TabIndex = 4;
+            dgvEmployees.AllowUserToAddRows = false;
+            dgvEmployees.AllowUserToDeleteRows = false;
+            dgvEmployees.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvEmployees.BackgroundColor = SystemColors.Control;
+            dgvEmployees.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvEmployees.Location = new Point(12, 99);
+            dgvEmployees.Name = "dgvEmployees";
+            dgvEmployees.ReadOnly = true;
+            dgvEmployees.RowHeadersVisible = false;
+            dgvEmployees.Size = new Size(853, 339);
+            dgvEmployees.TabIndex = 4;
             // 
-            // textBox1
+            // txbExcelPath
             // 
-            textBox1.Location = new Point(12, 12);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(430, 23);
-            textBox1.TabIndex = 0;
+            txbExcelPath.Location = new Point(12, 12);
+            txbExcelPath.Name = "txbExcelPath";
+            txbExcelPath.Size = new Size(430, 23);
+            txbExcelPath.TabIndex = 0;
             // 
             // ofdExcel
             // 
@@ -94,32 +98,58 @@
             // 
             // btnGuardarEmpleados
             // 
-            btnGuardarEmpleados.Image = Properties.Resources.guardarIcon16;
+            btnGuardarEmpleados.Image = (Image)resources.GetObject("btnGuardarEmpleados.Image");
             btnGuardarEmpleados.ImageAlign = ContentAlignment.MiddleLeft;
-            btnGuardarEmpleados.Location = new Point(12, 41);
+            btnGuardarEmpleados.Location = new Point(12, 70);
             btnGuardarEmpleados.Name = "btnGuardarEmpleados";
-            btnGuardarEmpleados.Size = new Size(134, 23);
+            btnGuardarEmpleados.Padding = new Padding(3, 0, 3, 0);
+            btnGuardarEmpleados.Size = new Size(140, 23);
             btnGuardarEmpleados.TabIndex = 3;
             btnGuardarEmpleados.Text = "Guardar empleados";
             btnGuardarEmpleados.TextAlign = ContentAlignment.MiddleRight;
             btnGuardarEmpleados.UseVisualStyleBackColor = true;
             btnGuardarEmpleados.Click += btnGuardarEmpleados_Click;
             // 
+            // cboSheets
+            // 
+            cboSheets.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSheets.FormattingEnabled = true;
+            cboSheets.Location = new Point(12, 41);
+            cboSheets.Name = "cboSheets";
+            cboSheets.Size = new Size(289, 23);
+            cboSheets.TabIndex = 13;
+            // 
+            // btnSheets
+            // 
+            btnSheets.Image = Properties.Resources.guardarIcon16;
+            btnSheets.ImageAlign = ContentAlignment.MiddleLeft;
+            btnSheets.Location = new Point(307, 40);
+            btnSheets.Name = "btnSheets";
+            btnSheets.Padding = new Padding(3, 0, 3, 0);
+            btnSheets.Size = new Size(100, 25);
+            btnSheets.TabIndex = 14;
+            btnSheets.Text = "Cargar hoja";
+            btnSheets.TextAlign = ContentAlignment.MiddleRight;
+            btnSheets.UseVisualStyleBackColor = true;
+            btnSheets.Click += btnSheets_Click;
+            // 
             // FrmAddEmployees
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(877, 450);
+            Controls.Add(btnSheets);
+            Controls.Add(cboSheets);
             Controls.Add(btnGuardarEmpleados);
             Controls.Add(btnExaminar);
             Controls.Add(btnLimpiar);
-            Controls.Add(dataGridView);
-            Controls.Add(textBox1);
+            Controls.Add(dgvEmployees);
+            Controls.Add(txbExcelPath);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAddEmployees";
-            Text = "FrmAddEmployees";
+            Text = "Cargar empleados Desert Ghost";
             WindowState = FormWindowState.Maximized;
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvEmployees).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -128,9 +158,11 @@
 
         private Button btnExaminar;
         private Button btnLimpiar;
-        private DataGridView dataGridView;
-        private TextBox textBox1;
+        private DataGridView dgvEmployees;
+        private TextBox txbExcelPath;
         private OpenFileDialog ofdExcel;
         private Button btnGuardarEmpleados;
+        private ComboBox cboSheets;
+        private Button btnSheets;
     }
 }

@@ -390,9 +390,13 @@ namespace SisUvex.Archivo.Manifiesto
 
                 sql.CommitTransaction();
 
-                MessageBox.Show("Se agregó el manifiesto: " + _frmAdd.txbId.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _frmAdd.txbId.Text = idManifest;
+
+                MessageBox.Show("Se agregó el manifiesto: " + idManifest, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 _frmAdd.AddIsUpdate = true;
+
+                _frmAdd.IsAddModify = true;
             }
             catch (Exception ex)
             {
