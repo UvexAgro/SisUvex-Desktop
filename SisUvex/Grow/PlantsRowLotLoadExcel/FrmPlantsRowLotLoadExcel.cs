@@ -38,7 +38,7 @@ namespace SisUvex.Grow.PlantsRowLotLoadExcel
 
                 Excel.Application excelApp = new Excel.Application();
                 Excel.Workbook workbook = excelApp.Workbooks.Open(txbFile.Text);
-                Excel.Worksheet worksheet = workbook.Sheets[1];
+                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
                 Excel.Range range = worksheet.UsedRange;
 
                 int rowCount = range.Rows.Count;

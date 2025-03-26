@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestAdd));
             btnPrintManifest = new Button();
             btnAccept = new Button();
@@ -155,7 +155,7 @@
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
-            btnPrintManifest.Location = new Point(447, 648);
+            btnPrintManifest.Location = new Point(447, 626);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 350;
@@ -165,7 +165,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(475, 648);
+            btnAccept.Location = new Point(475, 626);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 254;
@@ -176,7 +176,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(541, 648);
+            btnCancel.Location = new Point(541, 626);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 253;
@@ -207,7 +207,7 @@
             // txbDieselLiters
             // 
             txbDieselLiters.Font = new Font("Microsoft Sans Serif", 9F);
-            txbDieselLiters.Location = new Point(327, 625);
+            txbDieselLiters.Location = new Point(327, 602);
             txbDieselLiters.MaxLength = 15;
             txbDieselLiters.Name = "txbDieselLiters";
             txbDieselLiters.Size = new Size(102, 21);
@@ -219,7 +219,7 @@
             // 
             lblDieselInvoice.AutoSize = true;
             lblDieselInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            lblDieselInvoice.Location = new Point(45, 630);
+            lblDieselInvoice.Location = new Point(45, 607);
             lblDieselInvoice.Name = "lblDieselInvoice";
             lblDieselInvoice.Size = new Size(73, 15);
             lblDieselInvoice.TabIndex = 352;
@@ -229,7 +229,7 @@
             // txbDieselInvoice
             // 
             txbDieselInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            txbDieselInvoice.Location = new Point(115, 625);
+            txbDieselInvoice.Location = new Point(115, 602);
             txbDieselInvoice.MaxLength = 15;
             txbDieselInvoice.Name = "txbDieselInvoice";
             txbDieselInvoice.Size = new Size(102, 21);
@@ -267,14 +267,14 @@
             dgvPalletList.BackgroundColor = SystemColors.ControlLightLight;
             dgvPalletList.BorderStyle = BorderStyle.Fixed3D;
             dgvPalletList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgvPalletList.EnableHeadersVisualStyles = false;
             dgvPalletList.ImeMode = ImeMode.NoControl;
             dgvPalletList.Location = new Point(448, 54);
@@ -282,17 +282,17 @@
             dgvPalletList.Name = "dgvPalletList";
             dgvPalletList.ReadOnly = true;
             dgvPalletList.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = SystemColors.Control;
+            dataGridViewCellStyle8.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPalletList.Size = new Size(347, 591);
+            dgvPalletList.Size = new Size(347, 569);
             dgvPalletList.TabIndex = 347;
             // 
             // chbRejected
@@ -309,7 +309,7 @@
             // txbNameOperator
             // 
             txbNameOperator.Font = new Font("Microsoft Sans Serif", 9F);
-            txbNameOperator.Location = new Point(327, 651);
+            txbNameOperator.Location = new Point(327, 628);
             txbNameOperator.MaxLength = 20;
             txbNameOperator.Name = "txbNameOperator";
             txbNameOperator.Size = new Size(102, 21);
@@ -320,7 +320,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Microsoft Sans Serif", 9F);
-            label7.Location = new Point(40, 654);
+            label7.Location = new Point(40, 631);
             label7.Name = "label7";
             label7.Size = new Size(78, 15);
             label7.TabIndex = 343;
@@ -329,7 +329,7 @@
             // txbNameShipper
             // 
             txbNameShipper.Font = new Font("Microsoft Sans Serif", 9F);
-            txbNameShipper.Location = new Point(115, 651);
+            txbNameShipper.Location = new Point(115, 628);
             txbNameShipper.MaxLength = 20;
             txbNameShipper.Name = "txbNameShipper";
             txbNameShipper.Size = new Size(102, 21);
@@ -374,7 +374,7 @@
             txbObservations.Location = new Point(115, 548);
             txbObservations.MaxLength = 200;
             txbObservations.Name = "txbObservations";
-            txbObservations.Size = new Size(314, 71);
+            txbObservations.Size = new Size(314, 48);
             txbObservations.TabIndex = 338;
             txbObservations.Text = "";
             // 
@@ -1127,10 +1127,11 @@
             // txbId
             // 
             txbId.Enabled = false;
-            txbId.Font = new Font("Microsoft Sans Serif", 9F);
-            txbId.Location = new Point(211, 5);
+            txbId.Font = new Font("Arial", 9F, FontStyle.Bold);
+            txbId.ForeColor = Color.SteelBlue;
+            txbId.Location = new Point(84, 29);
             txbId.Name = "txbId";
-            txbId.Size = new Size(61, 21);
+            txbId.Size = new Size(50, 21);
             txbId.TabIndex = 251;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
@@ -1148,7 +1149,7 @@
             // 
             lblId.AutoSize = true;
             lblId.Font = new Font("Microsoft Sans Serif", 9F);
-            lblId.Location = new Point(193, 9);
+            lblId.Location = new Point(66, 33);
             lblId.Name = "lblId";
             lblId.Size = new Size(20, 15);
             lblId.TabIndex = 252;
@@ -1168,7 +1169,7 @@
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Microsoft Sans Serif", 9F);
-            label19.Location = new Point(268, 654);
+            label19.Location = new Point(268, 631);
             label19.Name = "label19";
             label19.Size = new Size(62, 15);
             label19.TabIndex = 345;
@@ -1178,7 +1179,7 @@
             // 
             lblDieselLiters.AutoSize = true;
             lblDieselLiters.Font = new Font("Microsoft Sans Serif", 9F);
-            lblDieselLiters.Location = new Point(254, 628);
+            lblDieselLiters.Location = new Point(254, 605);
             lblDieselLiters.Name = "lblDieselLiters";
             lblDieselLiters.Size = new Size(76, 15);
             lblDieselLiters.TabIndex = 354;
@@ -1475,9 +1476,10 @@
             // 
             // FrmManifestAdd
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(797, 678);
+            AutoScaleMode = AutoScaleMode.None;
+            AutoScroll = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            ClientSize = new Size(797, 656);
             Controls.Add(txbIdTemplate);
             Controls.Add(cboTemplate);
             Controls.Add(txbIdSeason);

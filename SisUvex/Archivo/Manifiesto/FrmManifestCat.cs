@@ -88,5 +88,10 @@ namespace SisUvex.Archivo.Manifiesto
             frm.MdiParent = this.MdiParent; // Set the MdiParent to the parent of the current form
             frm.Show();
         }
+
+        private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            cls.OpenFrmModify();
+        }
     }
 }

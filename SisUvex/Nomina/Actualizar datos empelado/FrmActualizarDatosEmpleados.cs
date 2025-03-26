@@ -57,7 +57,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
 
                 Excel.Application excelApp = new Excel.Application();
                 Excel.Workbook workbook = excelApp.Workbooks.Open(textBox1.Text);
-                Excel.Worksheet worksheet = workbook.Sheets[1];
+                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
                 Excel.Range range = worksheet.UsedRange;
 
                 // Obtener el número de filas y columnas
