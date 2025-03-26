@@ -44,7 +44,7 @@
             // 
             btnExaminar.Image = Properties.Resources.excelIcon16;
             btnExaminar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExaminar.Location = new Point(448, 12);
+            btnExaminar.Location = new Point(503, 12);
             btnExaminar.Name = "btnExaminar";
             btnExaminar.Padding = new Padding(3, 0, 3, 0);
             btnExaminar.Size = new Size(86, 23);
@@ -58,7 +58,7 @@
             // 
             btnLimpiar.Image = Properties.Resources.limpiarIcon16;
             btnLimpiar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLimpiar.Location = new Point(540, 12);
+            btnLimpiar.Location = new Point(158, 70);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Padding = new Padding(3, 0, 3, 0);
             btnLimpiar.Size = new Size(77, 23);
@@ -85,9 +85,10 @@
             // 
             // txbExcelPath
             // 
+            txbExcelPath.Enabled = false;
             txbExcelPath.Location = new Point(12, 12);
             txbExcelPath.Name = "txbExcelPath";
-            txbExcelPath.Size = new Size(430, 23);
+            txbExcelPath.Size = new Size(485, 23);
             txbExcelPath.TabIndex = 0;
             // 
             // ofdExcel

@@ -9,6 +9,7 @@ using SisUvex.Catalogos.Metods.ExcelLoad;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.IdentityModel.Tokens;
 using System.Media;
+using SisUvex.Catalogos.Metods.Querys;
 
 
 namespace SisUvex.DesertGhost
@@ -20,9 +21,8 @@ namespace SisUvex.DesertGhost
         private string titulo = "Actualizar datos empleados";
         private ClsExcel excel;
 
-        List<string> empleadosNoCumplen;
-        List<string> empleadosSiCumplen;
-        List<string> empleadosRepetidos;
+        List<string> empleadosSiCumplen, empleadosNoCumplen, empleadosRepetidos;
+        List<string?> workGroups, productionLines;
         public FrmAddEmployees()
         {
             InitializeComponent();
@@ -38,6 +38,9 @@ namespace SisUvex.DesertGhost
             {
                 txbExcelPath.Text = excel.path;
                 excel.LoadSheetsIntoComboBox(cboSheets);
+
+                if(cboSheets.Items.Count > 0)
+                    cboSheets.SelectedIndex = 0;
             }
             else
             {
@@ -57,77 +60,80 @@ namespace SisUvex.DesertGhost
         }
         private void btnGuardarEmpleados_Click(object sender, EventArgs e)
         {
-            if (!dgvEmployees.Columns.Contains("CODIGO") || !dgvEmployees.Columns.Contains("NOMBRE") || !dgvEmployees.Columns.Contains("APELLIDO PATERNO") || !dgvEmployees.Columns.Contains("APELLIDO MATERNO"))
+            if (!dgvEmployees.Columns.Contains("CODIGO") || !dgvEmployees.Columns.Contains("NOMBRE") || !dgvEmployees.Columns.Contains("APELLIDO PATERNO") || !dgvEmployees.Columns.Contains("APELLIDO MATERNO") || !dgvEmployees.Columns.Contains("CUADRILLA") || !dgvEmployees.Columns.Contains("BANDA"))
             {
-                txbExcelPath.Enabled = true;
-                btnExaminar.Enabled = true;
-                MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO y APELLIDO MATERNO en la primera fila de la hoja.", titulo);
+                MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO APELLIDO MATERNO, CUADRILLA Y BANDA en la primera fila de la hoja.", titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                guardar();
+                LoadEmployeesInDB();
             }
         }
 
-        private void guardar()
+        private void LoadEmployeesInDB()
         {
-            if (!dgvEmployees.Columns.Contains("CODIGO") || !dgvEmployees.Columns.Contains("NOMBRE") || !dgvEmployees.Columns.Contains("APELLIDO PATERNO") || !dgvEmployees.Columns.Contains("APELLIDO MATERNO"))
+            try
             {
-                MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO y APELLIDO MATERNO en la primera fila de la hoja.", titulo);
-            }
-            else
-            {
-                try
-                {
-                    empleadosNoCumplen = new List<string>();
-                    empleadosSiCumplen = new List<string>();
-                    empleadosRepetidos = new List<string>();
+                empleadosNoCumplen = new List<string>();
+                empleadosSiCumplen = new List<string>();
+                empleadosRepetidos = new List<string>();
 
-                    foreach (DataGridViewRow fila in dgvEmployees.Rows)
+                workGroups = ClsQuerysDB.GetListFromQuery("SELECT id_workGroup FROM Pack_WorkGroup");
+
+                productionLines = ClsQuerysDB.GetListFromQuery("SELECT id_productionLine FROM Nom_ProductionLine");
+
+                foreach (DataGridViewRow fila in dgvEmployees.Rows)
+                {
+                    if (!fila.IsNewRow)
                     {
-                        if (!fila.IsNewRow)
+                        string? idEmployee = ClsValues.FormatZeros(fila.Cells["CODIGO"].Value.ToString(), "000000");
+
+                        string? idWorkGroup = ClsValues.FormatZeros(fila.Cells["CUADRILLA"].Value.ToString(),"00");
+
+                        string? idProductionLine = ClsValues.FormatZeros(fila.Cells["BANDA"].Value.ToString(), "000");
+
+
+                        //MessageBox.Show($"EMP:-{idEmployee}-\nCUA:-{idWorkGroup}")
+                        if (IsEmployeeValid(idEmployee, idWorkGroup, idProductionLine))
                         {
-                            string? codigo = ClsValues.FormatZeros(fila.Cells["CODIGO"].Value.ToString(), "000000");
+                            string? name = fila.Cells["NOMBRE"].Value.ToString();
 
-                            if (EsCodigoValido(codigo))
-                            {
-                                string? nombre = fila.Cells["NOMBRE"].Value.ToString();
+                            string? lastNamePat = fila.Cells["APELLIDO PATERNO"].Value.ToString();
 
-                                string? apellidoPaterno = fila.Cells["APELLIDO PATERNO"].Value.ToString();
+                            string? lastNameMat = fila.Cells["APELLIDO MATERNO"].Value.ToString();
 
-                                string? apellidoMaterno = fila.Cells["APELLIDO MATERNO"].Value.ToString();
+                            string query = "IF (SELECT COUNT(id_employee) FROM Nom_Employees WHERE id_employee = @idEmployee) = 0 BEGIN INSERT INTO Nom_Employees (id_employee, v_lastNamePat, v_lastNameMat, v_name, id_workGroup, id_productionLine) VALUES (@idEmployee, @lastNamePat, @lastNameMat, @name, @idWorkGroup, @idProductionLine) END ELSE UPDATE Nom_Employees SET v_lastNamePat = @lastNamePat, v_lastNameMat = @lastNameMat, v_name = @name, id_workGroup = @idWorkGroup, id_productionLine = @idProductionLine WHERE id_employee = @idEmployee";
 
-                                string query = "IF (SELECT COUNT(id_employee) FROM Nom_Employees WHERE id_employee = @codigo) = 0 BEGIN INSERT INTO Nom_Employees (id_employee, v_lastNamePat, v_lastNameMat, v_name) VALUES (@codigo, @apellidoPaterno, @apellidoMaterno, @nombre) END ELSE UPDATE Nom_Employees SET v_lastNamePat = @apellidoPaterno, v_lastNameMat = @apellidoMaterno, v_name = @nombre WHERE id_employee = @codigo";
+                            sql.OpenConectionWrite();
 
-                                sql.OpenConectionWrite();
+                            SqlCommand cdm = new SqlCommand(query, sql.cnn);
+                            cdm.Parameters.AddWithValue("@idEmployee", idEmployee);
+                            cdm.Parameters.AddWithValue("@lastNamePat", ClsValues.IfEmptyToDBNull(lastNamePat));
+                            cdm.Parameters.AddWithValue("@lastNameMat", ClsValues.IfEmptyToDBNull(lastNameMat));
+                            cdm.Parameters.AddWithValue("@name", ClsValues.IfEmptyToDBNull(name));
+                            cdm.Parameters.AddWithValue("@idWorkGroup", ClsValues.IfEmptyToDBNull(idWorkGroup));
+                            cdm.Parameters.AddWithValue("@idProductionLine", ClsValues.IfEmptyToDBNull(idProductionLine));
 
-                                SqlCommand cdm = new SqlCommand(query, sql.cnn);
-                                cdm.Parameters.AddWithValue("@codigo", codigo);
-                                cdm.Parameters.AddWithValue("@apellidoPaterno", ClsValues.IfEmptyToDBNull(apellidoPaterno));
-                                cdm.Parameters.AddWithValue("@apellidoMaterno", ClsValues.IfEmptyToDBNull(apellidoMaterno));
-                                cdm.Parameters.AddWithValue("@nombre", ClsValues.IfEmptyToDBNull(nombre));
+                            cdm.ExecuteNonQuery();
 
-                                cdm.ExecuteNonQuery();
-
-                                empleadosSiCumplen.Add(codigo);
-                            }
+                            empleadosSiCumplen.Add(idEmployee);
                         }
-                    }//for
+                    }
+                }//for
 
-                    MostrarMensajeEmpleadosSiCumplen();
-                    MostrarMensajeEmpleadosNoCumplen();
-                    MostrarMensajeEmpleadosRepetidos();
+                MostrarMensajeEmpleadosSiCumplen();
+                MostrarMensajeEmpleadosNoCumplen();
+                MostrarMensajeEmpleadosRepetidos();
 
-                }//try
-                catch (Exception ex)
-                {
-                    txbExcelPath.Text = ex.Message;
-                    MessageBox.Show(ex.ToString(), titulo);
-                }
-                finally
-                {
-                    sql.CloseConectionWrite();
-                }
+            }//try
+            catch (Exception ex)
+            {
+                txbExcelPath.Text = ex.Message;
+                MessageBox.Show(ex.ToString(), titulo);
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
             }
         }
 
@@ -141,27 +147,32 @@ namespace SisUvex.DesertGhost
             dgvEmployees.Rows.Clear();
         }
 
-        public bool EsCodigoValido(string codigo)
+        public bool IsEmployeeValid(string idEmployee, string idWorkGroup, string idProductionLine)
         {
             try
             {
-                if (empleadosNoCumplen.Contains(codigo))
+                if (empleadosNoCumplen.Contains(idEmployee))
                 {
                     return false;
                 }
-                if (codigo.Length > 6)
+                if (idEmployee.Length > 6)
                 {
-                    empleadosNoCumplen.Add(codigo);
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
-                else if (!int.TryParse(codigo, out int noSirve))
+                else if (!int.TryParse(idEmployee, out int noSirve))
                 {
-                    empleadosNoCumplen.Add(codigo);
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
-                else if (empleadosSiCumplen.Contains(codigo))
+                else if (empleadosSiCumplen.Contains(idEmployee))
                 {
-                    empleadosRepetidos.Add(codigo);
+                    empleadosRepetidos.Add(idEmployee);
+                    return false;
+                }
+                else if (!workGroups.Contains(idWorkGroup) || !productionLines.Contains(idProductionLine))
+                {
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
                 else
@@ -171,7 +182,7 @@ namespace SisUvex.DesertGhost
             }
             catch
             {
-                empleadosNoCumplen.Add(codigo);
+                empleadosNoCumplen.Add(idEmployee);
                 return false;
             }
         }
