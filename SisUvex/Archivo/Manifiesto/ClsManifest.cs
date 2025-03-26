@@ -396,7 +396,7 @@ namespace SisUvex.Archivo.Manifiesto
 
                 _frmAdd.AddIsUpdate = true;
 
-                _frmAdd.IsAddModify = true;
+                _frmAdd.IsAddModify = false;
             }
             catch (Exception ex)
             {
