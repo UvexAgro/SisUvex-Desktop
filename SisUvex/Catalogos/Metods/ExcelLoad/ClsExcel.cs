@@ -120,12 +120,8 @@ namespace SisUvex.Catalogos.Metods.ExcelLoad
 
                         string sheetName = cbo.SelectedItem.ToString();
 
-                        MessageBox.Show(sheetName);
-
                         if (sheetsData.Tables.Contains(sheetName))
                         {
-                            MessageBox.Show("si:" + sheetName);
-
                             return sheetsData.Tables[sheetName];
                         }
                         else
