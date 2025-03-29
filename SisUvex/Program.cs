@@ -29,6 +29,8 @@ using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Lot;
 using SisUvex.Archivo.Manifiesto.ManifestTemplates;
 using SisUvex.Nomina.Padron.SUA;
+using SisUvex.Material.MaterialRegister;
+using SisUvex.Material.MaterialRegister.Entry;
 
 namespace SisUvex
 {
@@ -43,7 +45,7 @@ namespace SisUvex
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FrmMenu());
+            Application.Run(new FrmMaterialRegisterEntry());
             //Application.Run(new FrmMenu());
         }
     }
