@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             lblTitle = new Label();
             txbId = new TextBox();
             lblId = new Label();
@@ -825,6 +825,7 @@
             // 
             // picMaterialImage
             // 
+            picMaterialImage.BorderStyle = BorderStyle.Fixed3D;
             picMaterialImage.Location = new Point(490, -8);
             picMaterialImage.Name = "picMaterialImage";
             picMaterialImage.Size = new Size(132, 132);
@@ -841,14 +842,14 @@
             dgvMaterialList.BackgroundColor = SystemColors.ControlLightLight;
             dgvMaterialList.BorderStyle = BorderStyle.Fixed3D;
             dgvMaterialList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvMaterialList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvMaterialList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvMaterialList.Columns.AddRange(new DataGridViewColumn[] { Categoría, Código, Cantidad, Unidad, Concepto, Precio_USD, Precio_MXN, Proveedor, Distribuidor });
             dgvMaterialList.EnableHeadersVisualStyles = false;
             dgvMaterialList.ImeMode = ImeMode.NoControl;
@@ -857,14 +858,14 @@
             dgvMaterialList.Name = "dgvMaterialList";
             dgvMaterialList.ReadOnly = true;
             dgvMaterialList.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvMaterialList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvMaterialList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvMaterialList.RowHeadersVisible = false;
             dgvMaterialList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMaterialList.Size = new Size(817, 159);

@@ -7,14 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.WorkGroup;
 
 namespace SisUvex.Material.MaterialProvider
 {
-    public partial class FrmMaterialProviderAdd : Form
+    internal partial class FrmMaterialProviderAdd : Form
     {
+        public ClsMaterialProvider cls;
+        public bool IsAddModify = true, AddIsUpdate = false;
+        public string? idModify;
         public FrmMaterialProviderAdd()
         {
             InitializeComponent();
+        }
+
+        private void FrmMaterialProviderAdd_Load(object sender, EventArgs e)
+        {
+            cls ??= new ClsMaterialProvider();
+            cls._frmAdd ??= this;
+
+            cls.BeginFormAdd();
         }
     }
 }

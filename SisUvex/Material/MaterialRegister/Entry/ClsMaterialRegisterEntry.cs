@@ -8,6 +8,7 @@ using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 {
@@ -58,7 +59,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         }
         private void LoadComboBoxes()
         {
-            //dtUnit = ClsComboBoxes.CboLoadAll(ClsObject.Unit.Cbo);
+            dtUnit = ClsQuerysDB.GetDataTable(ClsObject.Unit.QueryCbo);
 
             //ALMACEN
             //PROVEEDOR
@@ -83,12 +84,16 @@ namespace SisUvex.Material.MaterialRegister.Entry
             {
                 _frmAdd.txbIdMaterial.Text = _frmAdd.cboMaterial.SelectedValue?.ToString();
 
-                if (_frmAdd.cboMaterial.SelectedIndex < 0)
+                if (_frmAdd.cboMaterial.SelectedIndex >= 0)
                 {
-                    //_frmAdd.txbUnit.Text = //UNIDAD con el dtUnit
+                    var selectedIdUnit = _frmAdd.cboMaterial.SelectedValue?.ToString();
+                    var unitRow = dtUnit?.AsEnumerable().FirstOrDefault(row => row[0].ToString() == selectedIdUnit);
+                    _frmAdd.txbUnit.Text = unitRow?[1].ToString() ?? string.Empty;
                 }
                 else
+                {
                     _frmAdd.txbUnit.Text = string.Empty;
+                }
             };
 
             List<Tuple<ComboBox, CheckBox?, string>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?, string>>();

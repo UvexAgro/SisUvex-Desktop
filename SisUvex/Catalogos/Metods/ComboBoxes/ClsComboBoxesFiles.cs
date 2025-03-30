@@ -217,6 +217,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.ManifestTemplate.Cbo:
                     queryDataTable = ClsObject.ManifestTemplate.QueryCbo;
                     break;
+                case ClsObject.Unit.Cbo:
+                    queryDataTable = ClsObject.Unit.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -337,6 +340,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.FreightContainer.TableName;
                 case ClsObject.ManifestTemplate.Cbo:
                     return ClsObject.ManifestTemplate.TableName;
+                case ClsObject.Unit.Cbo:
+                    return ClsObject.Unit.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

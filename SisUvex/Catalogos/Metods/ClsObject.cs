@@ -1,4 +1,5 @@
 ﻿
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
 using System.Web;
 
@@ -76,8 +77,8 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveCategory";
             public const string Cbo = "CboCategory";
             public const string DgvCatalog = "DgvCatalogCategory";
-            public const string QueryCbo = $" SELECT id_category AS '{Column.id}', CONCAT(v_nameCategory, ' | ', id_category,' |(',c_active,')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_Category ORDER BY '{Column.name}' ";
-            public const string QueryDgvCatalog = "queryCategory";
+            public const string QueryCbo = $" SELECT id_category AS '{Column.id}', CONCAT(v_nameCategory, ' | ', id_category,' | (',c_active,')') AS '{Column.name}', c_active AS '{Column.active}' FROM Pack_Category ORDER BY '{Column.name}' ";
+            public const string QueryDgvCatalog = "queryCategory ";
         }
 
         public static class Crop
@@ -385,6 +386,17 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboManifestTemplate";
             public const string DgvCatalog = "DgvCatalogManifestTemplate";
             public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], '1' AS [{ClsObject.Column.active}] FROM Pack_ManifestTemplates ";
+        }
+
+        public static class Unit
+        {
+            public const string TableName = "Pack_Unit";
+            public const string ColumnName = "Unidad";
+            public const string ColumnId = "idUnit";
+            public const string ColumnActive = "ActiveUnit";
+            public const string Cbo = "CboUnit";
+            public const string DgvCatalog = "DgvCatalogUnit";
+            public const string QueryCbo = $" SELECT id_unit AS '{Column.id}', CONCAT(v_nameUnit, ' | ', id_unit) AS '{Column.name}' FROM Pack_Unit ORDER BY '{Column.name}' ";
         }
     }
 }

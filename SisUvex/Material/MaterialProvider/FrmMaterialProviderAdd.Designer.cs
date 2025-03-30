@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialProviderAdd));
             lblTitle = new Label();
-            cboMarket = new ComboBox();
             txbId = new TextBox();
             txbName = new TextBox();
             lblObliName = new Label();
@@ -39,15 +38,13 @@
             label2 = new Label();
             lblName = new Label();
             lblId = new Label();
-            textBox1 = new TextBox();
-            label1 = new Label();
+            txbCity = new TextBox();
             label3 = new Label();
-            textBox2 = new TextBox();
-            label4 = new Label();
+            txbPhoneNumber = new TextBox();
             label5 = new Label();
-            textBox3 = new TextBox();
-            label7 = new Label();
+            txbEmail = new TextBox();
             label8 = new Label();
+            cboActive = new ComboBox();
             SuspendLayout();
             // 
             // lblTitle
@@ -59,17 +56,6 @@
             lblTitle.Size = new Size(221, 31);
             lblTitle.TabIndex = 120;
             lblTitle.Text = "Añadir proovedor";
-            // 
-            // cboMarket
-            // 
-            cboMarket.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMarket.Font = new Font("Segoe UI", 12F);
-            cboMarket.FormattingEnabled = true;
-            cboMarket.Items.AddRange(new object[] { "E", "N" });
-            cboMarket.Location = new Point(240, 44);
-            cboMarket.Name = "cboMarket";
-            cboMarket.Size = new Size(43, 29);
-            cboMarket.TabIndex = 112;
             // 
             // txbId
             // 
@@ -153,25 +139,14 @@
             lblId.TabIndex = 115;
             lblId.Text = "Id:";
             // 
-            // textBox1
+            // txbCity
             // 
-            textBox1.Font = new Font("Segoe UI", 12F);
-            textBox1.Location = new Point(88, 113);
-            textBox1.MaxLength = 50;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(437, 29);
-            textBox1.TabIndex = 121;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.Crimson;
-            label1.Location = new Point(79, 115);
-            label1.Margin = new Padding(0);
-            label1.Name = "label1";
-            label1.Size = new Size(12, 15);
-            label1.TabIndex = 123;
-            label1.Text = "*";
+            txbCity.Font = new Font("Segoe UI", 12F);
+            txbCity.Location = new Point(88, 113);
+            txbCity.MaxLength = 50;
+            txbCity.Name = "txbCity";
+            txbCity.Size = new Size(437, 29);
+            txbCity.TabIndex = 121;
             // 
             // label3
             // 
@@ -183,25 +158,14 @@
             label3.TabIndex = 122;
             label3.Text = "Ciudad:";
             // 
-            // textBox2
+            // txbPhoneNumber
             // 
-            textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(88, 148);
-            textBox2.MaxLength = 50;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(437, 29);
-            textBox2.TabIndex = 124;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.ForeColor = Color.Crimson;
-            label4.Location = new Point(79, 150);
-            label4.Margin = new Padding(0);
-            label4.Name = "label4";
-            label4.Size = new Size(12, 15);
-            label4.TabIndex = 126;
-            label4.Text = "*";
+            txbPhoneNumber.Font = new Font("Segoe UI", 12F);
+            txbPhoneNumber.Location = new Point(88, 148);
+            txbPhoneNumber.MaxLength = 50;
+            txbPhoneNumber.Name = "txbPhoneNumber";
+            txbPhoneNumber.Size = new Size(437, 29);
+            txbPhoneNumber.TabIndex = 124;
             // 
             // label5
             // 
@@ -213,25 +177,14 @@
             label5.TabIndex = 125;
             label5.Text = "Telefono:";
             // 
-            // textBox3
+            // txbEmail
             // 
-            textBox3.Font = new Font("Segoe UI", 12F);
-            textBox3.Location = new Point(88, 183);
-            textBox3.MaxLength = 50;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(437, 29);
-            textBox3.TabIndex = 127;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.ForeColor = Color.Crimson;
-            label7.Location = new Point(79, 185);
-            label7.Margin = new Padding(0);
-            label7.Name = "label7";
-            label7.Size = new Size(12, 15);
-            label7.TabIndex = 129;
-            label7.Text = "*";
+            txbEmail.Font = new Font("Segoe UI", 12F);
+            txbEmail.Location = new Point(88, 183);
+            txbEmail.MaxLength = 50;
+            txbEmail.Name = "txbEmail";
+            txbEmail.Size = new Size(437, 29);
+            txbEmail.TabIndex = 127;
             // 
             // label8
             // 
@@ -243,22 +196,30 @@
             label8.TabIndex = 128;
             label8.Text = "Correo:";
             // 
+            // cboActive
+            // 
+            cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboActive.Font = new Font("Segoe UI", 12F);
+            cboActive.FormattingEnabled = true;
+            cboActive.Items.AddRange(new object[] { "No", "Sí" });
+            cboActive.Location = new Point(240, 43);
+            cboActive.Name = "cboActive";
+            cboActive.Size = new Size(46, 29);
+            cboActive.TabIndex = 129;
+            // 
             // FrmMaterialProviderAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(543, 243);
-            Controls.Add(textBox3);
-            Controls.Add(label7);
+            Controls.Add(cboActive);
+            Controls.Add(txbEmail);
             Controls.Add(label8);
-            Controls.Add(textBox2);
-            Controls.Add(label4);
+            Controls.Add(txbPhoneNumber);
             Controls.Add(label5);
-            Controls.Add(textBox1);
-            Controls.Add(label1);
+            Controls.Add(txbCity);
             Controls.Add(label3);
             Controls.Add(lblTitle);
-            Controls.Add(cboMarket);
             Controls.Add(txbId);
             Controls.Add(txbName);
             Controls.Add(lblObliName);
@@ -270,6 +231,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialProviderAdd";
             Text = "Añadir proveedor";
+            Load += FrmMaterialProviderAdd_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -277,7 +239,6 @@
         #endregion
 
         public Label lblTitle;
-        public ComboBox cboMarket;
         public TextBox txbId;
         public TextBox txbName;
         private Label lblObliName;
@@ -286,14 +247,12 @@
         private Label label2;
         private Label lblName;
         private Label lblId;
-        public TextBox textBox1;
-        private Label label1;
+        public TextBox txbCity;
         private Label label3;
-        public TextBox textBox2;
-        private Label label4;
+        public TextBox txbPhoneNumber;
         private Label label5;
-        public TextBox textBox3;
-        private Label label7;
+        public TextBox txbEmail;
         private Label label8;
+        public ComboBox cboActive;
     }
 }
