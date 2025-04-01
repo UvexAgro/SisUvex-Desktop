@@ -14,8 +14,6 @@ namespace SisUvex.Material.MaterialProvider
     internal partial class FrmMaterialProviderAdd : Form
     {
         public ClsMaterialProvider cls;
-        public bool IsAddModify = true, AddIsUpdate = false;
-        public string? idModify;
         public FrmMaterialProviderAdd()
         {
             InitializeComponent();

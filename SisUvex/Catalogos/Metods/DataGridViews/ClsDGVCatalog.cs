@@ -11,16 +11,19 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
     {
         public string idColumn = ClsObject.Column.id;
         public string activeColumn = ClsObject.Column.active;
-        public string activeColumnHide = ClsObject.Column.active + "2";
-        public string queryCatalog;
-        public DataTable dtCatalog;
-        public DataTable dtCatalogActives;
+        private string activeColumnHide = ClsObject.Column.active + "2";
+        //public string queryCatalog;
         public DataGridView dgvCatalog;
+        public DataTable dtCatalog;
         public Button btnRemoved;
 
-        public void LoadDGVCatalog_ActiveColumn2()
+        public void LoadDGVCatalogWithActiveColumn2()
         {
+            activeColumnHide = activeColumn + "2";
+
             HideActiveColumn2();
+
+            SetFilterActivesOnly();
 
             DgvApplyCellFormattingEvent(dgvCatalog, activeColumn);
         }
@@ -38,7 +41,17 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             }
         }
 
-        public void ChangeActiveColumn(string id, string activeValue)
+        public void SetFilterActivesOnly()
+        {
+            dtCatalog.DefaultView.RowFilter = $"{activeColumnHide} = '1'";
+        }
+
+        public void SetFilterNull()
+        {
+            dtCatalog.DefaultView.RowFilter = "";
+        }
+
+        public void ChangeActiveCell(string id, string activeValue)
         {
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
             if (rows.Length > 0)
@@ -48,6 +61,86 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             dtCatalog.AcceptChanges();
         }
 
+        public void AddMultipleNewRowsToDGV(DataTable newRows)
+        {
+            foreach (DataRow newRow in newRows.Rows)
+            {
+                DataRow dr = dtCatalog.NewRow();
+                foreach (DataColumn dc in dtCatalog.Columns)
+                {
+                    if (newRows.Columns.Contains(dc.ColumnName))
+                    {
+                        dr[dc.ColumnName] = newRow[dc.ColumnName];
+                    }
+                }
+                if (dtCatalog.Columns.Contains(activeColumnHide))
+                {
+                    dr[activeColumnHide] = "1";
+                }
+                dtCatalog.Rows.Add(dr);
+            }
+            dtCatalog.AcceptChanges();
+        }
+
+        public void AddNewRowToDGV(DataTable newRows)
+        {
+            foreach (DataRow newRow in newRows.Rows)
+            {
+                DataRow dr = dtCatalog.NewRow();
+                foreach (DataColumn dc in dtCatalog.Columns)
+                {
+                    if (newRow.Table.Columns.Contains(dc.ColumnName))
+                    {
+                        dr[dc.ColumnName] = newRow[dc.ColumnName];
+                    }
+                }
+                if (dtCatalog.Columns.Contains(activeColumnHide))
+                {
+                    dr[activeColumnHide] = "1";
+                }
+                dtCatalog.Rows.Add(dr);
+            }
+            dtCatalog.AcceptChanges();
+        }
+        public void ModifyIdRowInDGV(DataTable newRows)
+        {
+            foreach (DataRow newRow in newRows.Rows)
+            {
+                DataRow[] existingRows = dtCatalog.Select($"{idColumn} = '{newRow[idColumn]}'");
+                if (existingRows.Length > 0)
+                {
+                    DataRow dr = existingRows[0];
+                    foreach (DataColumn dc in dtCatalog.Columns)
+                    {
+                        if (newRow.Table.Columns.Contains(dc.ColumnName))
+                        {
+                            dr[dc.ColumnName] = newRow[dc.ColumnName];
+                        }
+                    }
+                    if (dtCatalog.Columns.Contains(activeColumnHide))
+                    {
+                        dr[activeColumnHide] = "1";
+                    }
+                }
+                else
+                {
+                    DataRow dr = dtCatalog.NewRow();
+                    foreach (DataColumn dc in dtCatalog.Columns)
+                    {
+                        if (newRow.Table.Columns.Contains(dc.ColumnName))
+                        {
+                            dr[dc.ColumnName] = newRow[dc.ColumnName];
+                        }
+                    }
+                    if (dtCatalog.Columns.Contains(activeColumnHide))
+                    {
+                        dr[activeColumnHide] = "1";
+                    }
+                    dtCatalog.Rows.Add(dr);
+                }
+            }
+            dtCatalog.AcceptChanges();
+        }
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
             dataGridView.CellFormatting += (sender, e) =>

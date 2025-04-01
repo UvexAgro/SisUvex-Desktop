@@ -34,7 +34,6 @@ namespace SisUvex.Material.MaterialProvider
                 //metodo para abrir el formulario de modificar
 
                 //dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
-
             }
             else
                 SystemSounds.Exclamation.Play();
@@ -58,12 +57,36 @@ namespace SisUvex.Material.MaterialProvider
             }
             else
                 SystemSounds.Exclamation.Play();
+        }
+
+        private void chbRemoved_CheckedChanged(object sender, EventArgs e)
+        {
+            cls.ChbRemovedProcedure();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            cls.OpenFrmAdd();
+
+            if (cls.IsAddUpdate)
+            {
+                cls.CloseFrmAddModify();
+
+                cls.AddNewRowByIdInDGVCatalog();
+            }
 
         }
 
-        private void btnRemoved_Click(object sender, EventArgs e)
+        private void btnModify_Click(object sender, EventArgs e)
         {
+            cls.OpenFrmModify();
 
+            if (cls.IsAddUpdate)
+            {
+                cls.CloseFrmAddModify();
+
+                cls.AddNewRowByIdInDGVCatalog();
+            }
         }
     }
 }

@@ -28,26 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            btnRemoved = new Button();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             dgvCatalog = new DataGridView();
             btnRemove = new Button();
             btnRecover = new Button();
             btnModify = new Button();
             btnAdd = new Button();
+            chbRemoved = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
-            // 
-            // btnRemoved
-            // 
-            btnRemoved.Location = new Point(174, 12);
-            btnRemoved.Name = "btnRemoved";
-            btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 14;
-            btnRemoved.Text = "Eliminados";
-            btnRemoved.UseVisualStyleBackColor = true;
-            btnRemoved.Click += btnRemoved_Click;
             // 
             // dgvCatalog
             // 
@@ -59,28 +49,28 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 41);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -116,6 +106,7 @@
             btnModify.TabIndex = 13;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -125,13 +116,26 @@
             btnAdd.TabIndex = 12;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
+            // 
+            // chbRemoved
+            // 
+            chbRemoved.Appearance = Appearance.Button;
+            chbRemoved.Location = new Point(174, 12);
+            chbRemoved.Name = "chbRemoved";
+            chbRemoved.Size = new Size(75, 23);
+            chbRemoved.TabIndex = 18;
+            chbRemoved.Text = "Eliminados";
+            chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbRemoved.UseVisualStyleBackColor = true;
+            chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
             // 
             // FrmMaterialProviderCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnRemoved);
+            Controls.Add(chbRemoved);
             Controls.Add(dgvCatalog);
             Controls.Add(btnRemove);
             Controls.Add(btnRecover);
@@ -145,12 +149,11 @@
         }
 
         #endregion
-
-        public Button btnRemoved;
         public DataGridView dgvCatalog;
         private Button btnRemove;
         private Button btnRecover;
         private Button btnModify;
         private Button btnAdd;
+        public CheckBox chbRemoved;
     }
 }

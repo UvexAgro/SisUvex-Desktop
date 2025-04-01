@@ -13,6 +13,8 @@ using SisUvex.Catalogos.Metods;
 using System.Media;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using SisUvex.Catalogos.Metods.CheckBoxes;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Finance;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SisUvex.Material.MaterialProvider
 {
@@ -27,26 +29,31 @@ namespace SisUvex.Material.MaterialProvider
         public FrmMaterialProviderAdd _frmAdd;
         public FrmMaterialProviderCat _frmCat;
         public EMaterialProvider eProvider;
-        private string queryCatalogo = $" SELECT *, [Activo] AS [{Column.active + "2"}] FROM vw_PackWorkGroupCat ";
+        private string queryCatalogo = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackTransportLineCat ";
         ClsDGVCatalog dgv;
-        bool AddIsUpdate = false;
-        bool ModifyIsUpdate = false;
+        DataTable dtCatalog;
+        public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
+        public string? idAddModify;
+        DataTable? dtProvider;
 
         public void BeginFormCat()
         {
             _frmCat ??= new FrmMaterialProviderCat();
             _frmCat.cls ??= this;
 
-            _frmCat.dgvCatalog.DataSource = ClsQuerysDB.GetDataTable(queryCatalogo);
+            dtCatalog = ClsQuerysDB.GetDataTable(queryCatalogo);
             dgv = new ClsDGVCatalog();
+            dgv.dtCatalog = dtCatalog;
+
+            _frmCat.dgvCatalog.DataSource = dtCatalog;
             dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.LoadDGVCatalog_ActiveColumn2();
+            dgv.LoadDGVCatalogWithActiveColumn2();
         }
         public void BeginFormAdd()
         {
             AddControlsToList();
 
-            if (_frmAdd.IsAddModify)
+            if (IsAddOrModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
                 _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
@@ -66,29 +73,33 @@ namespace SisUvex.Material.MaterialProvider
         }
         public void OpenFrmAdd()
         {
+            IsAddOrModify = true;
+
             _frmAdd = new FrmMaterialProviderAdd();
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir proveedor";
             _frmAdd.lblTitle.Text = "Añadir proveedor";
-            _frmAdd.IsAddModify = true;
-
             _frmAdd.ShowDialog();
 
            // dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
         }
         public void OpenFrmModify()
         {
-            
+            IsAddOrModify = false;
+
+            if (idAddModify.IsNullOrEmpty())
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se ha seleccionado un proveedor para modificar.", "Modificar proveedor");
+                return;
+            }
+
             _frmAdd = new FrmMaterialProviderAdd();
-                _frmAdd.Text = "Modificar proveedor";
-                _frmAdd.lblTitle.Text = "Modificar proveedor";
-                _frmAdd.IsAddModify = false;
+            _frmAdd.Text = "Modificar proveedor";
+            _frmAdd.lblTitle.Text = "Modificar proveedor";
+            _frmAdd.ShowDialog();
 
-                _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
-
-                _frmAdd.ShowDialog();
-
-                //dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+            //dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
         }
 
         private EMaterialProvider SetProviderEntity()
@@ -103,10 +114,11 @@ namespace SisUvex.Material.MaterialProvider
 
             return eProvider;
         }
+
         private void LoadControlsModify()
         {
             eProvider = new EMaterialProvider();
-            eProvider.GetProvider(_frmAdd.idModify ?? "0");
+            eProvider.GetProvider(idAddModify ?? "0");
 
             _frmAdd.txbId.Text = eProvider.idProvider;
             _frmAdd.txbName.Text = eProvider.nameProvider;
@@ -116,49 +128,58 @@ namespace SisUvex.Material.MaterialProvider
             _frmAdd.cboActive.SelectedIndex = eProvider.active;
         }
 
-        public void BtnAddProcedure()
+        public void AddProcedure()
         {
             EMaterialProvider addProvider = new();
             addProvider = SetProviderEntity();
             var result = addProvider.AddProcedure();
-            bool procedureTrue = result.Item1;
-            string? idProvider = result.Item2;
-
-            if (procedureTrue)
-            {
-                AddIsUpdate = true;
-
-                MessageBox.Show($"Se ha agregado el proveedor: {addProvider.nameProvider} con el código: {idProvider}", "Añadir proveedor");
-
-                _frmAdd.Close();
-            }
-            else
-            {
-                SystemSounds.Exclamation.Play();
-                MessageBox.Show("No se pudo agregar el proveedor.", "Añadir proveedor");
-            }
+            IsAddUpdate = result.Item1;
+            idAddModify = result.Item2;
         }
 
-        public void BtnModifyProcedure()
+        public void ModifyProcedure()
         {
             EMaterialProvider modifyProvider = new();
             modifyProvider = SetProviderEntity();
             var result = modifyProvider.ModifyProcedure();
-
-            bool procedureTrue = result.Item1;
-            string? idProvider = result.Item2;
-
-            if (procedureTrue)
+            IsModifyUpdate = result.Item1;
+            idAddModify = result.Item2;
+        }
+        public void BtnAccept()
+        {
+            if (IsAddOrModify)
             {
-                ModifyIsUpdate = true;
-                MessageBox.Show($"Se ha modificado el proveedor: {modifyProvider.nameProvider} con el código: {idProvider}", "Modificar proveedor");
-                _frmAdd.Close();
+                AddProcedure();
+                if (IsAddUpdate)
+                {
+                    _frmAdd.txbId.Text = idAddModify;
+                    MessageBox.Show($"Se ha agregado el proveedor con código: {idAddModify}", "Añadir proveedor");
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo agregar el proveedor.", "Añadir proveedor");
+                }
             }
             else
             {
-                SystemSounds.Exclamation.Play();
-                MessageBox.Show("No se pudo modificar el proveedor.", "Modificar proveedor");
+                ModifyProcedure();
+
+                if (IsModifyUpdate)
+                {
+                    MessageBox.Show($"Se ha modificado el proveedor con el código: {idAddModify}", "Modificar proveedor");
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo modificar el proveedor.", "Modificar proveedor");
+                }
             }
+        }
+
+        public void CloseFrmAddModify()
+        {
+            _frmAdd.Close();
         }
 
         public void BtnActiveProcedure(string idProvider, string activeValue)
@@ -166,8 +187,23 @@ namespace SisUvex.Material.MaterialProvider
             bool result = EMaterialProvider.ActiveProcedure(idProvider, activeValue);
 
             if (result)
-                dgv.ChangeActiveColumn(idProvider, activeValue);
-
+                dgv.ChangeActiveCell(idProvider, activeValue);
         }
+
+        public void AddNewRowByIdInDGVCatalog()
+        {
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalogo + $" WHERE [{Column.id}] = '{idAddModify}'");
+
+            dgv.AddNewRowToDGV(newIdRow);
+        }
+
+        public void ChbRemovedProcedure()
+        {
+            if (_frmCat.chbRemoved.Checked)
+                dgv.SetFilterNull();
+            else
+                dgv.SetFilterActivesOnly();
+        }
+
     }
 }
