@@ -29,14 +29,7 @@ namespace SisUvex.Material.MaterialProvider
         }
         private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (dgvCatalog.SelectedRows.Count != 0)
-            {
-                //metodo para abrir el formulario de modificar
-
-                //dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
-            }
-            else
-                SystemSounds.Exclamation.Play();
+            OpenFrmModifyFromCat();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -70,22 +63,30 @@ namespace SisUvex.Material.MaterialProvider
 
             if (cls.IsAddUpdate)
             {
-                cls.CloseFrmAddModify();
-
                 cls.AddNewRowByIdInDGVCatalog();
             }
-
         }
 
         private void btnModify_Click(object sender, EventArgs e)
         {
+            OpenFrmModifyFromCat();
+        }
+
+        private void OpenFrmModifyFromCat()
+        {
+            if (dgvCatalog.SelectedRows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            cls.idAddModify = dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString();
+
             cls.OpenFrmModify();
 
-            if (cls.IsAddUpdate)
+            if (cls.IsModifyUpdate)
             {
-                cls.CloseFrmAddModify();
-
-                cls.AddNewRowByIdInDGVCatalog();
+                cls.ModifyRowByIdInDGVCatalog();
             }
         }
     }

@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialProviderCat));
             dgvCatalog = new DataGridView();
             btnRemove = new Button();
             btnRecover = new Button();
@@ -141,8 +142,10 @@
             Controls.Add(btnRecover);
             Controls.Add(btnModify);
             Controls.Add(btnAdd);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialProviderCat";
-            Text = "FrmMaterialProviderCat";
+            Text = "Catálago de proveedor";
+            WindowState = FormWindowState.Maximized;
             Load += FrmMaterialProviderCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);

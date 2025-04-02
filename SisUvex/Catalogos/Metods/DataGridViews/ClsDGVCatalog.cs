@@ -51,6 +51,18 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             dtCatalog.DefaultView.RowFilter = "";
         }
 
+        public void CopyActiveValuesToHiddenColumn()
+        {
+            if (dtCatalog.Columns.Contains(activeColumnHide))
+            {
+                foreach (DataRow row in dtCatalog.Rows)
+                {
+                    row[activeColumnHide] = row[activeColumn];
+                }
+                dtCatalog.AcceptChanges();
+            }
+        }
+
         public void ChangeActiveCell(string id, string activeValue)
         {
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
@@ -99,12 +111,16 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     dr[activeColumnHide] = "1";
                 }
                 dtCatalog.Rows.Add(dr);
+
+                int rowIndex = dtCatalog.Rows.IndexOf(dr);
+                dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
             }
             dtCatalog.AcceptChanges();
         }
-        public void ModifyIdRowInDGV(DataTable newRows)
+
+        public void ModifyIdRowInDGV(DataTable modifyRows)
         {
-            foreach (DataRow newRow in newRows.Rows)
+            foreach (DataRow newRow in modifyRows.Rows)
             {
                 DataRow[] existingRows = dtCatalog.Select($"{idColumn} = '{newRow[idColumn]}'");
                 if (existingRows.Length > 0)
@@ -121,6 +137,9 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     {
                         dr[activeColumnHide] = "1";
                     }
+                    // Focus on the modified row
+                    int rowIndex = dtCatalog.Rows.IndexOf(dr);
+                    dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
                 }
                 else
                 {
@@ -137,10 +156,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                         dr[activeColumnHide] = "1";
                     }
                     dtCatalog.Rows.Add(dr);
+                    // Focus on the new row
+                    int rowIndex = dtCatalog.Rows.IndexOf(dr);
+                    dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
                 }
             }
             dtCatalog.AcceptChanges();
         }
+
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
             dataGridView.CellFormatting += (sender, e) =>

@@ -45,6 +45,8 @@
             txbEmail = new TextBox();
             label8 = new Label();
             cboActive = new ComboBox();
+            btnAccept = new Button();
+            btnCancel = new Button();
             SuspendLayout();
             // 
             // lblTitle
@@ -162,9 +164,9 @@
             // 
             txbPhoneNumber.Font = new Font("Segoe UI", 12F);
             txbPhoneNumber.Location = new Point(88, 148);
-            txbPhoneNumber.MaxLength = 50;
+            txbPhoneNumber.MaxLength = 13;
             txbPhoneNumber.Name = "txbPhoneNumber";
-            txbPhoneNumber.Size = new Size(437, 29);
+            txbPhoneNumber.Size = new Size(155, 29);
             txbPhoneNumber.TabIndex = 124;
             // 
             // label5
@@ -207,11 +209,33 @@
             cboActive.Size = new Size(46, 29);
             cboActive.TabIndex = 129;
             // 
+            // btnAccept
+            // 
+            btnAccept.Location = new Point(369, 218);
+            btnAccept.Name = "btnAccept";
+            btnAccept.Size = new Size(75, 29);
+            btnAccept.TabIndex = 130;
+            btnAccept.Text = "Aceptar";
+            btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(450, 218);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 29);
+            btnCancel.TabIndex = 131;
+            btnCancel.Text = "Cancelar";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
             // FrmMaterialProviderAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(543, 243);
+            ClientSize = new Size(543, 263);
+            Controls.Add(btnAccept);
+            Controls.Add(btnCancel);
             Controls.Add(cboActive);
             Controls.Add(txbEmail);
             Controls.Add(label8);
@@ -228,8 +252,12 @@
             Controls.Add(label2);
             Controls.Add(lblName);
             Controls.Add(lblId);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmMaterialProviderAdd";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Añadir proveedor";
             Load += FrmMaterialProviderAdd_Load;
             ResumeLayout(false);
@@ -254,5 +282,7 @@
         public TextBox txbEmail;
         private Label label8;
         public ComboBox cboActive;
+        private Button btnAccept;
+        private Button btnCancel;
     }
 }

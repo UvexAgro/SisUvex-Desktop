@@ -23,8 +23,17 @@ namespace SisUvex.Material.MaterialProvider
         {
             cls ??= new ClsMaterialProvider();
             cls._frmAdd ??= this;
-
             cls.BeginFormAdd();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            cls.BtnAccept();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

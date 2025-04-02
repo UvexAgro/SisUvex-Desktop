@@ -81,7 +81,7 @@ namespace SisUvex.Material.MaterialProvider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+                MessageBox.Show(ex.ToString(), "Añadir proovedor");
                 return (false, null);
             }
             finally
@@ -111,7 +111,7 @@ namespace SisUvex.Material.MaterialProvider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+                MessageBox.Show(ex.ToString(), "Modificar proovedor");
                 return (false, null);
             }
             finally
