@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Presentation;
+﻿using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Presentation;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -168,97 +169,108 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
         }
 
-        public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumn(ComboBox cbo, List<Tuple<ComboBox, CheckBox?>> cboFilterCboDependens, string columnFilterName, TextBox idTextBox)
+        public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumn(ComboBox cboPrincipal, List<Tuple<ComboBox, CheckBox?, string>> cboFilterCboDependens, TextBox idTextBox)
         {
-            cbo.SelectedValueChanged += (sender, e) =>
+            cboPrincipal.SelectedValueChanged += (sender, e) =>
             {
-                if (cbo.SelectedIndex > 0)
-                {
-                    foreach (var item in cboFilterCboDependens)
-                    {
-                        ComboBox dependentCbo = item.Item1;
-                        CheckBox? filterCheckBox = item.Item2;
-
-                        DataTable? dt = (DataTable?)dependentCbo.DataSource;
-                        if (dt != null)
-                        {
-                            if (filterCheckBox == null || !filterCheckBox.Checked)
-                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
-                            else
-                                dt.DefaultView.RowFilter = $"{columnFilterName} = '{cbo.SelectedValue}' OR {ClsObject.Column.name} = '{textSelect}'";
-
-                            dependentCbo.DataSource = dt;
-                            dependentCbo.SelectedIndex = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var item in cboFilterCboDependens)
-                    {
-                        ComboBox dependentCbo = item.Item1;
-                        CheckBox? filterCheckBox = item.Item2;
-
-                        DataTable? dt = (DataTable?)dependentCbo.DataSource;
-                        if (dt != null)
-                        {
-                            if (filterCheckBox == null || !filterCheckBox.Checked)
-                                dt.DefaultView.RowFilter = null;
-                            else
-                                dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
-
-                            dependentCbo.DataSource = dt;
-                            dependentCbo.SelectedIndex = 0;
-                        }
-                    }
-                }
-
-                idTextBox.Text = cbo.SelectedValue?.ToString();
+                Metod_CboSelectedValueChangedWithCboDependensColumn(cboPrincipal, cboFilterCboDependens, idTextBox);
             };
+        }
+
+        public static void Metod_CboSelectedValueChangedWithCboDependensColumn(ComboBox cboPrincipal, List<Tuple<ComboBox, CheckBox?, string>> cboFilterCboDependens, TextBox idTextBox)
+        {
+            if (cboPrincipal.SelectedIndex > 0)
+            {
+                foreach (var item in cboFilterCboDependens)
+                {
+                    ComboBox dependentCbo = item.Item1;
+                    CheckBox? filterCheckBox = item.Item2;
+                    string columnFilterName = item.Item3;
+
+                    DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                    if (dt != null)
+                    {
+                        if (filterCheckBox == null || !filterCheckBox.Checked)
+                            dt.DefaultView.RowFilter = $"{columnFilterName} = '{cboPrincipal.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
+                        else
+                            dt.DefaultView.RowFilter = $"{columnFilterName} = '{cboPrincipal.SelectedValue}' OR {ClsObject.Column.name} = '{textSelect}'";
+
+                        dependentCbo.DataSource = dt;
+                        dependentCbo.SelectedIndex = 0;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in cboFilterCboDependens)
+                {
+                    ComboBox dependentCbo = item.Item1;
+                    CheckBox? filterCheckBox = item.Item2;
+
+                    DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                    if (dt != null)
+                    {
+                        if (filterCheckBox == null || !filterCheckBox.Checked)
+                            dt.DefaultView.RowFilter = null;
+                        else
+                            dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+
+                        dependentCbo.DataSource = dt;
+                        dependentCbo.SelectedIndex = 0;
+                    }
+                }
+            }
+
+            idTextBox.Text = cboPrincipal.SelectedValue?.ToString();
         }
 
         public static void CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(ComboBox cboPrincipal, Dictionary<ComboBox, string> dicCboDependends, TextBox txbId)
         {
             cboPrincipal.SelectedValueChanged += (sender, e) =>
             {
-                if (cboPrincipal.SelectedItem == null) return;
-
-                // Si el ComboBox principal está en el índice 0, todos los dependientes también se ponen en 0
-                if (cboPrincipal.SelectedIndex == 0)
-                {
-                    txbId.Text = string.Empty; // Limpia el TextBox
-
-                    foreach (var cmbDepended in dicCboDependends.Keys)
-                    {
-                        cmbDepended.SelectedIndex = 0; // Reinicia los ComboBox secundarios
-                    }
-                    return; // Sale de la función
-                }
-
-                // Obtener la fila seleccionada del ComboBox principal
-                DataRowView selectedRow = cboPrincipal.SelectedItem as DataRowView;
-
-                if (selectedRow != null)
-                {
-                    // Asignar el ID seleccionado al TextBox
-                    txbId.Text = selectedRow[cboPrincipal.ValueMember].ToString();
-
-                    // Actualizar los ComboBox dependientes
-                    foreach (var kvp in dicCboDependends)
-                    {
-                        ComboBox cmbSecundario = kvp.Key;
-                        string column = kvp.Value;
-
-                        // Verificar si la columna existe en la fila seleccionada
-                        if (selectedRow.Row.Table.Columns.Contains(column))
-                        {
-                            object value = selectedRow[column]; // Obtener el valor correspondiente
-                            CboSelectIndexWithTextInValueMember(cmbSecundario, value.ToString() ?? "");
-                            //cmbSecundario.SelectedValue = value; // Seleccionar el valor en el ComboBox dependiente
-                        }
-                    }
-                }
+                Metod_CboSelectedValueChangedWithCboDependensColumnTemplates(cboPrincipal, dicCboDependends, txbId);
             };
+        }
+
+        public static void Metod_CboSelectedValueChangedWithCboDependensColumnTemplates(ComboBox cboPrincipal, Dictionary<ComboBox, string> dicCboDependends, TextBox txbId)
+        {
+            if (cboPrincipal.SelectedItem == null) return;
+
+            // Si el ComboBox principal está en el índice 0, todos los dependientes también se ponen en 0
+            if (cboPrincipal.SelectedIndex == 0)
+            {
+                txbId.Text = string.Empty; // Limpia el TextBox
+
+                foreach (var cmbDepended in dicCboDependends.Keys)
+                {
+                    cmbDepended.SelectedIndex = 0; // Reinicia los ComboBox secundarios
+                }
+                return; // Sale de la función
+            }
+
+            // Obtener la fila seleccionada del ComboBox principal
+            DataRowView selectedRow = cboPrincipal.SelectedItem as DataRowView;
+
+            if (selectedRow != null)
+            {
+                // Asignar el ID seleccionado al TextBox
+                txbId.Text = selectedRow[cboPrincipal.ValueMember].ToString();
+
+                // Actualizar los ComboBox dependientes
+                foreach (var kvp in dicCboDependends)
+                {
+                    ComboBox cmbSecundario = kvp.Key;
+                    string column = kvp.Value;
+
+                    // Verificar si la columna existe en la fila seleccionada
+                    if (selectedRow.Row.Table.Columns.Contains(column))
+                    {
+                        object value = selectedRow[column]; // Obtener el valor correspondiente
+                        CboSelectIndexWithTextInValueMember(cmbSecundario, value.ToString() ?? "");
+                        //cmbSecundario.SelectedValue = value; // Seleccionar el valor en el ComboBox dependiente
+                    }
+                }
+            }
         }
 
 

@@ -232,12 +232,12 @@ namespace SisUvex.Archivo.Manifiesto
             };
             ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(_frmAdd.cboTemplate, columnasRelacionadas, _frmAdd.txbIdTemplate);
 
-            List<Tuple<ComboBox, CheckBox?>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?>>();
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer));
+            List<Tuple<ComboBox, CheckBox?, string>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId));
 
-            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
+            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, _frmAdd.txbIdTransportLine);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
