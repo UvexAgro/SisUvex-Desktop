@@ -2,10 +2,14 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using ExcelDataReader.Log;
 using iText.Layout.Element;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos;
+using SisUvex.Catalogos.Metods.ExcelLoad;
+using SisUvex.Catalogos.Metods.Forms.BigResult;
 using SisUvex.Configuracion;
 using System.Data;
 using System.Data.SqlClient;
+using System.Media;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -17,28 +21,44 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
         SQLControl sql = new SQLControl();
         ClsCatalogos cls = new ClsCatalogos();
         private string titulo = "Actualizar datos empleados";
+        private ClsExcel excel;
+
         public FrmActualizarDatosEmpleados()
         {
             InitializeComponent();
         }
         private void btnExaminar_Click(object sender, EventArgs e)
         {
-            if (ofdExcel.ShowDialog() == DialogResult.OK)
-                textBox1.Text = ofdExcel.FileName;
-        }
-        private void btnAbrirArchivos_Click(object sender, EventArgs e)
-        {
-            CargarExcel();
+            excel = new();
+
+            excel.OpenFileDialog();
+
+            cboSheets.DataSource = null;
+            dgvEmployees.DataSource = null;
+
+            if (!excel.path.IsNullOrEmpty())
+            {
+                ClearControls();
+
+                txbExcelPath.Text = excel.path;
+                excel.LoadSheetsIntoComboBox(cboSheets);
+
+                if (cboSheets.Items.Count > 0)
+                    cboSheets.SelectedIndex = 0;
+            }
         }
 
-        private void btnLimpiar_Click(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
         {
-            textBox1.Text = string.Empty;
-            textBox1.Enabled = true;
-            btnExaminar.Enabled = true;
-            btnCargarArchivos.Enabled = true;
-            dataGridView.DataSource = null;
-            dataGridView.Rows.Clear();
+            ClearControls();
+        }
+
+        private void ClearControls()
+        {
+            txbExcelPath.Text = string.Empty;
+            dgvEmployees.DataSource = null;
+            dgvEmployees.Rows.Clear();
+            cboSheets.Items.Clear();
             btnNSS.Enabled = false;
             btnRFC.Enabled = false;
             btnCURP.Enabled = false;
@@ -46,117 +66,11 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             btnCP.Enabled = false;
         }
 
-        public void CargarExcel()
-        {// Crear una aplicación de Excel
-            try
-            {
-                btnCargarArchivos.Enabled = false;
-                textBox1.Enabled = false;
-                btnExaminar.Enabled = false;
-
-
-                Excel.Application excelApp = new Excel.Application();
-                Excel.Workbook workbook = excelApp.Workbooks.Open(textBox1.Text);
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
-                Excel.Range range = worksheet.UsedRange;
-
-                // Obtener el número de filas y columnas
-                int rowCount = range.Rows.Count;
-                int colCount = range.Columns.Count;
-
-                // Crear una tabla de datos para almacenar los datos del archivo de Excel
-                DataTable dt = new DataTable();
-
-                // Iterar a través de las celdas y agregar los valores a la tabla de datos
-                for (int j = 1; j <= colCount; j++)
-                {
-                    Excel.Range cell = range.Cells[1, j] as Excel.Range;
-                    string columnName = cell?.Value2?.ToString();
-                    if (columnName != null)
-                    {
-                        columnName = (range.Cells[1, j] as Excel.Range).Value2.ToString();
-
-                        switch (columnName)
-                        {
-                            case "CODIGO":
-                                dt.Columns.Add(columnName);
-                                break;
-                            case "NSS":
-                                dt.Columns.Add(columnName);
-                                btnNSS.Enabled = true;
-                                break;
-                            case "RFC":
-                                dt.Columns.Add(columnName);
-                                btnRFC.Enabled = true;
-                                break;
-                            case "CURP":
-                                dt.Columns.Add(columnName);
-                                btnCURP.Enabled = true;
-
-                                break;
-                            case "LP":
-                                dt.Columns.Add(columnName);
-                                btnLP.Enabled = true;
-                                break;
-                            case "CP":
-                                dt.Columns.Add(columnName);
-                                btnCP.Enabled = true;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-
-                for (int i = 2; i <= rowCount; i++)
-                {
-                    DataRow row = dt.NewRow();
-                    for (int j = 1; j <= dt.Columns.Count; j++)
-                    {
-                        Excel.Range cell = range.Cells[i, j] as Excel.Range;
-                        string cellValue = cell?.Value2?.ToString();
-                        if (cellValue != null)
-                        {
-                            row[j - 1] = cellValue;
-                        }
-                    }
-                    dt.Rows.Add(row);
-                }
-
-
-
-                // Cerrar la aplicación de Excel
-                workbook.Close(false);
-                excelApp.Quit();
-
-                if (!dt.Columns.Contains("CODIGO"))
-                {
-                    textBox1.Enabled = true;
-                    btnExaminar.Enabled = true;
-                    btnCargarArchivos.Enabled = true;
-                    MessageBox.Show("La columna CODIGO no se encuentra en el documento.", titulo);
-                }
-                else
-                    dataGridView.DataSource = dt;
-
-
-            }
-            catch
-            {
-                textBox1.Enabled = true;
-                btnExaminar.Enabled = true;
-                btnCargarArchivos.Enabled = true;
-            }
-            finally
-            {
-            }
-        }
-
-        private void guardar(string columna)
+        private void ProcedureChangeCells(string columna)
         {
-            if (!dataGridView.Columns.Contains(columna))
+            if (!dgvEmployees.Columns.Contains(columna))
                 MessageBox.Show("La columna " + columna + " no se encuentra en el documento.", titulo);
-            else if (!dataGridView.Columns.Contains("CODIGO"))
+            else if (!dgvEmployees.Columns.Contains("CODIGO"))
                 MessageBox.Show("La columna CODIGO no se encuentra en el documento.", titulo);
             else
                 try
@@ -166,7 +80,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                     List<string> empleadosNoCumplen = new List<string>();
                     List<string> empleadosSiCumplen = new List<string>();
 
-                    foreach (DataGridViewRow fila in dataGridView.Rows)
+                    foreach (DataGridViewRow fila in dgvEmployees.Rows)
                     {
                         if (!fila.IsNewRow)
                         {
@@ -231,7 +145,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 }//try
                 catch (Exception ex)
                 {
-                    textBox1.Text = ex.Message;
+                    txbExcelPath.Text = ex.Message;
                     MessageBox.Show(ex.ToString(), titulo);
                 }
                 finally
@@ -243,51 +157,51 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
 
         private void btnNSS_Click(object sender, EventArgs e)
         {
-            guardar("NSS");//11 NUMEROS
-            btnCURP.Enabled = dataGridView.Columns.Contains("NSS");
-            btnLP.Enabled = dataGridView.Columns.Contains("LP");
-            btnNSS.Enabled = false;
-            btnRFC.Enabled = dataGridView.Columns.Contains("RFC");
-            btnCP.Enabled = dataGridView.Columns.Contains("CP");
+            ProcedureChangeCells("NSS");//11 NUMEROS
+            //btnCURP.Enabled = dgvEmployees.Columns.Contains("NSS");
+            //btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
+            //btnNSS.Enabled = false;
+            //btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+            //btnCP.Enabled = dgvEmployees.Columns.Contains("CP");
         }
 
         private void btnRFC_Click(object sender, EventArgs e)
         {
-            guardar("RFC");//13
-            btnCURP.Enabled = dataGridView.Columns.Contains("CURP");
-            btnLP.Enabled = dataGridView.Columns.Contains("LP");
-            btnNSS.Enabled = dataGridView.Columns.Contains("NSS");
-            btnRFC.Enabled = false;
-            btnCP.Enabled = dataGridView.Columns.Contains("CP");
+            ProcedureChangeCells("RFC");//13
+            //btnCURP.Enabled = dgvEmployees.Columns.Contains("CURP");
+            //btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
+            //btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
+            //btnRFC.Enabled = false;
+            //btnCP.Enabled = dgvEmployees.Columns.Contains("CP");
         }
 
         private void btnLP_Click(object sender, EventArgs e)
         {
-            guardar("LP");//NUMEROS
-            btnCURP.Enabled = dataGridView.Columns.Contains("CURP");
-            btnLP.Enabled = false;
-            btnNSS.Enabled = dataGridView.Columns.Contains("NSS");
-            btnRFC.Enabled = dataGridView.Columns.Contains("RFC");
-            btnCP.Enabled = dataGridView.Columns.Contains("CP");
+            ProcedureChangeCells("LP");//NUMEROS
+            //btnCURP.Enabled = dgvEmployees.Columns.Contains("CURP");
+            //btnLP.Enabled = false;
+            //btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
+            //btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+            //btnCP.Enabled = dgvEmployees.Columns.Contains("CP");
         }
 
         private void btnCURP_Click(object sender, EventArgs e)
         {
-            guardar("CURP");//18
-            btnCURP.Enabled = dataGridView.Columns.Contains("CURP");
-            btnLP.Enabled = dataGridView.Columns.Contains("LP");
-            btnNSS.Enabled = dataGridView.Columns.Contains("NSS");
-            btnRFC.Enabled = dataGridView.Columns.Contains("RFC");
-            btnCP.Enabled = dataGridView.Columns.Contains("CP");
+            ProcedureChangeCells("CURP");//18
+            //btnCURP.Enabled = dgvEmployees.Columns.Contains("CURP");
+            //btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
+            //btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
+            //btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+            //btnCP.Enabled = dgvEmployees.Columns.Contains("CP");
         }
         private void btnCP_Click(object sender, EventArgs e)
         {
-            guardar("CP");//5 NUMEROS
-            btnCURP.Enabled = dataGridView.Columns.Contains("CURP");
-            btnLP.Enabled = dataGridView.Columns.Contains("LP");
-            btnNSS.Enabled = dataGridView.Columns.Contains("NSS");
-            btnRFC.Enabled = dataGridView.Columns.Contains("RFC");
-            btnCP.Enabled = false;
+            ProcedureChangeCells("CP");//5 NUMEROS
+            //btnCURP.Enabled = dgvEmployees.Columns.Contains("CURP");
+            //btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
+            //btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
+            //btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+            //btnCP.Enabled = false;
         }
         public bool EvaluarNSS(ref string NSS)
         {
@@ -298,8 +212,10 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             long numero;
-            if (!long.TryParse(NSS, out numero))
+            if (!long.TryParse(NSS, out numero) || numero == 0)
                 return false;
+
+            NSS = cls.FormatoCeros(NSS, "00000000000");
 
             return true;
         }
@@ -324,7 +240,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             int numero;
-            if (!int.TryParse(LP, out numero))
+            if (!int.TryParse(LP, out numero) || numero == 0)
                 return false;
 
             if (numero > 9999)
@@ -356,7 +272,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
                 return false;
 
             long numero;
-            if (!long.TryParse(CP, out numero))
+            if (!long.TryParse(CP, out numero) || numero == 0)
                 return false;
 
             CP = cls.FormatoCeros(CP, "00000");
@@ -370,6 +286,17 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             {
                 string mensaje = "Los siguientes empleados no cumplen con los parámetros: " + string.Join(", ", empleadosNoCumplen);
                 MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                FrmBigResultText MesBox = new FrmBigResultText();
+                MesBox.TitleWindow = "Actualizar datos empleados";
+                MesBox.TextTitle = "Empleados que no cumplen";
+                MesBox.Description = "Los siguientes empleados no cumplen con los parámetros:";
+                MesBox.TextInBox = string.Join("\n", empleadosNoCumplen);
+                MesBox.SetValues();
+                MesBox.ShowDialog();
+
+                if (MesBox.CopyResult)
+                    Clipboard.SetText(MesBox.TextInBox);
             }
         }
 
@@ -382,7 +309,19 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             }
         }
 
-        
+        private void btnSheets_Click(object sender, EventArgs e)
+        {
+            if (excel == null || excel.path.IsNullOrEmpty() || cboSheets.Items.Count == 0)
+                SystemSounds.Exclamation.Play();
+            else
+                dgvEmployees.DataSource = excel.LoadSheetData(cboSheets);
+
+            btnCP.Enabled = dgvEmployees.Columns.Contains("CP");
+            btnCURP.Enabled = dgvEmployees.Columns.Contains("CURP");
+            btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
+            btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
+            btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+        }
     }
 
 }
