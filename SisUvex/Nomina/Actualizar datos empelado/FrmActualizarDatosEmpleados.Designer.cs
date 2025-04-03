@@ -198,6 +198,7 @@
             Name = "FrmActualizarDatosEmpleados";
             Text = "Actualizar datos empleados";
             WindowState = FormWindowState.Maximized;
+            Load += FrmActualizarDatosEmpleados_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEmployees).EndInit();
             ResumeLayout(false);
             PerformLayout();

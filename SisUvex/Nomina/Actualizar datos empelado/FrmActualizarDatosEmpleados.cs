@@ -284,19 +284,10 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
         {
             if (empleadosNoCumplen.Count > 0)
             {
-                string mensaje = "Los siguientes empleados no cumplen con los parámetros: " + string.Join(", ", empleadosNoCumplen);
-                MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //string mensaje = "Los siguientes empleados no cumplen con los parámetros: " + string.Join(", ", empleadosNoCumplen);
+                //MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                FrmBigResultText MesBox = new FrmBigResultText();
-                MesBox.TitleWindow = "Actualizar datos empleados";
-                MesBox.TextTitle = "Empleados que no cumplen";
-                MesBox.Description = "Los siguientes empleados no cumplen con los parámetros:";
-                MesBox.TextInBox = string.Join("\n", empleadosNoCumplen);
-                MesBox.SetValues();
-                MesBox.ShowDialog();
-
-                if (MesBox.CopyResult)
-                    Clipboard.SetText(MesBox.TextInBox);
+                FrmBigResultText MesBox = new FrmBigResultText(string.Join(", ", empleadosNoCumplen), "Empleados que no cumplen", "Los siguientes empleados no cumplen con los parámetros:", "Actualizar datos empleados", FrmBigResultTextIcon.Error);
             }
         }
 
@@ -304,8 +295,10 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
         {
             if (empleadosCumplen.Count > 0)
             {
-                string mensaje = "Se actualizaron correctamente los empleados: " + string.Join(", ", empleadosCumplen);
-                MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //string mensaje = "Se actualizaron correctamente los empleados: " + string.Join(", ", empleadosCumplen);
+                //MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                FrmBigResultText MesBox = new FrmBigResultText(string.Join(", ", empleadosCumplen), "Empleados actualizados", "Se actualizaron correctamente los empleados:", "Actualizar datos empleados", FrmBigResultTextIcon.Correct);
             }
         }
 
@@ -321,6 +314,11 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             btnLP.Enabled = dgvEmployees.Columns.Contains("LP");
             btnNSS.Enabled = dgvEmployees.Columns.Contains("NSS");
             btnRFC.Enabled = dgvEmployees.Columns.Contains("RFC");
+        }
+
+        private void FrmActualizarDatosEmpleados_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -97,9 +97,15 @@
             imageListIcons.ColorDepth = ColorDepth.Depth32Bit;
             imageListIcons.ImageStream = (ImageListStreamer)resources.GetObject("imageListIcons.ImageStream");
             imageListIcons.TransparentColor = Color.Transparent;
-            imageListIcons.Images.SetKeyName(0, "pngInformationIcon48.png");
-            imageListIcons.Images.SetKeyName(1, "pngExclamationIcon48.png");
-            imageListIcons.Images.SetKeyName(2, "pngWarningIcon48.png");
+            imageListIcons.Images.SetKeyName(0, "pngAsteriskIcon48.png");
+            imageListIcons.Images.SetKeyName(1, "pngErrorIcon48.png");
+            imageListIcons.Images.SetKeyName(2, "pngExclamationIcon48.png");
+            imageListIcons.Images.SetKeyName(3, "pngHandIcon48.png");
+            imageListIcons.Images.SetKeyName(4, "pngInformationIcon48.png");
+            imageListIcons.Images.SetKeyName(5, "pngQuestionIcon48.png");
+            imageListIcons.Images.SetKeyName(6, "pngStopIcon48.png");
+            imageListIcons.Images.SetKeyName(7, "pngWarningIcon48.png");
+            imageListIcons.Images.SetKeyName(8, "pngCorrectIcon48.png");
             // 
             // picIcon
             // 
