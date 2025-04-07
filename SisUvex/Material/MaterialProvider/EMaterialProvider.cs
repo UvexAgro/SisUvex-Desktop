@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using SisUvex.Catalogos.Metods.CheckBoxes;
 using SisUvex.Catalogos.Metods.Values;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Material.MaterialProvider
 {
@@ -18,6 +19,11 @@ namespace SisUvex.Material.MaterialProvider
         public string phoneNumber { get; set; }
         public string email { get; set; }
         public int active { get; set; }
+
+        public static string GetNextId()
+        {
+            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
+        }
 
         public void GetProvider(string idProvider)
         {
