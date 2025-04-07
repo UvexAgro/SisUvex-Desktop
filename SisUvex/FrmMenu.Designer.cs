@@ -736,7 +736,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(180, 22);
+            palletsToolStripMenuItem.Size = new Size(135, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -744,7 +744,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(180, 22);
+            manifiestosToolStripMenuItem.Size = new Size(135, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -780,7 +780,7 @@
             materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { almacénToolStripMenuItem, proovedoresToolStripMenuItem });
             materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
             materialesToolStripMenuItem.Size = new Size(180, 22);
-            materialesToolStripMenuItem.Text = " ";
+            materialesToolStripMenuItem.Text = "Material";
             // 
             // almacénToolStripMenuItem
             // 

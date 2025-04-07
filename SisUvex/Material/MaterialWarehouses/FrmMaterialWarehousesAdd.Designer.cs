@@ -190,6 +190,7 @@
             txbIdEmployee.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdEmployee.Location = new Point(172, 169);
             txbIdEmployee.Margin = new Padding(3, 3, 0, 3);
+            txbIdEmployee.MaxLength = 6;
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(87, 29);
             txbIdEmployee.TabIndex = 111;

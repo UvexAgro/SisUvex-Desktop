@@ -69,13 +69,22 @@ namespace SisUvex.Material.Warehouses
             cls.GetEmployeeName(txbIdEmployee.Text);
         }
 
-        public void txbIdEmployee_TextChanged(object sender, EventArgs e)
+        private void txbIdEmployee_TextChanged(object sender, EventArgs e)
         {
+            if (!long.TryParse(txbIdEmployee.Text, out _))
+            {
+                txbIdEmployee.Text = string.Empty; // Clear the text if it's not a valid long integer
+            }
             txbEmployeeName.Text = string.Empty;
         }
 
         private void txbIdEmployee_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Only allow numeric input
+            }
+
             if (e.KeyChar == (char)Keys.Enter)
             {
                 cls.GetEmployeeName(txbIdEmployee.Text);
