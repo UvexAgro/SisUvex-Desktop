@@ -32,6 +32,7 @@ using SisUvex.Nomina.Padron.SUA;
 using SisUvex.Material.MaterialRegister;
 using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialProvider;
+using SisUvex.Material.MaterialWarehouses;
 
 namespace SisUvex
 {

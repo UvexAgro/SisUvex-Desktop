@@ -56,6 +56,7 @@ using SisUvex.Nomina.Comedores.DiningReports.AbsenceReport;
 using SisUvex.Nomina.Padron.SUA;
 using SisUvex.Packing.Maintenance;
 using SisUvex.Material.MaterialProvider;
+using SisUvex.Material.MaterialWarehouses;
 
 namespace SisUvex
 {
@@ -523,6 +524,12 @@ namespace SisUvex
         private void proovedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialProviderCat cat = new FrmMaterialProviderCat();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialWareHousesCat cat = new FrmMaterialWareHousesCat();
             AbrirVentanaHijo(cat, 3);
         }
     }

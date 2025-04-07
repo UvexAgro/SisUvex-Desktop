@@ -123,13 +123,13 @@
             totalDeCajasEmbarcadasToolStripMenuItem = new ToolStripMenuItem();
             operaciónToolStripMenuItem = new ToolStripMenuItem();
             cajasAGranelToolStripMenuItem = new ToolStripMenuItem();
+            materialesToolStripMenuItem = new ToolStripMenuItem();
+            almacénToolStripMenuItem = new ToolStripMenuItem();
+            proovedoresToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            materialesToolStripMenuItem = new ToolStripMenuItem();
-            almacénToolStripMenuItem = new ToolStripMenuItem();
-            proovedoresToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -736,7 +736,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -744,7 +744,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -775,6 +775,27 @@
             cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
             cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
             // 
+            // materialesToolStripMenuItem
+            // 
+            materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { almacénToolStripMenuItem, proovedoresToolStripMenuItem });
+            materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
+            materialesToolStripMenuItem.Size = new Size(180, 22);
+            materialesToolStripMenuItem.Text = " ";
+            // 
+            // almacénToolStripMenuItem
+            // 
+            almacénToolStripMenuItem.Name = "almacénToolStripMenuItem";
+            almacénToolStripMenuItem.Size = new Size(180, 22);
+            almacénToolStripMenuItem.Text = "Almacenes";
+            almacénToolStripMenuItem.Click += almacénToolStripMenuItem_Click;
+            // 
+            // proovedoresToolStripMenuItem
+            // 
+            proovedoresToolStripMenuItem.Name = "proovedoresToolStripMenuItem";
+            proovedoresToolStripMenuItem.Size = new Size(180, 22);
+            proovedoresToolStripMenuItem.Text = "Proovedores";
+            proovedoresToolStripMenuItem.Click += proovedoresToolStripMenuItem_Click;
+            // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(40, 40);
@@ -801,26 +822,6 @@
             // 
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
-            // 
-            // materialesToolStripMenuItem
-            // 
-            materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { almacénToolStripMenuItem, proovedoresToolStripMenuItem });
-            materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
-            materialesToolStripMenuItem.Size = new Size(180, 22);
-            materialesToolStripMenuItem.Text = "Materiales";
-            // 
-            // almacénToolStripMenuItem
-            // 
-            almacénToolStripMenuItem.Name = "almacénToolStripMenuItem";
-            almacénToolStripMenuItem.Size = new Size(180, 22);
-            almacénToolStripMenuItem.Text = "Almacenes";
-            // 
-            // proovedoresToolStripMenuItem
-            // 
-            proovedoresToolStripMenuItem.Name = "proovedoresToolStripMenuItem";
-            proovedoresToolStripMenuItem.Size = new Size(180, 22);
-            proovedoresToolStripMenuItem.Text = "Proovedores";
-            proovedoresToolStripMenuItem.Click += proovedoresToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
