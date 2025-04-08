@@ -396,13 +396,13 @@ namespace SisUvex
         private void códigoParaCajaÚnicaEspárragoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmCajaEmpleado cat = new FrmCajaEmpleado();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void uvaNombreYCódigoDeEmpleadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmNombreYCodigo2x1 cat = new FrmNombreYCodigo2x1();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void CajasPorEmlpeadosYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
