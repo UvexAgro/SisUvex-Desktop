@@ -10,14 +10,32 @@ using System.Windows.Forms;
 
 namespace SisUvex.Material.MaterialCatalog
 {
-    public partial class FrmMaterialAdd : Form
+    internal partial class FrmMaterialAdd : Form
     {
+        public ClsMaterialCatalog cls;
         public FrmMaterialAdd()
         {
             InitializeComponent();
         }
 
         private void FrmMaterialAdd_Load(object sender, EventArgs e)
+        {
+            cls ??= new ClsMaterialCatalog();
+            cls._frmAdd = this;
+            cls.BeginFormAdd();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            cls.BtnAccept();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnPictureAdd_Click(object sender, EventArgs e)
         {
 
         }

@@ -38,6 +38,8 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 dc.DefaultValue = "1";
                 dtCatalog.Columns.Add(dc);
                 dc.SetOrdinal(dtCatalog.Columns.Count - 1);
+
+                dgvCatalog.Columns[activeColumnHide].Visible = false;
             }
         }
 

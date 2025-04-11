@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             lblTitle = new Label();
             txbId = new TextBox();
             lblId = new Label();
@@ -86,7 +86,6 @@
             txbIdWarehouse = new TextBox();
             cboWarehouse = new ComboBox();
             label14 = new Label();
-            txbReceiver = new TextBox();
             label15 = new Label();
             picMaterialImage = new PictureBox();
             dgvMaterialList = new DataGridView();
@@ -115,6 +114,11 @@
             txbIdGrower = new TextBox();
             cboGrower = new ComboBox();
             label6 = new Label();
+            button1 = new Button();
+            comboBox1 = new ComboBox();
+            textBox1 = new TextBox();
+            textBox2 = new TextBox();
+            label16 = new Label();
             ((System.ComponentModel.ISupportInitialize)picMaterialImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).BeginInit();
             SuspendLayout();
@@ -134,7 +138,7 @@
             txbId.Enabled = false;
             txbId.Font = new Font("Arial", 9F, FontStyle.Bold);
             txbId.ForeColor = Color.SteelBlue;
-            txbId.Location = new Point(69, 37);
+            txbId.Location = new Point(67, 44);
             txbId.Margin = new Padding(1, 1, 0, 0);
             txbId.Name = "txbId";
             txbId.Size = new Size(50, 21);
@@ -145,7 +149,7 @@
             // 
             lblId.AutoSize = true;
             lblId.Font = new Font("Microsoft Sans Serif", 9F);
-            lblId.Location = new Point(18, 39);
+            lblId.Location = new Point(16, 46);
             lblId.Margin = new Padding(1, 1, 0, 0);
             lblId.Name = "lblId";
             lblId.Size = new Size(53, 15);
@@ -159,7 +163,7 @@
             chbRemovedDistributor.Font = new Font("Segoe UI", 7.8F);
             chbRemovedDistributor.ForeColor = Color.DarkGray;
             chbRemovedDistributor.Image = Properties.Resources.removedList16;
-            chbRemovedDistributor.Location = new Point(377, 131);
+            chbRemovedDistributor.Location = new Point(789, 155);
             chbRemovedDistributor.Margin = new Padding(1, 1, 0, 0);
             chbRemovedDistributor.Name = "chbRemovedDistributor";
             chbRemovedDistributor.Size = new Size(23, 23);
@@ -173,7 +177,7 @@
             btnSearchDistributor.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchDistributor.Enabled = false;
             btnSearchDistributor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchDistributor.Location = new Point(355, 131);
+            btnSearchDistributor.Location = new Point(767, 155);
             btnSearchDistributor.Margin = new Padding(1, 1, 0, 0);
             btnSearchDistributor.Name = "btnSearchDistributor";
             btnSearchDistributor.Size = new Size(23, 23);
@@ -184,7 +188,7 @@
             // 
             txbIdDistributor.Enabled = false;
             txbIdDistributor.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdDistributor.Location = new Point(82, 132);
+            txbIdDistributor.Location = new Point(494, 156);
             txbIdDistributor.Margin = new Padding(1, 1, 0, 0);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(37, 21);
@@ -197,7 +201,7 @@
             cboDistributor.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboDistributor.FormattingEnabled = true;
             cboDistributor.ItemHeight = 13;
-            cboDistributor.Location = new Point(120, 132);
+            cboDistributor.Location = new Point(532, 156);
             cboDistributor.Margin = new Padding(1, 1, 0, 0);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(235, 21);
@@ -207,7 +211,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Microsoft Sans Serif", 9F);
-            label3.Location = new Point(11, 134);
+            label3.Location = new Point(423, 158);
             label3.Margin = new Padding(1, 1, 0, 0);
             label3.Name = "label3";
             label3.Size = new Size(73, 15);
@@ -222,7 +226,7 @@
             chbFreightContainerRemoved.Font = new Font("Segoe UI", 7.8F);
             chbFreightContainerRemoved.ForeColor = Color.DarkGray;
             chbFreightContainerRemoved.Image = Properties.Resources.removedList16;
-            chbFreightContainerRemoved.Location = new Point(378, 219);
+            chbFreightContainerRemoved.Location = new Point(362, 153);
             chbFreightContainerRemoved.Margin = new Padding(1, 1, 0, 0);
             chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
             chbFreightContainerRemoved.Size = new Size(23, 23);
@@ -237,7 +241,7 @@
             chbDriverRemoved.Font = new Font("Segoe UI", 7.8F);
             chbDriverRemoved.ForeColor = Color.DarkGray;
             chbDriverRemoved.Image = Properties.Resources.removedList16;
-            chbDriverRemoved.Location = new Point(378, 197);
+            chbDriverRemoved.Location = new Point(362, 131);
             chbDriverRemoved.Margin = new Padding(1, 1, 0, 0);
             chbDriverRemoved.Name = "chbDriverRemoved";
             chbDriverRemoved.Size = new Size(23, 23);
@@ -252,7 +256,7 @@
             chbTransportLineRemoved.Font = new Font("Segoe UI", 7.8F);
             chbTransportLineRemoved.ForeColor = Color.DarkGray;
             chbTransportLineRemoved.Image = Properties.Resources.removedList16;
-            chbTransportLineRemoved.Location = new Point(378, 175);
+            chbTransportLineRemoved.Location = new Point(362, 109);
             chbTransportLineRemoved.Margin = new Padding(1, 1, 0, 0);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Size = new Size(23, 23);
@@ -265,7 +269,7 @@
             btnFreightContainerSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnFreightContainerSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnFreightContainerSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnFreightContainerSearch.Location = new Point(356, 219);
+            btnFreightContainerSearch.Location = new Point(340, 153);
             btnFreightContainerSearch.Margin = new Padding(1, 1, 0, 0);
             btnFreightContainerSearch.Name = "btnFreightContainerSearch";
             btnFreightContainerSearch.Size = new Size(23, 23);
@@ -277,7 +281,7 @@
             btnDriverSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnDriverSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnDriverSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnDriverSearch.Location = new Point(356, 197);
+            btnDriverSearch.Location = new Point(340, 131);
             btnDriverSearch.Margin = new Padding(1, 1, 0, 0);
             btnDriverSearch.Name = "btnDriverSearch";
             btnDriverSearch.Size = new Size(23, 23);
@@ -288,7 +292,7 @@
             // 
             txbIdFreightContainer.Enabled = false;
             txbIdFreightContainer.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdFreightContainer.Location = new Point(83, 220);
+            txbIdFreightContainer.Location = new Point(67, 154);
             txbIdFreightContainer.Margin = new Padding(1, 1, 0, 0);
             txbIdFreightContainer.Name = "txbIdFreightContainer";
             txbIdFreightContainer.Size = new Size(37, 21);
@@ -301,7 +305,7 @@
             cboFreightContainer.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboFreightContainer.FormattingEnabled = true;
             cboFreightContainer.ItemHeight = 13;
-            cboFreightContainer.Location = new Point(121, 220);
+            cboFreightContainer.Location = new Point(105, 154);
             cboFreightContainer.Margin = new Padding(1, 1, 0, 0);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(235, 21);
@@ -311,7 +315,7 @@
             // 
             txbIdDriver.Enabled = false;
             txbIdDriver.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdDriver.Location = new Point(83, 198);
+            txbIdDriver.Location = new Point(67, 132);
             txbIdDriver.Margin = new Padding(1, 1, 0, 0);
             txbIdDriver.Name = "txbIdDriver";
             txbIdDriver.Size = new Size(37, 21);
@@ -324,7 +328,7 @@
             cboDriver.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboDriver.FormattingEnabled = true;
             cboDriver.ItemHeight = 13;
-            cboDriver.Location = new Point(121, 198);
+            cboDriver.Location = new Point(105, 132);
             cboDriver.Margin = new Padding(1, 1, 0, 0);
             cboDriver.Name = "cboDriver";
             cboDriver.Size = new Size(235, 21);
@@ -335,7 +339,7 @@
             btnTransportLineSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnTransportLineSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnTransportLineSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTransportLineSearch.Location = new Point(356, 175);
+            btnTransportLineSearch.Location = new Point(340, 109);
             btnTransportLineSearch.Margin = new Padding(1, 1, 0, 0);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(23, 23);
@@ -346,7 +350,7 @@
             // 
             txbIdTransportLine.Enabled = false;
             txbIdTransportLine.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdTransportLine.Location = new Point(83, 176);
+            txbIdTransportLine.Location = new Point(67, 110);
             txbIdTransportLine.Margin = new Padding(1, 1, 0, 0);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(37, 21);
@@ -359,7 +363,7 @@
             cboTransportLine.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportLine.FormattingEnabled = true;
             cboTransportLine.ItemHeight = 13;
-            cboTransportLine.Location = new Point(121, 176);
+            cboTransportLine.Location = new Point(105, 110);
             cboTransportLine.Margin = new Padding(1, 1, 0, 0);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(235, 21);
@@ -369,7 +373,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Microsoft Sans Serif", 9F);
-            label5.Location = new Point(50, 223);
+            label5.Location = new Point(34, 157);
             label5.Margin = new Padding(1, 1, 0, 0);
             label5.Name = "label5";
             label5.Size = new Size(35, 15);
@@ -380,7 +384,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Microsoft Sans Serif", 9F);
-            label8.Location = new Point(39, 200);
+            label8.Location = new Point(23, 134);
             label8.Margin = new Padding(1, 1, 0, 0);
             label8.Name = "label8";
             label8.Size = new Size(46, 15);
@@ -392,7 +396,7 @@
             // 
             lblLinea.AutoSize = true;
             lblLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            lblLinea.Location = new Point(44, 179);
+            lblLinea.Location = new Point(28, 113);
             lblLinea.Margin = new Padding(1, 1, 0, 0);
             lblLinea.Name = "lblLinea";
             lblLinea.Size = new Size(41, 15);
@@ -404,7 +408,7 @@
             // 
             dtpDate.Font = new Font("Microsoft Sans Serif", 9F);
             dtpDate.Format = DateTimePickerFormat.Short;
-            dtpDate.Location = new Point(312, 37);
+            dtpDate.Location = new Point(300, 44);
             dtpDate.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
             dtpDate.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             dtpDate.Name = "dtpDate";
@@ -415,7 +419,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Microsoft Sans Serif", 9F);
-            label17.Location = new Point(269, 41);
+            label17.Location = new Point(257, 48);
             label17.Name = "label17";
             label17.Size = new Size(44, 15);
             label17.TabIndex = 399;
@@ -424,7 +428,7 @@
             // txbInvoice
             // 
             txbInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            txbInvoice.Location = new Point(161, 37);
+            txbInvoice.Location = new Point(495, 23);
             txbInvoice.Margin = new Padding(1, 1, 0, 0);
             txbInvoice.MaxLength = 20;
             txbInvoice.Name = "txbInvoice";
@@ -436,7 +440,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Microsoft Sans Serif", 9F);
-            label11.Location = new Point(125, 41);
+            label11.Location = new Point(459, 27);
             label11.Margin = new Padding(1, 1, 0, 0);
             label11.Name = "label11";
             label11.Size = new Size(37, 15);
@@ -451,7 +455,7 @@
             chbCategoryRemoved.Font = new Font("Segoe UI", 7.8F);
             chbCategoryRemoved.ForeColor = Color.DarkGray;
             chbCategoryRemoved.Image = Properties.Resources.removedList16;
-            chbCategoryRemoved.Location = new Point(786, 127);
+            chbCategoryRemoved.Location = new Point(790, 45);
             chbCategoryRemoved.Margin = new Padding(1, 1, 0, 0);
             chbCategoryRemoved.Name = "chbCategoryRemoved";
             chbCategoryRemoved.Size = new Size(23, 23);
@@ -465,7 +469,7 @@
             btnCategorySearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnCategorySearch.Enabled = false;
             btnCategorySearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnCategorySearch.Location = new Point(764, 127);
+            btnCategorySearch.Location = new Point(768, 45);
             btnCategorySearch.Margin = new Padding(1, 1, 0, 0);
             btnCategorySearch.Name = "btnCategorySearch";
             btnCategorySearch.Size = new Size(23, 23);
@@ -476,7 +480,7 @@
             // 
             txbIdCategory.Enabled = false;
             txbIdCategory.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdCategory.Location = new Point(491, 128);
+            txbIdCategory.Location = new Point(495, 46);
             txbIdCategory.Margin = new Padding(1, 1, 0, 0);
             txbIdCategory.Name = "txbIdCategory";
             txbIdCategory.Size = new Size(37, 21);
@@ -489,7 +493,7 @@
             cboCategory.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboCategory.FormattingEnabled = true;
             cboCategory.ItemHeight = 13;
-            cboCategory.Location = new Point(529, 128);
+            cboCategory.Location = new Point(533, 46);
             cboCategory.Margin = new Padding(1, 1, 0, 0);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(234, 21);
@@ -499,7 +503,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 9F);
-            label1.Location = new Point(429, 131);
+            label1.Location = new Point(433, 49);
             label1.Margin = new Padding(1, 1, 0, 0);
             label1.Name = "label1";
             label1.Size = new Size(63, 15);
@@ -514,7 +518,7 @@
             chbMaterialRemoved.Font = new Font("Segoe UI", 7.8F);
             chbMaterialRemoved.ForeColor = Color.DarkGray;
             chbMaterialRemoved.Image = Properties.Resources.removedList16;
-            chbMaterialRemoved.Location = new Point(786, 149);
+            chbMaterialRemoved.Location = new Point(790, 67);
             chbMaterialRemoved.Margin = new Padding(1, 1, 0, 0);
             chbMaterialRemoved.Name = "chbMaterialRemoved";
             chbMaterialRemoved.Size = new Size(23, 23);
@@ -528,7 +532,7 @@
             btnMaterialSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnMaterialSearch.Enabled = false;
             btnMaterialSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnMaterialSearch.Location = new Point(764, 149);
+            btnMaterialSearch.Location = new Point(768, 67);
             btnMaterialSearch.Margin = new Padding(1, 1, 0, 0);
             btnMaterialSearch.Name = "btnMaterialSearch";
             btnMaterialSearch.Size = new Size(23, 23);
@@ -539,7 +543,7 @@
             // 
             txbIdMaterial.Enabled = false;
             txbIdMaterial.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdMaterial.Location = new Point(491, 150);
+            txbIdMaterial.Location = new Point(495, 68);
             txbIdMaterial.Margin = new Padding(1, 1, 0, 0);
             txbIdMaterial.Name = "txbIdMaterial";
             txbIdMaterial.Size = new Size(37, 21);
@@ -552,7 +556,7 @@
             cboMaterial.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboMaterial.FormattingEnabled = true;
             cboMaterial.ItemHeight = 13;
-            cboMaterial.Location = new Point(529, 150);
+            cboMaterial.Location = new Point(533, 68);
             cboMaterial.Margin = new Padding(1, 1, 0, 0);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(234, 21);
@@ -562,7 +566,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Microsoft Sans Serif", 9F);
-            label2.Location = new Point(437, 153);
+            label2.Location = new Point(441, 71);
             label2.Margin = new Padding(1, 1, 0, 0);
             label2.Name = "label2";
             label2.Size = new Size(55, 15);
@@ -577,7 +581,7 @@
             chbProviderRemoved.Font = new Font("Segoe UI", 7.8F);
             chbProviderRemoved.ForeColor = Color.DarkGray;
             chbProviderRemoved.Image = Properties.Resources.removedList16;
-            chbProviderRemoved.Location = new Point(377, 109);
+            chbProviderRemoved.Location = new Point(790, 133);
             chbProviderRemoved.Margin = new Padding(1, 1, 0, 0);
             chbProviderRemoved.Name = "chbProviderRemoved";
             chbProviderRemoved.Size = new Size(23, 23);
@@ -591,7 +595,7 @@
             btnProviderSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnProviderSearch.Enabled = false;
             btnProviderSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnProviderSearch.Location = new Point(355, 109);
+            btnProviderSearch.Location = new Point(768, 133);
             btnProviderSearch.Margin = new Padding(1, 1, 0, 0);
             btnProviderSearch.Name = "btnProviderSearch";
             btnProviderSearch.Size = new Size(23, 23);
@@ -602,7 +606,7 @@
             // 
             txbIdProvider.Enabled = false;
             txbIdProvider.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdProvider.Location = new Point(82, 110);
+            txbIdProvider.Location = new Point(495, 134);
             txbIdProvider.Margin = new Padding(1, 1, 0, 0);
             txbIdProvider.Name = "txbIdProvider";
             txbIdProvider.Size = new Size(37, 21);
@@ -615,7 +619,7 @@
             cboProvider.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboProvider.FormattingEnabled = true;
             cboProvider.ItemHeight = 13;
-            cboProvider.Location = new Point(120, 110);
+            cboProvider.Location = new Point(533, 134);
             cboProvider.Margin = new Padding(1, 1, 0, 0);
             cboProvider.Name = "cboProvider";
             cboProvider.Size = new Size(235, 21);
@@ -625,7 +629,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft Sans Serif", 9F);
-            label4.Location = new Point(18, 112);
+            label4.Location = new Point(431, 136);
             label4.Margin = new Padding(1, 1, 0, 0);
             label4.Name = "label4";
             label4.Size = new Size(66, 15);
@@ -637,7 +641,7 @@
             // 
             txbQuant.Enabled = false;
             txbQuant.Font = new Font("Microsoft Sans Serif", 9F);
-            txbQuant.Location = new Point(490, 172);
+            txbQuant.Location = new Point(494, 90);
             txbQuant.Margin = new Padding(1, 1, 0, 0);
             txbQuant.Name = "txbQuant";
             txbQuant.Size = new Size(97, 21);
@@ -648,7 +652,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Microsoft Sans Serif", 9F);
-            label7.Location = new Point(433, 175);
+            label7.Location = new Point(437, 93);
             label7.Margin = new Padding(1, 1, 0, 0);
             label7.Name = "label7";
             label7.Size = new Size(59, 15);
@@ -660,7 +664,7 @@
             // 
             txbUnit.Enabled = false;
             txbUnit.Font = new Font("Microsoft Sans Serif", 9F);
-            txbUnit.Location = new Point(634, 172);
+            txbUnit.Location = new Point(638, 90);
             txbUnit.Margin = new Padding(1, 1, 0, 0);
             txbUnit.Name = "txbUnit";
             txbUnit.Size = new Size(129, 21);
@@ -671,7 +675,7 @@
             // 
             txbMXN.Enabled = false;
             txbMXN.Font = new Font("Microsoft Sans Serif", 9F);
-            txbMXN.Location = new Point(529, 194);
+            txbMXN.Location = new Point(533, 112);
             txbMXN.Margin = new Padding(1, 1, 0, 0);
             txbMXN.Name = "txbMXN";
             txbMXN.Size = new Size(58, 21);
@@ -682,7 +686,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Microsoft Sans Serif", 9F);
-            label9.Location = new Point(441, 197);
+            label9.Location = new Point(445, 115);
             label9.Margin = new Padding(1, 1, 0, 0);
             label9.Name = "label9";
             label9.Size = new Size(51, 15);
@@ -694,7 +698,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Microsoft Sans Serif", 9F);
-            label10.Location = new Point(495, 197);
+            label10.Location = new Point(499, 115);
             label10.Margin = new Padding(1, 1, 0, 0);
             label10.Name = "label10";
             label10.Size = new Size(38, 15);
@@ -706,7 +710,7 @@
             // 
             txbUSD.Enabled = false;
             txbUSD.Font = new Font("Microsoft Sans Serif", 9F);
-            txbUSD.Location = new Point(634, 194);
+            txbUSD.Location = new Point(638, 112);
             txbUSD.Margin = new Padding(1, 1, 0, 0);
             txbUSD.Name = "txbUSD";
             txbUSD.Size = new Size(58, 21);
@@ -717,7 +721,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Microsoft Sans Serif", 9F);
-            label12.Location = new Point(601, 197);
+            label12.Location = new Point(605, 115);
             label12.Margin = new Padding(1, 1, 0, 0);
             label12.Name = "label12";
             label12.Size = new Size(36, 15);
@@ -729,7 +733,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Microsoft Sans Serif", 9F);
-            label13.Location = new Point(588, 175);
+            label13.Location = new Point(592, 93);
             label13.Margin = new Padding(1, 1, 0, 0);
             label13.Name = "label13";
             label13.Size = new Size(50, 15);
@@ -744,7 +748,7 @@
             chbWarehouseRemoved.Font = new Font("Segoe UI", 7.8F);
             chbWarehouseRemoved.ForeColor = Color.DarkGray;
             chbWarehouseRemoved.Image = Properties.Resources.removedList16;
-            chbWarehouseRemoved.Location = new Point(376, 65);
+            chbWarehouseRemoved.Location = new Point(362, 65);
             chbWarehouseRemoved.Margin = new Padding(1, 1, 0, 0);
             chbWarehouseRemoved.Name = "chbWarehouseRemoved";
             chbWarehouseRemoved.Size = new Size(23, 23);
@@ -758,7 +762,7 @@
             btnWarehouseSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnWarehouseSearch.Enabled = false;
             btnWarehouseSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnWarehouseSearch.Location = new Point(354, 65);
+            btnWarehouseSearch.Location = new Point(340, 65);
             btnWarehouseSearch.Margin = new Padding(1, 1, 0, 0);
             btnWarehouseSearch.Name = "btnWarehouseSearch";
             btnWarehouseSearch.Size = new Size(23, 23);
@@ -769,7 +773,7 @@
             // 
             txbIdWarehouse.Enabled = false;
             txbIdWarehouse.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdWarehouse.Location = new Point(81, 66);
+            txbIdWarehouse.Location = new Point(67, 66);
             txbIdWarehouse.Margin = new Padding(1, 1, 0, 0);
             txbIdWarehouse.Name = "txbIdWarehouse";
             txbIdWarehouse.Size = new Size(37, 21);
@@ -782,17 +786,17 @@
             cboWarehouse.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboWarehouse.FormattingEnabled = true;
             cboWarehouse.ItemHeight = 13;
-            cboWarehouse.Location = new Point(119, 66);
+            cboWarehouse.Location = new Point(105, 66);
             cboWarehouse.Margin = new Padding(1, 1, 0, 0);
             cboWarehouse.Name = "cboWarehouse";
-            cboWarehouse.Size = new Size(234, 21);
+            cboWarehouse.Size = new Size(235, 21);
             cboWarehouse.TabIndex = 427;
             // 
             // label14
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Microsoft Sans Serif", 9F);
-            label14.Location = new Point(24, 69);
+            label14.Location = new Point(10, 69);
             label14.Margin = new Padding(1, 1, 0, 0);
             label14.Name = "label14";
             label14.Size = new Size(58, 15);
@@ -800,22 +804,11 @@
             label14.Text = "Almacén:";
             label14.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbReceiver
-            // 
-            txbReceiver.Font = new Font("Microsoft Sans Serif", 9F);
-            txbReceiver.Location = new Point(81, 88);
-            txbReceiver.Margin = new Padding(1, 1, 0, 0);
-            txbReceiver.MaxLength = 20;
-            txbReceiver.Name = "txbReceiver";
-            txbReceiver.Size = new Size(147, 21);
-            txbReceiver.TabIndex = 432;
-            txbReceiver.TextAlign = HorizontalAlignment.Center;
-            // 
             // label15
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Microsoft Sans Serif", 9F);
-            label15.Location = new Point(30, 91);
+            label15.Location = new Point(16, 91);
             label15.Margin = new Padding(1, 1, 0, 0);
             label15.Name = "label15";
             label15.Size = new Size(52, 15);
@@ -826,7 +819,7 @@
             // picMaterialImage
             // 
             picMaterialImage.BorderStyle = BorderStyle.Fixed3D;
-            picMaterialImage.Location = new Point(490, -8);
+            picMaterialImage.Location = new Point(495, 202);
             picMaterialImage.Name = "picMaterialImage";
             picMaterialImage.Size = new Size(132, 132);
             picMaterialImage.TabIndex = 440;
@@ -842,33 +835,33 @@
             dgvMaterialList.BackgroundColor = SystemColors.ControlLightLight;
             dgvMaterialList.BorderStyle = BorderStyle.Fixed3D;
             dgvMaterialList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvMaterialList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgvMaterialList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dgvMaterialList.Columns.AddRange(new DataGridViewColumn[] { Categoría, Código, Cantidad, Unidad, Concepto, Precio_USD, Precio_MXN, Proveedor, Distribuidor });
             dgvMaterialList.EnableHeadersVisualStyles = false;
             dgvMaterialList.ImeMode = ImeMode.NoControl;
-            dgvMaterialList.Location = new Point(11, 244);
+            dgvMaterialList.Location = new Point(11, 364);
             dgvMaterialList.MultiSelect = false;
             dgvMaterialList.Name = "dgvMaterialList";
             dgvMaterialList.ReadOnly = true;
             dgvMaterialList.RightToLeft = RightToLeft.No;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvMaterialList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = SystemColors.Control;
+            dataGridViewCellStyle10.Font = new Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle10.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            dgvMaterialList.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgvMaterialList.RowHeadersVisible = false;
             dgvMaterialList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMaterialList.Size = new Size(817, 159);
+            dgvMaterialList.Size = new Size(817, 128);
             dgvMaterialList.TabIndex = 441;
             // 
             // Categoría
@@ -937,7 +930,7 @@
             btnAddMaterial.BackgroundImageLayout = ImageLayout.Stretch;
             btnAddMaterial.Enabled = false;
             btnAddMaterial.Font = new Font("Microsoft Sans Serif", 9F);
-            btnAddMaterial.Location = new Point(481, 218);
+            btnAddMaterial.Location = new Point(490, 338);
             btnAddMaterial.Margin = new Padding(1, 1, 0, 0);
             btnAddMaterial.Name = "btnAddMaterial";
             btnAddMaterial.Size = new Size(69, 23);
@@ -951,7 +944,7 @@
             btnModifyMaterial.BackgroundImageLayout = ImageLayout.Stretch;
             btnModifyMaterial.Enabled = false;
             btnModifyMaterial.Font = new Font("Microsoft Sans Serif", 9F);
-            btnModifyMaterial.Location = new Point(551, 218);
+            btnModifyMaterial.Location = new Point(560, 338);
             btnModifyMaterial.Margin = new Padding(1, 1, 0, 0);
             btnModifyMaterial.Name = "btnModifyMaterial";
             btnModifyMaterial.Size = new Size(69, 23);
@@ -965,7 +958,7 @@
             btnRemoveMaterial.BackgroundImageLayout = ImageLayout.Stretch;
             btnRemoveMaterial.Enabled = false;
             btnRemoveMaterial.Font = new Font("Microsoft Sans Serif", 9F);
-            btnRemoveMaterial.Location = new Point(621, 218);
+            btnRemoveMaterial.Location = new Point(630, 338);
             btnRemoveMaterial.Margin = new Padding(1, 1, 0, 0);
             btnRemoveMaterial.Name = "btnRemoveMaterial";
             btnRemoveMaterial.Size = new Size(69, 23);
@@ -975,11 +968,12 @@
             // 
             // btnSave
             // 
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSave.BackColor = SystemColors.ControlLightLight;
             btnSave.BackgroundImageLayout = ImageLayout.Stretch;
             btnSave.Enabled = false;
             btnSave.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSave.Location = new Point(10, 407);
+            btnSave.Location = new Point(10, 496);
             btnSave.Margin = new Padding(1, 1, 0, 0);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(69, 23);
@@ -989,11 +983,12 @@
             // 
             // btnCancel
             // 
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCancel.BackColor = SystemColors.ControlLightLight;
             btnCancel.BackgroundImageLayout = ImageLayout.Stretch;
             btnCancel.Enabled = false;
             btnCancel.Font = new Font("Microsoft Sans Serif", 9F);
-            btnCancel.Location = new Point(80, 407);
+            btnCancel.Location = new Point(80, 496);
             btnCancel.Margin = new Padding(1, 1, 0, 0);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(69, 23);
@@ -1006,7 +1001,7 @@
             btnFreightContainerAdd.BackgroundImageLayout = ImageLayout.Stretch;
             btnFreightContainerAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnFreightContainerAdd.Image = Properties.Resources.AddRowIcon16;
-            btnFreightContainerAdd.Location = new Point(400, 219);
+            btnFreightContainerAdd.Location = new Point(384, 153);
             btnFreightContainerAdd.Margin = new Padding(1, 1, 0, 0);
             btnFreightContainerAdd.Name = "btnFreightContainerAdd";
             btnFreightContainerAdd.Size = new Size(24, 23);
@@ -1018,7 +1013,7 @@
             btnDriverAdd.BackgroundImageLayout = ImageLayout.Stretch;
             btnDriverAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnDriverAdd.Image = Properties.Resources.AddRowIcon16;
-            btnDriverAdd.Location = new Point(400, 197);
+            btnDriverAdd.Location = new Point(384, 131);
             btnDriverAdd.Margin = new Padding(1, 1, 0, 0);
             btnDriverAdd.Name = "btnDriverAdd";
             btnDriverAdd.Size = new Size(24, 23);
@@ -1030,7 +1025,7 @@
             btnTransportLineAdd.BackgroundImageLayout = ImageLayout.Stretch;
             btnTransportLineAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnTransportLineAdd.Image = Properties.Resources.AddRowIcon16;
-            btnTransportLineAdd.Location = new Point(400, 175);
+            btnTransportLineAdd.Location = new Point(384, 109);
             btnTransportLineAdd.Margin = new Padding(1, 1, 0, 0);
             btnTransportLineAdd.Name = "btnTransportLineAdd";
             btnTransportLineAdd.Size = new Size(24, 23);
@@ -1043,7 +1038,7 @@
             btnProviderAdd.Enabled = false;
             btnProviderAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnProviderAdd.Image = Properties.Resources.AddRowIcon16;
-            btnProviderAdd.Location = new Point(399, 109);
+            btnProviderAdd.Location = new Point(812, 133);
             btnProviderAdd.Margin = new Padding(1, 1, 0, 0);
             btnProviderAdd.Name = "btnProviderAdd";
             btnProviderAdd.Size = new Size(24, 23);
@@ -1056,7 +1051,7 @@
             btnMaterialAdd.Enabled = false;
             btnMaterialAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnMaterialAdd.Image = Properties.Resources.AddRowIcon16;
-            btnMaterialAdd.Location = new Point(808, 149);
+            btnMaterialAdd.Location = new Point(812, 67);
             btnMaterialAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialAdd.Name = "btnMaterialAdd";
             btnMaterialAdd.Size = new Size(24, 23);
@@ -1069,7 +1064,7 @@
             btnMaterialImageAdd.Enabled = false;
             btnMaterialImageAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnMaterialImageAdd.Image = Properties.Resources.addImageIcon16;
-            btnMaterialImageAdd.Location = new Point(626, 102);
+            btnMaterialImageAdd.Location = new Point(631, 312);
             btnMaterialImageAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialImageAdd.Name = "btnMaterialImageAdd";
             btnMaterialImageAdd.Size = new Size(22, 22);
@@ -1083,7 +1078,7 @@
             chbGrowerRemoved.Font = new Font("Segoe UI", 7.8F);
             chbGrowerRemoved.ForeColor = Color.DarkGray;
             chbGrowerRemoved.Image = Properties.Resources.removedList16;
-            chbGrowerRemoved.Location = new Point(378, 153);
+            chbGrowerRemoved.Location = new Point(790, 177);
             chbGrowerRemoved.Margin = new Padding(1, 1, 0, 0);
             chbGrowerRemoved.Name = "chbGrowerRemoved";
             chbGrowerRemoved.Size = new Size(23, 23);
@@ -1097,7 +1092,7 @@
             btnGrowerSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnGrowerSearch.Enabled = false;
             btnGrowerSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnGrowerSearch.Location = new Point(356, 153);
+            btnGrowerSearch.Location = new Point(768, 177);
             btnGrowerSearch.Margin = new Padding(1, 1, 0, 0);
             btnGrowerSearch.Name = "btnGrowerSearch";
             btnGrowerSearch.Size = new Size(23, 23);
@@ -1108,7 +1103,7 @@
             // 
             txbIdGrower.Enabled = false;
             txbIdGrower.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdGrower.Location = new Point(83, 154);
+            txbIdGrower.Location = new Point(495, 178);
             txbIdGrower.Margin = new Padding(1, 1, 0, 0);
             txbIdGrower.Name = "txbIdGrower";
             txbIdGrower.Size = new Size(37, 21);
@@ -1121,7 +1116,7 @@
             cboGrower.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboGrower.FormattingEnabled = true;
             cboGrower.ItemHeight = 13;
-            cboGrower.Location = new Point(121, 154);
+            cboGrower.Location = new Point(533, 178);
             cboGrower.Margin = new Padding(1, 1, 0, 0);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(235, 21);
@@ -1131,7 +1126,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Microsoft Sans Serif", 9F);
-            label6.Location = new Point(20, 155);
+            label6.Location = new Point(432, 179);
             label6.Margin = new Padding(1, 1, 0, 0);
             label6.Name = "label6";
             label6.Size = new Size(63, 15);
@@ -1139,11 +1134,75 @@
             label6.Text = "Productor:";
             label6.TextAlign = ContentAlignment.TopRight;
             // 
+            // button1
+            // 
+            button1.BackgroundImage = Properties.Resources.BuscarLupa1;
+            button1.BackgroundImageLayout = ImageLayout.Stretch;
+            button1.Enabled = false;
+            button1.Font = new Font("Microsoft Sans Serif", 9F);
+            button1.Location = new Point(340, 87);
+            button1.Margin = new Padding(1, 1, 0, 0);
+            button1.Name = "button1";
+            button1.Size = new Size(23, 23);
+            button1.TabIndex = 460;
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // comboBox1
+            // 
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox1.Font = new Font("Microsoft Sans Serif", 8.25F);
+            comboBox1.FormattingEnabled = true;
+            comboBox1.ItemHeight = 13;
+            comboBox1.Location = new Point(147, 88);
+            comboBox1.Margin = new Padding(1, 1, 0, 0);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(193, 21);
+            comboBox1.TabIndex = 461;
+            // 
+            // textBox1
+            // 
+            textBox1.Enabled = false;
+            textBox1.Font = new Font("Microsoft Sans Serif", 9F);
+            textBox1.Location = new Point(67, 88);
+            textBox1.Margin = new Padding(1, 1, 0, 0);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(79, 21);
+            textBox1.TabIndex = 462;
+            textBox1.TextAlign = HorizontalAlignment.Center;
+            // 
+            // textBox2
+            // 
+            textBox2.Font = new Font("Microsoft Sans Serif", 9F);
+            textBox2.Location = new Point(667, 200);
+            textBox2.Margin = new Padding(1, 1, 0, 0);
+            textBox2.MaxLength = 20;
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(169, 21);
+            textBox2.TabIndex = 463;
+            textBox2.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Font = new Font("Microsoft Sans Serif", 9F);
+            label16.Location = new Point(631, 203);
+            label16.Margin = new Padding(1, 1, 0, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(35, 15);
+            label16.TabIndex = 464;
+            label16.Text = "Obs.:";
+            label16.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmMaterialRegisterEntry
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(840, 434);
+            ClientSize = new Size(840, 523);
+            Controls.Add(textBox2);
+            Controls.Add(label16);
+            Controls.Add(textBox1);
+            Controls.Add(comboBox1);
+            Controls.Add(button1);
             Controls.Add(chbGrowerRemoved);
             Controls.Add(btnGrowerSearch);
             Controls.Add(txbIdGrower);
@@ -1162,7 +1221,6 @@
             Controls.Add(btnAddMaterial);
             Controls.Add(dgvMaterialList);
             Controls.Add(picMaterialImage);
-            Controls.Add(txbReceiver);
             Controls.Add(label15);
             Controls.Add(chbWarehouseRemoved);
             Controls.Add(btnWarehouseSearch);
@@ -1287,7 +1345,6 @@
         public TextBox txbIdWarehouse;
         public ComboBox cboWarehouse;
         private Label label14;
-        public TextBox txbReceiver;
         private Label label15;
         private PictureBox picMaterialImage;
         public DataGridView dgvMaterialList;
@@ -1317,5 +1374,10 @@
         public TextBox txbIdGrower;
         public ComboBox cboGrower;
         private Label label6;
+        public Button button1;
+        public ComboBox comboBox1;
+        public TextBox textBox1;
+        public TextBox textBox2;
+        private Label label16;
     }
 }

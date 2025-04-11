@@ -33,6 +33,7 @@ using SisUvex.Material.MaterialRegister;
 using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialWarehouses;
+using SisUvex.Material.MaterialCatalog;
 
 namespace SisUvex
 {
@@ -47,7 +48,7 @@ namespace SisUvex
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new PantallaCarga());
+            Application.Run(new FrmMaterialCatalog());
             //Application.Run(new FrmMenu());
         }
     }

@@ -118,16 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnConfigManifest.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAP1JREFUOE+VU8FqwlAQtLeC9Nh/qpf2oqcEYkIzk4PBf1Ckn1Uhv6Gliv2OlolJ
-        eBkj1YWFZHdmdnlv3mh0JbIsewIwIzlNkuTR+/8GyTeSv0oAL96/iDRNn0lWAKB/kptWgORKNQDvwgjr
-        fBG2wcSfgNzWjsH3p/MlMHfStQSQOL8OACcD7pUmcOiRdNpFUbyS/DDgIhAurbfWIYur1SNfkeSuN+Us
-        4psoo0EBgW8WiON4nOf5xK5NImVLJrk04kocccMhD359zdQvq32HpC5koIEVB1OGcr7WrAJA7zqbWmck
-        YZ1fW1kOa01i17pWTT1hBq3scfdj8rj1Of8BQaMxbMMeb+0AAAAASUVORK5CYII=
-</value>
-  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA

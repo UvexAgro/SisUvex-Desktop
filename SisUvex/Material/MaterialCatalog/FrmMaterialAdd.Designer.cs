@@ -38,27 +38,33 @@
             txbIdCategory = new TextBox();
             cboCategory = new ComboBox();
             lblCategory = new Label();
-            cboMarket = new ComboBox();
+            cboActive = new ComboBox();
             txbId = new TextBox();
             txbName = new TextBox();
             lblName = new Label();
             lblTitle = new Label();
-            label3 = new Label();
             lblObliName = new Label();
             label6 = new Label();
             lblId = new Label();
             lblMarket = new Label();
             label2 = new Label();
-            checkBox1 = new CheckBox();
-            textBox1 = new TextBox();
-            comboBox1 = new ComboBox();
+            chbDistributorRemoved = new CheckBox();
+            txbIdDistributor = new TextBox();
+            cboDistributor = new ComboBox();
             label1 = new Label();
-            textBox2 = new TextBox();
-            label9 = new Label();
-            comboBox2 = new ComboBox();
-            label10 = new Label();
             pictureBox1 = new PictureBox();
-            checkBox11 = new CheckBox();
+            chbMaterialTypeRemoved = new CheckBox();
+            txbIdMaterialType = new TextBox();
+            cboMaterialType = new ComboBox();
+            label5 = new Label();
+            label7 = new Label();
+            label4 = new Label();
+            txbIdUnit = new TextBox();
+            cboUnit = new ComboBox();
+            label10 = new Label();
+            txbQuant = new TextBox();
+            label9 = new Label();
+            btnPictureAdd = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -69,7 +75,7 @@
             chbActiveCategory.BackgroundImage = Properties.Resources.Imagen6;
             chbActiveCategory.BackgroundImageLayout = ImageLayout.Stretch;
             chbActiveCategory.Font = new Font("Segoe UI", 10F);
-            chbActiveCategory.Location = new Point(555, 192);
+            chbActiveCategory.Location = new Point(555, 263);
             chbActiveCategory.Name = "chbActiveCategory";
             chbActiveCategory.Size = new Size(39, 29);
             chbActiveCategory.TabIndex = 76;
@@ -78,27 +84,29 @@
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(434, 331);
+            btnAccept.Location = new Point(434, 366);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 81;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(515, 331);
+            btnCancel.Location = new Point(515, 366);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 82;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // txbIdColor
             // 
             txbIdColor.Enabled = false;
             txbIdColor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdColor.Location = new Point(112, 261);
+            txbIdColor.Location = new Point(112, 332);
             txbIdColor.Name = "txbIdColor";
             txbIdColor.Size = new Size(43, 29);
             txbIdColor.TabIndex = 79;
@@ -110,7 +118,7 @@
             cboColor.Font = new Font("Segoe UI", 12F);
             cboColor.FormattingEnabled = true;
             cboColor.ItemHeight = 21;
-            cboColor.Location = new Point(161, 262);
+            cboColor.Location = new Point(161, 333);
             cboColor.Name = "cboColor";
             cboColor.Size = new Size(388, 29);
             cboColor.TabIndex = 80;
@@ -119,17 +127,18 @@
             // 
             lblColor.AutoSize = true;
             lblColor.Font = new Font("Segoe UI", 12F);
-            lblColor.Location = new Point(56, 263);
+            lblColor.Location = new Point(56, 334);
             lblColor.Name = "lblColor";
             lblColor.Size = new Size(51, 21);
             lblColor.TabIndex = 92;
             lblColor.Text = "Color:";
+            lblColor.TextAlign = ContentAlignment.TopRight;
             // 
             // txbIdCategory
             // 
             txbIdCategory.Enabled = false;
             txbIdCategory.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdCategory.Location = new Point(112, 191);
+            txbIdCategory.Location = new Point(112, 262);
             txbIdCategory.Name = "txbIdCategory";
             txbIdCategory.Size = new Size(43, 29);
             txbIdCategory.TabIndex = 74;
@@ -141,7 +150,7 @@
             cboCategory.Font = new Font("Segoe UI", 12F);
             cboCategory.FormattingEnabled = true;
             cboCategory.ItemHeight = 21;
-            cboCategory.Location = new Point(161, 192);
+            cboCategory.Location = new Point(161, 263);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(388, 29);
             cboCategory.TabIndex = 75;
@@ -150,22 +159,23 @@
             // 
             lblCategory.AutoSize = true;
             lblCategory.Font = new Font("Segoe UI", 12F);
-            lblCategory.Location = new Point(27, 194);
+            lblCategory.Location = new Point(27, 265);
             lblCategory.Name = "lblCategory";
             lblCategory.Size = new Size(80, 21);
             lblCategory.TabIndex = 90;
             lblCategory.Text = "Categoría:";
+            lblCategory.TextAlign = ContentAlignment.TopRight;
             // 
-            // cboMarket
+            // cboActive
             // 
-            cboMarket.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMarket.Font = new Font("Segoe UI", 12F);
-            cboMarket.FormattingEnabled = true;
-            cboMarket.Items.AddRange(new object[] { "E", "N" });
-            cboMarket.Location = new Point(264, 122);
-            cboMarket.Name = "cboMarket";
-            cboMarket.Size = new Size(43, 29);
-            cboMarket.TabIndex = 72;
+            cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboActive.Font = new Font("Segoe UI", 12F);
+            cboActive.FormattingEnabled = true;
+            cboActive.Items.AddRange(new object[] { "E", "N" });
+            cboActive.Location = new Point(264, 122);
+            cboActive.Name = "cboActive";
+            cboActive.Size = new Size(43, 29);
+            cboActive.TabIndex = 72;
             // 
             // txbId
             // 
@@ -180,7 +190,7 @@
             // txbName
             // 
             txbName.Font = new Font("Segoe UI", 12F);
-            txbName.Location = new Point(112, 156);
+            txbName.Location = new Point(112, 192);
             txbName.MaxLength = 50;
             txbName.Name = "txbName";
             txbName.Size = new Size(437, 29);
@@ -190,11 +200,12 @@
             // 
             lblName.AutoSize = true;
             lblName.Font = new Font("Segoe UI", 12F);
-            lblName.Location = new Point(28, 158);
+            lblName.Location = new Point(28, 194);
             lblName.Name = "lblName";
             lblName.Size = new Size(79, 21);
             lblName.TabIndex = 84;
             lblName.Text = "Concepto:";
+            lblName.TextAlign = ContentAlignment.TopRight;
             // 
             // lblTitle
             // 
@@ -206,22 +217,11 @@
             lblTitle.TabIndex = 83;
             lblTitle.Text = "Añadir material";
             // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.ForeColor = Color.Crimson;
-            label3.Location = new Point(103, 191);
-            label3.Margin = new Padding(0);
-            label3.Name = "label3";
-            label3.Size = new Size(12, 15);
-            label3.TabIndex = 93;
-            label3.Text = "*";
-            // 
             // lblObliName
             // 
             lblObliName.AutoSize = true;
             lblObliName.ForeColor = Color.Crimson;
-            lblObliName.Location = new Point(103, 158);
+            lblObliName.Location = new Point(103, 194);
             lblObliName.Margin = new Padding(0);
             lblObliName.Name = "lblObliName";
             lblObliName.Size = new Size(12, 15);
@@ -248,6 +248,7 @@
             lblId.Size = new Size(26, 21);
             lblId.TabIndex = 85;
             lblId.Text = "Id:";
+            lblId.TextAlign = ContentAlignment.TopRight;
             // 
             // lblMarket
             // 
@@ -258,6 +259,7 @@
             lblMarket.Size = new Size(56, 21);
             lblMarket.TabIndex = 86;
             lblMarket.Text = "Activo:";
+            lblMarket.TextAlign = ContentAlignment.TopRight;
             // 
             // label2
             // 
@@ -270,90 +272,51 @@
             label2.TabIndex = 89;
             label2.Text = "*";
             // 
-            // checkBox1
+            // chbDistributorRemoved
             // 
-            checkBox1.Appearance = Appearance.Button;
-            checkBox1.AutoSize = true;
-            checkBox1.BackgroundImage = Properties.Resources.Imagen6;
-            checkBox1.BackgroundImageLayout = ImageLayout.Stretch;
-            checkBox1.Font = new Font("Segoe UI", 10F);
-            checkBox1.Location = new Point(555, 227);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(39, 29);
-            checkBox1.TabIndex = 99;
-            checkBox1.Text = "     ";
-            checkBox1.UseVisualStyleBackColor = true;
+            chbDistributorRemoved.Appearance = Appearance.Button;
+            chbDistributorRemoved.AutoSize = true;
+            chbDistributorRemoved.BackgroundImage = Properties.Resources.Imagen6;
+            chbDistributorRemoved.BackgroundImageLayout = ImageLayout.Stretch;
+            chbDistributorRemoved.Font = new Font("Segoe UI", 10F);
+            chbDistributorRemoved.Location = new Point(555, 298);
+            chbDistributorRemoved.Name = "chbDistributorRemoved";
+            chbDistributorRemoved.Size = new Size(39, 29);
+            chbDistributorRemoved.TabIndex = 99;
+            chbDistributorRemoved.Text = "     ";
+            chbDistributorRemoved.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txbIdDistributor
             // 
-            textBox1.Enabled = false;
-            textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            textBox1.Location = new Point(112, 226);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(43, 29);
-            textBox1.TabIndex = 97;
-            textBox1.TextAlign = HorizontalAlignment.Center;
+            txbIdDistributor.Enabled = false;
+            txbIdDistributor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdDistributor.Location = new Point(112, 297);
+            txbIdDistributor.Name = "txbIdDistributor";
+            txbIdDistributor.Size = new Size(43, 29);
+            txbIdDistributor.TabIndex = 97;
+            txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
-            // comboBox1
+            // cboDistributor
             // 
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.Font = new Font("Segoe UI", 12F);
-            comboBox1.FormattingEnabled = true;
-            comboBox1.ItemHeight = 21;
-            comboBox1.Location = new Point(161, 227);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(388, 29);
-            comboBox1.TabIndex = 98;
+            cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDistributor.Font = new Font("Segoe UI", 12F);
+            cboDistributor.FormattingEnabled = true;
+            cboDistributor.ItemHeight = 21;
+            cboDistributor.Location = new Point(161, 298);
+            cboDistributor.Name = "cboDistributor";
+            cboDistributor.Size = new Size(388, 29);
+            cboDistributor.TabIndex = 98;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(11, 229);
+            label1.Location = new Point(11, 300);
             label1.Name = "label1";
             label1.Size = new Size(96, 21);
             label1.TabIndex = 100;
             label1.Text = "Distribuidor:";
-            // 
-            // textBox2
-            // 
-            textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(112, 296);
-            textBox2.MaxLength = 50;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(118, 29);
-            textBox2.TabIndex = 102;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 12F);
-            label9.Location = new Point(32, 299);
-            label9.Name = "label9";
-            label9.Size = new Size(75, 21);
-            label9.TabIndex = 103;
-            label9.Text = "Cantidad:";
-            // 
-            // comboBox2
-            // 
-            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox2.Font = new Font("Segoe UI", 12F);
-            comboBox2.FormattingEnabled = true;
-            comboBox2.ItemHeight = 21;
-            comboBox2.Location = new Point(305, 296);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(244, 29);
-            comboBox2.TabIndex = 105;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 12F);
-            label10.Location = new Point(236, 299);
-            label10.Name = "label10";
-            label10.Size = new Size(63, 21);
-            label10.TabIndex = 106;
-            label10.Text = "Unidad:";
+            label1.TextAlign = ContentAlignment.TopRight;
             // 
             // pictureBox1
             // 
@@ -363,34 +326,157 @@
             pictureBox1.TabIndex = 107;
             pictureBox1.TabStop = false;
             // 
-            // checkBox11
+            // chbMaterialTypeRemoved
             // 
-            checkBox11.Appearance = Appearance.Button;
-            checkBox11.Font = new Font("Segoe UI", 7.8F);
-            checkBox11.ForeColor = Color.DarkGray;
-            checkBox11.Image = Properties.Resources.addImageIcon16;
-            checkBox11.Location = new Point(526, 128);
-            checkBox11.Margin = new Padding(1, 1, 0, 0);
-            checkBox11.Name = "checkBox11";
-            checkBox11.Size = new Size(22, 22);
-            checkBox11.TabIndex = 446;
-            checkBox11.Text = "  ";
-            checkBox11.UseVisualStyleBackColor = true;
+            chbMaterialTypeRemoved.Appearance = Appearance.Button;
+            chbMaterialTypeRemoved.AutoSize = true;
+            chbMaterialTypeRemoved.BackgroundImage = Properties.Resources.Imagen6;
+            chbMaterialTypeRemoved.BackgroundImageLayout = ImageLayout.Stretch;
+            chbMaterialTypeRemoved.Font = new Font("Segoe UI", 10F);
+            chbMaterialTypeRemoved.Location = new Point(555, 158);
+            chbMaterialTypeRemoved.Name = "chbMaterialTypeRemoved";
+            chbMaterialTypeRemoved.Size = new Size(39, 29);
+            chbMaterialTypeRemoved.TabIndex = 456;
+            chbMaterialTypeRemoved.Text = "     ";
+            chbMaterialTypeRemoved.UseVisualStyleBackColor = true;
+            // 
+            // txbIdMaterialType
+            // 
+            txbIdMaterialType.Enabled = false;
+            txbIdMaterialType.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdMaterialType.Location = new Point(112, 157);
+            txbIdMaterialType.Name = "txbIdMaterialType";
+            txbIdMaterialType.Size = new Size(43, 29);
+            txbIdMaterialType.TabIndex = 454;
+            txbIdMaterialType.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboMaterialType
+            // 
+            cboMaterialType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMaterialType.Font = new Font("Segoe UI", 12F);
+            cboMaterialType.FormattingEnabled = true;
+            cboMaterialType.ItemHeight = 21;
+            cboMaterialType.Location = new Point(161, 158);
+            cboMaterialType.Name = "cboMaterialType";
+            cboMaterialType.Size = new Size(388, 29);
+            cboMaterialType.TabIndex = 455;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = Color.Crimson;
+            label5.Location = new Point(103, 157);
+            label5.Margin = new Padding(0);
+            label5.Name = "label5";
+            label5.Size = new Size(12, 15);
+            label5.TabIndex = 458;
+            label5.Text = "*";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 12F);
+            label7.Location = new Point(64, 161);
+            label7.Name = "label7";
+            label7.Size = new Size(43, 21);
+            label7.TabIndex = 457;
+            label7.Text = "Tipo:";
+            label7.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.Crimson;
+            label4.Location = new Point(295, 227);
+            label4.Margin = new Padding(0);
+            label4.Name = "label4";
+            label4.Size = new Size(12, 15);
+            label4.TabIndex = 464;
+            label4.Text = "*";
+            // 
+            // txbIdUnit
+            // 
+            txbIdUnit.Enabled = false;
+            txbIdUnit.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdUnit.Location = new Point(305, 227);
+            txbIdUnit.Name = "txbIdUnit";
+            txbIdUnit.Size = new Size(43, 29);
+            txbIdUnit.TabIndex = 463;
+            txbIdUnit.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboUnit
+            // 
+            cboUnit.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboUnit.Font = new Font("Segoe UI", 12F);
+            cboUnit.FormattingEnabled = true;
+            cboUnit.ItemHeight = 21;
+            cboUnit.Location = new Point(354, 227);
+            cboUnit.Name = "cboUnit";
+            cboUnit.Size = new Size(195, 29);
+            cboUnit.TabIndex = 461;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 12F);
+            label10.Location = new Point(236, 230);
+            label10.Name = "label10";
+            label10.Size = new Size(63, 21);
+            label10.TabIndex = 462;
+            label10.Text = "Unidad:";
+            label10.TextAlign = ContentAlignment.TopRight;
+            // 
+            // txbQuant
+            // 
+            txbQuant.Font = new Font("Segoe UI", 12F);
+            txbQuant.Location = new Point(112, 227);
+            txbQuant.MaxLength = 50;
+            txbQuant.Name = "txbQuant";
+            txbQuant.Size = new Size(118, 29);
+            txbQuant.TabIndex = 459;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 12F);
+            label9.Location = new Point(32, 230);
+            label9.Name = "label9";
+            label9.Size = new Size(75, 21);
+            label9.TabIndex = 460;
+            label9.Text = "Cantidad:";
+            label9.TextAlign = ContentAlignment.TopRight;
+            // 
+            // btnPictureAdd
+            // 
+            btnPictureAdd.Image = Properties.Resources.addImageIcon16;
+            btnPictureAdd.Location = new Point(555, 129);
+            btnPictureAdd.Name = "btnPictureAdd";
+            btnPictureAdd.Size = new Size(22, 22);
+            btnPictureAdd.TabIndex = 465;
+            btnPictureAdd.UseVisualStyleBackColor = true;
+            btnPictureAdd.Click += btnPictureAdd_Click;
             // 
             // FrmMaterialAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(602, 372);
-            Controls.Add(checkBox11);
-            Controls.Add(pictureBox1);
-            Controls.Add(comboBox2);
+            ClientSize = new Size(602, 412);
+            Controls.Add(btnPictureAdd);
+            Controls.Add(label4);
+            Controls.Add(txbIdUnit);
+            Controls.Add(cboUnit);
             Controls.Add(label10);
-            Controls.Add(textBox2);
+            Controls.Add(txbQuant);
             Controls.Add(label9);
-            Controls.Add(checkBox1);
-            Controls.Add(textBox1);
-            Controls.Add(comboBox1);
+            Controls.Add(chbMaterialTypeRemoved);
+            Controls.Add(txbIdMaterialType);
+            Controls.Add(cboMaterialType);
+            Controls.Add(label5);
+            Controls.Add(label7);
+            Controls.Add(pictureBox1);
+            Controls.Add(chbDistributorRemoved);
+            Controls.Add(txbIdDistributor);
+            Controls.Add(cboDistributor);
             Controls.Add(chbActiveCategory);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
@@ -398,11 +484,10 @@
             Controls.Add(cboColor);
             Controls.Add(txbIdCategory);
             Controls.Add(cboCategory);
-            Controls.Add(cboMarket);
+            Controls.Add(cboActive);
             Controls.Add(txbId);
             Controls.Add(txbName);
             Controls.Add(lblTitle);
-            Controls.Add(label3);
             Controls.Add(lblObliName);
             Controls.Add(label6);
             Controls.Add(lblMarket);
@@ -432,26 +517,32 @@
         public TextBox txbIdCategory;
         public ComboBox cboCategory;
         private Label lblCategory;
-        public ComboBox cboMarket;
+        public ComboBox cboActive;
         public TextBox txbId;
         public TextBox txbName;
         private Label lblName;
         public Label lblTitle;
-        private Label label3;
         private Label lblObliName;
         private Label label6;
         private Label lblId;
         private Label lblMarket;
         private Label label2;
-        public CheckBox checkBox1;
-        public TextBox textBox1;
-        public ComboBox comboBox1;
+        public CheckBox chbDistributorRemoved;
+        public TextBox txbIdDistributor;
+        public ComboBox cboDistributor;
         private Label label1;
-        public TextBox textBox2;
-        private Label label9;
-        public ComboBox comboBox2;
-        private Label label10;
         private PictureBox pictureBox1;
-        public CheckBox checkBox11;
+        public CheckBox chbMaterialTypeRemoved;
+        public TextBox txbIdMaterialType;
+        public ComboBox cboMaterialType;
+        private Label label5;
+        private Label label7;
+        private Label label4;
+        public TextBox txbIdUnit;
+        public ComboBox cboUnit;
+        private Label label10;
+        public TextBox txbQuant;
+        private Label label9;
+        private Button btnPictureAdd;
     }
 }

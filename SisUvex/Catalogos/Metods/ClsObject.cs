@@ -398,5 +398,27 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogUnit";
             public const string QueryCbo = $" SELECT id_unit AS '{Column.id}', CONCAT(v_nameUnit, ' | ', id_unit) AS '{Column.name}' FROM Pack_Unit ORDER BY '{Column.name}' ";
         }
+
+        public static class MaterialType //AGREGARLA AL LISTADO DONDE ESTAN LOS CLSCOMBOBOXES
+        {
+            public const string TableName = "Pack_MaterialType";
+            public const string ColumnName = "Tipo de material";
+            public const string ColumnId = "idMaterialType";
+            public const string ColumnActive = "ActiveMaterialType";
+            public const string Cbo = "CboMaterialType";
+            public const string DgvCatalog = "DgvCatalogMaterialType";
+            public const string QueryCbo = $" SELECT [id_matType] AS [{Column.id}], CONCAT([v_nameMatType], ' | ', [id_matType]) AS [{Column.name}] FROM [Pack_MaterialType] ORDER BY [{Column.name}] ";
+        }
+
+        public static class MaterialProvider
+        {
+            public const string TableName = "Pack_Provider";
+            public const string ColumnName = "Proveedor";
+            public const string ColumnId = "idMaterialProvider";
+            public const string ColumnActive = "ActiveMaterialProvider";
+            public const string Cbo = "CboMaterialProvider";
+            public const string DgvCatalog = "DgvCatalogMaterialProvider";
+            public const string QueryCbo = $" SELECT id_provider AS [{Column.id}], CONCAT(v_nameProvider, ' | ', id_provider) AS [{Column.name}], v_nameProvider AS [{ColumnName}] FROM [Pack_Provider] ORDER BY [{Column.name}] ";
+        }
     }
 }
