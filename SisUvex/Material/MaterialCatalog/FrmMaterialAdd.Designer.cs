@@ -15,6 +15,8 @@
         {
             if (disposing && (components != null))
             {
+                cls.Dispose();
+
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialAdd));
-            chbActiveCategory = new CheckBox();
+            chbCategoryRemoved = new CheckBox();
             btnAccept = new Button();
             btnCancel = new Button();
             txbIdColor = new TextBox();
@@ -52,8 +54,7 @@
             txbIdDistributor = new TextBox();
             cboDistributor = new ComboBox();
             label1 = new Label();
-            pictureBox1 = new PictureBox();
-            chbMaterialTypeRemoved = new CheckBox();
+            pbxMaterial = new PictureBox();
             txbIdMaterialType = new TextBox();
             cboMaterialType = new ComboBox();
             label5 = new Label();
@@ -65,26 +66,32 @@
             txbQuant = new TextBox();
             label9 = new Label();
             btnPictureAdd = new Button();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            chbImageBack = new CheckBox();
+            chbImageFront = new CheckBox();
+            chbImageUp = new CheckBox();
+            chbImageDown = new CheckBox();
+            btnRefreshImages = new Button();
+            btnDeleteImage = new Button();
+            ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             SuspendLayout();
             // 
-            // chbActiveCategory
+            // chbCategoryRemoved
             // 
-            chbActiveCategory.Appearance = Appearance.Button;
-            chbActiveCategory.AutoSize = true;
-            chbActiveCategory.BackgroundImage = Properties.Resources.Imagen6;
-            chbActiveCategory.BackgroundImageLayout = ImageLayout.Stretch;
-            chbActiveCategory.Font = new Font("Segoe UI", 10F);
-            chbActiveCategory.Location = new Point(555, 263);
-            chbActiveCategory.Name = "chbActiveCategory";
-            chbActiveCategory.Size = new Size(39, 29);
-            chbActiveCategory.TabIndex = 76;
-            chbActiveCategory.Text = "     ";
-            chbActiveCategory.UseVisualStyleBackColor = true;
+            chbCategoryRemoved.Appearance = Appearance.Button;
+            chbCategoryRemoved.AutoSize = true;
+            chbCategoryRemoved.BackgroundImage = Properties.Resources.Imagen6;
+            chbCategoryRemoved.BackgroundImageLayout = ImageLayout.Stretch;
+            chbCategoryRemoved.Font = new Font("Segoe UI", 10F);
+            chbCategoryRemoved.Location = new Point(553, 263);
+            chbCategoryRemoved.Name = "chbCategoryRemoved";
+            chbCategoryRemoved.Size = new Size(39, 29);
+            chbCategoryRemoved.TabIndex = 76;
+            chbCategoryRemoved.Text = "     ";
+            chbCategoryRemoved.UseVisualStyleBackColor = true;
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(434, 366);
+            btnAccept.Location = new Point(436, 368);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 81;
@@ -94,7 +101,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(515, 366);
+            btnCancel.Location = new Point(517, 368);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 82;
@@ -171,10 +178,10 @@
             cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
             cboActive.Font = new Font("Segoe UI", 12F);
             cboActive.FormattingEnabled = true;
-            cboActive.Items.AddRange(new object[] { "E", "N" });
+            cboActive.Items.AddRange(new object[] { "No", "Sí" });
             cboActive.Location = new Point(264, 122);
             cboActive.Name = "cboActive";
-            cboActive.Size = new Size(43, 29);
+            cboActive.Size = new Size(51, 29);
             cboActive.TabIndex = 72;
             // 
             // txbId
@@ -279,7 +286,7 @@
             chbDistributorRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbDistributorRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbDistributorRemoved.Font = new Font("Segoe UI", 10F);
-            chbDistributorRemoved.Location = new Point(555, 298);
+            chbDistributorRemoved.Location = new Point(553, 298);
             chbDistributorRemoved.Name = "chbDistributorRemoved";
             chbDistributorRemoved.Size = new Size(39, 29);
             chbDistributorRemoved.TabIndex = 99;
@@ -318,27 +325,15 @@
             label1.Text = "Distribuidor:";
             label1.TextAlign = ContentAlignment.TopRight;
             // 
-            // pictureBox1
+            // pbxMaterial
             // 
-            pictureBox1.Location = new Point(417, 19);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(132, 132);
-            pictureBox1.TabIndex = 107;
-            pictureBox1.TabStop = false;
-            // 
-            // chbMaterialTypeRemoved
-            // 
-            chbMaterialTypeRemoved.Appearance = Appearance.Button;
-            chbMaterialTypeRemoved.AutoSize = true;
-            chbMaterialTypeRemoved.BackgroundImage = Properties.Resources.Imagen6;
-            chbMaterialTypeRemoved.BackgroundImageLayout = ImageLayout.Stretch;
-            chbMaterialTypeRemoved.Font = new Font("Segoe UI", 10F);
-            chbMaterialTypeRemoved.Location = new Point(555, 158);
-            chbMaterialTypeRemoved.Name = "chbMaterialTypeRemoved";
-            chbMaterialTypeRemoved.Size = new Size(39, 29);
-            chbMaterialTypeRemoved.TabIndex = 456;
-            chbMaterialTypeRemoved.Text = "     ";
-            chbMaterialTypeRemoved.UseVisualStyleBackColor = true;
+            pbxMaterial.BorderStyle = BorderStyle.FixedSingle;
+            pbxMaterial.Location = new Point(417, 19);
+            pbxMaterial.Name = "pbxMaterial";
+            pbxMaterial.Size = new Size(132, 132);
+            pbxMaterial.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbxMaterial.TabIndex = 107;
+            pbxMaterial.TabStop = false;
             // 
             // txbIdMaterialType
             // 
@@ -349,6 +344,7 @@
             txbIdMaterialType.Size = new Size(43, 29);
             txbIdMaterialType.TabIndex = 454;
             txbIdMaterialType.TextAlign = HorizontalAlignment.Center;
+            txbIdMaterialType.TextChanged += txbIdMaterialType_TextChanged;
             // 
             // cboMaterialType
             // 
@@ -449,18 +445,102 @@
             // btnPictureAdd
             // 
             btnPictureAdd.Image = Properties.Resources.addImageIcon16;
-            btnPictureAdd.Location = new Point(555, 129);
+            btnPictureAdd.Location = new Point(555, 131);
             btnPictureAdd.Name = "btnPictureAdd";
             btnPictureAdd.Size = new Size(22, 22);
             btnPictureAdd.TabIndex = 465;
             btnPictureAdd.UseVisualStyleBackColor = true;
             btnPictureAdd.Click += btnPictureAdd_Click;
             // 
+            // chbImageBack
+            // 
+            chbImageBack.Appearance = Appearance.Button;
+            chbImageBack.BackgroundImageLayout = ImageLayout.Stretch;
+            chbImageBack.Font = new Font("Segoe UI", 8.25F);
+            chbImageBack.Location = new Point(555, 47);
+            chbImageBack.Name = "chbImageBack";
+            chbImageBack.Size = new Size(65, 25);
+            chbImageBack.TabIndex = 467;
+            chbImageBack.Text = "Atrás";
+            chbImageBack.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageBack.UseVisualStyleBackColor = true;
+            chbImageBack.Click += chbImageBack_Click;
+            // 
+            // chbImageFront
+            // 
+            chbImageFront.Appearance = Appearance.Button;
+            chbImageFront.BackgroundImageLayout = ImageLayout.Stretch;
+            chbImageFront.Font = new Font("Segoe UI", 8.25F);
+            chbImageFront.Location = new Point(555, 19);
+            chbImageFront.Name = "chbImageFront";
+            chbImageFront.Size = new Size(65, 25);
+            chbImageFront.TabIndex = 466;
+            chbImageFront.Text = "Frente";
+            chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageFront.UseVisualStyleBackColor = true;
+            chbImageFront.Click += chbImageFront_Click;
+            // 
+            // chbImageUp
+            // 
+            chbImageUp.Appearance = Appearance.Button;
+            chbImageUp.BackgroundImageLayout = ImageLayout.Stretch;
+            chbImageUp.Font = new Font("Segoe UI", 8.25F);
+            chbImageUp.Location = new Point(555, 103);
+            chbImageUp.Name = "chbImageUp";
+            chbImageUp.Size = new Size(65, 25);
+            chbImageUp.TabIndex = 469;
+            chbImageUp.Text = "Arriba";
+            chbImageUp.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageUp.UseVisualStyleBackColor = true;
+            chbImageUp.Click += chbImageUp_Click;
+            // 
+            // chbImageDown
+            // 
+            chbImageDown.Appearance = Appearance.Button;
+            chbImageDown.BackgroundImageLayout = ImageLayout.Stretch;
+            chbImageDown.Font = new Font("Segoe UI", 8.25F);
+            chbImageDown.Location = new Point(555, 75);
+            chbImageDown.Name = "chbImageDown";
+            chbImageDown.Size = new Size(65, 25);
+            chbImageDown.TabIndex = 468;
+            chbImageDown.Text = "Abajo";
+            chbImageDown.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageDown.UseVisualStyleBackColor = true;
+            chbImageDown.Click += chbImageDown_Click;
+            // 
+            // btnRefreshImages
+            // 
+            btnRefreshImages.Image = Properties.Resources.reiniciarMini;
+            btnRefreshImages.Location = new Point(576, 131);
+            btnRefreshImages.Margin = new Padding(0);
+            btnRefreshImages.Name = "btnRefreshImages";
+            btnRefreshImages.Size = new Size(22, 22);
+            btnRefreshImages.TabIndex = 470;
+            btnRefreshImages.UseVisualStyleBackColor = true;
+            btnRefreshImages.Click += btnRefreshImages_Click;
+            // 
+            // btnDeleteImage
+            // 
+            btnDeleteImage.Image = Properties.Resources.basuraIcon16;
+            btnDeleteImage.Location = new Point(597, 131);
+            btnDeleteImage.Margin = new Padding(0);
+            btnDeleteImage.Name = "btnDeleteImage";
+            btnDeleteImage.Size = new Size(22, 22);
+            btnDeleteImage.TabIndex = 471;
+            btnDeleteImage.UseVisualStyleBackColor = true;
+            btnDeleteImage.Click += btnDeleteImage_Click;
+            // 
             // FrmMaterialAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(602, 412);
+            ClientSize = new Size(625, 407);
+            Controls.Add(btnDeleteImage);
+            Controls.Add(btnRefreshImages);
+            Controls.Add(chbImageUp);
+            Controls.Add(chbImageDown);
+            Controls.Add(chbImageBack);
+            Controls.Add(chbImageFront);
             Controls.Add(btnPictureAdd);
             Controls.Add(label4);
             Controls.Add(txbIdUnit);
@@ -468,16 +548,15 @@
             Controls.Add(label10);
             Controls.Add(txbQuant);
             Controls.Add(label9);
-            Controls.Add(chbMaterialTypeRemoved);
             Controls.Add(txbIdMaterialType);
             Controls.Add(cboMaterialType);
             Controls.Add(label5);
             Controls.Add(label7);
-            Controls.Add(pictureBox1);
+            Controls.Add(pbxMaterial);
             Controls.Add(chbDistributorRemoved);
             Controls.Add(txbIdDistributor);
             Controls.Add(cboDistributor);
-            Controls.Add(chbActiveCategory);
+            Controls.Add(chbCategoryRemoved);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(txbIdColor);
@@ -497,18 +576,22 @@
             Controls.Add(lblCategory);
             Controls.Add(lblName);
             Controls.Add(lblId);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmMaterialAdd";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Añadir material";
             Load += FrmMaterialAdd_Load;
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbxMaterial).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        public CheckBox chbActiveCategory;
+        public CheckBox chbCategoryRemoved;
         private Button btnAccept;
         private Button btnCancel;
         public TextBox txbIdColor;
@@ -532,7 +615,6 @@
         public ComboBox cboDistributor;
         private Label label1;
         private PictureBox pictureBox1;
-        public CheckBox chbMaterialTypeRemoved;
         public TextBox txbIdMaterialType;
         public ComboBox cboMaterialType;
         private Label label5;
@@ -544,5 +626,12 @@
         public TextBox txbQuant;
         private Label label9;
         private Button btnPictureAdd;
+        public PictureBox pbxMaterial;
+        public CheckBox chbImageBack;
+        public CheckBox chbImageFront;
+        public CheckBox chbImageUp;
+        public CheckBox chbImageDown;
+        private Button btnRefreshImages;
+        private Button btnDeleteImage;
     }
 }

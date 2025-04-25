@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Images;
 
 namespace SisUvex.Material.MaterialCatalog
 {
     internal partial class FrmMaterialAdd : Form
     {
         public ClsMaterialCatalog cls;
+
         public FrmMaterialAdd()
         {
             InitializeComponent();
@@ -37,7 +39,43 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void btnPictureAdd_Click(object sender, EventArgs e)
         {
+            cls.BtnLoadNewImage();
+        }
 
+        private void txbIdMaterialType_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRefreshImages_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txbId.Text))
+                cls.BtnResetAllImages();
+        }
+
+        private void chbImageFront_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageFront);
+        }
+
+        private void chbImageBack_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageBack);
+        }
+
+        private void chbImageDown_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageDown);
+        }
+
+        private void chbImageUp_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageUp);
+        }
+
+        private void btnDeleteImage_Click(object sender, EventArgs e)
+        {
+            cls.BtnDeleteTemporalImage();
         }
     }
 }

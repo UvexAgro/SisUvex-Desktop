@@ -49,12 +49,12 @@ namespace SisUvex.Material.MaterialCatalog
                 {
                     this.idMaterialCatalog = dr.GetValue(dr.GetOrdinal("id_matCatalog")).ToString();
                     idDistributor = dr.GetValue(dr.GetOrdinal("id_distributor")).ToString();
-                    nameMaterialCatalog = dr.GetValue(dr.GetOrdinal("v_nameMatCatalog")).ToString();
+                    nameMaterialCatalog = dr.GetValue(dr.GetOrdinal("v_nameMat")).ToString();
                     idColor = dr.GetValue(dr.GetOrdinal("id_color")).ToString();
                     idCategory = dr.GetValue(dr.GetOrdinal("id_category")).ToString();
-                    quantity = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("i_quantity")));
+                    quantity = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("i_quant")));
                     idUnit = dr.GetValue(dr.GetOrdinal("id_unit")).ToString();
-                    idMaterialType = dr.GetValue(dr.GetOrdinal("id_materialType")).ToString();
+                    idMaterialType = dr.GetValue(dr.GetOrdinal("id_matType")).ToString();
                     active = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("c_active")));
                 }
             }
@@ -76,14 +76,14 @@ namespace SisUvex.Material.MaterialCatalog
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand("sp_PackMaterialCatalogAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@idMaterialType", ClsValues.IfEmptyToDBNull(idMaterialType));
                 cmd.Parameters.AddWithValue("@idDistributor", idDistributor);
-                cmd.Parameters.AddWithValue("@nameMaterialCatalog", nameMaterialCatalog);
+                cmd.Parameters.AddWithValue("@nameMaterial", nameMaterialCatalog);
                 cmd.Parameters.AddWithValue("@idColor", ClsValues.IfEmptyToDBNull(idColor));
                 cmd.Parameters.AddWithValue("@idCategory", ClsValues.IfEmptyToDBNull(idCategory));
-                cmd.Parameters.AddWithValue("@quantity", ClsValues.IfEmptyToDBNull(quantity.ToString()));
+                cmd.Parameters.AddWithValue("@quant", ClsValues.IfEmptyToDBNull(quantity.ToString()));
+                cmd.Parameters.AddWithValue("@active", active.ToString());
                 cmd.Parameters.AddWithValue("@idUnit", ClsValues.IfEmptyToDBNull(idUnit));
-                cmd.Parameters.AddWithValue("@idMaterialType", ClsValues.IfEmptyToDBNull(idMaterialType));
-                cmd.Parameters.AddWithValue("@active", active);
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -113,15 +113,15 @@ namespace SisUvex.Material.MaterialCatalog
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand("sp_PackMaterialCatalogModify", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", idMaterialCatalog);
+                cmd.Parameters.AddWithValue("@idMaterialCatalog", idMaterialCatalog);
+                cmd.Parameters.AddWithValue("@idMaterialType", ClsValues.IfEmptyToDBNull(idMaterialType));
                 cmd.Parameters.AddWithValue("@idDistributor", idDistributor);
-                cmd.Parameters.AddWithValue("@nameMaterialCatalog", nameMaterialCatalog);
+                cmd.Parameters.AddWithValue("@nameMaterial", nameMaterialCatalog);
                 cmd.Parameters.AddWithValue("@idColor", ClsValues.IfEmptyToDBNull(idColor));
                 cmd.Parameters.AddWithValue("@idCategory", ClsValues.IfEmptyToDBNull(idCategory));
-                cmd.Parameters.AddWithValue("@quantity", ClsValues.IfEmptyToDBNull(quantity.ToString()));
+                cmd.Parameters.AddWithValue("@quant", ClsValues.IfEmptyToDBNull(quantity.ToString()));
                 cmd.Parameters.AddWithValue("@idUnit", ClsValues.IfEmptyToDBNull(idUnit));
-                cmd.Parameters.AddWithValue("@idMaterialType", ClsValues.IfEmptyToDBNull(idMaterialType));
-                cmd.Parameters.AddWithValue("@active", active);
+                cmd.Parameters.AddWithValue("@active", active.ToString());
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
@@ -129,6 +129,9 @@ namespace SisUvex.Material.MaterialCatalog
                     string idMaterialCatalog = dr.GetValue(dr.GetOrdinal("id_matCatalog")).ToString();
                     return (true, idMaterialCatalog);
                 }
+
+                MessageBox.Show("SIN LEER MODIFICAR -" + idMaterialCatalog + "-");
+
                 return (false, null);
             }
             catch (Exception ex)

@@ -14,6 +14,7 @@ using SisUvex.Catalogos.Metods;
 using SisUvex.Material.Warehouses;
 using Microsoft.IdentityModel.Tokens;
 using System.Media;
+using SisUvex.Catalogos.Metods.Images;
 
 namespace SisUvex.Material.MaterialCatalog
 {
@@ -25,11 +26,16 @@ namespace SisUvex.Material.MaterialCatalog
         public FrmMaterialAdd _frmAdd;
         public FrmMaterialCatalog _frmCat;
         private EMaterialCatalog entityFrm;
-        private string queryCatalog = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackMaterialCatalogCat AS [vw] ";
+        //private string queryCatalog = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackMaterialCatalogCat AS [vw] ";
+        private string queryCatalog = $" SELECT vw.* FROM vw_PackMaterialCatalogCat AS [vw] ";
+
         ClsDGVCatalog dgv;
         DataTable dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
+        private string? imagesPathCatalogFolder = "\\\\SVRCAMPOSANAN\\Inventum\\MATERIALES";
+
+        private SingleImageManager frontImageManager, backImageManager, downImageManager, upImageManager;
 
         public void BtnFilterDtCatalog()
         {
@@ -89,17 +95,29 @@ namespace SisUvex.Material.MaterialCatalog
         {
             AddControlsToList();
 
-            LoadComboBoxes();
+            LoadControlsEvents();
 
             if (IsAddOrModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
                 _frmAdd.txbId.Text = string.Empty; //SE CAMBIA AL SELECCIONAR UN TIPO DE MATERIAL
+
+                InicializateImagesManagers();
             }
             else
             {
                 LoadControlsModify();
+
+                LoadAllImages(entityFrm.idMaterialCatalog);
             }
+
+            _frmAdd.txbIdMaterialType.TextChanged += (s, e) => //CAMBIAR ID DEL MATERIAL SEGUN EL TIPO, AQUÍ DESPUÉS DEL DE CARGAR CONTROLES MODIFICAR
+            {
+                if (_frmAdd.txbIdMaterialType.Text.IsNullOrEmpty())
+                    _frmAdd.txbId.Text = string.Empty;
+                else
+                    _frmAdd.txbId.Text = EMaterialCatalog.GetNextId(_frmAdd.txbIdMaterialType.Text);
+            };
         }
 
         private void AddControlsToList()
@@ -109,17 +127,27 @@ namespace SisUvex.Material.MaterialCatalog
             controlList.ChangeHeadMessage("Para dar de alta un material debe:\n");
             controlList.Add(_frmAdd.txbIdMaterialType, "Seleccionar un tipo de material.");
             controlList.Add(_frmAdd.txbId, "Ingresar el código del material.");
-            controlList.Add(_frmAdd.txbName, "Ingresar un nombre para el almacén.");
+            controlList.Add(_frmAdd.txbName, "Ingresar un concepto para el material.");
             controlList.Add(_frmAdd.txbIdUnit, "Seleccionar una unidad.");
+            controlList.Add(_frmAdd.txbIdDistributor, "Seleccionar un distribuidor.");
         }
 
-        private void LoadComboBoxes()
+        private void LoadControlsEvents()
         {
             ClsComboBoxes.CboLoadAll(_frmAdd.cboMaterialType, MaterialType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboCategory, Category.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboUnit, Unit.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboColor, ClsObject.Color.Cbo);
+
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboMaterialType, _frmAdd.txbIdMaterialType);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboUnit, _frmAdd.txbIdUnit);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboColor, _frmAdd.txbIdColor);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCategory, _frmAdd.txbIdCategory);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
+
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbDistributorRemoved);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCategory, _frmAdd.chbCategoryRemoved);
         }
 
         public void OpenFrmAdd()
@@ -140,15 +168,15 @@ namespace SisUvex.Material.MaterialCatalog
             if (idModify.IsNullOrEmpty())
             {
                 SystemSounds.Exclamation.Play();
-                MessageBox.Show("No se ha seleccionado un almacén para modificar.", "Modificar almacén");
+                MessageBox.Show("No se ha seleccionado un material para modificar.", "Modificar material");
                 return;
             }
 
             idAddModify = idModify;
             _frmAdd = new FrmMaterialAdd();
             _frmAdd.cls = this;
-            _frmAdd.Text = "Modificar almacén";
-            _frmAdd.lblTitle.Text = "Modificar almacén";
+            _frmAdd.Text = "Modificar materil";
+            _frmAdd.lblTitle.Text = "Modificar material";
             _frmAdd.ShowDialog();
         }
         private void LoadControlsModify()
@@ -158,12 +186,14 @@ namespace SisUvex.Material.MaterialCatalog
 
             _frmAdd.txbId.Text = entityFrm.idMaterialCatalog;
             _frmAdd.txbName.Text = entityFrm.nameMaterialCatalog;
-            _frmAdd.txbIdMaterialType.Text = entityFrm.idMaterialType;
-            _frmAdd.txbIdUnit.Text = entityFrm.idUnit;
-            _frmAdd.txbIdColor.Text = entityFrm.idColor;
-            _frmAdd.txbIdCategory.Text = entityFrm.idCategory;
-            _frmAdd.txbIdDistributor.Text = entityFrm.idDistributor;
+            _frmAdd.txbQuant.Text = entityFrm.quantity.ToString();
             _frmAdd.cboActive.SelectedIndex = entityFrm.active;
+
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, entityFrm.idMaterialType);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboUnit, entityFrm.idUnit);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboColor, entityFrm.idColor);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCategory, entityFrm.idCategory);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, entityFrm.idDistributor);
         }
 
         private EMaterialCatalog SetMaterialCatalogEntity()
@@ -172,13 +202,17 @@ namespace SisUvex.Material.MaterialCatalog
             entityFrm.idMaterialCatalog = _frmAdd.txbId.Text;
             entityFrm.nameMaterialCatalog = _frmAdd.txbName.Text;
             entityFrm.idMaterialType = _frmAdd.txbIdMaterialType.Text;
-            entityFrm.quantity = Convert.ToInt32(_frmAdd.txbQuant.Text);
             entityFrm.idUnit = _frmAdd.txbIdUnit.Text;
             entityFrm.idColor = _frmAdd.txbIdColor.Text;
             entityFrm.idCategory = _frmAdd.txbIdCategory.Text;
             entityFrm.idDistributor = _frmAdd.txbIdDistributor.Text;
             entityFrm.idCategory = _frmAdd.txbIdCategory.Text;
             entityFrm.active = _frmAdd.cboActive.SelectedIndex;
+
+            if (_frmAdd.txbQuant.Text.IsNullOrEmpty())
+                entityFrm.quantity = 0;
+            else
+                entityFrm.quantity = Convert.ToInt32(_frmAdd.txbQuant.Text);
 
             return entityFrm;
         }
@@ -212,6 +246,8 @@ namespace SisUvex.Material.MaterialCatalog
                     _frmAdd.txbId.Text = idAddModify;
                     MessageBox.Show($"Se ha agregado el material con código: {idAddModify}", "Añadir material");
 
+                    UpdateAllImagesMaterial();
+
                     _frmAdd.Close();
                 }
                 else
@@ -227,6 +263,8 @@ namespace SisUvex.Material.MaterialCatalog
                 if (IsModifyUpdate)
                 {
                     MessageBox.Show($"Se ha modificado el material con el código: {idAddModify}", "Modificar material");
+
+                    UpdateAllImagesMaterial();
 
                     _frmAdd.Close();
                 }
@@ -273,6 +311,116 @@ namespace SisUvex.Material.MaterialCatalog
                 dgv.CopyActiveValuesToHiddenColumn();
                 dgv.SetFilterActivesOnly();
             }
+        }
+
+        private void InicializateImagesManagers()
+        {
+            frontImageManager = new SingleImageManager(imagesPathCatalogFolder);
+            backImageManager = new SingleImageManager(imagesPathCatalogFolder);
+            downImageManager = new SingleImageManager(imagesPathCatalogFolder);
+            upImageManager = new SingleImageManager(imagesPathCatalogFolder);
+        }
+
+        private void LoadAllImages(string idMaterial)
+        {
+            InicializateImagesManagers();
+
+            frontImageManager.LoadImage($"{idMaterial}_Front");
+            backImageManager.LoadImage($"{idMaterial}_Back");
+            upImageManager.LoadImage($"{idMaterial}_Up");
+            downImageManager.LoadImage($"{idMaterial}_Down");
+
+            ChbImagesClic(_frmAdd.chbImageFront);
+        }
+
+
+
+        public void BtnLoadNewImage()
+        {
+            if (_frmAdd.chbImageFront.Checked)
+            {
+                frontImageManager.LoadNewImageFromFile();
+                _frmAdd.pbxMaterial.Image = frontImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageBack.Checked)
+            {
+                backImageManager.LoadNewImageFromFile();
+                _frmAdd.pbxMaterial.Image = backImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageDown.Checked)
+            {
+                downImageManager.LoadNewImageFromFile();
+                _frmAdd.pbxMaterial.Image = downImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageUp.Checked)
+            {
+                upImageManager.LoadNewImageFromFile();
+                _frmAdd.pbxMaterial.Image = upImageManager.CurrentImage;
+            }
+        }
+
+        public void BtnResetAllImages()
+        {
+            if (!_frmAdd.txbId.Text.IsNullOrEmpty())
+                LoadAllImages(_frmAdd.txbId.Text);
+        }
+
+        public void ChbImagesClic(CheckBox chb)
+        {
+            _frmAdd.chbImageFront.Checked = false;
+            _frmAdd.chbImageBack.Checked = false;
+            _frmAdd.chbImageDown.Checked = false;
+            _frmAdd.chbImageUp.Checked = false;
+            chb.Checked = true;
+
+            if (chb == _frmAdd.chbImageFront)
+                _frmAdd.pbxMaterial.Image = frontImageManager.CurrentImage;
+            else if (chb == _frmAdd.chbImageBack)
+                _frmAdd.pbxMaterial.Image = backImageManager.CurrentImage;
+            else if (chb == _frmAdd.chbImageDown)
+                _frmAdd.pbxMaterial.Image = downImageManager.CurrentImage;
+            else if (chb == _frmAdd.chbImageUp)
+                _frmAdd.pbxMaterial.Image = upImageManager.CurrentImage;
+        }
+
+        public void BtnDeleteTemporalImage()
+        {
+            if (_frmAdd.chbImageFront.Checked)
+            {
+                frontImageManager.ClearNew();
+                _frmAdd.pbxMaterial.Image = frontImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageBack.Checked)
+            {
+                backImageManager.ClearNew();
+                _frmAdd.pbxMaterial.Image = backImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageDown.Checked)
+            {
+                downImageManager.ClearNew();
+                _frmAdd.pbxMaterial.Image = downImageManager.CurrentImage;
+            }
+            else if (_frmAdd.chbImageUp.Checked)
+            {
+                upImageManager.ClearNew();
+                _frmAdd.pbxMaterial.Image = upImageManager.CurrentImage;
+            }
+        }
+
+        private void UpdateAllImagesMaterial()
+        {
+            frontImageManager.SaveImage($"{idAddModify}_Front");
+            backImageManager.SaveImage($"{idAddModify}_Back");
+            downImageManager.SaveImage($"{idAddModify}_Down");
+            upImageManager.SaveImage($"{idAddModify}_Up");
+        }
+
+        public void Dispose() //PARA QUE FUNCIONE CON EL DISPOSE DEL FORM
+        {
+            frontImageManager?.Dispose();
+            backImageManager?.Dispose();
+            downImageManager?.Dispose();
+            upImageManager?.Dispose();
         }
     }
 }
