@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Catalogos.Metods.DataGridViews
 {
@@ -15,7 +16,17 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         //public string queryCatalog;
         public DataGridView dgvCatalog;
         public DataTable dtCatalog;
-        public Button btnRemoved;
+        //public Button btnRemoved;
+
+        public ClsDGVCatalog(DataGridView dgvCatalog, DataTable dtCatalog)
+        {
+            this.dtCatalog = dtCatalog;
+
+            this.dgvCatalog = dgvCatalog;
+            this.dgvCatalog.DataSource = dtCatalog;
+
+            LoadDGVCatalogWithActiveColumn2();
+        }
 
         public void LoadDGVCatalogWithActiveColumn2()
         {
