@@ -36,12 +36,7 @@ namespace SisUvex.Material.MaterialWarehouses
             _frmCat.cls ??= this;
 
             dtCatalog = ClsQuerysDB.GetDataTable(queryCatalogo);
-            dgv = new ClsDGVCatalog();
-            dgv.dtCatalog = dtCatalog;
-
-            _frmCat.dgvCatalog.DataSource = dtCatalog;
-            dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.LoadDGVCatalogWithActiveColumn2();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         }
         public void BeginFormAdd()
         {

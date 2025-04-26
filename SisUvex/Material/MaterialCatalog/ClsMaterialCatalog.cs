@@ -30,7 +30,7 @@ namespace SisUvex.Material.MaterialCatalog
         private string queryCatalog = $" SELECT vw.* FROM vw_PackMaterialCatalogCat AS [vw] ";
 
         ClsDGVCatalog dgv;
-        DataTable dtCatalog;
+        DataTable? dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
         private string? imagesPathCatalogFolder = "\\\\SVRCAMPOSANAN\\Inventum\\MATERIALES";
@@ -67,9 +67,9 @@ namespace SisUvex.Material.MaterialCatalog
                 parameters.Add("@idColor", _frmCat.cboColor.SelectedValue.ToString());
             }
 
-            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + where, parameters);
 
-            dgv.LoadDGVCatalogWithActiveColumn2();
+            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + where, parameters);
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         }
 
         public void BeginFormCat()
@@ -78,12 +78,7 @@ namespace SisUvex.Material.MaterialCatalog
             _frmCat.cls ??= this;
 
             dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog);
-            dgv = new ClsDGVCatalog();
-            dgv.dtCatalog = dtCatalog;
-
-            _frmCat.dgvCatalog.DataSource = dtCatalog;
-            dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.LoadDGVCatalogWithActiveColumn2();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, MaterialType.Cbo);
