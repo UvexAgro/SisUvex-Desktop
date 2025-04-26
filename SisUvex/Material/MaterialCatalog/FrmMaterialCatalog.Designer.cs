@@ -33,8 +33,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialCatalog));
             cboCategory = new ComboBox();
             label5 = new Label();
-            btnSearchManifest = new Button();
-            txbIdManifest = new TextBox();
+            btnSearchMaterial = new Button();
+            txbIdMaterial = new TextBox();
             label2 = new Label();
             btnRemove = new Button();
             btnRecover = new Button();
@@ -71,23 +71,25 @@
             label5.TabIndex = 371;
             label5.Text = "Categoría";
             // 
-            // btnSearchManifest
+            // btnSearchMaterial
             // 
-            btnSearchManifest.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnSearchManifest.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchManifest.Location = new Point(497, 99);
-            btnSearchManifest.Name = "btnSearchManifest";
-            btnSearchManifest.Size = new Size(23, 23);
-            btnSearchManifest.TabIndex = 365;
-            btnSearchManifest.UseVisualStyleBackColor = true;
+            btnSearchMaterial.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchMaterial.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchMaterial.Location = new Point(497, 99);
+            btnSearchMaterial.Name = "btnSearchMaterial";
+            btnSearchMaterial.Size = new Size(23, 23);
+            btnSearchMaterial.TabIndex = 365;
+            btnSearchMaterial.UseVisualStyleBackColor = true;
+            btnSearchMaterial.Click += btnSearchMaterial_Click;
             // 
-            // txbIdManifest
+            // txbIdMaterial
             // 
-            txbIdManifest.Location = new Point(417, 99);
-            txbIdManifest.MaxLength = 5;
-            txbIdManifest.Name = "txbIdManifest";
-            txbIdManifest.Size = new Size(74, 23);
-            txbIdManifest.TabIndex = 364;
+            txbIdMaterial.Location = new Point(417, 99);
+            txbIdMaterial.MaxLength = 6;
+            txbIdMaterial.Name = "txbIdMaterial";
+            txbIdMaterial.Size = new Size(74, 23);
+            txbIdMaterial.TabIndex = 364;
+            txbIdMaterial.KeyPress += txbIdMaterial_KeyPress;
             // 
             // label2
             // 
@@ -149,6 +151,7 @@
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 127);
+            dgvCatalog.MultiSelect = false;
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -170,7 +173,7 @@
             // 
             cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDistributor.FormattingEnabled = true;
-            cboDistributor.Location = new Point(12, 21);
+            cboDistributor.Location = new Point(12, 59);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
             cboDistributor.TabIndex = 361;
@@ -199,7 +202,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 6.75F);
-            label1.Location = new Point(12, 9);
+            label1.Location = new Point(12, 47);
             label1.Name = "label1";
             label1.Size = new Size(50, 12);
             label1.TabIndex = 366;
@@ -242,7 +245,7 @@
             // 
             cboMaterialType.DropDownStyle = ComboBoxStyle.DropDownList;
             cboMaterialType.FormattingEnabled = true;
-            cboMaterialType.Location = new Point(12, 59);
+            cboMaterialType.Location = new Point(12, 21);
             cboMaterialType.Name = "cboMaterialType";
             cboMaterialType.Size = new Size(203, 23);
             cboMaterialType.TabIndex = 388;
@@ -251,7 +254,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 6.75F);
-            label3.Location = new Point(12, 47);
+            label3.Location = new Point(12, 9);
             label3.Name = "label3";
             label3.Size = new Size(69, 12);
             label3.TabIndex = 389;
@@ -268,8 +271,8 @@
             Controls.Add(btnFilterMaterialCatalog);
             Controls.Add(cboCategory);
             Controls.Add(label5);
-            Controls.Add(btnSearchManifest);
-            Controls.Add(txbIdManifest);
+            Controls.Add(btnSearchMaterial);
+            Controls.Add(txbIdMaterial);
             Controls.Add(label2);
             Controls.Add(btnRemove);
             Controls.Add(btnRecover);
@@ -292,8 +295,8 @@
         #endregion
         public ComboBox cboCategory;
         private Label label5;
-        private Button btnSearchManifest;
-        private TextBox txbIdManifest;
+        private Button btnSearchMaterial;
+        private TextBox txbIdMaterial;
         private Label label2;
         private Button btnRemove;
         private Button btnRecover;

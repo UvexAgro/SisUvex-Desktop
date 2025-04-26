@@ -26,7 +26,6 @@ namespace SisUvex.Material.MaterialCatalog
         public FrmMaterialAdd _frmAdd;
         public FrmMaterialCatalog _frmCat;
         private EMaterialCatalog entityFrm;
-        //private string queryCatalog = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackMaterialCatalogCat AS [vw] ";
         private string queryCatalog = $" SELECT vw.* FROM vw_PackMaterialCatalogCat AS [vw] ";
 
         ClsDGVCatalog dgv;
@@ -35,42 +34,7 @@ namespace SisUvex.Material.MaterialCatalog
         public string? idAddModify;
         private string? imagesPathCatalogFolder = "\\\\SVRCAMPOSANAN\\Inventum\\MATERIALES";
 
-        private SingleImageManager frontImageManager, backImageManager, downImageManager, upImageManager;
-
-        public void BtnFilterDtCatalog()
-        {
-            string where = $" LEFT JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = vw.[{Column.id}] WHERE 1=1 ";
-
-            Dictionary<string, object> parameters = new();
-
-            if (_frmCat.cboDistributor.SelectedIndex > 0)
-            {
-                where += $" AND matC.id_distributor = @idDistributor ";
-                parameters.Add("@idDistributor", _frmCat.cboDistributor.SelectedValue.ToString());
-            }
-
-            if (_frmCat.cboMaterialType.SelectedIndex > 0)
-            {
-                where += $" AND matC.id_matType = @idMaterialType ";
-                parameters.Add("@idMaterialType", _frmCat.cboMaterialType.SelectedValue.ToString());
-            }
-
-            if (_frmCat.cboCategory.SelectedIndex > 0)
-            {
-                where += $" AND matC.id_category = @idCategory ";
-                parameters.Add("@idCategory", _frmCat.cboCategory.SelectedValue.ToString());
-            }
-
-            if (_frmCat.cboColor.SelectedIndex > 0)
-            {
-                where += $" AND matC.id_color = @idColor ";
-                parameters.Add("@idColor", _frmCat.cboColor.SelectedValue.ToString());
-            }
-
-
-            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + where, parameters);
-            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
-        }
+        private SingleImageManager? frontImageManager, backImageManager, downImageManager, upImageManager;
 
         public void BeginFormCat()
         {
@@ -416,6 +380,53 @@ namespace SisUvex.Material.MaterialCatalog
             backImageManager?.Dispose();
             downImageManager?.Dispose();
             upImageManager?.Dispose();
+        }
+
+        public void BtnFilterDtCatalog()
+        {
+            string where = $" LEFT JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = vw.[{Column.id}] WHERE 1=1 ";
+
+            Dictionary<string, object> parameters = new();
+
+            if (_frmCat.cboDistributor.SelectedIndex > 0)
+            {
+                where += $" AND matC.id_distributor = @idDistributor ";
+                parameters.Add("@idDistributor", _frmCat.cboDistributor.SelectedValue.ToString());
+            }
+
+            if (_frmCat.cboMaterialType.SelectedIndex > 0)
+            {
+                where += $" AND matC.id_matType = @idMaterialType ";
+                parameters.Add("@idMaterialType", _frmCat.cboMaterialType.SelectedValue.ToString());
+            }
+
+            if (_frmCat.cboCategory.SelectedIndex > 0)
+            {
+                where += $" AND matC.id_category = @idCategory ";
+                parameters.Add("@idCategory", _frmCat.cboCategory.SelectedValue.ToString());
+            }
+
+            if (_frmCat.cboColor.SelectedIndex > 0)
+            {
+                where += $" AND matC.id_color = @idColor ";
+                parameters.Add("@idColor", _frmCat.cboColor.SelectedValue.ToString());
+            }
+
+
+            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + where, parameters);
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+        }
+
+        public void BtnSearchMaterialWithId(string idMaterial)
+        {
+            Dictionary<string, object> parameters = new();
+            parameters.Add("@idMaterial", idMaterial);
+
+            string w = $" WHERE vw.[{Column.id}] = @idMaterial ";
+
+            Clipboard.SetText(queryCatalog + w);
+            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + w, parameters);
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         }
     }
 }
