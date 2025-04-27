@@ -25,7 +25,8 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             this.dgvCatalog = dgvCatalog;
             this.dgvCatalog.DataSource = dtCatalog;
 
-            LoadDGVCatalogWithActiveColumn2();
+            if (dtCatalog.Columns.Contains(activeColumn))
+                LoadDGVCatalogWithActiveColumn2();
         }
 
         public void LoadDGVCatalogWithActiveColumn2()

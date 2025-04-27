@@ -45,7 +45,7 @@ namespace SisUvex.Material.MaterialCatalog
             dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
-            ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, MaterialType.Cbo);
+            ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, ClsObject.MaterialType.Cbo);
             ClsComboBoxes.CboLoadAll(_frmCat.cboColor, ClsObject.Color.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboCategory, Category.Cbo);
         }
@@ -93,7 +93,7 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void LoadControlsEvents()
         {
-            ClsComboBoxes.CboLoadAll(_frmAdd.cboMaterialType, MaterialType.Cbo);
+            ClsComboBoxes.CboLoadAll(_frmAdd.cboMaterialType, ClsObject.MaterialType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboCategory, Category.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboUnit, Unit.Cbo);

@@ -57,6 +57,8 @@ using SisUvex.Nomina.Padron.SUA;
 using SisUvex.Packing.Maintenance;
 using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialWarehouses;
+using SisUvex.Material.MaterialType;
+using SisUvex.Material.MaterialCatalog;
 
 namespace SisUvex
 {
@@ -530,6 +532,18 @@ namespace SisUvex
         private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialWareHousesCat cat = new FrmMaterialWareHousesCat();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void tipoDeMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialTypeCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialCatalog cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }
