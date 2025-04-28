@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialWarehousesAdd));
-            cboMarket = new ComboBox();
+            cboActive = new ComboBox();
             txbId = new TextBox();
             txbName = new TextBox();
             lblObliName = new Label();
@@ -39,22 +39,27 @@
             lblName = new Label();
             lblId = new Label();
             lblTitle = new Label();
-            textBox1 = new TextBox();
-            label1 = new Label();
+            txbEmployeeName = new TextBox();
             label3 = new Label();
-            btnBuscarCodigo = new Button();
+            btnSearchEmployee = new Button();
+            txbIdEmployee = new TextBox();
+            btnAccept = new Button();
+            btnCancel = new Button();
+            label4 = new Label();
+            label5 = new Label();
+            btnLoadEmployee = new Button();
             SuspendLayout();
             // 
-            // cboMarket
+            // cboActive
             // 
-            cboMarket.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMarket.Font = new Font("Segoe UI", 12F);
-            cboMarket.FormattingEnabled = true;
-            cboMarket.Items.AddRange(new object[] { "E", "N" });
-            cboMarket.Location = new Point(240, 44);
-            cboMarket.Name = "cboMarket";
-            cboMarket.Size = new Size(43, 29);
-            cboMarket.TabIndex = 98;
+            cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboActive.Font = new Font("Segoe UI", 12F);
+            cboActive.FormattingEnabled = true;
+            cboActive.Items.AddRange(new object[] { "No", "Sí" });
+            cboActive.Location = new Point(226, 43);
+            cboActive.Name = "cboActive";
+            cboActive.Size = new Size(54, 29);
+            cboActive.TabIndex = 98;
             // 
             // txbId
             // 
@@ -62,7 +67,7 @@
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(88, 43);
             txbId.Name = "txbId";
-            txbId.Size = new Size(84, 29);
+            txbId.Size = new Size(70, 29);
             txbId.TabIndex = 97;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
@@ -101,7 +106,7 @@
             // 
             lblMarket.AutoSize = true;
             lblMarket.Font = new Font("Segoe UI", 12F);
-            lblMarket.Location = new Point(178, 47);
+            lblMarket.Location = new Point(164, 46);
             lblMarket.Name = "lblMarket";
             lblMarket.Size = new Size(56, 21);
             lblMarket.TabIndex = 102;
@@ -111,7 +116,7 @@
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.Crimson;
-            label2.Location = new Point(231, 45);
+            label2.Location = new Point(217, 44);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
             label2.Size = new Size(12, 15);
@@ -148,25 +153,15 @@
             lblTitle.TabIndex = 106;
             lblTitle.Text = "Añadir almacén";
             // 
-            // textBox1
+            // txbEmployeeName
             // 
-            textBox1.Font = new Font("Segoe UI", 12F);
-            textBox1.Location = new Point(119, 142);
-            textBox1.MaxLength = 50;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(375, 29);
-            textBox1.TabIndex = 107;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.Crimson;
-            label1.Location = new Point(108, 145);
-            label1.Margin = new Padding(0);
-            label1.Name = "label1";
-            label1.Size = new Size(12, 15);
-            label1.TabIndex = 109;
-            label1.Text = "*";
+            txbEmployeeName.Enabled = false;
+            txbEmployeeName.Font = new Font("Segoe UI", 12F);
+            txbEmployeeName.Location = new Point(151, 204);
+            txbEmployeeName.MaxLength = 50;
+            txbEmployeeName.Name = "txbEmployeeName";
+            txbEmployeeName.Size = new Size(374, 29);
+            txbEmployeeName.TabIndex = 107;
             // 
             // label3
             // 
@@ -178,27 +173,101 @@
             label3.TabIndex = 108;
             label3.Text = "Responsable:";
             // 
-            // btnBuscarCodigo
+            // btnSearchEmployee
             // 
-            btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
-            btnBuscarCodigo.Image = Properties.Resources.BuscarLupa1;
-            btnBuscarCodigo.Location = new Point(497, 141);
-            btnBuscarCodigo.Name = "btnBuscarCodigo";
-            btnBuscarCodigo.Size = new Size(31, 31);
-            btnBuscarCodigo.TabIndex = 110;
-            btnBuscarCodigo.UseVisualStyleBackColor = true;
+            btnSearchEmployee.Font = new Font("Segoe UI", 14F);
+            btnSearchEmployee.Image = Properties.Resources.BuscarLupa1;
+            btnSearchEmployee.Location = new Point(290, 168);
+            btnSearchEmployee.Margin = new Padding(0);
+            btnSearchEmployee.Name = "btnSearchEmployee";
+            btnSearchEmployee.Size = new Size(32, 32);
+            btnSearchEmployee.TabIndex = 110;
+            btnSearchEmployee.UseVisualStyleBackColor = true;
+            btnSearchEmployee.Click += btnSearchEmployee_Click;
             // 
-            // FrmWarehousesAdd
+            // txbIdEmployee
+            // 
+            txbIdEmployee.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdEmployee.Location = new Point(172, 169);
+            txbIdEmployee.Margin = new Padding(3, 3, 0, 3);
+            txbIdEmployee.MaxLength = 6;
+            txbIdEmployee.Name = "txbIdEmployee";
+            txbIdEmployee.Size = new Size(87, 29);
+            txbIdEmployee.TabIndex = 111;
+            txbIdEmployee.TextChanged += txbIdEmployee_TextChanged;
+            txbIdEmployee.KeyPress += txbIdEmployee_KeyPress;
+            // 
+            // btnAccept
+            // 
+            btnAccept.Location = new Point(372, 239);
+            btnAccept.Name = "btnAccept";
+            btnAccept.Size = new Size(75, 29);
+            btnAccept.TabIndex = 112;
+            btnAccept.Text = "Aceptar";
+            btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(453, 239);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 29);
+            btnCancel.TabIndex = 113;
+            btnCancel.Text = "Cancelar";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 12F);
+            label4.Location = new Point(12, 172);
+            label4.Margin = new Padding(3, 0, 0, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(157, 21);
+            label4.TabIndex = 114;
+            label4.Text = "Código de empleado:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F);
+            label5.Location = new Point(12, 207);
+            label5.Margin = new Padding(3, 0, 0, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(136, 21);
+            label5.TabIndex = 115;
+            label5.Text = "Nombre empledo:";
+            // 
+            // btnLoadEmployee
+            // 
+            btnLoadEmployee.BackgroundImage = Properties.Resources.guardarIcon32;
+            btnLoadEmployee.BackgroundImageLayout = ImageLayout.Stretch;
+            btnLoadEmployee.Font = new Font("Segoe UI", 14F);
+            btnLoadEmployee.Location = new Point(259, 168);
+            btnLoadEmployee.Margin = new Padding(0);
+            btnLoadEmployee.Name = "btnLoadEmployee";
+            btnLoadEmployee.Size = new Size(32, 32);
+            btnLoadEmployee.TabIndex = 116;
+            btnLoadEmployee.UseVisualStyleBackColor = true;
+            btnLoadEmployee.Click += btnLoadEmployee_Click;
+            // 
+            // FrmMaterialWarehousesAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(540, 185);
-            Controls.Add(btnBuscarCodigo);
-            Controls.Add(textBox1);
-            Controls.Add(label1);
+            ClientSize = new Size(540, 279);
+            Controls.Add(btnLoadEmployee);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(btnAccept);
+            Controls.Add(btnCancel);
+            Controls.Add(txbIdEmployee);
+            Controls.Add(btnSearchEmployee);
+            Controls.Add(txbEmployeeName);
             Controls.Add(label3);
             Controls.Add(lblTitle);
-            Controls.Add(cboMarket);
+            Controls.Add(cboActive);
             Controls.Add(txbId);
             Controls.Add(txbName);
             Controls.Add(lblObliName);
@@ -211,15 +280,16 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "FrmWarehousesAdd";
+            Name = "FrmMaterialWarehousesAdd";
             Text = "Añadir almacén";
+            Load += FrmMaterialWarehousesAdd_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        public ComboBox cboMarket;
+        public ComboBox cboActive;
         public TextBox txbId;
         public TextBox txbName;
         private Label lblObliName;
@@ -229,9 +299,14 @@
         private Label lblName;
         private Label lblId;
         public Label lblTitle;
-        public TextBox textBox1;
-        private Label label1;
+        public TextBox txbEmployeeName;
         private Label label3;
-        private Button btnBuscarCodigo;
+        private Button btnSearchEmployee;
+        public TextBox txbIdEmployee;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label label4;
+        private Label label5;
+        private Button btnLoadEmployee;
     }
 }

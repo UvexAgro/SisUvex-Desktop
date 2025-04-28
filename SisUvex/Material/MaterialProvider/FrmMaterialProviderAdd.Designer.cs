@@ -65,7 +65,7 @@
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(88, 43);
             txbId.Name = "txbId";
-            txbId.Size = new Size(84, 29);
+            txbId.Size = new Size(43, 29);
             txbId.TabIndex = 111;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
@@ -104,17 +104,18 @@
             // 
             lblMarket.AutoSize = true;
             lblMarket.Font = new Font("Segoe UI", 12F);
-            lblMarket.Location = new Point(178, 47);
+            lblMarket.Location = new Point(137, 46);
             lblMarket.Name = "lblMarket";
             lblMarket.Size = new Size(56, 21);
             lblMarket.TabIndex = 116;
             lblMarket.Text = "Activo:";
+            lblMarket.TextAlign = ContentAlignment.TopRight;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.Crimson;
-            label2.Location = new Point(231, 45);
+            label2.Location = new Point(190, 44);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
             label2.Size = new Size(12, 15);
@@ -130,6 +131,7 @@
             lblName.Size = new Size(71, 21);
             lblName.TabIndex = 114;
             lblName.Text = "Nombre:";
+            lblName.TextAlign = ContentAlignment.TopRight;
             // 
             // lblId
             // 
@@ -140,6 +142,7 @@
             lblId.Size = new Size(26, 21);
             lblId.TabIndex = 115;
             lblId.Text = "Id:";
+            lblId.TextAlign = ContentAlignment.TopRight;
             // 
             // txbCity
             // 
@@ -154,11 +157,12 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(12, 116);
+            label3.Location = new Point(21, 116);
             label3.Name = "label3";
             label3.Size = new Size(62, 21);
             label3.TabIndex = 122;
             label3.Text = "Ciudad:";
+            label3.TextAlign = ContentAlignment.TopRight;
             // 
             // txbPhoneNumber
             // 
@@ -178,6 +182,7 @@
             label5.Size = new Size(71, 21);
             label5.TabIndex = 125;
             label5.Text = "Telefono:";
+            label5.TextAlign = ContentAlignment.TopRight;
             // 
             // txbEmail
             // 
@@ -192,11 +197,12 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12F);
-            label8.Location = new Point(12, 186);
+            label8.Location = new Point(22, 186);
             label8.Name = "label8";
             label8.Size = new Size(61, 21);
             label8.TabIndex = 128;
             label8.Text = "Correo:";
+            label8.TextAlign = ContentAlignment.TopRight;
             // 
             // cboActive
             // 
@@ -204,7 +210,7 @@
             cboActive.Font = new Font("Segoe UI", 12F);
             cboActive.FormattingEnabled = true;
             cboActive.Items.AddRange(new object[] { "No", "Sí" });
-            cboActive.Location = new Point(240, 43);
+            cboActive.Location = new Point(199, 43);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
             cboActive.TabIndex = 129;

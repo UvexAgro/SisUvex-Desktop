@@ -220,6 +220,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Unit.Cbo:
                     queryDataTable = ClsObject.Unit.QueryCbo;
                     break;
+                case ClsObject.MaterialType.Cbo:
+                    queryDataTable = ClsObject.MaterialType.QueryCbo;
+                    break;
+                case ClsObject.MaterialProvider.Cbo:
+                    queryDataTable = ClsObject.MaterialProvider.QueryCbo;
+                    break;
+                case ClsObject.MaterialWarehouse.Cbo:
+                    queryDataTable = ClsObject.MaterialWarehouse.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -342,6 +351,12 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.ManifestTemplate.TableName;
                 case ClsObject.Unit.Cbo:
                     return ClsObject.Unit.TableName;
+                case ClsObject.MaterialType.Cbo:
+                    return ClsObject.MaterialType.TableName;
+                case ClsObject.MaterialProvider.Cbo:
+                    return ClsObject.MaterialProvider.TableName;
+                case ClsObject.MaterialWarehouse.Cbo:
+                    return ClsObject.MaterialWarehouse.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

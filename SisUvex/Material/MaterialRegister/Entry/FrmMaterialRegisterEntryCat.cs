@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SisUvex.Material.Warehouses
+namespace SisUvex.Material.MaterialRegister.Entry
 {
-    public partial class FrmWarehousesCat : Form
+    public partial class FrmMaterialRegisterEntryCat : Form
     {
-        public FrmWarehousesCat()
+        public FrmMaterialRegisterEntryCat()
         {
             InitializeComponent();
         }

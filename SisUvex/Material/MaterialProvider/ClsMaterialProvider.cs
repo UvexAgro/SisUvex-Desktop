@@ -42,12 +42,7 @@ namespace SisUvex.Material.MaterialProvider
             _frmCat.cls ??= this;
 
             dtCatalog = ClsQuerysDB.GetDataTable(queryCatalogo);
-            dgv = new ClsDGVCatalog();
-            dgv.dtCatalog = dtCatalog;
-
-            _frmCat.dgvCatalog.DataSource = dtCatalog;
-            dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.LoadDGVCatalogWithActiveColumn2();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         }
 
         public void BeginFormAdd()
@@ -59,7 +54,7 @@ namespace SisUvex.Material.MaterialProvider
             if (IsAddOrModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
+                _frmAdd.txbId.Text = EMaterialProvider.GetNextId();
             }
             else
             {
@@ -87,17 +82,18 @@ namespace SisUvex.Material.MaterialProvider
             _frmAdd.ShowDialog();
         }
 
-        public void OpenFrmModify()
+        public void OpenFrmModify(string? idModify)
         {
             IsAddOrModify = false;
 
-            if (idAddModify.IsNullOrEmpty())
+            if (idModify.IsNullOrEmpty())
             {
                 SystemSounds.Exclamation.Play();
                 MessageBox.Show("No se ha seleccionado un proveedor para modificar.", "Modificar proveedor");
                 return;
             }
 
+            idAddModify = idModify;
             _frmAdd = new FrmMaterialProviderAdd();
             _frmAdd.cls = this;
             _frmAdd.Text = "Modificar proveedor";

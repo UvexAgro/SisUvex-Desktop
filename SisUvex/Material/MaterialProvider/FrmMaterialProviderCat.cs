@@ -80,9 +80,7 @@ namespace SisUvex.Material.MaterialProvider
                 return;
             }
 
-            cls.idAddModify = dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString();
-
-            cls.OpenFrmModify();
+            cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString());
 
             if (cls.IsModifyUpdate)
             {

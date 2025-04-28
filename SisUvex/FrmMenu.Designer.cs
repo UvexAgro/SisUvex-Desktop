@@ -123,13 +123,15 @@
             totalDeCajasEmbarcadasToolStripMenuItem = new ToolStripMenuItem();
             operaciónToolStripMenuItem = new ToolStripMenuItem();
             cajasAGranelToolStripMenuItem = new ToolStripMenuItem();
+            materialesToolStripMenuItem = new ToolStripMenuItem();
+            almacénToolStripMenuItem = new ToolStripMenuItem();
+            proovedoresToolStripMenuItem = new ToolStripMenuItem();
+            tipoDeMaterialToolStripMenuItem1 = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            materialesToolStripMenuItem = new ToolStripMenuItem();
-            almacénToolStripMenuItem = new ToolStripMenuItem();
-            proovedoresToolStripMenuItem = new ToolStripMenuItem();
+            catálogoMaterialToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -302,119 +304,119 @@
             // variedadesToolStripMenuItem
             // 
             variedadesToolStripMenuItem.Name = "variedadesToolStripMenuItem";
-            variedadesToolStripMenuItem.Size = new Size(175, 22);
+            variedadesToolStripMenuItem.Size = new Size(180, 22);
             variedadesToolStripMenuItem.Text = "Variedades";
             variedadesToolStripMenuItem.Click += variedadesToolStripMenuItem_Click;
             // 
             // lotesToolStripMenuItem
             // 
             lotesToolStripMenuItem.Name = "lotesToolStripMenuItem";
-            lotesToolStripMenuItem.Size = new Size(175, 22);
+            lotesToolStripMenuItem.Size = new Size(180, 22);
             lotesToolStripMenuItem.Text = "Lotes";
             lotesToolStripMenuItem.Click += lotesToolStripMenuItem_Click;
             // 
             // productorToolStripMenuItem
             // 
             productorToolStripMenuItem.Name = "productorToolStripMenuItem";
-            productorToolStripMenuItem.Size = new Size(175, 22);
+            productorToolStripMenuItem.Size = new Size(180, 22);
             productorToolStripMenuItem.Text = "Productor";
             productorToolStripMenuItem.Click += productorToolStripMenuItem_Click;
             // 
             // distribuidorToolStripMenuItem
             // 
             distribuidorToolStripMenuItem.Name = "distribuidorToolStripMenuItem";
-            distribuidorToolStripMenuItem.Size = new Size(175, 22);
+            distribuidorToolStripMenuItem.Size = new Size(180, 22);
             distribuidorToolStripMenuItem.Text = "Distribuidor";
             distribuidorToolStripMenuItem.Click += distribuidorToolStripMenuItem_Click;
             // 
             // consigToolStripMenuItem
             // 
             consigToolStripMenuItem.Name = "consigToolStripMenuItem";
-            consigToolStripMenuItem.Size = new Size(175, 22);
+            consigToolStripMenuItem.Size = new Size(180, 22);
             consigToolStripMenuItem.Text = "Consignatario";
             consigToolStripMenuItem.Click += consigToolStripMenuItem_Click;
             // 
             // contratistaToolStripMenuItem
             // 
             contratistaToolStripMenuItem.Name = "contratistaToolStripMenuItem";
-            contratistaToolStripMenuItem.Size = new Size(175, 22);
+            contratistaToolStripMenuItem.Size = new Size(180, 22);
             contratistaToolStripMenuItem.Text = "Contratista";
             contratistaToolStripMenuItem.Click += contratistaToolStripMenuItem_Click;
             // 
             // cuadrillaToolStripMenuItem
             // 
             cuadrillaToolStripMenuItem.Name = "cuadrillaToolStripMenuItem";
-            cuadrillaToolStripMenuItem.Size = new Size(175, 22);
+            cuadrillaToolStripMenuItem.Size = new Size(180, 22);
             cuadrillaToolStripMenuItem.Text = "Cuadrilla";
             cuadrillaToolStripMenuItem.Click += cuadrillaToolStripMenuItem_Click;
             // 
             // categoríaToolStripMenuItem
             // 
             categoríaToolStripMenuItem.Name = "categoríaToolStripMenuItem";
-            categoríaToolStripMenuItem.Size = new Size(175, 22);
+            categoríaToolStripMenuItem.Size = new Size(180, 22);
             categoríaToolStripMenuItem.Text = "Categoría";
             categoríaToolStripMenuItem.Click += categoríaToolStripMenuItem_Click;
             // 
             // presentaciónToolStripMenuItem
             // 
             presentaciónToolStripMenuItem.Name = "presentaciónToolStripMenuItem";
-            presentaciónToolStripMenuItem.Size = new Size(175, 22);
+            presentaciónToolStripMenuItem.Size = new Size(180, 22);
             presentaciónToolStripMenuItem.Text = "Presentación";
             presentaciónToolStripMenuItem.Click += presentaciónToolStripMenuItem_Click;
             // 
             // contenedorToolStripMenuItem
             // 
             contenedorToolStripMenuItem.Name = "contenedorToolStripMenuItem";
-            contenedorToolStripMenuItem.Size = new Size(175, 22);
+            contenedorToolStripMenuItem.Size = new Size(180, 22);
             contenedorToolStripMenuItem.Text = "Contenedor";
             contenedorToolStripMenuItem.Click += contenedorToolStripMenuItem_Click;
             // 
             // tamañoToolStripMenuItem
             // 
             tamañoToolStripMenuItem.Name = "tamañoToolStripMenuItem";
-            tamañoToolStripMenuItem.Size = new Size(175, 22);
+            tamañoToolStripMenuItem.Size = new Size(180, 22);
             tamañoToolStripMenuItem.Text = "Tamaño";
             tamañoToolStripMenuItem.Click += tamañoToolStripMenuItem_Click;
             // 
             // gTINUPCToolStripMenuItem
             // 
             gTINUPCToolStripMenuItem.Name = "gTINUPCToolStripMenuItem";
-            gTINUPCToolStripMenuItem.Size = new Size(175, 22);
+            gTINUPCToolStripMenuItem.Size = new Size(180, 22);
             gTINUPCToolStripMenuItem.Text = "GTIN - UPC";
             gTINUPCToolStripMenuItem.Click += gTINUPCToolStripMenuItem_Click;
             // 
             // líneaDeTransporteToolStripMenuItem
             // 
             líneaDeTransporteToolStripMenuItem.Name = "líneaDeTransporteToolStripMenuItem";
-            líneaDeTransporteToolStripMenuItem.Size = new Size(175, 22);
+            líneaDeTransporteToolStripMenuItem.Size = new Size(180, 22);
             líneaDeTransporteToolStripMenuItem.Text = "Línea de transporte";
             líneaDeTransporteToolStripMenuItem.Click += líneaDeTransporteToolStripMenuItem_Click;
             // 
             // choferToolStripMenuItem
             // 
             choferToolStripMenuItem.Name = "choferToolStripMenuItem";
-            choferToolStripMenuItem.Size = new Size(175, 22);
+            choferToolStripMenuItem.Size = new Size(180, 22);
             choferToolStripMenuItem.Text = "Chofer";
             choferToolStripMenuItem.Click += choferToolStripMenuItem_Click;
             // 
             // cajaToolStripMenuItem
             // 
             cajaToolStripMenuItem.Name = "cajaToolStripMenuItem";
-            cajaToolStripMenuItem.Size = new Size(175, 22);
+            cajaToolStripMenuItem.Size = new Size(180, 22);
             cajaToolStripMenuItem.Text = "Caja";
             cajaToolStripMenuItem.Click += cajaToolStripMenuItem_Click;
             // 
             // troqueToolStripMenuItem
             // 
             troqueToolStripMenuItem.Name = "troqueToolStripMenuItem";
-            troqueToolStripMenuItem.Size = new Size(175, 22);
+            troqueToolStripMenuItem.Size = new Size(180, 22);
             troqueToolStripMenuItem.Text = "Troque";
             troqueToolStripMenuItem.Click += troqueToolStripMenuItem_Click;
             // 
             // agenciaAduanalToolStripMenuItem
             // 
             agenciaAduanalToolStripMenuItem.Name = "agenciaAduanalToolStripMenuItem";
-            agenciaAduanalToolStripMenuItem.Size = new Size(175, 22);
+            agenciaAduanalToolStripMenuItem.Size = new Size(180, 22);
             agenciaAduanalToolStripMenuItem.Text = "Agencia Aduanal";
             agenciaAduanalToolStripMenuItem.Click += agenciaAduanalToolStripMenuItem_Click;
             // 
@@ -422,27 +424,27 @@
             // 
             actividadToolStripMenuItem.Enabled = false;
             actividadToolStripMenuItem.Name = "actividadToolStripMenuItem";
-            actividadToolStripMenuItem.Size = new Size(175, 22);
+            actividadToolStripMenuItem.Size = new Size(180, 22);
             actividadToolStripMenuItem.Text = "Actividad";
             // 
             // ciudadToolStripMenuItem
             // 
             ciudadToolStripMenuItem.Name = "ciudadToolStripMenuItem";
-            ciudadToolStripMenuItem.Size = new Size(175, 22);
+            ciudadToolStripMenuItem.Size = new Size(180, 22);
             ciudadToolStripMenuItem.Text = "Ciudad";
             ciudadToolStripMenuItem.Click += ciudadToolStripMenuItem_Click;
             // 
             // tipoDeMaterialToolStripMenuItem
             // 
             tipoDeMaterialToolStripMenuItem.Name = "tipoDeMaterialToolStripMenuItem";
-            tipoDeMaterialToolStripMenuItem.Size = new Size(175, 22);
+            tipoDeMaterialToolStripMenuItem.Size = new Size(180, 22);
             tipoDeMaterialToolStripMenuItem.Text = "Tipo de material";
             tipoDeMaterialToolStripMenuItem.Click += tipoDeMaterialToolStripMenuItem_Click;
             // 
             // materialToolStripMenuItem
             // 
             materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-            materialToolStripMenuItem.Size = new Size(175, 22);
+            materialToolStripMenuItem.Size = new Size(180, 22);
             materialToolStripMenuItem.Text = "Material";
             materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
             // 
@@ -736,7 +738,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -744,7 +746,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -775,6 +777,34 @@
             cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
             cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
             // 
+            // materialesToolStripMenuItem
+            // 
+            materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { almacénToolStripMenuItem, proovedoresToolStripMenuItem, tipoDeMaterialToolStripMenuItem1, catálogoMaterialToolStripMenuItem });
+            materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
+            materialesToolStripMenuItem.Size = new Size(180, 22);
+            materialesToolStripMenuItem.Text = "Material";
+            // 
+            // almacénToolStripMenuItem
+            // 
+            almacénToolStripMenuItem.Name = "almacénToolStripMenuItem";
+            almacénToolStripMenuItem.Size = new Size(180, 22);
+            almacénToolStripMenuItem.Text = "Almacenes";
+            almacénToolStripMenuItem.Click += almacénToolStripMenuItem_Click;
+            // 
+            // proovedoresToolStripMenuItem
+            // 
+            proovedoresToolStripMenuItem.Name = "proovedoresToolStripMenuItem";
+            proovedoresToolStripMenuItem.Size = new Size(180, 22);
+            proovedoresToolStripMenuItem.Text = "Proovedores";
+            proovedoresToolStripMenuItem.Click += proovedoresToolStripMenuItem_Click;
+            // 
+            // tipoDeMaterialToolStripMenuItem1
+            // 
+            tipoDeMaterialToolStripMenuItem1.Name = "tipoDeMaterialToolStripMenuItem1";
+            tipoDeMaterialToolStripMenuItem1.Size = new Size(180, 22);
+            tipoDeMaterialToolStripMenuItem1.Text = "Tipo de material";
+            tipoDeMaterialToolStripMenuItem1.Click += tipoDeMaterialToolStripMenuItem1_Click;
+            // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(40, 40);
@@ -802,25 +832,12 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // materialesToolStripMenuItem
+            // catálogoMaterialToolStripMenuItem
             // 
-            materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { almacénToolStripMenuItem, proovedoresToolStripMenuItem });
-            materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
-            materialesToolStripMenuItem.Size = new Size(180, 22);
-            materialesToolStripMenuItem.Text = "Materiales";
-            // 
-            // almacénToolStripMenuItem
-            // 
-            almacénToolStripMenuItem.Name = "almacénToolStripMenuItem";
-            almacénToolStripMenuItem.Size = new Size(180, 22);
-            almacénToolStripMenuItem.Text = "Almacenes";
-            // 
-            // proovedoresToolStripMenuItem
-            // 
-            proovedoresToolStripMenuItem.Name = "proovedoresToolStripMenuItem";
-            proovedoresToolStripMenuItem.Size = new Size(180, 22);
-            proovedoresToolStripMenuItem.Text = "Proovedores";
-            proovedoresToolStripMenuItem.Click += proovedoresToolStripMenuItem_Click;
+            catálogoMaterialToolStripMenuItem.Name = "catálogoMaterialToolStripMenuItem";
+            catálogoMaterialToolStripMenuItem.Size = new Size(180, 22);
+            catálogoMaterialToolStripMenuItem.Text = "Catálogo material";
+            catálogoMaterialToolStripMenuItem.Click += catálogoMaterialToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
@@ -949,5 +966,7 @@
         private ToolStripMenuItem materialesToolStripMenuItem;
         private ToolStripMenuItem almacénToolStripMenuItem;
         private ToolStripMenuItem proovedoresToolStripMenuItem;
+        private ToolStripMenuItem tipoDeMaterialToolStripMenuItem1;
+        private ToolStripMenuItem catálogoMaterialToolStripMenuItem;
     }
 }

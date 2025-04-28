@@ -28,63 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialCatalog));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            btnTemplates = new Button();
-            btnConfigManifest = new Button();
-            cboGrower = new ComboBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialCatalog));
+            cboCategory = new ComboBox();
             label5 = new Label();
-            btnSearchManifest = new Button();
-            txbIdManifest = new TextBox();
-            btnPrint = new Button();
-            btnRemoved = new Button();
+            btnSearchMaterial = new Button();
+            txbIdMaterial = new TextBox();
             label2 = new Label();
             btnRemove = new Button();
             btnRecover = new Button();
-            cboConsignee = new ComboBox();
+            cboColor = new ComboBox();
             dgvCatalog = new DataGridView();
             cboDistributor = new ComboBox();
             btnModify = new Button();
             btnAdd = new Button();
             label1 = new Label();
             label6 = new Label();
-            button1 = new Button();
+            btnFilterMaterialCatalog = new Button();
+            chbRemoved = new CheckBox();
+            cboMaterialType = new ComboBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
-            // btnTemplates
+            // cboCategory
             // 
-            btnTemplates.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTemplates.Image = Properties.Resources.templateIcon16;
-            btnTemplates.ImageAlign = ContentAlignment.BottomCenter;
-            btnTemplates.Location = new Point(528, 98);
-            btnTemplates.Name = "btnTemplates";
-            btnTemplates.Size = new Size(24, 23);
-            btnTemplates.TabIndex = 385;
-            btnTemplates.TextAlign = ContentAlignment.TopRight;
-            btnTemplates.UseVisualStyleBackColor = true;
-            // 
-            // btnConfigManifest
-            // 
-            btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
-            btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
-            btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(498, 98);
-            btnConfigManifest.Name = "btnConfigManifest";
-            btnConfigManifest.Size = new Size(24, 23);
-            btnConfigManifest.TabIndex = 384;
-            btnConfigManifest.TextAlign = ContentAlignment.TopRight;
-            btnConfigManifest.UseVisualStyleBackColor = true;
-            // 
-            // cboGrower
-            // 
-            cboGrower.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboGrower.FormattingEnabled = true;
-            cboGrower.Location = new Point(221, 21);
-            cboGrower.Name = "cboGrower";
-            cboGrower.Size = new Size(203, 23);
-            cboGrower.TabIndex = 362;
+            cboCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboCategory.FormattingEnabled = true;
+            cboCategory.Location = new Point(221, 21);
+            cboCategory.Name = "cboCategory";
+            cboCategory.Size = new Size(203, 23);
+            cboCategory.TabIndex = 362;
             // 
             // label5
             // 
@@ -96,41 +71,25 @@
             label5.TabIndex = 371;
             label5.Text = "Categoría";
             // 
-            // btnSearchManifest
+            // btnSearchMaterial
             // 
-            btnSearchManifest.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnSearchManifest.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchManifest.Location = new Point(221, 60);
-            btnSearchManifest.Name = "btnSearchManifest";
-            btnSearchManifest.Size = new Size(23, 23);
-            btnSearchManifest.TabIndex = 365;
-            btnSearchManifest.UseVisualStyleBackColor = true;
+            btnSearchMaterial.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchMaterial.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchMaterial.Location = new Point(497, 99);
+            btnSearchMaterial.Name = "btnSearchMaterial";
+            btnSearchMaterial.Size = new Size(23, 23);
+            btnSearchMaterial.TabIndex = 365;
+            btnSearchMaterial.UseVisualStyleBackColor = true;
+            btnSearchMaterial.Click += btnSearchMaterial_Click;
             // 
-            // txbIdManifest
+            // txbIdMaterial
             // 
-            txbIdManifest.Location = new Point(12, 60);
-            txbIdManifest.MaxLength = 5;
-            txbIdManifest.Name = "txbIdManifest";
-            txbIdManifest.Size = new Size(203, 23);
-            txbIdManifest.TabIndex = 364;
-            // 
-            // btnPrint
-            // 
-            btnPrint.Location = new Point(417, 98);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 377;
-            btnPrint.Text = "Imprimir";
-            btnPrint.UseVisualStyleBackColor = true;
-            // 
-            // btnRemoved
-            // 
-            btnRemoved.Location = new Point(174, 98);
-            btnRemoved.Name = "btnRemoved";
-            btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 374;
-            btnRemoved.Text = "Eliminados";
-            btnRemoved.UseVisualStyleBackColor = true;
+            txbIdMaterial.Location = new Point(417, 99);
+            txbIdMaterial.MaxLength = 6;
+            txbIdMaterial.Name = "txbIdMaterial";
+            txbIdMaterial.Size = new Size(74, 23);
+            txbIdMaterial.TabIndex = 364;
+            txbIdMaterial.KeyPress += txbIdMaterial_KeyPress;
             // 
             // label2
             // 
@@ -150,6 +109,7 @@
             btnRemove.TabIndex = 375;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // btnRecover
             // 
@@ -159,15 +119,16 @@
             btnRecover.TabIndex = 376;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
+            btnRecover.Click += btnRecover_Click;
             // 
-            // cboConsignee
+            // cboColor
             // 
-            cboConsignee.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboConsignee.FormattingEnabled = true;
-            cboConsignee.Location = new Point(430, 21);
-            cboConsignee.Name = "cboConsignee";
-            cboConsignee.Size = new Size(203, 23);
-            cboConsignee.TabIndex = 363;
+            cboColor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboColor.FormattingEnabled = true;
+            cboColor.Location = new Point(430, 21);
+            cboColor.Name = "cboColor";
+            cboColor.Size = new Size(203, 23);
+            cboColor.TabIndex = 363;
             // 
             // dgvCatalog
             // 
@@ -190,6 +151,7 @@
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 127);
+            dgvCatalog.MultiSelect = false;
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -205,12 +167,13 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 314);
             dgvCatalog.TabIndex = 381;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // cboDistributor
             // 
             cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDistributor.FormattingEnabled = true;
-            cboDistributor.Location = new Point(12, 21);
+            cboDistributor.Location = new Point(12, 59);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
             cboDistributor.TabIndex = 361;
@@ -223,6 +186,7 @@
             btnModify.TabIndex = 373;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -232,12 +196,13 @@
             btnAdd.TabIndex = 372;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 6.75F);
-            label1.Location = new Point(12, 9);
+            label1.Location = new Point(12, 47);
             label1.Name = "label1";
             label1.Size = new Size(50, 12);
             label1.TabIndex = 366;
@@ -247,40 +212,71 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(12, 47);
+            label6.Location = new Point(417, 86);
             label6.Name = "label6";
-            label6.Size = new Size(31, 12);
+            label6.Size = new Size(74, 12);
             label6.TabIndex = 368;
-            label6.Text = "Buscar";
+            label6.Text = "Buscar por código";
             // 
-            // button1
+            // btnFilterMaterialCatalog
             // 
-            button1.BackgroundImage = Properties.Resources.BuscarLupa1;
-            button1.BackgroundImageLayout = ImageLayout.Stretch;
-            button1.Location = new Point(639, 21);
-            button1.Name = "button1";
-            button1.Size = new Size(23, 23);
-            button1.TabIndex = 386;
-            button1.UseVisualStyleBackColor = true;
+            btnFilterMaterialCatalog.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnFilterMaterialCatalog.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFilterMaterialCatalog.Location = new Point(639, 21);
+            btnFilterMaterialCatalog.Name = "btnFilterMaterialCatalog";
+            btnFilterMaterialCatalog.Size = new Size(23, 23);
+            btnFilterMaterialCatalog.TabIndex = 386;
+            btnFilterMaterialCatalog.UseVisualStyleBackColor = true;
+            btnFilterMaterialCatalog.Click += btnFilterMaterialCatalog_Click;
+            // 
+            // chbRemoved
+            // 
+            chbRemoved.Appearance = Appearance.Button;
+            chbRemoved.Location = new Point(174, 98);
+            chbRemoved.Name = "chbRemoved";
+            chbRemoved.Size = new Size(75, 23);
+            chbRemoved.TabIndex = 387;
+            chbRemoved.Text = "Eliminados";
+            chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbRemoved.UseVisualStyleBackColor = true;
+            chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
+            // 
+            // cboMaterialType
+            // 
+            cboMaterialType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMaterialType.FormattingEnabled = true;
+            cboMaterialType.Location = new Point(12, 21);
+            cboMaterialType.Name = "cboMaterialType";
+            cboMaterialType.Size = new Size(203, 23);
+            cboMaterialType.TabIndex = 388;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 6.75F);
+            label3.Location = new Point(12, 9);
+            label3.Name = "label3";
+            label3.Size = new Size(69, 12);
+            label3.TabIndex = 389;
+            label3.Text = "Tipo de material";
             // 
             // FrmMaterialCatalog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(button1);
-            Controls.Add(btnTemplates);
-            Controls.Add(btnConfigManifest);
-            Controls.Add(cboGrower);
+            Controls.Add(cboMaterialType);
+            Controls.Add(label3);
+            Controls.Add(chbRemoved);
+            Controls.Add(btnFilterMaterialCatalog);
+            Controls.Add(cboCategory);
             Controls.Add(label5);
-            Controls.Add(btnSearchManifest);
-            Controls.Add(txbIdManifest);
-            Controls.Add(btnPrint);
-            Controls.Add(btnRemoved);
+            Controls.Add(btnSearchMaterial);
+            Controls.Add(txbIdMaterial);
             Controls.Add(label2);
             Controls.Add(btnRemove);
             Controls.Add(btnRecover);
-            Controls.Add(cboConsignee);
+            Controls.Add(cboColor);
             Controls.Add(dgvCatalog);
             Controls.Add(cboDistributor);
             Controls.Add(btnModify);
@@ -290,31 +286,31 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialCatalog";
             Text = "Catálogo de materiales";
+            WindowState = FormWindowState.Maximized;
+            Load += FrmMaterialCatalog_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Button btnTemplates;
-        private Button btnConfigManifest;
-        public ComboBox cboGrower;
+        public ComboBox cboCategory;
         private Label label5;
-        private Button btnSearchManifest;
-        private TextBox txbIdManifest;
-        private Button btnPrint;
-        public Button btnRemoved;
+        private Button btnSearchMaterial;
+        private TextBox txbIdMaterial;
         private Label label2;
         private Button btnRemove;
         private Button btnRecover;
-        public ComboBox cboConsignee;
+        public ComboBox cboColor;
         public DataGridView dgvCatalog;
         public ComboBox cboDistributor;
         private Button btnModify;
         private Button btnAdd;
         private Label label1;
         private Label label6;
-        private Button button1;
+        private Button btnFilterMaterialCatalog;
+        public CheckBox chbRemoved;
+        public ComboBox cboMaterialType;
+        private Label label3;
     }
 }

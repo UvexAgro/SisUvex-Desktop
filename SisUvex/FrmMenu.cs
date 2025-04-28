@@ -56,6 +56,9 @@ using SisUvex.Nomina.Comedores.DiningReports.AbsenceReport;
 using SisUvex.Nomina.Padron.SUA;
 using SisUvex.Packing.Maintenance;
 using SisUvex.Material.MaterialProvider;
+using SisUvex.Material.MaterialWarehouses;
+using SisUvex.Material.MaterialType;
+using SisUvex.Material.MaterialCatalog;
 
 namespace SisUvex
 {
@@ -395,13 +398,13 @@ namespace SisUvex
         private void códigoParaCajaÚnicaEspárragoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmCajaEmpleado cat = new FrmCajaEmpleado();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void uvaNombreYCódigoDeEmpleadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmNombreYCodigo2x1 cat = new FrmNombreYCodigo2x1();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void CajasPorEmlpeadosYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -523,6 +526,24 @@ namespace SisUvex
         private void proovedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialProviderCat cat = new FrmMaterialProviderCat();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialWareHousesCat cat = new FrmMaterialWareHousesCat();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void tipoDeMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialTypeCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialCatalog cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }

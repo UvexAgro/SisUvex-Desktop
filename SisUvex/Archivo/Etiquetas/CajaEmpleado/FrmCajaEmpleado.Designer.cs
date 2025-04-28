@@ -45,6 +45,7 @@
             // 
             // btnImprimir
             // 
+            btnImprimir.BackgroundImageLayout = ImageLayout.Stretch;
             btnImprimir.Font = new Font("Segoe UI", 14F);
             btnImprimir.Image = Properties.Resources.imprimirIcon32;
             btnImprimir.Location = new Point(299, 171);
@@ -110,6 +111,7 @@
             // 
             // btnBuscarCodigo
             // 
+            btnBuscarCodigo.BackgroundImageLayout = ImageLayout.Stretch;
             btnBuscarCodigo.Font = new Font("Segoe UI", 14F);
             btnBuscarCodigo.Image = Properties.Resources.guardarIcon321;
             btnBuscarCodigo.Location = new Point(290, 102);
@@ -151,6 +153,7 @@
             // 
             // button1
             // 
+            button1.BackgroundImageLayout = ImageLayout.Stretch;
             button1.Font = new Font("Segoe UI", 14F);
             button1.Image = Properties.Resources.buscarIcon32;
             button1.Location = new Point(345, 102);
@@ -180,7 +183,10 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MaximumSize = new Size(501, 276);
+            MinimumSize = new Size(501, 276);
             Name = "FrmCajaEmpleado";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Imprimir caja por código de empleado";
             Load += FrmCajaEmpleado_Load;
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();

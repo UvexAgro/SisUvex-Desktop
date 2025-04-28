@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Catalogos.Metods.DataGridViews
 {
@@ -15,7 +16,18 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         //public string queryCatalog;
         public DataGridView dgvCatalog;
         public DataTable dtCatalog;
-        public Button btnRemoved;
+        //public Button btnRemoved;
+
+        public ClsDGVCatalog(DataGridView dgvCatalog, DataTable dtCatalog)
+        {
+            this.dtCatalog = dtCatalog;
+
+            this.dgvCatalog = dgvCatalog;
+            this.dgvCatalog.DataSource = dtCatalog;
+
+            if (dtCatalog.Columns.Contains(activeColumn))
+                LoadDGVCatalogWithActiveColumn2();
+        }
 
         public void LoadDGVCatalogWithActiveColumn2()
         {
@@ -38,6 +50,8 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 dc.DefaultValue = "1";
                 dtCatalog.Columns.Add(dc);
                 dc.SetOrdinal(dtCatalog.Columns.Count - 1);
+
+                dgvCatalog.Columns[activeColumnHide].Visible = false;
             }
         }
 

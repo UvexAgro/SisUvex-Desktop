@@ -3,44 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Data;
-using SisUvex.Catalogos.Metods.CheckBoxes;
-using SisUvex.Catalogos.Metods.Values;
+using System.Data.SqlClient;
 using SisUvex.Catalogos.Metods.Querys;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using SisUvex.Catalogos.Metods.Values;
 
-namespace SisUvex.Material.MaterialProvider
+namespace SisUvex.Material.MaterialWarehouses
 {
-    internal class EMaterialProvider
+    internal class EMaterialWareHouse
     {
-        public string idProvider { get; set; }
-        public string nameProvider { get; set; }
-        public string city { get; set; }
-        public string phoneNumber { get; set; }
-        public string email { get; set; }
+        public string idWareHouse { get; set; }
+        public string nameWareHouse { get; set; }
         public int active { get; set; }
+        public string idEmployee { get; set; }
 
         public static string GetNextId()
         {
-            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
+            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_warehouses]), 0) +1, '0000') FROM [Pack_Warehouses]").ToString();
         }
-
-        public void GetProvider(string idProvider)
+        public void GetWareHouse(string idWareHouse)
         {
             SQLControl sql = new SQLControl();
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_Provider WHERE id_provider = @idProvider", sql.cnn);
-                cmd.Parameters.AddWithValue("@idProvider", idProvider);
+                SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_Warehouses WHERE id_warehouses = @idWareHouse", sql.cnn);
+                cmd.Parameters.AddWithValue("@idWareHouse", idWareHouse);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    this.idProvider = dr.GetValue(dr.GetOrdinal("id_provider")).ToString();
-                    nameProvider = dr.GetValue(dr.GetOrdinal("v_nameProvider")).ToString();
-                    city = dr.GetValue(dr.GetOrdinal("v_city")).ToString();
-                    phoneNumber = dr.GetValue(dr.GetOrdinal("c_phoneNumber")).ToString();
-                    email = dr.GetValue(dr.GetOrdinal("v_email")).ToString();
+                    this.idWareHouse = dr.GetValue(dr.GetOrdinal("id_warehouses")).ToString();
+                    nameWareHouse = dr.GetValue(dr.GetOrdinal("v_namewarehouses")).ToString();
+                    idEmployee = dr.GetValue(dr.GetOrdinal("id_employee")).ToString();
                     active = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("c_active")));
                 }
             }
@@ -54,40 +49,36 @@ namespace SisUvex.Material.MaterialProvider
             }
         }
 
-        private void ValidateProvider()
+        private void ValidateWareHouse()
         {
-            if (string.IsNullOrEmpty(idProvider) || string.IsNullOrEmpty(nameProvider) || active > 1)
-                throw new Exception("Faltan datos de proveedor.");
+            if (string.IsNullOrEmpty(idWareHouse) || string.IsNullOrEmpty(nameWareHouse) || active > 1)
+                throw new Exception("Faltan datos de almacén.");
         }
 
         public (bool, string?) AddProcedure()
         {
-            //AQUÍ REGRESA EL VALOR EL ID Y EL TRUE SI SE PUDO AGREGAR EL PROVEEDOR
-
             SQLControl sql = new SQLControl();
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackProviderAdd", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackWareHousesAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@nameWareHouse", nameWareHouse);
+                cmd.Parameters.AddWithValue("@idEmployee", ClsValues.IfEmptyToDBNull(idEmployee));
                 cmd.Parameters.AddWithValue("@active", active);
-                cmd.Parameters.AddWithValue("@nameProvider", nameProvider);
-                cmd.Parameters.AddWithValue("@nameCity", ClsValues.IfEmptyToDBNull(city));
-                cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
-                cmd.Parameters.AddWithValue("@email", ClsValues.IfEmptyToDBNull(email));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    string idProvider = dr.GetValue(dr.GetOrdinal("id_provider")).ToString();
-                    return (true, idProvider);
+                    string idWareHouse = dr.GetValue(dr.GetOrdinal("id_warehouses")).ToString();
+                    return (true, idWareHouse);
                 }
                 return (false, null);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Añadir proovedor");
+                MessageBox.Show(ex.ToString(), "Añadir almacén");
                 return (false, null);
             }
             finally
@@ -98,26 +89,23 @@ namespace SisUvex.Material.MaterialProvider
 
         public (bool, string?) ModifyProcedure()
         {
-            //DAR VALORES A LOS CAMPOS ANTES DE EJECUTAR EL PROCEDIMIENTO
             SQLControl sql = new SQLControl();
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackProviderModify", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackWareHousesModify", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", idProvider);
+                cmd.Parameters.AddWithValue("@idWareHouse", idWareHouse);
+                cmd.Parameters.AddWithValue("@nameWareHouse", nameWareHouse);
+                cmd.Parameters.AddWithValue("@idEmployee", ClsValues.IfEmptyToDBNull(idEmployee));
                 cmd.Parameters.AddWithValue("@active", active);
-                cmd.Parameters.AddWithValue("@nameProvider", nameProvider);
-                cmd.Parameters.AddWithValue("@nameCity", ClsValues.IfEmptyToDBNull(city));
-                cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
-                cmd.Parameters.AddWithValue("@email", ClsValues.IfEmptyToDBNull(email));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
                 cmd.ExecuteNonQuery();
-                return (true, idProvider);
+                return (true, idWareHouse);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Modificar proovedor");
+                MessageBox.Show(ex.ToString(), "Modificar almacén");
                 return (false, null);
             }
             finally
@@ -132,7 +120,7 @@ namespace SisUvex.Material.MaterialProvider
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackProviderActive", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackWareHousesActive", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@active", active);
@@ -142,7 +130,7 @@ namespace SisUvex.Material.MaterialProvider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Activos proveedor");
+                MessageBox.Show(ex.ToString(), "Activos almacén");
                 return false;
             }
             finally

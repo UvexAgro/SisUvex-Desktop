@@ -8,23 +8,23 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Metods;
 
-namespace SisUvex.Material.MaterialCatalog
+namespace SisUvex.Material.MaterialWarehouses
 {
-    internal partial class FrmMaterialCatalog : Form
+    internal partial class FrmMaterialWareHousesCat : Form
     {
-        public ClsMaterialCatalog cls;
-        public FrmMaterialCatalog()
+        public ClsMaterialWareHouses cls;
+
+        public FrmMaterialWareHousesCat()
         {
             InitializeComponent();
         }
 
-        private void FrmMaterialCatalog_Load(object sender, EventArgs e)
+        private void FrmMaterialWareHousesCat_Load(object sender, EventArgs e)
         {
-            cls ??= new ClsMaterialCatalog();
-            cls._frmCat = this;
+            cls ??= new ClsMaterialWareHouses();
+            cls._frmCat ??= this;
 
             cls.BeginFormCat();
         }
@@ -37,7 +37,9 @@ namespace SisUvex.Material.MaterialCatalog
         private void btnRemove_Click(object sender, EventArgs e)
         {
             if (dgvCatalog.SelectedRows.Count != 0)
+            {
                 cls.BtnActiveProcedure(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString(), "0");
+            }
             else
                 SystemSounds.Exclamation.Play();
         }
@@ -45,7 +47,9 @@ namespace SisUvex.Material.MaterialCatalog
         private void btnRecover_Click(object sender, EventArgs e)
         {
             if (dgvCatalog.SelectedRows.Count != 0)
+            {
                 cls.BtnActiveProcedure(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString(), "1");
+            }
             else
                 SystemSounds.Exclamation.Play();
         }
@@ -55,7 +59,9 @@ namespace SisUvex.Material.MaterialCatalog
             cls.OpenFrmAdd();
 
             if (cls.IsAddUpdate)
+            {
                 cls.AddNewRowByIdInDGVCatalog();
+            }
         }
 
         private void btnModify_Click(object sender, EventArgs e)
@@ -66,7 +72,6 @@ namespace SisUvex.Material.MaterialCatalog
         private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             OpenFrmModifyFromCat();
-
         }
 
         private void OpenFrmModifyFromCat()
@@ -80,37 +85,9 @@ namespace SisUvex.Material.MaterialCatalog
             cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString());
 
             if (cls.IsModifyUpdate)
+            {
                 cls.ModifyRowByIdInDGVCatalog();
-        }
-
-        private void btnFilterMaterialCatalog_Click(object sender, EventArgs e)
-        {
-            cls.BtnFilterDtCatalog();
-        }
-
-        private void btnSearchMaterial_Click(object sender, EventArgs e)
-        {
-            SearchMaterialId();
-        }
-
-        private void txbIdMaterial_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                e.Handled = true;
-                SearchMaterialId();
             }
-        }
-
-        private void SearchMaterialId()
-        {
-            if (string.IsNullOrEmpty(txbIdMaterial.Text))
-            {
-                SystemSounds.Exclamation.Play();
-                return;
-            }
-
-            cls.BtnSearchMaterialWithId(txbIdMaterial.Text);
         }
     }
 }
