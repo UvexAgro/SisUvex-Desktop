@@ -32,7 +32,7 @@ namespace SisUvex.Material.MaterialCatalog
         DataTable? dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
-        private string? imagesPathCatalogFolder = "\\\\SVRCAMPOSANAN\\Inventum\\MATERIALES";
+        private string? imagesPathCatalogFolder = null;
 
         private SingleImageManager? frontImageManager, backImageManager, downImageManager, upImageManager;
 
@@ -134,7 +134,7 @@ namespace SisUvex.Material.MaterialCatalog
             idAddModify = idModify;
             _frmAdd = new FrmMaterialAdd();
             _frmAdd.cls = this;
-            _frmAdd.Text = "Modificar materil";
+            _frmAdd.Text = "Modificar material";
             _frmAdd.lblTitle.Text = "Modificar material";
             _frmAdd.ShowDialog();
         }
@@ -142,6 +142,8 @@ namespace SisUvex.Material.MaterialCatalog
         {
             entityFrm = new EMaterialCatalog();
             entityFrm.GetMaterialCatalog(idAddModify ?? "0");
+
+            _frmAdd.cboMaterialType.Enabled = false;
 
             _frmAdd.txbId.Text = entityFrm.idMaterialCatalog;
             _frmAdd.txbName.Text = entityFrm.nameMaterialCatalog;
@@ -282,6 +284,13 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void LoadAllImages(string idMaterial)
         {
+            string parameterImagesFolderPath = ClsQuerysDB.GetData("SELECT v_valueParameters FROM Conf_Parameters WHERE id_typeParameter = '02' AND id_parameter = '007'");
+
+            if (parameterImagesFolderPath.IsNullOrEmpty())
+                return;
+
+            imagesPathCatalogFolder = parameterImagesFolderPath;
+
             InicializateImagesManagers();
 
             frontImageManager.LoadImage($"{idMaterial}_Front");

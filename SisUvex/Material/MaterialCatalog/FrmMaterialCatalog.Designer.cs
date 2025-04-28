@@ -286,6 +286,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialCatalog";
             Text = "Catálogo de materiales";
+            WindowState = FormWindowState.Maximized;
             Load += FrmMaterialCatalog_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);

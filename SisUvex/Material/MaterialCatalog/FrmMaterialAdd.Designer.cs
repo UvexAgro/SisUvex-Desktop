@@ -72,6 +72,7 @@
             chbImageDown = new CheckBox();
             btnRefreshImages = new Button();
             btnDeleteImage = new Button();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             SuspendLayout();
             // 
@@ -383,7 +384,7 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = Color.Crimson;
-            label4.Location = new Point(295, 227);
+            label4.Location = new Point(296, 227);
             label4.Margin = new Padding(0);
             label4.Name = "label4";
             label4.Size = new Size(12, 15);
@@ -530,6 +531,17 @@
             btnDeleteImage.UseVisualStyleBackColor = true;
             btnDeleteImage.Click += btnDeleteImage_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.Crimson;
+            label3.Location = new Point(104, 298);
+            label3.Margin = new Padding(0);
+            label3.Name = "label3";
+            label3.Size = new Size(12, 15);
+            label3.TabIndex = 472;
+            label3.Text = "*";
+            // 
             // FrmMaterialAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -542,7 +554,6 @@
             Controls.Add(chbImageBack);
             Controls.Add(chbImageFront);
             Controls.Add(btnPictureAdd);
-            Controls.Add(label4);
             Controls.Add(txbIdUnit);
             Controls.Add(cboUnit);
             Controls.Add(label10);
@@ -576,6 +587,8 @@
             Controls.Add(lblCategory);
             Controls.Add(lblName);
             Controls.Add(lblId);
+            Controls.Add(label3);
+            Controls.Add(label4);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -633,5 +646,6 @@
         public CheckBox chbImageDown;
         private Button btnRefreshImages;
         private Button btnDeleteImage;
+        private Label label3;
     }
 }
