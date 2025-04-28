@@ -68,6 +68,7 @@ namespace SisUvex.Material.MaterialCatalog
             OpenFrmModifyFromCat();
 
         }
+
         private void OpenFrmModifyFromCat()
         {
             if (dgvCatalog.SelectedRows.Count == 0)
