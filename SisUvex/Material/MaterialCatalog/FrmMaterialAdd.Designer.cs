@@ -427,7 +427,7 @@
             // 
             txbQuant.Font = new Font("Segoe UI", 12F);
             txbQuant.Location = new Point(112, 227);
-            txbQuant.MaxLength = 50;
+            txbQuant.MaxLength = 10;
             txbQuant.Name = "txbQuant";
             txbQuant.Size = new Size(118, 29);
             txbQuant.TabIndex = 459;

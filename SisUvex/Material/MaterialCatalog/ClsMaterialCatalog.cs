@@ -15,6 +15,7 @@ using SisUvex.Material.Warehouses;
 using Microsoft.IdentityModel.Tokens;
 using System.Media;
 using SisUvex.Catalogos.Metods.Images;
+using SisUvex.Catalogos.Metods.TextBoxes;
 
 namespace SisUvex.Material.MaterialCatalog
 {
@@ -32,7 +33,7 @@ namespace SisUvex.Material.MaterialCatalog
         DataTable? dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
-        private string? imagesPathCatalogFolder = null;
+        private string? imagesPathCatalogFolder = string.Empty;
 
         private SingleImageManager? frontImageManager, backImageManager, downImageManager, upImageManager;
 
@@ -55,6 +56,8 @@ namespace SisUvex.Material.MaterialCatalog
             AddControlsToList();
 
             LoadControlsEvents();
+
+            imagesPathCatalogFolder = ClsQuerysDB.GetData("SELECT v_valueParameters FROM Conf_Parameters WHERE id_typeParameter = '02' AND id_parameter = '007'");
 
             if (IsAddOrModify)
             {
@@ -107,6 +110,8 @@ namespace SisUvex.Material.MaterialCatalog
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbDistributorRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCategory, _frmAdd.chbCategoryRemoved);
+
+            ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbQuant);
         }
 
         public void OpenFrmAdd()
@@ -276,6 +281,9 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void InicializateImagesManagers()
         {
+            if (!IsImagesFolderPathValide())
+                return;
+
             frontImageManager = new SingleImageManager(imagesPathCatalogFolder);
             backImageManager = new SingleImageManager(imagesPathCatalogFolder);
             downImageManager = new SingleImageManager(imagesPathCatalogFolder);
@@ -284,12 +292,8 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void LoadAllImages(string idMaterial)
         {
-            string parameterImagesFolderPath = ClsQuerysDB.GetData("SELECT v_valueParameters FROM Conf_Parameters WHERE id_typeParameter = '02' AND id_parameter = '007'");
-
-            if (parameterImagesFolderPath.IsNullOrEmpty())
+            if (!IsImagesFolderPathValideWithMessageBox())
                 return;
-
-            imagesPathCatalogFolder = parameterImagesFolderPath;
 
             InicializateImagesManagers();
 
@@ -305,6 +309,9 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void BtnLoadNewImage()
         {
+            if (!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             if (_frmAdd.chbImageFront.Checked)
             {
                 frontImageManager.LoadNewImageFromFile();
@@ -329,12 +336,18 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void BtnResetAllImages()
         {
+            if (!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             if (!_frmAdd.txbId.Text.IsNullOrEmpty())
                 LoadAllImages(_frmAdd.txbId.Text);
         }
 
         public void ChbImagesClic(CheckBox chb)
         {
+            if (!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             _frmAdd.chbImageFront.Checked = false;
             _frmAdd.chbImageBack.Checked = false;
             _frmAdd.chbImageDown.Checked = false;
@@ -353,6 +366,9 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void BtnDeleteTemporalImage()
         {
+            if (!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             if (_frmAdd.chbImageFront.Checked)
             {
                 frontImageManager.ClearNew();
@@ -377,6 +393,9 @@ namespace SisUvex.Material.MaterialCatalog
 
         private void UpdateAllImagesMaterial()
         {
+            if(!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             frontImageManager.SaveImage($"{idAddModify}_Front");
             backImageManager.SaveImage($"{idAddModify}_Back");
             downImageManager.SaveImage($"{idAddModify}_Down");
@@ -385,6 +404,9 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void Dispose() //PARA QUE FUNCIONE CON EL DISPOSE DEL FORM
         {
+            if (!IsImagesFolderPathValideWithMessageBox())
+                return;
+
             frontImageManager?.Dispose();
             backImageManager?.Dispose();
             downImageManager?.Dispose();
@@ -436,6 +458,28 @@ namespace SisUvex.Material.MaterialCatalog
             Clipboard.SetText(queryCatalog + w);
             dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + w, parameters);
             dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+        }
+
+        private bool IsImagesFolderPathValideWithMessageBox()
+        {
+            if (string.IsNullOrEmpty(imagesPathCatalogFolder) || !Directory.Exists(imagesPathCatalogFolder))
+            {
+                MessageBox.Show("No se ha encontrado la carpeta de imágenes del catálogo de materiales.", "Carpeta imágenes", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsImagesFolderPathValide()
+        {
+            if (string.IsNullOrEmpty(imagesPathCatalogFolder) || !Directory.Exists(imagesPathCatalogFolder))
+            {
+                MessageBox.Show("No se ha encontrado la carpeta de imágenes del catálogo de materiales.", "Carpeta imágenes", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+            return true;
         }
     }
 }
