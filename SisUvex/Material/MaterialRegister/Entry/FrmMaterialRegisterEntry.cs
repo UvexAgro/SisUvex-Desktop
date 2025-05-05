@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 {
-    public partial class FrmMaterialRegisterEntry : Form
+    internal partial class FrmMaterialRegisterEntry : Form
     {
-        ClsMaterialRegisterEntry cls;
+        public ClsMaterialRegisterEntry cls;
         public FrmMaterialRegisterEntry()
         {
             InitializeComponent();
@@ -24,6 +26,11 @@ namespace SisUvex.Material.MaterialRegister.Entry
             cls._frmAdd ??= this;
 
             cls.BeginFormAdd();
+        }
+
+        private void btnEmployeeSearch_Click(object sender, EventArgs e)
+        {
+            cls.btnSearchEmployee();
         }
     }
 }

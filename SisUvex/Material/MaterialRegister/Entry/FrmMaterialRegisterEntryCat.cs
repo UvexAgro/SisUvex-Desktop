@@ -10,11 +10,24 @@ using System.Windows.Forms;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 {
-    public partial class FrmMaterialRegisterEntryCat : Form
+    internal partial class FrmMaterialRegisterEntryCat : Form
     {
+        public ClsMaterialRegisterEntry cls;
         public FrmMaterialRegisterEntryCat()
         {
             InitializeComponent();
+        }
+
+        private void FrmMaterialRegisterEntryCat_Load(object sender, EventArgs e)
+        {
+            cls ??= new();
+            cls._frmCat ??= this;
+            cls.BeginFormCat();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            cls.OpenFrmAdd();
         }
     }
 }

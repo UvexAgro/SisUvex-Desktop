@@ -435,5 +435,16 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogMatWarehouse";
             public const string QueryCbo = $" SELECT id_warehouses AS [{Column.id}], CONCAT(v_namewarehouses, ' | ', id_warehouses, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_namewarehouses AS [{ColumnName}] FROM Pack_Warehouses ORDER BY [{Column.name}] ";
         }
+
+        public static class MaterialCatalog
+        {
+            public const string TableName = "Pack_MaterialCatalog";
+            public const string ColumnName = "Material";
+            public const string ColumnId = "idMaterialCatalog";
+            public const string ColumnActive = "ActiveMaterialCatalog";
+            public const string Cbo = "CboMaterialCatalog";
+            public const string DgvCatalog = "DgvCatalogMaterialCatalog";
+            public const string QueryCbo = $" SELECT id_matCatalog AS [{Column.id}], CONCAT(v_nameMat, ' | ', id_matCatalog, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_nameMat AS [{ColumnName}], id_matType AS [{MaterialType.ColumnId}], id_color AS [{Color.ColumnId}], id_category AS [{Category.ColumnId}], id_unit AS [{Unit.ColumnId}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_MaterialCatalog ORDER BY [{Column.name}] ";
+        }
     }
 }

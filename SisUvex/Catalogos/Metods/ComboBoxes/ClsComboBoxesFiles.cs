@@ -229,6 +229,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.MaterialWarehouse.Cbo:
                     queryDataTable = ClsObject.MaterialWarehouse.QueryCbo;
                     break;
+                case ClsObject.MaterialCatalog.Cbo:
+                    queryDataTable = ClsObject.MaterialCatalog.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -267,7 +270,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Season', 'Pack_Crop') ";
                     break;
                 case ClsObject.Consignee.Cbo:
-                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";     
+                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";
                     break;
                 case ClsObject.Driver.Cbo:
                     query += " IN ('Pack_TransportLine', 'Pack_Driver') ";
@@ -280,6 +283,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.ManifestTemplate.Cbo:
                     query += " IN ('Pack_ManifestTemplates', 'Pack_Distributor', 'Pack_Grower', 'Pack_Consignee', 'Pack_AgencyTrade', 'Pack_City') ";
+                    break;
+                case ClsObject.MaterialCatalog.Cbo:
+                    query += " IN ('Pack_MaterialCatalog', 'Pack_MaterialType', 'Pack_Distributor', 'Pack_Color', 'Pack_Unit', 'Pack_Category') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -357,6 +363,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.MaterialProvider.TableName;
                 case ClsObject.MaterialWarehouse.Cbo:
                     return ClsObject.MaterialWarehouse.TableName;
+                case ClsObject.MaterialCatalog.Cbo:
+                    return ClsObject.MaterialCatalog.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

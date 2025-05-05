@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 { 
@@ -23,6 +24,59 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matInbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatInbound").ToString();
         }
+
+        public void GetMaterialEntry(string idMatInbound)
+        {
+            SQLControl sql = new SQLControl();
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_MatInbound WHERE id_matInbound = @idMatInbound", sql.cnn);
+                cmd.Parameters.AddWithValue("@idMatInbound", idMatInbound);
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    this.idMatInbound = dr.GetValue(dr.GetOrdinal("id_matInbound")).ToString();
+                    date = Convert.ToDateTime(dr.GetValue(dr.GetOrdinal("d_dateInbound")));
+                    idTransportLine = dr.GetValue(dr.GetOrdinal("id_transportLine")).ToString();
+                    idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
+                    idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
+                    idWarehouse = dr.GetValue(dr.GetOrdinal("id_warehouses")).ToString();
+                    idEmployee = dr.GetValue(dr.GetOrdinal("id_employee")).ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
+        public void GetMaterialEntryMaterials(string idMatInbound)
+        {
+            SQLControl sql = new SQLControl();
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand($"SELECT * FROM vw_PackMatInbondEntryMaterials WHERE {ClsObject.Column.id} = @idMatInbound", sql.cnn);
+                cmd.Parameters.AddWithValue("@idMatInbound", idMatInbound);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                dtMaterials = new DataTable();
+                da.Fill(dtMaterials);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
         public (bool, string?) AddProcedure()
         {
             SQLControl sql = new SQLControl();

@@ -34,7 +34,7 @@
             button1 = new Button();
             btnTemplates = new Button();
             btnConfigManifest = new Button();
-            cboMaterialCategory = new ComboBox();
+            cboMaterialType = new ComboBox();
             label5 = new Label();
             btnSearchManifest = new Button();
             txbIdManifest = new TextBox();
@@ -60,6 +60,13 @@
             label8 = new Label();
             cboFreightContainer = new ComboBox();
             label9 = new Label();
+            chbMaterialRemoved = new CheckBox();
+            chbFreightContainerRemoved = new CheckBox();
+            chbTransportLineRemoved = new CheckBox();
+            chbDistributorRemoved = new CheckBox();
+            chbGrowerRemoved = new CheckBox();
+            chbWareHouseRemoved = new CheckBox();
+            chbProviderRemoved = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -67,7 +74,7 @@
             // 
             button1.BackgroundImage = Properties.Resources.BuscarLupa1;
             button1.BackgroundImageLayout = ImageLayout.Stretch;
-            button1.Location = new Point(430, 97);
+            button1.Location = new Point(472, 98);
             button1.Name = "button1";
             button1.Size = new Size(23, 23);
             button1.TabIndex = 405;
@@ -97,24 +104,24 @@
             btnConfigManifest.TextAlign = ContentAlignment.TopRight;
             btnConfigManifest.UseVisualStyleBackColor = true;
             // 
-            // cboMaterialCategory
+            // cboMaterialType
             // 
-            cboMaterialCategory.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMaterialCategory.FormattingEnabled = true;
-            cboMaterialCategory.Location = new Point(221, 59);
-            cboMaterialCategory.Name = "cboMaterialCategory";
-            cboMaterialCategory.Size = new Size(203, 23);
-            cboMaterialCategory.TabIndex = 388;
+            cboMaterialType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMaterialType.FormattingEnabled = true;
+            cboMaterialType.Location = new Point(242, 59);
+            cboMaterialType.Name = "cboMaterialType";
+            cboMaterialType.Size = new Size(203, 23);
+            cboMaterialType.TabIndex = 388;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 6.75F);
-            label5.Location = new Point(221, 47);
+            label5.Location = new Point(242, 47);
             label5.Name = "label5";
-            label5.Size = new Size(44, 12);
+            label5.Size = new Size(69, 12);
             label5.TabIndex = 395;
-            label5.Text = "Categoría";
+            label5.Text = "Tipo de material";
             // 
             // btnSearchManifest
             // 
@@ -156,7 +163,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 6.75F);
-            label2.Location = new Point(221, 85);
+            label2.Location = new Point(242, 85);
             label2.Name = "label2";
             label2.Size = new Size(38, 12);
             label2.TabIndex = 393;
@@ -184,7 +191,7 @@
             // 
             cboMaterial.DropDownStyle = ComboBoxStyle.DropDownList;
             cboMaterial.FormattingEnabled = true;
-            cboMaterial.Location = new Point(221, 97);
+            cboMaterial.Location = new Point(242, 97);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(203, 23);
             cboMaterial.TabIndex = 389;
@@ -252,6 +259,7 @@
             btnAdd.TabIndex = 396;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // label1
             // 
@@ -267,7 +275,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(558, 122);
+            label6.Location = new Point(558, 120);
             label6.Name = "label6";
             label6.Size = new Size(110, 12);
             label6.TabIndex = 394;
@@ -315,7 +323,7 @@
             // 
             cboWareHouse.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWareHouse.FormattingEnabled = true;
-            cboWareHouse.Location = new Point(221, 21);
+            cboWareHouse.Location = new Point(242, 21);
             cboWareHouse.Name = "cboWareHouse";
             cboWareHouse.Size = new Size(203, 23);
             cboWareHouse.TabIndex = 410;
@@ -324,7 +332,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 6.75F);
-            label7.Location = new Point(221, 9);
+            label7.Location = new Point(242, 9);
             label7.Name = "label7";
             label7.Size = new Size(40, 12);
             label7.TabIndex = 411;
@@ -334,7 +342,7 @@
             // 
             cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportLine.FormattingEnabled = true;
-            cboTransportLine.Location = new Point(430, 21);
+            cboTransportLine.Location = new Point(472, 20);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
             cboTransportLine.TabIndex = 412;
@@ -343,7 +351,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 6.75F);
-            label8.Location = new Point(430, 9);
+            label8.Location = new Point(472, 8);
             label8.Name = "label8";
             label8.Size = new Size(81, 12);
             label8.TabIndex = 413;
@@ -353,7 +361,7 @@
             // 
             cboFreightContainer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFreightContainer.FormattingEnabled = true;
-            cboFreightContainer.Location = new Point(430, 59);
+            cboFreightContainer.Location = new Point(472, 58);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(203, 23);
             cboFreightContainer.TabIndex = 414;
@@ -362,17 +370,115 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 6.75F);
-            label9.Location = new Point(430, 47);
+            label9.Location = new Point(472, 46);
             label9.Name = "label9";
             label9.Size = new Size(23, 12);
             label9.TabIndex = 415;
             label9.Text = "Caja";
+            // 
+            // chbMaterialRemoved
+            // 
+            chbMaterialRemoved.Appearance = Appearance.Button;
+            chbMaterialRemoved.Image = Properties.Resources.removedList16;
+            chbMaterialRemoved.Location = new Point(445, 96);
+            chbMaterialRemoved.Margin = new Padding(0);
+            chbMaterialRemoved.Name = "chbMaterialRemoved";
+            chbMaterialRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbMaterialRemoved.Size = new Size(24, 25);
+            chbMaterialRemoved.TabIndex = 416;
+            chbMaterialRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbMaterialRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbFreightContainerRemoved
+            // 
+            chbFreightContainerRemoved.Appearance = Appearance.Button;
+            chbFreightContainerRemoved.Image = Properties.Resources.removedList16;
+            chbFreightContainerRemoved.Location = new Point(675, 57);
+            chbFreightContainerRemoved.Margin = new Padding(0);
+            chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
+            chbFreightContainerRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbFreightContainerRemoved.Size = new Size(24, 25);
+            chbFreightContainerRemoved.TabIndex = 417;
+            chbFreightContainerRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbFreightContainerRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbTransportLineRemoved
+            // 
+            chbTransportLineRemoved.Appearance = Appearance.Button;
+            chbTransportLineRemoved.Image = Properties.Resources.removedList16;
+            chbTransportLineRemoved.Location = new Point(675, 19);
+            chbTransportLineRemoved.Margin = new Padding(0);
+            chbTransportLineRemoved.Name = "chbTransportLineRemoved";
+            chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbTransportLineRemoved.Size = new Size(24, 25);
+            chbTransportLineRemoved.TabIndex = 418;
+            chbTransportLineRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbTransportLineRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbDistributorRemoved
+            // 
+            chbDistributorRemoved.Appearance = Appearance.Button;
+            chbDistributorRemoved.Image = Properties.Resources.removedList16;
+            chbDistributorRemoved.Location = new Point(215, 20);
+            chbDistributorRemoved.Margin = new Padding(0);
+            chbDistributorRemoved.Name = "chbDistributorRemoved";
+            chbDistributorRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbDistributorRemoved.Size = new Size(24, 25);
+            chbDistributorRemoved.TabIndex = 420;
+            chbDistributorRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbDistributorRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbGrowerRemoved
+            // 
+            chbGrowerRemoved.Appearance = Appearance.Button;
+            chbGrowerRemoved.Image = Properties.Resources.removedList16;
+            chbGrowerRemoved.Location = new Point(215, 58);
+            chbGrowerRemoved.Margin = new Padding(0);
+            chbGrowerRemoved.Name = "chbGrowerRemoved";
+            chbGrowerRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbGrowerRemoved.Size = new Size(24, 25);
+            chbGrowerRemoved.TabIndex = 419;
+            chbGrowerRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbGrowerRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbWareHouseRemoved
+            // 
+            chbWareHouseRemoved.Appearance = Appearance.Button;
+            chbWareHouseRemoved.Image = Properties.Resources.removedList16;
+            chbWareHouseRemoved.Location = new Point(445, 20);
+            chbWareHouseRemoved.Margin = new Padding(0);
+            chbWareHouseRemoved.Name = "chbWareHouseRemoved";
+            chbWareHouseRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbWareHouseRemoved.Size = new Size(24, 25);
+            chbWareHouseRemoved.TabIndex = 422;
+            chbWareHouseRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbWareHouseRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbProviderRemoved
+            // 
+            chbProviderRemoved.Appearance = Appearance.Button;
+            chbProviderRemoved.Image = Properties.Resources.removedList16;
+            chbProviderRemoved.Location = new Point(215, 96);
+            chbProviderRemoved.Margin = new Padding(0);
+            chbProviderRemoved.Name = "chbProviderRemoved";
+            chbProviderRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbProviderRemoved.Size = new Size(24, 25);
+            chbProviderRemoved.TabIndex = 421;
+            chbProviderRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbProviderRemoved.UseVisualStyleBackColor = true;
             // 
             // FrmMaterialRegisterEntryCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chbWareHouseRemoved);
+            Controls.Add(chbProviderRemoved);
+            Controls.Add(chbDistributorRemoved);
+            Controls.Add(chbGrowerRemoved);
+            Controls.Add(chbTransportLineRemoved);
+            Controls.Add(chbFreightContainerRemoved);
+            Controls.Add(chbMaterialRemoved);
             Controls.Add(cboFreightContainer);
             Controls.Add(label9);
             Controls.Add(cboTransportLine);
@@ -386,7 +492,7 @@
             Controls.Add(button1);
             Controls.Add(btnTemplates);
             Controls.Add(btnConfigManifest);
-            Controls.Add(cboMaterialCategory);
+            Controls.Add(cboMaterialType);
             Controls.Add(label5);
             Controls.Add(btnSearchManifest);
             Controls.Add(txbIdManifest);
@@ -404,6 +510,7 @@
             Controls.Add(label6);
             Name = "FrmMaterialRegisterEntryCat";
             Text = "FrmMaterialRegisterEntryCat";
+            Load += FrmMaterialRegisterEntryCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -414,7 +521,7 @@
         private Button button1;
         private Button btnTemplates;
         private Button btnConfigManifest;
-        public ComboBox cboMaterialCategory;
+        public ComboBox cboMaterialType;
         private Label label5;
         private Button btnSearchManifest;
         private TextBox txbIdManifest;
@@ -440,5 +547,12 @@
         private Label label8;
         public ComboBox cboFreightContainer;
         private Label label9;
+        public CheckBox chbMaterialRemoved;
+        public CheckBox chbFreightContainerRemoved;
+        public CheckBox chbTransportLineRemoved;
+        public CheckBox chbDistributorRemoved;
+        public CheckBox chbGrowerRemoved;
+        public CheckBox chbWareHouseRemoved;
+        public CheckBox chbProviderRemoved;
     }
 }
