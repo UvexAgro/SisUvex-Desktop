@@ -1,17 +1,11 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-using ExcelDataReader.Log;
-using iText.Layout.Element;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods.ExcelLoad;
 using SisUvex.Catalogos.Metods.Forms.BigResult;
+using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion;
-using System.Data;
 using System.Data.SqlClient;
 using System.Media;
-using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace SisUvex.Nomina.Actualizar_datos_empelado
@@ -19,7 +13,6 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
     public partial class FrmActualizarDatosEmpleados : Form
     {
         SQLControl sql = new SQLControl();
-        ClsCatalogos cls = new ClsCatalogos();
         private string titulo = "Actualizar datos empleados";
         private ClsExcel excel;
 
@@ -91,7 +84,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
 
                             if ((celda?.Length ?? 0) != 0 && (codigo?.Length ?? 0) != 0)
                             {
-                                codigo = cls.FormatoCeros(codigo, "000000");
+                                codigo = ClsValues.FormatZeros(codigo, "000000");
                                 bool valido = true;
                                 string query = $"USE {ClsConfig.DbEmployees} UPDATE nomempleados SET ";
 
@@ -215,7 +208,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             if (!long.TryParse(NSS, out numero) || numero == 0)
                 return false;
 
-            NSS = cls.FormatoCeros(NSS, "00000000000");
+            NSS = ClsValues.FormatZeros(NSS, "00000000000");
 
             return true;
         }
@@ -246,7 +239,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             if (numero > 9999)
                 return false;
 
-            LP = cls.FormatoCeros(LP, "0000");
+            LP = ClsValues.FormatZeros(LP, "0000");
             return true;
         }
 
@@ -275,7 +268,7 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
             if (!long.TryParse(CP, out numero) || numero == 0)
                 return false;
 
-            CP = cls.FormatoCeros(CP, "00000");
+            CP = ClsValues.FormatZeros(CP, "00000");
 
             return true;
         }
@@ -321,5 +314,4 @@ namespace SisUvex.Nomina.Actualizar_datos_empelado
 
         }
     }
-
 }
