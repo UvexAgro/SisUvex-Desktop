@@ -1,12 +1,7 @@
-﻿using System.Data;
-using System.Data.SqlClient;
-using System.Data;
-using Excel = Microsoft.Office.Interop.Excel;
+﻿using System.Data.SqlClient;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods.Values;
-using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Catalogos.Metods.ExcelLoad;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.IdentityModel.Tokens;
 using System.Media;
 using SisUvex.Catalogos.Metods.Querys;
@@ -17,7 +12,6 @@ namespace SisUvex.DesertGhost
     public partial class FrmAddEmployees : Form
     {
         SQLControl sql = new SQLControl();
-        ClsCatalogos cls = new ClsCatalogos();
         private string titulo = "Actualizar datos empleados";
         private ClsExcel excel;
 

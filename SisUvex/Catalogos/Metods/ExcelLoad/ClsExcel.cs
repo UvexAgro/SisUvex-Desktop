@@ -1,37 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExcelDataReader;
+using System.IO;
+using System.Windows.Forms;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel; // Para xlsx
+using NPOI.HSSF.UserModel; // Para xls
 
 namespace SisUvex.Catalogos.Metods.ExcelLoad
 {
     internal class ClsExcel
     {
         public string? path { get; set; }
-        public List<string?>? sheetsName { get; set; }
+        public List<string>? sheetsName { get; set; }
         public DataSet? sheetsData { get; set; }
 
         public void OpenFileDialog()
         {
             try
             {
-                // Configuración de ventana para seleccionar un archivo
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Excel Workbook|*.xlsx";
+                var openFileDialog = new OpenFileDialog
+                {
+                    Filter = "Excel Files|*.xls;*.xlsx"
+                };
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     path = openFileDialog.FileName;
-
                     LoadListSheetNames();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al abrir el archivo: {ex.Message}");
             }
         }
 
@@ -40,99 +41,133 @@ namespace SisUvex.Catalogos.Metods.ExcelLoad
             try
             {
                 if (string.IsNullOrEmpty(path))
-                {
-                    throw new InvalidOperationException("El path del archivo no está establecido.");
-                }
+                    throw new InvalidOperationException("Ruta del archivo no establecida");
 
-                sheetsName = new List<string?>();
+                sheetsName = new List<string>();
 
-                using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    using (IExcelDataReader reader = ExcelReaderFactory.CreateReader(fsSource))
+                    IWorkbook workbook;
+
+                    // Determinar si es xls o xlsx
+                    if (path.EndsWith(".xlsx"))
+                        workbook = new XSSFWorkbook(fileStream);
+                    else
+                        workbook = new HSSFWorkbook(fileStream);
+
+                    for (int i = 0; i < workbook.NumberOfSheets; i++)
                     {
-                        do
-                        {
-                            sheetsName.Add(reader.Name); // Solo obtiene el nombre de la hoja
-                        } while (reader.NextResult()); // Pasa a la siguiente hoja
+                        sheetsName.Add(workbook.GetSheetName(i));
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al cargar nombres de hojas: {ex.Message}");
             }
         }
 
-        public DataSet? LoadSheetData(string? sheetName)
+        public DataTable? LoadSheetData(string sheetName)
         {
             try
             {
                 if (string.IsNullOrEmpty(path))
-                {
-                    throw new InvalidOperationException("El path del archivo no está establecido.");
-                }
+                    throw new InvalidOperationException("Ruta del archivo no establecida");
 
-                using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    using (IExcelDataReader reader = ExcelReaderFactory.CreateReader(fsSource))
-                    {
-                        sheetsData = reader.AsDataSet(new ExcelDataSetConfiguration()
-                        {
-                            ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
-                            {
-                                UseHeaderRow = true
-                            }
-                        });
+                    IWorkbook workbook;
 
-                        return sheetsData.Tables.Contains(sheetName) ? sheetsData.Tables[sheetName].DataSet : null;
-                    }
+                    if (path.EndsWith(".xlsx"))
+                        workbook = new XSSFWorkbook(fileStream);
+                    else
+                        workbook = new HSSFWorkbook(fileStream);
+
+                    ISheet sheet = workbook.GetSheet(sheetName);
+                    if (sheet == null) return null;
+
+                    return WorksheetToDataTable(sheet);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al cargar datos de la hoja: {ex.Message}");
                 return null;
             }
         }
+
         public DataTable? LoadSheetData(ComboBox cbo)
+        {
+            if (cbo.SelectedItem == null) return null;
+            return LoadSheetData(cbo.SelectedItem.ToString());
+        }
+
+        private DataTable WorksheetToDataTable(ISheet sheet)
+        {
+            DataTable dt = new DataTable(sheet.SheetName);
+
+            // Crear columnas basadas en la primera fila (encabezados)
+            IRow headerRow = sheet.GetRow(0);
+            if (headerRow != null)
+            {
+                for (int i = 0; i < headerRow.LastCellNum; i++)
+                {
+                    ICell cell = headerRow.GetCell(i);
+                    dt.Columns.Add(cell?.ToString() ?? $"Columna{i}");
+                }
+            }
+
+            // Llenar filas
+            for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
+            {
+                IRow row = sheet.GetRow(rowIndex);
+                if (row == null) continue;
+
+                DataRow dataRow = dt.NewRow();
+
+                for (int colIndex = 0; colIndex < dt.Columns.Count; colIndex++)
+                {
+                    ICell cell = row.GetCell(colIndex);
+                    dataRow[colIndex] = cell?.ToString() ?? string.Empty;
+                }
+
+                dt.Rows.Add(dataRow);
+            }
+
+            return dt;
+        }
+
+        public DataSet? LoadAllSheetsData()
         {
             try
             {
                 if (string.IsNullOrEmpty(path))
-                {
-                    throw new InvalidOperationException("El path del archivo no está establecido.");
-                }
+                    throw new InvalidOperationException("Ruta del archivo no establecida");
 
-                using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                sheetsData = new DataSet();
+
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    using (IExcelDataReader reader = ExcelReaderFactory.CreateReader(fsSource))
+                    IWorkbook workbook;
+
+                    if (path.EndsWith(".xlsx"))
+                        workbook = new XSSFWorkbook(fileStream);
+                    else
+                        workbook = new HSSFWorkbook(fileStream);
+
+                    for (int i = 0; i < workbook.NumberOfSheets; i++)
                     {
-                        sheetsData = reader.AsDataSet(new ExcelDataSetConfiguration()
-                        {
-                            ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
-                            {
-                                UseHeaderRow = true
-                            }
-                        });
-
-                        string sheetName = cbo.SelectedItem.ToString();
-
-                        if (sheetsData.Tables.Contains(sheetName))
-                        {
-                            return sheetsData.Tables[sheetName];
-                        }
-                        else
-                            return null;
-                        
+                        ISheet sheet = workbook.GetSheetAt(i);
+                        DataTable dt = WorksheetToDataTable(sheet);
+                        sheetsData.Tables.Add(dt);
                     }
                 }
+
+                return sheetsData;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al cargar todas las hojas: {ex.Message}");
                 return null;
             }
         }
@@ -140,15 +175,10 @@ namespace SisUvex.Catalogos.Metods.ExcelLoad
         public void LoadSheetsIntoComboBox(ComboBox comboBox)
         {
             if (sheetsName == null || sheetsName.Count == 0)
-            {
-                throw new InvalidOperationException("No hay nombres de hojas cargados.");
-            }
+                throw new InvalidOperationException("No hay nombres de hojas cargados");
 
             comboBox.Items.Clear();
-            foreach (var sheet in sheetsName)
-            {
-                comboBox.Items.Add(sheet);
-            }
+            comboBox.Items.AddRange(sheetsName.ToArray());
         }
     }
 }
