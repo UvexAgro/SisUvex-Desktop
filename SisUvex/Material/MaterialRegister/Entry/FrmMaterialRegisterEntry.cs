@@ -32,5 +32,30 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             cls.btnSearchEmployee();
         }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            cls.BtnAccept();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnAddMaterial_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddRowMaterialsInEntry();
+        }
+
+        private void btnRemoveMaterial_Click(object sender, EventArgs e)
+        {
+            cls.BtnRemoveRowMaterialsInEntry();
+        }
+
+        private void btnModifyMaterial_Click(object sender, EventArgs e)
+        {
+            cls.BtnModifyRowMaterialsSelected();
+        }
     }
 }

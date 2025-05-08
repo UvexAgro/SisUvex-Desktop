@@ -90,10 +90,22 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             CboSelectIndexWithTextInValueMember(cbo, txbValueMember.Text);
         }
 
-        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, string ValueMemberText)
+        public static void CboSelectIndexWithTextInValueMember(ComboBox cbo, string? ValueMemberText)
         {
-            if (cbo.DataSource != null && ValueMemberText != string.Empty)
+            try
             {
+                if (cbo.DataSource == null || cbo.Items.Count == 0)
+                {
+                    cbo.SelectedIndex = -1;
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(ValueMemberText))
+                {
+                    cbo.SelectedIndex = 0;
+                    return;
+                }
+
                 DataTable dt = (DataTable)cbo.DataSource;
                 string columnNameValueMember = cbo.ValueMember;
 
@@ -102,20 +114,29 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     dt.DefaultView.RowFilter = $"{columnNameValueMember} = '{ValueMemberText}' OR {ClsObject.Column.active} = '1'";
                 }
 
+                bool encontrado = false;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     if (dt.Rows[i][columnNameValueMember].ToString() == ValueMemberText)
                     {
                         string valorBuscado = dt.Rows[i][ClsObject.Column.name].ToString();
-
                         int indice = cbo.FindStringExact(valorBuscado);
 
                         if (indice != -1)
                         {
                             cbo.SelectedIndex = indice;
+                            encontrado = true;
+                            break;
                         }
                     }
                 }
+
+                if (!encontrado)
+                    cbo.SelectedIndex = cbo.Items.Count > 0 ? 0 : -1;
+            }
+            catch (Exception ex)
+            {
+                cbo.SelectedIndex = -1;
             }
         }
 
@@ -314,7 +335,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             if (!idFilter.IsNullOrEmpty())
             {
                 if (checkBox.Checked)
-                    dt.DefaultView.RowFilter = $"{columnFilterName} = '{idFilter}' OR {ClsObject.Column.name} = '{textSelect}'";
+                    dt.DefaultView.RowFilter = $"[{columnFilterName}] = '{idFilter}' OR [{ClsObject.Column.name}] = '{textSelect}'";
                 else
                     dt.DefaultView.RowFilter = $"{columnFilterName} = '{idFilter}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
             }

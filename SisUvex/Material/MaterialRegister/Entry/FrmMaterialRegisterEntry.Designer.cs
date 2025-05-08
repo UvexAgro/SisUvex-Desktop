@@ -33,7 +33,7 @@
             lblTitle = new Label();
             txbId = new TextBox();
             lblId = new Label();
-            chbRemovedDistributor = new CheckBox();
+            chbDistributorRemoved = new CheckBox();
             btnSearchDistributor = new Button();
             txbIdDistributor = new TextBox();
             cboDistributor = new ComboBox();
@@ -57,7 +57,6 @@
             label17 = new Label();
             txbInvoice = new TextBox();
             label11 = new Label();
-            chbMaterialTypeRemoved = new CheckBox();
             btnMaterialTypeSearch = new Button();
             txbIdMaterialType = new TextBox();
             cboMaterialType = new ComboBox();
@@ -89,15 +88,6 @@
             label15 = new Label();
             picMaterialImage = new PictureBox();
             dgvMaterialList = new DataGridView();
-            Categoría = new DataGridViewTextBoxColumn();
-            Código = new DataGridViewTextBoxColumn();
-            Cantidad = new DataGridViewTextBoxColumn();
-            Unidad = new DataGridViewTextBoxColumn();
-            Concepto = new DataGridViewTextBoxColumn();
-            Precio_USD = new DataGridViewTextBoxColumn();
-            Precio_MXN = new DataGridViewTextBoxColumn();
-            Proveedor = new DataGridViewTextBoxColumn();
-            Distribuidor = new DataGridViewTextBoxColumn();
             btnAddMaterial = new Button();
             btnModifyMaterial = new Button();
             btnRemoveMaterial = new Button();
@@ -117,7 +107,7 @@
             btnEmployeeSearch = new Button();
             cboEmployee = new ComboBox();
             txbIdEmployee = new TextBox();
-            textBox2 = new TextBox();
+            txbObs = new TextBox();
             label16 = new Label();
             ((System.ComponentModel.ISupportInitialize)picMaterialImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).BeginInit();
@@ -156,20 +146,20 @@
             lblId.TabIndex = 254;
             lblId.Text = "Entrada:";
             // 
-            // chbRemovedDistributor
+            // chbDistributorRemoved
             // 
-            chbRemovedDistributor.Appearance = Appearance.Button;
-            chbRemovedDistributor.AutoSize = true;
-            chbRemovedDistributor.Font = new Font("Segoe UI", 7.8F);
-            chbRemovedDistributor.ForeColor = Color.DarkGray;
-            chbRemovedDistributor.Image = Properties.Resources.removedList16;
-            chbRemovedDistributor.Location = new Point(725, 154);
-            chbRemovedDistributor.Margin = new Padding(1, 1, 0, 0);
-            chbRemovedDistributor.Name = "chbRemovedDistributor";
-            chbRemovedDistributor.Size = new Size(23, 23);
-            chbRemovedDistributor.TabIndex = 378;
-            chbRemovedDistributor.Text = "  ";
-            chbRemovedDistributor.UseVisualStyleBackColor = true;
+            chbDistributorRemoved.Appearance = Appearance.Button;
+            chbDistributorRemoved.AutoSize = true;
+            chbDistributorRemoved.Font = new Font("Segoe UI", 7.8F);
+            chbDistributorRemoved.ForeColor = Color.DarkGray;
+            chbDistributorRemoved.Image = Properties.Resources.removedList16;
+            chbDistributorRemoved.Location = new Point(725, 154);
+            chbDistributorRemoved.Margin = new Padding(1, 1, 0, 0);
+            chbDistributorRemoved.Name = "chbDistributorRemoved";
+            chbDistributorRemoved.Size = new Size(23, 23);
+            chbDistributorRemoved.TabIndex = 378;
+            chbDistributorRemoved.Text = "  ";
+            chbDistributorRemoved.UseVisualStyleBackColor = true;
             // 
             // btnSearchDistributor
             // 
@@ -395,12 +385,12 @@
             // 
             lblLinea.AutoSize = true;
             lblLinea.Font = new Font("Microsoft Sans Serif", 9F);
-            lblLinea.Location = new Point(28, 113);
+            lblLinea.Location = new Point(10, 113);
             lblLinea.Margin = new Padding(1, 1, 0, 0);
             lblLinea.Name = "lblLinea";
-            lblLinea.Size = new Size(41, 15);
+            lblLinea.Size = new Size(54, 15);
             lblLinea.TabIndex = 379;
-            lblLinea.Text = "Línea:";
+            lblLinea.Text = "Línea T.:";
             lblLinea.TextAlign = ContentAlignment.TopRight;
             // 
             // dtpDate
@@ -445,21 +435,6 @@
             label11.TabIndex = 402;
             label11.Text = "Folio:";
             label11.TextAlign = ContentAlignment.TopRight;
-            // 
-            // chbMaterialTypeRemoved
-            // 
-            chbMaterialTypeRemoved.Appearance = Appearance.Button;
-            chbMaterialTypeRemoved.AutoSize = true;
-            chbMaterialTypeRemoved.Font = new Font("Segoe UI", 7.8F);
-            chbMaterialTypeRemoved.ForeColor = Color.DarkGray;
-            chbMaterialTypeRemoved.Image = Properties.Resources.removedList16;
-            chbMaterialTypeRemoved.Location = new Point(726, 44);
-            chbMaterialTypeRemoved.Margin = new Padding(1, 1, 0, 0);
-            chbMaterialTypeRemoved.Name = "chbMaterialTypeRemoved";
-            chbMaterialTypeRemoved.Size = new Size(23, 23);
-            chbMaterialTypeRemoved.TabIndex = 407;
-            chbMaterialTypeRemoved.Text = "  ";
-            chbMaterialTypeRemoved.UseVisualStyleBackColor = true;
             // 
             // btnMaterialTypeSearch
             // 
@@ -819,6 +794,7 @@
             dgvMaterialList.AllowUserToOrderColumns = true;
             dgvMaterialList.AllowUserToResizeRows = false;
             dgvMaterialList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMaterialList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dgvMaterialList.BackgroundColor = SystemColors.ControlLightLight;
             dgvMaterialList.BorderStyle = BorderStyle.Fixed3D;
             dgvMaterialList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -830,7 +806,6 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvMaterialList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvMaterialList.Columns.AddRange(new DataGridViewColumn[] { Categoría, Código, Cantidad, Unidad, Concepto, Precio_USD, Precio_MXN, Proveedor, Distribuidor });
             dgvMaterialList.EnableHeadersVisualStyles = false;
             dgvMaterialList.ImeMode = ImeMode.NoControl;
             dgvMaterialList.Location = new Point(11, 224);
@@ -851,71 +826,10 @@
             dgvMaterialList.Size = new Size(894, 268);
             dgvMaterialList.TabIndex = 441;
             // 
-            // Categoría
-            // 
-            Categoría.HeaderText = "Categoría";
-            Categoría.Name = "Categoría";
-            Categoría.ReadOnly = true;
-            // 
-            // Código
-            // 
-            Código.HeaderText = "Código";
-            Código.Name = "Código";
-            Código.ReadOnly = true;
-            Código.Width = 50;
-            // 
-            // Cantidad
-            // 
-            Cantidad.HeaderText = "Cantidad";
-            Cantidad.Name = "Cantidad";
-            Cantidad.ReadOnly = true;
-            Cantidad.Width = 50;
-            // 
-            // Unidad
-            // 
-            Unidad.HeaderText = "Unidad";
-            Unidad.Name = "Unidad";
-            Unidad.ReadOnly = true;
-            Unidad.Width = 50;
-            // 
-            // Concepto
-            // 
-            Concepto.HeaderText = "Concepto";
-            Concepto.Name = "Concepto";
-            Concepto.ReadOnly = true;
-            // 
-            // Precio_USD
-            // 
-            Precio_USD.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            Precio_USD.HeaderText = "$USD";
-            Precio_USD.Name = "Precio_USD";
-            Precio_USD.ReadOnly = true;
-            Precio_USD.Width = 50;
-            // 
-            // Precio_MXN
-            // 
-            Precio_MXN.HeaderText = "$MXN";
-            Precio_MXN.Name = "Precio_MXN";
-            Precio_MXN.ReadOnly = true;
-            Precio_MXN.Width = 50;
-            // 
-            // Proveedor
-            // 
-            Proveedor.HeaderText = "Proveedor";
-            Proveedor.Name = "Proveedor";
-            Proveedor.ReadOnly = true;
-            // 
-            // Distribuidor
-            // 
-            Distribuidor.HeaderText = "Distribuidor";
-            Distribuidor.Name = "Distribuidor";
-            Distribuidor.ReadOnly = true;
-            // 
             // btnAddMaterial
             // 
             btnAddMaterial.BackColor = Color.GreenYellow;
             btnAddMaterial.BackgroundImageLayout = ImageLayout.Stretch;
-            btnAddMaterial.Enabled = false;
             btnAddMaterial.Font = new Font("Microsoft Sans Serif", 9F);
             btnAddMaterial.Location = new Point(600, 198);
             btnAddMaterial.Margin = new Padding(1, 1, 0, 0);
@@ -924,12 +838,12 @@
             btnAddMaterial.TabIndex = 442;
             btnAddMaterial.Text = "Agregar";
             btnAddMaterial.UseVisualStyleBackColor = false;
+            btnAddMaterial.Click += btnAddMaterial_Click;
             // 
             // btnModifyMaterial
             // 
             btnModifyMaterial.BackColor = Color.FromArgb(255, 255, 128);
             btnModifyMaterial.BackgroundImageLayout = ImageLayout.Stretch;
-            btnModifyMaterial.Enabled = false;
             btnModifyMaterial.Font = new Font("Microsoft Sans Serif", 9F);
             btnModifyMaterial.Location = new Point(670, 198);
             btnModifyMaterial.Margin = new Padding(1, 1, 0, 0);
@@ -938,12 +852,12 @@
             btnModifyMaterial.TabIndex = 443;
             btnModifyMaterial.Text = "Modificar";
             btnModifyMaterial.UseVisualStyleBackColor = false;
+            btnModifyMaterial.Click += btnModifyMaterial_Click;
             // 
             // btnRemoveMaterial
             // 
             btnRemoveMaterial.BackColor = Color.Salmon;
             btnRemoveMaterial.BackgroundImageLayout = ImageLayout.Stretch;
-            btnRemoveMaterial.Enabled = false;
             btnRemoveMaterial.Font = new Font("Microsoft Sans Serif", 9F);
             btnRemoveMaterial.Location = new Point(740, 198);
             btnRemoveMaterial.Margin = new Padding(1, 1, 0, 0);
@@ -952,13 +866,13 @@
             btnRemoveMaterial.TabIndex = 444;
             btnRemoveMaterial.Text = "Eliminar";
             btnRemoveMaterial.UseVisualStyleBackColor = false;
+            btnRemoveMaterial.Click += btnRemoveMaterial_Click;
             // 
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSave.BackColor = SystemColors.ControlLightLight;
             btnSave.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSave.Enabled = false;
             btnSave.Font = new Font("Microsoft Sans Serif", 9F);
             btnSave.Location = new Point(10, 496);
             btnSave.Margin = new Padding(1, 1, 0, 0);
@@ -967,13 +881,13 @@
             btnSave.TabIndex = 446;
             btnSave.Text = "Guardar";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCancel.BackColor = SystemColors.ControlLightLight;
             btnCancel.BackgroundImageLayout = ImageLayout.Stretch;
-            btnCancel.Enabled = false;
             btnCancel.Font = new Font("Microsoft Sans Serif", 9F);
             btnCancel.Location = new Point(80, 496);
             btnCancel.Margin = new Padding(1, 1, 0, 0);
@@ -982,6 +896,7 @@
             btnCancel.TabIndex = 447;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnFreightContainerAdd
             // 
@@ -1122,7 +1037,7 @@
             btnEmployeeSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnEmployeeSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnEmployeeSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnEmployeeSearch.Location = new Point(146, 87);
+            btnEmployeeSearch.Location = new Point(323, 87);
             btnEmployeeSearch.Margin = new Padding(1, 1, 0, 0);
             btnEmployeeSearch.Name = "btnEmployeeSearch";
             btnEmployeeSearch.Size = new Size(23, 23);
@@ -1136,10 +1051,10 @@
             cboEmployee.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboEmployee.FormattingEnabled = true;
             cboEmployee.ItemHeight = 13;
-            cboEmployee.Location = new Point(169, 87);
+            cboEmployee.Location = new Point(128, 88);
             cboEmployee.Margin = new Padding(1, 1, 0, 0);
             cboEmployee.Name = "cboEmployee";
-            cboEmployee.Size = new Size(177, 21);
+            cboEmployee.Size = new Size(195, 21);
             cboEmployee.TabIndex = 461;
             // 
             // txbIdEmployee
@@ -1153,15 +1068,15 @@
             txbIdEmployee.TabIndex = 462;
             txbIdEmployee.TextAlign = HorizontalAlignment.Center;
             // 
-            // textBox2
+            // txbObs
             // 
-            textBox2.Font = new Font("Microsoft Sans Serif", 9F);
-            textBox2.Location = new Point(430, 199);
-            textBox2.Margin = new Padding(1, 1, 0, 0);
-            textBox2.MaxLength = 20;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(169, 21);
-            textBox2.TabIndex = 463;
+            txbObs.Font = new Font("Microsoft Sans Serif", 9F);
+            txbObs.Location = new Point(430, 199);
+            txbObs.Margin = new Padding(1, 1, 0, 0);
+            txbObs.MaxLength = 20;
+            txbObs.Name = "txbObs";
+            txbObs.Size = new Size(169, 21);
+            txbObs.TabIndex = 463;
             // 
             // label16
             // 
@@ -1179,8 +1094,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(917, 523);
-            Controls.Add(textBox2);
+            Controls.Add(txbObs);
             Controls.Add(label16);
             Controls.Add(txbIdEmployee);
             Controls.Add(cboEmployee);
@@ -1225,7 +1141,6 @@
             Controls.Add(txbIdMaterial);
             Controls.Add(cboMaterial);
             Controls.Add(label2);
-            Controls.Add(chbMaterialTypeRemoved);
             Controls.Add(btnMaterialTypeSearch);
             Controls.Add(txbIdMaterialType);
             Controls.Add(cboMaterialType);
@@ -1249,7 +1164,7 @@
             Controls.Add(label5);
             Controls.Add(label8);
             Controls.Add(lblLinea);
-            Controls.Add(chbRemovedDistributor);
+            Controls.Add(chbDistributorRemoved);
             Controls.Add(btnSearchDistributor);
             Controls.Add(txbIdDistributor);
             Controls.Add(cboDistributor);
@@ -1274,7 +1189,7 @@
         public Label lblTitle;
         public TextBox txbId;
         private Label lblId;
-        public CheckBox chbRemovedDistributor;
+        public CheckBox chbDistributorRemoved;
         public Button btnSearchDistributor;
         public TextBox txbIdDistributor;
         public ComboBox cboDistributor;
@@ -1298,7 +1213,6 @@
         private Label label17;
         public TextBox txbInvoice;
         private Label label11;
-        public CheckBox chbMaterialTypeRemoved;
         public Button btnMaterialTypeSearch;
         public TextBox txbIdMaterialType;
         public ComboBox cboMaterialType;
@@ -1361,5 +1275,6 @@
         public TextBox txbIdEmployee;
         public TextBox textBox2;
         private Label label16;
+        public TextBox txbObs;
     }
 }
