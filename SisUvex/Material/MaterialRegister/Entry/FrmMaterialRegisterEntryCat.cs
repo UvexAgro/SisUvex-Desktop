@@ -52,5 +52,17 @@ namespace SisUvex.Material.MaterialRegister.Entry
             if (cls.IsModifyUpdate)
                 cls.ModifyRowByIdInDGVCatalog();
         }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (dgvCatalog.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dgvCatalog.SelectedRows[0];
+
+                cls.BtnDeleteSelectedRowFromDGV(selectedRow);
+            }
+            else
+                SystemSounds.Exclamation.Play();
+        }
     }
 }

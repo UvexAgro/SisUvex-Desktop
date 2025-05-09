@@ -493,9 +493,9 @@ namespace SisUvex.Material.MaterialRegister.Entry
             newRow["Cantidad"] = _frmAdd.txbQuant.Text;
             newRow["Unidad"] = _frmAdd.txbUnit.Text;
             newRow["Folio"] = _frmAdd.txbInvoice.Text;
-            newRow["Proveedor"] = _frmAdd.cboProvider.GetColumnValue(ClsObject.MaterialProvider.ColumnName);
-            newRow["Distribuidor"] = _frmAdd.cboDistributor.GetColumnValue(Distributor.ColumnName);
-            newRow["Productor"] = _frmAdd.cboGrower.GetColumnValue(Grower.ColumnName);
+            newRow["Proveedor"] = _frmAdd.cboProvider.GetColumnValue(ClsObject.MaterialProvider.ColumnShortName);
+            newRow["Distribuidor"] = _frmAdd.cboDistributor.GetColumnValue(Distributor.ColumnShortName);
+            newRow["Productor"] = _frmAdd.cboGrower.GetColumnValue(Grower.ColumnShortName);
             newRow["$USD"] = _frmAdd.txbUSD.Text; //.ToString("N2");
             newRow["$MXN"] = _frmAdd.txbMXN.Text; //.ToString("N2");
             newRow["Obs."] = _frmAdd.txbObs.Text;
@@ -547,6 +547,63 @@ namespace SisUvex.Material.MaterialRegister.Entry
             _frmAdd.txbObs.Text = rowToModify["Obs."].ToString();
 
             RemoveRowMaterialsInEntry();
+        }
+
+        public void BtnDeleteSelectedRowFromDGV(DataGridViewRow selectedRow)
+        {
+            string? idMatInboundEntry = selectedRow.Cells[Column.id].Value?.ToString();
+
+            if (!string.IsNullOrEmpty(idMatInboundEntry))
+            {
+                DialogResult result = MessageBox.Show($"¿Está seguro de que desea eliminar la entrada de material {idMatInboundEntry}?", "Eliminar entrada de material", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result != DialogResult.Yes)
+                    return;
+
+                bool isDeleted = DeleteMatInboundEntry(idMatInboundEntry);
+
+                if (isDeleted)
+                {
+                    for (int i = _frmCat.dgvCatalog.Rows.Count - 1; i >= 0; i--)
+                    {
+                        DataGridViewRow row = _frmCat.dgvCatalog.Rows[i];
+                        MessageBox.Show(row.Cells[Column.id].Value?.ToString(), idMatInboundEntry);
+                        if (row.Cells[Column.id].Value?.ToString() == idMatInboundEntry)
+                        {
+                            _frmCat.dgvCatalog.Rows.Remove(row);
+                        }
+                    }
+                    MessageBox.Show($"Se ha eliminado la entrada de material con el código: {idMatInboundEntry}", "Eliminar entrada de material");
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se eliminó la entrada de material.", "Eliminar entrada de material");
+                }
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("El código de la entrada de material no es válido.", "Eliminar entrada de material");
+            }
+        }
+
+        private bool DeleteMatInboundEntry(string idMatInboundEntry)
+        {
+            if (string.IsNullOrEmpty(idMatInboundEntry))
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se ha seleccionado una entrada para eliminar.", "Eliminar entrada de material");
+                return false;
+            }
+
+            return EMaterialRegisterEntry.DeleteProcedure(idMatInboundEntry);
+        }
+        public void BtnDeleteRowsByIdFromDGV(string idToDelete)
+        {
+
+
+            MessageBox.Show($"Se han eliminado las filas con el ID: {idToDelete}", "Eliminar filas del DataGridView");
         }
     }
 }

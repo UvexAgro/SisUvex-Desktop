@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialRegisterEntryCat));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             button1 = new Button();
             btnTemplates = new Button();
             btnConfigManifest = new Button();
@@ -39,10 +39,8 @@
             btnSearchManifest = new Button();
             txbIdManifest = new TextBox();
             btnPrint = new Button();
-            btnRemoved = new Button();
             label2 = new Label();
             btnRemove = new Button();
-            btnRecover = new Button();
             cboMaterial = new ComboBox();
             dgvCatalog = new DataGridView();
             cboDistributor = new ComboBox();
@@ -65,8 +63,8 @@
             chbTransportLineRemoved = new CheckBox();
             chbDistributorRemoved = new CheckBox();
             chbGrowerRemoved = new CheckBox();
-            chbWareHouseRemoved = new CheckBox();
             chbProviderRemoved = new CheckBox();
+            chbWareHouseRemoved = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -150,15 +148,6 @@
             btnPrint.Text = "Imprimir";
             btnPrint.UseVisualStyleBackColor = true;
             // 
-            // btnRemoved
-            // 
-            btnRemoved.Location = new Point(174, 135);
-            btnRemoved.Name = "btnRemoved";
-            btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 398;
-            btnRemoved.Text = "Eliminados";
-            btnRemoved.UseVisualStyleBackColor = true;
-            // 
             // label2
             // 
             label2.AutoSize = true;
@@ -171,21 +160,13 @@
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(255, 135);
+            btnRemove.Location = new Point(174, 135);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
             btnRemove.TabIndex = 399;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
-            // 
-            // btnRecover
-            // 
-            btnRecover.Location = new Point(336, 135);
-            btnRecover.Name = "btnRecover";
-            btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 400;
-            btnRecover.Text = "Recuperar";
-            btnRecover.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // cboMaterial
             // 
@@ -205,28 +186,28 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 164);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -442,19 +423,6 @@
             chbGrowerRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbGrowerRemoved.UseVisualStyleBackColor = true;
             // 
-            // chbWareHouseRemoved
-            // 
-            chbWareHouseRemoved.Appearance = Appearance.Button;
-            chbWareHouseRemoved.Image = Properties.Resources.removedList16;
-            chbWareHouseRemoved.Location = new Point(445, 20);
-            chbWareHouseRemoved.Margin = new Padding(0);
-            chbWareHouseRemoved.Name = "chbWareHouseRemoved";
-            chbWareHouseRemoved.Padding = new Padding(0, 1, 0, 0);
-            chbWareHouseRemoved.Size = new Size(24, 25);
-            chbWareHouseRemoved.TabIndex = 422;
-            chbWareHouseRemoved.TextAlign = ContentAlignment.MiddleCenter;
-            chbWareHouseRemoved.UseVisualStyleBackColor = true;
-            // 
             // chbProviderRemoved
             // 
             chbProviderRemoved.Appearance = Appearance.Button;
@@ -467,6 +435,19 @@
             chbProviderRemoved.TabIndex = 421;
             chbProviderRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbProviderRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbWareHouseRemoved
+            // 
+            chbWareHouseRemoved.Appearance = Appearance.Button;
+            chbWareHouseRemoved.Image = Properties.Resources.removedList16;
+            chbWareHouseRemoved.Location = new Point(445, 20);
+            chbWareHouseRemoved.Margin = new Padding(0);
+            chbWareHouseRemoved.Name = "chbWareHouseRemoved";
+            chbWareHouseRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbWareHouseRemoved.Size = new Size(24, 25);
+            chbWareHouseRemoved.TabIndex = 422;
+            chbWareHouseRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbWareHouseRemoved.UseVisualStyleBackColor = true;
             // 
             // FrmMaterialRegisterEntryCat
             // 
@@ -498,10 +479,8 @@
             Controls.Add(btnSearchManifest);
             Controls.Add(txbIdManifest);
             Controls.Add(btnPrint);
-            Controls.Add(btnRemoved);
             Controls.Add(label2);
             Controls.Add(btnRemove);
-            Controls.Add(btnRecover);
             Controls.Add(cboMaterial);
             Controls.Add(dgvCatalog);
             Controls.Add(cboDistributor);
@@ -527,10 +506,8 @@
         private Button btnSearchManifest;
         private TextBox txbIdManifest;
         private Button btnPrint;
-        public Button btnRemoved;
         private Label label2;
         private Button btnRemove;
-        private Button btnRecover;
         public ComboBox cboMaterial;
         public DataGridView dgvCatalog;
         public ComboBox cboDistributor;
@@ -553,7 +530,7 @@
         public CheckBox chbTransportLineRemoved;
         public CheckBox chbDistributorRemoved;
         public CheckBox chbGrowerRemoved;
-        public CheckBox chbWareHouseRemoved;
         public CheckBox chbProviderRemoved;
+        public CheckBox chbWareHouseRemoved;
     }
 }

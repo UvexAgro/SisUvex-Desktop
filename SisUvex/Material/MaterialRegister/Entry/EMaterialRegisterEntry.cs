@@ -261,5 +261,31 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 return (false, null);
             }
         }
+
+        public static bool DeleteProcedure(string idMatInbound)
+        {
+            SQLControl sql = new SQLControl();
+            try
+            {
+                sql.OpenConectionWrite();
+                sql.BeginTransaction();
+                SqlCommand cmd = new SqlCommand("sp_PackMatInboundDelete", sql.cnn, sql.transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@idMatInbound", idMatInbound);
+                cmd.ExecuteNonQuery();
+                sql.transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                sql.transaction?.Rollback();
+                MessageBox.Show(ex.ToString(), "Eliminar entrada de material");
+                return false;
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
     }
 }
