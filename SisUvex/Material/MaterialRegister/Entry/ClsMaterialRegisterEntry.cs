@@ -88,6 +88,8 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             AddControlsToListEntry();
             LoadControlsAddModify();
+            InitializeDtInboundMaterials();
+
             if (IsAddOrModify)
             {
                 //_frmAdd.chbActive.Checked = true; //NO LLEVA
@@ -98,7 +100,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 LoadControlsModify();
             }
 
-            InitializeDtInboundMaterials();
         }
         private void AddControlsToListEntry()
         {
@@ -139,7 +140,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 MessageBox.Show("No se ha seleccionado una entrada para modificar.", "Modificar entrada de material");
                 return;
             }
-
             idAddModify = idModify;
             _frmAdd = new FrmMaterialRegisterEntry();
             _frmAdd.cls = this;
@@ -242,7 +242,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             entity.GetMaterialEntryMaterials(idAddModify);
 
             _frmAdd.txbId.Text = entity.idMatInbound;
-            _frmAdd.dtpDate.Value = entity.date;
+            //_frmAdd.dtpDate.Value = entity.date;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, entity.idTransportLine);
@@ -251,6 +251,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
 
             dtInboundMaterials = entity.dtMaterials;
+            _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
         }
 
         private EMaterialRegisterEntry SetEntity()
@@ -409,12 +410,16 @@ namespace SisUvex.Material.MaterialRegister.Entry
             dtInboundMaterials.Columns.Add("$USD", typeof(string));
             dtInboundMaterials.Columns.Add("$MXN", typeof(string));
             dtInboundMaterials.Columns.Add("Obs.", typeof(string));
+            dtInboundMaterials.Columns.Add(EMaterialRegisterEntry.cPosition, typeof(string));
+            dtInboundMaterials.Columns.Add(EMaterialRegisterEntry.cIdMatInbound, typeof(string));
             dtInboundMaterials.Columns.Add(ClsObject.MaterialProvider.ColumnId, typeof(string));
             dtInboundMaterials.Columns.Add(Distributor.ColumnId, typeof(string));
             dtInboundMaterials.Columns.Add(Grower.ColumnId, typeof(string));
 
             _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
 
+            _frmAdd.dgvMaterialList.Columns[EMaterialRegisterEntry.cPosition].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[EMaterialRegisterEntry.cIdMatInbound].Visible = false;
             _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialProvider.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Distributor.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Grower.ColumnId].Visible = false;
@@ -494,9 +499,11 @@ namespace SisUvex.Material.MaterialRegister.Entry
             newRow["$USD"] = _frmAdd.txbUSD.Text; //.ToString("N2");
             newRow["$MXN"] = _frmAdd.txbMXN.Text; //.ToString("N2");
             newRow["Obs."] = _frmAdd.txbObs.Text;
-            newRow["idProvedor"] = _frmAdd.txbIdProvider.Text;
-            newRow["idDistribuidor"] = _frmAdd.txbIdDistributor.Text;
-            newRow["idProductor"] = _frmAdd.txbIdGrower.Text;
+            newRow[EMaterialRegisterEntry.cPosition] = ""; //no ocupa ir nada
+            newRow[EMaterialRegisterEntry.cIdMatInbound] = ""; //no ocupa ir nada
+            newRow[ClsObject.MaterialProvider.ColumnId] = _frmAdd.txbIdProvider.Text;
+            newRow[Distributor.ColumnId] = _frmAdd.txbIdDistributor.Text;
+            newRow[Grower.ColumnId] = _frmAdd.txbIdGrower.Text;
 
             dtInboundMaterials.Rows.Add(newRow);
         }

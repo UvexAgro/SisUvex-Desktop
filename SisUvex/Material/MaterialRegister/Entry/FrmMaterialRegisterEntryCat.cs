@@ -47,7 +47,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 SystemSounds.Exclamation.Play();
                 return;
             }
-
             cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString());
 
             if (cls.IsModifyUpdate)

@@ -21,6 +21,9 @@ namespace SisUvex.Material.MaterialRegister.Entry
         public string? idWarehouse { get; set; }
         public string? idEmployee { get; set; }
         public DataTable? dtMaterials { get; set; }
+
+        public const string? cIdMatInbound = "idMatInbound";
+        public const string? cPosition = "Posición";
         public static string GetNextId()
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matInbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatInbound").ToString();
@@ -28,15 +31,15 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         public void GetMaterialEntry(string idMaterialInbound)
         {
-            if (string.IsNullOrEmpty(idMatInbound))
-                idMatInbound = "0";
+            if (string.IsNullOrEmpty(idMaterialInbound))
+                idMaterialInbound = "0";
 
             SQLControl sql = new SQLControl();
             try
             {
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_MatInbound WHERE id_matInbound = @idMatInbound", sql.cnn);
-                cmd.Parameters.AddWithValue("@idMatInbound", idMatInbound);
+                cmd.Parameters.AddWithValue("@idMatInbound", idMaterialInbound);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
@@ -68,7 +71,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand($"SELECT * FROM vw_PackMatInbondEntryMaterials WHERE {ClsObject.Column.id} = @idMatInbound", sql.cnn);
+                SqlCommand cmd = new SqlCommand($"SELECT * FROM vw_PackMatInbondEntryMaterials WHERE [{cIdMatInbound}] = @idMatInbound", sql.cnn);
                 cmd.Parameters.AddWithValue("@idMatInbound", idMatInbound);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 dtMaterials = new DataTable();
