@@ -182,7 +182,7 @@
             Controls.Add(btnAdd);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmLotCat";
-            Text = "FrmLotCat";
+            Text = "Catálogo de lotes";
             WindowState = FormWindowState.Maximized;
             Load += FrmLotCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();

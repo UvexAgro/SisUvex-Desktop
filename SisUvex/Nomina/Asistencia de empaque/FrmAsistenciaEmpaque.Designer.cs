@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaEmpaque));
             btnNuevo = new Button();
             lblNuevo = new Label();
             lblEmpleado = new Label();
@@ -55,7 +56,7 @@
             lblNuevo.AutoSize = true;
             lblNuevo.Location = new Point(12, 9);
             lblNuevo.Name = "lblNuevo";
-            lblNuevo.Size = new Size(126, 15);
+            lblNuevo.Size = new Size(125, 15);
             lblNuevo.TabIndex = 1;
             lblNuevo.Text = "Cargar excel asistencia";
             // 
@@ -148,6 +149,10 @@
             Controls.Add(btnEmpleado);
             Controls.Add(lblNuevo);
             Controls.Add(btnNuevo);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmAsistenciaEmpaque";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Asistencia de empaque";
