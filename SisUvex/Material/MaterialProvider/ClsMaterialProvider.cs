@@ -69,6 +69,7 @@ namespace SisUvex.Material.MaterialProvider
             controlList.ChangeHeadMessage("Para dar de alta un proveedor debe:\n");
             controlList.Add(_frmAdd.txbId, "Ingresar el código del proveedor.");
             controlList.Add(_frmAdd.txbName, "Ingresar el nombre del proveedor.");
+            controlList.Add(_frmAdd.txbShortName, "Ingresar el nombre corto del proveedor.");
         }
 
         public void OpenFrmAdd()
@@ -112,6 +113,7 @@ namespace SisUvex.Material.MaterialProvider
             _frmAdd.txbPhoneNumber.Text = eProvider.phoneNumber;
             _frmAdd.txbEmail.Text = eProvider.email;
             _frmAdd.cboActive.SelectedIndex = eProvider.active;
+            _frmAdd.txbShortName.Text = eProvider.shortNameProvider;
         }
 
         private EMaterialProvider SetProviderEntity()
@@ -123,6 +125,7 @@ namespace SisUvex.Material.MaterialProvider
             eProvider.phoneNumber = _frmAdd.txbPhoneNumber.Text;
             eProvider.email = _frmAdd.txbEmail.Text;
             eProvider.active = _frmAdd.cboActive.SelectedIndex;
+            eProvider.shortNameProvider = _frmAdd.txbShortName.Text;
 
             return eProvider;
         }

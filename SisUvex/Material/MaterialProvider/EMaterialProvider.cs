@@ -19,7 +19,7 @@ namespace SisUvex.Material.MaterialProvider
         public string phoneNumber { get; set; }
         public string email { get; set; }
         public int active { get; set; }
-
+        public string shortNameProvider { get; set; }
         public static string GetNextId()
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
@@ -42,6 +42,7 @@ namespace SisUvex.Material.MaterialProvider
                     phoneNumber = dr.GetValue(dr.GetOrdinal("c_phoneNumber")).ToString();
                     email = dr.GetValue(dr.GetOrdinal("v_email")).ToString();
                     active = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("c_active")));
+                    shortNameProvider = dr.GetValue(dr.GetOrdinal("v_shortName")).ToString();
                 }
             }
             catch (Exception ex)
@@ -76,6 +77,7 @@ namespace SisUvex.Material.MaterialProvider
                 cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
                 cmd.Parameters.AddWithValue("@email", ClsValues.IfEmptyToDBNull(email));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
+                cmd.Parameters.AddWithValue("@shortName", shortNameProvider);
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
@@ -112,6 +114,7 @@ namespace SisUvex.Material.MaterialProvider
                 cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
                 cmd.Parameters.AddWithValue("@email", ClsValues.IfEmptyToDBNull(email));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
+                cmd.Parameters.AddWithValue("@shortName", shortNameProvider);
                 cmd.ExecuteNonQuery();
                 return (true, idProvider);
             }
