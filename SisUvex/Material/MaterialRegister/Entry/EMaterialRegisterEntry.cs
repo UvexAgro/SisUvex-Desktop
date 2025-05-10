@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Values;
+using Microsoft.Win32.SafeHandles;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 { 
@@ -51,6 +52,8 @@ namespace SisUvex.Material.MaterialRegister.Entry
                     idWarehouse = dr.GetValue(dr.GetOrdinal("id_warehouses")).ToString();
                     idEmployee = dr.GetValue(dr.GetOrdinal("id_employee")).ToString();
                 }
+
+
             }
             catch (Exception ex)
             {

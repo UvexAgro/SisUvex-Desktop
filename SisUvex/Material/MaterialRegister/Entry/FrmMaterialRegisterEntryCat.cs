@@ -64,5 +64,10 @@ namespace SisUvex.Material.MaterialRegister.Entry
             else
                 SystemSounds.Exclamation.Play();
         }
+
+        private void btnSearchFilters_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchFilter();
+        }
     }
 }

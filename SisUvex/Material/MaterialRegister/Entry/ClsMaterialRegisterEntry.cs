@@ -22,7 +22,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 {
     internal class ClsMaterialRegisterEntry
     {
-        SQLControl sql = new SQLControl();
         ClsControls? controlListInbound;
         ClsControls? controlListMaterial;
         DataTable? dtUnit;
@@ -30,20 +29,107 @@ namespace SisUvex.Material.MaterialRegister.Entry
         public FrmMaterialRegisterEntry _frmAdd;
         public FrmMaterialRegisterEntryCat _frmCat;
         public EMaterialRegisterEntry entity;
-        private string queryCatalog = $" SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat";
+        private string queryCatalog = "SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat ";
+        private string queryCatalogExists = "WHERE EXISTS (SELECT 1 FROM Pack_MatInbound inb " +
+                                          "JOIN Pack_MatInboundMaterials mat ON mat.id_matInbound = inb.id_matInbound " +
+                                          "JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = mat.id_matCatalog " +
+                                          "LEFT JOIN Pack_MaterialType matT ON matT.id_matType = matC.id_matType " +
+                                          "WHERE inb.id_matInbound = cat.[Código] ";
         ClsDGVCatalog dgv;
         DataTable? dtCatalog, dtInboundMaterials, dtEmployees;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
         private string employeeCboQuery = $" SELECT DISTINCT emp.id_employee AS [{Column.id}], CONCAT_WS(' ',emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS [{Column.name}] FROM Nom_Employees emp ";
         private string employeeCboQueryJoin = $" JOIN Pack_MatInbound mat ON mat.id_employee = emp.id_employee ";
+
+        public void BtnSearchFilter()
+        {
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+        }
+
+        private DataTable SearchFilter()
+        {
+            Dictionary<string, object> parameters = new();
+            StringBuilder qry = new StringBuilder(queryCatalog);
+            StringBuilder existsConditions = new StringBuilder(queryCatalogExists);
+
+            // Fecha siempre aplica
+            existsConditions.Append(" AND inb.d_date BETWEEN @date1 AND @date2 ");
+            parameters.Add("@date1", _frmCat.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            parameters.Add("@date2", _frmCat.dtpDate2.Value.ToString("yyyy-MM-dd"));
+
+            // Filtros condicionales
+            if (_frmCat.cboDistributor.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_distributor = @idDistributor ");
+                parameters.Add("@idDistributor", _frmCat.cboDistributor.SelectedValue);
+            }
+
+            if (_frmCat.cboGrower.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_grower = @idGrower ");
+                parameters.Add("@idGrower", _frmCat.cboGrower.SelectedValue);
+            }
+
+            if (_frmCat.cboProvider.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_provider = @idProvider ");
+                parameters.Add("@idProvider", _frmCat.cboProvider.SelectedValue);
+            }
+
+            if (_frmCat.cboWareHouse.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_warehouses = @idWarehouse ");
+                parameters.Add("@idWarehouse", _frmCat.cboWareHouse.SelectedValue);
+            }
+
+            if (_frmCat.cboMaterialType.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND matC.id_matType = @idMaterialType ");
+                parameters.Add("@idMaterialType", _frmCat.cboMaterialType.SelectedValue);
+            }
+            if (_frmCat.cboMaterial.SelectedIndex > 0)
+            {
+                MessageBox.Show(_frmCat.cboMaterial.SelectedValue.ToString());
+
+                existsConditions.Append(" AND matC.id_matCatalog = @idMaterial ");
+                parameters.Add("@idMaterial", _frmCat.cboMaterial.SelectedValue);
+            }
+
+            if (_frmCat.cboTransportLine.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_transportLine = @idTransportLine ");
+                parameters.Add("@idTransportLine", _frmCat.cboTransportLine.SelectedValue);
+            }
+
+            if (_frmCat.cboFreightContainer.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_freightContainer = @idFreightContainer ");
+                parameters.Add("@idFreightContainer", _frmCat.cboFreightContainer.SelectedValue);
+            }
+
+            // Cierra la subconsulta EXISTS
+            existsConditions.Append(")");
+            qry.Append(existsConditions);
+
+            // Ordenar por Fecha, Código y c_position (sin mostrarlo en los resultados)
+            qry.Append(" ORDER BY cat.[Fecha], cat.[Código], ");
+            qry.Append("(SELECT TOP 1 mat.c_position FROM Pack_MatInboundMaterials mat ");
+            qry.Append("WHERE mat.id_matInbound = cat.[Código])");
+
+            Clipboard.SetText(qry.ToString());
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(qry.ToString(), parameters);
+        }
+
         public void BeginFormCat()
         {
             _frmCat ??= new FrmMaterialRegisterEntryCat();
             _frmCat.cls ??= this;
 
-            dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog);
-            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
 
             LoadComboBoxesCatalog();
         }
@@ -242,7 +328,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             entity.GetMaterialEntryMaterials(idAddModify);
 
             _frmAdd.txbId.Text = entity.idMatInbound;
-            //_frmAdd.dtpDate.Value = entity.date;
+            _frmAdd.dtpDate.Value = entity.date;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, entity.idTransportLine);
@@ -250,7 +336,8 @@ namespace SisUvex.Material.MaterialRegister.Entry
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, entity.idFreightContainer);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
 
-            dtInboundMaterials = entity.dtMaterials;
+            dtInboundMaterials.CopyDataFrom(entity.dtMaterials);
+
             _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
         }
 
@@ -394,11 +481,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private void InitializeDtInboundMaterials()
         {
             dtInboundMaterials = new DataTable();
-
-            // Añadir columnas al DataTable
-            //Partes donde se debe cambiar si se modifica:
-            //"AddRowToInboundMaterials()", "BtnModifyRowMaterialsSelected()" 
-            //dtInboundMaterials.Columns.Add("Tipo", typeof(string));
             dtInboundMaterials.Columns.Add("Código", typeof(string));
             dtInboundMaterials.Columns.Add("Material", typeof(string));
             dtInboundMaterials.Columns.Add("Cantidad", typeof(string));
@@ -423,47 +505,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
             _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialProvider.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Distributor.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Grower.ColumnId].Visible = false;
-            //----[METODOS PARA EL DATAGRIDVIEW DEL ADD/MODIFY]----
-
-            //ConfigureEditableColumns();
-        }
-
-        private void ConfigureEditableColumns()
-        {
-            DataGridViewTextBoxColumn cantidadColumn = (DataGridViewTextBoxColumn)_frmAdd.dgvMaterialList.Columns["Cantidad"];
-            cantidadColumn.ValueType = typeof(int);
-            cantidadColumn.DefaultCellStyle.Format = "N0";
-            cantidadColumn.ReadOnly = false;
-
-            DataGridViewTextBoxColumn usdColumn = (DataGridViewTextBoxColumn)_frmAdd.dgvMaterialList.Columns["$USD"];
-            usdColumn.ValueType = typeof(decimal);
-            usdColumn.DefaultCellStyle.Format = "N2";
-            usdColumn.ReadOnly = false;
-
-            DataGridViewTextBoxColumn mxnColumn = (DataGridViewTextBoxColumn)_frmAdd.dgvMaterialList.Columns["$MXN"];
-            mxnColumn.ValueType = typeof(decimal);
-            mxnColumn.DefaultCellStyle.Format = "N2";
-            mxnColumn.ReadOnly = false;
-
-            _frmAdd.dgvMaterialList.CellValidating += (s, e) =>
-            {
-                if (e.ColumnIndex == cantidadColumn.Index)
-                {
-                    if (!int.TryParse(e.FormattedValue.ToString(), out _))
-                    {
-                        e.Cancel = true;
-                        MessageBox.Show("Por favor, ingrese un número entero válido en la columna 'Cantidad'.", "Validación de entrada");
-                    }
-                }
-                else if (e.ColumnIndex == usdColumn.Index || e.ColumnIndex == mxnColumn.Index)
-                {
-                    if (!decimal.TryParse(e.FormattedValue.ToString(), out _))
-                    {
-                        e.Cancel = true;
-                        MessageBox.Show($"Por favor, ingrese un valor decimal válido en la columna '{_frmAdd.dgvMaterialList.Columns[e.ColumnIndex].HeaderText}'.", "Validación de entrada");
-                    }
-                }
-            };
         }
 
         public void BtnAddRowMaterialsInEntry()
@@ -487,7 +528,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private void AddRowToInboundMaterials()
         {
             DataRow newRow = dtInboundMaterials.NewRow();
-            //newRow["Tipo"] = _frmAdd.txbIdMaterial.Text.Substring(0, 2);
             newRow["Código"] = _frmAdd.txbIdMaterial.Text;
             newRow["Material"] = _frmAdd.cboMaterial.GetColumnValue(ClsObject.MaterialCatalog.ColumnName);
             newRow["Cantidad"] = _frmAdd.txbQuant.Text;
@@ -496,8 +536,10 @@ namespace SisUvex.Material.MaterialRegister.Entry
             newRow["Proveedor"] = _frmAdd.cboProvider.GetColumnValue(ClsObject.MaterialProvider.ColumnShortName);
             newRow["Distribuidor"] = _frmAdd.cboDistributor.GetColumnValue(Distributor.ColumnShortName);
             newRow["Productor"] = _frmAdd.cboGrower.GetColumnValue(Grower.ColumnShortName);
-            newRow["$USD"] = _frmAdd.txbUSD.Text; //.ToString("N2");
-            newRow["$MXN"] = _frmAdd.txbMXN.Text; //.ToString("N2");
+            if (decimal.TryParse(_frmAdd.txbUSD.Text, out decimal usdValue))
+                newRow["$USD"] = usdValue.ToString("N2");
+            if (decimal.TryParse(_frmAdd.txbMXN.Text, out decimal mxnValue))
+                newRow["$MXN"] = mxnValue.ToString("N2");
             newRow["Obs."] = _frmAdd.txbObs.Text;
             newRow[EMaterialRegisterEntry.cPosition] = ""; //no ocupa ir nada
             newRow[EMaterialRegisterEntry.cIdMatInbound] = ""; //no ocupa ir nada
@@ -599,11 +641,22 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             return EMaterialRegisterEntry.DeleteProcedure(idMatInboundEntry);
         }
-        public void BtnDeleteRowsByIdFromDGV(string idToDelete)
+        private void ShowColumnNamesAndTypes()
         {
+            if (dtInboundMaterials == null)
+            {
+                MessageBox.Show("La tabla de materiales está vacía o no ha sido inicializada.", "Información");
+                return;
+            }
 
+            StringBuilder columnInfo = new StringBuilder("Columnas y tipos de datos:\n");
 
-            MessageBox.Show($"Se han eliminado las filas con el ID: {idToDelete}", "Eliminar filas del DataGridView");
+            foreach (DataColumn column in dtInboundMaterials.Columns)
+            {
+                columnInfo.AppendLine($"Nombre: {column.ColumnName}, Tipo: {column.DataType.Name}");
+            }
+
+            MessageBox.Show(columnInfo.ToString(), "Información de Columnas");
         }
     }
 }

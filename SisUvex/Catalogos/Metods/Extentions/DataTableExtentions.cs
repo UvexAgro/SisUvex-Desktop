@@ -29,5 +29,27 @@ namespace SisUvex.Catalogos.Metods.Extentions
 
             return null;
         }
+
+        public static void CopyDataFrom(this DataTable? targetTable, DataTable? sourceTable)
+        {
+            if (sourceTable == null || targetTable == null) return;
+
+            targetTable.Clear();
+
+            foreach (DataRow sourceRow in sourceTable.Rows)
+            {
+                DataRow newRow = targetTable.NewRow();
+
+                foreach (DataColumn column in targetTable.Columns)
+                {
+                    if (sourceTable.Columns.Contains(column.ColumnName))
+                    {
+                        newRow[column.ColumnName] = sourceRow[column.ColumnName];
+                    }
+                }
+
+                targetTable.Rows.Add(newRow);
+            }
+        }
     }
 }
