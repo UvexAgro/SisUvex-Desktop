@@ -59,6 +59,7 @@ using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialWarehouses;
 using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialCatalog;
+using SisUvex.Material.MaterialRegister.Entry;
 
 namespace SisUvex
 {
@@ -544,6 +545,12 @@ namespace SisUvex
         private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialCatalog cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void entradasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterEntryCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }
