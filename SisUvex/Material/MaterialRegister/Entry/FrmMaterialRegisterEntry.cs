@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Material.MaterialCatalog;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 {
@@ -56,6 +57,36 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private void btnModifyMaterial_Click(object sender, EventArgs e)
         {
             cls.BtnModifyRowMaterialsSelected();
+        }
+
+        private void chbImageFront_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageFront);
+        }
+
+        private void chbImageBack_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageBack);
+        }
+
+        private void chbImageDown_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageDown);
+        }
+
+        private void chbImageUp_Click(object sender, EventArgs e)
+        {
+            cls.ChbImagesClic(chbImageUp);
+        }
+
+        private void btnMaterialAdd_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddMaterialCatalog();
+        }
+
+        private void btnProviderAdd_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddMaterialProvider();
         }
     }
 }

@@ -28,17 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialRegisterEntryCat));
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             btnSearchFilters = new Button();
-            btnTemplates = new Button();
-            btnConfigManifest = new Button();
             cboMaterialType = new ComboBox();
             label5 = new Label();
-            btnSearchManifest = new Button();
-            txbIdManifest = new TextBox();
-            btnPrint = new Button();
+            txbSearchBy = new TextBox();
             label2 = new Label();
             btnRemove = new Button();
             cboMaterial = new ComboBox();
@@ -69,6 +65,10 @@
             dtpDate1 = new DateTimePicker();
             lblY = new Label();
             label10 = new Label();
+            cboSearchBy = new ComboBox();
+            btnSearchBy = new Button();
+            btnFreightContainerSearch = new Button();
+            btnTransportLineSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -76,36 +76,12 @@
             // 
             btnSearchFilters.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchFilters.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchFilters.Location = new Point(651, 98);
+            btnSearchFilters.Location = new Point(648, 97);
             btnSearchFilters.Name = "btnSearchFilters";
-            btnSearchFilters.Size = new Size(23, 23);
+            btnSearchFilters.Size = new Size(25, 25);
             btnSearchFilters.TabIndex = 405;
             btnSearchFilters.UseVisualStyleBackColor = true;
             btnSearchFilters.Click += btnSearchFilters_Click;
-            // 
-            // btnTemplates
-            // 
-            btnTemplates.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTemplates.Image = Properties.Resources.templateIcon16;
-            btnTemplates.ImageAlign = ContentAlignment.BottomCenter;
-            btnTemplates.Location = new Point(366, 135);
-            btnTemplates.Name = "btnTemplates";
-            btnTemplates.Size = new Size(24, 23);
-            btnTemplates.TabIndex = 404;
-            btnTemplates.TextAlign = ContentAlignment.TopRight;
-            btnTemplates.UseVisualStyleBackColor = true;
-            // 
-            // btnConfigManifest
-            // 
-            btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
-            btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
-            btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(336, 135);
-            btnConfigManifest.Name = "btnConfigManifest";
-            btnConfigManifest.Size = new Size(24, 23);
-            btnConfigManifest.TabIndex = 403;
-            btnConfigManifest.TextAlign = ContentAlignment.TopRight;
-            btnConfigManifest.UseVisualStyleBackColor = true;
             // 
             // cboMaterialType
             // 
@@ -126,32 +102,13 @@
             label5.TabIndex = 395;
             label5.Text = "Tipo de material";
             // 
-            // btnSearchManifest
+            // txbSearchBy
             // 
-            btnSearchManifest.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnSearchManifest.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchManifest.Location = new Point(605, 135);
-            btnSearchManifest.Name = "btnSearchManifest";
-            btnSearchManifest.Size = new Size(23, 23);
-            btnSearchManifest.TabIndex = 391;
-            btnSearchManifest.UseVisualStyleBackColor = true;
-            // 
-            // txbIdManifest
-            // 
-            txbIdManifest.Location = new Point(396, 135);
-            txbIdManifest.MaxLength = 5;
-            txbIdManifest.Name = "txbIdManifest";
-            txbIdManifest.Size = new Size(203, 23);
-            txbIdManifest.TabIndex = 390;
-            // 
-            // btnPrint
-            // 
-            btnPrint.Location = new Point(255, 135);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 401;
-            btnPrint.Text = "Imprimir";
-            btnPrint.UseVisualStyleBackColor = true;
+            txbSearchBy.Location = new Point(385, 135);
+            txbSearchBy.MaxLength = 5;
+            txbSearchBy.Name = "txbSearchBy";
+            txbSearchBy.Size = new Size(203, 23);
+            txbSearchBy.TabIndex = 390;
             // 
             // label2
             // 
@@ -191,28 +148,28 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 164);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -262,11 +219,11 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(396, 120);
+            label6.Location = new Point(255, 123);
             label6.Name = "label6";
-            label6.Size = new Size(110, 12);
+            label6.Size = new Size(48, 12);
             label6.TabIndex = 394;
-            label6.Text = "Buscar por num. de factura";
+            label6.Text = "Buscar por:";
             // 
             // cboGrower
             // 
@@ -489,11 +446,57 @@
             label10.TabIndex = 427;
             label10.Text = "Entre fechas:";
             // 
+            // cboSearchBy
+            // 
+            cboSearchBy.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSearchBy.FormattingEnabled = true;
+            cboSearchBy.Location = new Point(255, 135);
+            cboSearchBy.Name = "cboSearchBy";
+            cboSearchBy.Size = new Size(124, 23);
+            cboSearchBy.TabIndex = 428;
+            // 
+            // btnSearchBy
+            // 
+            btnSearchBy.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchBy.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchBy.Location = new Point(594, 135);
+            btnSearchBy.Name = "btnSearchBy";
+            btnSearchBy.Size = new Size(23, 23);
+            btnSearchBy.TabIndex = 429;
+            btnSearchBy.UseVisualStyleBackColor = true;
+            btnSearchBy.Click += btnSearchBy_Click;
+            // 
+            // btnFreightContainerSearch
+            // 
+            btnFreightContainerSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnFreightContainerSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFreightContainerSearch.Location = new Point(698, 57);
+            btnFreightContainerSearch.Name = "btnFreightContainerSearch";
+            btnFreightContainerSearch.Size = new Size(25, 25);
+            btnFreightContainerSearch.TabIndex = 430;
+            btnFreightContainerSearch.UseVisualStyleBackColor = true;
+            btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
+            // 
+            // btnTransportLineSearch
+            // 
+            btnTransportLineSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnTransportLineSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnTransportLineSearch.Location = new Point(698, 19);
+            btnTransportLineSearch.Name = "btnTransportLineSearch";
+            btnTransportLineSearch.Size = new Size(25, 25);
+            btnTransportLineSearch.TabIndex = 431;
+            btnTransportLineSearch.UseVisualStyleBackColor = true;
+            btnTransportLineSearch.Click += btnTransportLineSearch_Click;
+            // 
             // FrmMaterialRegisterEntryCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(985, 450);
+            Controls.Add(btnTransportLineSearch);
+            Controls.Add(btnFreightContainerSearch);
+            Controls.Add(btnSearchBy);
+            Controls.Add(cboSearchBy);
             Controls.Add(dtpDate2);
             Controls.Add(dtpDate1);
             Controls.Add(lblY);
@@ -516,13 +519,9 @@
             Controls.Add(cboGrower);
             Controls.Add(label3);
             Controls.Add(btnSearchFilters);
-            Controls.Add(btnTemplates);
-            Controls.Add(btnConfigManifest);
             Controls.Add(cboMaterialType);
             Controls.Add(label5);
-            Controls.Add(btnSearchManifest);
-            Controls.Add(txbIdManifest);
-            Controls.Add(btnPrint);
+            Controls.Add(txbSearchBy);
             Controls.Add(label2);
             Controls.Add(btnRemove);
             Controls.Add(cboMaterial);
@@ -532,8 +531,10 @@
             Controls.Add(btnAdd);
             Controls.Add(label1);
             Controls.Add(label6);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialRegisterEntryCat";
-            Text = "FrmMaterialRegisterEntryCat";
+            Text = "Registro de entradas de material";
+            WindowState = FormWindowState.Maximized;
             Load += FrmMaterialRegisterEntryCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
@@ -548,7 +549,7 @@
         public ComboBox cboMaterialType;
         private Label label5;
         private Button btnSearchManifest;
-        private TextBox txbIdManifest;
+        private TextBox txbSearchBy;
         private Button btnPrint;
         private Label label2;
         private Button btnRemove;
@@ -580,5 +581,9 @@
         public DateTimePicker dtpDate1;
         private Label lblY;
         private Label label10;
+        public ComboBox cboSearchBy;
+        private Button btnSearchBy;
+        private Button btnFreightContainerSearch;
+        private Button btnTransportLineSearch;
     }
 }

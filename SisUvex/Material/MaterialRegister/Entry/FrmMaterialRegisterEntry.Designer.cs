@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialRegisterEntry));
             lblTitle = new Label();
             txbId = new TextBox();
             lblId = new Label();
@@ -86,7 +87,7 @@
             cboWarehouse = new ComboBox();
             label14 = new Label();
             label15 = new Label();
-            picMaterialImage = new PictureBox();
+            pbxMaterial = new PictureBox();
             dgvMaterialList = new DataGridView();
             btnAddMaterial = new Button();
             btnModifyMaterial = new Button();
@@ -109,7 +110,11 @@
             txbIdEmployee = new TextBox();
             txbObs = new TextBox();
             label16 = new Label();
-            ((System.ComponentModel.ISupportInitialize)picMaterialImage).BeginInit();
+            chbImageFront = new CheckBox();
+            chbImageBack = new CheckBox();
+            chbImageDown = new CheckBox();
+            chbImageUp = new CheckBox();
+            ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).BeginInit();
             SuspendLayout();
             // 
@@ -778,14 +783,16 @@
             label15.Text = "Recibió:";
             label15.TextAlign = ContentAlignment.TopRight;
             // 
-            // picMaterialImage
+            // pbxMaterial
             // 
-            picMaterialImage.BorderStyle = BorderStyle.Fixed3D;
-            picMaterialImage.Location = new Point(775, 43);
-            picMaterialImage.Name = "picMaterialImage";
-            picMaterialImage.Size = new Size(132, 132);
-            picMaterialImage.TabIndex = 440;
-            picMaterialImage.TabStop = false;
+            pbxMaterial.BackgroundImageLayout = ImageLayout.Stretch;
+            pbxMaterial.BorderStyle = BorderStyle.Fixed3D;
+            pbxMaterial.Location = new Point(775, 43);
+            pbxMaterial.Name = "pbxMaterial";
+            pbxMaterial.Size = new Size(132, 132);
+            pbxMaterial.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbxMaterial.TabIndex = 440;
+            pbxMaterial.TabStop = false;
             // 
             // dgvMaterialList
             // 
@@ -823,7 +830,7 @@
             dgvMaterialList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvMaterialList.RowHeadersVisible = false;
             dgvMaterialList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMaterialList.Size = new Size(894, 268);
+            dgvMaterialList.Size = new Size(948, 268);
             dgvMaterialList.TabIndex = 441;
             // 
             // btnAddMaterial
@@ -945,6 +952,7 @@
             btnProviderAdd.Size = new Size(24, 23);
             btnProviderAdd.TabIndex = 451;
             btnProviderAdd.UseVisualStyleBackColor = true;
+            btnProviderAdd.Click += btnProviderAdd_Click;
             // 
             // btnMaterialAdd
             // 
@@ -957,13 +965,14 @@
             btnMaterialAdd.Size = new Size(24, 23);
             btnMaterialAdd.TabIndex = 452;
             btnMaterialAdd.UseVisualStyleBackColor = true;
+            btnMaterialAdd.Click += btnMaterialAdd_Click;
             // 
             // btnMaterialImageAdd
             // 
             btnMaterialImageAdd.BackgroundImageLayout = ImageLayout.Stretch;
             btnMaterialImageAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnMaterialImageAdd.Image = Properties.Resources.addImageIcon16;
-            btnMaterialImageAdd.Location = new Point(885, 179);
+            btnMaterialImageAdd.Location = new Point(885, 18);
             btnMaterialImageAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialImageAdd.Name = "btnMaterialImageAdd";
             btnMaterialImageAdd.Size = new Size(22, 22);
@@ -1090,12 +1099,80 @@
             label16.Text = "Obs.:";
             label16.TextAlign = ContentAlignment.TopRight;
             // 
+            // chbImageFront
+            // 
+            chbImageFront.Appearance = Appearance.Button;
+            chbImageFront.Font = new Font("Segoe UI", 8F);
+            chbImageFront.ForeColor = Color.Black;
+            chbImageFront.Location = new Point(797, 18);
+            chbImageFront.Margin = new Padding(0);
+            chbImageFront.Name = "chbImageFront";
+            chbImageFront.Padding = new Padding(1, 0, 0, 0);
+            chbImageFront.Size = new Size(22, 22);
+            chbImageFront.TabIndex = 465;
+            chbImageFront.Text = "1";
+            chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageFront.UseVisualStyleBackColor = true;
+            chbImageFront.Click += chbImageFront_Click;
+            // 
+            // chbImageBack
+            // 
+            chbImageBack.Appearance = Appearance.Button;
+            chbImageBack.Font = new Font("Segoe UI", 8F);
+            chbImageBack.ForeColor = Color.Black;
+            chbImageBack.Location = new Point(819, 18);
+            chbImageBack.Margin = new Padding(0);
+            chbImageBack.Name = "chbImageBack";
+            chbImageBack.Padding = new Padding(1, 0, 0, 0);
+            chbImageBack.Size = new Size(22, 22);
+            chbImageBack.TabIndex = 466;
+            chbImageBack.Text = "2";
+            chbImageBack.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageBack.UseVisualStyleBackColor = true;
+            chbImageBack.Click += chbImageBack_Click;
+            // 
+            // chbImageDown
+            // 
+            chbImageDown.Appearance = Appearance.Button;
+            chbImageDown.Font = new Font("Segoe UI", 8F);
+            chbImageDown.ForeColor = Color.Black;
+            chbImageDown.Location = new Point(841, 18);
+            chbImageDown.Margin = new Padding(0);
+            chbImageDown.Name = "chbImageDown";
+            chbImageDown.Padding = new Padding(1, 0, 0, 0);
+            chbImageDown.Size = new Size(22, 22);
+            chbImageDown.TabIndex = 467;
+            chbImageDown.Text = "3";
+            chbImageDown.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageDown.UseVisualStyleBackColor = true;
+            chbImageDown.Click += chbImageDown_Click;
+            // 
+            // chbImageUp
+            // 
+            chbImageUp.Appearance = Appearance.Button;
+            chbImageUp.Font = new Font("Segoe UI", 8F);
+            chbImageUp.ForeColor = Color.Black;
+            chbImageUp.Location = new Point(863, 18);
+            chbImageUp.Margin = new Padding(0);
+            chbImageUp.Name = "chbImageUp";
+            chbImageUp.Padding = new Padding(1, 0, 0, 0);
+            chbImageUp.Size = new Size(22, 22);
+            chbImageUp.TabIndex = 468;
+            chbImageUp.Text = "4";
+            chbImageUp.TextAlign = ContentAlignment.MiddleCenter;
+            chbImageUp.UseVisualStyleBackColor = true;
+            chbImageUp.Click += chbImageUp_Click;
+            // 
             // FrmMaterialRegisterEntry
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(917, 523);
+            ClientSize = new Size(971, 523);
+            Controls.Add(chbImageUp);
+            Controls.Add(chbImageDown);
+            Controls.Add(chbImageBack);
+            Controls.Add(chbImageFront);
             Controls.Add(txbObs);
             Controls.Add(label16);
             Controls.Add(txbIdEmployee);
@@ -1118,7 +1195,7 @@
             Controls.Add(btnModifyMaterial);
             Controls.Add(btnAddMaterial);
             Controls.Add(dgvMaterialList);
-            Controls.Add(picMaterialImage);
+            Controls.Add(pbxMaterial);
             Controls.Add(label15);
             Controls.Add(chbWarehouseRemoved);
             Controls.Add(btnWarehouseSearch);
@@ -1175,10 +1252,11 @@
             Controls.Add(label7);
             Controls.Add(label10);
             Controls.Add(label13);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialRegisterEntry";
-            Text = "FrmMaterialRegisterEntry";
+            Text = "Registro de entrada de material";
             Load += FrmMaterialRegisterEntry_Load;
-            ((System.ComponentModel.ISupportInitialize)picMaterialImage).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbxMaterial).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -1242,7 +1320,6 @@
         public ComboBox cboWarehouse;
         private Label label14;
         private Label label15;
-        private PictureBox picMaterialImage;
         public DataGridView dgvMaterialList;
         public Button btnAddMaterial;
         public Button btnModifyMaterial;
@@ -1276,5 +1353,10 @@
         public TextBox textBox2;
         private Label label16;
         public TextBox txbObs;
+        public CheckBox chbImageFront;
+        public CheckBox chbImageBack;
+        public CheckBox chbImageDown;
+        public CheckBox chbImageUp;
+        public PictureBox pbxMaterial;
     }
 }

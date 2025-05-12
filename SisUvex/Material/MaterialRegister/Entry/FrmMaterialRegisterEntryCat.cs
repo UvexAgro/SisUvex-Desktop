@@ -8,7 +8,10 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 
 namespace SisUvex.Material.MaterialRegister.Entry
 {
@@ -68,6 +71,35 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private void btnSearchFilters_Click(object sender, EventArgs e)
         {
             cls.BtnSearchFilter();
+        }
+
+        private void btnSearchBy_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchBy(txbSearchBy.Text);
+        }
+
+        private void btnFreightContainerSearch_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("FreightContainer", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboFreightContainer, sel.SelectedValue);
+            }
+        }
+
+        private void btnTransportLineSearch_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+
+            sel.OpenSelectionForm("TransportLine", "Código");
+
+            if (!sel.SelectedValue.IsNullOrEmpty())
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
+            }
         }
     }
 }
