@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SisUvex.Material.MaterialRegister
+namespace SisUvex.Material.MaterialRegister.FieldExit
 {
-    public partial class FrmMaterialRegister : Form
+    public partial class FrmMaterialRegisterFieldExitCat : Form
     {
-        public FrmMaterialRegister()
+        public FrmMaterialRegisterFieldExitCat()
         {
             InitializeComponent();
+        }
+
+        private void FrmMaterialRegisterFieldExitCat_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

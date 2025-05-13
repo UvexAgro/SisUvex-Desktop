@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,34 @@ namespace SisUvex.Catalogos.Metods.Values
             }
 
             return result;
+        }
+
+        // Reemplaza el método TryGetDecimal por una versión corregida y más flexible
+        public static decimal? TryGetDecimal(object? value)
+        {
+            if (value == null)
+                return null;
+
+            string strValue = value.ToString();
+            if (!string.IsNullOrWhiteSpace(strValue) && decimal.TryParse(strValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+                return result;
+
+            return null;
+        }
+
+        public static object GetDecimalOrNullDB(object? value)
+        {
+            if (value == null)
+                return DBNull.Value;
+
+            string strValue = value.ToString();
+            if (string.IsNullOrWhiteSpace(strValue))
+                return DBNull.Value;
+
+            if (decimal.TryParse(strValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+                return result;
+
+            return DBNull.Value;
         }
     }
 }

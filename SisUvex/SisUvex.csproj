@@ -165,8 +165,5 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Material\MaterialRegister\Exit\" />
-  </ItemGroup>
 
 </Project>

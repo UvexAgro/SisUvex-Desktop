@@ -31,7 +31,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private string? imagesPathCatalogFolder = string.Empty;
         public FrmMaterialRegisterEntry _frmAdd;
         public FrmMaterialRegisterEntryCat _frmCat;
-        public EMaterialRegisterEntry entity;
+        public EMaterialRegisterEntry? entity;
         private string queryCatalog = "SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat ";
         private string queryCatalogExists = "WHERE EXISTS (SELECT 1 FROM Pack_MatInbound inb " +
                                           "JOIN Pack_MatInboundMaterials mat ON mat.id_matInbound = inb.id_matInbound " +
@@ -175,6 +175,8 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         public void BeginFormAdd()
         {
+            idAddModify = null;
+            entity = null;
             AddControlsToListEntry();
             LoadControlsAddModify();
             InitializeDtInboundMaterials();
@@ -212,6 +214,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         public void OpenFrmAdd()
         {
             IsAddOrModify = true;
+            IsAddUpdate = false;
             _frmAdd = new FrmMaterialRegisterEntry();
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir entrada de material";
@@ -222,6 +225,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         public void OpenFrmModify(string? idModify)
         {
             IsAddOrModify = false;
+            IsModifyUpdate = false;
 
             if (idModify.IsNullOrEmpty())
             {
