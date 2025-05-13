@@ -28,21 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialRegisterEntryCat));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            button1 = new Button();
-            btnTemplates = new Button();
-            btnConfigManifest = new Button();
-            cboMaterialCategory = new ComboBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMaterialRegisterEntryCat));
+            btnSearchFilters = new Button();
+            cboMaterialType = new ComboBox();
             label5 = new Label();
-            btnSearchManifest = new Button();
-            txbIdManifest = new TextBox();
-            btnPrint = new Button();
-            btnRemoved = new Button();
+            txbSearchBy = new TextBox();
             label2 = new Label();
             btnRemove = new Button();
-            btnRecover = new Button();
             cboMaterial = new ComboBox();
             dgvCatalog = new DataGridView();
             cboDistributor = new ComboBox();
@@ -60,103 +54,67 @@
             label8 = new Label();
             cboFreightContainer = new ComboBox();
             label9 = new Label();
+            chbMaterialRemoved = new CheckBox();
+            chbFreightContainerRemoved = new CheckBox();
+            chbTransportLineRemoved = new CheckBox();
+            chbDistributorRemoved = new CheckBox();
+            chbGrowerRemoved = new CheckBox();
+            chbProviderRemoved = new CheckBox();
+            chbWareHouseRemoved = new CheckBox();
+            dtpDate2 = new DateTimePicker();
+            dtpDate1 = new DateTimePicker();
+            lblY = new Label();
+            label10 = new Label();
+            cboSearchBy = new ComboBox();
+            btnSearchBy = new Button();
+            btnFreightContainerSearch = new Button();
+            btnTransportLineSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
-            // button1
+            // btnSearchFilters
             // 
-            button1.BackgroundImage = Properties.Resources.BuscarLupa1;
-            button1.BackgroundImageLayout = ImageLayout.Stretch;
-            button1.Location = new Point(430, 97);
-            button1.Name = "button1";
-            button1.Size = new Size(23, 23);
-            button1.TabIndex = 405;
-            button1.UseVisualStyleBackColor = true;
+            btnSearchFilters.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchFilters.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFilters.Location = new Point(648, 97);
+            btnSearchFilters.Name = "btnSearchFilters";
+            btnSearchFilters.Size = new Size(25, 25);
+            btnSearchFilters.TabIndex = 405;
+            btnSearchFilters.UseVisualStyleBackColor = true;
+            btnSearchFilters.Click += btnSearchFilters_Click;
             // 
-            // btnTemplates
+            // cboMaterialType
             // 
-            btnTemplates.Font = new Font("Microsoft Sans Serif", 9F);
-            btnTemplates.Image = Properties.Resources.templateIcon16;
-            btnTemplates.ImageAlign = ContentAlignment.BottomCenter;
-            btnTemplates.Location = new Point(528, 135);
-            btnTemplates.Name = "btnTemplates";
-            btnTemplates.Size = new Size(24, 23);
-            btnTemplates.TabIndex = 404;
-            btnTemplates.TextAlign = ContentAlignment.TopRight;
-            btnTemplates.UseVisualStyleBackColor = true;
-            // 
-            // btnConfigManifest
-            // 
-            btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
-            btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
-            btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(498, 135);
-            btnConfigManifest.Name = "btnConfigManifest";
-            btnConfigManifest.Size = new Size(24, 23);
-            btnConfigManifest.TabIndex = 403;
-            btnConfigManifest.TextAlign = ContentAlignment.TopRight;
-            btnConfigManifest.UseVisualStyleBackColor = true;
-            // 
-            // cboMaterialCategory
-            // 
-            cboMaterialCategory.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMaterialCategory.FormattingEnabled = true;
-            cboMaterialCategory.Location = new Point(221, 59);
-            cboMaterialCategory.Name = "cboMaterialCategory";
-            cboMaterialCategory.Size = new Size(203, 23);
-            cboMaterialCategory.TabIndex = 388;
+            cboMaterialType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMaterialType.FormattingEnabled = true;
+            cboMaterialType.Location = new Point(242, 59);
+            cboMaterialType.Name = "cboMaterialType";
+            cboMaterialType.Size = new Size(203, 23);
+            cboMaterialType.TabIndex = 388;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 6.75F);
-            label5.Location = new Point(221, 47);
+            label5.Location = new Point(242, 47);
             label5.Name = "label5";
-            label5.Size = new Size(44, 12);
+            label5.Size = new Size(69, 12);
             label5.TabIndex = 395;
-            label5.Text = "Categoría";
+            label5.Text = "Tipo de material";
             // 
-            // btnSearchManifest
+            // txbSearchBy
             // 
-            btnSearchManifest.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnSearchManifest.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchManifest.Location = new Point(767, 135);
-            btnSearchManifest.Name = "btnSearchManifest";
-            btnSearchManifest.Size = new Size(23, 23);
-            btnSearchManifest.TabIndex = 391;
-            btnSearchManifest.UseVisualStyleBackColor = true;
-            // 
-            // txbIdManifest
-            // 
-            txbIdManifest.Location = new Point(558, 135);
-            txbIdManifest.MaxLength = 5;
-            txbIdManifest.Name = "txbIdManifest";
-            txbIdManifest.Size = new Size(203, 23);
-            txbIdManifest.TabIndex = 390;
-            // 
-            // btnPrint
-            // 
-            btnPrint.Location = new Point(417, 135);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 401;
-            btnPrint.Text = "Imprimir";
-            btnPrint.UseVisualStyleBackColor = true;
-            // 
-            // btnRemoved
-            // 
-            btnRemoved.Location = new Point(174, 135);
-            btnRemoved.Name = "btnRemoved";
-            btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 398;
-            btnRemoved.Text = "Eliminados";
-            btnRemoved.UseVisualStyleBackColor = true;
+            txbSearchBy.Location = new Point(385, 135);
+            txbSearchBy.MaxLength = 5;
+            txbSearchBy.Name = "txbSearchBy";
+            txbSearchBy.Size = new Size(203, 23);
+            txbSearchBy.TabIndex = 390;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 6.75F);
-            label2.Location = new Point(221, 85);
+            label2.Location = new Point(242, 85);
             label2.Name = "label2";
             label2.Size = new Size(38, 12);
             label2.TabIndex = 393;
@@ -164,27 +122,19 @@
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(255, 135);
+            btnRemove.Location = new Point(174, 135);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
             btnRemove.TabIndex = 399;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
-            // 
-            // btnRecover
-            // 
-            btnRecover.Location = new Point(336, 135);
-            btnRecover.Name = "btnRecover";
-            btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 400;
-            btnRecover.Text = "Recuperar";
-            btnRecover.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // cboMaterial
             // 
             cboMaterial.DropDownStyle = ComboBoxStyle.DropDownList;
             cboMaterial.FormattingEnabled = true;
-            cboMaterial.Location = new Point(221, 97);
+            cboMaterial.Location = new Point(242, 97);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(203, 23);
             cboMaterial.TabIndex = 389;
@@ -223,7 +173,7 @@
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalog.Size = new Size(776, 277);
+            dgvCatalog.Size = new Size(961, 277);
             dgvCatalog.TabIndex = 402;
             // 
             // cboDistributor
@@ -243,6 +193,7 @@
             btnModify.TabIndex = 397;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -252,6 +203,7 @@
             btnAdd.TabIndex = 396;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // label1
             // 
@@ -267,11 +219,11 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(558, 122);
+            label6.Location = new Point(255, 123);
             label6.Name = "label6";
-            label6.Size = new Size(110, 12);
+            label6.Size = new Size(48, 12);
             label6.TabIndex = 394;
-            label6.Text = "Buscar por num. de factura";
+            label6.Text = "Buscar por:";
             // 
             // cboGrower
             // 
@@ -315,7 +267,7 @@
             // 
             cboWareHouse.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWareHouse.FormattingEnabled = true;
-            cboWareHouse.Location = new Point(221, 21);
+            cboWareHouse.Location = new Point(242, 21);
             cboWareHouse.Name = "cboWareHouse";
             cboWareHouse.Size = new Size(203, 23);
             cboWareHouse.TabIndex = 410;
@@ -324,7 +276,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 6.75F);
-            label7.Location = new Point(221, 9);
+            label7.Location = new Point(242, 9);
             label7.Name = "label7";
             label7.Size = new Size(40, 12);
             label7.TabIndex = 411;
@@ -334,7 +286,7 @@
             // 
             cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportLine.FormattingEnabled = true;
-            cboTransportLine.Location = new Point(430, 21);
+            cboTransportLine.Location = new Point(472, 20);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
             cboTransportLine.TabIndex = 412;
@@ -343,7 +295,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 6.75F);
-            label8.Location = new Point(430, 9);
+            label8.Location = new Point(472, 8);
             label8.Name = "label8";
             label8.Size = new Size(81, 12);
             label8.TabIndex = 413;
@@ -353,7 +305,7 @@
             // 
             cboFreightContainer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFreightContainer.FormattingEnabled = true;
-            cboFreightContainer.Location = new Point(430, 59);
+            cboFreightContainer.Location = new Point(472, 58);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(203, 23);
             cboFreightContainer.TabIndex = 414;
@@ -362,17 +314,200 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 6.75F);
-            label9.Location = new Point(430, 47);
+            label9.Location = new Point(472, 46);
             label9.Name = "label9";
             label9.Size = new Size(23, 12);
             label9.TabIndex = 415;
             label9.Text = "Caja";
             // 
+            // chbMaterialRemoved
+            // 
+            chbMaterialRemoved.Appearance = Appearance.Button;
+            chbMaterialRemoved.Image = Properties.Resources.removedList16;
+            chbMaterialRemoved.Location = new Point(445, 96);
+            chbMaterialRemoved.Margin = new Padding(0);
+            chbMaterialRemoved.Name = "chbMaterialRemoved";
+            chbMaterialRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbMaterialRemoved.Size = new Size(24, 25);
+            chbMaterialRemoved.TabIndex = 416;
+            chbMaterialRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbMaterialRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbFreightContainerRemoved
+            // 
+            chbFreightContainerRemoved.Appearance = Appearance.Button;
+            chbFreightContainerRemoved.Image = Properties.Resources.removedList16;
+            chbFreightContainerRemoved.Location = new Point(675, 57);
+            chbFreightContainerRemoved.Margin = new Padding(0);
+            chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
+            chbFreightContainerRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbFreightContainerRemoved.Size = new Size(24, 25);
+            chbFreightContainerRemoved.TabIndex = 417;
+            chbFreightContainerRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbFreightContainerRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbTransportLineRemoved
+            // 
+            chbTransportLineRemoved.Appearance = Appearance.Button;
+            chbTransportLineRemoved.Image = Properties.Resources.removedList16;
+            chbTransportLineRemoved.Location = new Point(675, 19);
+            chbTransportLineRemoved.Margin = new Padding(0);
+            chbTransportLineRemoved.Name = "chbTransportLineRemoved";
+            chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbTransportLineRemoved.Size = new Size(24, 25);
+            chbTransportLineRemoved.TabIndex = 418;
+            chbTransportLineRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbTransportLineRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbDistributorRemoved
+            // 
+            chbDistributorRemoved.Appearance = Appearance.Button;
+            chbDistributorRemoved.Image = Properties.Resources.removedList16;
+            chbDistributorRemoved.Location = new Point(215, 20);
+            chbDistributorRemoved.Margin = new Padding(0);
+            chbDistributorRemoved.Name = "chbDistributorRemoved";
+            chbDistributorRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbDistributorRemoved.Size = new Size(24, 25);
+            chbDistributorRemoved.TabIndex = 420;
+            chbDistributorRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbDistributorRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbGrowerRemoved
+            // 
+            chbGrowerRemoved.Appearance = Appearance.Button;
+            chbGrowerRemoved.Image = Properties.Resources.removedList16;
+            chbGrowerRemoved.Location = new Point(215, 58);
+            chbGrowerRemoved.Margin = new Padding(0);
+            chbGrowerRemoved.Name = "chbGrowerRemoved";
+            chbGrowerRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbGrowerRemoved.Size = new Size(24, 25);
+            chbGrowerRemoved.TabIndex = 419;
+            chbGrowerRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbGrowerRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbProviderRemoved
+            // 
+            chbProviderRemoved.Appearance = Appearance.Button;
+            chbProviderRemoved.Image = Properties.Resources.removedList16;
+            chbProviderRemoved.Location = new Point(215, 96);
+            chbProviderRemoved.Margin = new Padding(0);
+            chbProviderRemoved.Name = "chbProviderRemoved";
+            chbProviderRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbProviderRemoved.Size = new Size(24, 25);
+            chbProviderRemoved.TabIndex = 421;
+            chbProviderRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbProviderRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbWareHouseRemoved
+            // 
+            chbWareHouseRemoved.Appearance = Appearance.Button;
+            chbWareHouseRemoved.Image = Properties.Resources.removedList16;
+            chbWareHouseRemoved.Location = new Point(445, 20);
+            chbWareHouseRemoved.Margin = new Padding(0);
+            chbWareHouseRemoved.Name = "chbWareHouseRemoved";
+            chbWareHouseRemoved.Padding = new Padding(0, 1, 0, 0);
+            chbWareHouseRemoved.Size = new Size(24, 25);
+            chbWareHouseRemoved.TabIndex = 422;
+            chbWareHouseRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbWareHouseRemoved.UseVisualStyleBackColor = true;
+            // 
+            // dtpDate2
+            // 
+            dtpDate2.Format = DateTimePickerFormat.Short;
+            dtpDate2.Location = new Point(565, 98);
+            dtpDate2.Name = "dtpDate2";
+            dtpDate2.Size = new Size(80, 23);
+            dtpDate2.TabIndex = 424;
+            // 
+            // dtpDate1
+            // 
+            dtpDate1.Format = DateTimePickerFormat.Short;
+            dtpDate1.Location = new Point(473, 98);
+            dtpDate1.Name = "dtpDate1";
+            dtpDate1.Size = new Size(80, 23);
+            dtpDate1.TabIndex = 423;
+            // 
+            // lblY
+            // 
+            lblY.AutoSize = true;
+            lblY.Location = new Point(553, 104);
+            lblY.Name = "lblY";
+            lblY.Size = new Size(13, 15);
+            lblY.TabIndex = 426;
+            lblY.Text = "y";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 6.75F);
+            label10.Location = new Point(473, 85);
+            label10.Name = "label10";
+            label10.Size = new Size(56, 12);
+            label10.TabIndex = 427;
+            label10.Text = "Entre fechas:";
+            // 
+            // cboSearchBy
+            // 
+            cboSearchBy.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSearchBy.FormattingEnabled = true;
+            cboSearchBy.Location = new Point(255, 135);
+            cboSearchBy.Name = "cboSearchBy";
+            cboSearchBy.Size = new Size(124, 23);
+            cboSearchBy.TabIndex = 428;
+            // 
+            // btnSearchBy
+            // 
+            btnSearchBy.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchBy.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchBy.Location = new Point(594, 135);
+            btnSearchBy.Name = "btnSearchBy";
+            btnSearchBy.Size = new Size(23, 23);
+            btnSearchBy.TabIndex = 429;
+            btnSearchBy.UseVisualStyleBackColor = true;
+            btnSearchBy.Click += btnSearchBy_Click;
+            // 
+            // btnFreightContainerSearch
+            // 
+            btnFreightContainerSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnFreightContainerSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFreightContainerSearch.Location = new Point(698, 57);
+            btnFreightContainerSearch.Name = "btnFreightContainerSearch";
+            btnFreightContainerSearch.Size = new Size(25, 25);
+            btnFreightContainerSearch.TabIndex = 430;
+            btnFreightContainerSearch.UseVisualStyleBackColor = true;
+            btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
+            // 
+            // btnTransportLineSearch
+            // 
+            btnTransportLineSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnTransportLineSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnTransportLineSearch.Location = new Point(698, 19);
+            btnTransportLineSearch.Name = "btnTransportLineSearch";
+            btnTransportLineSearch.Size = new Size(25, 25);
+            btnTransportLineSearch.TabIndex = 431;
+            btnTransportLineSearch.UseVisualStyleBackColor = true;
+            btnTransportLineSearch.Click += btnTransportLineSearch_Click;
+            // 
             // FrmMaterialRegisterEntryCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(985, 450);
+            Controls.Add(btnTransportLineSearch);
+            Controls.Add(btnFreightContainerSearch);
+            Controls.Add(btnSearchBy);
+            Controls.Add(cboSearchBy);
+            Controls.Add(dtpDate2);
+            Controls.Add(dtpDate1);
+            Controls.Add(lblY);
+            Controls.Add(label10);
+            Controls.Add(chbWareHouseRemoved);
+            Controls.Add(chbProviderRemoved);
+            Controls.Add(chbDistributorRemoved);
+            Controls.Add(chbGrowerRemoved);
+            Controls.Add(chbTransportLineRemoved);
+            Controls.Add(chbFreightContainerRemoved);
+            Controls.Add(chbMaterialRemoved);
             Controls.Add(cboFreightContainer);
             Controls.Add(label9);
             Controls.Add(cboTransportLine);
@@ -383,18 +518,12 @@
             Controls.Add(label4);
             Controls.Add(cboGrower);
             Controls.Add(label3);
-            Controls.Add(button1);
-            Controls.Add(btnTemplates);
-            Controls.Add(btnConfigManifest);
-            Controls.Add(cboMaterialCategory);
+            Controls.Add(btnSearchFilters);
+            Controls.Add(cboMaterialType);
             Controls.Add(label5);
-            Controls.Add(btnSearchManifest);
-            Controls.Add(txbIdManifest);
-            Controls.Add(btnPrint);
-            Controls.Add(btnRemoved);
+            Controls.Add(txbSearchBy);
             Controls.Add(label2);
             Controls.Add(btnRemove);
-            Controls.Add(btnRecover);
             Controls.Add(cboMaterial);
             Controls.Add(dgvCatalog);
             Controls.Add(cboDistributor);
@@ -402,8 +531,11 @@
             Controls.Add(btnAdd);
             Controls.Add(label1);
             Controls.Add(label6);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialRegisterEntryCat";
-            Text = "FrmMaterialRegisterEntryCat";
+            Text = "Registro de entradas de material";
+            WindowState = FormWindowState.Maximized;
+            Load += FrmMaterialRegisterEntryCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -411,18 +543,16 @@
 
         #endregion
 
-        private Button button1;
+        private Button btnSearchFilters;
         private Button btnTemplates;
         private Button btnConfigManifest;
-        public ComboBox cboMaterialCategory;
+        public ComboBox cboMaterialType;
         private Label label5;
         private Button btnSearchManifest;
-        private TextBox txbIdManifest;
+        private TextBox txbSearchBy;
         private Button btnPrint;
-        public Button btnRemoved;
         private Label label2;
         private Button btnRemove;
-        private Button btnRecover;
         public ComboBox cboMaterial;
         public DataGridView dgvCatalog;
         public ComboBox cboDistributor;
@@ -440,5 +570,20 @@
         private Label label8;
         public ComboBox cboFreightContainer;
         private Label label9;
+        public CheckBox chbMaterialRemoved;
+        public CheckBox chbFreightContainerRemoved;
+        public CheckBox chbTransportLineRemoved;
+        public CheckBox chbDistributorRemoved;
+        public CheckBox chbGrowerRemoved;
+        public CheckBox chbProviderRemoved;
+        public CheckBox chbWareHouseRemoved;
+        public DateTimePicker dtpDate2;
+        public DateTimePicker dtpDate1;
+        private Label lblY;
+        private Label label10;
+        public ComboBox cboSearchBy;
+        private Button btnSearchBy;
+        private Button btnFreightContainerSearch;
+        private Button btnTransportLineSearch;
     }
 }

@@ -47,6 +47,9 @@
             cboActive = new ComboBox();
             btnAccept = new Button();
             btnCancel = new Button();
+            txbShortName = new TextBox();
+            label1 = new Label();
+            label4 = new Label();
             SuspendLayout();
             // 
             // lblTitle
@@ -147,7 +150,7 @@
             // txbCity
             // 
             txbCity.Font = new Font("Segoe UI", 12F);
-            txbCity.Location = new Point(88, 113);
+            txbCity.Location = new Point(88, 148);
             txbCity.MaxLength = 50;
             txbCity.Name = "txbCity";
             txbCity.Size = new Size(437, 29);
@@ -157,7 +160,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(21, 116);
+            label3.Location = new Point(21, 151);
             label3.Name = "label3";
             label3.Size = new Size(62, 21);
             label3.TabIndex = 122;
@@ -167,7 +170,7 @@
             // txbPhoneNumber
             // 
             txbPhoneNumber.Font = new Font("Segoe UI", 12F);
-            txbPhoneNumber.Location = new Point(88, 148);
+            txbPhoneNumber.Location = new Point(88, 183);
             txbPhoneNumber.MaxLength = 13;
             txbPhoneNumber.Name = "txbPhoneNumber";
             txbPhoneNumber.Size = new Size(155, 29);
@@ -177,7 +180,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F);
-            label5.Location = new Point(12, 151);
+            label5.Location = new Point(12, 186);
             label5.Name = "label5";
             label5.Size = new Size(71, 21);
             label5.TabIndex = 125;
@@ -187,7 +190,7 @@
             // txbEmail
             // 
             txbEmail.Font = new Font("Segoe UI", 12F);
-            txbEmail.Location = new Point(88, 183);
+            txbEmail.Location = new Point(88, 218);
             txbEmail.MaxLength = 50;
             txbEmail.Name = "txbEmail";
             txbEmail.Size = new Size(437, 29);
@@ -197,7 +200,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12F);
-            label8.Location = new Point(22, 186);
+            label8.Location = new Point(22, 221);
             label8.Name = "label8";
             label8.Size = new Size(61, 21);
             label8.TabIndex = 128;
@@ -217,7 +220,7 @@
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(369, 218);
+            btnAccept.Location = new Point(369, 253);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 130;
@@ -227,7 +230,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(450, 218);
+            btnCancel.Location = new Point(450, 253);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 131;
@@ -235,11 +238,45 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
+            // txbShortName
+            // 
+            txbShortName.Font = new Font("Segoe UI", 12F);
+            txbShortName.Location = new Point(129, 113);
+            txbShortName.MaxLength = 10;
+            txbShortName.Name = "txbShortName";
+            txbShortName.Size = new Size(182, 29);
+            txbShortName.TabIndex = 132;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.Crimson;
+            label1.Location = new Point(119, 113);
+            label1.Margin = new Padding(0);
+            label1.Name = "label1";
+            label1.Size = new Size(12, 15);
+            label1.TabIndex = 134;
+            label1.Text = "*";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 12F);
+            label4.Location = new Point(12, 116);
+            label4.Name = "label4";
+            label4.Size = new Size(111, 21);
+            label4.TabIndex = 133;
+            label4.Text = "Nombre corto:";
+            label4.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmMaterialProviderAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(543, 263);
+            ClientSize = new Size(536, 294);
+            Controls.Add(label4);
+            Controls.Add(txbShortName);
+            Controls.Add(label1);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(cboActive);
@@ -290,5 +327,8 @@
         public ComboBox cboActive;
         private Button btnAccept;
         private Button btnCancel;
+        public TextBox txbShortName;
+        private Label label1;
+        private Label label4;
     }
 }

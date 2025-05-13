@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCajasGranelRegistro));
             lblLote = new Label();
             txbIdLote = new TextBox();
             cboLote = new ComboBox();
@@ -626,6 +627,7 @@
             Controls.Add(label1);
             Controls.Add(lblPapeleta);
             Controls.Add(panel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmCajasGranelRegistro";
             Text = "Registro de cajas a granel";
             Load += FrmCajasGranelRegistro_Load;

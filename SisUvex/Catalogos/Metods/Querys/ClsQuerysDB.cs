@@ -16,7 +16,6 @@ namespace SisUvex.Catalogos.Metods.Querys
         public static DataTable GetDataTable(string query)
         {
             DataTable dataTable = new DataTable();
-
             try
             {
                 sql.OpenConectionWrite();
