@@ -60,6 +60,7 @@ using SisUvex.Material.MaterialWarehouses;
 using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialRegister.Entry;
+using SisUvex.Material.MaterialForeignDest;
 
 namespace SisUvex
 {
@@ -526,31 +527,49 @@ namespace SisUvex
 
         private void proovedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMaterialProviderCat cat = new FrmMaterialProviderCat();
-            AbrirVentanaHijo(cat, 3);
         }
 
         private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMaterialWareHousesCat cat = new FrmMaterialWareHousesCat();
-            AbrirVentanaHijo(cat, 3);
-        }
-
-        private void tipoDeMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            FrmMaterialTypeCat cat = new();
-            AbrirVentanaHijo(cat, 3);
         }
 
         private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMaterialCatalog cat = new();
-            AbrirVentanaHijo(cat, 3);
         }
 
         private void entradasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialRegisterEntryCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void tipoDeMaterialToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            FrmMaterialTypeCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void catálogoMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialCatalog cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void almacenesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialWareHousesCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void proovedoresToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialProviderCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void destinosExternosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialForeignDestCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }

@@ -175,8 +175,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         public void BeginFormAdd()
         {
-            idAddModify = null;
-            entity = null;
             AddControlsToListEntry();
             LoadControlsAddModify();
             InitializeDtInboundMaterials();
@@ -213,6 +211,8 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         public void OpenFrmAdd()
         {
+            idAddModify = null;
+            entity = null;
             IsAddOrModify = true;
             IsAddUpdate = false;
             _frmAdd = new FrmMaterialRegisterEntry();

@@ -22,7 +22,7 @@ namespace SisUvex.Material.MaterialWarehouses
         ClsControls controlList;
         public FrmMaterialWarehousesAdd _frmAdd;
         public FrmMaterialWareHousesCat _frmCat;
-        public EMaterialWareHouse eWareHouse;
+        public EMaterialWareHouse? eWareHouse;
         private string queryCatalogo = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackWareHousesCat ";
         ClsDGVCatalog dgv;
         DataTable dtCatalog;
@@ -65,6 +65,9 @@ namespace SisUvex.Material.MaterialWarehouses
         public void OpenFrmAdd()
         {
             IsAddOrModify = true;
+            idAddModify = null;
+            eWareHouse = null;
+            IsAddUpdate = false;
 
             _frmAdd = new FrmMaterialWarehousesAdd();
             _frmAdd.cls = this;
