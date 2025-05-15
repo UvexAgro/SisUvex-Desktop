@@ -19,6 +19,7 @@ using SisUvex.Catalogos.Metods.TextBoxes;
 using System.Web;
 using SisUvex.Material.MaterialProvider;
 using DocumentFormat.OpenXml.Presentation;
+using SisUvex.Catalogos.TransportLine;
 
 
 namespace SisUvex.Material.MaterialRegister.Entry
@@ -793,6 +794,18 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 ClsComboBoxes.CboLoadActives(_frmAdd.cboProvider, ClsObject.MaterialProvider.Cbo);
                 _frmAdd.chbProviderRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboProvider, providerAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddTransportLine()
+        {
+            FrmTransportLineAdd transportLineAdd = new();
+            transportLineAdd.ShowDialog();
+            if (transportLineAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
+                _frmAdd.chbProviderRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, transportLineAdd.cls.idAddModify);
             }
         }
     }

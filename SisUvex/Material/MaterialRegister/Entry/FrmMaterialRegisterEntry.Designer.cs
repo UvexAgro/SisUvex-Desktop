@@ -948,6 +948,7 @@
             btnTransportLineAdd.Size = new Size(24, 23);
             btnTransportLineAdd.TabIndex = 448;
             btnTransportLineAdd.UseVisualStyleBackColor = true;
+            btnTransportLineAdd.Click += btnTransportLineAdd_Click;
             // 
             // btnProviderAdd
             // 

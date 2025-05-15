@@ -61,6 +61,7 @@ using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialForeignDest;
+using SisUvex.Catalogos.TransportLine;
 
 namespace SisUvex
 {
@@ -152,7 +153,7 @@ namespace SisUvex
 
         private void líneaDeTransporteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLineaTransporteCat cat = new FrmLineaTransporteCat();
+            FrmTransportLineCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 

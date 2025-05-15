@@ -24,24 +24,22 @@ namespace SisUvex.Material.MaterialProvider
         //--ESTA CLASE SE HIZO PENSANDO EN PODERL ABRIR LOS FORMULARIOS DE AÑADIR Y MODIFICAR DESDE ALGUN BOTON, Y NO SOLO DESDE EL CATALOGO.
         //--POR EJEMPLO DESDE EL FORMULARIO DE ENTRADAS DE MATERIAL.
         //--LA EJECUCION DE LOS PROCEDIMIENTOS SE CAMBIO A LA CLASE DE LA ENTIDAD (EMaterialProvider)
-        SQLControl sql = new SQLControl();
         ClsControls controlList;
         public FrmMaterialProviderAdd _frmAdd;
         public FrmMaterialProviderCat _frmCat;
-        public EMaterialProvider eProvider;
-        private string queryCatalogo = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackProviderCat ";
+        public EMaterialProvider entity;
+        private string queryCatalog = $" SELECT *, [{Column.active}] AS [{Column.active + "2"}] FROM vw_PackProviderCat ";
         ClsDGVCatalog dgv;
         DataTable dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
-        DataTable? dtProvider;
 
         public void BeginFormCat()
         {
-            _frmCat ??= new FrmMaterialProviderCat();
+            _frmCat ??= new();
             _frmCat.cls ??= this;
 
-            dtCatalog = ClsQuerysDB.GetDataTable(queryCatalogo);
+            dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog);
             dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         }
 
@@ -64,7 +62,7 @@ namespace SisUvex.Material.MaterialProvider
 
         private void AddControlsToList()
         {
-            controlList = new ClsControls();
+            controlList = new();
 
             controlList.ChangeHeadMessage("Para dar de alta un proveedor debe:\n");
             controlList.Add(_frmAdd.txbId, "Ingresar el código del proveedor.");
@@ -75,8 +73,9 @@ namespace SisUvex.Material.MaterialProvider
         public void OpenFrmAdd()
         {
             IsAddOrModify = true;
-
-            _frmAdd = new FrmMaterialProviderAdd();
+            IsAddUpdate = false;
+            idAddModify = null;
+            _frmAdd = new();
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir proveedor";
             _frmAdd.lblTitle.Text = "Añadir proveedor";
@@ -86,7 +85,7 @@ namespace SisUvex.Material.MaterialProvider
         public void OpenFrmModify(string? idModify)
         {
             IsAddOrModify = false;
-
+            IsModifyUpdate = false;
             if (idModify.IsNullOrEmpty())
             {
                 SystemSounds.Exclamation.Play();
@@ -95,7 +94,7 @@ namespace SisUvex.Material.MaterialProvider
             }
 
             idAddModify = idModify;
-            _frmAdd = new FrmMaterialProviderAdd();
+            _frmAdd = new();
             _frmAdd.cls = this;
             _frmAdd.Text = "Modificar proveedor";
             _frmAdd.lblTitle.Text = "Modificar proveedor";
@@ -104,46 +103,46 @@ namespace SisUvex.Material.MaterialProvider
 
         private void LoadControlsModify()
         {
-            eProvider = new EMaterialProvider();
-            eProvider.GetProvider(idAddModify ?? "0");
+            entity = new();
+            entity.GetProvider(idAddModify);
 
-            _frmAdd.txbId.Text = eProvider.idProvider;
-            _frmAdd.txbName.Text = eProvider.nameProvider;
-            _frmAdd.txbCity.Text = eProvider.city;
-            _frmAdd.txbPhoneNumber.Text = eProvider.phoneNumber;
-            _frmAdd.txbEmail.Text = eProvider.email;
-            _frmAdd.cboActive.SelectedIndex = eProvider.active;
-            _frmAdd.txbShortName.Text = eProvider.shortNameProvider;
+            _frmAdd.txbId.Text = entity.idProvider;
+            _frmAdd.txbName.Text = entity.nameProvider;
+            _frmAdd.txbCity.Text = entity.city;
+            _frmAdd.txbPhoneNumber.Text = entity.phoneNumber;
+            _frmAdd.txbEmail.Text = entity.email;
+            _frmAdd.cboActive.SelectedIndex = entity.active;
+            _frmAdd.txbShortName.Text = entity.shortNameProvider;
         }
 
-        private EMaterialProvider SetProviderEntity()
+        private EMaterialProvider SetEntity()
         {
-            eProvider = new EMaterialProvider();
-            eProvider.idProvider = _frmAdd.txbId.Text;
-            eProvider.nameProvider = _frmAdd.txbName.Text;
-            eProvider.city = _frmAdd.txbCity.Text;
-            eProvider.phoneNumber = _frmAdd.txbPhoneNumber.Text;
-            eProvider.email = _frmAdd.txbEmail.Text;
-            eProvider.active = _frmAdd.cboActive.SelectedIndex;
-            eProvider.shortNameProvider = _frmAdd.txbShortName.Text;
+            entity = new();
+            entity.idProvider = _frmAdd.txbId.Text;
+            entity.nameProvider = _frmAdd.txbName.Text;
+            entity.city = _frmAdd.txbCity.Text;
+            entity.phoneNumber = _frmAdd.txbPhoneNumber.Text;
+            entity.email = _frmAdd.txbEmail.Text;
+            entity.active = _frmAdd.cboActive.SelectedIndex;
+            entity.shortNameProvider = _frmAdd.txbShortName.Text;
 
-            return eProvider;
+            return entity;
         }
 
         public void AddProcedure()
         {
-            EMaterialProvider addProvider = new();
-            addProvider = SetProviderEntity();
-            var result = addProvider.AddProcedure();
+            EMaterialProvider addEntity = new();
+            addEntity = SetEntity();
+            var result = addEntity.AddProcedure();
             IsAddUpdate = result.Item1;
             idAddModify = result.Item2;
         }
 
         public void ModifyProcedure()
         {
-            EMaterialProvider modifyProvider = new();
-            modifyProvider = SetProviderEntity();
-            var result = modifyProvider.ModifyProcedure();
+            EMaterialProvider modifyEntity = new();
+            modifyEntity = SetEntity();
+            var result = modifyEntity.ModifyProcedure();
             IsModifyUpdate = result.Item1;
             idAddModify = result.Item2;
         }
@@ -191,24 +190,24 @@ namespace SisUvex.Material.MaterialProvider
             _frmAdd.Close();
         }
 
-        public void BtnActiveProcedure(string idProvider, string activeValue)
+        public void BtnActiveProcedure(string id, string activeValue)
         {
-            bool result = EMaterialProvider.ActiveProcedure(idProvider, activeValue);
+            bool result = EMaterialProvider.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(idProvider, activeValue);
+                dgv.ChangeActiveCell(id, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()
         {
-            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalogo + $" WHERE [{Column.id}] = '{idAddModify}'");
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{idAddModify}'");
 
             dgv.AddNewRowToDGV(newIdRow);
         }
 
         public void ModifyRowByIdInDGVCatalog()
         {
-            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalogo + $" WHERE [{Column.id}] = '{idAddModify}'");
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{idAddModify}'");
 
             dgv.ModifyIdRowInDGV(newIdRow);
         }

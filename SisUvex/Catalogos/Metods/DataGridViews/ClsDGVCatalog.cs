@@ -126,8 +126,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 }
                 dtCatalog.Rows.Add(dr);
 
-                int rowIndex = dtCatalog.Rows.IndexOf(dr);
-                dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
+                SafeSelectRowInDGV(dr);
             }
             dtCatalog.AcceptChanges();
         }
@@ -151,9 +150,8 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     {
                         dr[activeColumnHide] = "1";
                     }
-                    // Focus on the modified row
-                    int rowIndex = dtCatalog.Rows.IndexOf(dr);
-                    dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
+
+                    SafeSelectRowInDGV(dr);
                 }
                 else
                 {
@@ -170,9 +168,8 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                         dr[activeColumnHide] = "1";
                     }
                     dtCatalog.Rows.Add(dr);
-                    // Focus on the new row
-                    int rowIndex = dtCatalog.Rows.IndexOf(dr);
-                    dgvCatalog.CurrentCell = dgvCatalog.Rows[rowIndex].Cells[0];
+
+                    SafeSelectRowInDGV(dr);
                 }
             }
             dtCatalog.AcceptChanges();
@@ -196,6 +193,23 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     }
                 }
             };
+        }
+
+        private void SafeSelectRowInDGV(DataRow dataRow)
+        {
+            if (dgvCatalog.Rows.Count == 0 || string.IsNullOrEmpty(idColumn))
+                return;
+
+            foreach (DataGridViewRow dgvRow in dgvCatalog.Rows)
+            {
+                if (dgvRow.Cells[idColumn].Value?.ToString() == dataRow[idColumn].ToString())
+                {
+                    dgvCatalog.CurrentCell = dgvRow.Cells[0];
+                    dgvRow.Selected = true;
+                    dgvCatalog.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+                    break;
+                }
+            }
         }
     }
 }

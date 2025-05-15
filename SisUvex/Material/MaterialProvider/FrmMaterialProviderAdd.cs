@@ -21,7 +21,7 @@ namespace SisUvex.Material.MaterialProvider
 
         private void FrmMaterialProviderAdd_Load(object sender, EventArgs e)
         {
-            cls ??= new ClsMaterialProvider();
+            cls ??= new();
             cls._frmAdd ??= this;
             cls.BeginFormAdd();
         }

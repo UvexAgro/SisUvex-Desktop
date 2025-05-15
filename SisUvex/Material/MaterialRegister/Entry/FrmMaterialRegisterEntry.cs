@@ -106,6 +106,11 @@ namespace SisUvex.Material.MaterialRegister.Entry
             cls.BtnAddMaterialProvider();
         }
 
+        private void btnTransportLineAdd_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddTransportLine();
+        }
+
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
             ClsSelectionForm sel = new ClsSelectionForm();
