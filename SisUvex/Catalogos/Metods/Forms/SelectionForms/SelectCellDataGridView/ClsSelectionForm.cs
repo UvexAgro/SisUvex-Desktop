@@ -24,6 +24,12 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 {"Driver", (" SELECT * FROM vw_PackDriverCat WHERE CONCAT_WS(' ', Código, Nombre, [Línea de transporte]) LIKE @parameter ", "@parameter")},
                 {"Truck", (" SELECT * FROM vw_PackTruckCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', Código, [N. Económico], [Placas US], [Placas MX], [Línea de transporte])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"FreightContainer", (" SELECT * FROM vw_PackFreightContainerCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', Código, [N. Económico], [Placas US], [Placas MX], [Línea de transporte])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter ")},
+                {"MaterialCatalog", (" SELECT * FROM vw_PackMaterialCatalogCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"MaterialProvider", (" SELECT * FROM vw_PackProviderCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre], [Diminutivo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"Distributor", (" SELECT * FROM vw_PackDistributorCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre], [Diminutivo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"Grower", (" SELECT * FROM vw_PackGrowerCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre], [Diminutivo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"WareHouses", (" SELECT * FROM vw_PackWareHousesCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"MaterialType", (" SELECT id_matType AS [Código], v_nameMatType AS [Nombre] FROM Pack_MaterialType WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', id_matType, v_nameMatType)) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 // Add more predefined queries here
             };
 

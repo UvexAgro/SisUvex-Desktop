@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             btnTransportLineSearch = new Button();
             btnFreightContainerSearch = new Button();
             btnSearchBy = new Button();
@@ -80,6 +80,7 @@
             btnTransportLineSearch.Size = new Size(25, 25);
             btnTransportLineSearch.TabIndex = 469;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
+            btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
             // btnFreightContainerSearch
             // 
@@ -90,6 +91,7 @@
             btnFreightContainerSearch.Size = new Size(25, 25);
             btnFreightContainerSearch.TabIndex = 468;
             btnFreightContainerSearch.UseVisualStyleBackColor = true;
+            btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
             // 
             // btnSearchBy
             // 
@@ -100,6 +102,7 @@
             btnSearchBy.Size = new Size(23, 23);
             btnSearchBy.TabIndex = 467;
             btnSearchBy.UseVisualStyleBackColor = true;
+            btnSearchBy.Click += btnSearchBy_Click;
             // 
             // cboSearchBy
             // 
@@ -340,6 +343,7 @@
             btnSearchFilters.Size = new Size(25, 25);
             btnSearchFilters.TabIndex = 444;
             btnSearchFilters.UseVisualStyleBackColor = true;
+            btnSearchFilters.Click += btnSearchFilters_Click;
             // 
             // cboMaterialType
             // 
@@ -386,6 +390,7 @@
             btnRemove.TabIndex = 442;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // cboMaterial
             // 
@@ -405,28 +410,28 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 165);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = SystemColors.Control;
+            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle10.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -450,6 +455,7 @@
             btnModify.TabIndex = 441;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -525,7 +531,7 @@
             Controls.Add(label1);
             Controls.Add(label6);
             Name = "FrmMaterialRegisterExitCat";
-            Text = "FrmMaterialRegisterExitCat";
+            Text = "Registro de salidas de material";
             Load += FrmMaterialRegisterExitCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);

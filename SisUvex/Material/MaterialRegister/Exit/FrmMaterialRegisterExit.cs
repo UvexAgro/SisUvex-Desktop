@@ -10,8 +10,9 @@ using System.Windows.Forms;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
-    public partial class FrmMaterialRegisterExit : Form
+    internal partial class FrmMaterialRegisterExit : Form
     {
+        public ClsMaterialRegisterExit cls;
         public FrmMaterialRegisterExit()
         {
             InitializeComponent();
@@ -19,7 +20,9 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void FrmMaterialRegisterExit_Load(object sender, EventArgs e)
         {
-
+            cls ??= new();
+            cls._frmAdd ??= this;
+            cls.BeginFormAdd();
         }
     }
 }

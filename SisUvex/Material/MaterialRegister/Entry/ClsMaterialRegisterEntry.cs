@@ -18,6 +18,7 @@ using SisUvex.Material.MaterialCatalog;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using System.Web;
 using SisUvex.Material.MaterialProvider;
+using DocumentFormat.OpenXml.Presentation;
 
 
 namespace SisUvex.Material.MaterialRegister.Entry
@@ -698,7 +699,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + queryWhere, parameters);
             dgv = new(_frmCat.dgvCatalog, dtCatalog);
-            Clipboard.SetText(queryCatalog + queryWhere);
         }
 
         /////IMAGENES
