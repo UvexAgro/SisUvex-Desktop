@@ -172,7 +172,7 @@
             cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
             cboActive.Font = new Font("Segoe UI", 12F);
             cboActive.FormattingEnabled = true;
-            cboActive.Items.AddRange(new object[] { "No", "Sí", "DL" });
+            cboActive.Items.AddRange(new object[] { "No", "Sí" });
             cboActive.Location = new Point(451, 9);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);

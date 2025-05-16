@@ -206,7 +206,7 @@ namespace SisUvex.Catalogos.TransportLine
             dgv.ModifyIdRowInDGV(newIdRow);
         }
 
-        public void ChbRemovedProcedure()
+        public void ChbRemovedFilter()
         {
             if (_frmCat.chbRemoved.Checked)
                 dgv.SetFilterNull();

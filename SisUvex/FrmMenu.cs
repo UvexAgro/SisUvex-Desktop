@@ -62,6 +62,7 @@ using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialForeignDest;
 using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
 
 namespace SisUvex
 {
@@ -209,7 +210,7 @@ namespace SisUvex
 
         private void choferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmChoferCat cat = new FrmChoferCat();
+            FrmDriverCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)

@@ -117,7 +117,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("TransportLine", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
             }
@@ -129,7 +129,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("Driver", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboDriver, sel.SelectedValue);
             }
@@ -141,7 +141,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("FreightContainer", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboFreightContainer, sel.SelectedValue);
             }
@@ -153,7 +153,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("MaterialProvider", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboProvider, sel.SelectedValue);
             }
@@ -165,7 +165,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("Distributor", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboDistributor, sel.SelectedValue);
             }
@@ -177,7 +177,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("Grower", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboGrower, sel.SelectedValue);
             }
@@ -189,7 +189,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("WareHouses", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboWarehouse, sel.SelectedValue);
             }

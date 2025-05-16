@@ -338,6 +338,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmLotAdd";
             SizeGripStyle = SizeGripStyle.Hide;
             Text = "Añadir lote";

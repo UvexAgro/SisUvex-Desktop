@@ -57,7 +57,7 @@ namespace SisUvex.Catalogos.TransportLine
 
         private void chbRemoved_CheckedChanged(object sender, EventArgs e)
         {
-            cls.ChbRemovedProcedure();
+            cls.ChbRemovedFilter();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
