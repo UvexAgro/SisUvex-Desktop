@@ -73,10 +73,24 @@ namespace SisUvex.Catalogos.Metods.Controls
                 }
                 else if (control is ComboBox comboBox)
                 {
-                    if (comboBox.SelectedIndex == -1 || comboBox.Text == ClsObject.String.SelectText)
+                    if (comboBox.Tag == null)
                     {
-                        isValid = false;
-                        showMessage += "\n    " + message;
+                        if (comboBox.SelectedIndex == -1 || comboBox.Text == ClsObject.String.SelectText)
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else
+                    {
+                        if (comboBox.Tag.ToString() == "text")
+                        {
+                            if (string.IsNullOrEmpty(comboBox.Text))
+                            {
+                                isValid = false;
+                                showMessage += "\n    " + message;
+                            }
+                        }
                     }
                 }
                 else if (control is DateTimePicker dateTimePicker)

@@ -223,6 +223,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap filterIcon16 {
+            get {
+                object obj = ResourceManager.GetObject("filterIcon16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap guardarIcon16 {
             get {
                 object obj = ResourceManager.GetObject("guardarIcon16", resourceCulture);

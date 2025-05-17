@@ -12,13 +12,13 @@ namespace SisUvex.Catalogos.Driver
 {
     internal class EDriver
     {
-        public string idDriver { get; set; }
-        public string idTransportLine { get; set; }
-        public string nameDriver { get; set; }
-        public string lastNameDriver { get; set; }
-        public string license { get; set; }
+        public string? idDriver { get; set; }
+        public string? idTransportLine { get; set; }
+        public string? nameDriver { get; set; }
+        public string? lastNameDriver { get; set; }
+        public string? license { get; set; }
         public DateTime? birthday { get; set; }
-        public string visa { get; set; }
+        public string? visa { get; set; }
         public int active { get; set; }
 
         public static string GetNextId()
@@ -96,7 +96,7 @@ namespace SisUvex.Catalogos.Driver
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    string idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
+                    string? idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
                     return (true, idDriver);
                 }
                 return (false, null);
@@ -133,7 +133,7 @@ namespace SisUvex.Catalogos.Driver
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    string idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
+                    string? idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
                     return (true, idDriver);
                 }
                 return (false, null);

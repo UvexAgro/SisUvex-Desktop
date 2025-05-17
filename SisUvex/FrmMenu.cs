@@ -3,17 +3,12 @@ using SisUvex.Catalogos.Variedad;
 using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
 using SisUvex.Catalogos.Productor;
-using SisUvex.Catalogos.LineaTransporte;
 using SisUvex.Catalogos.AgenciaAduanal;
 using SisUvex.Catalogos.TipoMaterial;
 using SisUvex.Catalogos.Contratista;
 using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Distribuidor;
-using SisUvex.Catalogos.Lote;
-using SisUvex.Catalogos.Chofer;
 using SisUvex.Nomina;
-using SisUvex.Catalogos.Caja;
-using SisUvex.Catalogos.Troque;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
 using SisUvex.Catalogos.RegistroMaterial;
@@ -63,6 +58,8 @@ using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialForeignDest;
 using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.Truck;
+using SisUvex.Catalogos.FreightContainer;
 
 namespace SisUvex
 {
@@ -215,13 +212,13 @@ namespace SisUvex
         }
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCajaCat cat = new FrmCajaCat();
+            FrmFreightContainerCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
         private void troqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmTroqueCat cat = new FrmTroqueCat();
+            FrmTruckCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 

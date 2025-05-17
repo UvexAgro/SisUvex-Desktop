@@ -96,8 +96,6 @@
     <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />
-    <Compile Update="Catalogos\Caja\FrmCajaAñadir.cs" />
-    <Compile Update="Catalogos\Caja\FrmCajaCat.cs" />
     <Compile Update="Catalogos\Chofer\FrmChoferAñadir.cs" />
     <Compile Update="Catalogos\Chofer\FrmChoferCat.cs" />
     <Compile Update="Catalogos\Ciudad\FrmCiudadAñadir.cs">

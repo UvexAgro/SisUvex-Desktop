@@ -12,16 +12,16 @@ using System.Media;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods;
 
-namespace SisUvex.Catalogos.Driver
+namespace SisUvex.Catalogos.FreightContainer
 {
-    internal class ClsDriver
+    internal class ClsFreightContainer
     {
         ClsControls controlList;
-        public FrmDriverAdd _frmAdd;
-        public FrmDriverCat _frmCat;
-        public EDriver entity;
-        private string queryCatalog = $" SELECT cat.*, cat.[{Column.active}] AS [{Column.active + "2"}] FROM vw_PackDriverCat cat ";
-        private string queryJoin = $"  LEFT JOIN Pack_Driver dri ON dri.id_driver = cat.[Código] LEFT JOIN Pack_TransportLine tln ON tln.id_transportLine = dri.id_transportLine ";
+        public FrmFreightContainerAdd _frmAdd;
+        public FrmFreightContainerCat _frmCat;
+        public EFreightContainer entity;
+        private string queryCatalog = $" SELECT cat.*, cat.[{Column.active}] AS [{Column.active + "2"}] FROM vw_PackFreightContainerCat cat ";
+        private string queryJoin = $" LEFT JOIN Pack_FreightContainer frc ON frc.id_freightContainer = cat.[Código] LEFT JOIN Pack_TransportLine tln ON tln.id_transportLine = frc.id_transportLine ";
         ClsDGVCatalog? dgv;
         DataTable dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
@@ -42,13 +42,12 @@ namespace SisUvex.Catalogos.Driver
         public void BeginFormAdd()
         {
             AddControlsToList();
-
             LoadControls();
 
             if (IsAddOrModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
-                _frmAdd.txbId.Text = EDriver.GetNextId();
+                _frmAdd.txbId.Text = EFreightContainer.GetNextId();
             }
             else
             {
@@ -60,22 +59,23 @@ namespace SisUvex.Catalogos.Driver
         {
             controlList = new ClsControls();
 
-            controlList.ChangeHeadMessage("Para dar de alta un chofer debe:\n");
-            controlList.Add(_frmAdd.txbId, "Ingresar el código del chofer.");
+            controlList.ChangeHeadMessage("Para dar de alta una caja refrigerada debe:\n");
+            controlList.Add(_frmAdd.txbId, "Ingresar el código de la caja.");
             controlList.Add(_frmAdd.txbIdTransportLine, "Seleccionar la línea de transporte.");
-            controlList.Add(_frmAdd.txbName, "Ingresar el nombre del chofer.");
-            controlList.Add(_frmAdd.txbLastNames, "Ingresar los apellidos del chofer.");
+            controlList.Add(_frmAdd.txbEcoNumber, "Ingresar el número económico.");
+            controlList.Add(_frmAdd.cboTypeContainer, "Ingresar la marca de la caja.");
         }
 
         private void LoadControls()
         {
-            _frmAdd.dtpBirthday.Checked = false; // Inicialmente no seleccionado
+            _frmAdd.cboTypeContainer.Tag = "text";
+            ClsComboBoxes.CboLoadAllWithoutTextSelect(_frmAdd.cboTypeContainer, ClsObject.FreightContainer.CboTypeContainer);
+            _frmAdd.cboTypeContainer.SelectedIndex = -1;
 
             ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, ClsObject.TransportLine.Cbo);
-
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTransportLine, _frmAdd.chbTransportLineRemoved);
-
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTransportLine, _frmAdd.txbIdTransportLine);
+
         }
 
         public void OpenFrmAdd()
@@ -85,8 +85,8 @@ namespace SisUvex.Catalogos.Driver
             idAddModify = null;
             _frmAdd = new();
             _frmAdd.cls = this;
-            _frmAdd.Text = "Añadir chofer";
-            _frmAdd.lblTitle.Text = "Añadir chofer";
+            _frmAdd.Text = "Añadir caja refrigerada";
+            _frmAdd.lblTitle.Text = "Añadir caja refrigerada";
             _frmAdd.ShowDialog();
         }
 
@@ -97,47 +97,46 @@ namespace SisUvex.Catalogos.Driver
             if (string.IsNullOrEmpty(idModify))
             {
                 SystemSounds.Exclamation.Play();
-                MessageBox.Show("No se ha seleccionado un chofer para modificar.", "Modificar chofer");
+                MessageBox.Show("No se ha seleccionado una caja para modificar.", "Modificar caja refrigerada");
                 return;
             }
 
             idAddModify = idModify;
             _frmAdd = new();
             _frmAdd.cls = this;
-            _frmAdd.Text = "Modificar chofer";
-            _frmAdd.lblTitle.Text = "Modificar chofer";
+            _frmAdd.Text = "Modificar caja refrigerada";
+            _frmAdd.lblTitle.Text = "Modificar caja refrigerada";
             _frmAdd.ShowDialog();
         }
 
         private void LoadControlsModify()
         {
             entity = new();
-            entity.GetDriver(idAddModify);
+            entity.GetFreightContainer(idAddModify);
 
-            _frmAdd.txbId.Text = entity.idDriver;
-            _frmAdd.txbName.Text = entity.nameDriver;
-            _frmAdd.txbLastNames.Text = entity.lastNameDriver;
-            _frmAdd.txbLicense.Text = entity.license;
-            _frmAdd.dtpBirthday.Value = entity.birthday ?? DateTime.Now;
-            _frmAdd.txbVisa.Text = entity.visa;
+            _frmAdd.txbId.Text = entity.idFreightContainer;
+            _frmAdd.txbEcoNumber.Text = entity.ecoNumber;
+            _frmAdd.txbPlateUS.Text = entity.plateUS;
+            _frmAdd.txbPlateMX.Text = entity.plateMX;
+            _frmAdd.txbYear.Text = entity.year;
+            _frmAdd.txbBrand.Text = entity.brand;
+            _frmAdd.cboTypeContainer.Text = entity.typeContainer;
+            _frmAdd.txbSize.Text = entity.size.ToString();
             _frmAdd.cboActive.SelectedIndex = entity.active;
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, entity.idTransportLine);
-
-            if (entity.birthday != null)
-                _frmAdd.dtpBirthday.Checked = true;
-            else
-                _frmAdd.dtpBirthday.Checked = false; // Si la fecha de nacimiento es nula, desmarcar el DateTimePicker
         }
 
-        private EDriver SetEntity()
+        private EFreightContainer SetEntity()
         {
             entity = new();
-            entity.idDriver = _frmAdd.txbId.Text;
-            entity.nameDriver = _frmAdd.txbName.Text;
-            entity.lastNameDriver = _frmAdd.txbLastNames.Text;
-            entity.license = _frmAdd.txbLicense.Text;
-            entity.birthday = _frmAdd.dtpBirthday.Checked ? _frmAdd.dtpBirthday.Value : (DateTime?)null;
-            entity.visa = _frmAdd.txbVisa.Text;
+            entity.idFreightContainer = _frmAdd.txbId.Text;
+            entity.ecoNumber = _frmAdd.txbEcoNumber.Text;
+            entity.plateUS = _frmAdd.txbPlateUS.Text;
+            entity.plateMX = _frmAdd.txbPlateMX.Text;
+            entity.year = _frmAdd.txbYear.Text;
+            entity.brand = _frmAdd.txbBrand.Text;
+            entity.typeContainer = _frmAdd.cboTypeContainer.Text;
+            entity.size = int.TryParse(_frmAdd.txbSize.Text, out int size) ? size : 0;
             entity.active = _frmAdd.cboActive.SelectedIndex;
             entity.idTransportLine = _frmAdd.txbIdTransportLine.Text;
 
@@ -146,7 +145,7 @@ namespace SisUvex.Catalogos.Driver
 
         public void AddProcedure()
         {
-            EDriver addEntity = new();
+            EFreightContainer addEntity = new();
             addEntity = SetEntity();
             var result = addEntity.AddProcedure();
             IsAddUpdate = result.Item1;
@@ -155,7 +154,7 @@ namespace SisUvex.Catalogos.Driver
 
         public void ModifyProcedure()
         {
-            EDriver modifyEntity = new();
+            EFreightContainer modifyEntity = new();
             modifyEntity = SetEntity();
             var result = modifyEntity.ModifyProcedure();
             IsModifyUpdate = result.Item1;
@@ -173,13 +172,13 @@ namespace SisUvex.Catalogos.Driver
                 if (IsAddUpdate)
                 {
                     _frmAdd.txbId.Text = idAddModify;
-                    MessageBox.Show($"Se ha agregado el chofer con código: {idAddModify}", "Añadir chofer");
+                    MessageBox.Show($"Se ha agregado la caja con código: {idAddModify}", "Añadir caja refrigerada");
                     _frmAdd.Close();
                 }
                 else
                 {
                     SystemSounds.Exclamation.Play();
-                    MessageBox.Show("No se pudo agregar el chofer.", "Añadir chofer");
+                    MessageBox.Show("No se pudo agregar la caja.", "Añadir caja refrigerada");
                 }
             }
             else
@@ -188,13 +187,13 @@ namespace SisUvex.Catalogos.Driver
 
                 if (IsModifyUpdate)
                 {
-                    MessageBox.Show($"Se ha modificado el chofer con el código: {idAddModify}", "Modificar chofer");
+                    MessageBox.Show($"Se ha modificado la caja con el código: {idAddModify}", "Modificar caja refrigerada");
                     _frmAdd.Close();
                 }
                 else
                 {
                     SystemSounds.Exclamation.Play();
-                    MessageBox.Show("No se pudo modificar el chofer.", "Modificar chofer");
+                    MessageBox.Show("No se pudo modificar la caja.", "Modificar caja refrigerada");
                 }
             }
         }
@@ -206,7 +205,7 @@ namespace SisUvex.Catalogos.Driver
 
         public void BtnActiveProcedure(string id, string activeValue)
         {
-            bool result = EDriver.ActiveProcedure(id, activeValue);
+            bool result = EFreightContainer.ActiveProcedure(id, activeValue);
 
             if (result)
                 dgv.ChangeActiveCell(id, activeValue);
@@ -226,15 +225,13 @@ namespace SisUvex.Catalogos.Driver
 
         public void ChbRemovedFilter()
         {
-            string qry = queryCatalog + queryJoin + " WHERE 1 = 1 AND  tln.c_active = '1'";
+            string qry = queryCatalog + queryJoin + " WHERE 1 = 1 AND tln.c_active = '1'";
 
-            if (_frmCat.chbDriverTransportLineRemoved.Checked)
+            if (_frmCat.chbFreightContainerTransportLineRemoved.Checked)
                 qry = queryCatalog;
 
             dtCatalog = ClsQuerysDB.GetDataTable(qry);
             dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
-
-            //SE MANEJA DIFERENTE POR EL FILTRO DE CHOFERES POR LINEA DE TRANSPORTE ACTIVA
 
             if (_frmCat.chbRemoved.Checked)
                 dgv.SetFilterNull();

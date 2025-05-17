@@ -924,6 +924,7 @@
             btnFreightContainerAdd.Size = new Size(24, 23);
             btnFreightContainerAdd.TabIndex = 450;
             btnFreightContainerAdd.UseVisualStyleBackColor = true;
+            btnFreightContainerAdd.Click += btnFreightContainerAdd_Click;
             // 
             // btnDriverAdd
             // 
@@ -936,6 +937,7 @@
             btnDriverAdd.Size = new Size(24, 23);
             btnDriverAdd.TabIndex = 449;
             btnDriverAdd.UseVisualStyleBackColor = true;
+            btnDriverAdd.Click += btnDriverAdd_Click;
             // 
             // btnTransportLineAdd
             // 

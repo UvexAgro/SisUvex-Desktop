@@ -111,6 +111,15 @@ namespace SisUvex.Material.MaterialRegister.Entry
             cls.BtnAddTransportLine();
         }
 
+        private void btnDriverAdd_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddDriver();
+        }
+        private void btnFreightContainerAdd_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddFreighContainer();
+        }
+
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
             ClsSelectionForm sel = new ClsSelectionForm();
@@ -199,5 +208,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
 
         }
+
     }
 }

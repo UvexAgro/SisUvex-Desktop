@@ -8,7 +8,6 @@ using SisUvex.Catalogos.Metods.DataGridViews;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using System.Data;
 using SisUvex.Catalogos.Metods.Querys;
-using SisUvex.Material.MaterialProvider;
 using Microsoft.IdentityModel.Tokens;
 using System.Media;
 

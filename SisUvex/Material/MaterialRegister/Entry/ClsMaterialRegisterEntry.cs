@@ -20,6 +20,8 @@ using System.Web;
 using SisUvex.Material.MaterialProvider;
 using DocumentFormat.OpenXml.Presentation;
 using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.FreightContainer;
 
 
 namespace SisUvex.Material.MaterialRegister.Entry
@@ -291,7 +293,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             _frmAdd.cboMaterial.SelectedIndexChanged += (s, e) =>
             {//AL SELECCIONAR UN MATERIAL, CAMBIA SU TXBID Y EL TXB UNIDAD
-                
+
                 if (_frmAdd.cboMaterial.SelectedIndex > 0)
                 {
                     string? idMaterialSelected = _frmAdd.cboMaterial.SelectedValue?.ToString();
@@ -683,7 +685,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
                     parameters.Add("@text", "%" + text + "%");
                     break;
                 case "Código de entrada":
-                    if(long.TryParse(text, out long idInbound))
+                    if (long.TryParse(text, out long idInbound))
                         text = idInbound.ToString("000000000000000");
                     else
                     {
@@ -691,7 +693,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
                         return;
                     }
                     queryWhere = " WHERE cat.[Código] LIKE @text ";
-                    parameters.Add("@text",text);
+                    parameters.Add("@text", text);
                     break;
                 default:
                     SystemSounds.Exclamation.Play();
@@ -806,6 +808,30 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
                 _frmAdd.chbProviderRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, transportLineAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddDriver()
+        {
+            FrmDriverAdd driverAdd = new();
+            driverAdd.ShowDialog();
+            if (driverAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboDriver, Driver.Cbo);
+                _frmAdd.chbDriverRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, driverAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddFreighContainer()
+        {
+            FrmFreightContainerAdd freightContainerAdd = new();
+            freightContainerAdd.ShowDialog();
+            if (freightContainerAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, FreightContainer.Cbo);
+                _frmAdd.chbFreightContainerRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, freightContainerAdd.cls.idAddModify);
             }
         }
     }

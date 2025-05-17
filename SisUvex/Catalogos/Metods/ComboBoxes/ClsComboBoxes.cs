@@ -52,6 +52,18 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             LoadComboBoxDataSource(comboBox, dt);
         }
 
+        public static void CboLoadAllWithoutTextSelect(ComboBox comboBox, string keyName)
+        {
+            DataTable dt = GetCboCatalogDataTable(keyName);
+
+            if (dt.Rows.Count == 0)
+                return;
+
+            comboBox.DataSource = dt;
+            comboBox.DisplayMember = ClsObject.Column.name;
+            comboBox.ValueMember = ClsObject.Column.id;
+        }
+
         public static void CboApplyTextChangedEvent(ComboBox comboBox, TextBox textBox)
         {
             comboBox.TextChanged += (sender, e) =>

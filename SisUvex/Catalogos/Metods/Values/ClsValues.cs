@@ -10,7 +10,7 @@ namespace SisUvex.Catalogos.Metods.Values
 {
     internal class ClsValues
     {
-        public static object IfEmptyToDBNull(string texto)
+        public static object IfEmptyToDBNull(string? texto)
         {//SI EL VALOR ES NULL O EMPTY, ENTONCES AGREGA UN NULL EN LA BASE DE DATOS (PARA CUANDO LA COLUMNA ACEPTE NULO)
             return string.IsNullOrEmpty(texto) ? DBNull.Value : (object)texto;
         }
