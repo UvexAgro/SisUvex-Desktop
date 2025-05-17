@@ -1,6 +1,4 @@
 ﻿
-using SisUvex.Catalogos.Material;
-
 namespace SisUvex.Catalogos.PlantillaV1
 {
     public partial class FrmPlantillaV1Cat : Form

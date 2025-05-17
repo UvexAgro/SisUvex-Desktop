@@ -1,6 +1,4 @@
 ﻿
-using SisUvex.Catalogos.Material;
-
 namespace SisUvex.Archivo.Manifiesto
 {
     public partial class FrmManifiestoCat : Form
