@@ -18,6 +18,10 @@ using SisUvex.Material.MaterialCatalog;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using System.Web;
 using SisUvex.Material.MaterialProvider;
+using DocumentFormat.OpenXml.Presentation;
+using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.FreightContainer;
 
 
 namespace SisUvex.Material.MaterialRegister.Entry
@@ -31,7 +35,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         private string? imagesPathCatalogFolder = string.Empty;
         public FrmMaterialRegisterEntry _frmAdd;
         public FrmMaterialRegisterEntryCat _frmCat;
-        public EMaterialRegisterEntry entity;
+        public EMaterialRegisterEntry? entity;
         private string queryCatalog = "SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat ";
         private string queryCatalogExists = "WHERE EXISTS (SELECT 1 FROM Pack_MatInbound inb " +
                                           "JOIN Pack_MatInboundMaterials mat ON mat.id_matInbound = inb.id_matInbound " +
@@ -211,7 +215,10 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         public void OpenFrmAdd()
         {
+            idAddModify = null;
+            entity = null;
             IsAddOrModify = true;
+            IsAddUpdate = false;
             _frmAdd = new FrmMaterialRegisterEntry();
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir entrada de material";
@@ -222,6 +229,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         public void OpenFrmModify(string? idModify)
         {
             IsAddOrModify = false;
+            IsModifyUpdate = false;
 
             if (idModify.IsNullOrEmpty())
             {
@@ -285,7 +293,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             _frmAdd.cboMaterial.SelectedIndexChanged += (s, e) =>
             {//AL SELECCIONAR UN MATERIAL, CAMBIA SU TXBID Y EL TXB UNIDAD
-                
+
                 if (_frmAdd.cboMaterial.SelectedIndex > 0)
                 {
                     string? idMaterialSelected = _frmAdd.cboMaterial.SelectedValue?.ToString();
@@ -677,7 +685,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
                     parameters.Add("@text", "%" + text + "%");
                     break;
                 case "Código de entrada":
-                    if(long.TryParse(text, out long idInbound))
+                    if (long.TryParse(text, out long idInbound))
                         text = idInbound.ToString("000000000000000");
                     else
                     {
@@ -685,7 +693,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
                         return;
                     }
                     queryWhere = " WHERE cat.[Código] LIKE @text ";
-                    parameters.Add("@text",text);
+                    parameters.Add("@text", text);
                     break;
                 default:
                     SystemSounds.Exclamation.Play();
@@ -694,7 +702,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(queryCatalog + queryWhere, parameters);
             dgv = new(_frmCat.dgvCatalog, dtCatalog);
-            Clipboard.SetText(queryCatalog + queryWhere);
         }
 
         /////IMAGENES
@@ -789,6 +796,42 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 ClsComboBoxes.CboLoadActives(_frmAdd.cboProvider, ClsObject.MaterialProvider.Cbo);
                 _frmAdd.chbProviderRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboProvider, providerAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddTransportLine()
+        {
+            FrmTransportLineAdd transportLineAdd = new();
+            transportLineAdd.ShowDialog();
+            if (transportLineAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
+                _frmAdd.chbProviderRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, transportLineAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddDriver()
+        {
+            FrmDriverAdd driverAdd = new();
+            driverAdd.ShowDialog();
+            if (driverAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboDriver, Driver.Cbo);
+                _frmAdd.chbDriverRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, driverAdd.cls.idAddModify);
+            }
+        }
+
+        public void BtnAddFreighContainer()
+        {
+            FrmFreightContainerAdd freightContainerAdd = new();
+            freightContainerAdd.ShowDialog();
+            if (freightContainerAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, FreightContainer.Cbo);
+                _frmAdd.chbFreightContainerRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, freightContainerAdd.cls.idAddModify);
             }
         }
     }

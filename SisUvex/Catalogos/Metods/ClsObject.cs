@@ -383,6 +383,9 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboFreightContainer";
             public const string DgvCatalog = "DgvCatalogFreightContainer";
             public const string QueryCbo = $" SELECT id_freightContainer AS [{Column.id}], CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_freightContainer + ')', '(' + c_active + ')' ) AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}]  FROM Pack_FreightContainer ORDER BY [{Column.name}] ";
+            public const string CboTypeContainer = "CboTypeContainer";
+            public const string QueryCboTypeContainer = $"  SELECT DISTINCT '1' AS [{Column.id}], v_typeContainer AS [{Column.name}] FROM Pack_FreightContainer frc WHERE v_typeContainer IS NOT NULL ";
+
         }
 
         public static class ManifestTemplate

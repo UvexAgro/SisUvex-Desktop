@@ -96,7 +96,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             sel.OpenSelectionForm("TransportLine", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
             }

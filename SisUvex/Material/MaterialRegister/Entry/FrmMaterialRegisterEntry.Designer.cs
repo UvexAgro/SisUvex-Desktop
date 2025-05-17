@@ -158,7 +158,7 @@
             chbDistributorRemoved.Font = new Font("Segoe UI", 7.8F);
             chbDistributorRemoved.ForeColor = Color.DarkGray;
             chbDistributorRemoved.Image = Properties.Resources.removedList16;
-            chbDistributorRemoved.Location = new Point(725, 154);
+            chbDistributorRemoved.Location = new Point(726, 154);
             chbDistributorRemoved.Margin = new Padding(1, 1, 0, 0);
             chbDistributorRemoved.Name = "chbDistributorRemoved";
             chbDistributorRemoved.Size = new Size(23, 23);
@@ -171,12 +171,13 @@
             btnSearchDistributor.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchDistributor.BackgroundImageLayout = ImageLayout.Stretch;
             btnSearchDistributor.Font = new Font("Microsoft Sans Serif", 9F);
-            btnSearchDistributor.Location = new Point(703, 154);
+            btnSearchDistributor.Location = new Point(704, 154);
             btnSearchDistributor.Margin = new Padding(1, 1, 0, 0);
             btnSearchDistributor.Name = "btnSearchDistributor";
             btnSearchDistributor.Size = new Size(23, 23);
             btnSearchDistributor.TabIndex = 375;
             btnSearchDistributor.UseVisualStyleBackColor = true;
+            btnSearchDistributor.Click += btnSearchDistributor_Click;
             // 
             // txbIdDistributor
             // 
@@ -185,7 +186,7 @@
             txbIdDistributor.Location = new Point(430, 155);
             txbIdDistributor.Margin = new Padding(1, 1, 0, 0);
             txbIdDistributor.Name = "txbIdDistributor";
-            txbIdDistributor.Size = new Size(37, 21);
+            txbIdDistributor.Size = new Size(38, 21);
             txbIdDistributor.TabIndex = 377;
             txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
@@ -195,7 +196,7 @@
             cboDistributor.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboDistributor.FormattingEnabled = true;
             cboDistributor.ItemHeight = 13;
-            cboDistributor.Location = new Point(468, 155);
+            cboDistributor.Location = new Point(469, 155);
             cboDistributor.Margin = new Padding(1, 1, 0, 0);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(235, 21);
@@ -269,6 +270,7 @@
             btnFreightContainerSearch.Size = new Size(23, 23);
             btnFreightContainerSearch.TabIndex = 388;
             btnFreightContainerSearch.UseVisualStyleBackColor = true;
+            btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
             // 
             // btnDriverSearch
             // 
@@ -281,6 +283,7 @@
             btnDriverSearch.Size = new Size(23, 23);
             btnDriverSearch.TabIndex = 386;
             btnDriverSearch.UseVisualStyleBackColor = true;
+            btnDriverSearch.Click += btnDriverSearch_Click;
             // 
             // txbIdFreightContainer
             // 
@@ -339,6 +342,7 @@
             btnTransportLineSearch.Size = new Size(23, 23);
             btnTransportLineSearch.TabIndex = 381;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
+            btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
             // txbIdTransportLine
             // 
@@ -422,7 +426,7 @@
             // txbInvoice
             // 
             txbInvoice.Font = new Font("Microsoft Sans Serif", 9F);
-            txbInvoice.Location = new Point(431, 22);
+            txbInvoice.Location = new Point(431, 23);
             txbInvoice.Margin = new Padding(1, 1, 0, 0);
             txbInvoice.MaxLength = 20;
             txbInvoice.Name = "txbInvoice";
@@ -433,7 +437,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Microsoft Sans Serif", 9F);
-            label11.Location = new Point(395, 26);
+            label11.Location = new Point(395, 27);
             label11.Margin = new Padding(1, 1, 0, 0);
             label11.Name = "label11";
             label11.Size = new Size(37, 15);
@@ -446,12 +450,13 @@
             btnMaterialTypeSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnMaterialTypeSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnMaterialTypeSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnMaterialTypeSearch.Location = new Point(704, 44);
+            btnMaterialTypeSearch.Location = new Point(703, 44);
             btnMaterialTypeSearch.Margin = new Padding(1, 1, 0, 0);
             btnMaterialTypeSearch.Name = "btnMaterialTypeSearch";
             btnMaterialTypeSearch.Size = new Size(23, 23);
             btnMaterialTypeSearch.TabIndex = 404;
             btnMaterialTypeSearch.UseVisualStyleBackColor = true;
+            btnMaterialTypeSearch.Click += btnMaterialTypeSearch_Click;
             // 
             // txbIdMaterialType
             // 
@@ -495,7 +500,7 @@
             chbMaterialRemoved.Font = new Font("Segoe UI", 7.8F);
             chbMaterialRemoved.ForeColor = Color.DarkGray;
             chbMaterialRemoved.Image = Properties.Resources.removedList16;
-            chbMaterialRemoved.Location = new Point(726, 66);
+            chbMaterialRemoved.Location = new Point(725, 66);
             chbMaterialRemoved.Margin = new Padding(1, 1, 0, 0);
             chbMaterialRemoved.Name = "chbMaterialRemoved";
             chbMaterialRemoved.Size = new Size(23, 23);
@@ -508,12 +513,13 @@
             btnMaterialSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnMaterialSearch.BackgroundImageLayout = ImageLayout.Stretch;
             btnMaterialSearch.Font = new Font("Microsoft Sans Serif", 9F);
-            btnMaterialSearch.Location = new Point(704, 66);
+            btnMaterialSearch.Location = new Point(703, 66);
             btnMaterialSearch.Margin = new Padding(1, 1, 0, 0);
             btnMaterialSearch.Name = "btnMaterialSearch";
             btnMaterialSearch.Size = new Size(23, 23);
             btnMaterialSearch.TabIndex = 409;
             btnMaterialSearch.UseVisualStyleBackColor = true;
+            btnMaterialSearch.Click += btnMaterialSearch_Click;
             // 
             // txbIdMaterial
             // 
@@ -576,6 +582,7 @@
             btnProviderSearch.Size = new Size(23, 23);
             btnProviderSearch.TabIndex = 414;
             btnProviderSearch.UseVisualStyleBackColor = true;
+            btnProviderSearch.Click += btnProviderSearch_Click;
             // 
             // txbIdProvider
             // 
@@ -735,6 +742,7 @@
             btnWarehouseSearch.Size = new Size(23, 23);
             btnWarehouseSearch.TabIndex = 428;
             btnWarehouseSearch.UseVisualStyleBackColor = true;
+            btnWarehouseSearch.Click += btnWarehouseSearch_Click;
             // 
             // txbIdWarehouse
             // 
@@ -916,6 +924,7 @@
             btnFreightContainerAdd.Size = new Size(24, 23);
             btnFreightContainerAdd.TabIndex = 450;
             btnFreightContainerAdd.UseVisualStyleBackColor = true;
+            btnFreightContainerAdd.Click += btnFreightContainerAdd_Click;
             // 
             // btnDriverAdd
             // 
@@ -928,6 +937,7 @@
             btnDriverAdd.Size = new Size(24, 23);
             btnDriverAdd.TabIndex = 449;
             btnDriverAdd.UseVisualStyleBackColor = true;
+            btnDriverAdd.Click += btnDriverAdd_Click;
             // 
             // btnTransportLineAdd
             // 
@@ -940,6 +950,7 @@
             btnTransportLineAdd.Size = new Size(24, 23);
             btnTransportLineAdd.TabIndex = 448;
             btnTransportLineAdd.UseVisualStyleBackColor = true;
+            btnTransportLineAdd.Click += btnTransportLineAdd_Click;
             // 
             // btnProviderAdd
             // 
@@ -959,7 +970,7 @@
             btnMaterialAdd.BackgroundImageLayout = ImageLayout.Stretch;
             btnMaterialAdd.Font = new Font("Microsoft Sans Serif", 9F);
             btnMaterialAdd.Image = Properties.Resources.AddRowIcon16;
-            btnMaterialAdd.Location = new Point(748, 66);
+            btnMaterialAdd.Location = new Point(747, 66);
             btnMaterialAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialAdd.Name = "btnMaterialAdd";
             btnMaterialAdd.Size = new Size(24, 23);
@@ -1005,6 +1016,7 @@
             btnGrowerSearch.Size = new Size(23, 23);
             btnGrowerSearch.TabIndex = 455;
             btnGrowerSearch.UseVisualStyleBackColor = true;
+            btnGrowerSearch.Click += btnGrowerSearch_Click;
             // 
             // txbIdGrower
             // 

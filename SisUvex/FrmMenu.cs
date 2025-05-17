@@ -3,17 +3,12 @@ using SisUvex.Catalogos.Variedad;
 using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
 using SisUvex.Catalogos.Productor;
-using SisUvex.Catalogos.LineaTransporte;
 using SisUvex.Catalogos.AgenciaAduanal;
 using SisUvex.Catalogos.TipoMaterial;
 using SisUvex.Catalogos.Contratista;
 using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Distribuidor;
-using SisUvex.Catalogos.Lote;
-using SisUvex.Catalogos.Chofer;
 using SisUvex.Nomina;
-using SisUvex.Catalogos.Caja;
-using SisUvex.Catalogos.Troque;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
 using SisUvex.Catalogos.RegistroMaterial;
@@ -59,6 +54,12 @@ using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialWarehouses;
 using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialCatalog;
+using SisUvex.Material.MaterialRegister.Entry;
+using SisUvex.Material.MaterialForeignDest;
+using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.Truck;
+using SisUvex.Catalogos.FreightContainer;
 
 namespace SisUvex
 {
@@ -150,7 +151,7 @@ namespace SisUvex
 
         private void líneaDeTransporteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLineaTransporteCat cat = new FrmLineaTransporteCat();
+            FrmTransportLineCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -206,18 +207,18 @@ namespace SisUvex
 
         private void choferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmChoferCat cat = new FrmChoferCat();
+            FrmDriverCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCajaCat cat = new FrmCajaCat();
+            FrmFreightContainerCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
         private void troqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmTroqueCat cat = new FrmTroqueCat();
+            FrmTruckCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -525,25 +526,49 @@ namespace SisUvex
 
         private void proovedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMaterialProviderCat cat = new FrmMaterialProviderCat();
-            AbrirVentanaHijo(cat, 3);
         }
 
         private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMaterialWareHousesCat cat = new FrmMaterialWareHousesCat();
+        }
+
+        private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void entradasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterEntryCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
 
-        private void tipoDeMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void tipoDeMaterialToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             FrmMaterialTypeCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
 
-        private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
+        private void catálogoMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             FrmMaterialCatalog cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void almacenesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialWareHousesCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void proovedoresToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialProviderCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void destinosExternosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialForeignDestCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }

@@ -25,8 +25,11 @@ namespace SisUvex.Material.MaterialProvider
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_provider]), 0) +1, '00') FROM [Pack_Provider]").ToString();
         }
 
-        public void GetProvider(string idProvider)
+        public void GetProvider(string? idProvider)
         {
+            if (string.IsNullOrEmpty(idProvider))
+                idProvider = "0";
+
             SQLControl sql = new SQLControl();
             try
             {

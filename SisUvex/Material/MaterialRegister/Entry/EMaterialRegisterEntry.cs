@@ -214,9 +214,9 @@ namespace SisUvex.Material.MaterialRegister.Entry
                     cmd.Parameters.AddWithValue("@idProvider", ClsValues.IfEmptyToDBNull(row[ClsObject.MaterialProvider.ColumnId].ToString()));
                     cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(row[ClsObject.Grower.ColumnId].ToString()));
                     cmd.Parameters.AddWithValue("@idMatCatalog", row["Código"]);
-                    cmd.Parameters.AddWithValue("@quant", row["Cantidad"]);
-                    cmd.Parameters.AddWithValue("@priceMX", ClsValues.IfEmptyToDBNull(row["$MXN"].ToString()));
-                    cmd.Parameters.AddWithValue("@priceUS", ClsValues.IfEmptyToDBNull(row["$USD"].ToString()));
+                    cmd.Parameters.AddWithValue("@quant", row["Cantidad"]);                    
+                    cmd.Parameters.AddWithValue("@priceMX", ClsValues.GetDecimalOrNullDB(row["$MXN"].ToString()));
+                    cmd.Parameters.AddWithValue("@priceUS", ClsValues.GetDecimalOrNullDB(row["$USD"].ToString()));
                     cmd.Parameters.AddWithValue("@user", User.GetUserName());
                     cmd.Parameters.AddWithValue("@position", position.ToString("00"));
 

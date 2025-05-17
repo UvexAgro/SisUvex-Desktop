@@ -214,6 +214,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.FreightContainer.Cbo:
                     queryDataTable = ClsObject.FreightContainer.QueryCbo;
                     break;
+                case ClsObject.FreightContainer.CboTypeContainer:
+                    queryDataTable = ClsObject.FreightContainer.QueryCboTypeContainer;
+                    break;
                 case ClsObject.ManifestTemplate.Cbo:
                     queryDataTable = ClsObject.ManifestTemplate.QueryCbo;
                     break;
@@ -279,6 +282,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_TransportLine', 'Pack_Truck') ";
                     break;
                 case ClsObject.FreightContainer.Cbo:
+                case ClsObject.FreightContainer.CboTypeContainer:
                     query += " IN ('Pack_TransportLine', 'Pack_FreightContainer') ";
                     break;
                 case ClsObject.ManifestTemplate.Cbo:
@@ -352,6 +356,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Truck.Cbo:
                     return ClsObject.Truck.TableName;
                 case ClsObject.FreightContainer.Cbo:
+                case ClsObject.FreightContainer.CboTypeContainer:
                     return ClsObject.FreightContainer.TableName;
                 case ClsObject.ManifestTemplate.Cbo:
                     return ClsObject.ManifestTemplate.TableName;
