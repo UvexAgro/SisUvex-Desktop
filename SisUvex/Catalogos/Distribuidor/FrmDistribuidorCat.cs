@@ -1,7 +1,4 @@
 ﻿
-using SisUvex.Catalogos.Consignatario;
-using SisUvex.Catalogos.Material;
-
 namespace SisUvex.Catalogos.Distribuidor
 {
     public partial class FrmDistribuidorCat : Form

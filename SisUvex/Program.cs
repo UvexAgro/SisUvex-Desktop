@@ -2,7 +2,6 @@
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Archivo.Manifiesto;
-using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.PlanTrabajo;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Consultas.Pallets;
@@ -49,7 +48,7 @@ namespace SisUvex
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FrmMenu());
+            Application.Run(new PantallaCarga());
             //Application.Run(new FrmMenu());
         }
     }

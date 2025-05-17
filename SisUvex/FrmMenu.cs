@@ -4,9 +4,7 @@ using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Catalogos.AgenciaAduanal;
-using SisUvex.Catalogos.TipoMaterial;
 using SisUvex.Catalogos.Contratista;
-using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Distribuidor;
 using SisUvex.Nomina;
 using SisUvex.Catalogos.Consignatario;
@@ -60,6 +58,7 @@ using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
 using SisUvex.Catalogos.Truck;
 using SisUvex.Catalogos.FreightContainer;
+using SisUvex.Material.MaterialRegister.Exit;
 
 namespace SisUvex
 {
@@ -161,21 +160,9 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 1);
         }
 
-        private void tipoDeMaterialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmTipoMaterialCat cat = new FrmTipoMaterialCat();
-            AbrirVentanaHijo(cat, 1);
-        }
-
         private void contratistaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmContratistaCat cat = new FrmContratistaCat();
-            AbrirVentanaHijo(cat, 1);
-        }
-
-        private void materialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmMaterialCat cat = new FrmMaterialCat();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -569,6 +556,12 @@ namespace SisUvex
         private void destinosExternosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmMaterialForeignDestCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void salidasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterExitCat cat = new();
             AbrirVentanaHijo(cat, 3);
         }
     }
