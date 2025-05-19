@@ -453,5 +453,19 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogMaterialCatalog";
             public const string QueryCbo = $" SELECT id_matCatalog AS [{Column.id}], CONCAT(v_nameMat, ' | ', id_matCatalog, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_nameMat AS [{ColumnName}], id_matType AS [{MaterialType.ColumnId}], id_color AS [{Color.ColumnId}], id_category AS [{Category.ColumnId}], id_unit AS [{Unit.ColumnId}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_MaterialCatalog ORDER BY [{Column.name}] ";
         }
+
+        public static class ForeignDest
+        {
+            public const string TableName = "Pack_ForeignDest";
+            public const string ColumnName = "Destino extranjero";
+            public const string ColumnId = "idForeignDest";
+            public const string ColumnCity = "Ciudad destino extranjero";
+            public const string ColumnState = "Estado destino extranjero";
+            public const string ColumnAddress = "Dirección destino extranjero";
+            public const string ColumnCp = "CP destino extranjero";
+            public const string Cbo = "CboForeignDest";
+            public const string DgvCatalog = "DgvCatalogForeignDest";
+            public const string QueryCbo = $" SELECT id_foreignDest AS [{Column.id}], CONCAT_WS(' | ',v_address,'('+id_foreignDest+')', v_city, v_state) AS [{Column.name}], v_address AS [{ColumnAddress}], v_city AS [{ColumnCity}], v_state AS [{ColumnState}], c_codigoPost AS [{ColumnCp}] FROM Pack_ForeignDest ";
+        }
     }
 }

@@ -17,6 +17,11 @@ using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialProvider;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.FreightContainer;
+using SisUvex.Material.MaterialForeignDest;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -42,6 +47,82 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public string? idAddModify;
         private string employeeCboQuery = $" SELECT DISTINCT emp.id_employee AS [{Column.id}], CONCAT_WS(' ',emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS [{Column.name}] FROM Nom_Employees emp ";
         private string employeeCboQueryJoin = $" JOIN Pack_MatInbound mat ON mat.id_employee = emp.id_employee ";
+        public void BtnSearchFilter()
+        {
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+        }
+
+        private DataTable SearchFilter()
+        {
+            Dictionary<string, object> parameters = new();
+            StringBuilder qry = new StringBuilder(queryCatalog);
+            StringBuilder existsConditions = new StringBuilder(queryCatalogExists);
+
+            // Fecha siempre aplica
+            existsConditions.Append(" AND inb.d_date BETWEEN @date1 AND @date2 ");
+            parameters.Add("@date1", _frmCat.dtpDate1.Value.ToString("yyyy-MM-dd"));
+            parameters.Add("@date2", _frmCat.dtpDate2.Value.ToString("yyyy-MM-dd"));
+
+            // Filtros condicionales
+            if (_frmCat.cboDistributor.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_distributor = @idDistributor ");
+                parameters.Add("@idDistributor", _frmCat.cboDistributor.SelectedValue);
+            }
+
+            if (_frmCat.cboGrower.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_grower = @idGrower ");
+                parameters.Add("@idGrower", _frmCat.cboGrower.SelectedValue);
+            }
+
+            if (_frmCat.cboProvider.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_provider = @idProvider ");
+                parameters.Add("@idProvider", _frmCat.cboProvider.SelectedValue);
+            }
+
+            if (_frmCat.cboWareHouse.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_warehouses = @idWarehouse ");
+                parameters.Add("@idWarehouse", _frmCat.cboWareHouse.SelectedValue);
+            }
+
+            if (_frmCat.cboMaterialType.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND matC.id_matType = @idMaterialType ");
+                parameters.Add("@idMaterialType", _frmCat.cboMaterialType.SelectedValue);
+            }
+            if (_frmCat.cboMaterial.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND matC.id_matCatalog = @idMaterial ");
+                parameters.Add("@idMaterial", _frmCat.cboMaterial.SelectedValue);
+            }
+
+            if (_frmCat.cboTransportLine.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_transportLine = @idTransportLine ");
+                parameters.Add("@idTransportLine", _frmCat.cboTransportLine.SelectedValue);
+            }
+
+            if (_frmCat.cboFreightContainer.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND inb.id_freightContainer = @idFreightContainer ");
+                parameters.Add("@idFreightContainer", _frmCat.cboFreightContainer.SelectedValue);
+            }
+
+            // Cierra la subconsulta EXISTS
+            existsConditions.Append(")");
+            qry.Append(existsConditions);
+
+            // Ordenar por Fecha, Código y c_position (sin mostrarlo en los resultados)
+            qry.Append(" ORDER BY cat.[Fecha], cat.[Código], ");
+            qry.Append("(SELECT TOP 1 mat.c_position FROM Pack_MatInboundMaterials mat ");
+            qry.Append("WHERE mat.id_matInbound = cat.[Código])");
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(qry.ToString(), parameters);
+        }
 
         public void BeginFormCat()
         {
@@ -49,14 +130,14 @@ namespace SisUvex.Material.MaterialRegister.Exit
             _frmCat.cls ??= this;
 
             //dtCatalog = SearchFilter();
-            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            //dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
 
             LoadComboBoxesCatalog();
         }
 
         private void LoadComboBoxesCatalog()
         {
-            //LoadSearchByCbo();
+            LoadSearchByCbo();
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboWareHouse, MaterialWarehouse.Cbo);
@@ -116,6 +197,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             controlListInbound = new ClsControls();
             controlListInbound.ChangeHeadMessage("Para registrar una salida debe:\n");
             controlListInbound.Add(_frmAdd.txbId, "Seleccionar un tipo de salida.");
+            controlListInbound.Add(_frmAdd.txbIdStatus, "Seleccionar el estado.");
             controlListInbound.Add(_frmAdd.txbIdWarehouse, "Seleccionar un almacén de salida.");
             controlListInbound.Add(_frmAdd.txbIdWarehouse, "Ingresar dirección de destino.");
             controlListInbound.Add(_frmAdd.txbIdTransportLine, "Seleccionar una línea de transporte.");
@@ -124,7 +206,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             controlListMaterial = new ClsControls();
             controlListMaterial.ChangeHeadMessage("Para agregar un material al listado debe:\n");
-            controlListMaterial.Add(_frmAdd.txbIdStatus, "Seleccionar el estado.");
             controlListMaterial.Add(_frmAdd.txbInvoice, "Introducir folio/remisión/factura.");
             controlListMaterial.Add(_frmAdd.txbIdMaterial, "Seleccionar un material.");
             controlListMaterial.Add(_frmAdd.txbQuant, "Ingresar la cantidad.");
@@ -165,7 +246,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
         {
             _frmAdd.txbQuant.Tag = "integerNoEmpty";
             ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbQuant);
-
+            ClsComboBoxes.CboLoadAll(_frmAdd.cboForeignDest, ForeignDest.Cbo);
             dtUnit = ClsQuerysDB.GetDataTable(Unit.QueryCbo);
             dtEmployees = ClsQuerysDB.GetDataTable(employeeCboQuery + employeeCboQueryJoin);
             ClsComboBoxes.LoadComboBoxDataSource(_frmAdd.cboEmployee, dtEmployees);
@@ -230,6 +311,18 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 }
             };
 
+            _frmAdd.cboForeignDest.SelectedIndexChanged += (s, e) =>
+            {
+                if (_frmAdd.cboForeignDest.SelectedIndex > 0)
+                {
+                    _frmAdd.txbIdForeignDest.Text = _frmAdd.cboForeignDest.SelectedValue?.ToString();
+                    _frmAdd.txbForeignDestCity.Text = _frmAdd.cboForeignDest.GetColumnValue(ForeignDest.ColumnCity).ToString();
+                    _frmAdd.txbForeignDestState.Text = _frmAdd.cboForeignDest.GetColumnValue(ForeignDest.ColumnState).ToString();
+                }
+                else
+                    _frmAdd.txbIdForeignDest.Text = string.Empty;
+            };
+
             List<Tuple<ComboBox, CheckBox?, string>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
             cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboDriver, _frmAdd.chbDriverRemoved, TransportLine.ColumnId));
             cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboFreightContainer, _frmAdd.chbFreightContainerRemoved, TransportLine.ColumnId));
@@ -284,7 +377,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdExitStatus].Visible = false;
         }
 
-        public void BtnAddRowMaterialsInEntry()
+        public void BtnAddRowMaterialsInExit()
         {
             if (!controlListMaterial.ValidateControls())
                 return;
@@ -348,7 +441,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, rowToModify["Código"].ToString());
             _frmAdd.txbQuant.Text = rowToModify["Cantidad"].ToString();
             _frmAdd.txbInvoice.Text = rowToModify["Folio"].ToString();
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, rowToModify[EMaterialRegisterExit.cIdExitStatus].ToString());
             _frmAdd.txbObs.Text = rowToModify["Obs."].ToString();
 
             RemoveRowMaterialsInExit();
@@ -519,6 +611,52 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             _frmAdd.pbxMaterial.Image = null;
         }
+
+        /////////
+        public void btnSearchEmployee()
+        {
+            ClsSelectionForm sel = new ClsSelectionForm();
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                Dictionary<string, object> parameters = new();
+                parameters.Add("@idEmployee", sel.SelectedValue);
+
+                string q = employeeCboQuery + " WHERE emp.id_employee = @idEmployee ";
+
+                DataTable dtEmp = ClsQuerysDB.ExecuteParameterizedQuery(q, parameters);
+
+                if (dtEmp.Rows.Count > 0)
+                {
+                    DataRow newRow = dtEmp.Rows[0];
+
+                    DataTable currentDt = (DataTable)_frmAdd.cboEmployee.DataSource;
+
+                    bool exists = false;
+                    foreach (DataRow row in currentDt.Rows)
+                    {
+                        if (row[Column.id].ToString() == newRow[Column.id].ToString() &&
+                            row[Column.id].ToString() != string.Empty) // Excluir la fila "---Seleccionar---"
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                    {
+                        DataRow rowToAdd = currentDt.NewRow();
+                        rowToAdd[Column.id] = newRow[Column.id];
+                        rowToAdd[Column.name] = newRow[Column.name];
+
+                        currentDt.Rows.Add(rowToAdd);
+                    }
+
+                    _frmAdd.cboEmployee.SelectedValue = newRow[Column.id];
+                }
+            }
+        }
         /////////Btns de añadir
         public void BtnAddMaterialCatalog()
         {
@@ -529,6 +667,49 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 ClsComboBoxes.CboLoadActives(_frmAdd.cboMaterial, ClsObject.MaterialCatalog.Cbo);
                 _frmAdd.chbMaterialRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, materialAdd.cls.idAddModify);
+            }
+        }
+        public void BtnAddTransportLine()
+        {
+            FrmTransportLineAdd transportLineAdd = new();
+            transportLineAdd.ShowDialog();
+            if (transportLineAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
+                _frmAdd.chbTransportLineRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, transportLineAdd.cls.idAddModify);
+            }
+        }
+        public void BtnAddDriver()
+        {
+            FrmDriverAdd driverAdd = new();
+            driverAdd.ShowDialog();
+            if (driverAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboDriver, Driver.Cbo);
+                _frmAdd.chbDriverRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, driverAdd.cls.idAddModify);
+            }
+        }
+        public void BtnAddFreighContainer()
+        {
+            FrmFreightContainerAdd freightContainerAdd = new();
+            freightContainerAdd.ShowDialog();
+            if (freightContainerAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, FreightContainer.Cbo);
+                _frmAdd.chbFreightContainerRemoved.Checked = false;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, freightContainerAdd.cls.idAddModify);
+            }
+        }
+        public void BtnAddForeignDest()
+        {
+            FrmMaterialForeignDestAdd foreignDestAdd = new();
+            foreignDestAdd.ShowDialog();
+            if (foreignDestAdd.cls.IsAddUpdate)
+            {
+                ClsComboBoxes.CboLoadAll(_frmAdd.cboForeignDest, ForeignDest.Cbo);
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboForeignDest, foreignDestAdd.cls.idAddModify);
             }
         }
     }

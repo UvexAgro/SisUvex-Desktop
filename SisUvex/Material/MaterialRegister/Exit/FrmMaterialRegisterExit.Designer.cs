@@ -98,15 +98,16 @@
             cboStatus = new ComboBox();
             label19 = new Label();
             label20 = new Label();
-            txbCity = new TextBox();
+            txbForeignDestCity = new TextBox();
             label21 = new Label();
-            txbState = new TextBox();
+            txbForeignDestState = new TextBox();
             label22 = new Label();
             txbIdOutputType = new TextBox();
             cboOutputType = new ComboBox();
-            button1 = new Button();
+            btnForeignDestSearch = new Button();
             txbIdForeignDest = new TextBox();
             cboForeignDest = new ComboBox();
+            btnForeignDestAdd = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             SuspendLayout();
@@ -125,6 +126,7 @@
             chbImageUp.Text = "4";
             chbImageUp.TextAlign = ContentAlignment.MiddleCenter;
             chbImageUp.UseVisualStyleBackColor = true;
+            chbImageUp.Click += chbImageUp_Click;
             // 
             // chbImageDown
             // 
@@ -140,6 +142,7 @@
             chbImageDown.Text = "3";
             chbImageDown.TextAlign = ContentAlignment.MiddleCenter;
             chbImageDown.UseVisualStyleBackColor = true;
+            chbImageDown.Click += chbImageDown_Click;
             // 
             // chbImageBack
             // 
@@ -155,6 +158,7 @@
             chbImageBack.Text = "2";
             chbImageBack.TextAlign = ContentAlignment.MiddleCenter;
             chbImageBack.UseVisualStyleBackColor = true;
+            chbImageBack.Click += chbImageBack_Click;
             // 
             // chbImageFront
             // 
@@ -170,6 +174,7 @@
             chbImageFront.Text = "1";
             chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
             chbImageFront.UseVisualStyleBackColor = true;
+            chbImageFront.Click += chbImageFront_Click;
             // 
             // txbObs
             // 
@@ -228,6 +233,7 @@
             btnEmployeeSearch.Size = new Size(23, 23);
             btnEmployeeSearch.TabIndex = 543;
             btnEmployeeSearch.UseVisualStyleBackColor = true;
+            btnEmployeeSearch.Click += btnEmployeeSearch_Click;
             // 
             // btnMaterialImageAdd
             // 
@@ -252,6 +258,7 @@
             btnMaterialAdd.Size = new Size(24, 23);
             btnMaterialAdd.TabIndex = 536;
             btnMaterialAdd.UseVisualStyleBackColor = true;
+            btnMaterialAdd.Click += btnMaterialAdd_Click;
             // 
             // btnFreightContainerAdd
             // 
@@ -264,6 +271,7 @@
             btnFreightContainerAdd.Size = new Size(24, 23);
             btnFreightContainerAdd.TabIndex = 534;
             btnFreightContainerAdd.UseVisualStyleBackColor = true;
+            btnFreightContainerAdd.Click += btnFreightContainerAdd_Click;
             // 
             // btnDriverAdd
             // 
@@ -276,6 +284,7 @@
             btnDriverAdd.Size = new Size(24, 23);
             btnDriverAdd.TabIndex = 533;
             btnDriverAdd.UseVisualStyleBackColor = true;
+            btnDriverAdd.Click += btnDriverAdd_Click;
             // 
             // btnTransportLineAdd
             // 
@@ -288,6 +297,7 @@
             btnTransportLineAdd.Size = new Size(24, 23);
             btnTransportLineAdd.TabIndex = 532;
             btnTransportLineAdd.UseVisualStyleBackColor = true;
+            btnTransportLineAdd.Click += btnTransportLineAdd_Click;
             // 
             // btnCancel
             // 
@@ -329,6 +339,7 @@
             btnRemoveMaterial.TabIndex = 529;
             btnRemoveMaterial.Text = "Eliminar";
             btnRemoveMaterial.UseVisualStyleBackColor = false;
+            btnRemoveMaterial.Click += btnRemoveMaterial_Click;
             // 
             // btnModifyMaterial
             // 
@@ -342,6 +353,7 @@
             btnModifyMaterial.TabIndex = 528;
             btnModifyMaterial.Text = "Modificar";
             btnModifyMaterial.UseVisualStyleBackColor = false;
+            btnModifyMaterial.Click += btnModifyMaterial_Click;
             // 
             // btnAddMaterial
             // 
@@ -355,6 +367,7 @@
             btnAddMaterial.TabIndex = 527;
             btnAddMaterial.Text = "Agregar";
             btnAddMaterial.UseVisualStyleBackColor = false;
+            btnAddMaterial.Click += btnAddMaterial_Click;
             // 
             // dgvMaterialList
             // 
@@ -444,6 +457,7 @@
             btnWarehouseSearch.Size = new Size(23, 23);
             btnWarehouseSearch.TabIndex = 520;
             btnWarehouseSearch.UseVisualStyleBackColor = true;
+            btnWarehouseSearch.Click += btnWarehouseSearch_Click;
             // 
             // txbIdWarehouse
             // 
@@ -525,6 +539,7 @@
             btnMaterialSearch.Size = new Size(23, 23);
             btnMaterialSearch.TabIndex = 501;
             btnMaterialSearch.UseVisualStyleBackColor = true;
+            btnMaterialSearch.Click += btnMaterialSearch_Click;
             // 
             // txbIdMaterial
             // 
@@ -572,6 +587,7 @@
             btnMaterialTypeSearch.Size = new Size(23, 23);
             btnMaterialTypeSearch.TabIndex = 497;
             btnMaterialTypeSearch.UseVisualStyleBackColor = true;
+            btnMaterialTypeSearch.Click += btnMaterialTypeSearch_Click;
             // 
             // txbIdMaterialType
             // 
@@ -707,6 +723,7 @@
             btnFreightContainerSearch.Size = new Size(23, 23);
             btnFreightContainerSearch.TabIndex = 484;
             btnFreightContainerSearch.UseVisualStyleBackColor = true;
+            btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
             // 
             // btnDriverSearch
             // 
@@ -719,6 +736,7 @@
             btnDriverSearch.Size = new Size(23, 23);
             btnDriverSearch.TabIndex = 483;
             btnDriverSearch.UseVisualStyleBackColor = true;
+            btnDriverSearch.Click += btnDriverSearch_Click;
             // 
             // txbIdFreightContainer
             // 
@@ -777,6 +795,7 @@
             btnTransportLineSearch.Size = new Size(23, 23);
             btnTransportLineSearch.TabIndex = 479;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
+            btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
             // txbIdTransportLine
             // 
@@ -951,15 +970,16 @@
             label20.Text = "Dirección:";
             label20.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbCity
+            // txbForeignDestCity
             // 
-            txbCity.Font = new Font("Microsoft Sans Serif", 9F);
-            txbCity.Location = new Point(67, 154);
-            txbCity.Margin = new Padding(1, 1, 0, 0);
-            txbCity.MaxLength = 20;
-            txbCity.Name = "txbCity";
-            txbCity.Size = new Size(278, 21);
-            txbCity.TabIndex = 559;
+            txbForeignDestCity.Enabled = false;
+            txbForeignDestCity.Font = new Font("Microsoft Sans Serif", 9F);
+            txbForeignDestCity.Location = new Point(67, 154);
+            txbForeignDestCity.Margin = new Padding(1, 1, 0, 0);
+            txbForeignDestCity.MaxLength = 20;
+            txbForeignDestCity.Name = "txbForeignDestCity";
+            txbForeignDestCity.Size = new Size(278, 21);
+            txbForeignDestCity.TabIndex = 559;
             // 
             // label21
             // 
@@ -973,15 +993,16 @@
             label21.Text = "Ciudad:";
             label21.TextAlign = ContentAlignment.TopRight;
             // 
-            // txbState
+            // txbForeignDestState
             // 
-            txbState.Font = new Font("Microsoft Sans Serif", 9F);
-            txbState.Location = new Point(67, 176);
-            txbState.Margin = new Padding(1, 1, 0, 0);
-            txbState.MaxLength = 20;
-            txbState.Name = "txbState";
-            txbState.Size = new Size(278, 21);
-            txbState.TabIndex = 561;
+            txbForeignDestState.Enabled = false;
+            txbForeignDestState.Font = new Font("Microsoft Sans Serif", 9F);
+            txbForeignDestState.Location = new Point(67, 176);
+            txbForeignDestState.Margin = new Padding(1, 1, 0, 0);
+            txbForeignDestState.MaxLength = 20;
+            txbForeignDestState.Name = "txbForeignDestState";
+            txbForeignDestState.Size = new Size(278, 21);
+            txbForeignDestState.TabIndex = 561;
             // 
             // label22
             // 
@@ -1018,17 +1039,18 @@
             cboOutputType.Size = new Size(117, 21);
             cboOutputType.TabIndex = 563;
             // 
-            // button1
+            // btnForeignDestSearch
             // 
-            button1.BackgroundImage = Properties.Resources.BuscarLupa1;
-            button1.BackgroundImageLayout = ImageLayout.Stretch;
-            button1.Font = new Font("Microsoft Sans Serif", 9F);
-            button1.Location = new Point(323, 131);
-            button1.Margin = new Padding(1, 1, 0, 0);
-            button1.Name = "button1";
-            button1.Size = new Size(23, 23);
-            button1.TabIndex = 565;
-            button1.UseVisualStyleBackColor = true;
+            btnForeignDestSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnForeignDestSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnForeignDestSearch.Font = new Font("Microsoft Sans Serif", 9F);
+            btnForeignDestSearch.Location = new Point(300, 131);
+            btnForeignDestSearch.Margin = new Padding(1, 1, 0, 0);
+            btnForeignDestSearch.Name = "btnForeignDestSearch";
+            btnForeignDestSearch.Size = new Size(23, 23);
+            btnForeignDestSearch.TabIndex = 565;
+            btnForeignDestSearch.UseVisualStyleBackColor = true;
+            btnForeignDestSearch.Click += btnForeignDest_Click;
             // 
             // txbIdForeignDest
             // 
@@ -1050,22 +1072,37 @@
             cboForeignDest.Location = new Point(105, 132);
             cboForeignDest.Margin = new Padding(1, 1, 0, 0);
             cboForeignDest.Name = "cboForeignDest";
-            cboForeignDest.Size = new Size(218, 21);
+            cboForeignDest.Size = new Size(195, 21);
             cboForeignDest.TabIndex = 567;
+            // 
+            // btnForeignDestAdd
+            // 
+            btnForeignDestAdd.BackgroundImageLayout = ImageLayout.Stretch;
+            btnForeignDestAdd.Font = new Font("Microsoft Sans Serif", 9F);
+            btnForeignDestAdd.Image = Properties.Resources.AddRowIcon16;
+            btnForeignDestAdd.Location = new Point(322, 131);
+            btnForeignDestAdd.Margin = new Padding(1, 1, 0, 0);
+            btnForeignDestAdd.Name = "btnForeignDestAdd";
+            btnForeignDestAdd.Size = new Size(24, 23);
+            btnForeignDestAdd.TabIndex = 568;
+            btnForeignDestAdd.UseVisualStyleBackColor = true;
+            btnForeignDestAdd.Click += btnForeignDestAdd_Click;
             // 
             // FrmMaterialRegisterExit
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(784, 523);
+            Controls.Add(btnForeignDestAdd);
             Controls.Add(cboForeignDest);
             Controls.Add(txbIdForeignDest);
-            Controls.Add(button1);
+            Controls.Add(btnForeignDestSearch);
             Controls.Add(txbIdOutputType);
             Controls.Add(cboOutputType);
-            Controls.Add(txbState);
+            Controls.Add(txbForeignDestState);
             Controls.Add(label22);
-            Controls.Add(txbCity);
+            Controls.Add(txbForeignDestCity);
             Controls.Add(label21);
             Controls.Add(label20);
             Controls.Add(txbIdStatus);
@@ -1136,7 +1173,7 @@
             Controls.Add(label13);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialRegisterExit";
-            Text = "FrmMaterialRegisterExit";
+            Text = "Registro de salidaa externa de material";
             Load += FrmMaterialRegisterExit_Load;
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).EndInit();
@@ -1213,14 +1250,15 @@
         public ComboBox cboStatus;
         private Label label19;
         private Label label20;
-        public TextBox txbCity;
+        public TextBox txbForeignDestCity;
         private Label label21;
-        public TextBox txbState;
+        public TextBox txbForeignDestState;
         private Label label22;
         public TextBox txbIdOutputType;
         public ComboBox cboOutputType;
-        public Button button1;
+        public Button btnForeignDestSearch;
         public TextBox txbIdForeignDest;
         public ComboBox cboForeignDest;
+        public Button btnForeignDestAdd;
     }
 }

@@ -806,7 +806,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             if (transportLineAdd.cls.IsAddUpdate)
             {
                 ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
-                _frmAdd.chbProviderRemoved.Checked = false;
+                _frmAdd.chbTransportLineRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, transportLineAdd.cls.idAddModify);
             }
         }
