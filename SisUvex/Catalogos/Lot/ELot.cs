@@ -15,6 +15,7 @@ namespace SisUvex.Catalogos.Lot
         public int? active { get; set; }
         public decimal ha { get; set; }
         public DateTime date { get; set; }
+        public string? idFarm { get; set; }
 
         public void SetLot(string idLot, string idVariety)
         {
@@ -37,6 +38,7 @@ namespace SisUvex.Catalogos.Lot
                 active = int.Parse(dr["c_active"].ToString());
                 ha = decimal.Parse(dr["n_ha"].ToString());
                 date = DateTime.Parse(dr["d_year"].ToString());
+                idFarm = dr["id_farm"].ToString();
             }
         }
     }

@@ -35,8 +35,6 @@
             chbImageDown = new CheckBox();
             chbImageBack = new CheckBox();
             chbImageFront = new CheckBox();
-            txbObs = new TextBox();
-            label16 = new Label();
             txbIdEmployee = new TextBox();
             cboEmployee = new ComboBox();
             btnEmployeeSearch = new Button();
@@ -108,6 +106,11 @@
             txbIdForeignDest = new TextBox();
             cboForeignDest = new ComboBox();
             btnForeignDestAdd = new Button();
+            txbUSD = new TextBox();
+            label12 = new Label();
+            txbMXN = new TextBox();
+            label9 = new Label();
+            label10 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             SuspendLayout();
@@ -175,28 +178,6 @@
             chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
             chbImageFront.UseVisualStyleBackColor = true;
             chbImageFront.Click += chbImageFront_Click;
-            // 
-            // txbObs
-            // 
-            txbObs.Font = new Font("Microsoft Sans Serif", 9F);
-            txbObs.Location = new Point(433, 220);
-            txbObs.Margin = new Padding(1, 1, 0, 0);
-            txbObs.MaxLength = 20;
-            txbObs.Name = "txbObs";
-            txbObs.Size = new Size(318, 21);
-            txbObs.TabIndex = 546;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Font = new Font("Microsoft Sans Serif", 9F);
-            label16.Location = new Point(397, 223);
-            label16.Margin = new Padding(1, 1, 0, 0);
-            label16.Name = "label16";
-            label16.Size = new Size(35, 15);
-            label16.TabIndex = 547;
-            label16.Text = "Obs.:";
-            label16.TextAlign = ContentAlignment.TopRight;
             // 
             // txbIdEmployee
             // 
@@ -1088,12 +1069,71 @@
             btnForeignDestAdd.UseVisualStyleBackColor = true;
             btnForeignDestAdd.Click += btnForeignDestAdd_Click;
             // 
+            // txbUSD
+            // 
+            txbUSD.Font = new Font("Microsoft Sans Serif", 9F);
+            txbUSD.Location = new Point(577, 220);
+            txbUSD.Margin = new Padding(1, 1, 0, 0);
+            txbUSD.Name = "txbUSD";
+            txbUSD.Size = new Size(58, 21);
+            txbUSD.TabIndex = 572;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Microsoft Sans Serif", 9F);
+            label12.Location = new Point(544, 223);
+            label12.Margin = new Padding(1, 1, 0, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(36, 15);
+            label12.TabIndex = 573;
+            label12.Text = "USD:";
+            label12.TextAlign = ContentAlignment.TopRight;
+            // 
+            // txbMXN
+            // 
+            txbMXN.Font = new Font("Microsoft Sans Serif", 9F);
+            txbMXN.Location = new Point(472, 220);
+            txbMXN.Margin = new Padding(1, 1, 0, 0);
+            txbMXN.Name = "txbMXN";
+            txbMXN.Size = new Size(58, 21);
+            txbMXN.TabIndex = 569;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Microsoft Sans Serif", 9F);
+            label9.Location = new Point(384, 223);
+            label9.Margin = new Padding(1, 1, 0, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(51, 15);
+            label9.TabIndex = 570;
+            label9.Text = "Precios:";
+            label9.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Microsoft Sans Serif", 9F);
+            label10.Location = new Point(438, 223);
+            label10.Margin = new Padding(1, 1, 0, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(38, 15);
+            label10.TabIndex = 571;
+            label10.Text = "MXN:";
+            label10.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmMaterialRegisterExit
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(784, 523);
+            Controls.Add(txbUSD);
+            Controls.Add(label12);
+            Controls.Add(txbMXN);
+            Controls.Add(label9);
+            Controls.Add(label10);
             Controls.Add(btnForeignDestAdd);
             Controls.Add(cboForeignDest);
             Controls.Add(txbIdForeignDest);
@@ -1113,8 +1153,6 @@
             Controls.Add(chbImageDown);
             Controls.Add(chbImageBack);
             Controls.Add(chbImageFront);
-            Controls.Add(txbObs);
-            Controls.Add(label16);
             Controls.Add(txbIdEmployee);
             Controls.Add(cboEmployee);
             Controls.Add(btnEmployeeSearch);
@@ -1187,8 +1225,6 @@
         public CheckBox chbImageDown;
         public CheckBox chbImageBack;
         public CheckBox chbImageFront;
-        public TextBox txbObs;
-        private Label label16;
         public TextBox txbIdEmployee;
         public ComboBox cboEmployee;
         public Button btnEmployeeSearch;
@@ -1260,5 +1296,10 @@
         public TextBox txbIdForeignDest;
         public ComboBox cboForeignDest;
         public Button btnForeignDestAdd;
+        public TextBox txbUSD;
+        private Label label12;
+        public TextBox txbMXN;
+        private Label label9;
+        private Label label10;
     }
 }

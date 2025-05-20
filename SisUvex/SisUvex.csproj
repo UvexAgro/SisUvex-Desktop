@@ -75,10 +75,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Archivo\Manifiesto\FrmManifiestoAñadir.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Archivo\Manifiesto\FrmManifiestoCat.cs" />
     <Compile Update="Archivo\Manifiesto\PalletsManifiesto.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -96,8 +92,6 @@
     <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />
-    <Compile Update="Catalogos\Chofer\FrmChoferAñadir.cs" />
-    <Compile Update="Catalogos\Chofer\FrmChoferCat.cs" />
     <Compile Update="Catalogos\Ciudad\FrmCiudadAñadir.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,18 +104,12 @@
     <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
     <Compile Update="Catalogos\Distribuidor\FrmDistribuidorAñadir.cs" />
     <Compile Update="Catalogos\Distribuidor\FrmDistribuidorCat.cs" />
-    <Compile Update="Catalogos\LineaTransporte\FrmLineaTransporteAñadir.cs" />
-    <Compile Update="Catalogos\LineaTransporte\FrmLineaTransporteCat.cs" />
-    <Compile Update="Catalogos\Lote\FrmLoteAñadir.cs" />
-    <Compile Update="Catalogos\Lote\FrmLoteCat.cs" />
     <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Añadir.cs" />
     <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Cat.cs" />
     <Compile Update="Catalogos\Productor\FrmProductorAñadir.cs" />
     <Compile Update="Catalogos\Productor\FrmProductorCat.cs" />
     <Compile Update="Catalogos\Tamaño\FrmTamañoAñadir.cs" />
     <Compile Update="Catalogos\Tamaño\FrmTamañoCat.cs" />
-    <Compile Update="Catalogos\Troque\FrmTroqueAñadir.cs" />
-    <Compile Update="Catalogos\Troque\FrmTroqueCat.cs" />
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -367,13 +367,13 @@ namespace SisUvex.Material.MaterialRegister.Exit
             dtInboundMaterials.Columns.Add("Estado", typeof(string));
             dtInboundMaterials.Columns.Add("Obs.", typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cPosition, typeof(string));
-            dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cIdMatOutput, typeof(string));
+            dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cIdMatOutbound, typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cIdExitStatus, typeof(string));
 
             _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
 
             _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cPosition].Visible = false;
-            _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdMatOutput].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdMatOutbound].Visible = false;
             _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdExitStatus].Visible = false;
         }
 
@@ -390,7 +390,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 _frmAdd.cboMaterial.SelectedIndex = 0;
 
             _frmAdd.txbQuant.Text = string.Empty;
-            _frmAdd.txbObs.Text = string.Empty;
         }
 
         private void AddRowToInboundMaterials()
@@ -402,9 +401,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
             newRow["Unidad"] = _frmAdd.txbUnit.Text;
             newRow["Folio"] = _frmAdd.txbInvoice.Text;
             newRow["Estado"] = _frmAdd.cboMaterial.GetColumnValue(Column.name);
-            newRow["Obs."] = _frmAdd.txbObs.Text;
             newRow[EMaterialRegisterExit.cPosition] = ""; //no ocupa ir nada
-            newRow[EMaterialRegisterExit.cIdMatOutput] = ""; //no ocupa ir nada
+            newRow[EMaterialRegisterExit.cIdMatOutbound] = ""; //no ocupa ir nada
             newRow[EMaterialRegisterExit.cIdExitStatus] = _frmAdd.txbIdStatus.Text;
 
 
@@ -441,7 +439,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, rowToModify["Código"].ToString());
             _frmAdd.txbQuant.Text = rowToModify["Cantidad"].ToString();
             _frmAdd.txbInvoice.Text = rowToModify["Folio"].ToString();
-            _frmAdd.txbObs.Text = rowToModify["Obs."].ToString();
 
             RemoveRowMaterialsInExit();
         }

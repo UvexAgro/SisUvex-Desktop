@@ -467,5 +467,16 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogForeignDest";
             public const string QueryCbo = $" SELECT id_foreignDest AS [{Column.id}], CONCAT_WS(' | ',v_address,'('+id_foreignDest+')', v_city, v_state) AS [{Column.name}], v_address AS [{ColumnAddress}], v_city AS [{ColumnCity}], v_state AS [{ColumnState}], c_codigoPost AS [{ColumnCp}] FROM Pack_ForeignDest ";
         }
+
+        public static class Farm
+        {
+            public const string TableName = "Grow_Farm";
+            public const string ColumnName = "Campo";
+            public const string ColumnId = "idFarm";
+            public const string ColumnActive = "ActiveFarm";
+            public const string Cbo = "CboFarm";
+            public const string DgvCatalog = "DgvCatalogFarm";
+            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(id_farm,' | ',v_farmName) AS [{Column.name}], v_farmName AS [{ColumnName}] FROM Grow_Farm ORDER BY [{Column.name}] ";
+        }
     }
 }

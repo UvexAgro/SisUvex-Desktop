@@ -9,8 +9,6 @@ using SisUvex.Catalogos;
 using DocumentFormat.OpenXml.Presentation;
 using System.Windows.Forms;
 using DocumentFormat.OpenXml.Spreadsheet;
-using SisUvex.Catalogos.Chofer;
-using SisUvex.Catalogos.Troque;
 using System.Linq.Expressions;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods;
