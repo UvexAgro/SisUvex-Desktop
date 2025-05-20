@@ -30,7 +30,8 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 {"Grower", (" SELECT * FROM vw_PackGrowerCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre], [Diminutivo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"WareHouses", (" SELECT * FROM vw_PackWareHousesCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"MaterialType", (" SELECT id_matType AS [Código], v_nameMatType AS [Nombre] FROM Pack_MaterialType WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', id_matType, v_nameMatType)) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
-                // Add more predefined queries here
+                {"ForeignDest", (" SELECT * FROM vw_PackForeignDestCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Dirección], [Ciudad], [Estado], [C.P.])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+            // Add more predefined queries here
             };
 
         public void OpenSelectionForm(string startQueryString, string parameterName, string columnNameResult)

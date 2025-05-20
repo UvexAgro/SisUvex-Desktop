@@ -171,6 +171,7 @@ namespace SisUvex.Catalogos.Lot
             controlList.Add(_frmAdd.spnId, "Ingresar el código de lote de 4 números.");
             controlList.Add(_frmAdd.txbName, "Ingrese el nombre del lote");
             controlList.Add(_frmAdd.txbIdVariety, "Seleccionar una variedad.");
+            controlList.Add(_frmAdd.txbIdFarm, "Seleccionar un campo.");
             controlList.Add(_frmAdd.nudHa, "Ingresar las hectáreas.");
             controlList.Add(_frmAdd.dtpDate, "Seleccionar una fecha.");
         }
@@ -178,8 +179,10 @@ namespace SisUvex.Catalogos.Lot
         private void CargarComboBoxes()
         {
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, ClsObject.Variety.Cbo);
+            ClsComboBoxes.CboLoadAll(_frmAdd.cboFarm, ClsObject.Farm.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFarm, _frmAdd.txbIdFarm);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboVariety, _frmAdd.chbActiveVariety);
         }
@@ -213,11 +216,11 @@ namespace SisUvex.Catalogos.Lot
             _frmAdd.spnId.Text = eLot.idLot;
             _frmAdd.txbName.Text = eLot.nameLot;
             _frmAdd.nudHa.Value = eLot.ha;
-            _frmAdd.txbIdVariety.Text = eLot.idVariety;
             _frmAdd.chbActive.Checked = eLot.active == 1;
             _frmAdd.dtpDate.Value = eLot.date;
 
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, eLot.idVariety);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFarm, eLot.idFarm);
         }
 
         public void btnSearchNameWithIdLot()
@@ -296,8 +299,9 @@ namespace SisUvex.Catalogos.Lot
                 cmd.Parameters.AddWithValue("@idVariety", _frmAdd.txbIdVariety.Text);
                 cmd.Parameters.AddWithValue("@ha", _frmAdd.nudHa.Value.ToString());
                 cmd.Parameters.AddWithValue("@year", _frmAdd.dtpDate.Value);
+                cmd.Parameters.AddWithValue("@idFarm", _frmAdd.txbIdFarm.Text);
 
-                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 cmd.ExecuteNonQuery();
 
@@ -328,8 +332,9 @@ namespace SisUvex.Catalogos.Lot
                 cmd.Parameters.AddWithValue("@ha", _frmAdd.nudHa.Value.ToString());
                 cmd.Parameters.AddWithValue("@year", _frmAdd.dtpDate.Value);
                 cmd.Parameters.AddWithValue("@active", _frmAdd.chbActive.Checked ? "1" : "0");
+                cmd.Parameters.AddWithValue("@idFarm", _frmAdd.txbIdFarm.Text);
 
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 cmd.ExecuteNonQuery();
 

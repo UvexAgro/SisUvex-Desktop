@@ -159,10 +159,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 DataTable dt = (DataTable)cbo.DataSource;
                 string columnNameValueMember = cbo.ValueMember;
 
-                if (dt.Columns.Contains(ClsObject.Column.active))
-                {
-                    dt.DefaultView.RowFilter += $" OR {columnNameValueMember} = '{ValueMemberText}'";
-                }
+                if (!string.IsNullOrEmpty(dt.DefaultView.RowFilter))
+                    dt.DefaultView.RowFilter += $" OR {columnNameValueMember} = '{ValueMemberText}' ";
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {

@@ -52,6 +52,10 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            txbIdFarm = new TextBox();
+            cboFarm = new ComboBox();
+            label5 = new Label();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudHa).BeginInit();
             SuspendLayout();
             // 
@@ -183,7 +187,7 @@
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(500, 225);
+            btnAccept.Location = new Point(500, 260);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 72;
@@ -193,7 +197,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(581, 225);
+            btnCancel.Location = new Point(581, 260);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 73;
@@ -215,7 +219,7 @@
             // 
             lblHa.AutoSize = true;
             lblHa.Font = new Font("Segoe UI", 12F);
-            lblHa.Location = new Point(81, 186);
+            lblHa.Location = new Point(81, 221);
             lblHa.Name = "lblHa";
             lblHa.Size = new Size(81, 21);
             lblHa.TabIndex = 75;
@@ -226,7 +230,7 @@
             nudHa.DecimalPlaces = 2;
             nudHa.Font = new Font("Segoe UI", 12F);
             nudHa.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            nudHa.Location = new Point(168, 184);
+            nudHa.Location = new Point(168, 219);
             nudHa.Maximum = new decimal(new int[] { 999999, 0, 0, 131072 });
             nudHa.Name = "nudHa";
             nudHa.Size = new Size(85, 29);
@@ -237,7 +241,7 @@
             // 
             lblDate.AutoSize = true;
             lblDate.Font = new Font("Segoe UI", 12F);
-            lblDate.Location = new Point(12, 224);
+            lblDate.Location = new Point(12, 259);
             lblDate.Name = "lblDate";
             lblDate.Size = new Size(150, 21);
             lblDate.TabIndex = 77;
@@ -248,7 +252,7 @@
             dtpDate.CustomFormat = " dd    'de'MMMM'de'   yyyy";
             dtpDate.Font = new Font("Segoe UI", 12F);
             dtpDate.Format = DateTimePickerFormat.Custom;
-            dtpDate.Location = new Point(168, 218);
+            dtpDate.Location = new Point(168, 253);
             dtpDate.Name = "dtpDate";
             dtpDate.RightToLeft = RightToLeft.No;
             dtpDate.Size = new Size(259, 29);
@@ -291,7 +295,7 @@
             // 
             label3.AutoSize = true;
             label3.ForeColor = Color.Crimson;
-            label3.Location = new Point(159, 186);
+            label3.Location = new Point(159, 221);
             label3.Name = "label3";
             label3.Size = new Size(12, 15);
             label3.TabIndex = 82;
@@ -301,17 +305,62 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = Color.Crimson;
-            label4.Location = new Point(159, 220);
+            label4.Location = new Point(159, 255);
             label4.Name = "label4";
             label4.Size = new Size(12, 15);
             label4.TabIndex = 83;
             label4.Text = "*";
             // 
+            // txbIdFarm
+            // 
+            txbIdFarm.Enabled = false;
+            txbIdFarm.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdFarm.Location = new Point(168, 184);
+            txbIdFarm.Name = "txbIdFarm";
+            txbIdFarm.Size = new Size(46, 29);
+            txbIdFarm.TabIndex = 84;
+            txbIdFarm.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboFarm
+            // 
+            cboFarm.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFarm.Font = new Font("Segoe UI", 12F);
+            cboFarm.FormattingEnabled = true;
+            cboFarm.ItemHeight = 21;
+            cboFarm.Location = new Point(220, 184);
+            cboFarm.Name = "cboFarm";
+            cboFarm.Size = new Size(355, 29);
+            cboFarm.TabIndex = 85;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = Color.Crimson;
+            label5.Location = new Point(160, 184);
+            label5.Name = "label5";
+            label5.Size = new Size(12, 15);
+            label5.TabIndex = 89;
+            label5.Text = "*";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 12F);
+            label6.Location = new Point(88, 187);
+            label6.Name = "label6";
+            label6.Size = new Size(63, 21);
+            label6.TabIndex = 88;
+            label6.Text = "Campo:";
+            // 
             // FrmLotAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(668, 266);
+            ClientSize = new Size(663, 299);
+            Controls.Add(txbIdFarm);
+            Controls.Add(cboFarm);
+            Controls.Add(label5);
+            Controls.Add(label6);
             Controls.Add(btnSearchNameLot);
             Controls.Add(spnId);
             Controls.Add(dtpDate);
@@ -373,5 +422,9 @@
         private Label label3;
         private Label label4;
         public Button btnSearchVariety;
+        public TextBox txbIdFarm;
+        public ComboBox cboFarm;
+        private Label label5;
+        private Label label6;
     }
 }

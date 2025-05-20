@@ -86,7 +86,7 @@
             chbCategoryRemoved.Location = new Point(553, 263);
             chbCategoryRemoved.Name = "chbCategoryRemoved";
             chbCategoryRemoved.Size = new Size(39, 29);
-            chbCategoryRemoved.TabIndex = 76;
+            chbCategoryRemoved.TabIndex = 9;
             chbCategoryRemoved.Text = "     ";
             chbCategoryRemoved.UseVisualStyleBackColor = true;
             // 
@@ -95,7 +95,7 @@
             btnAccept.Location = new Point(436, 368);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 81;
+            btnAccept.TabIndex = 22;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -105,7 +105,7 @@
             btnCancel.Location = new Point(517, 368);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 82;
+            btnCancel.TabIndex = 23;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -117,7 +117,7 @@
             txbIdColor.Location = new Point(112, 332);
             txbIdColor.Name = "txbIdColor";
             txbIdColor.Size = new Size(43, 29);
-            txbIdColor.TabIndex = 79;
+            txbIdColor.TabIndex = 13;
             txbIdColor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboColor
@@ -129,7 +129,7 @@
             cboColor.Location = new Point(161, 333);
             cboColor.Name = "cboColor";
             cboColor.Size = new Size(388, 29);
-            cboColor.TabIndex = 80;
+            cboColor.TabIndex = 14;
             // 
             // lblColor
             // 
@@ -149,7 +149,7 @@
             txbIdCategory.Location = new Point(112, 262);
             txbIdCategory.Name = "txbIdCategory";
             txbIdCategory.Size = new Size(43, 29);
-            txbIdCategory.TabIndex = 74;
+            txbIdCategory.TabIndex = 7;
             txbIdCategory.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCategory
@@ -161,7 +161,7 @@
             cboCategory.Location = new Point(161, 263);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(388, 29);
-            cboCategory.TabIndex = 75;
+            cboCategory.TabIndex = 8;
             // 
             // lblCategory
             // 
@@ -183,7 +183,7 @@
             cboActive.Location = new Point(264, 122);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(51, 29);
-            cboActive.TabIndex = 72;
+            cboActive.TabIndex = 0;
             // 
             // txbId
             // 
@@ -199,10 +199,10 @@
             // 
             txbName.Font = new Font("Segoe UI", 12F);
             txbName.Location = new Point(112, 192);
-            txbName.MaxLength = 50;
+            txbName.MaxLength = 200;
             txbName.Name = "txbName";
             txbName.Size = new Size(437, 29);
-            txbName.TabIndex = 73;
+            txbName.TabIndex = 3;
             // 
             // lblName
             // 
@@ -290,7 +290,7 @@
             chbDistributorRemoved.Location = new Point(553, 298);
             chbDistributorRemoved.Name = "chbDistributorRemoved";
             chbDistributorRemoved.Size = new Size(39, 29);
-            chbDistributorRemoved.TabIndex = 99;
+            chbDistributorRemoved.TabIndex = 12;
             chbDistributorRemoved.Text = "     ";
             chbDistributorRemoved.UseVisualStyleBackColor = true;
             // 
@@ -301,7 +301,7 @@
             txbIdDistributor.Location = new Point(112, 297);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(43, 29);
-            txbIdDistributor.TabIndex = 97;
+            txbIdDistributor.TabIndex = 10;
             txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistributor
@@ -313,7 +313,7 @@
             cboDistributor.Location = new Point(161, 298);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(388, 29);
-            cboDistributor.TabIndex = 98;
+            cboDistributor.TabIndex = 11;
             // 
             // label1
             // 
@@ -343,7 +343,7 @@
             txbIdMaterialType.Location = new Point(112, 157);
             txbIdMaterialType.Name = "txbIdMaterialType";
             txbIdMaterialType.Size = new Size(43, 29);
-            txbIdMaterialType.TabIndex = 454;
+            txbIdMaterialType.TabIndex = 1;
             txbIdMaterialType.TextAlign = HorizontalAlignment.Center;
             txbIdMaterialType.TextChanged += txbIdMaterialType_TextChanged;
             // 
@@ -356,7 +356,7 @@
             cboMaterialType.Location = new Point(161, 158);
             cboMaterialType.Name = "cboMaterialType";
             cboMaterialType.Size = new Size(388, 29);
-            cboMaterialType.TabIndex = 455;
+            cboMaterialType.TabIndex = 2;
             // 
             // label5
             // 
@@ -398,7 +398,7 @@
             txbIdUnit.Location = new Point(305, 227);
             txbIdUnit.Name = "txbIdUnit";
             txbIdUnit.Size = new Size(43, 29);
-            txbIdUnit.TabIndex = 463;
+            txbIdUnit.TabIndex = 5;
             txbIdUnit.TextAlign = HorizontalAlignment.Center;
             // 
             // cboUnit
@@ -410,7 +410,7 @@
             cboUnit.Location = new Point(354, 227);
             cboUnit.Name = "cboUnit";
             cboUnit.Size = new Size(195, 29);
-            cboUnit.TabIndex = 461;
+            cboUnit.TabIndex = 6;
             // 
             // label10
             // 
@@ -430,7 +430,7 @@
             txbQuant.MaxLength = 10;
             txbQuant.Name = "txbQuant";
             txbQuant.Size = new Size(118, 29);
-            txbQuant.TabIndex = 459;
+            txbQuant.TabIndex = 4;
             // 
             // label9
             // 
@@ -449,7 +449,7 @@
             btnPictureAdd.Location = new Point(555, 131);
             btnPictureAdd.Name = "btnPictureAdd";
             btnPictureAdd.Size = new Size(22, 22);
-            btnPictureAdd.TabIndex = 465;
+            btnPictureAdd.TabIndex = 19;
             btnPictureAdd.UseVisualStyleBackColor = true;
             btnPictureAdd.Click += btnPictureAdd_Click;
             // 
@@ -461,7 +461,7 @@
             chbImageBack.Location = new Point(555, 47);
             chbImageBack.Name = "chbImageBack";
             chbImageBack.Size = new Size(65, 25);
-            chbImageBack.TabIndex = 467;
+            chbImageBack.TabIndex = 16;
             chbImageBack.Text = "Atrás";
             chbImageBack.TextAlign = ContentAlignment.MiddleCenter;
             chbImageBack.UseVisualStyleBackColor = true;
@@ -475,7 +475,7 @@
             chbImageFront.Location = new Point(555, 19);
             chbImageFront.Name = "chbImageFront";
             chbImageFront.Size = new Size(65, 25);
-            chbImageFront.TabIndex = 466;
+            chbImageFront.TabIndex = 15;
             chbImageFront.Text = "Frente";
             chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
             chbImageFront.UseVisualStyleBackColor = true;
@@ -489,7 +489,7 @@
             chbImageUp.Location = new Point(555, 103);
             chbImageUp.Name = "chbImageUp";
             chbImageUp.Size = new Size(65, 25);
-            chbImageUp.TabIndex = 469;
+            chbImageUp.TabIndex = 18;
             chbImageUp.Text = "Arriba";
             chbImageUp.TextAlign = ContentAlignment.MiddleCenter;
             chbImageUp.UseVisualStyleBackColor = true;
@@ -503,7 +503,7 @@
             chbImageDown.Location = new Point(555, 75);
             chbImageDown.Name = "chbImageDown";
             chbImageDown.Size = new Size(65, 25);
-            chbImageDown.TabIndex = 468;
+            chbImageDown.TabIndex = 17;
             chbImageDown.Text = "Abajo";
             chbImageDown.TextAlign = ContentAlignment.MiddleCenter;
             chbImageDown.UseVisualStyleBackColor = true;
@@ -516,7 +516,7 @@
             btnRefreshImages.Margin = new Padding(0);
             btnRefreshImages.Name = "btnRefreshImages";
             btnRefreshImages.Size = new Size(22, 22);
-            btnRefreshImages.TabIndex = 470;
+            btnRefreshImages.TabIndex = 20;
             btnRefreshImages.UseVisualStyleBackColor = true;
             btnRefreshImages.Click += btnRefreshImages_Click;
             // 
@@ -527,7 +527,7 @@
             btnDeleteImage.Margin = new Padding(0);
             btnDeleteImage.Name = "btnDeleteImage";
             btnDeleteImage.Size = new Size(22, 22);
-            btnDeleteImage.TabIndex = 471;
+            btnDeleteImage.TabIndex = 21;
             btnDeleteImage.UseVisualStyleBackColor = true;
             btnDeleteImage.Click += btnDeleteImage_Click;
             // 

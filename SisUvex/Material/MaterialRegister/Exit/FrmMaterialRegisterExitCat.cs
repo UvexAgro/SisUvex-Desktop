@@ -31,7 +31,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            //cls.OpenFrmAdd();
+            cls.OpenFrmAdd();
 
             //if (cls.IsAddUpdate)
             //    cls.AddNewRowByIdInDGVCatalog();
@@ -69,7 +69,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnSearchFilters_Click(object sender, EventArgs e)
         {
-            //cls.BtnSearchFilter();
+            cls.BtnSearchFilter();
         }
 
         private void btnSearchBy_Click(object sender, EventArgs e)
