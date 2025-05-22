@@ -361,7 +361,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private EMaterialRegisterEntry SetEntity()
         {
-            entity = new EMaterialRegisterEntry();
+            entity = new();
             entity.idMatInbound = _frmAdd.txbId.Text;
             entity.date = _frmAdd.dtpDate.Value;
             entity.idTransportLine = _frmAdd.txbIdTransportLine.Text;
@@ -500,6 +500,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             dtInboundMaterials = new DataTable();
             dtInboundMaterials.Columns.Add("Código", typeof(string));
+            dtInboundMaterials.Columns.Add("Tipo", typeof(string));
             dtInboundMaterials.Columns.Add("Material", typeof(string));
             dtInboundMaterials.Columns.Add("Cantidad", typeof(string));
             dtInboundMaterials.Columns.Add("Unidad", typeof(string));
@@ -507,14 +508,15 @@ namespace SisUvex.Material.MaterialRegister.Entry
             dtInboundMaterials.Columns.Add("Proveedor", typeof(string));
             dtInboundMaterials.Columns.Add("Distribuidor", typeof(string));
             dtInboundMaterials.Columns.Add("Productor", typeof(string));
-            dtInboundMaterials.Columns.Add("$USD", typeof(string));
             dtInboundMaterials.Columns.Add("$MXN", typeof(string));
+            dtInboundMaterials.Columns.Add("$USD", typeof(string));
             dtInboundMaterials.Columns.Add("Obs.", typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterEntry.cPosition, typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterEntry.cIdMatInbound, typeof(string));
             dtInboundMaterials.Columns.Add(ClsObject.MaterialProvider.ColumnId, typeof(string));
             dtInboundMaterials.Columns.Add(Distributor.ColumnId, typeof(string));
             dtInboundMaterials.Columns.Add(Grower.ColumnId, typeof(string));
+            dtInboundMaterials.Columns.Add(ClsObject.MaterialType.ColumnId, typeof(string));
 
             _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
 
@@ -523,6 +525,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialProvider.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Distributor.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Grower.ColumnId].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialType.ColumnId].Visible = false;
         }
 
         public void BtnAddRowMaterialsInEntry()
@@ -547,6 +550,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             DataRow newRow = dtInboundMaterials.NewRow();
             newRow["Código"] = _frmAdd.txbIdMaterial.Text;
+            newRow["Tipo"] = _frmAdd.cboMaterialType.GetColumnValue(ClsObject.MaterialType.ColumnName);
             newRow["Material"] = _frmAdd.cboMaterial.GetColumnValue(ClsObject.MaterialCatalog.ColumnName);
             newRow["Cantidad"] = _frmAdd.txbQuant.Text;
             newRow["Unidad"] = _frmAdd.txbUnit.Text;
@@ -554,16 +558,17 @@ namespace SisUvex.Material.MaterialRegister.Entry
             newRow["Proveedor"] = _frmAdd.cboProvider.GetColumnValue(ClsObject.MaterialProvider.ColumnShortName);
             newRow["Distribuidor"] = _frmAdd.cboDistributor.GetColumnValue(Distributor.ColumnShortName);
             newRow["Productor"] = _frmAdd.cboGrower.GetColumnValue(Grower.ColumnShortName);
-            if (decimal.TryParse(_frmAdd.txbUSD.Text, out decimal usdValue))
-                newRow["$USD"] = usdValue.ToString("N2");
             if (decimal.TryParse(_frmAdd.txbMXN.Text, out decimal mxnValue))
                 newRow["$MXN"] = mxnValue.ToString("N2");
+            if (decimal.TryParse(_frmAdd.txbUSD.Text, out decimal usdValue))
+                newRow["$USD"] = usdValue.ToString("N2");
             newRow["Obs."] = _frmAdd.txbObs.Text;
             newRow[EMaterialRegisterEntry.cPosition] = ""; //no ocupa ir nada
             newRow[EMaterialRegisterEntry.cIdMatInbound] = ""; //no ocupa ir nada
             newRow[ClsObject.MaterialProvider.ColumnId] = _frmAdd.txbIdProvider.Text;
             newRow[Distributor.ColumnId] = _frmAdd.txbIdDistributor.Text;
             newRow[Grower.ColumnId] = _frmAdd.txbIdGrower.Text;
+            newRow[ClsObject.MaterialType.ColumnId] = _frmAdd.txbIdMaterialType.Text;
 
             dtInboundMaterials.Rows.Add(newRow);
         }
@@ -595,21 +600,21 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             int selectedIndex = _frmAdd.dgvMaterialList.SelectedRows[0].Index;
             DataRow rowToModify = dtInboundMaterials.Rows[selectedIndex];
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, rowToModify["Código"].ToString().Substring(0, 2));
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, rowToModify[ClsObject.MaterialType.ColumnId].ToString());
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, rowToModify["Código"].ToString());
             _frmAdd.txbQuant.Text = rowToModify["Cantidad"].ToString();
             _frmAdd.txbInvoice.Text = rowToModify["Folio"].ToString();
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboProvider, rowToModify[ClsObject.MaterialProvider.ColumnId].ToString());
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, rowToModify[Distributor.ColumnId].ToString());
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, rowToModify[Grower.ColumnId].ToString());
-            _frmAdd.txbUSD.Text = rowToModify["$USD"].ToString();
             _frmAdd.txbMXN.Text = rowToModify["$MXN"].ToString();
+            _frmAdd.txbUSD.Text = rowToModify["$USD"].ToString();
             _frmAdd.txbObs.Text = rowToModify["Obs."].ToString();
 
             RemoveRowMaterialsInEntry();
         }
 
-        public void BtnDeleteSelectedRowFromDGV(DataGridViewRow selectedRow)
+        public void BtnDeleteSelectedRowFromDGVCatalog(DataGridViewRow selectedRow)
         {
             string? idMatInboundEntry = selectedRow.Cells[Column.id].Value?.ToString();
 

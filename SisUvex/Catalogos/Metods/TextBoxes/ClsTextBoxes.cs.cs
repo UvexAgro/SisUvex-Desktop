@@ -9,26 +9,6 @@ namespace SisUvex.Catalogos.Metods.TextBoxes
 {
     internal class ClsTextBoxes
     {
-        public static void DgvApplyCellFormattingEvent(DataGridView dataGridView)
-        {
-            dataGridView.CellFormatting += (sender, e) =>
-            {
-                if (dataGridView.Columns[e.ColumnIndex].Name == ClsObject.Column.active)
-                {
-                    if (e.Value.ToString() == "0")
-                    {
-                        e.CellStyle.BackColor = System.Drawing.Color.Tomato;
-                        e.CellStyle.ForeColor = System.Drawing.Color.Red;
-                    }
-                    if (e.Value.ToString() == "1")
-                    {
-                        e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
-                        e.CellStyle.ForeColor = System.Drawing.Color.Green;
-                    }
-                }
-            };
-        }
-
         public static void TxbApplyKeyPressEventInt(TextBox textBox)
         {
             textBox.KeyPress += (sender, e) =>
@@ -38,79 +18,178 @@ namespace SisUvex.Catalogos.Metods.TextBoxes
                     e.Handled = true;
                 }
             };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                // Si no es un número válido, eliminar caracteres no numéricos
+                if (!int.TryParse(textBox.Text, out _))
+                {
+                    string cleanedText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+                    textBox.Text = cleanedText;
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+            };
         }
         public static void TxbApplyKeyPressEventDecimal(TextBox textBox)
         {
             textBox.KeyPress += (sender, e) =>
             {
-                if (((e.KeyChar < 48 || e.KeyChar > 57) && e.KeyChar != 8 && e.KeyChar != 46))
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.' && !char.IsControl(e.KeyChar))
                 {
                     e.Handled = true;
-                    return;
                 }
 
-                if (e.KeyChar == 46)
+                // Solo permitir un punto decimal
+                if (e.KeyChar == '.' && (sender as TextBox).Text.Contains('.'))
                 {
-                    if ((sender as TextBox).Text.IndexOf(e.KeyChar) != -1)
-                        e.Handled = true;
+                    e.Handled = true;
+                }
+            };
 
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                // Si no es un decimal válido, limpiar el texto
+                if (!decimal.TryParse(textBox.Text, out _))
+                {
+                    // Permitir solo un punto y números
+                    var sb = new StringBuilder();
+                    bool hasDecimalPoint = false;
+
+                    foreach (char c in textBox.Text)
+                    {
+                        if (char.IsDigit(c))
+                        {
+                            sb.Append(c);
+                        }
+                        else if (c == '.' && !hasDecimalPoint)
+                        {
+                            sb.Append(c);
+                            hasDecimalPoint = true;
+                        }
+                    }
+
+                    string cleanedText = sb.ToString();
+                    if (cleanedText != textBox.Text)
+                    {
+                        int cursorPos = textBox.SelectionStart;
+                        textBox.Text = cleanedText;
+                        textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                    }
                 }
             };
         }
-        public static void TxbApplyKeyPressEventNumericWithLimit(TextBox textBox, int maxInt, int maxDecimal)
+        public static void TxbApplyKeyPressEventNumericWithLimit(TextBox textBox, int maxIntDigits, int maxDecimalDigits)
         {
             textBox.KeyPress += (sender, e) =>
             {
-                // Si el carácter no es un control, dígito o punto decimal, lo rechaza
+                // Permitir solo dígitos, punto decimal y teclas de control (Backspace, etc.)
                 if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
                 {
                     e.Handled = true;
                     return;
                 }
 
-                // Si el carácter es un punto decimal y ya hay un punto decimal en el TextBox, lo rechaza
+                // Evitar múltiples puntos decimales
                 if (e.KeyChar == '.' && textBox.Text.Contains('.'))
                 {
                     e.Handled = true;
                     return;
                 }
 
-                // Dividir el texto en la parte entera y decimal
+                // Obtener el texto actual y la posición del cursor
+                string currentText = textBox.Text;
+                int selectionStart = textBox.SelectionStart;
+
+                // Simular el nuevo texto que se generaría
+                string newText = currentText.Substring(0, selectionStart)
+                               + e.KeyChar
+                               + currentText.Substring(selectionStart + textBox.SelectionLength);
+
+                // Validar estructura del número
+                string[] parts = newText.Split('.');
+
+                // Validar parte entera
+                if (parts[0].Length > maxIntDigits)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Validar parte decimal si existe
+                if (parts.Length > 1 && parts[1].Length > maxDecimalDigits)
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validación al pegar texto
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text)) return;
+
+                // Verificar si el texto es un número válido
+                if (!decimal.TryParse(textBox.Text, out decimal _))
+                {
+                    // Limpiar caracteres no válidos manteniendo el formato numérico
+                    var sb = new StringBuilder();
+                    bool hasDecimalPoint = false;
+
+                    foreach (char c in textBox.Text)
+                    {
+                        if (char.IsDigit(c))
+                        {
+                            sb.Append(c);
+                        }
+                        else if (c == '.' && !hasDecimalPoint)
+                        {
+                            sb.Append(c);
+                            hasDecimalPoint = true;
+                        }
+                    }
+
+                    string cleanedText = sb.ToString();
+                    if (cleanedText != textBox.Text)
+                    {
+                        int cursorPos = textBox.SelectionStart;
+                        textBox.Text = cleanedText;
+                        textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                    }
+                }
+
+                // Validar límites después de limpieza
                 string[] parts = textBox.Text.Split('.');
 
-                // Si hay más de una parte decimal, no permitir más caracteres decimales
-                if (parts.Length > 1 && e.KeyChar == '.')
+                // Truncar parte entera si excede el límite
+                if (parts[0].Length > maxIntDigits)
                 {
-                    e.Handled = true;
-                    return;
+                    parts[0] = parts[0].Substring(0, maxIntDigits);
+                    textBox.Text = parts.Length > 1 ? $"{parts[0]}.{parts[1]}" : parts[0];
+                    textBox.SelectionStart = textBox.Text.Length;
                 }
 
-                // Limitar la longitud de la parte decimal
-                if (parts.Length == 2 && parts[1].Length >= maxDecimal && !char.IsControl(e.KeyChar))
+                // Truncar parte decimal si excede el límite
+                if (parts.Length > 1 && parts[1].Length > maxDecimalDigits)
                 {
-                    e.Handled = true;
-                    return;
+                    parts[1] = parts[1].Substring(0, maxDecimalDigits);
+                    textBox.Text = $"{parts[0]}.{parts[1]}";
+                    textBox.SelectionStart = textBox.Text.Length;
                 }
+            };
 
-                // Validar la longitud de la parte entera y del número completo
-                if (!char.IsControl(e.KeyChar))
+            // Validación al perder el foco (opcional)
+            textBox.Validating += (sender, e) =>
+            {
+                if (!string.IsNullOrEmpty(textBox.Text) && !decimal.TryParse(textBox.Text, out _))
                 {
-                    string newText = textBox.Text.Insert(textBox.SelectionStart, e.KeyChar.ToString());
-                    string[] newParts = newText.Split('.');
-
-                    // Verificar que la parte entera no exceda el tamaño máximo
-                    if (newParts[0].Length > maxInt)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-
-                    // Verificar que el número completo no exceda el tamaño total permitido (incluyendo punto decimal y decimales)
-                    if (newText.Length > maxInt + maxDecimal + 1)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
+                    textBox.Text = "";
                 }
             };
         }

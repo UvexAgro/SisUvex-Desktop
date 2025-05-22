@@ -46,7 +46,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
         public string? idAddModify;
         private string employeeCboQuery = $" SELECT DISTINCT emp.id_employee AS [{Column.id}], CONCAT_WS(' ',emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name) AS [{Column.name}] FROM Nom_Employees emp ";
-        private string employeeCboQueryJoin = $" JOIN Pack_MatInbound mat ON mat.id_employee = emp.id_employee ";
+        private string employeeCboQueryJoin = $" JOIN Pack_MatOutput mat ON mat.id_employee = emp.id_employee ";
         public void BtnSearchFilter()
         {
             dtCatalog = SearchFilter();
@@ -197,9 +197,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
             controlListInbound = new ClsControls();
             controlListInbound.ChangeHeadMessage("Para registrar una salida debe:\n");
             controlListInbound.Add(_frmAdd.txbId, "Seleccionar un tipo de salida.");
+            controlListInbound.Add(_frmAdd.txbIdOutputType, "Seleccionar un tipo de salida.");
             controlListInbound.Add(_frmAdd.txbIdStatus, "Seleccionar el estado.");
             controlListInbound.Add(_frmAdd.txbIdWarehouse, "Seleccionar un almacén de salida.");
-            controlListInbound.Add(_frmAdd.txbIdWarehouse, "Ingresar dirección de destino.");
+            controlListInbound.Add(_frmAdd.txbIdEmployee, "Seleccionar un empleado.");
+            controlListInbound.Add(_frmAdd.txbIdForeignDest, "Ingresar dirección de destino.");
             controlListInbound.Add(_frmAdd.txbIdTransportLine, "Seleccionar una línea de transporte.");
             controlListInbound.Add(_frmAdd.txbIdFreightContainer, "Seleccionar una caja.");
             controlListInbound.Add(_frmAdd.dgvMaterialList, "Agregar materiales al listado.");
@@ -246,6 +248,10 @@ namespace SisUvex.Material.MaterialRegister.Exit
         {
             _frmAdd.txbQuant.Tag = "integerNoEmpty";
             ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbQuant);
+            _frmAdd.txbUSD.Tag = "decimalEmpty";
+            ClsTextBoxes.TxbApplyKeyPressEventDecimal(_frmAdd.txbUSD);
+            _frmAdd.txbMXN.Tag = "decimalEmpty";
+            ClsTextBoxes.TxbApplyKeyPressEventDecimal(_frmAdd.txbMXN);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboForeignDest, ForeignDest.Cbo);
             dtUnit = ClsQuerysDB.GetDataTable(Unit.QueryCbo);
             dtEmployees = ClsQuerysDB.GetDataTable(employeeCboQuery + employeeCboQueryJoin);
@@ -257,6 +263,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, FreightContainer.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDriver, Driver.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboStatus, _frmAdd.txbIdStatus);
@@ -264,6 +272,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDriver, _frmAdd.txbIdDriver);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboGrower, _frmAdd.txbIdGrower);
 
             //Material/Tipo material
             List<Tuple<ComboBox, CheckBox?, string>> cboMaterialTypeDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
@@ -335,46 +345,151 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboDriver, _frmAdd.chbDriverRemoved, TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboFreightContainer, _frmAdd.chbFreightContainerRemoved, TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboMaterial, _frmAdd.chbMaterialRemoved, ClsObject.MaterialType.ColumnId, _frmAdd.txbIdMaterialType);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbDistributorRemoved);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboGrower, _frmAdd.chbGrowerRemoved);
+
         }
         private void LoadControlsModify()
         {
-            //entity = new();
-            //entity.GetMaterialExit(idAddModify);
-            //entity.GetMaterialExitMaterials(idAddModify);
+            entity = new();
+            entity.GetMaterialOutbound(idAddModify);
+            entity.GetMaterialOutboundMaterials(idAddModify);
 
-            //_frmAdd.txbId.Text = entity.idMatInbound;
-            //_frmAdd.dtpDate.Value = entity.date;
+            _frmAdd.txbId.Text = entity.idMatOutbound;
+            _frmAdd.dtpDate.Value = entity.dateOutbound;
 
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse);
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, entity.idTransportLine);
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, entity.idDriver);
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, entity.idFreightContainer);
-            //ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboOutputType, entity.idOutputType);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboStatus, entity.idExitStatus);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse); ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboForeignDest, entity.idForeignDest);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, entity.idTransportLine);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDriver, entity.idDriver);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFreightContainer, entity.idFreightContainer);
 
-            //dtInboundMaterials.CopyDataFrom(entity.dtMaterials);
+            dtInboundMaterials.CopyDataFrom(entity.dtMaterials);
 
-            //_frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
+            _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
+        }
+
+        private EMaterialRegisterExit SetEntity()
+        {
+            entity = new();
+            entity.idMatOutbound = _frmAdd.txbId.Text;
+            entity.dateOutbound = _frmAdd.dtpDate.Value;
+            entity.idOutputType = _frmAdd.txbIdOutputType.Text;
+            entity.idExitStatus = _frmAdd.txbIdStatus.Text;
+            entity.idWarehouse = _frmAdd.txbIdWarehouse.Text;
+            entity.idEmployee = _frmAdd.txbIdEmployee.Text;
+            entity.idForeignDest = _frmAdd.txbIdForeignDest.Text;
+            entity.idTransportLine = _frmAdd.txbIdTransportLine.Text;
+            entity.idDriver = _frmAdd.txbIdDriver.Text;
+            entity.idFreightContainer = _frmAdd.txbIdFreightContainer.Text;
+
+            entity.dtMaterials = dtInboundMaterials;
+
+            return entity;
+        }
+
+        public void AddProcedure()
+        {
+            EMaterialRegisterExit eAdd = new();
+            eAdd = SetEntity();
+            var result = eAdd.AddProcedureWithMaterials();
+            IsAddUpdate = result.Item1;
+            idAddModify = result.Item2;
+        }
+
+        public void ModifyProcedure()
+        {
+            EMaterialRegisterExit eModify = new();
+            eModify = SetEntity();
+            var result = eModify.ModifyProcedureWithMaterials();
+            IsModifyUpdate = result.Item1;
+            idAddModify = result.Item2;
+        }
+
+        public void BtnAccept()
+        {
+            if (!controlListInbound.ValidateControls())
+                return;
+
+            if (IsAddOrModify)
+            {
+                AddProcedure();
+                if (IsAddUpdate)
+                {
+                    _frmAdd.txbId.Text = idAddModify;
+                    MessageBox.Show($"Se ha agregado la salida con código: {idAddModify}", "Añadir salida de material");
+
+                    _frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo agregar la salida.", "Añadir salida de material");
+                }
+            }
+            else
+            {
+                ModifyProcedure();
+
+                if (IsModifyUpdate)
+                {
+                    MessageBox.Show($"Se ha modificado la salida con el código: {idAddModify}", "Modificar salida de material");
+
+                    _frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo modificar la salida.", "Modificar salida de material");
+                }
+            }
+        }
+
+        public void CloseFrmAddModify()
+        {
+            _frmAdd.Close();
+        }
+        public void AddNewRowByIdInDGVCatalog()
+        {
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{idAddModify}'");
+
+            dgv.AddNewRowToDGV(newIdRow);
+        }
+        public void ModifyRowByIdInDGVCatalog()
+        {
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{idAddModify}'");
+
+            dgv.ModifyIdRowInDGV(newIdRow);
         }
 
         private void InitializeDtInboundMaterials()
         {
             dtInboundMaterials = new DataTable();
             dtInboundMaterials.Columns.Add("Código", typeof(string));
+            dtInboundMaterials.Columns.Add("Tipo", typeof(string));
             dtInboundMaterials.Columns.Add("Material", typeof(string));
             dtInboundMaterials.Columns.Add("Cantidad", typeof(string));
             dtInboundMaterials.Columns.Add("Unidad", typeof(string));
             dtInboundMaterials.Columns.Add("Folio", typeof(string));
-            dtInboundMaterials.Columns.Add("Estado", typeof(string));
-            dtInboundMaterials.Columns.Add("Obs.", typeof(string));
+            dtInboundMaterials.Columns.Add("Distribuidor", typeof(string));
+            dtInboundMaterials.Columns.Add("Productor", typeof(string));
+            dtInboundMaterials.Columns.Add("$MXN", typeof(string));
+            dtInboundMaterials.Columns.Add("$USD", typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cPosition, typeof(string));
             dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cIdMatOutbound, typeof(string));
-            dtInboundMaterials.Columns.Add(EMaterialRegisterExit.cIdExitStatus, typeof(string));
+            dtInboundMaterials.Columns.Add(Distributor.ColumnId, typeof(string));
+            dtInboundMaterials.Columns.Add(Grower.ColumnId, typeof(string));
+            dtInboundMaterials.Columns.Add(ClsObject.MaterialType.ColumnId, typeof(string));
 
             _frmAdd.dgvMaterialList.DataSource = dtInboundMaterials;
 
             _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cPosition].Visible = false;
             _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdMatOutbound].Visible = false;
-            _frmAdd.dgvMaterialList.Columns[EMaterialRegisterExit.cIdExitStatus].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[Distributor.ColumnId].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[Grower.ColumnId].Visible = false;
+            _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialType.ColumnId].Visible = false;
         }
 
         public void BtnAddRowMaterialsInExit()
@@ -390,21 +505,30 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 _frmAdd.cboMaterial.SelectedIndex = 0;
 
             _frmAdd.txbQuant.Text = string.Empty;
+            _frmAdd.txbUSD.Text = string.Empty;
+            _frmAdd.txbMXN.Text = string.Empty;
         }
 
         private void AddRowToInboundMaterials()
         {
             DataRow newRow = dtInboundMaterials.NewRow();
             newRow["Código"] = _frmAdd.txbIdMaterial.Text;
+            newRow["Tipo"] = _frmAdd.cboMaterialType.GetColumnValue(ClsObject.MaterialType.ColumnName);
             newRow["Material"] = _frmAdd.cboMaterial.GetColumnValue(ClsObject.MaterialCatalog.ColumnName);
             newRow["Cantidad"] = _frmAdd.txbQuant.Text;
             newRow["Unidad"] = _frmAdd.txbUnit.Text;
             newRow["Folio"] = _frmAdd.txbInvoice.Text;
-            newRow["Estado"] = _frmAdd.cboMaterial.GetColumnValue(Column.name);
+            newRow["Distribuidor"] = _frmAdd.cboDistributor.GetColumnValue(Distributor.ColumnShortName);
+            newRow["Productor"] = _frmAdd.cboGrower.GetColumnValue(Grower.ColumnShortName);
+            if (decimal.TryParse(_frmAdd.txbMXN.Text, out decimal mxnValue))
+                newRow["$MXN"] = mxnValue.ToString("N2");
+            if (decimal.TryParse(_frmAdd.txbUSD.Text, out decimal usdValue))
+                newRow["$USD"] = usdValue.ToString("N2");
             newRow[EMaterialRegisterExit.cPosition] = ""; //no ocupa ir nada
             newRow[EMaterialRegisterExit.cIdMatOutbound] = ""; //no ocupa ir nada
-            newRow[EMaterialRegisterExit.cIdExitStatus] = _frmAdd.txbIdStatus.Text;
-
+            newRow[Distributor.ColumnId] = _frmAdd.cboDistributor.SelectedValue?.ToString();
+            newRow[Grower.ColumnId] = _frmAdd.cboGrower.SelectedValue?.ToString();
+            newRow[ClsObject.MaterialType.ColumnId] = _frmAdd.txbIdMaterialType.Text;
 
             dtInboundMaterials.Rows.Add(newRow);
         }
@@ -435,63 +559,67 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             int selectedIndex = _frmAdd.dgvMaterialList.SelectedRows[0].Index;
             DataRow rowToModify = dtInboundMaterials.Rows[selectedIndex];
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, rowToModify["Código"].ToString().Substring(0, 2));
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, rowToModify[ClsObject.MaterialType.ColumnId].ToString());
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterial, rowToModify["Código"].ToString());
             _frmAdd.txbQuant.Text = rowToModify["Cantidad"].ToString();
             _frmAdd.txbInvoice.Text = rowToModify["Folio"].ToString();
+            _frmAdd.txbMXN.Text = rowToModify["$MXN"].ToString();
+            _frmAdd.txbUSD.Text = rowToModify["$USD"].ToString();
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, rowToModify[Distributor.ColumnId].ToString());
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, rowToModify[Grower.ColumnId].ToString());
 
             RemoveRowMaterialsInExit();
         }
 
         public void BtnDeleteSelectedRowFromDGVCatalog(DataGridViewRow selectedRow)
         {
-            //string? idMatOutputExit = selectedRow.Cells[Column.id].Value?.ToString();
+            string? idMatOutputExit = selectedRow.Cells[Column.id].Value?.ToString();
 
-            //if (!string.IsNullOrEmpty(idMatOutputExit))
-            //{
-            //    DialogResult result = MessageBox.Show($"¿Está seguro de que desea eliminar la salida de material {idMatOutputExit}?", "Eliminar salida de material", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (!string.IsNullOrEmpty(idMatOutputExit))
+            {
+                DialogResult result = MessageBox.Show($"¿Está seguro de que desea eliminar la salida de material {idMatOutputExit}?", "Eliminar salida de material", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            //    if (result != DialogResult.Yes)
-            //        return;
+                if (result != DialogResult.Yes)
+                    return;
 
-            //    bool isDeleted = DeleteMatOutputExit(idMatOutputExit);
+                bool isDeleted = DeleteMatOutputExit(idMatOutputExit);
 
-            //    if (isDeleted)
-            //    {
-            //        for (int i = _frmCat.dgvCatalog.Rows.Count - 1; i >= 0; i--)
-            //        {
-            //            DataGridViewRow row = _frmCat.dgvCatalog.Rows[i];
-            //            if (row.Cells[Column.id].Value?.ToString() == idMatOutputExit)
-            //            {
-            //                _frmCat.dgvCatalog.Rows.Remove(row);
-            //            }
-            //        }
-            //        MessageBox.Show($"Se ha eliminado la salida de material con el código: {idMatOutputExit}", "Eliminar salida de material");
-            //    }
-            //    else
-            //    {
-            //        SystemSounds.Exclamation.Play();
-            //        MessageBox.Show("No se eliminó la salida de material.", "Eliminar salida de material");
-            //    }
-            //}
-            //else
-            //{
-            //    SystemSounds.Exclamation.Play();
-            //    MessageBox.Show("El código de la salida de material no es válido.", "Eliminar salida de material");
-            //}
+                if (isDeleted)
+                {
+                    for (int i = _frmCat.dgvCatalog.Rows.Count - 1; i >= 0; i--)
+                    {
+                        DataGridViewRow row = _frmCat.dgvCatalog.Rows[i];
+                        if (row.Cells[Column.id].Value?.ToString() == idMatOutputExit)
+                        {
+                            _frmCat.dgvCatalog.Rows.Remove(row);
+                        }
+                    }
+                    MessageBox.Show($"Se ha eliminado la salida de material con el código: {idMatOutputExit}", "Eliminar salida de material");
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se eliminó la salida de material.", "Eliminar salida de material");
+                }
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("El código de la salida de material no es válido.", "Eliminar salida de material");
+            }
         }
 
-        //private bool DeleteMatOutputExit(string idMatOutputExit)
-        //{
-        //    if (string.IsNullOrEmpty(idMatOutputExit))
-        //    {
-        //        SystemSounds.Exclamation.Play();
-        //        MessageBox.Show("No se ha seleccionado una salida para eliminar.", "Eliminar salida de material");
-        //        return false;
-        //    }
+        private bool DeleteMatOutputExit(string idMatOutputExit)
+        {
+            if (string.IsNullOrEmpty(idMatOutputExit))
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se ha seleccionado una salida para eliminar.", "Eliminar salida de material");
+                return false;
+            }
 
-        //    return EMaterialRegisterExit.DeleteProcedure(idMatOutputExit);
-        //}
+            return EMaterialRegisterExit.DeleteProcedure(idMatOutputExit);
+        }
 
         private void LoadSearchByCbo()
         {

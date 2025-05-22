@@ -16,7 +16,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
     {
         public string? idMatOutbound { get; set; }
         public string? idOutputType { get; set; }
-        public DateTime dateOutput { get; set; }
+        public DateTime dateOutbound { get; set; }
         public string? idFreightContainer { get; set; }
         public string? idDriver { get; set; }
         public int? idVehicle { get; set; }
@@ -27,12 +27,13 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public string? idEmployee { get; set; }
         public string? matDeliveryMan { get; set; }
         public string? idExitStatus { get; set; }
+        public string? idTransportLine { get; set; }
         public DataTable? dtMaterials { get; set; }
 
-        public const string? cIdMatOutbound = "@idMatOutbound";
-        public const string? cPosition = "Posición";
-        public const string? cIdOutputType = "idOutputType";
-        public const string? cIdExitStatus = "idExitStatus";
+        public const string cIdMatOutbound = "idMatOutbound";
+        public const string cPosition = "Posición";
+        public const string cIdOutputType = "idOutputType";
+        public const string cIdExitStatus = "idExitStatus";
 
         public static DataTable? GetDTOutputType()
         {
@@ -49,7 +50,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matOutbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatOutput").ToString();
         }
 
-        public void GetMaterialOutput(string idMaterialOutbound)
+        public void GetMaterialOutbound(string idMaterialOutbound)
         {
             if (string.IsNullOrEmpty(idMaterialOutbound))
                 idMaterialOutbound = "0";
@@ -65,7 +66,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 {
                     this.idMatOutbound = dr.GetValue(dr.GetOrdinal("id_matOutbound")).ToString();
                     idOutputType = dr.GetValue(dr.GetOrdinal("id_outputType")).ToString();
-                    dateOutput = Convert.ToDateTime(dr.GetValue(dr.GetOrdinal("d_date")));
+                    dateOutbound = Convert.ToDateTime(dr.GetValue(dr.GetOrdinal("d_date")));
                     idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
                     idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
                     idVehicle = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("id_vehiculos")));
@@ -88,7 +89,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             }
         }
 
-        public void GetMaterialOutputMaterials(string? idMatOutbound)
+        public void GetMaterialOutboundMaterials(string? idMatOutbound)
         {
             if (string.IsNullOrEmpty(idMatOutbound))
                 idMatOutbound = "0";
@@ -120,7 +121,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 SqlCommand cmd = new SqlCommand("sp_PackMatOutputAdd", sql.cnn, sql.transaction);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@idOutputType", idOutputType);
-                cmd.Parameters.AddWithValue("@dateOutput", dateOutput);
+                cmd.Parameters.AddWithValue("@dateOutput", dateOutbound);
                 cmd.Parameters.AddWithValue("@idFreightContainer", idFreightContainer);
                 cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(idDriver));
                 cmd.Parameters.AddWithValue("@idVehicle", idVehicle);
@@ -267,7 +268,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@idMatOutbound", this.idMatOutbound);
                 cmd.Parameters.AddWithValue("@idOutputType", idOutputType);
-                cmd.Parameters.AddWithValue("@dateOutput", dateOutput);
+                cmd.Parameters.AddWithValue("@dateOutput", dateOutbound);
                 cmd.Parameters.AddWithValue("@idFreightContainer", idFreightContainer);
                 cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(idDriver));
                 cmd.Parameters.AddWithValue("@idVehicle", idVehicle);

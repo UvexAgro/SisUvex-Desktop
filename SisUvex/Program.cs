@@ -34,6 +34,7 @@ using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialWarehouses;
 using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialType;
+using SisUvex.Material.MaterialRegister.Exit;
 
 namespace SisUvex
 {
