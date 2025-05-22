@@ -16,30 +16,11 @@ namespace SisUvex.Material.MaterialType
         public string idMaterialType { get; set; }
         public string nameMaterialType { get; set; }
 
-        public static bool ValidateMaterialType(string? idMaterialType)
+        public static string GetNextId()
         {
-            if (string.IsNullOrEmpty(idMaterialType) || idMaterialType.Length != 2 || !idMaterialType.All(char.IsLetterOrDigit))
-                return false;
-
-            SQLControl sql = new SQLControl();
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Pack_MaterialType WHERE id_matType = @idMaterialType", sql.cnn);
-                cmd.Parameters.AddWithValue("@idMaterialType", idMaterialType);
-                int count = (int)cmd.ExecuteScalar();
-                return count == 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Validar id");
-                return false;
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
+            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matType), 0) +1, '00') AS [ID] FROM Pack_MaterialType");
         }
+
         public void GetMaterialType(string id)
         {
             SQLControl sql = new SQLControl();
@@ -74,7 +55,6 @@ namespace SisUvex.Material.MaterialType
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new("sp_PackMaterialTypeAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@idmatType", idMaterialType.ToUpper());
                 cmd.Parameters.AddWithValue("@nameMatType", nameMaterialType);
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 

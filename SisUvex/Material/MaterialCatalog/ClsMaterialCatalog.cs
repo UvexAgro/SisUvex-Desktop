@@ -22,11 +22,10 @@ namespace SisUvex.Material.MaterialCatalog
     internal class ClsMaterialCatalog
     {
         //PARA QUE NO TARDE TANTO EN CARGAR EL CATALOGO DE LOS MATERIALES, SE DEJARÁ CADA QUE CARGUE UNA BUSQUEDA, COMO CONSULTA DIRECTA DE LA BD
-        SQLControl sql = new SQLControl();
         ClsControls controlList;
         public FrmMaterialAdd _frmAdd;
         public FrmMaterialCatalog _frmCat;
-        private EMaterialCatalog entityFrm;
+        private EMaterialCatalog entity;
         private string queryCatalog = $" SELECT vw.* FROM vw_PackMaterialCatalogCat AS [vw] ";
 
         ClsDGVCatalog dgv;
@@ -39,7 +38,7 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void BeginFormCat()
         {
-            _frmCat ??= new FrmMaterialCatalog();
+            _frmCat ??= new();
             _frmCat.cls ??= this;
 
             dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog);
@@ -63,32 +62,25 @@ namespace SisUvex.Material.MaterialCatalog
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
                 _frmAdd.txbId.Text = string.Empty; //SE CAMBIA AL SELECCIONAR UN TIPO DE MATERIAL
-
+                TxbPrefixApplyEvents();
                 InicializateImagesManagers();
             }
             else
             {
                 LoadControlsModify();
 
-                LoadAllImages(entityFrm.idMaterialCatalog);
+                LoadAllImages(entity.idMaterialCatalog);
             }
-
-            _frmAdd.txbIdMaterialType.TextChanged += (s, e) => //CAMBIAR ID DEL MATERIAL SEGUN EL TIPO, AQUÍ DESPUÉS DEL DE CARGAR CONTROLES MODIFICAR
-            {
-                if (_frmAdd.txbIdMaterialType.Text.IsNullOrEmpty())
-                    _frmAdd.txbId.Text = string.Empty;
-                else
-                    _frmAdd.txbId.Text = EMaterialCatalog.GetNextId(_frmAdd.txbIdMaterialType.Text);
-            };
         }
 
         private void AddControlsToList()
         {
-            controlList = new ClsControls();
+            controlList = new();
 
             controlList.ChangeHeadMessage("Para dar de alta un material debe:\n");
-            controlList.Add(_frmAdd.txbIdMaterialType, "Seleccionar un tipo de material.");
+            controlList.Add(_frmAdd.txbPrefix, "Ingresar un prefijo para él código de material.");
             controlList.Add(_frmAdd.txbId, "Ingresar el código del material.");
+            controlList.Add(_frmAdd.txbIdMaterialType, "Seleccionar un tipo de material.");
             controlList.Add(_frmAdd.txbName, "Ingresar un concepto para el material.");
             controlList.Add(_frmAdd.txbIdUnit, "Seleccionar una unidad.");
             controlList.Add(_frmAdd.txbIdDistributor, "Seleccionar un distribuidor.");
@@ -116,9 +108,12 @@ namespace SisUvex.Material.MaterialCatalog
 
         public void OpenFrmAdd()
         {
+            idAddModify = null;
+            entity = null;
             IsAddOrModify = true;
+            IsAddUpdate = false;
 
-            _frmAdd = new FrmMaterialAdd();
+            _frmAdd = new();
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir material";
             _frmAdd.lblTitle.Text = "Añadir material";
@@ -128,6 +123,7 @@ namespace SisUvex.Material.MaterialCatalog
         public void OpenFrmModify(string? idModify)
         {
             IsAddOrModify = false;
+            IsModifyUpdate = false;
 
             if (idModify.IsNullOrEmpty())
             {
@@ -137,7 +133,7 @@ namespace SisUvex.Material.MaterialCatalog
             }
 
             idAddModify = idModify;
-            _frmAdd = new FrmMaterialAdd();
+            _frmAdd = new();
             _frmAdd.cls = this;
             _frmAdd.Text = "Modificar material";
             _frmAdd.lblTitle.Text = "Modificar material";
@@ -145,42 +141,43 @@ namespace SisUvex.Material.MaterialCatalog
         }
         private void LoadControlsModify()
         {
-            entityFrm = new EMaterialCatalog();
-            entityFrm.GetMaterialCatalog(idAddModify ?? "0");
+            entity = new();
+            entity.GetMaterialCatalog(idAddModify ?? "0");
 
             _frmAdd.cboMaterialType.Enabled = false;
+            _frmAdd.txbPrefix.Text = entity.idMaterialCatalog?.Substring(0, 2);
+            _frmAdd.txbId.Text = entity.idMaterialCatalog;
+            _frmAdd.txbName.Text = entity.nameMaterialCatalog;
+            _frmAdd.txbQuant.Text = entity.quantity.ToString();
+            _frmAdd.cboActive.SelectedIndex = entity.active;
 
-            _frmAdd.txbId.Text = entityFrm.idMaterialCatalog;
-            _frmAdd.txbName.Text = entityFrm.nameMaterialCatalog;
-            _frmAdd.txbQuant.Text = entityFrm.quantity.ToString();
-            _frmAdd.cboActive.SelectedIndex = entityFrm.active;
-
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, entityFrm.idMaterialType);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboUnit, entityFrm.idUnit);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboColor, entityFrm.idColor);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCategory, entityFrm.idCategory);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, entityFrm.idDistributor);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMaterialType, entity.idMaterialType);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboUnit, entity.idUnit);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboColor, entity.idColor);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCategory, entity.idCategory);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, entity.idDistributor);
         }
 
         private EMaterialCatalog SetMaterialCatalogEntity()
         {
-            entityFrm = new EMaterialCatalog();
-            entityFrm.idMaterialCatalog = _frmAdd.txbId.Text;
-            entityFrm.nameMaterialCatalog = _frmAdd.txbName.Text;
-            entityFrm.idMaterialType = _frmAdd.txbIdMaterialType.Text;
-            entityFrm.idUnit = _frmAdd.txbIdUnit.Text;
-            entityFrm.idColor = _frmAdd.txbIdColor.Text;
-            entityFrm.idCategory = _frmAdd.txbIdCategory.Text;
-            entityFrm.idDistributor = _frmAdd.txbIdDistributor.Text;
-            entityFrm.idCategory = _frmAdd.txbIdCategory.Text;
-            entityFrm.active = _frmAdd.cboActive.SelectedIndex;
+            entity = new();
+            entity.prefix = _frmAdd.txbPrefix.Text;
+            entity.idMaterialCatalog = _frmAdd.txbId.Text;
+            entity.nameMaterialCatalog = _frmAdd.txbName.Text;
+            entity.idMaterialType = _frmAdd.txbIdMaterialType.Text;
+            entity.idUnit = _frmAdd.txbIdUnit.Text;
+            entity.idColor = _frmAdd.txbIdColor.Text;
+            entity.idCategory = _frmAdd.txbIdCategory.Text;
+            entity.idDistributor = _frmAdd.txbIdDistributor.Text;
+            entity.idCategory = _frmAdd.txbIdCategory.Text;
+            entity.active = _frmAdd.cboActive.SelectedIndex;
 
             if (_frmAdd.txbQuant.Text.IsNullOrEmpty())
-                entityFrm.quantity = 0;
+                entity.quantity = 0;
             else
-                entityFrm.quantity = Convert.ToInt32(_frmAdd.txbQuant.Text);
+                entity.quantity = Convert.ToInt32(_frmAdd.txbQuant.Text);
 
-            return entityFrm;
+            return entity;
         }
         public void AddProcedure()
         {
@@ -480,6 +477,80 @@ namespace SisUvex.Material.MaterialCatalog
             }
 
             return true;
+        }
+        ////pfefijo
+
+        private void TxbPrefixApplyEvents()
+        {
+            _frmAdd.txbPrefix.KeyPress += txbPrefix_KeyPress;
+            _frmAdd.txbPrefix.TextChanged += txbPrefix_TextChanged;
+            _frmAdd.txbPrefix.KeyDown += txbPrefix_KeyDown;
+        }
+
+        private void txbPrefix_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo letras y números
+            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Convertir a mayúsculas automáticamente
+            if (char.IsLetter(e.KeyChar))
+            {
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+
+            // Limitar a 2 caracteres
+            if (_frmAdd.txbPrefix.Text.Length >= 2 && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txbPrefix_TextChanged(object sender, EventArgs e)
+        {
+            // Limpiar el ID si el prefijo no tiene exactamente 2 caracteres
+            if (_frmAdd.txbPrefix.Text.Length != 2)
+            {
+                _frmAdd.txbId.Text = string.Empty;
+                return;
+            }
+
+            // Validar y buscar el siguiente ID solo cuando tenga exactamente 2 caracteres válidos
+            if (IsValidPrefix(_frmAdd.txbPrefix.Text))
+            {
+                _frmAdd.txbId.Text = EMaterialCatalog.GetNextId(_frmAdd.txbPrefix.Text);
+            }
+            else
+            {
+                _frmAdd.txbId.Text = string.Empty;
+            }
+        }
+
+        private bool IsValidPrefix(string prefix)
+        {
+            // Validación adicional si necesitas asegurar que cumple con ciertas reglas
+            return prefix.Length == 2 && prefix.All(c => char.IsLetterOrDigit(c));
+        }
+
+        // Para prevenir el pegado de texto no deseado
+        private void txbPrefix_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                e.SuppressKeyPress = true;
+
+                // Pegar solo si el texto es válido
+                var clipboardText = Clipboard.GetText();
+                if (clipboardText.Length >= 2 && clipboardText.All(c => char.IsLetterOrDigit(c)))
+                {
+                    var validText = new string(clipboardText.Where(c => char.IsLetterOrDigit(c)).Take(2).ToArray());
+                    _frmAdd.txbPrefix.Text = validText.ToUpper();
+                    _frmAdd.txbPrefix.SelectionStart = _frmAdd.txbPrefix.Text.Length;
+                }
+            }
         }
     }
 }

@@ -52,6 +52,7 @@
             // 
             // txbId
             // 
+            txbId.Enabled = false;
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(88, 43);
             txbId.MaxLength = 2;

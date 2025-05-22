@@ -38,6 +38,7 @@ namespace SisUvex.Material.MaterialType
         {
             AddControlsToList();
 
+            _frmAdd.txbId.Text = EMaterialType.GetNextId();
             //LoadComboBoxes(); //No tiene cbo para cargar
 
             if (IsAddOrModify)
@@ -130,12 +131,6 @@ namespace SisUvex.Material.MaterialType
 
             if (IsAddOrModify)
             {
-                if (!EMaterialType.ValidateMaterialType(_frmAdd.txbId.Text))
-                {
-                    MessageBox.Show("El código del tipo de material no es válido.", "Validar código", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
                 AddProcedure();
                 if (IsAddUpdate)
                 {

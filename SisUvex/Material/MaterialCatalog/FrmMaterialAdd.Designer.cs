@@ -73,6 +73,9 @@
             btnRefreshImages = new Button();
             btnDeleteImage = new Button();
             label3 = new Label();
+            txbPrefix = new TextBox();
+            label8 = new Label();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).BeginInit();
             SuspendLayout();
             // 
@@ -135,7 +138,7 @@
             // 
             lblColor.AutoSize = true;
             lblColor.Font = new Font("Segoe UI", 12F);
-            lblColor.Location = new Point(56, 334);
+            lblColor.Location = new Point(58, 334);
             lblColor.Name = "lblColor";
             lblColor.Size = new Size(51, 21);
             lblColor.TabIndex = 92;
@@ -167,7 +170,7 @@
             // 
             lblCategory.AutoSize = true;
             lblCategory.Font = new Font("Segoe UI", 12F);
-            lblCategory.Location = new Point(27, 265);
+            lblCategory.Location = new Point(29, 265);
             lblCategory.Name = "lblCategory";
             lblCategory.Size = new Size(80, 21);
             lblCategory.TabIndex = 90;
@@ -190,6 +193,7 @@
             txbId.Enabled = false;
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(112, 121);
+            txbId.MaxLength = 6;
             txbId.Name = "txbId";
             txbId.Size = new Size(84, 29);
             txbId.TabIndex = 71;
@@ -208,7 +212,7 @@
             // 
             lblName.AutoSize = true;
             lblName.Font = new Font("Segoe UI", 12F);
-            lblName.Location = new Point(28, 194);
+            lblName.Location = new Point(30, 194);
             lblName.Name = "lblName";
             lblName.Size = new Size(79, 21);
             lblName.TabIndex = 84;
@@ -319,7 +323,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(11, 300);
+            label1.Location = new Point(13, 300);
             label1.Name = "label1";
             label1.Size = new Size(96, 21);
             label1.TabIndex = 100;
@@ -373,7 +377,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F);
-            label7.Location = new Point(64, 161);
+            label7.Location = new Point(66, 161);
             label7.Name = "label7";
             label7.Size = new Size(43, 21);
             label7.TabIndex = 457;
@@ -436,7 +440,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 12F);
-            label9.Location = new Point(32, 230);
+            label9.Location = new Point(34, 230);
             label9.Name = "label9";
             label9.Size = new Size(75, 21);
             label9.TabIndex = 460;
@@ -542,11 +546,45 @@
             label3.TabIndex = 472;
             label3.Text = "*";
             // 
+            // txbPrefix
+            // 
+            txbPrefix.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbPrefix.Location = new Point(112, 86);
+            txbPrefix.MaxLength = 2;
+            txbPrefix.Name = "txbPrefix";
+            txbPrefix.Size = new Size(43, 29);
+            txbPrefix.TabIndex = 473;
+            txbPrefix.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.ForeColor = Color.Crimson;
+            label8.Location = new Point(103, 86);
+            label8.Margin = new Padding(0);
+            label8.Name = "label8";
+            label8.Size = new Size(12, 15);
+            label8.TabIndex = 475;
+            label8.Text = "*";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 12F);
+            label11.Location = new Point(51, 89);
+            label11.Name = "label11";
+            label11.Size = new Size(58, 21);
+            label11.TabIndex = 474;
+            label11.Text = "Prefijo:";
+            label11.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmMaterialAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(625, 407);
+            Controls.Add(txbPrefix);
+            Controls.Add(label8);
             Controls.Add(btnDeleteImage);
             Controls.Add(btnRefreshImages);
             Controls.Add(chbImageUp);
@@ -558,11 +596,9 @@
             Controls.Add(cboUnit);
             Controls.Add(label10);
             Controls.Add(txbQuant);
-            Controls.Add(label9);
             Controls.Add(txbIdMaterialType);
             Controls.Add(cboMaterialType);
             Controls.Add(label5);
-            Controls.Add(label7);
             Controls.Add(pbxMaterial);
             Controls.Add(chbDistributorRemoved);
             Controls.Add(txbIdDistributor);
@@ -582,13 +618,16 @@
             Controls.Add(label6);
             Controls.Add(lblMarket);
             Controls.Add(label2);
+            Controls.Add(lblId);
+            Controls.Add(label3);
+            Controls.Add(label4);
+            Controls.Add(label11);
+            Controls.Add(label9);
+            Controls.Add(label7);
             Controls.Add(label1);
             Controls.Add(lblColor);
             Controls.Add(lblCategory);
             Controls.Add(lblName);
-            Controls.Add(lblId);
-            Controls.Add(label3);
-            Controls.Add(label4);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -647,5 +686,8 @@
         private Button btnRefreshImages;
         private Button btnDeleteImage;
         private Label label3;
+        public TextBox txbPrefix;
+        private Label label8;
+        private Label label11;
     }
 }
