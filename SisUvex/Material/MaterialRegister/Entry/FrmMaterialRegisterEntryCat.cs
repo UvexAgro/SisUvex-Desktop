@@ -62,7 +62,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             {
                 DataGridViewRow selectedRow = dgvCatalog.SelectedRows[0];
 
-                cls.BtnDeleteSelectedRowFromDGV(selectedRow);
+                cls.BtnDeleteSelectedRowFromDGVCatalog(selectedRow);
             }
             else
                 SystemSounds.Exclamation.Play();

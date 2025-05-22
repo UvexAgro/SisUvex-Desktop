@@ -33,8 +33,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
         {
             cls.OpenFrmAdd();
 
-            //if (cls.IsAddUpdate)
-            //    cls.AddNewRowByIdInDGVCatalog();
+            if (cls.IsAddUpdate)
+                cls.AddNewRowByIdInDGVCatalog();
         }
 
         private void btnModify_Click(object sender, EventArgs e)
@@ -44,27 +44,27 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void OpenFrmModifyFromCat()
         {
-            //if (dgvCatalog.SelectedRows.Count == 0)
-            //{
-            //    SystemSounds.Exclamation.Play();
-            //    return;
-            //}
-            //cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString());
+            if (dgvCatalog.SelectedRows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+            cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString());
 
-            //if (cls.IsModifyUpdate)
-            //    cls.ModifyRowByIdInDGVCatalog();
+            if (cls.IsModifyUpdate)
+                cls.ModifyRowByIdInDGVCatalog();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            //if (dgvCatalog.SelectedRows.Count > 0)
-            //{
-            //    DataGridViewRow selectedRow = dgvCatalog.SelectedRows[0];
+            if (dgvCatalog.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dgvCatalog.SelectedRows[0];
 
-            //    cls.BtnDeleteSelectedRowFromDGV(selectedRow);
-            //}
-            //else
-            //    SystemSounds.Exclamation.Play();
+                cls.BtnDeleteSelectedRowFromDGVCatalog(selectedRow);
+            }
+            else
+                SystemSounds.Exclamation.Play();
         }
 
         private void btnSearchFilters_Click(object sender, EventArgs e)

@@ -167,5 +167,9 @@ namespace SisUvex.Material.MaterialRegister.Exit
             cls.ChbImagesClic(chbImageUp);
         }
 
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            cls.BtnAccept();
+        }
     }
 }
