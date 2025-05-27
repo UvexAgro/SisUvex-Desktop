@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -20,6 +22,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
             InitializeComponent();
         }
 
+        public static string GetNextId()
+        {
+            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matOutbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatOutput").ToString();
+        }
+
         private void FrmMaterialRegisterExit_Load(object sender, EventArgs e)
         {
             cls ??= new();
@@ -29,7 +36,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnWarehouseSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("WareHouses", "Código");
 
@@ -45,7 +52,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnForeignDest_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
             sel.OpenSelectionForm("ForeignDest", "Código");
 
             if (!string.IsNullOrEmpty(sel.SelectedValue))
@@ -56,7 +63,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("TransportLine", "Código");
 
@@ -67,7 +74,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
         }
         private void btnDriverSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("Driver", "Código");
 
@@ -79,7 +86,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnFreightContainerSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("FreightContainer", "Código");
 
@@ -96,17 +103,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnMaterialSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
-            sel.OpenSelectionForm("MaterialCatalog", "Código");
-
-            if (!string.IsNullOrEmpty(sel.SelectedValue))
-            {
-
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMaterialType, sel.SelectedValue.Substring(0, 2));
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMaterial, sel.SelectedValue);
-            }
-            else
-                cboMaterialType.SelectedIndex = 0;
+            cls.BtnMaterialCatalogSearch(cboMaterialType, cboMaterial);
         }
 
         private void btnAddMaterial_Click(object sender, EventArgs e)

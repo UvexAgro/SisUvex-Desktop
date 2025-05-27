@@ -16,18 +16,18 @@ using System.Media;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Material.MaterialCatalog;
-using SisUvex.Material.MaterialProvider;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
 using SisUvex.Catalogos.FreightContainer;
 using SisUvex.Material.MaterialForeignDest;
+using SisUvex.Material.MaterialType;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
     internal class ClsMaterialRegisterExit
     {
-        ClsControls? controlListInbound;
+        ClsControls? controlListOutput;
         ClsControls? controlListMaterial;
         DataTable? dtUnit;
         private SingleImageManager? frontImageManager, backImageManager, downImageManager, upImageManager;
@@ -35,12 +35,12 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public FrmMaterialRegisterExit _frmAdd;
         public FrmMaterialRegisterExitCat _frmCat;
         public EMaterialRegisterExit? entity;
-        private string queryCatalog = "SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat ";
-        private string queryCatalogExists = "WHERE EXISTS (SELECT 1 FROM Pack_MatInbound inb " +
-                                          "JOIN Pack_MatInboundMaterials mat ON mat.id_matInbound = inb.id_matInbound " +
-                                          "JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = mat.id_matCatalog " +
+        private string queryCatalog = " SELECT cat.* FROM vw_PackMatOutputExitCat AS cat ";
+        private string queryCatalogExists = " WHERE EXISTS (SELECT 1 FROM Pack_MatOutput outp " +
+                                          "JOIN Pack_MatOutputMaterials mat ON mat.id_matOutbound = outp.id_matOutbound " +
+                                          "JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = mat.id_materialCat " +
                                           "LEFT JOIN Pack_MaterialType matT ON matT.id_matType = matC.id_matType " +
-                                          "WHERE inb.id_matInbound = cat.[Código] ";
+                                          "WHERE outp.id_matOutbound = cat.[Código] ";
         ClsDGVCatalog dgv;
         DataTable? dtCatalog, dtInboundMaterials, dtEmployees;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
@@ -59,8 +59,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
             StringBuilder qry = new StringBuilder(queryCatalog);
             StringBuilder existsConditions = new StringBuilder(queryCatalogExists);
 
-            // Fecha siempre aplica
-            existsConditions.Append(" AND inb.d_date BETWEEN @date1 AND @date2 ");
+            // Fecha siempre aplica y el valor de id_outputtype
+            existsConditions.Append(" AND outp.d_date BETWEEN @date1 AND @date2 AND outp.id_outputType = '02' ");
             parameters.Add("@date1", _frmCat.dtpDate1.Value.ToString("yyyy-MM-dd"));
             parameters.Add("@date2", _frmCat.dtpDate2.Value.ToString("yyyy-MM-dd"));
 
@@ -77,15 +77,9 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 parameters.Add("@idGrower", _frmCat.cboGrower.SelectedValue);
             }
 
-            if (_frmCat.cboProvider.SelectedIndex > 0)
-            {
-                existsConditions.Append(" AND mat.id_provider = @idProvider ");
-                parameters.Add("@idProvider", _frmCat.cboProvider.SelectedValue);
-            }
-
             if (_frmCat.cboWareHouse.SelectedIndex > 0)
             {
-                existsConditions.Append(" AND inb.id_warehouses = @idWarehouse ");
+                existsConditions.Append(" AND outp.id_warehouses = @idWarehouse ");
                 parameters.Add("@idWarehouse", _frmCat.cboWareHouse.SelectedValue);
             }
 
@@ -102,14 +96,26 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             if (_frmCat.cboTransportLine.SelectedIndex > 0)
             {
-                existsConditions.Append(" AND inb.id_transportLine = @idTransportLine ");
+                existsConditions.Append(" AND outp.id_transportLine = @idTransportLine ");
                 parameters.Add("@idTransportLine", _frmCat.cboTransportLine.SelectedValue);
             }
 
             if (_frmCat.cboFreightContainer.SelectedIndex > 0)
             {
-                existsConditions.Append(" AND inb.id_freightContainer = @idFreightContainer ");
+                existsConditions.Append(" AND outp.id_freightContainer = @idFreightContainer ");
                 parameters.Add("@idFreightContainer", _frmCat.cboFreightContainer.SelectedValue);
+            }
+
+            if (_frmCat.cboForeignDest.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND outp.id_foreignDest = @idForeignDest ");
+                parameters.Add("@idForeignDest", _frmCat.cboForeignDest.SelectedValue);
+            }
+
+            if (_frmCat.cboStatus.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND outp.id_exitStatus = @idStatus ");
+                parameters.Add("@idStatus", _frmCat.cboStatus.SelectedValue);
             }
 
             // Cierra la subconsulta EXISTS
@@ -126,11 +132,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         public void BeginFormCat()
         {
-            _frmCat ??= new FrmMaterialRegisterExitCat();
+            _frmCat ??= new();
             _frmCat.cls ??= this;
 
-            //dtCatalog = SearchFilter();
-            //dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
 
             LoadComboBoxesCatalog();
         }
@@ -145,7 +151,8 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboLoadActives(_frmCat.cboFreightContainer, FreightContainer.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, Grower.Cbo);
             ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, ClsObject.MaterialType.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmCat.cboProvider, ClsObject.MaterialProvider.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboForeignDest, ForeignDest.Cbo);
+            ClsComboBoxes.LoadComboBoxDataSource(_frmCat.cboStatus, EMaterialRegisterExit.GetDTExitStatus());
 
             //Material/Tipo material
             List<Tuple<ComboBox, CheckBox?, string>> cboMaterialTypeDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
@@ -169,7 +176,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboDistributor, _frmCat.chbDistributorRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboWareHouse, _frmCat.chbWareHouseRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboGrower, _frmCat.chbGrowerRemoved);
-            ClsComboBoxes.CboApplyClickEvent(_frmCat.cboProvider, _frmCat.chbProviderRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboTransportLine, _frmCat.chbTransportLineRemoved);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmCat.cboFreightContainer, _frmCat.chbFreightContainerRemoved, TransportLine.ColumnId, _frmCat.cboTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmCat.cboMaterial, _frmCat.chbMaterialRemoved, ClsObject.MaterialType.ColumnId, _frmCat.cboMaterialType);
@@ -180,11 +186,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
             AddControlsToListExit();
             LoadControlsAddModify();
             InitializeDtInboundMaterials();
-
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboOutputType, "02");
             if (IsAddOrModify)
             {
                 //_frmAdd.chbActive.Checked = true; //NO LLEVA
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matInbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatInbound").ToString();
+                _frmAdd.txbId.Text = EMaterialRegisterExit.GetNextId();
             }
             else
             {
@@ -194,17 +200,17 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void AddControlsToListExit()
         {
-            controlListInbound = new ClsControls();
-            controlListInbound.ChangeHeadMessage("Para registrar una salida debe:\n");
-            controlListInbound.Add(_frmAdd.txbId, "Seleccionar un tipo de salida.");
-            controlListInbound.Add(_frmAdd.txbIdOutputType, "Seleccionar un tipo de salida.");
-            controlListInbound.Add(_frmAdd.txbIdStatus, "Seleccionar el estado.");
-            controlListInbound.Add(_frmAdd.txbIdWarehouse, "Seleccionar un almacén de salida.");
-            controlListInbound.Add(_frmAdd.txbIdEmployee, "Seleccionar un empleado.");
-            controlListInbound.Add(_frmAdd.txbIdForeignDest, "Ingresar dirección de destino.");
-            controlListInbound.Add(_frmAdd.txbIdTransportLine, "Seleccionar una línea de transporte.");
-            controlListInbound.Add(_frmAdd.txbIdFreightContainer, "Seleccionar una caja.");
-            controlListInbound.Add(_frmAdd.dgvMaterialList, "Agregar materiales al listado.");
+            controlListOutput = new ClsControls();
+            controlListOutput.ChangeHeadMessage("Para registrar una salida debe:\n");
+            controlListOutput.Add(_frmAdd.txbId, "Seleccionar un tipo de salida.");
+            controlListOutput.Add(_frmAdd.txbIdOutputType, "Seleccionar un tipo de salida.");
+            controlListOutput.Add(_frmAdd.txbIdStatus, "Seleccionar el estado.");
+            controlListOutput.Add(_frmAdd.txbIdWarehouse, "Seleccionar un almacén de salida.");
+            controlListOutput.Add(_frmAdd.txbIdEmployee, "Seleccionar un empleado.");
+            controlListOutput.Add(_frmAdd.txbIdForeignDest, "Ingresar dirección de destino.");
+            controlListOutput.Add(_frmAdd.txbIdTransportLine, "Seleccionar una línea de transporte.");
+            controlListOutput.Add(_frmAdd.txbIdFreightContainer, "Seleccionar una caja.");
+            controlListOutput.Add(_frmAdd.dgvMaterialList, "Agregar materiales al listado.");
 
             controlListMaterial = new ClsControls();
             controlListMaterial.ChangeHeadMessage("Para agregar un material al listado debe:\n");
@@ -267,6 +273,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboOutputType, _frmAdd.txbIdOutputType);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboStatus, _frmAdd.txbIdStatus);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWarehouse, _frmAdd.txbIdWarehouse);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
@@ -410,7 +417,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         public void BtnAccept()
         {
-            if (!controlListInbound.ValidateControls())
+            if (!controlListOutput.ValidateControls())
                 return;
 
             if (IsAddOrModify)
@@ -638,7 +645,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             Dictionary<string, object> parameters = new();
             string queryWhere = string.Empty;
-            MessageBox.Show(_frmCat.cboSearchBy.Text);
             switch (_frmCat.cboSearchBy.Text)
             {
                 case "Folio":
@@ -737,7 +743,30 @@ namespace SisUvex.Material.MaterialRegister.Exit
             _frmAdd.pbxMaterial.Image = null;
         }
 
-        /////////
+        /////////btnSearch 
+        public void BtnMaterialCatalogSearch(ComboBox cboMatType, ComboBox cboMaterialCat)
+        {
+            //METODO ESPECIFICO PARA ESTOS CASOS CON CboMaterialType con CboMaterialCatalog çomo dependiente
+            ClsSelectionForm sel = new();
+            sel.OpenSelectionForm("MaterialCatalog", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                if (cboMaterialCat.Items.Count == 0)
+                    ClsComboBoxes.CboLoadActives(cboMaterialCat, ClsObject.MaterialCatalog.Cbo);
+
+                DataTable? dtSearch = cboMaterialCat.DataSource as DataTable;
+
+                string idMatType = dtSearch.GetValue(ClsObject.MaterialType.ColumnId, Column.id, sel.SelectedValue)?.ToString() ?? string.Empty;
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMatType, idMatType);
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboMaterialCat, sel.SelectedValue);
+            }
+            else
+                cboMatType.SelectedIndex = 0;
+        }
+
         public void btnSearchEmployee()
         {
             ClsSelectionForm sel = new ClsSelectionForm();

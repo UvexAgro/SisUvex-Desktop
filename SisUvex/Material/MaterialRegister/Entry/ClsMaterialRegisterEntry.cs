@@ -18,7 +18,6 @@ using SisUvex.Material.MaterialCatalog;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using System.Web;
 using SisUvex.Material.MaterialProvider;
-using DocumentFormat.OpenXml.Presentation;
 using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
 using SisUvex.Catalogos.FreightContainer;
@@ -682,7 +681,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             Dictionary<string, object> parameters = new();
             string queryWhere = string.Empty;
-            MessageBox.Show(_frmCat.cboSearchBy.Text);
             switch (_frmCat.cboSearchBy.Text)
             {
                 case "Folio":
@@ -777,6 +775,30 @@ namespace SisUvex.Material.MaterialRegister.Entry
             upImageManager?.Dispose();
 
             _frmAdd.pbxMaterial.Image = null;
+        }
+        /////////btnSearch 
+
+        public void BtnMaterialCatalogSearch(ComboBox cboMatType, ComboBox cboMaterialCat)
+        {
+            //METODO ESPECIFICO PARA ESTOS CASOS CON CboMaterialType con CboMaterialCatalog çomo dependiente
+            ClsSelectionForm sel = new();
+            sel.OpenSelectionForm("MaterialCatalog", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                if (cboMaterialCat.Items.Count == 0)
+                    ClsComboBoxes.CboLoadActives(cboMaterialCat, ClsObject.MaterialCatalog.Cbo);
+
+                DataTable? dtSearch = cboMaterialCat.DataSource as DataTable;
+
+                string idMatType = dtSearch.GetValue(ClsObject.MaterialType.ColumnId, Column.id, sel.SelectedValue)?.ToString() ?? string.Empty;
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMatType, idMatType);
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboMaterialCat, sel.SelectedValue);
+            }
+            else
+                cboMatType.SelectedIndex = 0;
         }
 
         /////////Btns de añadir

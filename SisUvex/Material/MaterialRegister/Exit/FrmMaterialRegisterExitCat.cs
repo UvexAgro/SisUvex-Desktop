@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.Extentions;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -79,7 +80,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnFreightContainerSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("FreightContainer", "Código");
 
@@ -91,7 +92,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("TransportLine", "Código");
 
@@ -99,6 +100,23 @@ namespace SisUvex.Material.MaterialRegister.Exit
             {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
             }
+        }
+
+        private void btnForeignDestSearch_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new();
+
+            sel.OpenSelectionForm("ForeignDest", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboForeignDest, sel.SelectedValue);
+            }
+        }
+
+        private void btnMaterialSearch_Click(object sender, EventArgs e)
+        {
+            cls.BtnMaterialCatalogSearch(cboMaterialType, cboMaterial);
         }
     }
 }

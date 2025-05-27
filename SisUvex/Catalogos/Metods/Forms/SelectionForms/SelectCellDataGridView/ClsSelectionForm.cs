@@ -7,12 +7,12 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
 {
     internal class ClsSelectionForm
     {
-        private string queryString { get; set; }
-        private string ParameterName { get; set; }
-        private string ColumnNameResult { get; set; }
-        public string SelectedValue { get; set; }
+        private string? queryString { get; set; }
+        private string? ParameterName { get; set; }
+        private string? ColumnNameResult { get; set; }
+        public string? SelectedValue { get; set; }
 
-        private DataTable DataTable { get; set; }
+        public DataTable dtQuery { get; set; }
 
         private FrmSelectCellDataGridView frm;
 
@@ -97,7 +97,9 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 {ParameterName, $"%{text}%" }
                 };
 
-                frm.dgvRows.DataSource = ClsQuerysDB.ExecuteParameterizedQuery(queryString, parameters);
+                dtQuery = ClsQuerysDB.ExecuteParameterizedQuery(queryString, parameters);
+
+                frm.dgvRows.DataSource = dtQuery;
             }
             else
             {
