@@ -9,6 +9,7 @@ using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Values;
 using Microsoft.Win32.SafeHandles;
+using iText.Commons.Utils;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -19,7 +20,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public DateTime dateOutbound { get; set; }
         public string? idFreightContainer { get; set; }
         public string? idDriver { get; set; }
-        public int? idVehicle { get; set; }
+        public string? idVehicle { get; set; }
         public string? idWarehouse { get; set; }
         public string? idLot { get; set; }
         public string? idVariety { get; set; }
@@ -69,7 +70,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
                     dateOutbound = Convert.ToDateTime(dr.GetValue(dr.GetOrdinal("d_date")));
                     idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
                     idDriver = dr.GetValue(dr.GetOrdinal("id_driver")).ToString();
-                    idVehicle = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("id_vehiculos")));
+                    idVehicle = dr.GetValue(dr.GetOrdinal("id_vehiculos")).ToString();
                     idWarehouse = dr.GetValue(dr.GetOrdinal("id_warehouses")).ToString();
                     idLot = dr.GetValue(dr.GetOrdinal("id_lot")).ToString();
                     idVariety = dr.GetValue(dr.GetOrdinal("id_variety")).ToString();
@@ -77,6 +78,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
                     idEmployee = dr.GetValue(dr.GetOrdinal("id_employee")).ToString();
                     matDeliveryMan = dr.GetValue(dr.GetOrdinal("v_matDeliveryMan")).ToString();
                     idExitStatus = dr.GetValue(dr.GetOrdinal("id_exitStatus")).ToString();
+                    idTransportLine = dr.GetValue(dr.GetOrdinal("id_transportLine")).ToString();
                 }
             }
             catch (Exception ex)
@@ -122,17 +124,18 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@idOutputType", idOutputType);
                 cmd.Parameters.AddWithValue("@dateOutput", dateOutbound);
-                cmd.Parameters.AddWithValue("@idFreightContainer", idFreightContainer);
+                cmd.Parameters.AddWithValue("@idFreightContainer", ClsValues.IfEmptyToDBNull(idFreightContainer));
                 cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(idDriver));
-                cmd.Parameters.AddWithValue("@idVehicle", idVehicle);
-                cmd.Parameters.AddWithValue("@idWarehouses", idWarehouse);
+                cmd.Parameters.AddWithValue("@idVehicle", ClsValues.IfEmptyToDBNull(idVehicle));
+                cmd.Parameters.AddWithValue("@idWarehouses", ClsValues.IfEmptyToDBNull(idWarehouse));
                 cmd.Parameters.AddWithValue("@idLot", ClsValues.IfEmptyToDBNull(idLot));
                 cmd.Parameters.AddWithValue("@idVariety", ClsValues.IfEmptyToDBNull(idVariety));
                 cmd.Parameters.AddWithValue("@idForeignDest", ClsValues.IfEmptyToDBNull(idForeignDest));
                 cmd.Parameters.AddWithValue("@idEmployee", ClsValues.IfEmptyToDBNull(idEmployee));
                 cmd.Parameters.AddWithValue("@matDeliveryMan", ClsValues.IfEmptyToDBNull(matDeliveryMan));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idExitStatus", idExitStatus);
+                cmd.Parameters.AddWithValue("@idExitStatus", ClsValues.IfEmptyToDBNull(idExitStatus));
+                cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(idTransportLine));
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 string? idMatOutbound = null;
@@ -269,17 +272,18 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 cmd.Parameters.AddWithValue("@idMatOutbound", this.idMatOutbound);
                 cmd.Parameters.AddWithValue("@idOutputType", idOutputType);
                 cmd.Parameters.AddWithValue("@dateOutput", dateOutbound);
-                cmd.Parameters.AddWithValue("@idFreightContainer", idFreightContainer);
+                cmd.Parameters.AddWithValue("@idFreightContainer", ClsValues.IfEmptyToDBNull(idFreightContainer));
                 cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(idDriver));
-                cmd.Parameters.AddWithValue("@idVehicle", idVehicle);
-                cmd.Parameters.AddWithValue("@idWarehouses", idWarehouse);
+                cmd.Parameters.AddWithValue("@idVehicle", ClsValues.IfEmptyToDBNull(idVehicle));
+                cmd.Parameters.AddWithValue("@idWarehouses", ClsValues.IfEmptyToDBNull(idWarehouse));
                 cmd.Parameters.AddWithValue("@idLot", ClsValues.IfEmptyToDBNull(idLot));
                 cmd.Parameters.AddWithValue("@idVariety", ClsValues.IfEmptyToDBNull(idVariety));
                 cmd.Parameters.AddWithValue("@idForeignDest", ClsValues.IfEmptyToDBNull(idForeignDest));
                 cmd.Parameters.AddWithValue("@idEmployee", ClsValues.IfEmptyToDBNull(idEmployee));
                 cmd.Parameters.AddWithValue("@matDeliveryMan", ClsValues.IfEmptyToDBNull(matDeliveryMan));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idExitStatus", idExitStatus);
+                cmd.Parameters.AddWithValue("@idExitStatus", ClsValues.IfEmptyToDBNull(idExitStatus));
+                cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(idTransportLine));
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 string? idMatOutbound = null;

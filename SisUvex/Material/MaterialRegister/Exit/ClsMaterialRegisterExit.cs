@@ -16,12 +16,12 @@ using System.Media;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Material.MaterialCatalog;
-using SisUvex.Material.MaterialProvider;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
 using SisUvex.Catalogos.FreightContainer;
 using SisUvex.Material.MaterialForeignDest;
+using SisUvex.Material.MaterialType;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -35,12 +35,12 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public FrmMaterialRegisterExit _frmAdd;
         public FrmMaterialRegisterExitCat _frmCat;
         public EMaterialRegisterExit? entity;
-        private string queryCatalog = "SELECT cat.* FROM vw_PackMatInbondEntryCat AS cat ";
-        private string queryCatalogExists = "WHERE EXISTS (SELECT 1 FROM Pack_MatInbound inb " +
-                                          "JOIN Pack_MatInboundMaterials mat ON mat.id_matInbound = inb.id_matInbound " +
-                                          "JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = mat.id_matCatalog " +
+        private string queryCatalog = " SELECT cat.* FROM vw_PackMatOutputExitCat AS cat ";
+        private string queryCatalogExists = " WHERE EXISTS (SELECT 1 FROM Pack_MatOutput inb " +
+                                          "JOIN Pack_MatOutputMaterials mat ON mat.id_matOutbound = inb.id_matOutbound " +
+                                          "JOIN Pack_MaterialCatalog matC ON matC.id_matCatalog = mat.id_materialCat " +
                                           "LEFT JOIN Pack_MaterialType matT ON matT.id_matType = matC.id_matType " +
-                                          "WHERE inb.id_matInbound = cat.[Código] ";
+                                          "WHERE inb.id_matOutbound = cat.[Código] ";
         ClsDGVCatalog dgv;
         DataTable? dtCatalog, dtInboundMaterials, dtEmployees;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
@@ -77,12 +77,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 parameters.Add("@idGrower", _frmCat.cboGrower.SelectedValue);
             }
 
-            if (_frmCat.cboProvider.SelectedIndex > 0)
-            {
-                existsConditions.Append(" AND mat.id_provider = @idProvider ");
-                parameters.Add("@idProvider", _frmCat.cboProvider.SelectedValue);
-            }
-
             if (_frmCat.cboWareHouse.SelectedIndex > 0)
             {
                 existsConditions.Append(" AND inb.id_warehouses = @idWarehouse ");
@@ -112,6 +106,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
                 parameters.Add("@idFreightContainer", _frmCat.cboFreightContainer.SelectedValue);
             }
 
+            if (_frmCat.cboForeignDest.SelectedIndex > 0)
+            {
+                existsConditions.Append(" AND mat.id_distributor = @idDistributor ");
+                parameters.Add("@idDistributor", _frmCat.cboForeignDest.SelectedValue);
+            }
             // Cierra la subconsulta EXISTS
             existsConditions.Append(")");
             qry.Append(existsConditions);
@@ -126,11 +125,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         public void BeginFormCat()
         {
-            _frmCat ??= new FrmMaterialRegisterExitCat();
+            _frmCat ??= new();
             _frmCat.cls ??= this;
 
-            //dtCatalog = SearchFilter();
-            //dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
 
             LoadComboBoxesCatalog();
         }
@@ -145,7 +144,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboLoadActives(_frmCat.cboFreightContainer, FreightContainer.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, Grower.Cbo);
             ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, ClsObject.MaterialType.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmCat.cboProvider, ClsObject.MaterialProvider.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboForeignDest, ForeignDest.Cbo);
 
             //Material/Tipo material
             List<Tuple<ComboBox, CheckBox?, string>> cboMaterialTypeDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
@@ -169,7 +168,6 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboDistributor, _frmCat.chbDistributorRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboWareHouse, _frmCat.chbWareHouseRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboGrower, _frmCat.chbGrowerRemoved);
-            ClsComboBoxes.CboApplyClickEvent(_frmCat.cboProvider, _frmCat.chbProviderRemoved);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboTransportLine, _frmCat.chbTransportLineRemoved);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmCat.cboFreightContainer, _frmCat.chbFreightContainerRemoved, TransportLine.ColumnId, _frmCat.cboTransportLine);
             ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmCat.cboMaterial, _frmCat.chbMaterialRemoved, ClsObject.MaterialType.ColumnId, _frmCat.cboMaterialType);
@@ -180,11 +178,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
             AddControlsToListExit();
             LoadControlsAddModify();
             InitializeDtInboundMaterials();
-
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboOutputType, "02");
             if (IsAddOrModify)
             {
                 //_frmAdd.chbActive.Checked = true; //NO LLEVA
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matInbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatInbound").ToString();
+                _frmAdd.txbId.Text = EMaterialRegisterExit.GetNextId();
             }
             else
             {
@@ -267,6 +265,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboOutputType, _frmAdd.txbIdOutputType);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboStatus, _frmAdd.txbIdStatus);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWarehouse, _frmAdd.txbIdWarehouse);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
@@ -737,7 +736,30 @@ namespace SisUvex.Material.MaterialRegister.Exit
             _frmAdd.pbxMaterial.Image = null;
         }
 
-        /////////
+        /////////btnSearch 
+        public void BtnMaterialCatalogSearch(ComboBox cboMatType, ComboBox cboMaterialCat)
+        {
+            //METODO ESPECIFICO PARA ESTOS CASOS CON CboMaterialType con CboMaterialCatalog çomo dependiente
+            ClsSelectionForm sel = new();
+            sel.OpenSelectionForm("MaterialCatalog", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                if (cboMaterialCat.Items.Count == 0)
+                    ClsComboBoxes.CboLoadActives(cboMaterialCat, ClsObject.MaterialCatalog.Cbo);
+
+                DataTable? dtSearch = cboMaterialCat.DataSource as DataTable;
+
+                string idMatType = dtSearch.GetValue(ClsObject.MaterialType.ColumnId, Column.id, sel.SelectedValue)?.ToString() ?? string.Empty;
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMatType, idMatType);
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboMaterialCat, sel.SelectedValue);
+            }
+            else
+                cboMatType.SelectedIndex = 0;
+        }
+
         public void btnSearchEmployee()
         {
             ClsSelectionForm sel = new ClsSelectionForm();

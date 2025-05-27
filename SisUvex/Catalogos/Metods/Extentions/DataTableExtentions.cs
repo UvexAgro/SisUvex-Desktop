@@ -5,7 +5,7 @@ namespace SisUvex.Catalogos.Metods.Extentions
 {
     public static class DataTableExtensions
     {
-        public static object? GetValue(this DataTable dataTable, string valueColumnName, string searchColumnName, object? searchValue)
+        public static object? GetValue(this DataTable? dataTable, string valueColumnName, string searchColumnName, object? searchValue)
         {
             if (dataTable == null || dataTable.Rows.Count == 0)
                 return null;

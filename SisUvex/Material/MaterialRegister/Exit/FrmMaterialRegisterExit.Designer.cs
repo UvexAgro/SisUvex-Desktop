@@ -642,7 +642,7 @@
             // 
             dtpDate.Font = new Font("Microsoft Sans Serif", 9F);
             dtpDate.Format = DateTimePickerFormat.Short;
-            dtpDate.Location = new Point(314, 42);
+            dtpDate.Location = new Point(261, 66);
             dtpDate.MaxDate = new DateTime(2050, 12, 31, 0, 0, 0, 0);
             dtpDate.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             dtpDate.Name = "dtpDate";
@@ -653,7 +653,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Microsoft Sans Serif", 9F);
-            label17.Location = new Point(271, 44);
+            label17.Location = new Point(218, 68);
             label17.Name = "label17";
             label17.Size = new Size(44, 15);
             label17.TabIndex = 492;
@@ -908,7 +908,7 @@
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Microsoft Sans Serif", 9F);
-            label18.Location = new Point(35, 70);
+            label18.Location = new Point(194, 46);
             label18.Margin = new Padding(1, 1, 0, 0);
             label18.Name = "label18";
             label18.Size = new Size(34, 15);
@@ -919,7 +919,7 @@
             // 
             txbIdStatus.Enabled = false;
             txbIdStatus.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdStatus.Location = new Point(272, 66);
+            txbIdStatus.Location = new Point(67, 66);
             txbIdStatus.Margin = new Padding(1, 1, 0, 0);
             txbIdStatus.Name = "txbIdStatus";
             txbIdStatus.Size = new Size(37, 21);
@@ -932,17 +932,17 @@
             cboStatus.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboStatus.FormattingEnabled = true;
             cboStatus.ItemHeight = 13;
-            cboStatus.Location = new Point(310, 66);
+            cboStatus.Location = new Point(105, 66);
             cboStatus.Margin = new Padding(1, 1, 0, 0);
             cboStatus.Name = "cboStatus";
-            cboStatus.Size = new Size(117, 21);
+            cboStatus.Size = new Size(110, 21);
             cboStatus.TabIndex = 554;
             // 
             // label19
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Microsoft Sans Serif", 9F);
-            label19.Location = new Point(225, 69);
+            label19.Location = new Point(20, 69);
             label19.Margin = new Padding(1, 1, 0, 0);
             label19.Name = "label19";
             label19.Size = new Size(48, 15);
@@ -1012,23 +1012,24 @@
             // 
             txbIdOutputType.Enabled = false;
             txbIdOutputType.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdOutputType.Location = new Point(67, 66);
+            txbIdOutputType.Location = new Point(226, 44);
             txbIdOutputType.Margin = new Padding(1, 1, 0, 0);
             txbIdOutputType.Name = "txbIdOutputType";
-            txbIdOutputType.Size = new Size(37, 21);
+            txbIdOutputType.Size = new Size(21, 21);
             txbIdOutputType.TabIndex = 564;
             txbIdOutputType.TextAlign = HorizontalAlignment.Center;
             // 
             // cboOutputType
             // 
             cboOutputType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboOutputType.Enabled = false;
             cboOutputType.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboOutputType.FormattingEnabled = true;
             cboOutputType.ItemHeight = 13;
-            cboOutputType.Location = new Point(105, 66);
+            cboOutputType.Location = new Point(248, 44);
             cboOutputType.Margin = new Padding(1, 1, 0, 0);
             cboOutputType.Name = "cboOutputType";
-            cboOutputType.Size = new Size(117, 21);
+            cboOutputType.Size = new Size(97, 21);
             cboOutputType.TabIndex = 563;
             // 
             // btnForeignDestSearch

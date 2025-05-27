@@ -101,5 +101,10 @@ namespace SisUvex.Material.MaterialRegister.Entry
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboTransportLine, sel.SelectedValue);
             }
         }
+
+        private void btnMaterialSearch_Click(object sender, EventArgs e)
+        {
+            cls.BtnMaterialCatalogSearch(cboMaterialType, cboMaterial);
+        }
     }
 }

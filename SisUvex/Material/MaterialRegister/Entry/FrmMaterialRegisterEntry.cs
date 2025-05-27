@@ -38,17 +38,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnMaterialSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
-            sel.OpenSelectionForm("MaterialCatalog", "Código");
-
-            if (!string.IsNullOrEmpty(sel.SelectedValue))
-            {
-
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMaterialType, sel.SelectedValue.Substring(0, 2));
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMaterial, sel.SelectedValue);
-            }
-            else
-                cboMaterialType.SelectedIndex = 0;
+            cls.BtnMaterialCatalogSearch(cboMaterialType, cboMaterial);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -122,7 +112,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("TransportLine", "Código");
 
@@ -134,7 +124,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnDriverSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("Driver", "Código");
 
@@ -146,7 +136,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnFreightContainerSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("FreightContainer", "Código");
 
@@ -158,7 +148,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnProviderSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("MaterialProvider", "Código");
 
@@ -170,7 +160,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnSearchDistributor_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("Distributor", "Código");
 
@@ -182,7 +172,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnGrowerSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("Grower", "Código");
 
@@ -194,7 +184,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnWarehouseSearch_Click(object sender, EventArgs e)
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            ClsSelectionForm sel = new();
 
             sel.OpenSelectionForm("WareHouses", "Código");
 
@@ -206,7 +196,14 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
         private void btnMaterialTypeSearch_Click(object sender, EventArgs e)
         {
+            ClsSelectionForm sel = new();
 
+            sel.OpenSelectionForm("MaterialType", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboMaterialType, sel.SelectedValue);
+            }
         }
 
     }

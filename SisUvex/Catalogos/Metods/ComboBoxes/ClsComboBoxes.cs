@@ -37,7 +37,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             if (dt.Rows.Count == 0)
                 return;
 
-            dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+            if (dt.Columns.Contains(ClsObject.Column.active))
+                dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
 
             LoadComboBoxDataSource(comboBox, dt);
         }
@@ -88,7 +89,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 }
                 else
                 {
-                    dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+                    if (dt.Columns.Contains(ClsObject.Column.active))           
+                        dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
                 }
 
                 comboBox.DataSource = dt;
