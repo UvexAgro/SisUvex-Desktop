@@ -70,6 +70,8 @@
             label6 = new Label();
             btnMaterialSearch = new Button();
             btnForeignDestSearch = new Button();
+            cboStatus = new ComboBox();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -77,7 +79,7 @@
             // 
             btnTransportLineSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnTransportLineSearch.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTransportLineSearch.Location = new Point(731, 21);
+            btnTransportLineSearch.Location = new Point(707, 21);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(25, 25);
             btnTransportLineSearch.TabIndex = 13;
@@ -88,7 +90,7 @@
             // 
             btnFreightContainerSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnFreightContainerSearch.BackgroundImageLayout = ImageLayout.Stretch;
-            btnFreightContainerSearch.Location = new Point(731, 59);
+            btnFreightContainerSearch.Location = new Point(707, 59);
             btnFreightContainerSearch.Name = "btnFreightContainerSearch";
             btnFreightContainerSearch.Size = new Size(25, 25);
             btnFreightContainerSearch.TabIndex = 18;
@@ -193,7 +195,7 @@
             // 
             chbTransportLineRemoved.Appearance = Appearance.Button;
             chbTransportLineRemoved.Image = Properties.Resources.removedList16;
-            chbTransportLineRemoved.Location = new Point(708, 21);
+            chbTransportLineRemoved.Location = new Point(684, 21);
             chbTransportLineRemoved.Margin = new Padding(0);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
@@ -206,7 +208,7 @@
             // 
             chbFreightContainerRemoved.Appearance = Appearance.Button;
             chbFreightContainerRemoved.Image = Properties.Resources.removedList16;
-            chbFreightContainerRemoved.Location = new Point(708, 59);
+            chbFreightContainerRemoved.Location = new Point(684, 59);
             chbFreightContainerRemoved.Margin = new Padding(0);
             chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
             chbFreightContainerRemoved.Padding = new Padding(0, 1, 0, 0);
@@ -232,7 +234,7 @@
             // 
             cboFreightContainer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFreightContainer.FormattingEnabled = true;
-            cboFreightContainer.Location = new Point(505, 60);
+            cboFreightContainer.Location = new Point(481, 60);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(203, 23);
             cboFreightContainer.TabIndex = 14;
@@ -241,7 +243,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 6.75F);
-            label9.Location = new Point(505, 48);
+            label9.Location = new Point(481, 48);
             label9.Name = "label9";
             label9.Size = new Size(23, 12);
             label9.TabIndex = 454;
@@ -251,7 +253,7 @@
             // 
             cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportLine.FormattingEnabled = true;
-            cboTransportLine.Location = new Point(505, 22);
+            cboTransportLine.Location = new Point(481, 22);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
             cboTransportLine.TabIndex = 11;
@@ -260,7 +262,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 6.75F);
-            label8.Location = new Point(505, 10);
+            label8.Location = new Point(481, 10);
             label8.Name = "label8";
             label8.Size = new Size(81, 12);
             label8.TabIndex = 452;
@@ -325,8 +327,8 @@
             // 
             // btnSearchFilters
             // 
-            btnSearchFilters.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchFilters.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFilters.Image = Properties.Resources.filterIcon16;
             btnSearchFilters.Location = new Point(681, 97);
             btnSearchFilters.Name = "btnSearchFilters";
             btnSearchFilters.Size = new Size(25, 25);
@@ -424,7 +426,7 @@
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalog.Size = new Size(961, 277);
+            dgvCatalog.Size = new Size(913, 277);
             dgvCatalog.TabIndex = 28;
             // 
             // cboDistributor
@@ -498,11 +500,32 @@
             btnForeignDestSearch.UseVisualStyleBackColor = true;
             btnForeignDestSearch.Click += btnForeignDestSearch_Click;
             // 
+            // cboStatus
+            // 
+            cboStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboStatus.FormattingEnabled = true;
+            cboStatus.Location = new Point(738, 21);
+            cboStatus.Name = "cboStatus";
+            cboStatus.Size = new Size(96, 23);
+            cboStatus.TabIndex = 469;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 6.75F);
+            label11.Location = new Point(738, 9);
+            label11.Name = "label11";
+            label11.Size = new Size(32, 12);
+            label11.TabIndex = 472;
+            label11.Text = "Estado";
+            // 
             // FrmMaterialRegisterExitCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(985, 450);
+            ClientSize = new Size(937, 450);
+            Controls.Add(cboStatus);
+            Controls.Add(label11);
             Controls.Add(btnForeignDestSearch);
             Controls.Add(btnMaterialSearch);
             Controls.Add(btnTransportLineSearch);
@@ -596,5 +619,10 @@
         private Button button1;
         private Button btnMaterialSearch;
         private Button btnForeignDestSearch;
+        private Button button2;
+        public CheckBox checkBox1;
+        public ComboBox comboBox1;
+        private Label label11;
+        public ComboBox cboStatus;
     }
 }

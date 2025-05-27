@@ -681,7 +681,6 @@ namespace SisUvex.Material.MaterialRegister.Entry
 
             Dictionary<string, object> parameters = new();
             string queryWhere = string.Empty;
-            MessageBox.Show(_frmCat.cboSearchBy.Text);
             switch (_frmCat.cboSearchBy.Text)
             {
                 case "Folio":
