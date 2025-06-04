@@ -86,7 +86,7 @@
             chbActive.Location = new Point(168, 42);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 56;
+            chbActive.TabIndex = 13;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -101,7 +101,7 @@
             chbActiveVariety.Location = new Point(581, 149);
             chbActiveVariety.Name = "chbActiveVariety";
             chbActiveVariety.Size = new Size(39, 29);
-            chbActiveVariety.TabIndex = 61;
+            chbActiveVariety.TabIndex = 5;
             chbActiveVariety.Text = "     ";
             chbActiveVariety.UseVisualStyleBackColor = true;
             // 
@@ -112,7 +112,7 @@
             txbName.MaxLength = 15;
             txbName.Name = "txbName";
             txbName.Size = new Size(275, 29);
-            txbName.TabIndex = 58;
+            txbName.TabIndex = 1;
             // 
             // btnSearchVariety
             // 
@@ -121,7 +121,7 @@
             btnSearchVariety.Location = new Point(626, 149);
             btnSearchVariety.Name = "btnSearchVariety";
             btnSearchVariety.Size = new Size(29, 29);
-            btnSearchVariety.TabIndex = 62;
+            btnSearchVariety.TabIndex = 6;
             btnSearchVariety.UseVisualStyleBackColor = true;
             // 
             // txbIdVariety
@@ -131,7 +131,7 @@
             txbIdVariety.Location = new Point(168, 149);
             txbIdVariety.Name = "txbIdVariety";
             txbIdVariety.Size = new Size(46, 29);
-            txbIdVariety.TabIndex = 59;
+            txbIdVariety.TabIndex = 3;
             txbIdVariety.TextAlign = HorizontalAlignment.Center;
             // 
             // cboVariety
@@ -143,7 +143,7 @@
             cboVariety.Location = new Point(220, 149);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(355, 29);
-            cboVariety.TabIndex = 60;
+            cboVariety.TabIndex = 4;
             // 
             // lblObliContratista
             // 
@@ -190,7 +190,7 @@
             btnAccept.Location = new Point(500, 260);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 72;
+            btnAccept.TabIndex = 11;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -200,7 +200,7 @@
             btnCancel.Location = new Point(581, 260);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 73;
+            btnCancel.TabIndex = 12;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -234,7 +234,7 @@
             nudHa.Maximum = new decimal(new int[] { 999999, 0, 0, 131072 });
             nudHa.Name = "nudHa";
             nudHa.Size = new Size(85, 29);
-            nudHa.TabIndex = 76;
+            nudHa.TabIndex = 9;
             nudHa.TextAlign = HorizontalAlignment.Right;
             // 
             // lblDate
@@ -256,7 +256,7 @@
             dtpDate.Name = "dtpDate";
             dtpDate.RightToLeft = RightToLeft.No;
             dtpDate.Size = new Size(259, 29);
-            dtpDate.TabIndex = 78;
+            dtpDate.TabIndex = 10;
             // 
             // spnId
             // 
@@ -265,7 +265,7 @@
             spnId.Mask = "9999";
             spnId.Name = "spnId";
             spnId.Size = new Size(57, 29);
-            spnId.TabIndex = 79;
+            spnId.TabIndex = 0;
             spnId.Tag = "fourInts";
             spnId.TextAlign = HorizontalAlignment.Center;
             spnId.ValidatingType = typeof(int);
@@ -277,7 +277,7 @@
             btnSearchNameLot.Location = new Point(449, 114);
             btnSearchNameLot.Name = "btnSearchNameLot";
             btnSearchNameLot.Size = new Size(29, 29);
-            btnSearchNameLot.TabIndex = 80;
+            btnSearchNameLot.TabIndex = 2;
             btnSearchNameLot.UseVisualStyleBackColor = true;
             btnSearchNameLot.Click += btnSearchNameLot_Click;
             // 
@@ -318,7 +318,7 @@
             txbIdFarm.Location = new Point(168, 184);
             txbIdFarm.Name = "txbIdFarm";
             txbIdFarm.Size = new Size(46, 29);
-            txbIdFarm.TabIndex = 84;
+            txbIdFarm.TabIndex = 7;
             txbIdFarm.TextAlign = HorizontalAlignment.Center;
             // 
             // cboFarm
@@ -330,7 +330,7 @@
             cboFarm.Location = new Point(220, 184);
             cboFarm.Name = "cboFarm";
             cboFarm.Size = new Size(355, 29);
-            cboFarm.TabIndex = 85;
+            cboFarm.TabIndex = 8;
             // 
             // label5
             // 

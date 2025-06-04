@@ -59,7 +59,7 @@
             chbActive.Location = new Point(94, 58);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 0;
+            chbActive.TabIndex = 4;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -71,7 +71,7 @@
             txbId.Location = new Point(358, 9);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 1;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -81,7 +81,7 @@
             txbName.MaxLength = 15;
             txbName.Name = "txbName";
             txbName.Size = new Size(310, 29);
-            txbName.TabIndex = 2;
+            txbName.TabIndex = 1;
             // 
             // lblName
             // 
@@ -148,7 +148,7 @@
             btnAccept.Location = new Point(248, 130);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 3;
+            btnAccept.TabIndex = 2;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -158,7 +158,7 @@
             btnCancel.Location = new Point(329, 130);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 4;
+            btnCancel.TabIndex = 3;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;

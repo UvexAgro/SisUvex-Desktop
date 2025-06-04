@@ -85,7 +85,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(783, 338);
-            dgvCatalog.TabIndex = 41;
+            dgvCatalog.TabIndex = 9;
             dgvCatalog.MouseDoubleClick += dgvCatalog_MouseDoubleClick;
             // 
             // btnRemove
@@ -93,7 +93,7 @@
             btnRemove.Location = new Point(247, 75);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 8;
+            btnRemove.TabIndex = 7;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -103,7 +103,7 @@
             btnRecover.Location = new Point(328, 75);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 9;
+            btnRecover.TabIndex = 8;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -113,7 +113,7 @@
             btnModify.Location = new Point(90, 75);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 6;
+            btnModify.TabIndex = 5;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -123,7 +123,7 @@
             btnAdd.Location = new Point(9, 75);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 5;
+            btnAdd.TabIndex = 4;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -228,7 +228,7 @@
             chbRemoved.Margin = new Padding(1);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 25);
-            chbRemoved.TabIndex = 7;
+            chbRemoved.TabIndex = 6;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;

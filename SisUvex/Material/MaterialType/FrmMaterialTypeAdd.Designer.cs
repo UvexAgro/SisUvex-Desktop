@@ -58,7 +58,7 @@
             txbId.MaxLength = 2;
             txbId.Name = "txbId";
             txbId.Size = new Size(43, 29);
-            txbId.TabIndex = 130;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -68,7 +68,7 @@
             txbName.MaxLength = 20;
             txbName.Name = "txbName";
             txbName.Size = new Size(276, 29);
-            txbName.TabIndex = 131;
+            txbName.TabIndex = 1;
             // 
             // lblObliName
             // 
@@ -119,7 +119,7 @@
             btnAccept.Location = new Point(208, 114);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 139;
+            btnAccept.TabIndex = 2;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -129,7 +129,7 @@
             btnCancel.Location = new Point(289, 114);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 140;
+            btnCancel.TabIndex = 3;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;

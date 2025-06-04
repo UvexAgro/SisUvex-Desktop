@@ -71,7 +71,7 @@ namespace SisUvex.Catalogos.Contratista
             txbNombre.MaxLength = 20;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(380, 29);
-            txbNombre.TabIndex = 2;
+            txbNombre.TabIndex = 1;
             // 
             // txbId
             // 
@@ -80,7 +80,7 @@ namespace SisUvex.Catalogos.Contratista
             txbId.Location = new Point(423, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 1;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -98,7 +98,7 @@ namespace SisUvex.Catalogos.Contratista
             btnCancelar.Location = new Point(394, 97);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 4;
+            btnCancelar.TabIndex = 3;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -108,7 +108,7 @@ namespace SisUvex.Catalogos.Contratista
             btnAceptar.Location = new Point(313, 97);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 3;
+            btnAceptar.TabIndex = 2;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -132,7 +132,7 @@ namespace SisUvex.Catalogos.Contratista
             cboActivo.Location = new Point(342, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 0;
+            cboActivo.TabIndex = 4;
             // 
             // lblObliCom
             // 

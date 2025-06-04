@@ -489,5 +489,16 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogVehicleType";
             public const string QueryCbo = $" SELECT id_vehicleType AS [{Column.id}], CONCAT_WS(' | ', v_nameVehicleType, v_implements, id_vehicleType) AS [{Column.name}], COALESCE(NULLIF(v_nameVehicleType, ''), v_implements) AS [{ColumnName}] FROM Ast_VehicleType ORDER BY [{Column.name}] ";
         }
+
+        public static class Vehicle
+        {
+            public const string TableName = "Ast_Vehicle";
+            public const string ColumnName = "Vehículo";
+            public const string ColumnId = "idVehicle";
+            public const string ColumnActive = "ActiveVehicle";
+            public const string Cbo = "CboVehicle";
+            public const string DgvCatalog = "DgvCatalogVehicle";
+            public const string QueryCbo = $" SELECT c_active AS [{Column.active}],id_vehicle AS [{Column.id}], CONCAT_WS(' | ', v_prefix + v_ecoNumber, id_vehicle, '('+c_active+')') AS [{Column.name}], CONCAT(v_prefix, v_ecoNumber) AS [{ColumnName}], id_vehicleType AS [{VehicleType.ColumnId}] FROM Ast_Vehicle ORDER BY [{Column.name}] ";
+        }
     }
 }

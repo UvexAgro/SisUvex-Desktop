@@ -59,7 +59,7 @@
             cboCategory.Location = new Point(221, 21);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(203, 23);
-            cboCategory.TabIndex = 362;
+            cboCategory.TabIndex = 10;
             // 
             // label5
             // 
@@ -78,7 +78,7 @@
             btnSearchMaterial.Location = new Point(497, 99);
             btnSearchMaterial.Name = "btnSearchMaterial";
             btnSearchMaterial.Size = new Size(23, 23);
-            btnSearchMaterial.TabIndex = 365;
+            btnSearchMaterial.TabIndex = 6;
             btnSearchMaterial.UseVisualStyleBackColor = true;
             btnSearchMaterial.Click += btnSearchMaterial_Click;
             // 
@@ -88,7 +88,7 @@
             txbIdMaterial.MaxLength = 6;
             txbIdMaterial.Name = "txbIdMaterial";
             txbIdMaterial.Size = new Size(74, 23);
-            txbIdMaterial.TabIndex = 364;
+            txbIdMaterial.TabIndex = 5;
             txbIdMaterial.KeyPress += txbIdMaterial_KeyPress;
             // 
             // label2
@@ -106,7 +106,7 @@
             btnRemove.Location = new Point(255, 98);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 375;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -116,7 +116,7 @@
             btnRecover.Location = new Point(336, 98);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 376;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -128,7 +128,7 @@
             cboColor.Location = new Point(430, 21);
             cboColor.Name = "cboColor";
             cboColor.Size = new Size(203, 23);
-            cboColor.TabIndex = 363;
+            cboColor.TabIndex = 11;
             // 
             // dgvCatalog
             // 
@@ -166,7 +166,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 314);
-            dgvCatalog.TabIndex = 381;
+            dgvCatalog.TabIndex = 7;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // cboDistributor
@@ -176,14 +176,14 @@
             cboDistributor.Location = new Point(12, 59);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
-            cboDistributor.TabIndex = 361;
+            cboDistributor.TabIndex = 9;
             // 
             // btnModify
             // 
             btnModify.Location = new Point(93, 98);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 373;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -193,7 +193,7 @@
             btnAdd.Location = new Point(12, 98);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 372;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -220,12 +220,12 @@
             // 
             // btnFilterMaterialCatalog
             // 
-            btnFilterMaterialCatalog.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnFilterMaterialCatalog.BackgroundImageLayout = ImageLayout.Stretch;
+            btnFilterMaterialCatalog.Image = Properties.Resources.filterIcon16;
             btnFilterMaterialCatalog.Location = new Point(639, 21);
             btnFilterMaterialCatalog.Name = "btnFilterMaterialCatalog";
             btnFilterMaterialCatalog.Size = new Size(23, 23);
-            btnFilterMaterialCatalog.TabIndex = 386;
+            btnFilterMaterialCatalog.TabIndex = 12;
             btnFilterMaterialCatalog.UseVisualStyleBackColor = true;
             btnFilterMaterialCatalog.Click += btnFilterMaterialCatalog_Click;
             // 
@@ -235,7 +235,7 @@
             chbRemoved.Location = new Point(174, 98);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 23);
-            chbRemoved.TabIndex = 387;
+            chbRemoved.TabIndex = 2;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
@@ -248,7 +248,7 @@
             cboMaterialType.Location = new Point(12, 21);
             cboMaterialType.Name = "cboMaterialType";
             cboMaterialType.Size = new Size(203, 23);
-            cboMaterialType.TabIndex = 388;
+            cboMaterialType.TabIndex = 8;
             // 
             // label3
             // 

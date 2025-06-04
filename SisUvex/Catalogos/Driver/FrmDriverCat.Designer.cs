@@ -52,7 +52,7 @@
             chbRemoved.Location = new Point(174, 13);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 23);
-            chbRemoved.TabIndex = 30;
+            chbRemoved.TabIndex = 2;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(851, 363);
-            dgvCatalog.TabIndex = 29;
+            dgvCatalog.TabIndex = 10;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
@@ -102,7 +102,7 @@
             btnRemove.Location = new Point(255, 13);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 27;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -112,7 +112,7 @@
             btnRecover.Location = new Point(336, 13);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 28;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -122,7 +122,7 @@
             btnModify.Location = new Point(93, 13);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 26;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -132,7 +132,7 @@
             btnAdd.Location = new Point(12, 13);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 25;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -144,7 +144,7 @@
             cboTransportLine.Location = new Point(336, 41);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
-            cboTransportLine.TabIndex = 414;
+            cboTransportLine.TabIndex = 6;
             // 
             // label8
             // 
@@ -163,7 +163,7 @@
             btnTransportLineSearch.Location = new Point(562, 40);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(25, 25);
-            btnTransportLineSearch.TabIndex = 433;
+            btnTransportLineSearch.TabIndex = 8;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
             btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
@@ -176,7 +176,7 @@
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
             chbTransportLineRemoved.Size = new Size(24, 25);
-            chbTransportLineRemoved.TabIndex = 432;
+            chbTransportLineRemoved.TabIndex = 7;
             chbTransportLineRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbTransportLineRemoved.UseVisualStyleBackColor = true;
             // 
@@ -187,7 +187,7 @@
             btnTransportLineFilter.Location = new Point(586, 40);
             btnTransportLineFilter.Name = "btnTransportLineFilter";
             btnTransportLineFilter.Size = new Size(25, 25);
-            btnTransportLineFilter.TabIndex = 434;
+            btnTransportLineFilter.TabIndex = 9;
             btnTransportLineFilter.UseVisualStyleBackColor = true;
             btnTransportLineFilter.Click += btnTransportLineFilter_Click;
             // 
@@ -197,7 +197,7 @@
             chbDriverTransportLineRemoved.Location = new Point(12, 41);
             chbDriverTransportLineRemoved.Name = "chbDriverTransportLineRemoved";
             chbDriverTransportLineRemoved.Size = new Size(111, 23);
-            chbDriverTransportLineRemoved.TabIndex = 435;
+            chbDriverTransportLineRemoved.TabIndex = 5;
             chbDriverTransportLineRemoved.Text = "Líneas eliminadas";
             chbDriverTransportLineRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbDriverTransportLineRemoved.UseVisualStyleBackColor = true;

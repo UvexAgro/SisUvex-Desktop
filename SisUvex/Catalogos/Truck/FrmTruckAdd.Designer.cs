@@ -79,7 +79,7 @@
             txbColor.MaxLength = 30;
             txbColor.Name = "txbColor";
             txbColor.Size = new Size(237, 29);
-            txbColor.TabIndex = 84;
+            txbColor.TabIndex = 12;
             // 
             // lblVIN
             // 
@@ -98,7 +98,7 @@
             txbVinNumber.MaxLength = 30;
             txbVinNumber.Name = "txbVinNumber";
             txbVinNumber.Size = new Size(392, 29);
-            txbVinNumber.TabIndex = 83;
+            txbVinNumber.TabIndex = 11;
             // 
             // lblAño
             // 
@@ -108,7 +108,7 @@
             lblAño.Location = new Point(182, 231);
             lblAño.Name = "lblAño";
             lblAño.Size = new Size(36, 21);
-            lblAño.TabIndex = 97;
+            lblAño.TabIndex = 10;
             lblAño.Text = "año";
             // 
             // lblModelo
@@ -128,7 +128,7 @@
             txbYear.MaxLength = 4;
             txbYear.Name = "txbYear";
             txbYear.Size = new Size(80, 29);
-            txbYear.TabIndex = 82;
+            txbYear.TabIndex = 9;
             // 
             // lblMarca
             // 
@@ -147,7 +147,7 @@
             txbBrand.MaxLength = 30;
             txbBrand.Name = "txbBrand";
             txbBrand.Size = new Size(392, 29);
-            txbBrand.TabIndex = 81;
+            txbBrand.TabIndex = 8;
             // 
             // lblPlacasMX
             // 
@@ -166,7 +166,7 @@
             txbPlateMX.MaxLength = 15;
             txbPlateMX.Name = "txbPlateMX";
             txbPlateMX.Size = new Size(237, 29);
-            txbPlateMX.TabIndex = 80;
+            txbPlateMX.TabIndex = 7;
             // 
             // lblPlacasUS
             // 
@@ -185,7 +185,7 @@
             txbPlateUS.MaxLength = 15;
             txbPlateUS.Name = "txbPlateUS";
             txbPlateUS.Size = new Size(237, 29);
-            txbPlateUS.TabIndex = 79;
+            txbPlateUS.TabIndex = 6;
             // 
             // lblNumEco
             // 
@@ -206,7 +206,7 @@
             cboActive.Location = new Point(440, 12);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
-            cboActive.TabIndex = 70;
+            cboActive.TabIndex = 15;
             // 
             // lblObliLinea
             // 
@@ -223,7 +223,7 @@
             btnAccept.Location = new Point(414, 337);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 86;
+            btnAccept.TabIndex = 13;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -233,7 +233,7 @@
             btnCancel.Location = new Point(495, 337);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 87;
+            btnCancel.TabIndex = 14;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -245,7 +245,7 @@
             txbId.Location = new Point(524, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 72;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -285,7 +285,7 @@
             txbEcoNumber.MaxLength = 15;
             txbEcoNumber.Name = "txbEcoNumber";
             txbEcoNumber.Size = new Size(175, 29);
-            txbEcoNumber.TabIndex = 77;
+            txbEcoNumber.TabIndex = 5;
             // 
             // lblObliNumEco
             // 
@@ -337,7 +337,7 @@
             chbTransportLineRemoved.Location = new Point(499, 53);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Size = new Size(39, 29);
-            chbTransportLineRemoved.TabIndex = 100;
+            chbTransportLineRemoved.TabIndex = 3;
             chbTransportLineRemoved.Text = "     ";
             chbTransportLineRemoved.UseVisualStyleBackColor = true;
             // 
@@ -348,7 +348,7 @@
             btnTransportLineSearch.Location = new Point(541, 53);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(29, 29);
-            btnTransportLineSearch.TabIndex = 101;
+            btnTransportLineSearch.TabIndex = 4;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
             btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
@@ -359,7 +359,7 @@
             txbIdTransportLine.Location = new Point(163, 53);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(46, 29);
-            txbIdTransportLine.TabIndex = 102;
+            txbIdTransportLine.TabIndex = 1;
             txbIdTransportLine.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTransportLine
@@ -371,7 +371,7 @@
             cboTransportLine.Location = new Point(215, 53);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(278, 29);
-            cboTransportLine.TabIndex = 103;
+            cboTransportLine.TabIndex = 2;
             // 
             // FrmTruckAdd
             // 

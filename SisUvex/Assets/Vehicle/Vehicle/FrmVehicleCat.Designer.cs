@@ -51,7 +51,7 @@
             btnVehicleTypeFilter.Margin = new Padding(0);
             btnVehicleTypeFilter.Name = "btnVehicleTypeFilter";
             btnVehicleTypeFilter.Size = new Size(25, 25);
-            btnVehicleTypeFilter.TabIndex = 458;
+            btnVehicleTypeFilter.TabIndex = 6;
             btnVehicleTypeFilter.UseVisualStyleBackColor = true;
             btnVehicleTypeFilter.Click += btnVehicleTypeFilter_Click;
             // 
@@ -62,7 +62,7 @@
             cboVehicleType.Location = new Point(84, 44);
             cboVehicleType.Name = "cboVehicleType";
             cboVehicleType.Size = new Size(203, 23);
-            cboVehicleType.TabIndex = 454;
+            cboVehicleType.TabIndex = 5;
             // 
             // label8
             // 
@@ -80,7 +80,7 @@
             chbRemoved.Location = new Point(174, 15);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 23);
-            chbRemoved.TabIndex = 453;
+            chbRemoved.TabIndex = 2;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
@@ -122,7 +122,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 363);
-            dgvCatalog.TabIndex = 452;
+            dgvCatalog.TabIndex = 7;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
@@ -130,7 +130,7 @@
             btnRemove.Location = new Point(255, 15);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 450;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -140,7 +140,7 @@
             btnRecover.Location = new Point(336, 15);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 451;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -150,7 +150,7 @@
             btnModify.Location = new Point(93, 15);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 449;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -160,7 +160,7 @@
             btnAdd.Location = new Point(12, 15);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 448;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;

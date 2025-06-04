@@ -68,7 +68,7 @@
             txbNombre.MaxLength = 12;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(191, 29);
-            txbNombre.TabIndex = 3;
+            txbNombre.TabIndex = 1;
             // 
             // txbId
             // 
@@ -77,7 +77,7 @@
             txbId.Location = new Point(423, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 1;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -95,7 +95,7 @@
             btnCancelar.Location = new Point(394, 97);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 5;
+            btnCancelar.TabIndex = 3;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -105,7 +105,7 @@
             btnAceptar.Location = new Point(313, 97);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 4;
+            btnAceptar.TabIndex = 2;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -129,7 +129,7 @@
             cboActivo.Location = new Point(342, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 0;
+            cboActivo.TabIndex = 4;
             // 
             // lblObliCom
             // 

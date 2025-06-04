@@ -73,7 +73,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 395);
-            dgvCatalog.TabIndex = 29;
+            dgvCatalog.TabIndex = 2;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnModify
@@ -81,7 +81,7 @@
             btnModify.Location = new Point(93, 13);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 28;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -91,7 +91,7 @@
             btnAdd.Location = new Point(12, 13);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 27;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;

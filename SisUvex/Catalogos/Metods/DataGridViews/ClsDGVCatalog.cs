@@ -131,14 +131,81 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             dtCatalog.AcceptChanges();
         }
 
+        //public void ModifyIdRowInDGV(DataTable modifyRows)
+        //{
+        //    foreach (DataRow newRow in modifyRows.Rows)
+        //    {
+        //        DataRow[] existingRows = dtCatalog.Select($"{idColumn} = '{newRow[idColumn]}'");
+        //        if (existingRows.Length > 0)
+        //        {
+        //            DataRow dr = existingRows[0];
+        //            foreach (DataColumn dc in dtCatalog.Columns)
+        //            {
+        //                if (newRow.Table.Columns.Contains(dc.ColumnName))
+        //                {
+        //                    dr[dc.ColumnName] = newRow[dc.ColumnName];
+        //                }
+        //            }
+        //            if (dtCatalog.Columns.Contains(activeColumnHide))
+        //            {
+        //                dr[activeColumnHide] = "1";
+        //            }
+
+        //            SafeSelectRowInDGV(dr);
+        //        }
+        //        else
+        //        {
+        //            DataRow dr = dtCatalog.NewRow();
+        //            foreach (DataColumn dc in dtCatalog.Columns)
+        //            {
+        //                if (newRow.Table.Columns.Contains(dc.ColumnName))
+        //                {
+        //                    dr[dc.ColumnName] = newRow[dc.ColumnName];
+        //                }
+        //            }
+        //            if (dtCatalog.Columns.Contains(activeColumnHide))
+        //            {
+        //                dr[activeColumnHide] = "1";
+        //            }
+        //            dtCatalog.Rows.Add(dr);
+
+        //            SafeSelectRowInDGV(dr);
+        //        }
+        //    }
+        //    dtCatalog.AcceptChanges();
+        //}
         public void ModifyIdRowInDGV(DataTable modifyRows)
         {
-            foreach (DataRow newRow in modifyRows.Rows)
+            if (modifyRows.Rows.Count == 0) return;
+
+            // Primero agrupamos las filas nuevas por ID para procesarlas por grupos
+            var groupedRows = modifyRows.AsEnumerable()
+                .GroupBy(row => row[idColumn].ToString())
+                .ToList();
+
+            foreach (var group in groupedRows)
             {
-                DataRow[] existingRows = dtCatalog.Select($"{idColumn} = '{newRow[idColumn]}'");
-                if (existingRows.Length > 0)
+                string currentId = group.Key;
+                DataRow[] existingRows = dtCatalog.Select($"{idColumn} = '{currentId}'");
+
+                // Determinar la posición donde insertar (la primera coincidencia)
+                int insertPosition = existingRows.Length > 0 ?
+                    dtCatalog.Rows.IndexOf(existingRows[0]) :
+                    dtCatalog.Rows.Count;
+
+                // Eliminar todas las filas existentes con este ID
+                foreach (DataRow existingRow in existingRows)
                 {
-                    DataRow dr = existingRows[0];
+                    dtCatalog.Rows.Remove(existingRow);
+                }
+
+                // Insertar todas las nuevas filas con este ID en la posición correcta
+                int currentPosition = insertPosition;
+                foreach (DataRow newRow in group)
+                {
+                    DataRow dr = dtCatalog.NewRow();
+
+                    // Copiar los valores
                     foreach (DataColumn dc in dtCatalog.Columns)
                     {
                         if (newRow.Table.Columns.Contains(dc.ColumnName))
@@ -146,35 +213,22 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                             dr[dc.ColumnName] = newRow[dc.ColumnName];
                         }
                     }
+
                     if (dtCatalog.Columns.Contains(activeColumnHide))
                     {
                         dr[activeColumnHide] = "1";
                     }
 
-                    SafeSelectRowInDGV(dr);
-                }
-                else
-                {
-                    DataRow dr = dtCatalog.NewRow();
-                    foreach (DataColumn dc in dtCatalog.Columns)
-                    {
-                        if (newRow.Table.Columns.Contains(dc.ColumnName))
-                        {
-                            dr[dc.ColumnName] = newRow[dc.ColumnName];
-                        }
-                    }
-                    if (dtCatalog.Columns.Contains(activeColumnHide))
-                    {
-                        dr[activeColumnHide] = "1";
-                    }
-                    dtCatalog.Rows.Add(dr);
+                    // Insertar en la posición correcta
+                    dtCatalog.Rows.InsertAt(dr, currentPosition);
+                    currentPosition++;
 
                     SafeSelectRowInDGV(dr);
                 }
             }
+
             dtCatalog.AcceptChanges();
         }
-
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
             dataGridView.CellFormatting += (sender, e) =>

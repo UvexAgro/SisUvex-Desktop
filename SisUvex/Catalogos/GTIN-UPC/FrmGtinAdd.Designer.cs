@@ -108,7 +108,7 @@
             txbPLU.MaxLength = 4;
             txbPLU.Name = "txbPLU";
             txbPLU.Size = new Size(75, 29);
-            txbPLU.TabIndex = 4;
+            txbPLU.TabIndex = 2;
             // 
             // lblColorVariety
             // 
@@ -127,7 +127,7 @@
             txbIdColorVariety.Location = new Point(128, 185);
             txbIdColorVariety.Name = "txbIdColorVariety";
             txbIdColorVariety.Size = new Size(46, 29);
-            txbIdColorVariety.TabIndex = 5;
+            txbIdColorVariety.TabIndex = 3;
             txbIdColorVariety.TextAlign = HorizontalAlignment.Center;
             // 
             // cboColorVariety
@@ -143,7 +143,7 @@
             cboColorVariety.Location = new Point(180, 185);
             cboColorVariety.Name = "cboColorVariety";
             cboColorVariety.Size = new Size(278, 29);
-            cboColorVariety.TabIndex = 6;
+            cboColorVariety.TabIndex = 4;
             // 
             // lblDistributor
             // 
@@ -163,7 +163,7 @@
             txbIdDistribuitor.Location = new Point(128, 255);
             txbIdDistribuitor.Name = "txbIdDistribuitor";
             txbIdDistribuitor.Size = new Size(46, 29);
-            txbIdDistribuitor.TabIndex = 10;
+            txbIdDistribuitor.TabIndex = 8;
             txbIdDistribuitor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistributor
@@ -178,7 +178,7 @@
             cboDistributor.Location = new Point(180, 255);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(394, 29);
-            cboDistributor.TabIndex = 11;
+            cboDistributor.TabIndex = 9;
             // 
             // label4
             // 
@@ -222,7 +222,7 @@
             cboVariety.Location = new Point(180, 220);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(394, 29);
-            cboVariety.TabIndex = 8;
+            cboVariety.TabIndex = 6;
             // 
             // lblPresentation
             // 
@@ -241,7 +241,7 @@
             txbIdPresentation.Location = new Point(128, 325);
             txbIdPresentation.Name = "txbIdPresentation";
             txbIdPresentation.Size = new Size(46, 29);
-            txbIdPresentation.TabIndex = 16;
+            txbIdPresentation.TabIndex = 14;
             txbIdPresentation.TextAlign = HorizontalAlignment.Center;
             // 
             // cboPresentation
@@ -256,7 +256,7 @@
             cboPresentation.Location = new Point(180, 325);
             cboPresentation.Name = "cboPresentation";
             cboPresentation.Size = new Size(394, 29);
-            cboPresentation.TabIndex = 17;
+            cboPresentation.TabIndex = 15;
             // 
             // label3
             // 
@@ -285,7 +285,7 @@
             txbUPCNum.MaxLength = 14;
             txbUPCNum.Name = "txbUPCNum";
             txbUPCNum.Size = new Size(330, 29);
-            txbUPCNum.TabIndex = 3;
+            txbUPCNum.TabIndex = 1;
             // 
             // lblGTINNum
             // 
@@ -304,7 +304,7 @@
             txbGTINNum.MaxLength = 20;
             txbGTINNum.Name = "txbGTINNum";
             txbGTINNum.Size = new Size(330, 29);
-            txbGTINNum.TabIndex = 2;
+            txbGTINNum.TabIndex = 0;
             // 
             // lblContainer
             // 
@@ -323,7 +323,7 @@
             txbIdContainer.Location = new Point(128, 290);
             txbIdContainer.Name = "txbIdContainer";
             txbIdContainer.Size = new Size(46, 29);
-            txbIdContainer.TabIndex = 13;
+            txbIdContainer.TabIndex = 11;
             txbIdContainer.TextAlign = HorizontalAlignment.Center;
             // 
             // cboContainer
@@ -338,14 +338,14 @@
             cboContainer.Location = new Point(180, 290);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(394, 29);
-            cboContainer.TabIndex = 14;
+            cboContainer.TabIndex = 12;
             // 
             // btnAccept
             // 
             btnAccept.Location = new Point(467, 602);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 30;
+            btnAccept.TabIndex = 28;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -355,7 +355,7 @@
             btnCancel.Location = new Point(548, 602);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 31;
+            btnCancel.TabIndex = 29;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -367,7 +367,7 @@
             txbId.Location = new Point(539, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(84, 29);
-            txbId.TabIndex = 1;
+            txbId.TabIndex = 31;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -447,7 +447,7 @@
             label2.Location = new Point(120, 223);
             label2.Name = "label2";
             label2.Size = new Size(12, 15);
-            label2.TabIndex = 113;
+            label2.TabIndex = 5;
             label2.Text = "*";
             // 
             // chbActiveVariety
@@ -460,7 +460,7 @@
             chbActiveVariety.Location = new Point(580, 220);
             chbActiveVariety.Name = "chbActiveVariety";
             chbActiveVariety.Size = new Size(39, 29);
-            chbActiveVariety.TabIndex = 9;
+            chbActiveVariety.TabIndex = 7;
             chbActiveVariety.Text = "     ";
             chbActiveVariety.UseVisualStyleBackColor = true;
             // 
@@ -474,7 +474,7 @@
             chbActiveDistributor.Location = new Point(580, 255);
             chbActiveDistributor.Name = "chbActiveDistributor";
             chbActiveDistributor.Size = new Size(39, 29);
-            chbActiveDistributor.TabIndex = 12;
+            chbActiveDistributor.TabIndex = 10;
             chbActiveDistributor.Text = "     ";
             chbActiveDistributor.UseVisualStyleBackColor = true;
             // 
@@ -488,7 +488,7 @@
             chbActiveContainer.Location = new Point(580, 290);
             chbActiveContainer.Name = "chbActiveContainer";
             chbActiveContainer.Size = new Size(39, 29);
-            chbActiveContainer.TabIndex = 15;
+            chbActiveContainer.TabIndex = 13;
             chbActiveContainer.Text = "     ";
             chbActiveContainer.UseVisualStyleBackColor = true;
             // 
@@ -502,7 +502,7 @@
             chbActivePresentation.Location = new Point(580, 325);
             chbActivePresentation.Name = "chbActivePresentation";
             chbActivePresentation.Size = new Size(39, 29);
-            chbActivePresentation.TabIndex = 18;
+            chbActivePresentation.TabIndex = 16;
             chbActivePresentation.Text = "     ";
             chbActivePresentation.UseVisualStyleBackColor = true;
             // 
@@ -523,7 +523,7 @@
             chbActive.Location = new Point(128, 43);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
-            chbActive.TabIndex = 0;
+            chbActive.TabIndex = 30;
             chbActive.Text = "Activo";
             chbActive.TextAlign = ContentAlignment.MiddleCenter;
             chbActive.UseVisualStyleBackColor = false;
@@ -556,7 +556,7 @@
             txbLbs.MaxLength = 20;
             txbLbs.Name = "txbLbs";
             txbLbs.Size = new Size(75, 29);
-            txbLbs.TabIndex = 19;
+            txbLbs.TabIndex = 17;
             // 
             // lblBoxes
             // 
@@ -575,7 +575,7 @@
             txbBoxes.MaxLength = 4;
             txbBoxes.Name = "txbBoxes";
             txbBoxes.Size = new Size(75, 29);
-            txbBoxes.TabIndex = 20;
+            txbBoxes.TabIndex = 18;
             // 
             // lblPreLabel
             // 
@@ -594,7 +594,7 @@
             txbPreLabel.MaxLength = 4;
             txbPreLabel.Name = "txbPreLabel";
             txbPreLabel.Size = new Size(134, 29);
-            txbPreLabel.TabIndex = 21;
+            txbPreLabel.TabIndex = 19;
             // 
             // lblPostLabel
             // 
@@ -613,7 +613,7 @@
             txbPostLabel.MaxLength = 4;
             txbPostLabel.Name = "txbPostLabel";
             txbPostLabel.Size = new Size(134, 29);
-            txbPostLabel.TabIndex = 22;
+            txbPostLabel.TabIndex = 20;
             // 
             // chbActivePrice
             // 
@@ -625,7 +625,7 @@
             chbActivePrice.Location = new Point(464, 500);
             chbActivePrice.Name = "chbActivePrice";
             chbActivePrice.Size = new Size(39, 29);
-            chbActivePrice.TabIndex = 25;
+            chbActivePrice.TabIndex = 23;
             chbActivePrice.Text = "     ";
             chbActivePrice.UseVisualStyleBackColor = true;
             // 
@@ -646,7 +646,7 @@
             txbIdPrice.Location = new Point(128, 500);
             txbIdPrice.Name = "txbIdPrice";
             txbIdPrice.Size = new Size(46, 29);
-            txbIdPrice.TabIndex = 23;
+            txbIdPrice.TabIndex = 21;
             txbIdPrice.TextAlign = HorizontalAlignment.Center;
             // 
             // cboPrice
@@ -661,7 +661,7 @@
             cboPrice.Location = new Point(180, 500);
             cboPrice.Name = "cboPrice";
             cboPrice.Size = new Size(278, 29);
-            cboPrice.TabIndex = 24;
+            cboPrice.TabIndex = 22;
             // 
             // label9
             // 
@@ -693,7 +693,7 @@
             chbPtiTag.Location = new Point(464, 535);
             chbPtiTag.Name = "chbPtiTag";
             chbPtiTag.Size = new Size(39, 29);
-            chbPtiTag.TabIndex = 28;
+            chbPtiTag.TabIndex = 26;
             chbPtiTag.Text = "     ";
             chbPtiTag.UseVisualStyleBackColor = true;
             // 
@@ -714,7 +714,7 @@
             txbIdPtiTag.Location = new Point(128, 535);
             txbIdPtiTag.Name = "txbIdPtiTag";
             txbIdPtiTag.Size = new Size(46, 29);
-            txbIdPtiTag.TabIndex = 26;
+            txbIdPtiTag.TabIndex = 24;
             txbIdPtiTag.TextAlign = HorizontalAlignment.Center;
             // 
             // cboPtiTag
@@ -729,7 +729,7 @@
             cboPtiTag.Location = new Point(180, 535);
             cboPtiTag.Name = "cboPtiTag";
             cboPtiTag.Size = new Size(278, 29);
-            cboPtiTag.TabIndex = 27;
+            cboPtiTag.TabIndex = 25;
             // 
             // lblLoadPallets
             // 
@@ -748,7 +748,7 @@
             txbLoadPallets.MaxLength = 4;
             txbLoadPallets.Name = "txbLoadPallets";
             txbLoadPallets.Size = new Size(134, 29);
-            txbLoadPallets.TabIndex = 29;
+            txbLoadPallets.TabIndex = 27;
             // 
             // FrmGtinAdd
             // 

@@ -83,7 +83,7 @@
             txbEcoNumber.MaxLength = 12;
             txbEcoNumber.Name = "txbEcoNumber";
             txbEcoNumber.Size = new Size(119, 29);
-            txbEcoNumber.TabIndex = 153;
+            txbEcoNumber.TabIndex = 4;
             // 
             // label1
             // 
@@ -101,7 +101,7 @@
             btnAccept.Location = new Point(369, 393);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 151;
+            btnAccept.TabIndex = 14;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -111,7 +111,7 @@
             btnCancel.Location = new Point(450, 393);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 152;
+            btnCancel.TabIndex = 15;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -125,7 +125,7 @@
             cboActive.Location = new Point(240, 43);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
-            cboActive.TabIndex = 150;
+            cboActive.TabIndex = 16;
             // 
             // txbComments
             // 
@@ -134,7 +134,7 @@
             txbComments.MaxLength = 200;
             txbComments.Name = "txbComments";
             txbComments.Size = new Size(396, 29);
-            txbComments.TabIndex = 148;
+            txbComments.TabIndex = 10;
             // 
             // label8
             // 
@@ -154,7 +154,7 @@
             txbMake.MaxLength = 20;
             txbMake.Name = "txbMake";
             txbMake.Size = new Size(155, 29);
-            txbMake.TabIndex = 146;
+            txbMake.TabIndex = 6;
             // 
             // label5
             // 
@@ -174,7 +174,7 @@
             txbSerialNumber.MaxLength = 50;
             txbSerialNumber.Name = "txbSerialNumber";
             txbSerialNumber.Size = new Size(396, 29);
-            txbSerialNumber.TabIndex = 144;
+            txbSerialNumber.TabIndex = 9;
             // 
             // label3
             // 
@@ -204,7 +204,7 @@
             txbId.Location = new Point(129, 43);
             txbId.Name = "txbId";
             txbId.Size = new Size(43, 29);
-            txbId.TabIndex = 135;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblObliName
@@ -282,7 +282,7 @@
             cboPrefix.MaxLength = 8;
             cboPrefix.Name = "cboPrefix";
             cboPrefix.Size = new Size(119, 29);
-            cboPrefix.TabIndex = 156;
+            cboPrefix.TabIndex = 3;
             // 
             // label7
             // 
@@ -302,7 +302,7 @@
             txbYear.MaxLength = 4;
             txbYear.Name = "txbYear";
             txbYear.Size = new Size(54, 29);
-            txbYear.TabIndex = 158;
+            txbYear.TabIndex = 7;
             // 
             // txbModel
             // 
@@ -311,7 +311,7 @@
             txbModel.MaxLength = 20;
             txbModel.Name = "txbModel";
             txbModel.Size = new Size(155, 29);
-            txbModel.TabIndex = 159;
+            txbModel.TabIndex = 8;
             // 
             // label9
             // 
@@ -331,7 +331,7 @@
             txbPlates.MaxLength = 10;
             txbPlates.Name = "txbPlates";
             txbPlates.Size = new Size(155, 29);
-            txbPlates.TabIndex = 161;
+            txbPlates.TabIndex = 5;
             // 
             // label10
             // 
@@ -353,7 +353,7 @@
             chbGrowerRemoved.Location = new Point(486, 358);
             chbGrowerRemoved.Name = "chbGrowerRemoved";
             chbGrowerRemoved.Size = new Size(39, 29);
-            chbGrowerRemoved.TabIndex = 475;
+            chbGrowerRemoved.TabIndex = 13;
             chbGrowerRemoved.Text = "     ";
             chbGrowerRemoved.UseVisualStyleBackColor = true;
             // 
@@ -364,7 +364,7 @@
             txbIdGrower.Location = new Point(129, 358);
             txbIdGrower.Name = "txbIdGrower";
             txbIdGrower.Size = new Size(43, 29);
-            txbIdGrower.TabIndex = 473;
+            txbIdGrower.TabIndex = 11;
             txbIdGrower.TextAlign = HorizontalAlignment.Center;
             // 
             // cboGrower
@@ -376,7 +376,7 @@
             cboGrower.Location = new Point(178, 358);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(302, 29);
-            cboGrower.TabIndex = 474;
+            cboGrower.TabIndex = 12;
             // 
             // label12
             // 
@@ -396,7 +396,7 @@
             txbIdVehicleType.Location = new Point(129, 78);
             txbIdVehicleType.Name = "txbIdVehicleType";
             txbIdVehicleType.Size = new Size(43, 29);
-            txbIdVehicleType.TabIndex = 477;
+            txbIdVehicleType.TabIndex = 1;
             txbIdVehicleType.TextAlign = HorizontalAlignment.Center;
             // 
             // cboVehicleType
@@ -408,7 +408,7 @@
             cboVehicleType.Location = new Point(178, 78);
             cboVehicleType.Name = "cboVehicleType";
             cboVehicleType.Size = new Size(302, 29);
-            cboVehicleType.TabIndex = 478;
+            cboVehicleType.TabIndex = 2;
             // 
             // label11
             // 

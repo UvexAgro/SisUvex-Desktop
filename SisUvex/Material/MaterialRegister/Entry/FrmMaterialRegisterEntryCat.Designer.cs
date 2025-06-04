@@ -75,12 +75,12 @@
             // 
             // btnSearchFilters
             // 
-            btnSearchFilters.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearchFilters.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFilters.Image = Properties.Resources.filterIcon16;
             btnSearchFilters.Location = new Point(675, 96);
             btnSearchFilters.Name = "btnSearchFilters";
             btnSearchFilters.Size = new Size(25, 25);
-            btnSearchFilters.TabIndex = 19;
+            btnSearchFilters.TabIndex = 28;
             btnSearchFilters.UseVisualStyleBackColor = true;
             btnSearchFilters.Click += btnSearchFilters_Click;
             // 
@@ -91,7 +91,7 @@
             cboMaterialType.Location = new Point(244, 59);
             cboMaterialType.Name = "cboMaterialType";
             cboMaterialType.Size = new Size(203, 23);
-            cboMaterialType.TabIndex = 8;
+            cboMaterialType.TabIndex = 16;
             // 
             // label5
             // 
@@ -109,7 +109,7 @@
             txbSearchBy.MaxLength = 5;
             txbSearchBy.Name = "txbSearchBy";
             txbSearchBy.Size = new Size(203, 23);
-            txbSearchBy.TabIndex = 24;
+            txbSearchBy.TabIndex = 4;
             // 
             // label2
             // 
@@ -126,7 +126,7 @@
             btnRemove.Location = new Point(174, 135);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 22;
+            btnRemove.TabIndex = 2;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -138,7 +138,7 @@
             cboMaterial.Location = new Point(244, 97);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(203, 23);
-            cboMaterial.TabIndex = 9;
+            cboMaterial.TabIndex = 17;
             // 
             // dgvCatalog
             // 
@@ -175,7 +175,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(961, 277);
-            dgvCatalog.TabIndex = 26;
+            dgvCatalog.TabIndex = 6;
             // 
             // cboDistributor
             // 
@@ -184,14 +184,14 @@
             cboDistributor.Location = new Point(12, 21);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
-            cboDistributor.TabIndex = 0;
+            cboDistributor.TabIndex = 7;
             // 
             // btnModify
             // 
             btnModify.Location = new Point(93, 135);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 21;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -201,7 +201,7 @@
             btnAdd.Location = new Point(12, 135);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 20;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -233,7 +233,7 @@
             cboGrower.Location = new Point(12, 59);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(203, 23);
-            cboGrower.TabIndex = 2;
+            cboGrower.TabIndex = 10;
             // 
             // label3
             // 
@@ -252,7 +252,7 @@
             cboProvider.Location = new Point(12, 97);
             cboProvider.Name = "cboProvider";
             cboProvider.Size = new Size(203, 23);
-            cboProvider.TabIndex = 4;
+            cboProvider.TabIndex = 12;
             // 
             // label4
             // 
@@ -271,7 +271,7 @@
             cboWareHouse.Location = new Point(244, 21);
             cboWareHouse.Name = "cboWareHouse";
             cboWareHouse.Size = new Size(203, 23);
-            cboWareHouse.TabIndex = 6;
+            cboWareHouse.TabIndex = 14;
             // 
             // label7
             // 
@@ -290,7 +290,7 @@
             cboTransportLine.Location = new Point(499, 20);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
-            cboTransportLine.TabIndex = 11;
+            cboTransportLine.TabIndex = 20;
             // 
             // label8
             // 
@@ -309,7 +309,7 @@
             cboFreightContainer.Location = new Point(499, 58);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(203, 23);
-            cboFreightContainer.TabIndex = 14;
+            cboFreightContainer.TabIndex = 23;
             // 
             // label9
             // 
@@ -330,7 +330,7 @@
             chbMaterialRemoved.Name = "chbMaterialRemoved";
             chbMaterialRemoved.Padding = new Padding(0, 1, 0, 0);
             chbMaterialRemoved.Size = new Size(24, 25);
-            chbMaterialRemoved.TabIndex = 10;
+            chbMaterialRemoved.TabIndex = 18;
             chbMaterialRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbMaterialRemoved.UseVisualStyleBackColor = true;
             // 
@@ -343,7 +343,7 @@
             chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
             chbFreightContainerRemoved.Padding = new Padding(0, 1, 0, 0);
             chbFreightContainerRemoved.Size = new Size(24, 25);
-            chbFreightContainerRemoved.TabIndex = 15;
+            chbFreightContainerRemoved.TabIndex = 24;
             chbFreightContainerRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbFreightContainerRemoved.UseVisualStyleBackColor = true;
             // 
@@ -356,7 +356,7 @@
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
             chbTransportLineRemoved.Size = new Size(24, 25);
-            chbTransportLineRemoved.TabIndex = 12;
+            chbTransportLineRemoved.TabIndex = 21;
             chbTransportLineRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbTransportLineRemoved.UseVisualStyleBackColor = true;
             // 
@@ -369,7 +369,7 @@
             chbDistributorRemoved.Name = "chbDistributorRemoved";
             chbDistributorRemoved.Padding = new Padding(0, 1, 0, 0);
             chbDistributorRemoved.Size = new Size(24, 25);
-            chbDistributorRemoved.TabIndex = 1;
+            chbDistributorRemoved.TabIndex = 8;
             chbDistributorRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbDistributorRemoved.UseVisualStyleBackColor = true;
             // 
@@ -382,7 +382,7 @@
             chbGrowerRemoved.Name = "chbGrowerRemoved";
             chbGrowerRemoved.Padding = new Padding(0, 1, 0, 0);
             chbGrowerRemoved.Size = new Size(24, 25);
-            chbGrowerRemoved.TabIndex = 3;
+            chbGrowerRemoved.TabIndex = 11;
             chbGrowerRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbGrowerRemoved.UseVisualStyleBackColor = true;
             // 
@@ -395,7 +395,7 @@
             chbProviderRemoved.Name = "chbProviderRemoved";
             chbProviderRemoved.Padding = new Padding(0, 1, 0, 0);
             chbProviderRemoved.Size = new Size(24, 25);
-            chbProviderRemoved.TabIndex = 5;
+            chbProviderRemoved.TabIndex = 13;
             chbProviderRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbProviderRemoved.UseVisualStyleBackColor = true;
             // 
@@ -408,7 +408,7 @@
             chbWareHouseRemoved.Name = "chbWareHouseRemoved";
             chbWareHouseRemoved.Padding = new Padding(0, 1, 0, 0);
             chbWareHouseRemoved.Size = new Size(24, 25);
-            chbWareHouseRemoved.TabIndex = 7;
+            chbWareHouseRemoved.TabIndex = 15;
             chbWareHouseRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbWareHouseRemoved.UseVisualStyleBackColor = true;
             // 
@@ -418,7 +418,7 @@
             dtpDate2.Location = new Point(592, 97);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(80, 23);
-            dtpDate2.TabIndex = 18;
+            dtpDate2.TabIndex = 27;
             // 
             // dtpDate1
             // 
@@ -426,7 +426,7 @@
             dtpDate1.Location = new Point(500, 97);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(80, 23);
-            dtpDate1.TabIndex = 17;
+            dtpDate1.TabIndex = 26;
             // 
             // lblY
             // 
@@ -454,7 +454,7 @@
             cboSearchBy.Location = new Point(255, 135);
             cboSearchBy.Name = "cboSearchBy";
             cboSearchBy.Size = new Size(124, 23);
-            cboSearchBy.TabIndex = 23;
+            cboSearchBy.TabIndex = 3;
             // 
             // btnSearchBy
             // 
@@ -463,7 +463,7 @@
             btnSearchBy.Location = new Point(594, 135);
             btnSearchBy.Name = "btnSearchBy";
             btnSearchBy.Size = new Size(23, 23);
-            btnSearchBy.TabIndex = 25;
+            btnSearchBy.TabIndex = 5;
             btnSearchBy.UseVisualStyleBackColor = true;
             btnSearchBy.Click += btnSearchBy_Click;
             // 
@@ -474,7 +474,7 @@
             btnFreightContainerSearch.Location = new Point(725, 57);
             btnFreightContainerSearch.Name = "btnFreightContainerSearch";
             btnFreightContainerSearch.Size = new Size(25, 25);
-            btnFreightContainerSearch.TabIndex = 16;
+            btnFreightContainerSearch.TabIndex = 25;
             btnFreightContainerSearch.UseVisualStyleBackColor = true;
             btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
             // 
@@ -485,7 +485,7 @@
             btnTransportLineSearch.Location = new Point(725, 19);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(25, 25);
-            btnTransportLineSearch.TabIndex = 13;
+            btnTransportLineSearch.TabIndex = 22;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
             btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
@@ -496,7 +496,7 @@
             btnMaterialSearch.Location = new Point(470, 96);
             btnMaterialSearch.Name = "btnMaterialSearch";
             btnMaterialSearch.Size = new Size(25, 25);
-            btnMaterialSearch.TabIndex = 468;
+            btnMaterialSearch.TabIndex = 19;
             btnMaterialSearch.UseVisualStyleBackColor = true;
             btnMaterialSearch.Click += btnMaterialSearch_Click;
             // 

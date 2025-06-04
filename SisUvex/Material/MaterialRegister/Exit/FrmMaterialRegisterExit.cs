@@ -98,12 +98,31 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         private void btnMaterialTypeSearch_Click(object sender, EventArgs e)
         {
+            ClsSelectionForm sel = new();
 
+            sel.OpenSelectionForm("MaterialType", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboMaterialType, sel.SelectedValue);
+            }
         }
 
         private void btnMaterialSearch_Click(object sender, EventArgs e)
         {
             cls.BtnMaterialCatalogSearch(cboMaterialType, cboMaterial);
+        }
+
+        private void btnSearchDistributor_Click(object sender, EventArgs e)
+        {
+            ClsSelectionForm sel = new();
+
+            sel.OpenSelectionForm("Distributor", "Código");
+
+            if (!string.IsNullOrEmpty(sel.SelectedValue))
+            {
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboDistributor, sel.SelectedValue);
+            }
         }
 
         private void btnAddMaterial_Click(object sender, EventArgs e)
@@ -167,6 +186,11 @@ namespace SisUvex.Material.MaterialRegister.Exit
         private void btnSave_Click(object sender, EventArgs e)
         {
             cls.BtnAccept();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            cls.CloseFrmAddModify();
         }
     }
 }

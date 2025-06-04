@@ -59,7 +59,7 @@
             cboActive.Location = new Point(226, 43);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(54, 29);
-            cboActive.TabIndex = 98;
+            cboActive.TabIndex = 8;
             // 
             // txbId
             // 
@@ -68,7 +68,7 @@
             txbId.Location = new Point(88, 43);
             txbId.Name = "txbId";
             txbId.Size = new Size(70, 29);
-            txbId.TabIndex = 97;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -78,7 +78,7 @@
             txbName.MaxLength = 50;
             txbName.Name = "txbName";
             txbName.Size = new Size(437, 29);
-            txbName.TabIndex = 99;
+            txbName.TabIndex = 1;
             // 
             // lblObliName
             // 
@@ -120,7 +120,7 @@
             label2.Margin = new Padding(0);
             label2.Name = "label2";
             label2.Size = new Size(12, 15);
-            label2.TabIndex = 104;
+            label2.TabIndex = 1;
             label2.Text = "*";
             // 
             // lblName
@@ -161,7 +161,7 @@
             txbEmployeeName.MaxLength = 50;
             txbEmployeeName.Name = "txbEmployeeName";
             txbEmployeeName.Size = new Size(374, 29);
-            txbEmployeeName.TabIndex = 107;
+            txbEmployeeName.TabIndex = 5;
             // 
             // label3
             // 
@@ -181,7 +181,7 @@
             btnSearchEmployee.Margin = new Padding(0);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Size = new Size(32, 32);
-            btnSearchEmployee.TabIndex = 110;
+            btnSearchEmployee.TabIndex = 4;
             btnSearchEmployee.UseVisualStyleBackColor = true;
             btnSearchEmployee.Click += btnSearchEmployee_Click;
             // 
@@ -193,7 +193,7 @@
             txbIdEmployee.MaxLength = 6;
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(87, 29);
-            txbIdEmployee.TabIndex = 111;
+            txbIdEmployee.TabIndex = 2;
             txbIdEmployee.TextChanged += txbIdEmployee_TextChanged;
             txbIdEmployee.KeyPress += txbIdEmployee_KeyPress;
             // 
@@ -202,7 +202,7 @@
             btnAccept.Location = new Point(372, 239);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 112;
+            btnAccept.TabIndex = 6;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -212,7 +212,7 @@
             btnCancel.Location = new Point(453, 239);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 113;
+            btnCancel.TabIndex = 7;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -248,7 +248,7 @@
             btnLoadEmployee.Margin = new Padding(0);
             btnLoadEmployee.Name = "btnLoadEmployee";
             btnLoadEmployee.Size = new Size(32, 32);
-            btnLoadEmployee.TabIndex = 116;
+            btnLoadEmployee.TabIndex = 3;
             btnLoadEmployee.UseVisualStyleBackColor = true;
             btnLoadEmployee.Click += btnLoadEmployee_Click;
             // 
