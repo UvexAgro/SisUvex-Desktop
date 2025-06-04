@@ -85,7 +85,7 @@
             txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(528, 29);
-            txbNombre.TabIndex = 2;
+            txbNombre.TabIndex = 1;
             // 
             // txbId
             // 
@@ -94,7 +94,7 @@
             txbId.Location = new Point(571, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 1;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -113,7 +113,7 @@
             btnCancelar.Location = new Point(542, 367);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 12;
+            btnCancelar.TabIndex = 11;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -124,7 +124,7 @@
             btnAceptar.Location = new Point(461, 367);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 11;
+            btnAceptar.TabIndex = 10;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -149,7 +149,7 @@
             cboActivo.MaxDropDownItems = 9;
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 0;
+            cboActivo.TabIndex = 12;
             // 
             // lblDireccion
             // 
@@ -168,7 +168,7 @@
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
             txbDireccion.Size = new Size(528, 29);
-            txbDireccion.TabIndex = 4;
+            txbDireccion.TabIndex = 3;
             // 
             // lblCiudad
             // 
@@ -187,7 +187,7 @@
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
             txbCiudad.Size = new Size(528, 29);
-            txbCiudad.TabIndex = 5;
+            txbCiudad.TabIndex = 4;
             // 
             // lblRFC
             // 
@@ -206,7 +206,7 @@
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
             txbRFC.Size = new Size(248, 29);
-            txbRFC.TabIndex = 6;
+            txbRFC.TabIndex = 5;
             // 
             // txbTelefono
             // 
@@ -215,7 +215,7 @@
             txbTelefono.MaxLength = 13;
             txbTelefono.Name = "txbTelefono";
             txbTelefono.Size = new Size(248, 29);
-            txbTelefono.TabIndex = 7;
+            txbTelefono.TabIndex = 6;
             txbTelefono.KeyPress += txbTelefono_KeyPress;
             // 
             // lblTelefono
@@ -256,7 +256,7 @@
             txbGGN.MaxLength = 13;
             txbGGN.Name = "txbGGN";
             txbGGN.Size = new Size(248, 29);
-            txbGGN.TabIndex = 8;
+            txbGGN.TabIndex = 7;
             // 
             // lblRegPat
             // 
@@ -275,7 +275,7 @@
             txbRegPat.MaxLength = 30;
             txbRegPat.Name = "txbRegPat";
             txbRegPat.Size = new Size(307, 29);
-            txbRegPat.TabIndex = 9;
+            txbRegPat.TabIndex = 8;
             // 
             // lblLogo
             // 
@@ -294,7 +294,7 @@
             txbLogo.MaxLength = 15;
             txbLogo.Name = "txbLogo";
             txbLogo.Size = new Size(248, 29);
-            txbLogo.TabIndex = 10;
+            txbLogo.TabIndex = 9;
             // 
             // lblShortName
             // 
@@ -313,7 +313,7 @@
             txbShortName.MaxLength = 6;
             txbShortName.Name = "txbShortName";
             txbShortName.Size = new Size(121, 29);
-            txbShortName.TabIndex = 3;
+            txbShortName.TabIndex = 2;
             // 
             // label1
             // 

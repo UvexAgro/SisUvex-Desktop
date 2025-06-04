@@ -60,6 +60,8 @@ using SisUvex.Catalogos.Truck;
 using SisUvex.Catalogos.FreightContainer;
 using SisUvex.Material.MaterialRegister.Exit;
 using SisUvex.Assets.Vehicle.VehicleType;
+using SisUvex.Material.MaterialRegister.FieldExit;
+using SisUvex.Assets.Vehicle.Vehicle;
 
 namespace SisUvex
 {
@@ -569,6 +571,18 @@ namespace SisUvex
         private void tipoDeVehículosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmVehicleTypeCat cat = new();
+            AbrirVentanaHijo(cat, 1);
+        }
+
+        private void salidasInternasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterFieldExitCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void vehículosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmVehicleCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
     }

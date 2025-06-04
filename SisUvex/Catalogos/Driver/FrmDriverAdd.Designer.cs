@@ -85,7 +85,7 @@
             txbVisa.MaxLength = 30;
             txbVisa.Name = "txbVisa";
             txbVisa.Size = new Size(406, 29);
-            txbVisa.TabIndex = 69;
+            txbVisa.TabIndex = 8;
             // 
             // lblLicencia
             // 
@@ -104,7 +104,7 @@
             txbLicense.MaxLength = 20;
             txbLicense.Name = "txbLicense";
             txbLicense.Size = new Size(406, 29);
-            txbLicense.TabIndex = 68;
+            txbLicense.TabIndex = 7;
             // 
             // lblApellido
             // 
@@ -123,7 +123,7 @@
             txbLastNames.MaxLength = 30;
             txbLastNames.Name = "txbLastNames";
             txbLastNames.Size = new Size(406, 29);
-            txbLastNames.TabIndex = 67;
+            txbLastNames.TabIndex = 6;
             // 
             // lblNombre
             // 
@@ -144,7 +144,7 @@
             cboActive.Location = new Point(441, 13);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
-            cboActive.TabIndex = 58;
+            cboActive.TabIndex = 12;
             // 
             // txbIdTransportLine
             // 
@@ -153,7 +153,7 @@
             txbIdTransportLine.Location = new Point(165, 48);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(46, 29);
-            txbIdTransportLine.TabIndex = 61;
+            txbIdTransportLine.TabIndex = 1;
             txbIdTransportLine.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTransportLine
@@ -165,7 +165,7 @@
             cboTransportLine.Location = new Point(217, 48);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(278, 29);
-            cboTransportLine.TabIndex = 62;
+            cboTransportLine.TabIndex = 2;
             // 
             // lblObliLinea
             // 
@@ -182,7 +182,7 @@
             btnAccept.Location = new Point(415, 257);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 71;
+            btnAccept.TabIndex = 10;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -192,7 +192,7 @@
             btnCancel.Location = new Point(496, 257);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 72;
+            btnCancel.TabIndex = 11;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -234,7 +234,7 @@
             txbName.MaxLength = 30;
             txbName.Name = "txbName";
             txbName.Size = new Size(406, 29);
-            txbName.TabIndex = 65;
+            txbName.TabIndex = 5;
             // 
             // label3
             // 
@@ -293,7 +293,7 @@
             txbId.Location = new Point(525, 13);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 60;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // dtpBirthday
@@ -305,7 +305,7 @@
             dtpBirthday.Location = new Point(165, 223);
             dtpBirthday.Name = "dtpBirthday";
             dtpBirthday.Size = new Size(217, 29);
-            dtpBirthday.TabIndex = 84;
+            dtpBirthday.TabIndex = 9;
             // 
             // chbTransportLineRemoved
             // 
@@ -317,7 +317,7 @@
             chbTransportLineRemoved.Location = new Point(500, 48);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Size = new Size(39, 29);
-            chbTransportLineRemoved.TabIndex = 86;
+            chbTransportLineRemoved.TabIndex = 3;
             chbTransportLineRemoved.Text = "     ";
             chbTransportLineRemoved.UseVisualStyleBackColor = true;
             // 
@@ -328,7 +328,7 @@
             btnTransportLineSearch.Location = new Point(542, 48);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(29, 29);
-            btnTransportLineSearch.TabIndex = 87;
+            btnTransportLineSearch.TabIndex = 4;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
             btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 

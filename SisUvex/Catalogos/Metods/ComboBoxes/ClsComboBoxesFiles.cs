@@ -36,7 +36,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 string directoryPath = Path.GetDirectoryName(cboFiles[catalogName]); //OBTIENE LA DIRECCION DEL ARCHIVO DE ESE CATALOGO
                 if (!Directory.Exists(directoryPath))
                     Directory.CreateDirectory(directoryPath);
-
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Create)) //LE AGREGA EL DATATABLE A ESE ARCHIVO
                 {
                     var serializedData = ConvertDataTableToList(dataTable);    //////////////////////////////////////////
@@ -247,6 +246,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 default:
                     // Handle unknown table names
                     break;
+                case ClsObject.Vehicle.Cbo:
+                    queryDataTable = ClsObject.Vehicle.QueryCbo;
+                    break;
             }
             return ClsQuerysDB.GetDataTable(queryDataTable);
         }
@@ -299,6 +301,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.MaterialCatalog.Cbo:
                     query += " IN ('Pack_MaterialCatalog', 'Pack_MaterialType', 'Pack_Distributor', 'Pack_Color', 'Pack_Unit', 'Pack_Category') ";
+                    break;
+                case ClsObject.MaterialType.Cbo:
+                    query += " IN ('Ast_MaterialType', 'Ast_MaterialCatalog') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -385,6 +390,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Farm.TableName;
                 case ClsObject.VehicleType.Cbo:
                     return ClsObject.VehicleType.TableName;
+                case ClsObject.Vehicle.Cbo:
+                    return ClsObject.Vehicle.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

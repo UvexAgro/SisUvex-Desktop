@@ -13,6 +13,7 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
         public string? SelectedValue { get; set; }
 
         public DataTable dtQuery { get; set; }
+        public DataTable? SelectedRow { get; private set; }
 
         private FrmSelectCellDataGridView frm;
 
@@ -31,6 +32,10 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 {"WareHouses", (" SELECT * FROM vw_PackWareHousesCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Nombre])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"MaterialType", (" SELECT id_matType AS [Código], v_nameMatType AS [Nombre] FROM Pack_MaterialType WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', id_matType, v_nameMatType)) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"ForeignDest", (" SELECT * FROM vw_PackForeignDestCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Dirección], [Ciudad], [Estado], [C.P.])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"Variety", ("SELECT * FROM vw_PackVarietyCat WHERE CONCAT_WS(' ', [Código], [Nombre comercial], [Nombre cientifico], [Nombre corto]) LIKE @parameter", "@parameter")},
+                {"Lot", ("SELECT * FROM vw_PackLotCat WHERE CONCAT_WS(' ', [Código], [Nombre], [Variedad], [Campo]) LIKE @parameter", "@parameter")},
+                {"Vehicle", (" SELECT * FROM vw_AstVehicleCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Prefijo], [N° económico], [Marca], [Modelo], [Año], [Placas], [Tipo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"VehicleType", ($"SELECT id_vehicleType AS [{ClsObject.Column.id}], v_nameVehicleType AS [{ClsObject.Column.name}], v_implements AS [Implementos] FROM Ast_VehicleType WHERE CONCAT_WS(' ', id_vehicleType, v_nameVehicleType, v_implements) LIKE @parameter", "@parameter")},
             // Add more predefined queries here
             };
 
@@ -119,9 +124,26 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 if (cellValue != null)
                 {
                     SelectedValue = cellValue.ToString();
+                    SelectedRow = SetSelectedRowDT();
                 }
                 frm.Close();
             }
+        }
+        public DataTable? SetSelectedRowDT()
+        {
+            if (dtQuery == null || frm.dgvRows.CurrentRow == null)
+                return null;
+
+            int selectedIndex = frm.dgvRows.CurrentRow.Index;
+
+            if (selectedIndex < 0 || selectedIndex >= dtQuery.Rows.Count)
+                return null;
+
+            DataTable singleRowTable = dtQuery.Clone();
+
+            singleRowTable.ImportRow(dtQuery.Rows[selectedIndex]);
+
+            return singleRowTable;
         }
     }
 }

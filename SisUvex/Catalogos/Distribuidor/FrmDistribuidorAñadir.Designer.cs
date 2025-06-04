@@ -110,7 +110,7 @@
             txbNombre.MaxLength = 50;
             txbNombre.Name = "txbNombre";
             txbNombre.Size = new Size(591, 29);
-            txbNombre.TabIndex = 3;
+            txbNombre.TabIndex = 1;
             // 
             // txbId
             // 
@@ -119,7 +119,7 @@
             txbId.Location = new Point(635, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 2;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -137,7 +137,7 @@
             btnCancelar.Location = new Point(608, 479);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 31;
+            btnCancelar.TabIndex = 29;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -147,7 +147,7 @@
             btnAceptar.Location = new Point(527, 479);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 30;
+            btnAceptar.TabIndex = 28;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -171,7 +171,7 @@
             cboActivo.Location = new Point(554, 12);
             cboActivo.Name = "cboActivo";
             cboActivo.Size = new Size(46, 29);
-            cboActivo.TabIndex = 1;
+            cboActivo.TabIndex = 30;
             // 
             // txbDireccion
             // 
@@ -180,7 +180,7 @@
             txbDireccion.MaxLength = 100;
             txbDireccion.Name = "txbDireccion";
             txbDireccion.Size = new Size(591, 29);
-            txbDireccion.TabIndex = 5;
+            txbDireccion.TabIndex = 3;
             // 
             // lblDireccion
             // 
@@ -199,7 +199,7 @@
             txbCiudad.MaxLength = 50;
             txbCiudad.Name = "txbCiudad";
             txbCiudad.Size = new Size(471, 29);
-            txbCiudad.TabIndex = 7;
+            txbCiudad.TabIndex = 5;
             // 
             // lblCiudad
             // 
@@ -218,7 +218,7 @@
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
             txbRFC.Size = new Size(268, 29);
-            txbRFC.TabIndex = 8;
+            txbRFC.TabIndex = 6;
             // 
             // lblRFC
             // 
@@ -237,7 +237,7 @@
             txbTelefono.MaxLength = 13;
             txbTelefono.Name = "txbTelefono";
             txbTelefono.Size = new Size(268, 29);
-            txbTelefono.TabIndex = 9;
+            txbTelefono.TabIndex = 7;
             txbTelefono.KeyPress += txbTelefono_KeyPress;
             // 
             // lblTelefono
@@ -259,7 +259,7 @@
             cboMercado.Location = new Point(449, 12);
             cboMercado.Name = "cboMercado";
             cboMercado.Size = new Size(43, 29);
-            cboMercado.TabIndex = 0;
+            cboMercado.TabIndex = 31;
             // 
             // lblMercado
             // 
@@ -278,7 +278,7 @@
             txbIdAgenciaMX.Location = new Point(125, 335);
             txbIdAgenciaMX.Name = "txbIdAgenciaMX";
             txbIdAgenciaMX.Size = new Size(43, 29);
-            txbIdAgenciaMX.TabIndex = 14;
+            txbIdAgenciaMX.TabIndex = 12;
             txbIdAgenciaMX.TextAlign = HorizontalAlignment.Center;
             // 
             // cboAgenciaMX
@@ -289,7 +289,7 @@
             cboAgenciaMX.Location = new Point(174, 336);
             cboAgenciaMX.Name = "cboAgenciaMX";
             cboAgenciaMX.Size = new Size(388, 29);
-            cboAgenciaMX.TabIndex = 15;
+            cboAgenciaMX.TabIndex = 13;
             cboAgenciaMX.TextChanged += cboAgenciaMX_TextChanged;
             cboAgenciaMX.MouseClick += cboAgenciaMX_MouseClick;
             // 
@@ -310,7 +310,7 @@
             txbIdAgenciaUS.Location = new Point(125, 300);
             txbIdAgenciaUS.Name = "txbIdAgenciaUS";
             txbIdAgenciaUS.Size = new Size(43, 29);
-            txbIdAgenciaUS.TabIndex = 10;
+            txbIdAgenciaUS.TabIndex = 8;
             txbIdAgenciaUS.TextAlign = HorizontalAlignment.Center;
             // 
             // cboAgenciaUS
@@ -321,7 +321,7 @@
             cboAgenciaUS.Location = new Point(174, 301);
             cboAgenciaUS.Name = "cboAgenciaUS";
             cboAgenciaUS.Size = new Size(388, 29);
-            cboAgenciaUS.TabIndex = 11;
+            cboAgenciaUS.TabIndex = 9;
             cboAgenciaUS.TextChanged += cboAgenciaUS_TextChanged;
             cboAgenciaUS.MouseClick += cboAgenciaUS_MouseClick;
             // 
@@ -342,7 +342,7 @@
             txbIdProductor.Location = new Point(125, 370);
             txbIdProductor.Name = "txbIdProductor";
             txbIdProductor.Size = new Size(43, 29);
-            txbIdProductor.TabIndex = 18;
+            txbIdProductor.TabIndex = 16;
             txbIdProductor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboProductor
@@ -353,7 +353,7 @@
             cboProductor.Location = new Point(174, 371);
             cboProductor.Name = "cboProductor";
             cboProductor.Size = new Size(388, 29);
-            cboProductor.TabIndex = 19;
+            cboProductor.TabIndex = 17;
             cboProductor.TextChanged += cboProductor_TextChanged;
             cboProductor.MouseClick += cboProductor_MouseClick;
             // 
@@ -374,7 +374,7 @@
             txbIdCiudadDestino.Location = new Point(125, 440);
             txbIdCiudadDestino.Name = "txbIdCiudadDestino";
             txbIdCiudadDestino.Size = new Size(43, 29);
-            txbIdCiudadDestino.TabIndex = 26;
+            txbIdCiudadDestino.TabIndex = 24;
             txbIdCiudadDestino.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCiudadDestino
@@ -385,7 +385,7 @@
             cboCiudadDestino.Location = new Point(174, 441);
             cboCiudadDestino.Name = "cboCiudadDestino";
             cboCiudadDestino.Size = new Size(388, 29);
-            cboCiudadDestino.TabIndex = 27;
+            cboCiudadDestino.TabIndex = 25;
             cboCiudadDestino.TextChanged += cboCiudadDestino_TextChanged;
             cboCiudadDestino.MouseClick += cboCiudadDestino_MouseClick;
             // 
@@ -406,7 +406,7 @@
             txbIdCiudadCruce.Location = new Point(125, 405);
             txbIdCiudadCruce.Name = "txbIdCiudadCruce";
             txbIdCiudadCruce.Size = new Size(43, 29);
-            txbIdCiudadCruce.TabIndex = 22;
+            txbIdCiudadCruce.TabIndex = 20;
             txbIdCiudadCruce.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCiudadCruce
@@ -417,7 +417,7 @@
             cboCiudadCruce.Location = new Point(174, 406);
             cboCiudadCruce.Name = "cboCiudadCruce";
             cboCiudadCruce.Size = new Size(388, 29);
-            cboCiudadCruce.TabIndex = 23;
+            cboCiudadCruce.TabIndex = 21;
             cboCiudadCruce.TextChanged += cboCiudadCruce_TextChanged;
             cboCiudadCruce.MouseClick += cboCiudadCruce_MouseClick;
             // 
@@ -436,7 +436,7 @@
             btnBuscarAgenciaUS.Location = new Point(568, 300);
             btnBuscarAgenciaUS.Name = "btnBuscarAgenciaUS";
             btnBuscarAgenciaUS.Size = new Size(54, 29);
-            btnBuscarAgenciaUS.TabIndex = 12;
+            btnBuscarAgenciaUS.TabIndex = 10;
             btnBuscarAgenciaUS.Text = "Buscar";
             btnBuscarAgenciaUS.UseVisualStyleBackColor = true;
             btnBuscarAgenciaUS.Click += btnBuscarAgenciaUS_Click;
@@ -446,7 +446,7 @@
             btnTodoAgenciaUS.Location = new Point(628, 300);
             btnTodoAgenciaUS.Name = "btnTodoAgenciaUS";
             btnTodoAgenciaUS.Size = new Size(54, 29);
-            btnTodoAgenciaUS.TabIndex = 13;
+            btnTodoAgenciaUS.TabIndex = 11;
             btnTodoAgenciaUS.Text = "Todo";
             btnTodoAgenciaUS.UseVisualStyleBackColor = true;
             btnTodoAgenciaUS.Click += btnTodoAgenciaUS_Click;
@@ -456,7 +456,7 @@
             btnTodoAgenciaMX.Location = new Point(628, 335);
             btnTodoAgenciaMX.Name = "btnTodoAgenciaMX";
             btnTodoAgenciaMX.Size = new Size(54, 29);
-            btnTodoAgenciaMX.TabIndex = 17;
+            btnTodoAgenciaMX.TabIndex = 15;
             btnTodoAgenciaMX.Text = "Todo";
             btnTodoAgenciaMX.UseVisualStyleBackColor = true;
             btnTodoAgenciaMX.Click += btnTodoAgenciaMX_Click;
@@ -466,7 +466,7 @@
             btnBuscarAgenciaMX.Location = new Point(568, 335);
             btnBuscarAgenciaMX.Name = "btnBuscarAgenciaMX";
             btnBuscarAgenciaMX.Size = new Size(54, 29);
-            btnBuscarAgenciaMX.TabIndex = 16;
+            btnBuscarAgenciaMX.TabIndex = 14;
             btnBuscarAgenciaMX.Text = "Buscar";
             btnBuscarAgenciaMX.UseVisualStyleBackColor = true;
             btnBuscarAgenciaMX.Click += btnBuscarAgenciaMX_Click;
@@ -476,7 +476,7 @@
             btnTodoProductor.Location = new Point(628, 370);
             btnTodoProductor.Name = "btnTodoProductor";
             btnTodoProductor.Size = new Size(54, 29);
-            btnTodoProductor.TabIndex = 21;
+            btnTodoProductor.TabIndex = 19;
             btnTodoProductor.Text = "Todo";
             btnTodoProductor.UseVisualStyleBackColor = true;
             btnTodoProductor.Click += btnTodoProductor_Click;
@@ -486,7 +486,7 @@
             btnBuscarProductor.Location = new Point(568, 370);
             btnBuscarProductor.Name = "btnBuscarProductor";
             btnBuscarProductor.Size = new Size(54, 29);
-            btnBuscarProductor.TabIndex = 20;
+            btnBuscarProductor.TabIndex = 18;
             btnBuscarProductor.Text = "Buscar";
             btnBuscarProductor.UseVisualStyleBackColor = true;
             btnBuscarProductor.Click += btnBuscarProductor_Click;
@@ -496,7 +496,7 @@
             btnTodoCiudadCruce.Location = new Point(628, 405);
             btnTodoCiudadCruce.Name = "btnTodoCiudadCruce";
             btnTodoCiudadCruce.Size = new Size(54, 29);
-            btnTodoCiudadCruce.TabIndex = 25;
+            btnTodoCiudadCruce.TabIndex = 23;
             btnTodoCiudadCruce.Text = "Todo";
             btnTodoCiudadCruce.UseVisualStyleBackColor = true;
             btnTodoCiudadCruce.Click += btnTodoCiudadCruce_Click;
@@ -506,7 +506,7 @@
             btnBuscarCiudadCruce.Location = new Point(568, 405);
             btnBuscarCiudadCruce.Name = "btnBuscarCiudadCruce";
             btnBuscarCiudadCruce.Size = new Size(54, 29);
-            btnBuscarCiudadCruce.TabIndex = 24;
+            btnBuscarCiudadCruce.TabIndex = 22;
             btnBuscarCiudadCruce.Text = "Buscar";
             btnBuscarCiudadCruce.UseVisualStyleBackColor = true;
             btnBuscarCiudadCruce.Click += btnBuscarCiudadCruce_Click;
@@ -516,7 +516,7 @@
             btnTodoCiudadDestino.Location = new Point(628, 440);
             btnTodoCiudadDestino.Name = "btnTodoCiudadDestino";
             btnTodoCiudadDestino.Size = new Size(54, 29);
-            btnTodoCiudadDestino.TabIndex = 29;
+            btnTodoCiudadDestino.TabIndex = 27;
             btnTodoCiudadDestino.Text = "Todo";
             btnTodoCiudadDestino.UseVisualStyleBackColor = true;
             btnTodoCiudadDestino.Click += btnTodoCiudadDestino_Click;
@@ -526,7 +526,7 @@
             btnBuscarCiudadDestino.Location = new Point(568, 440);
             btnBuscarCiudadDestino.Name = "btnBuscarCiudadDestino";
             btnBuscarCiudadDestino.Size = new Size(54, 29);
-            btnBuscarCiudadDestino.TabIndex = 28;
+            btnBuscarCiudadDestino.TabIndex = 26;
             btnBuscarCiudadDestino.Text = "Buscar";
             btnBuscarCiudadDestino.UseVisualStyleBackColor = true;
             btnBuscarCiudadDestino.Click += btnBuscarCiudadDestino_Click;
@@ -570,7 +570,7 @@
             txbNombreCorto.MaxLength = 10;
             txbNombreCorto.Name = "txbNombreCorto";
             txbNombreCorto.Size = new Size(229, 29);
-            txbNombreCorto.TabIndex = 4;
+            txbNombreCorto.TabIndex = 2;
             // 
             // label3
             // 
@@ -589,7 +589,7 @@
             txbPais.MaxLength = 50;
             txbPais.Name = "txbPais";
             txbPais.Size = new Size(268, 29);
-            txbPais.TabIndex = 6;
+            txbPais.TabIndex = 4;
             // 
             // lblPais
             // 

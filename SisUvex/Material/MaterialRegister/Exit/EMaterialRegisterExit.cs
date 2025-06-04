@@ -15,6 +15,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 {
     internal class EMaterialRegisterExit
     {
+        //--[SON LAS MISMAS PARA LA SALIDA EXTERNA Y LA INTERNA (RegisterExit y RegisterFieldExit)]
         public string? idMatOutbound { get; set; }
         public string? idOutputType { get; set; }
         public DateTime dateOutbound { get; set; }
@@ -49,6 +50,10 @@ namespace SisUvex.Material.MaterialRegister.Exit
         public static string GetNextId()
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_matOutbound), 0) +1, '000000000000000') AS [Id] FROM Pack_MatOutput").ToString();
+        }
+        public static DataTable? GetDTMatDeliveryMan()
+        {
+            return ClsQuerysDB.GetDataTable($" SELECT DISTINCT v_matDeliveryMan AS [{ClsObject.Column.name}] FROM Pack_MatOutput ");
         }
 
         public void GetMaterialOutbound(string idMaterialOutbound)

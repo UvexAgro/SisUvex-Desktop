@@ -45,7 +45,7 @@
             btnRemoved.Location = new Point(171, 9);
             btnRemoved.Name = "btnRemoved";
             btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 8;
+            btnRemoved.TabIndex = 2;
             btnRemoved.Text = "Eliminados";
             btnRemoved.UseVisualStyleBackColor = true;
             btnRemoved.Click += btnRemoved_Click;
@@ -86,14 +86,14 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(398, 395);
-            dgvCatalog.TabIndex = 11;
+            dgvCatalog.TabIndex = 5;
             // 
             // btnRemove
             // 
             btnRemove.Location = new Point(252, 9);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 9;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -103,7 +103,7 @@
             btnRecover.Location = new Point(333, 9);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 10;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -113,7 +113,7 @@
             btnModify.Location = new Point(90, 9);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 7;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -123,7 +123,7 @@
             btnAdd.Location = new Point(9, 9);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 6;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;

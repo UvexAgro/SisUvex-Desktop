@@ -7,7 +7,6 @@ using System.Data;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
-using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
@@ -21,7 +20,6 @@ using SisUvex.Catalogos.TransportLine;
 using SisUvex.Catalogos.Driver;
 using SisUvex.Catalogos.FreightContainer;
 using SisUvex.Material.MaterialForeignDest;
-using SisUvex.Material.MaterialType;
 
 namespace SisUvex.Material.MaterialRegister.Exit
 {
@@ -49,8 +47,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
         private string employeeCboQueryJoin = $" JOIN Pack_MatOutput mat ON mat.id_employee = emp.id_employee ";
         public void BtnSearchFilter()
         {
-            dtCatalog = SearchFilter();
-            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            ApplyFilderCatalog();
         }
 
         private DataTable SearchFilter()
@@ -129,14 +126,28 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
             return ClsQuerysDB.ExecuteParameterizedQuery(qry.ToString(), parameters);
         }
+        private void ApplyFilderCatalog()
+        {
+            dtCatalog = SearchFilter();
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            DgvHideColumnsToExitCatalog();
+        }
+        private void DgvHideColumnsToExitCatalog()
+        {
+            if (dtCatalog.Columns.Contains("Lote"))
+                _frmCat.dgvCatalog.Columns["Lote"].Visible = false;
+            if (dtCatalog.Columns.Contains("Variedad"))
+                _frmCat.dgvCatalog.Columns["Variedad"].Visible = false;
+            if (dtCatalog.Columns.Contains("Vehículo"))
+                _frmCat.dgvCatalog.Columns["Vehículo"].Visible = false;
+        }
 
         public void BeginFormCat()
         {
             _frmCat ??= new();
             _frmCat.cls ??= this;
 
-            dtCatalog = SearchFilter();
-            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog); //Para agregar las Filas
+            ApplyFilderCatalog();
 
             LoadComboBoxesCatalog();
         }
@@ -456,6 +467,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
 
         public void CloseFrmAddModify()
         {
+            Dispose(); //Para liberar recursos de imágenes
             _frmAdd.Close();
         }
         public void AddNewRowByIdInDGVCatalog()
@@ -497,6 +509,7 @@ namespace SisUvex.Material.MaterialRegister.Exit
             _frmAdd.dgvMaterialList.Columns[Distributor.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[Grower.ColumnId].Visible = false;
             _frmAdd.dgvMaterialList.Columns[ClsObject.MaterialType.ColumnId].Visible = false;
+
         }
 
         public void BtnAddRowMaterialsInExit()

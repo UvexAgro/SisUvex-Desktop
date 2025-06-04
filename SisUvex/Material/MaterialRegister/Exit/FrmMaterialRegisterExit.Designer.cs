@@ -135,7 +135,7 @@
             chbImageUp.Name = "chbImageUp";
             chbImageUp.Padding = new Padding(1, 0, 0, 0);
             chbImageUp.Size = new Size(22, 22);
-            chbImageUp.TabIndex = 551;
+            chbImageUp.TabIndex = 67;
             chbImageUp.Text = "4";
             chbImageUp.TextAlign = ContentAlignment.MiddleCenter;
             chbImageUp.UseVisualStyleBackColor = true;
@@ -151,7 +151,7 @@
             chbImageDown.Name = "chbImageDown";
             chbImageDown.Padding = new Padding(1, 0, 0, 0);
             chbImageDown.Size = new Size(22, 22);
-            chbImageDown.TabIndex = 550;
+            chbImageDown.TabIndex = 66;
             chbImageDown.Text = "3";
             chbImageDown.TextAlign = ContentAlignment.MiddleCenter;
             chbImageDown.UseVisualStyleBackColor = true;
@@ -167,7 +167,7 @@
             chbImageBack.Name = "chbImageBack";
             chbImageBack.Padding = new Padding(1, 0, 0, 0);
             chbImageBack.Size = new Size(22, 22);
-            chbImageBack.TabIndex = 549;
+            chbImageBack.TabIndex = 65;
             chbImageBack.Text = "2";
             chbImageBack.TextAlign = ContentAlignment.MiddleCenter;
             chbImageBack.UseVisualStyleBackColor = true;
@@ -183,7 +183,7 @@
             chbImageFront.Name = "chbImageFront";
             chbImageFront.Padding = new Padding(1, 0, 0, 0);
             chbImageFront.Size = new Size(22, 22);
-            chbImageFront.TabIndex = 548;
+            chbImageFront.TabIndex = 64;
             chbImageFront.Text = "1";
             chbImageFront.TextAlign = ContentAlignment.MiddleCenter;
             chbImageFront.UseVisualStyleBackColor = true;
@@ -197,7 +197,7 @@
             txbIdEmployee.Margin = new Padding(1, 1, 0, 0);
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(60, 21);
-            txbIdEmployee.TabIndex = 545;
+            txbIdEmployee.TabIndex = 10;
             txbIdEmployee.TextAlign = HorizontalAlignment.Center;
             // 
             // cboEmployee
@@ -211,7 +211,7 @@
             cboEmployee.Margin = new Padding(1, 1, 0, 0);
             cboEmployee.Name = "cboEmployee";
             cboEmployee.Size = new Size(195, 21);
-            cboEmployee.TabIndex = 544;
+            cboEmployee.TabIndex = 11;
             // 
             // btnEmployeeSearch
             // 
@@ -222,7 +222,7 @@
             btnEmployeeSearch.Margin = new Padding(1, 1, 0, 0);
             btnEmployeeSearch.Name = "btnEmployeeSearch";
             btnEmployeeSearch.Size = new Size(23, 23);
-            btnEmployeeSearch.TabIndex = 543;
+            btnEmployeeSearch.TabIndex = 12;
             btnEmployeeSearch.UseVisualStyleBackColor = true;
             btnEmployeeSearch.Click += btnEmployeeSearch_Click;
             // 
@@ -235,7 +235,7 @@
             btnMaterialImageAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialImageAdd.Name = "btnMaterialImageAdd";
             btnMaterialImageAdd.Size = new Size(22, 22);
-            btnMaterialImageAdd.TabIndex = 537;
+            btnMaterialImageAdd.TabIndex = 68;
             btnMaterialImageAdd.UseVisualStyleBackColor = true;
             // 
             // btnMaterialAdd
@@ -247,7 +247,7 @@
             btnMaterialAdd.Margin = new Padding(1, 1, 0, 0);
             btnMaterialAdd.Name = "btnMaterialAdd";
             btnMaterialAdd.Size = new Size(24, 23);
-            btnMaterialAdd.TabIndex = 536;
+            btnMaterialAdd.TabIndex = 44;
             btnMaterialAdd.UseVisualStyleBackColor = true;
             btnMaterialAdd.Click += btnMaterialAdd_Click;
             // 
@@ -260,7 +260,7 @@
             btnFreightContainerAdd.Margin = new Padding(1, 1, 0, 0);
             btnFreightContainerAdd.Name = "btnFreightContainerAdd";
             btnFreightContainerAdd.Size = new Size(24, 23);
-            btnFreightContainerAdd.TabIndex = 534;
+            btnFreightContainerAdd.TabIndex = 35;
             btnFreightContainerAdd.UseVisualStyleBackColor = true;
             btnFreightContainerAdd.Click += btnFreightContainerAdd_Click;
             // 
@@ -273,7 +273,7 @@
             btnDriverAdd.Margin = new Padding(1, 1, 0, 0);
             btnDriverAdd.Name = "btnDriverAdd";
             btnDriverAdd.Size = new Size(24, 23);
-            btnDriverAdd.TabIndex = 533;
+            btnDriverAdd.TabIndex = 30;
             btnDriverAdd.UseVisualStyleBackColor = true;
             btnDriverAdd.Click += btnDriverAdd_Click;
             // 
@@ -286,7 +286,7 @@
             btnTransportLineAdd.Margin = new Padding(1, 1, 0, 0);
             btnTransportLineAdd.Name = "btnTransportLineAdd";
             btnTransportLineAdd.Size = new Size(24, 23);
-            btnTransportLineAdd.TabIndex = 532;
+            btnTransportLineAdd.TabIndex = 25;
             btnTransportLineAdd.UseVisualStyleBackColor = true;
             btnTransportLineAdd.Click += btnTransportLineAdd_Click;
             // 
@@ -300,9 +300,10 @@
             btnCancel.Margin = new Padding(1, 1, 0, 0);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(69, 23);
-            btnCancel.TabIndex = 531;
+            btnCancel.TabIndex = 63;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnSave
             // 
@@ -314,7 +315,7 @@
             btnSave.Margin = new Padding(1, 1, 0, 0);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(69, 23);
-            btnSave.TabIndex = 530;
+            btnSave.TabIndex = 62;
             btnSave.Text = "Guardar";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
@@ -328,7 +329,7 @@
             btnRemoveMaterial.Margin = new Padding(1, 1, 0, 0);
             btnRemoveMaterial.Name = "btnRemoveMaterial";
             btnRemoveMaterial.Size = new Size(69, 23);
-            btnRemoveMaterial.TabIndex = 529;
+            btnRemoveMaterial.TabIndex = 60;
             btnRemoveMaterial.Text = "Eliminar";
             btnRemoveMaterial.UseVisualStyleBackColor = false;
             btnRemoveMaterial.Click += btnRemoveMaterial_Click;
@@ -342,7 +343,7 @@
             btnModifyMaterial.Margin = new Padding(1, 1, 0, 0);
             btnModifyMaterial.Name = "btnModifyMaterial";
             btnModifyMaterial.Size = new Size(69, 23);
-            btnModifyMaterial.TabIndex = 528;
+            btnModifyMaterial.TabIndex = 59;
             btnModifyMaterial.Text = "Modificar";
             btnModifyMaterial.UseVisualStyleBackColor = false;
             btnModifyMaterial.Click += btnModifyMaterial_Click;
@@ -356,7 +357,7 @@
             btnAddMaterial.Margin = new Padding(1, 1, 0, 0);
             btnAddMaterial.Name = "btnAddMaterial";
             btnAddMaterial.Size = new Size(69, 23);
-            btnAddMaterial.TabIndex = 527;
+            btnAddMaterial.TabIndex = 58;
             btnAddMaterial.Text = "Agregar";
             btnAddMaterial.UseVisualStyleBackColor = false;
             btnAddMaterial.Click += btnAddMaterial_Click;
@@ -398,7 +399,7 @@
             dgvMaterialList.RowHeadersVisible = false;
             dgvMaterialList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMaterialList.Size = new Size(892, 225);
-            dgvMaterialList.TabIndex = 526;
+            dgvMaterialList.TabIndex = 61;
             // 
             // pbxMaterial
             // 
@@ -434,7 +435,7 @@
             chbWarehouseRemoved.Margin = new Padding(1, 1, 0, 0);
             chbWarehouseRemoved.Name = "chbWarehouseRemoved";
             chbWarehouseRemoved.Size = new Size(23, 23);
-            chbWarehouseRemoved.TabIndex = 523;
+            chbWarehouseRemoved.TabIndex = 9;
             chbWarehouseRemoved.Text = "  ";
             chbWarehouseRemoved.UseVisualStyleBackColor = true;
             // 
@@ -447,7 +448,7 @@
             btnWarehouseSearch.Margin = new Padding(1, 1, 0, 0);
             btnWarehouseSearch.Name = "btnWarehouseSearch";
             btnWarehouseSearch.Size = new Size(23, 23);
-            btnWarehouseSearch.TabIndex = 520;
+            btnWarehouseSearch.TabIndex = 8;
             btnWarehouseSearch.UseVisualStyleBackColor = true;
             btnWarehouseSearch.Click += btnWarehouseSearch_Click;
             // 
@@ -459,7 +460,7 @@
             txbIdWarehouse.Margin = new Padding(1, 1, 0, 0);
             txbIdWarehouse.Name = "txbIdWarehouse";
             txbIdWarehouse.Size = new Size(37, 21);
-            txbIdWarehouse.TabIndex = 522;
+            txbIdWarehouse.TabIndex = 6;
             txbIdWarehouse.TextAlign = HorizontalAlignment.Center;
             // 
             // cboWarehouse
@@ -472,7 +473,7 @@
             cboWarehouse.Margin = new Padding(1, 1, 0, 0);
             cboWarehouse.Name = "cboWarehouse";
             cboWarehouse.Size = new Size(196, 21);
-            cboWarehouse.TabIndex = 519;
+            cboWarehouse.TabIndex = 7;
             // 
             // label14
             // 
@@ -494,7 +495,7 @@
             txbUnit.Margin = new Padding(1, 1, 0, 0);
             txbUnit.Name = "txbUnit";
             txbUnit.Size = new Size(129, 21);
-            txbUnit.TabIndex = 512;
+            txbUnit.TabIndex = 46;
             // 
             // txbQuant
             // 
@@ -503,7 +504,7 @@
             txbQuant.Margin = new Padding(1, 1, 0, 0);
             txbQuant.Name = "txbQuant";
             txbQuant.Size = new Size(97, 21);
-            txbQuant.TabIndex = 510;
+            txbQuant.TabIndex = 45;
             // 
             // chbMaterialRemoved
             // 
@@ -516,7 +517,7 @@
             chbMaterialRemoved.Margin = new Padding(1, 1, 0, 0);
             chbMaterialRemoved.Name = "chbMaterialRemoved";
             chbMaterialRemoved.Size = new Size(23, 23);
-            chbMaterialRemoved.TabIndex = 504;
+            chbMaterialRemoved.TabIndex = 43;
             chbMaterialRemoved.Text = "  ";
             chbMaterialRemoved.UseVisualStyleBackColor = true;
             // 
@@ -529,7 +530,7 @@
             btnMaterialSearch.Margin = new Padding(1, 1, 0, 0);
             btnMaterialSearch.Name = "btnMaterialSearch";
             btnMaterialSearch.Size = new Size(23, 23);
-            btnMaterialSearch.TabIndex = 501;
+            btnMaterialSearch.TabIndex = 42;
             btnMaterialSearch.UseVisualStyleBackColor = true;
             btnMaterialSearch.Click += btnMaterialSearch_Click;
             // 
@@ -541,7 +542,7 @@
             txbIdMaterial.Margin = new Padding(1, 1, 0, 0);
             txbIdMaterial.Name = "txbIdMaterial";
             txbIdMaterial.Size = new Size(53, 21);
-            txbIdMaterial.TabIndex = 503;
+            txbIdMaterial.TabIndex = 40;
             txbIdMaterial.TextAlign = HorizontalAlignment.Center;
             // 
             // cboMaterial
@@ -554,7 +555,7 @@
             cboMaterial.Margin = new Padding(1, 1, 0, 0);
             cboMaterial.Name = "cboMaterial";
             cboMaterial.Size = new Size(218, 21);
-            cboMaterial.TabIndex = 500;
+            cboMaterial.TabIndex = 41;
             // 
             // label2
             // 
@@ -577,7 +578,7 @@
             btnMaterialTypeSearch.Margin = new Padding(1, 1, 0, 0);
             btnMaterialTypeSearch.Name = "btnMaterialTypeSearch";
             btnMaterialTypeSearch.Size = new Size(23, 23);
-            btnMaterialTypeSearch.TabIndex = 497;
+            btnMaterialTypeSearch.TabIndex = 39;
             btnMaterialTypeSearch.UseVisualStyleBackColor = true;
             btnMaterialTypeSearch.Click += btnMaterialTypeSearch_Click;
             // 
@@ -589,7 +590,7 @@
             txbIdMaterialType.Margin = new Padding(1, 1, 0, 0);
             txbIdMaterialType.Name = "txbIdMaterialType";
             txbIdMaterialType.Size = new Size(37, 21);
-            txbIdMaterialType.TabIndex = 499;
+            txbIdMaterialType.TabIndex = 37;
             txbIdMaterialType.TextAlign = HorizontalAlignment.Center;
             // 
             // cboMaterialType
@@ -602,7 +603,7 @@
             cboMaterialType.Margin = new Padding(1, 1, 0, 0);
             cboMaterialType.Name = "cboMaterialType";
             cboMaterialType.Size = new Size(234, 21);
-            cboMaterialType.TabIndex = 496;
+            cboMaterialType.TabIndex = 38;
             // 
             // label1
             // 
@@ -624,7 +625,7 @@
             txbInvoice.MaxLength = 20;
             txbInvoice.Name = "txbInvoice";
             txbInvoice.Size = new Size(203, 21);
-            txbInvoice.TabIndex = 494;
+            txbInvoice.TabIndex = 36;
             // 
             // label11
             // 
@@ -647,7 +648,7 @@
             dtpDate.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             dtpDate.Name = "dtpDate";
             dtpDate.Size = new Size(84, 21);
-            dtpDate.TabIndex = 493;
+            dtpDate.TabIndex = 5;
             // 
             // label17
             // 
@@ -670,7 +671,7 @@
             chbFreightContainerRemoved.Margin = new Padding(1, 1, 0, 0);
             chbFreightContainerRemoved.Name = "chbFreightContainerRemoved";
             chbFreightContainerRemoved.Size = new Size(23, 23);
-            chbFreightContainerRemoved.TabIndex = 491;
+            chbFreightContainerRemoved.TabIndex = 34;
             chbFreightContainerRemoved.Text = "  ";
             chbFreightContainerRemoved.UseVisualStyleBackColor = true;
             // 
@@ -685,7 +686,7 @@
             chbDriverRemoved.Margin = new Padding(1, 1, 0, 0);
             chbDriverRemoved.Name = "chbDriverRemoved";
             chbDriverRemoved.Size = new Size(23, 23);
-            chbDriverRemoved.TabIndex = 490;
+            chbDriverRemoved.TabIndex = 29;
             chbDriverRemoved.Text = "  ";
             chbDriverRemoved.UseVisualStyleBackColor = true;
             // 
@@ -700,7 +701,7 @@
             chbTransportLineRemoved.Margin = new Padding(1, 1, 0, 0);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Size = new Size(23, 23);
-            chbTransportLineRemoved.TabIndex = 489;
+            chbTransportLineRemoved.TabIndex = 24;
             chbTransportLineRemoved.Text = "  ";
             chbTransportLineRemoved.UseVisualStyleBackColor = true;
             // 
@@ -713,7 +714,7 @@
             btnFreightContainerSearch.Margin = new Padding(1, 1, 0, 0);
             btnFreightContainerSearch.Name = "btnFreightContainerSearch";
             btnFreightContainerSearch.Size = new Size(23, 23);
-            btnFreightContainerSearch.TabIndex = 484;
+            btnFreightContainerSearch.TabIndex = 33;
             btnFreightContainerSearch.UseVisualStyleBackColor = true;
             btnFreightContainerSearch.Click += btnFreightContainerSearch_Click;
             // 
@@ -726,7 +727,7 @@
             btnDriverSearch.Margin = new Padding(1, 1, 0, 0);
             btnDriverSearch.Name = "btnDriverSearch";
             btnDriverSearch.Size = new Size(23, 23);
-            btnDriverSearch.TabIndex = 483;
+            btnDriverSearch.TabIndex = 28;
             btnDriverSearch.UseVisualStyleBackColor = true;
             btnDriverSearch.Click += btnDriverSearch_Click;
             // 
@@ -738,7 +739,7 @@
             txbIdFreightContainer.Margin = new Padding(1, 1, 0, 0);
             txbIdFreightContainer.Name = "txbIdFreightContainer";
             txbIdFreightContainer.Size = new Size(37, 21);
-            txbIdFreightContainer.TabIndex = 488;
+            txbIdFreightContainer.TabIndex = 31;
             txbIdFreightContainer.TextAlign = HorizontalAlignment.Center;
             // 
             // cboFreightContainer
@@ -751,7 +752,7 @@
             cboFreightContainer.Margin = new Padding(1, 1, 0, 0);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(173, 21);
-            cboFreightContainer.TabIndex = 482;
+            cboFreightContainer.TabIndex = 32;
             // 
             // txbIdDriver
             // 
@@ -761,7 +762,7 @@
             txbIdDriver.Margin = new Padding(1, 1, 0, 0);
             txbIdDriver.Name = "txbIdDriver";
             txbIdDriver.Size = new Size(37, 21);
-            txbIdDriver.TabIndex = 486;
+            txbIdDriver.TabIndex = 26;
             txbIdDriver.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDriver
@@ -774,7 +775,7 @@
             cboDriver.Margin = new Padding(1, 1, 0, 0);
             cboDriver.Name = "cboDriver";
             cboDriver.Size = new Size(173, 21);
-            cboDriver.TabIndex = 481;
+            cboDriver.TabIndex = 27;
             // 
             // btnTransportLineSearch
             // 
@@ -785,7 +786,7 @@
             btnTransportLineSearch.Margin = new Padding(1, 1, 0, 0);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(23, 23);
-            btnTransportLineSearch.TabIndex = 479;
+            btnTransportLineSearch.TabIndex = 23;
             btnTransportLineSearch.UseVisualStyleBackColor = true;
             btnTransportLineSearch.Click += btnTransportLineSearch_Click;
             // 
@@ -797,7 +798,7 @@
             txbIdTransportLine.Margin = new Padding(1, 1, 0, 0);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(37, 21);
-            txbIdTransportLine.TabIndex = 480;
+            txbIdTransportLine.TabIndex = 21;
             txbIdTransportLine.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTransportLine
@@ -810,7 +811,7 @@
             cboTransportLine.Margin = new Padding(1, 1, 0, 0);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(173, 21);
-            cboTransportLine.TabIndex = 478;
+            cboTransportLine.TabIndex = 22;
             // 
             // label5
             // 
@@ -856,7 +857,7 @@
             txbId.Margin = new Padding(1, 1, 0, 0);
             txbId.Name = "txbId";
             txbId.Size = new Size(126, 21);
-            txbId.TabIndex = 470;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -923,7 +924,7 @@
             txbIdStatus.Margin = new Padding(1, 1, 0, 0);
             txbIdStatus.Name = "txbIdStatus";
             txbIdStatus.Size = new Size(37, 21);
-            txbIdStatus.TabIndex = 556;
+            txbIdStatus.TabIndex = 3;
             txbIdStatus.TextAlign = HorizontalAlignment.Center;
             // 
             // cboStatus
@@ -936,7 +937,7 @@
             cboStatus.Margin = new Padding(1, 1, 0, 0);
             cboStatus.Name = "cboStatus";
             cboStatus.Size = new Size(110, 21);
-            cboStatus.TabIndex = 554;
+            cboStatus.TabIndex = 4;
             // 
             // label19
             // 
@@ -971,7 +972,7 @@
             txbForeignDestCity.MaxLength = 20;
             txbForeignDestCity.Name = "txbForeignDestCity";
             txbForeignDestCity.Size = new Size(278, 21);
-            txbForeignDestCity.TabIndex = 559;
+            txbForeignDestCity.TabIndex = 19;
             // 
             // label21
             // 
@@ -994,7 +995,7 @@
             txbForeignDestState.MaxLength = 20;
             txbForeignDestState.Name = "txbForeignDestState";
             txbForeignDestState.Size = new Size(278, 21);
-            txbForeignDestState.TabIndex = 561;
+            txbForeignDestState.TabIndex = 20;
             // 
             // label22
             // 
@@ -1016,7 +1017,7 @@
             txbIdOutputType.Margin = new Padding(1, 1, 0, 0);
             txbIdOutputType.Name = "txbIdOutputType";
             txbIdOutputType.Size = new Size(21, 21);
-            txbIdOutputType.TabIndex = 564;
+            txbIdOutputType.TabIndex = 1;
             txbIdOutputType.TextAlign = HorizontalAlignment.Center;
             // 
             // cboOutputType
@@ -1030,7 +1031,7 @@
             cboOutputType.Margin = new Padding(1, 1, 0, 0);
             cboOutputType.Name = "cboOutputType";
             cboOutputType.Size = new Size(97, 21);
-            cboOutputType.TabIndex = 563;
+            cboOutputType.TabIndex = 2;
             // 
             // btnForeignDestSearch
             // 
@@ -1041,7 +1042,7 @@
             btnForeignDestSearch.Margin = new Padding(1, 1, 0, 0);
             btnForeignDestSearch.Name = "btnForeignDestSearch";
             btnForeignDestSearch.Size = new Size(23, 23);
-            btnForeignDestSearch.TabIndex = 565;
+            btnForeignDestSearch.TabIndex = 15;
             btnForeignDestSearch.UseVisualStyleBackColor = true;
             btnForeignDestSearch.Click += btnForeignDest_Click;
             // 
@@ -1053,7 +1054,7 @@
             txbIdForeignDest.Margin = new Padding(1, 1, 0, 0);
             txbIdForeignDest.Name = "txbIdForeignDest";
             txbIdForeignDest.Size = new Size(37, 21);
-            txbIdForeignDest.TabIndex = 566;
+            txbIdForeignDest.TabIndex = 13;
             txbIdForeignDest.TextAlign = HorizontalAlignment.Center;
             // 
             // cboForeignDest
@@ -1066,7 +1067,7 @@
             cboForeignDest.Margin = new Padding(1, 1, 0, 0);
             cboForeignDest.Name = "cboForeignDest";
             cboForeignDest.Size = new Size(195, 21);
-            cboForeignDest.TabIndex = 567;
+            cboForeignDest.TabIndex = 14;
             // 
             // btnForeignDestAdd
             // 
@@ -1077,7 +1078,7 @@
             btnForeignDestAdd.Margin = new Padding(1, 1, 0, 0);
             btnForeignDestAdd.Name = "btnForeignDestAdd";
             btnForeignDestAdd.Size = new Size(24, 23);
-            btnForeignDestAdd.TabIndex = 568;
+            btnForeignDestAdd.TabIndex = 16;
             btnForeignDestAdd.UseVisualStyleBackColor = true;
             btnForeignDestAdd.Click += btnForeignDestAdd_Click;
             // 
@@ -1088,7 +1089,7 @@
             txbUSD.Margin = new Padding(1, 1, 0, 0);
             txbUSD.Name = "txbUSD";
             txbUSD.Size = new Size(58, 21);
-            txbUSD.TabIndex = 572;
+            txbUSD.TabIndex = 49;
             // 
             // label12
             // 
@@ -1109,7 +1110,7 @@
             txbMXN.Margin = new Padding(1, 1, 0, 0);
             txbMXN.Name = "txbMXN";
             txbMXN.Size = new Size(58, 21);
-            txbMXN.TabIndex = 569;
+            txbMXN.TabIndex = 48;
             // 
             // label9
             // 
@@ -1131,7 +1132,7 @@
             label10.Margin = new Padding(1, 1, 0, 0);
             label10.Name = "label10";
             label10.Size = new Size(38, 15);
-            label10.TabIndex = 571;
+            label10.TabIndex = 47;
             label10.Text = "MXN:";
             label10.TextAlign = ContentAlignment.TopRight;
             // 
@@ -1146,7 +1147,7 @@
             chbGrowerRemoved.Margin = new Padding(1, 1, 0, 0);
             chbGrowerRemoved.Name = "chbGrowerRemoved";
             chbGrowerRemoved.Size = new Size(23, 23);
-            chbGrowerRemoved.TabIndex = 583;
+            chbGrowerRemoved.TabIndex = 57;
             chbGrowerRemoved.Text = "  ";
             chbGrowerRemoved.UseVisualStyleBackColor = true;
             // 
@@ -1159,7 +1160,7 @@
             btnGrowerSearch.Margin = new Padding(1, 1, 0, 0);
             btnGrowerSearch.Name = "btnGrowerSearch";
             btnGrowerSearch.Size = new Size(23, 23);
-            btnGrowerSearch.TabIndex = 580;
+            btnGrowerSearch.TabIndex = 56;
             btnGrowerSearch.UseVisualStyleBackColor = true;
             // 
             // txbIdGrower
@@ -1170,7 +1171,7 @@
             txbIdGrower.Margin = new Padding(1, 1, 0, 0);
             txbIdGrower.Name = "txbIdGrower";
             txbIdGrower.Size = new Size(37, 21);
-            txbIdGrower.TabIndex = 582;
+            txbIdGrower.TabIndex = 54;
             txbIdGrower.TextAlign = HorizontalAlignment.Center;
             // 
             // cboGrower
@@ -1183,7 +1184,7 @@
             cboGrower.Margin = new Padding(1, 1, 0, 0);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(235, 21);
-            cboGrower.TabIndex = 579;
+            cboGrower.TabIndex = 55;
             // 
             // label6
             // 
@@ -1208,7 +1209,7 @@
             chbDistributorRemoved.Margin = new Padding(1, 1, 0, 0);
             chbDistributorRemoved.Name = "chbDistributorRemoved";
             chbDistributorRemoved.Size = new Size(23, 23);
-            chbDistributorRemoved.TabIndex = 578;
+            chbDistributorRemoved.TabIndex = 53;
             chbDistributorRemoved.Text = "  ";
             chbDistributorRemoved.UseVisualStyleBackColor = true;
             // 
@@ -1221,8 +1222,9 @@
             btnSearchDistributor.Margin = new Padding(1, 1, 0, 0);
             btnSearchDistributor.Name = "btnSearchDistributor";
             btnSearchDistributor.Size = new Size(23, 23);
-            btnSearchDistributor.TabIndex = 575;
+            btnSearchDistributor.TabIndex = 52;
             btnSearchDistributor.UseVisualStyleBackColor = true;
+            btnSearchDistributor.Click += btnSearchDistributor_Click;
             // 
             // txbIdDistributor
             // 
@@ -1232,7 +1234,7 @@
             txbIdDistributor.Margin = new Padding(1, 1, 0, 0);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(38, 21);
-            txbIdDistributor.TabIndex = 577;
+            txbIdDistributor.TabIndex = 50;
             txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistributor
@@ -1245,7 +1247,7 @@
             cboDistributor.Margin = new Padding(1, 1, 0, 0);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(235, 21);
-            cboDistributor.TabIndex = 574;
+            cboDistributor.TabIndex = 51;
             // 
             // label3
             // 
@@ -1357,7 +1359,7 @@
             Controls.Add(label13);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMaterialRegisterExit";
-            Text = "Registro de salidaa externa de material";
+            Text = "Registro de salida de material de campo";
             Load += FrmMaterialRegisterExit_Load;
             ((System.ComponentModel.ISupportInitialize)dgvMaterialList).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbxMaterial).EndInit();

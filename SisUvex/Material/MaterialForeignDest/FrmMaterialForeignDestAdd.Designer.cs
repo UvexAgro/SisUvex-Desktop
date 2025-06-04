@@ -63,7 +63,7 @@
             txbId.Location = new Point(97, 43);
             txbId.Name = "txbId";
             txbId.Size = new Size(70, 29);
-            txbId.TabIndex = 107;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // txbName
@@ -73,7 +73,7 @@
             txbName.MaxLength = 30;
             txbName.Name = "txbName";
             txbName.Size = new Size(437, 29);
-            txbName.TabIndex = 108;
+            txbName.TabIndex = 1;
             // 
             // lblObliName
             // 
@@ -134,7 +134,7 @@
             txbCity.MaxLength = 50;
             txbCity.Name = "txbCity";
             txbCity.Size = new Size(437, 29);
-            txbCity.TabIndex = 114;
+            txbCity.TabIndex = 2;
             // 
             // label3
             // 
@@ -153,14 +153,14 @@
             txbState.MaxLength = 30;
             txbState.Name = "txbState";
             txbState.Size = new Size(437, 29);
-            txbState.TabIndex = 117;
+            txbState.TabIndex = 3;
             // 
             // btnAccept
             // 
             btnAccept.Location = new Point(381, 229);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 120;
+            btnAccept.TabIndex = 5;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -170,7 +170,7 @@
             btnCancel.Location = new Point(462, 229);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 121;
+            btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -192,7 +192,7 @@
             txbPostalCode.MaxLength = 5;
             txbPostalCode.Name = "txbPostalCode";
             txbPostalCode.Size = new Size(97, 29);
-            txbPostalCode.TabIndex = 122;
+            txbPostalCode.TabIndex = 4;
             // 
             // FrmMaterialForeignDestAdd
             // 
