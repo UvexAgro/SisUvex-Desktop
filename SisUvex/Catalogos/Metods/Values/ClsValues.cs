@@ -81,5 +81,15 @@ namespace SisUvex.Catalogos.Metods.Values
 
             return DBNull.Value;
         }
+
+        public static string ToTitleCase(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+            return textInfo.ToTitleCase(text.ToLower());
+        }
     }
 }

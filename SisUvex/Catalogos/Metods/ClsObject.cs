@@ -481,7 +481,7 @@ namespace SisUvex.Catalogos.Metods
 
         public static class VehicleType
         {
-            public const string TableName = "Pack_VehicleType";
+            public const string TableName = "Ast_VehicleType";
             public const string ColumnName = "Tipo de vehículo";
             public const string ColumnId = "idVehicleType";
             public const string ColumnActive = "ActiveVehicleType";
