@@ -370,8 +370,8 @@ namespace SisUvex
 
         private void cajaPalletToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsPrintLabelsPtiPallets cls = new ClsPrintLabelsPtiPallets();
-            AbrirVentanaHijo(cls.frm, 1);
+            FrmPrintLabelsPtiPallets frm = new();
+            AbrirVentanaHijo(frm, 1);
         }
 
         private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
