@@ -37,6 +37,8 @@ using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialRegister.Exit;
 using System.Xml.XPath;
 using SisUvex.Assets.Vehicle.Vehicle;
+using SisUvex.Archivo.Etiquetas.PrintLabels;
+using SisUvex.Archivo.Etiquetas;
 
 namespace SisUvex
 {

@@ -17,14 +17,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         ClsPrintLabelsPtiPallets cls;
         ClsPrintPtiTag print;
-        public FrmPrintLabelsPtiPallets(ClsPrintLabelsPtiPallets cls)
+        public FrmPrintLabelsPtiPallets()
         {
             InitializeComponent();
-            this.cls = cls;
         }
 
         private void FrmPrintLabelsPtiPallets_Load(object sender, EventArgs e)
         {
+            cls ??= new();
+            cls.frm = this;
+
             cls.LoadFormPrintLabels();
 
             confPrinter.Leer();
