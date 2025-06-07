@@ -49,6 +49,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? voicePickCode { get; set; }
         public string? idContractor { get; set; }
         public string? nameContractor { get; set; }
+        public string? growFarmName { get; set; } // Added for grow farm name
 
         public void ClearFields()
         {
@@ -92,6 +93,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             voicePickCode = null;
             idContractor = null;
             nameContractor = null;
+            growFarmName = null; // Clear grow farm name
         }
     }
 }

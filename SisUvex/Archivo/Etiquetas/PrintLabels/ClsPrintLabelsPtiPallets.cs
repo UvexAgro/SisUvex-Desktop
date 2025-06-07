@@ -164,6 +164,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.voicePickCode          = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
                 eTag.idContractor           = rows[0][Contractor.ColumnId].ToString();
                 eTag.nameContractor         = rows[0][Contractor.ColumnName].ToString();
+                eTag.growFarmName           = rows[0][GrowFarm.ColumnName].ToString(); // Added for grow farm name
             }
         }
 

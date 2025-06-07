@@ -32,6 +32,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string datePal = string.Empty;
         private string presentationZPL = string.Empty;
         private string distribuidorZPL = string.Empty;
+        private string farmName = string.Empty; // Added for grow farm name
         private bool reverseLabelOrientation = false;
 
 
@@ -52,6 +53,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             distribuidorZPL = eTag.shortNameDistributor;
             if (distribuidorZPL.IsNullOrEmpty()) distribuidorZPL = eTag.nameDistributor;
             //todo esto
+            farmName = eTag.growFarmName;
+
 
             return SuperPrintPalletTag(copies);
         }
@@ -80,6 +83,20 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (presentationZPL.Length < 12)
                 lenghtPresentation = "120";
 
+            // Convierte farmIndentation a int para poder operar
+            int baseIndent = 400;
+            int step = 20;
+
+            if(farmName.IsNullOrEmpty())
+            {
+                farmName = " ";
+            }
+            int farmIndentationValue = baseIndent - (farmName.Length - 1) * step;
+
+
+
+            string farmIndentation = farmIndentationValue.ToString();
+
             string PalletString = "^XA^PW812"
                                 //+ "^POI" //Orientacion de impresion
                                 + "^FX BARCODE AND PALLET NUMBER\n"
@@ -87,12 +104,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                 + $"^FO181,20^BC^FD{idPal}^FS\n"
 
                                 + "^FX BIG INFO SECTION.\n"
+                                + "^CF0,80\n"
+                                + $"^FO{farmIndentation},170^FD{farmName}^FS\n"
                                 + "^CF0,150\n"
-                                + $"^FO20,155^FD{distribuidorZPL}^FS\n"
-                                + "^CF0,160,50\n"
-                                + $"^FO25,300^FD{eTag.nameVariety}^FS\n"
-                                + $"^CF0,200,{lenghtPresentation}\n"
-                                + $"^FO5,450^FD{presentationZPL}^FS\n"
+                                + $"^FO20,270^FD{distribuidorZPL}^FS\n"
+                                + "^CF0,130,50\n"
+                                + $"^FO25,420^FD{eTag.nameVariety}^FS\n"
+                                + $"^CF0,130,{lenghtPresentation}\n"
+                                + $"^FO25,540^FD{presentationZPL}^FS\n"
                                 + "^FO100,570^FD^FS\n"
                                 + "^CF0,50\n"
                                 + $"^FO50,650^FD{eTag.nameContainer}{eTag.Lbs} {eTag.nameSize}^FS\n"

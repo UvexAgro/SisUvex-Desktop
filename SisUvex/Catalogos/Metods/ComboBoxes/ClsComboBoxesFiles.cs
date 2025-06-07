@@ -186,6 +186,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     queryDataTable = ClsObject.Contractor.QueryCbo;
                     break;
+                case ClsObject.GrowFarm.Cbo:
+                    queryDataTable = ClsObject.GrowFarm.QueryCbo;
+                    break;
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
                     break;
@@ -262,7 +265,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Variety', 'Pack_Crop')";
                     break;
                 case ClsObject.Lot.Cbo:
-                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot')";
+                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot','Grow_Farm')";
                     break;
                 case ClsObject.Presentation.Cbo:
                     query += " IN ('Pack_Category', 'Pack_Presentation') ";

@@ -131,6 +131,9 @@ namespace SisUvex.Archivo.Reimprimir
                 eTagInfo.idColor = rows[0][ClsObject.Color.ColumnId].ToString();
                 eTagInfo.nameColor = rows[0][ClsObject.Color.ColumnName].ToString();
                 eTagInfo.voicePickCode = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
+                eTagInfo.idContractor = rows[0][Contractor.ColumnId].ToString();
+                eTagInfo.nameContractor = rows[0][Contractor.ColumnName].ToString();
+                eTagInfo.growFarmName = rows[0][GrowFarm.ColumnName].ToString(); // Added for grow farm name
             }
         }
     }

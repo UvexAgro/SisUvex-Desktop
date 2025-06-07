@@ -146,5 +146,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+	<PropertyGroup>
+		<!-- Esto fuerza a no generar ni incluir recursos satélite (.resources.dll) -->
+		<SatelliteResourceLanguages></SatelliteResourceLanguages>
+	</PropertyGroup>
+
 
 </Project>
