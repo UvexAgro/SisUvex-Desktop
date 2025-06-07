@@ -243,11 +243,14 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.VehicleType.Cbo:
                     queryDataTable = ClsObject.VehicleType.QueryCbo;
                     break;
-                default:
-                    // Handle unknown table names
-                    break;
                 case ClsObject.Vehicle.Cbo:
                     queryDataTable = ClsObject.Vehicle.QueryCbo;
+                    break;
+                case ClsObject.Market.Cbo:
+                    queryDataTable = ClsObject.Market.QueryCbo;
+                    break;
+                default:
+                    // Handle unknown table names
                     break;
             }
             return ClsQuerysDB.GetDataTable(queryDataTable);
@@ -392,6 +395,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.VehicleType.TableName;
                 case ClsObject.Vehicle.Cbo:
                     return ClsObject.Vehicle.TableName;
+                case ClsObject.Market.Cbo:
+                    return ClsObject.Market.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

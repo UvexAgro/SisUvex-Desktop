@@ -154,9 +154,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
         }
 
-        public static void CboSelectIndexWithTextInValueMemberKeepingFilter(ComboBox cbo, string ValueMemberText)
+        public static void CboSelectIndexWithTextInValueMemberKeepingFilter(ComboBox cbo, string? ValueMemberText)
         {
-            if (cbo.DataSource != null && ValueMemberText != string.Empty)
+            if (cbo.DataSource != null && !string.IsNullOrEmpty(ValueMemberText))
             {
                 DataTable dt = (DataTable)cbo.DataSource;
                 string columnNameValueMember = cbo.ValueMember;
