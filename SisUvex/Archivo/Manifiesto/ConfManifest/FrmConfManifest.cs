@@ -25,7 +25,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             try
             {
                 cls.idSeason = txbIdSeason.Text;
-                cls.market = cboMarket.Text.Substring(0, 1);
+                cls.idMarket = txbIdMarket.Text;
                 cls.temperature = (int)nudTemperature.Value;
                 cls.temperatureUnit = cboTemperatureUnit.Text;
                 cls.printManifest = chbPrintManifest.Checked;
@@ -58,13 +58,13 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
 
             cls.GetParameters();
 
-            txbIdSeason.Text = cls.idSeason;
             ClsComboBoxes.CboLoadActives(cboSeason, ClsObject.Season.Cbo);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboSeason, cls.idSeason ?? "");
             ClsComboBoxes.CboApplyTextChangedEvent(cboSeason, txbIdSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboSeason, cls.idSeason);
 
-            SetMarketCbo();
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMarket, cls.market ?? "E");
+            ClsComboBoxes.CboLoadActives(cboMarket, ClsObject.Market.Cbo);
+            ClsComboBoxes.CboApplyTextChangedEvent(cboMarket, txbIdMarket);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboMarket, cls.idMarket);
 
             nudTemperature.Value = cls.temperature ?? 34;
             cboTemperatureUnit.Text = cls.temperatureUnit ?? "F";
@@ -76,20 +76,6 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             cboTransportType.Text = cls.transportTransportType;
 
             txbManifestFolderPath.Text = cls.manifestFolderPath;
-        }
-
-        private void SetMarketCbo()
-        {
-            DataTable dt = new();
-            dt.Columns.Add(ClsObject.Column.name);
-            dt.Columns.Add(ClsObject.Column.id);
-
-            dt.Rows.Add("Extranjero", "E");
-            dt.Rows.Add("Nacional", "N");
-
-            cboMarket.DataSource = dt;
-            cboMarket.DisplayMember = ClsObject.Column.name;
-            cboMarket.ValueMember = ClsObject.Column.id;
         }
 
         private void btnManifestFolderPath_Click(object sender, EventArgs e)
