@@ -568,5 +568,17 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogVehicle";
             public const string QueryCbo = $" SELECT c_active AS [{Column.active}],id_vehicle AS [{Column.id}], CONCAT_WS(' | ', v_prefix + v_ecoNumber, id_vehicle, '('+c_active+')') AS [{Column.name}], CONCAT(v_prefix, v_ecoNumber) AS [{ColumnName}], id_vehicleType AS [{VehicleType.ColumnId}] FROM Ast_Vehicle ORDER BY [{Column.name}] ";
         }
+
+        public static class Market
+        {
+            public const string TableName = "Pack_Market";
+            public const string ColumnName = "Mercado";
+            public const string ColumnId = "idMarket";
+            public const string ColumnActive = "ActiveMarket";
+            public const string ColumnPrefix = "Nombre del mercado";
+            public const string Cbo = "CboMarket";
+            public const string DgvCatalog = "DgvCatalogMarket";
+            public const string QueryCbo = $" SELECT id_market AS [{Column.id}], CONCAT_WS(' | ',v_nameMarket, v_marketPrefix, id_market, '(' + c_active + ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameMarket AS [{ColumnName}], v_marketPrefix AS [{ColumnPrefix}] FROM Pack_Market ORDER BY [{Column.name}] ";
+        }
     }
 }
