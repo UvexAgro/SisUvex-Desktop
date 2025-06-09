@@ -46,6 +46,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idColor { get; set; }
         public string? nameColor { get; set; }
         public string? nameGenericColor { get; set; }
+        public string? nameColorCanEn { get; set; }
+        public string? nameColorCanFr { get; set; }
         public string? voicePickCode { get; set; }
         public string? idContractor { get; set; }
         public string? nameContractor { get; set; }
@@ -89,6 +91,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             namePti = null;
             idColor = null;
             nameColor = null;
+            nameColorCanEn = null;
+            nameColorCanFr = null;
             nameGenericColor = null;
             voicePickCode = null;
             idContractor = null;

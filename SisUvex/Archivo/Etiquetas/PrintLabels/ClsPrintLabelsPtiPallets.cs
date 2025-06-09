@@ -159,7 +159,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.voicePickCode          = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
                 eTag.idContractor           = rows[0][Contractor.ColumnId].ToString();
                 eTag.nameContractor         = rows[0][Contractor.ColumnName].ToString();
+<<<<<<< HEAD
                 eTag.growFarmName           = rows[0][GrowFarm.ColumnName].ToString(); // Added for grow farm name
+=======
+                eTag.nameColorCanEn         = rows[0][ClsObject.Color.ColumnNameCanEn].ToString();
+                eTag.nameColorCanFr         = rows[0][ClsObject.Color.ColumnNameCanFr].ToString();
+>>>>>>> 8f7ed93722d99b8a26d73984055394b6fafd48d3
             }
         }
 

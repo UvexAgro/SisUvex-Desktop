@@ -1,5 +1,6 @@
 ﻿using Azure;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.ReportingServices.ReportProcessing.OnDemandReportObjectModel;
 using SisUvex.Catalogos.Metods.Values;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZXing.QrCode.Internal;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SisUvex.Archivo.Etiquetas.PrintLabels
 {
@@ -36,7 +38,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string GenerateSuperStringTag(ETagInfo eTagInfo, int copies, bool reverseOrientation)
         {
             reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
-
+            
             eTag = eTagInfo;
             switch (eTag.idPti)
             {
@@ -80,7 +82,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
                     SetStringQrSpaceDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR CON ESPACIO QR
-
+                    break;
+                case
+                    "07":
+                    //QR CANADA
+                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    return SetStringCanadaPtiLabel(copies);
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
@@ -142,6 +150,41 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                     $"\n^FT166,246^A@N,25,25^FDP.O. Box 99, Pleasanton, CA 94566-0009^FS" +
                                     $"\n^FO90,270^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
             labelsZPLString = zplBegin + zplAlbertons + reverseLabelOrientationZPL + zplEnd;
+            string superString = string.Empty;
+            for (int i = 0; i < copies; i++)
+            {
+                superString += "\n" + labelsZPLString;
+            }
+
+            return superString;
+        }
+        private string SetStringCanadaPtiLabel(int copies)
+        {
+            string stringPresentation = eTag.nameContainer;
+            if (!string.IsNullOrEmpty(eTag.preLabel)) stringPresentation += " " + eTag.preLabel;
+            stringPresentation += " " + eTag.namePresentation;
+            if (!string.IsNullOrEmpty(eTag.postLabel)) stringPresentation += " " + eTag.postLabel;
+
+            string VPC1 = eTag.voicePickCode.Substring(0, 2);
+            string VPC2 = eTag.voicePickCode.Substring(2, 2);
+            string DateMonth = eTag.dateWorkPlan?.ToString("MMM") ?? DateTime.Now.ToString("MMM");
+            string DateDay = eTag.dateWorkPlan?.ToString("dd") ?? DateTime.Now.ToString("dd");
+
+            string zplAlbertons =   $"\n^CFF,10,0 ^FO10,130^FD {eTag.nameColorCanEn}/{eTag.nameColorCanFr} ^FS" +
+                                    $"\n^CFF,10,0 ^FO25,160^FD{eTag.nameVariety} ({eTag.nameSize})^FS" +
+                                    $"\n^CFF,10,0 ^FO25,210^FD{stringPresentation}^FS" +
+                                    $"\n^CFF,10,0 ^FO25,240^FDNet Weight / Poids Net: {eTag.Lbs} lb^FS" +
+                                    $"\n^CFF,10,0 ^FO25,270^FDProduce of / Produit des Mexico^FS" +
+                                    $"\n^CFF,30,10^FO635,175^FDPack date^FS" +
+                                    $"\n^CFF,30,10^FO615,205^FDDate du pack^FS" +
+                                    $"\n^CFD,37^FO650,255^FD{DateMonth}^FS" +
+                                    $"\n^CFD,37^FO745,255^FD{DateDay}^FS" +
+                                    $"\n^FO640,235^FR^GB160,70,50^FS" +
+                                    $"\n^CFE,40,30^FO645,355^FD{VPC1}^FS" +
+                                    $"\n^CFE,50,30^FO720,335^FD{VPC2}^FS" +
+                                    $"\n^FO640,325^FR^GB160,70,50^FS";
+
+            labelsZPLString = zplBegin + zplAlbertons + gtinZPL + distributorZPL + upcZPL + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)
             {
