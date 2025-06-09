@@ -34,7 +34,6 @@ namespace SisUvex.Catalogos.Metods
             public const string QueryCbo = "queryWorkPlan";
             public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] ";
             public const string CboPresentation = "CboWorkPlanPresentation";
-<<<<<<< HEAD
             public const string QueryCboPresentation =
                 $" SELECT CONCAT_WS(' ',wpl.id_workPlan,'|',lot.v_nameLot,'|',dis.v_nameDistShort,'|',CONCAT(con.v_nameContainer,CAST(gtn.n_lbs AS FLOAT)),siz.v_sizeValue,gtn.v_preLabel,pre.v_namePresentation,[var].v_nameComercial,gtn.v_postLabel) AS [{Column.name}]" +
                 $", wpl.c_active AS [{Column.active}]" +
@@ -73,6 +72,8 @@ namespace SisUvex.Catalogos.Metods
                 $", [var].id_color AS [{Color.ColumnId}]" +
                 $", col.v_genericName AS [{Color.ColumnGenericName}]" +
                 $", col.v_nameColor AS [{Color.ColumnName}]" +
+                $", col.v_CanColorEn AS [{Color.ColumnNameCanEn}]" +
+                $", col.v_CanColorFr AS [{Color.ColumnNameCanFr}]" +
                 $", wpl.c_voicePickCode AS [{ColumnVpc}]" +
                 $", ctr.id_contractor AS [{Contractor.ColumnId}]" +
                 $", ctr.v_nameContractor AS [{Contractor.ColumnName}]" +
@@ -92,9 +93,6 @@ namespace SisUvex.Catalogos.Metods
                 $"LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop " +
                 $"LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color " +
                 $"LEFT JOIN dbo.Grow_Farm AS farm ON farm.id_farm = lot.id_farm";
-=======
-            public const string QueryCboPresentation = $" SELECT CONCAT_WS(' ',wpl.id_workPlan,'|',lot.v_nameLot,'|',dis.v_nameDistShort,'|',CONCAT(con.v_nameContainer,CAST(gtn.n_lbs AS FLOAT)),siz.v_sizeValue,gtn.v_preLabel,pre.v_namePresentation,[var].v_nameComercial,gtn.v_postLabel) AS [{Column.name}], wpl.c_active AS [{Column.active}], wpl.id_workPlan AS [{Column.id}], FORMAT(wpl.d_workDay, 'yyyy-MM-dd') AS [{ColumnDate}], wpl.id_workGroup AS [{WorkGroup.ColumnId}], wpl.id_lot AS [{Lot.ColumnId}], lot.v_nameLot AS [{Lot.ColumnName}], gtn.id_variety AS [{Variety.ColumnId}], [var].v_nameComercial AS [{Variety.ColumnName}], [var].v_nameScientis AS [{Variety.ColumnScientis}], [var].v_shortName AS [{Variety.ColumnShortName}], cro.id_crop AS [{Crop.ColumnId}], cro.v_nameCrop AS [{Crop.ColumnName}], wpl.id_size AS [{Size.ColumnId}], siz.v_sizeValue AS [{Size.ColumnName}], gtn.id_distributor AS [{Distributor.ColumnId}], dis.v_nameDistributor AS [{Distributor.ColumnName}], dis.v_address AS [{Distributor.ColumnAddress}], dis.v_city AS [{Distributor.ColumnCity}], dis.v_nameDistShort AS [{Distributor.ColumnShortName}], wpl.id_GTIN AS [{Gtin.ColumnId}], gtn.v_GTIN AS [{Gtin.ColumnName}], gtn.id_container AS [{Container.ColumnId}], gtn.v_UPC AS [{Gtin.ColumnUpc}], gtn.c_PLU AS [{Gtin.ColumnPlu}], con.v_nameContainer AS [{Container.ColumnName}], gtn.n_lbs AS [{Gtin.ColumnLbs}], gtn.v_preLabel AS [{Gtin.ColumnPreLabel}], gtn.id_presentation AS [{Presentation.ColumnId}], pre.v_namePresentation AS [{Presentation.ColumnName}], gtn.v_postLabel AS [{Gtin.ColumnPostLabel}], gtn.i_palletBoxes AS [{Gtin.ColumnPalletBoxes}], gtn.id_pti AS [{Pti.ColumnId}], pti.v_namePti AS [{Pti.ColumnName}], [var].id_color AS [{Color.ColumnId}], col.v_genericName AS [{Color.ColumnGenericName}], col.v_nameColor AS [{Color.ColumnName}], col.v_CanColorEn AS [{Color.ColumnNameCanEn}], col.v_CanColorFr AS [{Color.ColumnNameCanFr}], wpl.c_voicePickCode AS [{ColumnVpc}], ctr.id_contractor AS [{Contractor.ColumnId}], ctr.v_nameContractor AS [{Contractor.ColumnName}] FROM Pack_WorkPlan AS wpl LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation LEFT JOIN dbo.Pack_Container AS con ON con.id_container = gtn.id_container LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor LEFT JOIN dbo.Pack_Price AS prc ON prc.id_price = gtn.id_price LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color ";
->>>>>>> 8f7ed93722d99b8a26d73984055394b6fafd48d3
         }
 
         public static class Grower
