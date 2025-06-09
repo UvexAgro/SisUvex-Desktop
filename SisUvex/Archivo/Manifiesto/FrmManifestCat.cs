@@ -53,10 +53,6 @@ namespace SisUvex.Archivo.Manifiesto
             cls.btnRecoverProcedure();
         }
 
-        private void btnPrint_Click(object sender, EventArgs e)
-        {
-            cls.BtnPrintManifestFrmCat();
-        }
 
         private void txbIdManifest_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -92,6 +88,11 @@ namespace SisUvex.Archivo.Manifiesto
         private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             cls.OpenFrmModify();
+        }
+
+        private void btnPrintManifest_Click(object sender, EventArgs e)
+        {
+            cls.BtnPrintManifestFrmCat();
         }
     }
 }

@@ -149,6 +149,7 @@
             txbIdTemplate = new TextBox();
             label21 = new Label();
             txbIdMarket = new TextBox();
+            chbPrintManifestPerField = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -156,7 +157,7 @@
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
-            btnPrintManifest.Location = new Point(446, 584);
+            btnPrintManifest.Location = new Point(638, 583);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 350;
@@ -166,7 +167,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(474, 584);
+            btnAccept.Location = new Point(445, 583);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 254;
@@ -177,7 +178,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(540, 584);
+            btnCancel.Location = new Point(511, 583);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 253;
@@ -1486,12 +1487,25 @@
             txbIdMarket.TextAlign = HorizontalAlignment.Center;
             txbIdMarket.TextChanged += txbIdMarket_TextChanged;
             // 
+            // chbPrintManifestPerField
+            // 
+            chbPrintManifestPerField.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chbPrintManifestPerField.AutoSize = true;
+            chbPrintManifestPerField.Font = new Font("Microsoft Sans Serif", 9F);
+            chbPrintManifestPerField.Location = new Point(670, 587);
+            chbPrintManifestPerField.Name = "chbPrintManifestPerField";
+            chbPrintManifestPerField.Size = new Size(116, 19);
+            chbPrintManifestPerField.TabIndex = 382;
+            chbPrintManifestPerField.Text = "Man. por campo";
+            chbPrintManifestPerField.UseVisualStyleBackColor = true;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleMode = AutoScaleMode.None;
             AutoScroll = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(797, 613);
+            Controls.Add(chbPrintManifestPerField);
             Controls.Add(txbIdMarket);
             Controls.Add(txbIdTemplate);
             Controls.Add(cboTemplate);
@@ -1738,5 +1752,6 @@
         public TextBox txbIdTemplate;
         private Label label21;
         public TextBox txbIdMarket;
+        public CheckBox chbPrintManifestPerField;
     }
 }

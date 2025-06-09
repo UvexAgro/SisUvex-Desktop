@@ -122,11 +122,13 @@ namespace SisUvex.Archivo.Manifiesto
         public string? consigneeStatus { get; set; }
         public DataTable? DetalleCarga { get; set; }
         public DataTable? TotalesCarga { get; set; }
+        public DataTable? TotalesPorCampo { get; set; }
 
         public ClsQueryManifest()
         {
             DetalleCarga = new DataTable();
             TotalesCarga = new DataTable();
+            TotalesPorCampo = new();
         }
 
         public void GetManifestData(string manifestNumber)
@@ -276,6 +278,26 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 sql.CloseConectionWrite();
             }
+        }
+
+        public void GetManifestTotalPerField(string manifestNumber)
+        {
+            //try
+            //{
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM [vw_PackManifestTotalPerField] WHERE Manifiesto = @manifestNumber", sql.cnn);
+                cmd.Parameters.AddWithValue("@manifestNumber", manifestNumber);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(TotalesPorCampo);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+            //finally
+            //{
+                sql.CloseConectionWrite();
+            //}
         }
     }
 }
