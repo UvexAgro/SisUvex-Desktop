@@ -590,14 +590,14 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BtnPrintManifestFrmAdd()
         {
-            PrintManifest(_frmAdd.txbId.Text);
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked);
         }
 
         public void BtnPrintManifestFrmCat()
         {
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked);
             }
             else
             {
@@ -605,7 +605,7 @@ namespace SisUvex.Archivo.Manifiesto
             }
         }
 
-        private void PrintManifest(string idManifest)
+        private void PrintManifest(string idManifest, bool isManifestPerField)
         {
             try
             {
@@ -620,11 +620,14 @@ namespace SisUvex.Archivo.Manifiesto
                     {
                         ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
                         pdf.desktopPath = conf.manifestFolderPath;
-                        pdf.CreatePDFManifest(idManifest);
+
+                        if (!isManifestPerField)
+                            pdf.CreatePDFManifest(idManifest);
+                        else
+                            pdf.CreatePDFManifestTotalsPerLot(idManifest);
 
                         isPrint = true;
                     }
-
 
                     //if (conf.printManifest)
                     //{

@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestCat));
             dtpDate2 = new DateTimePicker();
             dtpDate1 = new DateTimePicker();
             btnSearchDate = new Button();
             lblY = new Label();
             label4 = new Label();
-            btnPrint = new Button();
             btnRemoved = new Button();
             btnRemove = new Button();
             btnRecover = new Button();
@@ -56,6 +55,8 @@
             label6 = new Label();
             btnConfigManifest = new Button();
             btnTemplates = new Button();
+            chbPrintManifestPerField = new CheckBox();
+            btnPrintManifest = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -105,16 +106,6 @@
             label4.TabIndex = 59;
             label4.Text = "Entre fechas:";
             // 
-            // btnPrint
-            // 
-            btnPrint.Location = new Point(417, 120);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 53;
-            btnPrint.Text = "Imprimir";
-            btnPrint.UseVisualStyleBackColor = true;
-            btnPrint.Click += btnPrint_Click;
-            // 
             // btnRemoved
             // 
             btnRemoved.Location = new Point(174, 120);
@@ -154,28 +145,28 @@
             dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
             dgvCatalog.Location = new Point(12, 149);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -314,7 +305,7 @@
             btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
             btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
             btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(498, 120);
+            btnConfigManifest.Location = new Point(417, 120);
             btnConfigManifest.Name = "btnConfigManifest";
             btnConfigManifest.Size = new Size(24, 23);
             btnConfigManifest.TabIndex = 359;
@@ -327,7 +318,7 @@
             btnTemplates.Font = new Font("Microsoft Sans Serif", 9F);
             btnTemplates.Image = Properties.Resources.templateIcon16;
             btnTemplates.ImageAlign = ContentAlignment.BottomCenter;
-            btnTemplates.Location = new Point(528, 120);
+            btnTemplates.Location = new Point(447, 120);
             btnTemplates.Name = "btnTemplates";
             btnTemplates.Size = new Size(24, 23);
             btnTemplates.TabIndex = 360;
@@ -335,11 +326,34 @@
             btnTemplates.UseVisualStyleBackColor = true;
             btnTemplates.Click += btnTemplates_Click;
             // 
+            // chbPrintManifestPerField
+            // 
+            chbPrintManifestPerField.AutoSize = true;
+            chbPrintManifestPerField.Font = new Font("Microsoft Sans Serif", 9F);
+            chbPrintManifestPerField.Location = new Point(531, 123);
+            chbPrintManifestPerField.Name = "chbPrintManifestPerField";
+            chbPrintManifestPerField.Size = new Size(116, 19);
+            chbPrintManifestPerField.TabIndex = 384;
+            chbPrintManifestPerField.Text = "Man. por campo";
+            chbPrintManifestPerField.UseVisualStyleBackColor = true;
+            // 
+            // btnPrintManifest
+            // 
+            btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
+            btnPrintManifest.Location = new Point(499, 119);
+            btnPrintManifest.Name = "btnPrintManifest";
+            btnPrintManifest.Size = new Size(26, 25);
+            btnPrintManifest.TabIndex = 383;
+            btnPrintManifest.UseVisualStyleBackColor = true;
+            btnPrintManifest.Click += btnPrintManifest_Click;
+            // 
             // FrmManifestCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chbPrintManifestPerField);
+            Controls.Add(btnPrintManifest);
             Controls.Add(btnTemplates);
             Controls.Add(btnConfigManifest);
             Controls.Add(cboGrower);
@@ -353,7 +367,6 @@
             Controls.Add(label3);
             Controls.Add(lblY);
             Controls.Add(label4);
-            Controls.Add(btnPrint);
             Controls.Add(btnRemoved);
             Controls.Add(label2);
             Controls.Add(btnRemove);
@@ -382,7 +395,6 @@
         private Button btnSearchDate;
         private Label lblY;
         private Label label4;
-        private Button btnPrint;
         private Button btnRemove;
         private Button btnRecover;
         public DataGridView dgvCatalog;
@@ -402,5 +414,7 @@
         public ComboBox cboGrower;
         private Button btnConfigManifest;
         private Button btnTemplates;
+        public CheckBox chbPrintManifestPerField;
+        private Button btnPrintManifest;
     }
 }
