@@ -17,6 +17,7 @@ namespace SisUvex.Archivo.WorkPlan
         private int active;
         private string materialPallet;
         private string idGtin;
+        private string idTypeBox;
 
         public string IdWorkPlan
         {
@@ -68,6 +69,11 @@ namespace SisUvex.Archivo.WorkPlan
             get { return idGtin; }
             set { idGtin = value; }
         }
+        public string IdTypeBox
+        {
+            get { return idTypeBox; }
+            set { idTypeBox = value; }
+        }
 
         public void SetWorkPlan(string idWorkPlan)
         {
@@ -88,6 +94,7 @@ namespace SisUvex.Archivo.WorkPlan
                     VPC = dr.GetValue(dr.GetOrdinal("c_voicePickCode")).ToString();
                     WorkDay = DateTime.Parse(dr.GetValue(dr.GetOrdinal("d_workDay")).ToString());
                     Size = dr.GetValue(dr.GetOrdinal("id_size")).ToString();
+                    IdTypeBox = dr.GetValue(dr.GetOrdinal("id_typeBox")).ToString();
                 }
             }
             catch (Exception ex)
