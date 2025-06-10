@@ -52,6 +52,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idContractor { get; set; }
         public string? nameContractor { get; set; }
         public string? growFarmName { get; set; } // Added for grow farm name
+        public string? idTypeBox { get; set; }
+        public string? nameTypeBox { get; set; }
+        public string? shortNameTypeBox { get; set; } // Added for short name type box
 
         public void ClearFields()
         {
@@ -98,6 +101,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             idContractor = null;
             nameContractor = null;
             growFarmName = null; // Clear grow farm name
+            idTypeBox = null;
+            nameTypeBox = null;
+            shortNameTypeBox = null;
         }
     }
 }

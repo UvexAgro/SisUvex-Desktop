@@ -73,6 +73,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             lblTagWorkGroup = new Label();
             lblTagHead = new Label();
             grbProduct = new GroupBox();
+            lblTypeBox = new Label();
+            label3 = new Label();
             txbBoxesTotaL = new TextBox();
             label14 = new Label();
             label16 = new Label();
@@ -258,7 +260,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbTag.Controls.Add(label12);
             grbTag.Controls.Add(lblPtiId);
             grbTag.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            grbTag.Location = new Point(10, 537);
+            grbTag.Location = new Point(10, 559);
             grbTag.Margin = new Padding(1);
             grbTag.Name = "grbTag";
             grbTag.Padding = new Padding(1);
@@ -381,7 +383,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbCrop.Controls.Add(lblVarietyName);
             grbCrop.Controls.Add(lblLotName);
             grbCrop.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            grbCrop.Location = new Point(10, 278);
+            grbCrop.Location = new Point(10, 300);
             grbCrop.Margin = new Padding(1);
             grbCrop.Name = "grbCrop";
             grbCrop.Padding = new Padding(1);
@@ -557,6 +559,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // grbProduct
             // 
+            grbProduct.Controls.Add(lblTypeBox);
+            grbProduct.Controls.Add(label3);
             grbProduct.Controls.Add(txbBoxesTotaL);
             grbProduct.Controls.Add(label14);
             grbProduct.Controls.Add(label16);
@@ -573,15 +577,38 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbProduct.Margin = new Padding(1);
             grbProduct.Name = "grbProduct";
             grbProduct.Padding = new Padding(1);
-            grbProduct.Size = new Size(564, 171);
+            grbProduct.Size = new Size(564, 193);
             grbProduct.TabIndex = 61;
             grbProduct.TabStop = false;
             grbProduct.Text = "PRODUCTO";
             // 
+            // lblTypeBox
+            // 
+            lblTypeBox.AutoSize = true;
+            lblTypeBox.Font = new Font("Segoe UI", 14F);
+            lblTypeBox.Location = new Point(161, 79);
+            lblTypeBox.Margin = new Padding(1, 0, 1, 0);
+            lblTypeBox.Name = "lblTypeBox";
+            lblTypeBox.Size = new Size(45, 25);
+            lblTypeBox.TabIndex = 40;
+            lblTypeBox.Text = "###";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label3.Location = new Point(98, 79);
+            label3.Margin = new Padding(1, 0, 1, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(63, 25);
+            label3.TabIndex = 39;
+            label3.Text = "CAJA:";
+            label3.TextAlign = ContentAlignment.TopRight;
+            // 
             // txbBoxesTotaL
             // 
             txbBoxesTotaL.Font = new Font("Segoe UI", 12F);
-            txbBoxesTotaL.Location = new Point(165, 126);
+            txbBoxesTotaL.Location = new Point(165, 152);
             txbBoxesTotaL.Margin = new Padding(1);
             txbBoxesTotaL.MaxLength = 6;
             txbBoxesTotaL.Name = "txbBoxesTotaL";
@@ -592,7 +619,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label14.Location = new Point(26, 127);
+            label14.Location = new Point(26, 153);
             label14.Margin = new Padding(1, 0, 1, 0);
             label14.Name = "label14";
             label14.Size = new Size(135, 25);
@@ -604,7 +631,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 14F);
-            label16.Location = new Point(168, 126);
+            label16.Location = new Point(168, 152);
             label16.Margin = new Padding(1, 0, 1, 0);
             label16.Name = "label16";
             label16.Size = new Size(0, 25);
@@ -614,7 +641,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label17.Location = new Point(61, 102);
+            label17.Location = new Point(61, 128);
             label17.Margin = new Padding(1, 0, 1, 0);
             label17.Name = "label17";
             label17.Size = new Size(100, 25);
@@ -626,7 +653,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             lblLbsNum.AutoSize = true;
             lblLbsNum.Font = new Font("Segoe UI", 14F);
-            lblLbsNum.Location = new Point(161, 77);
+            lblLbsNum.Location = new Point(161, 103);
             lblLbsNum.Margin = new Padding(1, 0, 1, 0);
             lblLbsNum.Name = "lblLbsNum";
             lblLbsNum.Size = new Size(45, 25);
@@ -649,12 +676,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             label22.AutoSize = true;
             label22.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label22.Location = new Point(98, 28);
+            label22.Location = new Point(17, 28);
             label22.Margin = new Padding(1, 0, 1, 0);
             label22.Name = "label22";
-            label22.Size = new Size(63, 25);
+            label22.Size = new Size(144, 25);
             label22.TabIndex = 13;
-            label22.Text = "CAJA:";
+            label22.Text = "CONTENEDOR:";
             label22.TextAlign = ContentAlignment.TopRight;
             // 
             // lblContainerName
@@ -683,7 +710,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             lblSizeName.AutoSize = true;
             lblSizeName.Font = new Font("Segoe UI", 14F);
-            lblSizeName.Location = new Point(161, 102);
+            lblSizeName.Location = new Point(161, 128);
             lblSizeName.Margin = new Padding(1, 0, 1, 0);
             lblSizeName.Name = "lblSizeName";
             lblSizeName.Size = new Size(45, 25);
@@ -695,7 +722,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label27.AutoSize = true;
             label27.BackColor = SystemColors.Control;
             label27.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label27.Location = new Point(97, 78);
+            label27.Location = new Point(97, 104);
             label27.Margin = new Padding(1, 0, 1, 0);
             label27.Name = "label27";
             label27.Size = new Size(64, 25);
@@ -710,7 +737,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbDistributor.Controls.Add(lblDistributorCity);
             grbDistributor.Controls.Add(lblDistributorAddress);
             grbDistributor.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            grbDistributor.Location = new Point(10, 395);
+            grbDistributor.Location = new Point(10, 417);
             grbDistributor.Margin = new Padding(1);
             grbDistributor.Name = "grbDistributor";
             grbDistributor.Padding = new Padding(1);
@@ -749,11 +776,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbPrint.Controls.Add(nudPtiTotal);
             grbPrint.Controls.Add(btnPrintPtiTag);
             grbPrint.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            grbPrint.Location = new Point(588, 278);
+            grbPrint.Location = new Point(588, 283);
             grbPrint.Margin = new Padding(1);
             grbPrint.Name = "grbPrint";
             grbPrint.Padding = new Padding(1);
-            grbPrint.Size = new Size(223, 115);
+            grbPrint.Size = new Size(223, 137);
             grbPrint.TabIndex = 62;
             grbPrint.TabStop = false;
             grbPrint.Text = "CAJA / PTI";
@@ -777,7 +804,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             gpbLastPallets.Controls.Add(dgvLastUserPallet);
             gpbLastPallets.Controls.Add(chbReverseReprintPallet);
             gpbLastPallets.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            gpbLastPallets.Location = new Point(359, 395);
+            gpbLastPallets.Location = new Point(359, 417);
             gpbLastPallets.Margin = new Padding(1);
             gpbLastPallets.Name = "gpbLastPallets";
             gpbLastPallets.Padding = new Padding(1);
@@ -868,7 +895,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1.Margin = new Padding(1);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(1);
-            groupBox1.Size = new Size(223, 171);
+            groupBox1.Size = new Size(223, 176);
             groupBox1.TabIndex = 68;
             groupBox1.TabStop = false;
             groupBox1.Text = "PALLET";
@@ -899,7 +926,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(822, 687);
+            ClientSize = new Size(822, 730);
             Controls.Add(groupBox1);
             Controls.Add(gpbLastPallets);
             Controls.Add(grbPrint);
@@ -1008,5 +1035,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public CheckBox chbRevesePalletTag;
         public CheckBox chbReversePtiTag;
         public CheckBox chbReverseReprintPallet;
+        private Label label3;
+        public Label lblTypeBox;
     }
 }

@@ -252,6 +252,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Market.Cbo:
                     queryDataTable = ClsObject.Market.QueryCbo;
                     break;
+                case ClsObject.TypeBox.Cbo:
+                    queryDataTable = ClsObject.TypeBox.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -281,7 +284,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.WorkPlan.DgvCatalog:
                 case ClsObject.WorkPlan.CboPresentation:
-                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop') ";
+                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox') ";
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
@@ -400,6 +403,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Vehicle.TableName;
                 case ClsObject.Market.Cbo:
                     return ClsObject.Market.TableName;
+                case ClsObject.TypeBox.Cbo:
+                    return ClsObject.TypeBox.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

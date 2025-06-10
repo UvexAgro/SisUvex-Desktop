@@ -246,8 +246,8 @@ namespace SisUvex
 
         private void planDeTrabajoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsWorkPlan cls = new ClsWorkPlan();
-            AbrirVentanaHijo(cls._frmCat, 1);
+            FrmWorkPlanCat cat = new();
+            AbrirVentanaHijo(cat, 1);
         }
 
         private void FrmMenu_FormClosed(object sender, FormClosedEventArgs e)

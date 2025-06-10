@@ -13,15 +13,12 @@ namespace SisUvex.Archivo.WorkPlan
 {
     internal partial class FrmWorkPlanAdd : Form
     {
-        FrmWorkPlanCat frmCat;
-        ClsWorkPlan cls;
+        public ClsWorkPlan cls;
         public bool IsAddModify = true, AddIsUpdate = false;
         public string? idModify;
-        public FrmWorkPlanAdd(FrmWorkPlanCat frmCatalog, ClsWorkPlan clsClass)
+        public FrmWorkPlanAdd()
         {
             InitializeComponent();
-            frmCat = frmCatalog;
-            cls = clsClass;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -36,6 +33,8 @@ namespace SisUvex.Archivo.WorkPlan
 
         private void FrmWorkPlanAdd_Load(object sender, EventArgs e)
         {
+            cls ??= new();
+            cls._frmAdd ??= this;
             cls.BeginFormAdd();
         }
 
