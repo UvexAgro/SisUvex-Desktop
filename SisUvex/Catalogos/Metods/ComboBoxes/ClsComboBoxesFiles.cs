@@ -284,7 +284,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.WorkPlan.DgvCatalog:
                 case ClsObject.WorkPlan.CboPresentation:
-                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop'. 'Pack_TypeBox') ";
+                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox') ";
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
