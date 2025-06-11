@@ -223,7 +223,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         else
                         {//imprimir (se creó el pallet)
                             print = new ClsPrintPtiTag();
-                            print.SendToPrintPalletTag(idPallet, eTagInfo, timesPalletPrint, palletBoxes, reverseOrientation);
+                            print.SendToPrintPalletTag(idPallet, eTagInfo, timesPalletPrint, palletBoxes, reverseOrientation, false);
 
                             AddNewRowToLastPallets(idPallet, palletBoxes.ToString());
                         }
@@ -287,7 +287,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetTagInfo(selectedPlan, eTagInfoReprint);
                     print = new ClsPrintPtiTag();
 
-                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, timesPalletPrint, selectedBoxes, reverseOrientation);
+                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, timesPalletPrint, selectedBoxes, reverseOrientation, true);
                 }
             }
         }
