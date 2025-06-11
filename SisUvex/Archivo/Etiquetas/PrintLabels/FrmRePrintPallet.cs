@@ -70,7 +70,7 @@ namespace SisUvex.Archivo.Reimprimir
                 }
 
                 print = new ClsPrintPtiTag();
-                print.SendToPrintPalletTag(idPallet, eTagInfo, 2, palletBoxes, reverseOrientation);
+                print.SendToPrintPalletTag(idPallet, eTagInfo, 2, palletBoxes, reverseOrientation, true);
             
             }
             catch (Exception ex)
