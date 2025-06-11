@@ -25,11 +25,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             printPalletPTI.SetTagInfo(workPlan, printPalletPTI.eTagInfo);
         }
 
-        public void SendToPrintPalletTag(string idPallet, ETagInfo eTagInfo, int copies, int palletBoxes, bool reverseOrientation)
+        public void SendToPrintPalletTag(string idPallet, ETagInfo eTagInfo, int copies, int palletBoxes, bool reverseOrientation, bool isReprint)
         {
-            string SuperString = GenPallet.GenerateSuperStringTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation);
+            string SuperString = GenPallet.GenerateSuperStringTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, isReprint);
             PrintZPL(SuperString, ClsConfPrinter.PrintPallet);
-            //Clipboard.SetText(SuperString);
+            Clipboard.SetText(SuperString);
         }
 
         private void PrintZPL(string superPrint, string printer)
