@@ -91,7 +91,7 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 idManifest = manifestId.ToString("D4");
 
-                qry = queryCatalogo + $" WHERE vw.Manifiesto = 'E{idManifest}' OR vw.Manifiesto = 'N{idManifest}' ";
+                qry = queryCatalogo + $" WHERE RIGHT(vw.Manifiesto, 4) = '{idManifest}' ";
             }
             else
             {
@@ -383,6 +383,9 @@ namespace SisUvex.Archivo.Manifiesto
         public void btnAcceptAddModify()
         {
             if (!controlList.ValidateControls())
+                return;
+
+            if (!clsPallets.ValidateIdDistributorInPallets(_frmAdd.txbIdDistributor.Text))
                 return;
 
             if (_frmAdd.IsAddModify)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient.DataClassification;
 using SisUvex.Archivo.Etiquetas.LabelInterface;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,9 @@ namespace SisUvex.Archivo.Manifiesto
     internal class ClsManifestPalletList
     {
         public static string columnPosition = "Posicion";
+        private const string cIdDistributor = ClsObject.Distributor.ColumnId;
         public DataGridView dataGridView;
-        string qryPal = $" SELECT Activo, Posicion AS [{columnPosition}], Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack FROM vw_PackPalletDetails ";
+        string qryPal = $" SELECT Activo, Posicion AS [{columnPosition}], Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack, gtn.id_distributor AS [{cIdDistributor}] FROM vw_PackPalletDetails vw JOIN Pack_GTIN gtn ON gtn.id_GTIN = vw.Programa ";
         public int GetNextPalletPosition()
         {
             int maxPosition = 0;
@@ -52,7 +54,9 @@ namespace SisUvex.Archivo.Manifiesto
             dataGridView.Columns.Add("Fecha", "Fecha");
             dataGridView.Columns.Add("Plan", "Plan");
             dataGridView.Columns.Add("GTIN", "GTIN");
+            dataGridView.Columns.Add(cIdDistributor, cIdDistributor);
 
+            //dataGridView.Columns[cIdDistributor].Visible = false;
 
             dataGridView.Columns[columnPosition].ValueType = typeof(int);
             dataGridView.Columns[columnPosition].DefaultCellStyle.Format = "00";
@@ -114,7 +118,7 @@ namespace SisUvex.Archivo.Manifiesto
             foreach (DataRow row in dtPallets.Rows)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
-                newRow.CreateCells(dataGridView, row[columnPosition], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"]);
+                newRow.CreateCells(dataGridView, row[columnPosition], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"], row[cIdDistributor]);
                 rowsToInsert.Add(newRow);
             }
 
@@ -287,6 +291,37 @@ namespace SisUvex.Archivo.Manifiesto
             DataTable dtManifestPallets = ClsQuerysDB.ExecuteParameterizedQuery(qryPal + qryWherePallet, idPalParameter);
 
             AddDTPalletsToDGVList(dtManifestPallets);
+        }
+
+        public bool ValidateIdDistributorInPallets(string idDistributor)
+        {
+            if (string.IsNullOrEmpty(idDistributor)) //PORQUE SE PERMITE NO TENER DISTRUBUIDOR SELECCIONADO
+                return true;
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    if (row.Cells[cIdDistributor].Value != null)
+                    {
+                        if (!row.Cells[cIdDistributor].Value.ToString().Equals(idDistributor))
+                        {
+                            System.Media.SystemSounds.Beep.Play();
+                            DialogResult result = MessageBox.Show(
+                                "El distribuidor del manifiesto es diferente al distribuidor del pallet (o pallets).\n\n ¿Desea guardarlo aún así?",
+                                "Distribuidor en pallets",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Exclamation);
+
+                            if (result == DialogResult.No)
+                                return false;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            return true;
         }
     }
 }
