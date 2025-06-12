@@ -10,6 +10,8 @@ using iText.Kernel.Colors;
 using iText.Kernel.Pdf.Canvas.Draw;
 using System.Data;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Bcpg.OpenPgp;
+using OfficeOpenXml.VBA;
 
 namespace SisUvex.Archivo.Manifiesto
 {
@@ -85,18 +87,21 @@ namespace SisUvex.Archivo.Manifiesto
                 logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", queryManifest.shipperLogo + "Logo.png");
             }
 
-            iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
+            if (File.Exists(logoPath))
+            {
+                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 
-            float scale = maxWidthLogo / logo.GetImageScaledHeight();
-            logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
+                float scale = maxWidthLogo / logo.GetImageScaledHeight();
+                logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
 
-            logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
+                logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
 
-            // Agregar el logo a la primera celda de la tabla
-            Cell logoCell = new Cell().Add(logo);
-            logoCell.SetBorder(Border.NO_BORDER);
-            logoCell.SetPaddingRight(0);
-            table.AddCell(logoCell);
+                // Agregar el logo a la primera celda de la tabla
+                Cell logoCell = new Cell().Add(logo);
+                logoCell.SetBorder(Border.NO_BORDER);
+                logoCell.SetPaddingRight(0);
+                table.AddCell(logoCell);
+            }
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph shipperNameParagraph = new Paragraph(queryManifest.shipperName)
@@ -219,9 +224,13 @@ namespace SisUvex.Archivo.Manifiesto
                 Paragraph nextParagraph = new Paragraph();
                 Paragraph varietyParagraph = new Paragraph();
 
+                string PalEstiba = pallet;
+                if (!string.IsNullOrEmpty(estiba))
+                    PalEstiba += $" [{estiba}]";
+
                 positionPalletParagraph
                     .Add(new Text(pos.ToString() + " ").SetFont(boldFont).SetFontSize(fontSizeBody).SetFontColor(ColorConstants.RED))
-                    .Add(pallet)
+                    .Add(PalEstiba)
                     .SetFont(font)
                     .SetFontSize(fontPosition)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);

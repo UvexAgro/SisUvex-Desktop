@@ -91,7 +91,7 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 idManifest = manifestId.ToString("D4");
 
-                qry = queryCatalogo + $" WHERE vw.Manifiesto = 'E{idManifest}' OR vw.Manifiesto = 'N{idManifest}' ";
+                qry = queryCatalogo + $" WHERE RIGHT(vw.Manifiesto, 4) = '{idManifest}' ";
             }
             else
             {

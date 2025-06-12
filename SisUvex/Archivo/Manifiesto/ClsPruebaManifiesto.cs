@@ -78,34 +78,30 @@ namespace SisUvex.Archivo.Manifiesto
             table.SetWidth(UnitValue.CreatePercentValue(100));
             table.SetBorder(Border.NO_BORDER);
 
+            Cell logoCell = new Cell();
 
             // Cargar el logo
             if (queryManifest.shipperLogo != null)
             {
-                //string dataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
                 logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", queryManifest.shipperLogo + "Logo.png");
-                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 
-                float scale = maxWidthLogo / logo.GetImageScaledHeight();
-                logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
+                if (File.Exists(logoPath))
+                {
+                    iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 
-                logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
+                    float scale = maxWidthLogo / logo.GetImageScaledHeight();
+                    logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
 
-                // Agregar el logo a la primera celda de la tabla
-                Cell logoCell = new Cell().Add(logo);
-                logoCell.SetBorder(Border.NO_BORDER);
-                logoCell.SetPaddingRight(0);
-                table.AddCell(logoCell);
+                    logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
 
+                    // Agregar el logo a la primera celda de la tabla
+                    logoCell.Add(logo);
+                    logoCell.SetPaddingRight(0);
+                }
             }
-            else
-            {
-                // Crear una celda vacía para mantener la alineación de la tabla
-                Cell emptyCell = new Cell();
-                emptyCell.SetBorder(Border.NO_BORDER);
-                table.AddCell(emptyCell);
-            }
+
+            logoCell.SetBorder(Border.NO_BORDER);
+            table.AddCell(logoCell);
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph shipperNameParagraph = new Paragraph(queryManifest.shipperName)
