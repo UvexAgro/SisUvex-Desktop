@@ -295,8 +295,9 @@ namespace SisUvex.Archivo.Manifiesto
 
         public bool ValidateIdDistributorInPallets(string idDistributor)
         {
-            if (string.IsNullOrEmpty(idDistributor))
-                return false;
+            if (string.IsNullOrEmpty(idDistributor)) //PORQUE SE PERMITE NO TENER DISTRUBUIDOR SELECCIONADO
+                return true;
+
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
                 if (!row.IsNewRow)
