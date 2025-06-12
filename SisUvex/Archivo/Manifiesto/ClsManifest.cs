@@ -385,6 +385,9 @@ namespace SisUvex.Archivo.Manifiesto
             if (!controlList.ValidateControls())
                 return;
 
+            if (!clsPallets.ValidateIdDistributorInPallets(_frmAdd.txbIdDistributor.Text))
+                return;
+
             if (_frmAdd.IsAddModify)
                 AddProcedures();
             else
