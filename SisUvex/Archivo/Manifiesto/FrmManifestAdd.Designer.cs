@@ -150,6 +150,7 @@
             label21 = new Label();
             txbIdMarket = new TextBox();
             chbPrintManifestPerField = new CheckBox();
+            chbExcelLayout = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -157,7 +158,7 @@
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
-            btnPrintManifest.Location = new Point(638, 583);
+            btnPrintManifest.Location = new Point(638, 569);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 350;
@@ -167,7 +168,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(445, 583);
+            btnAccept.Location = new Point(446, 569);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 254;
@@ -178,7 +179,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(511, 583);
+            btnCancel.Location = new Point(512, 569);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 253;
@@ -294,7 +295,7 @@
             dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPalletList.Size = new Size(347, 525);
+            dgvPalletList.Size = new Size(347, 508);
             dgvPalletList.TabIndex = 347;
             // 
             // chbRejected
@@ -1499,12 +1500,24 @@
             chbPrintManifestPerField.Text = "Man. por campo";
             chbPrintManifestPerField.UseVisualStyleBackColor = true;
             // 
+            // chbExcelLayout
+            // 
+            chbExcelLayout.AutoSize = true;
+            chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
+            chbExcelLayout.Location = new Point(670, 568);
+            chbExcelLayout.Name = "chbExcelLayout";
+            chbExcelLayout.Size = new Size(91, 19);
+            chbExcelLayout.TabIndex = 386;
+            chbExcelLayout.Text = "Excel layout";
+            chbExcelLayout.UseVisualStyleBackColor = true;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleMode = AutoScaleMode.None;
             AutoScroll = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(797, 613);
+            Controls.Add(chbExcelLayout);
             Controls.Add(chbPrintManifestPerField);
             Controls.Add(txbIdMarket);
             Controls.Add(txbIdTemplate);
@@ -1753,5 +1766,6 @@
         private Label label21;
         public TextBox txbIdMarket;
         public CheckBox chbPrintManifestPerField;
+        public CheckBox chbExcelLayout;
     }
 }
