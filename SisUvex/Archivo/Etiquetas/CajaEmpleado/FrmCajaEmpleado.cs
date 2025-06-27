@@ -9,6 +9,7 @@ using System.Media;
 
 namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
 {
+    //
     public partial class FrmCajaEmpleado : Form
     {
         ClsCajaEmpleado cls = new ClsCajaEmpleado();
@@ -32,9 +33,6 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
 
             dt = new ClsSearchEmployees();
             ClsTextBoxes.TxbApplyKeyPressEventInt(txbCodigoEmp);
-
-            ClsConfPrinter clsConfPrinter = new ClsConfPrinter();
-            clsConfPrinter.Leer();
         }
 
         private void txbCodigoEmp_KeyPress(object sender, KeyPressEventArgs e)
@@ -90,14 +88,12 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             }
             else
             {
-                if (!ClsConfPrinter.PrintCode.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(ClsConfPrinter.GetPrinterCodeName()))
                 {
-
-                    //pd.PrinterSettings.PrinterName = ClsConfPrinter.PrintCode;
-
                     string superPrint = cls.GetStringZPL(dt.id, dt.name, dt.lastNamePat, dt.lastNameMat, (int)nudCantidad.Value);
+                    //Clipboard.SetText(superPrint);
                     //MessageBox.Show(superPrint);
-                    RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.PrintCode, superPrint);
+                    RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.GetPrinterCodeName(), superPrint);
                 }
                 else
                 {
@@ -118,7 +114,7 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
         {
             ClsSelectionForm sel = new ClsSelectionForm();
 
-            sel.OpenSelectionForm("TransportLine", "Código");
+            sel.OpenSelectionForm("EmployeeBasic", "Código");
 
             if (!sel.SelectedValue.IsNullOrEmpty())
             {

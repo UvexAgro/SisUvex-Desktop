@@ -18,7 +18,6 @@ using SisUvex.Nomina.Actualizar_datos_empelado;
 using SisUvex.Operacion;
 using SisUvex.Catalogos.Categoría;
 using SisUvex.Catalogos.Presentacion;
-using SisUvex.Catalogos.PlantillaV1;
 using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Grow.PlantsRowLot;
@@ -53,7 +52,7 @@ namespace SisUvex
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new PantallaCarga());
+            Application.Run(new FrmMenu());
             //Application.Run(new FrmMenu());
         }
     }
