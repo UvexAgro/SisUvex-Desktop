@@ -9,7 +9,6 @@ namespace SisUvex.Configuracion
 {
     internal class ClsConfPrinter
     {
-
         public static string PrinDocuments { get; set; }
         public static string PrintTags { get; set; }
         public static string PrintPallet { get; set; }
@@ -89,21 +88,29 @@ namespace SisUvex.Configuracion
 
         public static string GetPrinterDocumentsName()
         {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterDocuments))
+                return string.Empty;
             return Properties.Settings.Default.PrinterDocuments;
         }
 
         public static string GetPrinterPtiName()
         {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPti))
+                return string.Empty;
             return Properties.Settings.Default.PrinterPti;
         }
 
         public static string GetPrinterPalletName()
         {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPallet))
+                return string.Empty;
             return Properties.Settings.Default.PrinterPallet;
         }
 
         public static string GetPrinterCodeName()
         {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterCode))
+                return string.Empty;
             return Properties.Settings.Default.PrinterCode;
         }
 

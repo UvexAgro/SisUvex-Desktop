@@ -239,6 +239,7 @@
             btnImprimir.Text = "Imprimir";
             btnImprimir.TextAlign = ContentAlignment.MiddleRight;
             btnImprimir.UseVisualStyleBackColor = true;
+            btnImprimir.Click += btnImprimir_Click;
             // 
             // btnEliminar
             // 

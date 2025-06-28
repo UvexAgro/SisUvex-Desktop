@@ -88,17 +88,15 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             }
             else
             {
-                if (!string.IsNullOrEmpty(ClsConfPrinter.GetPrinterCodeName()))
+                string printerName = ClsConfPrinter.GetPrinterCodeName();
+                if (!string.IsNullOrEmpty(printerName))
                 {
                     string superPrint = cls.GetStringZPL(dt.id, dt.name, dt.lastNamePat, dt.lastNameMat, (int)nudCantidad.Value);
                     //Clipboard.SetText(superPrint);
-                    //MessageBox.Show(superPrint);
-                    RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.GetPrinterCodeName(), superPrint);
+                    RawPrinterHelper.SendStringToPrinter(printerName, superPrint);
                 }
                 else
-                {
                     MessageBox.Show("No se ha seleccionado una impresora", "Impresora no seleccionada");
-                }
             }
         }
         private void FirstClick()
