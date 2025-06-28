@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Vml;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,85 +18,90 @@ namespace SisUvex.Configuracion
 {
     public partial class FrmSetupPrint : Form
     {
-
+        private const string _noPrinter = "Sin impresora";
         ClsConfPrinter confPrint = new ClsConfPrinter();
         public FrmSetupPrint()
         {
             InitializeComponent();
-            LoadPrinterInCmbx();
         }
 
         private void FrmSetupPrinterPallet_Load(object sender, EventArgs e)
         {
-
+            LoadPrintersInCbos();
+            ReadPrinters();
         }
 
-        private void LoadPrinterInCmbx()
+        private void LoadPrintersInCbos()
         {
-            cmBxSetupPrintPallet.Items.Clear();
-            cmBxSetupPrintPTI.Items.Clear();
-            cmBxSetupPrintDoc.Items.Clear();
-            cmBxSetupPrintCode.Items.Clear();
+            cboPrinterPallet.Items.Clear();
+            cboPrinterPTI.Items.Clear();
+            cboPrinterDoc.Items.Clear();
+            cboPrinterCode.Items.Clear();
 
             foreach (string printers in PrinterSettings.InstalledPrinters)
             {
-                cmBxSetupPrintPallet.Items.Add(printers);
-                cmBxSetupPrintDoc.Items.Add(printers);
-                cmBxSetupPrintPTI.Items.Add(printers);
-                cmBxSetupPrintCode.Items.Add(printers);
+                cboPrinterPallet.Items.Add(printers);
+                cboPrinterDoc.Items.Add(printers);
+                cboPrinterPTI.Items.Add(printers);
+                cboPrinterCode.Items.Add(printers);
             }
+        }
 
+        private void ValidateLabelPrinterName(Label lblPrinterName, string printerName)
+        {
+            if (ClsConfPrinter.ValidatePrinterName(printerName)) //VALIDACION SOLO PARA CAMBIAR DE COLOR
+            {
+                lblPrinterName.Text = printerName;
+                lblPrinterName.ForeColor = Color.Black;
+            }
+            else
+            {
+                lblPrinterName.Text = _noPrinter;
+                lblPrinterName.ForeColor = Color.Red;
+            }
         }
 
         private void btnSetupPrintPTI_Click(object sender, EventArgs e)
         {
-            ReadPrinters();
-
-            if (cmBxSetupPrintCode.Text == "")
-            {
-                cmBxSetupPrintCode.Text = lblCode.Text;
-            }
-
-            if (cmBxSetupPrintDoc.Text == "")
-            {
-                cmBxSetupPrintDoc.Text = lblDoc.Text;
-            }
-
-            if (cmBxSetupPrintPallet.Text == "")
-            {
-                cmBxSetupPrintPallet.Text = lblPallet.Text;
-            }
-
-            if (cmBxSetupPrintPTI.Text == "")
-            {
-                cmBxSetupPrintPTI.Text = lblPTI.Text;
-            }
-
-            ClsConfPrinter.PrinDocuments = cmBxSetupPrintDoc.Text;
-            ClsConfPrinter.PrintTags = cmBxSetupPrintPTI.Text;
-            ClsConfPrinter.PrintPallet = cmBxSetupPrintPallet.Text;
-            ClsConfPrinter.PrintCode = cmBxSetupPrintCode.Text;
-
-            confPrint.Guardar();
-            ClsXmlPrinter xmlCreate = new ClsXmlPrinter();
-            xmlCreate.CreateXmlConfPrinter();
+            ClsConfPrinter.SetPrinterDocumentsName(cboPrinterDoc.Text);
+            ClsConfPrinter.SetPrinterPtiName(cboPrinterPTI.Text);
+            ClsConfPrinter.SetPrinterPalletName(cboPrinterPallet.Text);
+            ClsConfPrinter.SetPrinterCodeName(cboPrinterCode.Text);
 
             MessageBox.Show("Configuración guardada", "[Configuración]", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            LoadPrintersInCbos();
             ReadPrinters();
         }
 
         public void ReadPrinters()       
         {
-            confPrint.Leer();
-            lblPallet.Text = ClsConfPrinter.PrintPallet;
-            lblPTI.Text = ClsConfPrinter.PrintTags;
-            lblCode.Text = ClsConfPrinter.PrintCode;
-            lblDoc.Text = ClsConfPrinter.PrinDocuments;
+            ValidateLabelPrinterName(lblDoc, ClsConfPrinter.GetPrinterDocumentsName());
+            ValidateLabelPrinterName(lblPTI, ClsConfPrinter.GetPrinterPtiName());
+            ValidateLabelPrinterName(lblPallet, ClsConfPrinter.GetPrinterPalletName());
+            ValidateLabelPrinterName(lblCode, ClsConfPrinter.GetPrinterCodeName());
+
+            SelectIndexWithPrinterName(cboPrinterPallet, lblPallet.Text);
+            SelectIndexWithPrinterName(cboPrinterPTI, lblPTI.Text);
+            SelectIndexWithPrinterName(cboPrinterCode, lblCode.Text);
+            SelectIndexWithPrinterName(cboPrinterDoc, lblDoc.Text);
+        }
+
+        private void SelectIndexWithPrinterName(ComboBox cbo, string printerName)
+        {
+            int index = cbo.FindString(printerName);
+            if (index != -1)
+            {
+                cbo.SelectedIndex = index;
+            }
+            else
+            {
+                cbo.SelectedIndex = -1;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ReadPrinters();
         }
 
         private void cmBxSetupPrintPallet_SelectedIndexChanged(object sender, EventArgs e)

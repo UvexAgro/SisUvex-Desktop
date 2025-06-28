@@ -9,58 +9,111 @@ namespace SisUvex.Configuracion
 {
     internal class ClsConfPrinter
     {
-
         public static string PrinDocuments { get; set; }
         public static string PrintTags { get; set; }
         public static string PrintPallet { get; set; }
         public static string PrintCode { get; set; }
 
-        private string path = ClsXmlPrinter.path;
-
-
         public ClsConfPrinter()
         {
         }
 
-        //Leer el archivo XML, si no existe manda un mensaje con esa advertencia.
         public void Leer()
         {
-
-            if(File.Exists(path))
-            {
-                XDocument doc = XDocument.Load(path);
-                var configuracion = doc.Element("Print_setup");
-
-                PrinDocuments = configuracion.Element("prinDocuments").Value;
-                PrintTags = configuracion.Element("printTags").Value;
-                PrintPallet = configuracion.Element("printPallet").Value;
-                PrintCode = configuracion.Element("printCode").Value;
-            }
-            else
-            {
-
-                MessageBox.Show("No hay impresoras configuradas", "[Print Config]", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }   
+            PrinDocuments = GetPrinterDocumentsName();
+            PrintTags = GetPrinterPtiName();
+            PrintPallet = GetPrinterPalletName();
+            PrintCode = GetPrinterCodeName();
         }
-
-        //Guardar la configuración de las impresoras en el archivo XML
 
         public void Guardar()
         {
-            var doc = new XDocument(
-                new XElement("Print_setup",
-                    new XElement("prinDocuments", PrinDocuments),
-                    new XElement("printTags", PrintTags),
-                    new XElement("printPallet", PrintPallet),
-                    new XElement("printCode", PrintCode)
-                )
-            );
-
-            //string directoryPath = Path.GetDirectoryName(path2);
-            //Directory.CreateDirectory(directoryPath);
-            //MessageBox.Show("Configuracion guardada en: " + path2+"\nel directory es: "+directoryPath+"\nEl path1 es:"+path1);
-            doc.Save(path);
+            Properties.Settings.Default.PrinterDocuments = PrinDocuments;
+            Properties.Settings.Default.PrinterPti = PrintTags;
+            Properties.Settings.Default.PrinterPallet = PrintPallet;
+            Properties.Settings.Default.PrinterCode = PrintCode;
+            Properties.Settings.Default.Save();
         }
+
+        public static bool ValidatePrinterName(string? printerName)
+        {
+            if (string.IsNullOrEmpty(printerName))
+            {
+                return false;
+            }
+
+            // Verifica si la impresora está instalada
+            foreach (string installedPrinter in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+            {
+                if (installedPrinter.Equals(printerName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static void SetPrinterDocumentsName(string? printerName)
+        {
+            if (!ValidatePrinterName(printerName))
+                printerName = string.Empty;
+
+            Properties.Settings.Default.PrinterDocuments = printerName ;
+            Properties.Settings.Default.Save();
+        }
+
+        public static void SetPrinterPtiName(string? printerName)
+        {
+            if (!ValidatePrinterName(printerName))
+                printerName = string.Empty;
+            Properties.Settings.Default.PrinterPti = printerName;
+            Properties.Settings.Default.Save();
+        }
+
+        public static void SetPrinterPalletName(string? printerName)
+        {
+            if (!ValidatePrinterName(printerName))
+                printerName = string.Empty;
+            Properties.Settings.Default.PrinterPallet = printerName;
+            Properties.Settings.Default.Save();
+        }
+
+        public static void SetPrinterCodeName(string? printerName)
+        {
+            if (!ValidatePrinterName(printerName))
+                printerName = string.Empty;
+            Properties.Settings.Default.PrinterCode = printerName;
+            Properties.Settings.Default.Save();
+        }
+
+        public static string GetPrinterDocumentsName()
+        {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterDocuments))
+                return string.Empty;
+            return Properties.Settings.Default.PrinterDocuments;
+        }
+
+        public static string GetPrinterPtiName()
+        {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPti))
+                return string.Empty;
+            return Properties.Settings.Default.PrinterPti;
+        }
+
+        public static string GetPrinterPalletName()
+        {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPallet))
+                return string.Empty;
+            return Properties.Settings.Default.PrinterPallet;
+        }
+
+        public static string GetPrinterCodeName()
+        {
+            if (!ValidatePrinterName(Properties.Settings.Default.PrinterCode))
+                return string.Empty;
+            return Properties.Settings.Default.PrinterCode;
+        }
+
         public static string GetPrinterOrientation(string printerName)
         {
             // Obtiene la configuración de la impresora

@@ -91,15 +91,11 @@ namespace SisUvex.Archivo.Etiquetas.NombreYCodigo2x1
 
         public void ImprimirCajaEmpleado(string codigo, int cantidad, string nombre, string apellido, string apellido2)
         {
-            if (ClsConfPrinter.PrintCode.Length > 0)
-            {
-                RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.PrintCode, ImprimirSuperString(codigo, cantidad, nombre, apellido, apellido2));
-            }
+            string printerName = ClsConfPrinter.GetPrinterCodeName();
+            if (!string.IsNullOrEmpty(printerName))
+                RawPrinterHelper.SendStringToPrinter(printerName, ImprimirSuperString(codigo, cantidad, nombre, apellido, apellido2));
             else
-            {
                 MessageBox.Show("No se ha seleccionado una impresora", "Impresora no seleccionada");
-            }
-           
         }
     }
 }

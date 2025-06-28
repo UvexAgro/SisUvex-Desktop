@@ -164,16 +164,11 @@ namespace SisUvex.Archivo.Etiquetas
                     string message = labelPti.labelsZPLString;
 
                     confPrinter.Leer();
-
-                    if (ClsConfPrinter.PrintTags.Length > 0)
-                    {
-
-                        PrintZPL(labelPti.labelsZPLString, ClsConfPrinter.PrintTags);
-                    }
+                    string printerName = ClsConfPrinter.GetPrinterPtiName();
+                    if (!string.IsNullOrEmpty(printerName))
+                        PrintZPL(labelPti.labelsZPLString, printerName);
                     else
-                    {
                         MessageBox.Show("Seleccione una impresora válida", "Impresora");
-                    }
                 }
             }
             catch (Exception ex)
@@ -373,28 +368,21 @@ namespace SisUvex.Archivo.Etiquetas
 
                     print = pt.PrintPalletString(printPallet.code, printPallet.variety, printPallet.distributor, printPallet.pounds, printPallet.presentation, printPallet.datePacking, printPallet.lote, printPallet.boxes);
 
-                    PrintDocument pd = new PrintDocument();
-                    pd.PrinterSettings = new PrinterSettings();
-                    pd.PrinterSettings.Copies = 2;
-
-
-                    for (int i = 0; i < pd.PrinterSettings.Copies; i++)
+                    for (int i = 0; i < 2; i++) //DOS POR DOS COPIAS DEL PALLET
                     {
                         superPrint = superPrint + print;
-
                     }
 
-                    if (ClsConfPrinter.PrintPallet.Length > 0)
-                    {
-                        pd.PrinterSettings.PrinterName = ClsConfPrinter.PrintPallet;
-                        RawPrinterHelper.SendStringToPrinter(pd.PrinterSettings.PrinterName, superPrint);
-                    }
+                    string printerName = ClsConfPrinter.GetPrinterPalletName();
+
+                    if (!string.IsNullOrEmpty(printerName))
+                        RawPrinterHelper.SendStringToPrinter(printerName, superPrint);
                     else
-                    {
                         MessageBox.Show("Seleccione una impresora válida", "Impresora");
-                    }
+
                     superPrint = "";
-                } else
+                }
+                else
                 {
                     MessageBox.Show("Ingrese el número de boleta", "Boleta");
                 }
