@@ -9,6 +9,7 @@ using System.Media;
 
 namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
 {
+    //
     public partial class FrmCajaEmpleado : Form
     {
         ClsCajaEmpleado cls = new ClsCajaEmpleado();
@@ -32,9 +33,6 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
 
             dt = new ClsSearchEmployees();
             ClsTextBoxes.TxbApplyKeyPressEventInt(txbCodigoEmp);
-
-            ClsConfPrinter clsConfPrinter = new ClsConfPrinter();
-            clsConfPrinter.Leer();
         }
 
         private void txbCodigoEmp_KeyPress(object sender, KeyPressEventArgs e)
@@ -90,19 +88,15 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
             }
             else
             {
-                if (!ClsConfPrinter.PrintCode.IsNullOrEmpty())
+                string printerName = ClsConfPrinter.GetPrinterCodeName();
+                if (!string.IsNullOrEmpty(printerName))
                 {
-
-                    //pd.PrinterSettings.PrinterName = ClsConfPrinter.PrintCode;
-
                     string superPrint = cls.GetStringZPL(dt.id, dt.name, dt.lastNamePat, dt.lastNameMat, (int)nudCantidad.Value);
-                    //MessageBox.Show(superPrint);
-                    RawPrinterHelper.SendStringToPrinter(ClsConfPrinter.PrintCode, superPrint);
+                    //Clipboard.SetText(superPrint);
+                    RawPrinterHelper.SendStringToPrinter(printerName, superPrint);
                 }
                 else
-                {
                     MessageBox.Show("No se ha seleccionado una impresora", "Impresora no seleccionada");
-                }
             }
         }
         private void FirstClick()

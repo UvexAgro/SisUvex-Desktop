@@ -18,7 +18,6 @@ using SisUvex.Nomina.Actualizar_datos_empelado;
 using SisUvex.Operacion;
 using SisUvex.Catalogos.Categoría;
 using SisUvex.Catalogos.Presentacion;
-using SisUvex.Catalogos.PlantillaV1;
 using SisUvex.Nomina.Prices.PricesGtin;
 using SisUvex.Nomina.EmployeeCredentials;
 using SisUvex.Grow.PlantsRowLot;

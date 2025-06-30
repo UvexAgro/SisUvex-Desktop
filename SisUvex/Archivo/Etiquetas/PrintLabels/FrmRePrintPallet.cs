@@ -20,7 +20,6 @@ namespace SisUvex.Archivo.Reimprimir
         private ClsPalletCreate palletCreate;
         public DataTable? dtWorkPlan;
         ETagInfo eTagInfo = new ETagInfo();
-        ClsConfPrinter confPrinter = new ClsConfPrinter();
         string idPallet;
         string update;
 
@@ -45,7 +44,7 @@ namespace SisUvex.Archivo.Reimprimir
                 {
                     workPlan = reader[0].ToString();
                     palletBoxes = Convert.ToInt32(reader[1].ToString());
-                    MessageBox.Show("Plan de trabajo: "+workPlan+"\n"+"Pallet: "+ idPallet, "REIMPRESION DE PALLET" );
+                    //MessageBox.Show("Plan de trabajo: "+workPlan+"\n"+"Pallet: "+ idPallet, "REIMPRESION DE PALLET" );
                 }
                 else
                 {
@@ -81,7 +80,6 @@ namespace SisUvex.Archivo.Reimprimir
 
         private void FrmRePrintPallet_Load(object sender, EventArgs e)
         {
-            confPrinter.Leer();
         }
 
         public void SetTagInfo(string idWorkPlan)

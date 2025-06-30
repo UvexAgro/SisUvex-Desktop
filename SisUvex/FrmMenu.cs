@@ -10,7 +10,6 @@ using SisUvex.Nomina;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
 using SisUvex.Catalogos.RegistroMaterial;
-using SisUvex.Archivo.Impresoras;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Configuracion;
 using SisUvex.Consultas.Pallets;
@@ -225,17 +224,6 @@ namespace SisUvex
             FrmRegistroMaterialCat cat = new FrmRegistroMaterialCat();
 
             AbrirVentanaHijo(cat, 1);
-        }
-
-        private void configurarImpresorasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmSelectPrinter cat = new FrmSelectPrinter();
-
-            AbrirVentanaHijo(cat, 1);
-        }
-
-        private void reportesComedorToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
         }
 
         private void impresoraPalletToolStripMenuItem_Click(object sender, EventArgs e)
