@@ -57,6 +57,7 @@
             btnTemplates = new Button();
             chbPrintManifestPerField = new CheckBox();
             btnPrintManifest = new Button();
+            chbExcelLayout = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -347,11 +348,23 @@
             btnPrintManifest.UseVisualStyleBackColor = true;
             btnPrintManifest.Click += btnPrintManifest_Click;
             // 
+            // chbExcelLayout
+            // 
+            chbExcelLayout.AutoSize = true;
+            chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
+            chbExcelLayout.Location = new Point(653, 124);
+            chbExcelLayout.Name = "chbExcelLayout";
+            chbExcelLayout.Size = new Size(91, 19);
+            chbExcelLayout.TabIndex = 385;
+            chbExcelLayout.Text = "Excel layout";
+            chbExcelLayout.UseVisualStyleBackColor = true;
+            // 
             // FrmManifestCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chbExcelLayout);
             Controls.Add(chbPrintManifestPerField);
             Controls.Add(btnPrintManifest);
             Controls.Add(btnTemplates);
@@ -416,5 +429,6 @@
         private Button btnTemplates;
         public CheckBox chbPrintManifestPerField;
         private Button btnPrintManifest;
+        public CheckBox chbExcelLayout;
     }
 }

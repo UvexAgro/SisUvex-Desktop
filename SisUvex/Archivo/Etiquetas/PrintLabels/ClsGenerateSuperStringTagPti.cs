@@ -174,9 +174,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                     $"\n^CFF,10,0 ^FO25,160^FD{eTag.nameVariety} ({eTag.nameSize})^FS" +
                                     $"\n^CFF,10,0 ^FO25,210^FD{stringPresentation}^FS" +
                                     $"\n^CFF,10,0 ^FO25,240^FDNet Weight / Poids Net: {eTag.Lbs} lb^FS" +
-                                    $"\n^CFF,10,0 ^FO25,270^FDProduce of / Produit des Mexico^FS" +
+                                    $"\n^CFF,10,0 ^FO25,270^FDProduce of / Produit de Mexique^FS" +
                                     $"\n^CFF,30,10^FO635,175^FDPack date^FS" +
-                                    $"\n^CFF,30,10^FO615,205^FDDate du pack^FS" +
+                                    $"\n^CFF,30,10^FO605,205^FDDate d'emballage^FS" +
                                     $"\n^CFD,37^FO650,255^FD{DateMonth}^FS" +
                                     $"\n^CFD,37^FO745,255^FD{DateDay}^FS" +
                                     $"\n^FO640,235^FR^GB160,70,50^FS" +

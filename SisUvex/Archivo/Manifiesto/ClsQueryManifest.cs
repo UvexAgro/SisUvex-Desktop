@@ -177,7 +177,7 @@ namespace SisUvex.Archivo.Manifiesto
                     this.carrierId = dr["idTLn"].ToString();
                     this.carrierName = dr["Linea de transporte"].ToString();
                     this.carrierSCAC = dr["tln SCAC"].ToString();
-                    this.carrierSCAAT = dr["tln SCAAT"].ToString();
+                    this.carrierSCAAT = dr["tln CAAT"].ToString();
                     this.truckId = dr["idTru"].ToString();
                     this.truckNoEco = dr["tru Num eco"].ToString();
                     this.truckPlateUS = dr["tru Placas US"].ToString();

@@ -55,6 +55,7 @@ namespace SisUvex
             ApplicationConfiguration.Initialize();
             //Application.Run(new FrmManifestCat());
             Application.Run(new PantallaCarga());
+
         }
     }
 }

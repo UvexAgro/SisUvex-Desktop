@@ -24,7 +24,7 @@ namespace SisUvex.Catalogos.TransportLine
         {
             cls ??= new();
             cls._frmCat ??= this;
-            
+
             cls.BeginFormCat();
         }
 
@@ -83,6 +83,11 @@ namespace SisUvex.Catalogos.TransportLine
         private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             OpenFrmModifyFromCat();
+        }
+
+        private void dgvCatalog_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

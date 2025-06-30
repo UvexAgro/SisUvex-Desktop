@@ -593,14 +593,14 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BtnPrintManifestFrmAdd()
         {
-            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked);
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
         }
 
         public void BtnPrintManifestFrmCat()
         {
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked);
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
             }
             else
             {
@@ -608,7 +608,7 @@ namespace SisUvex.Archivo.Manifiesto
             }
         }
 
-        private void PrintManifest(string idManifest, bool isManifestPerField)
+        private void PrintManifest(string idManifest, bool isManifestPerField, bool isExcelLayout)
         {
             try
             {
@@ -621,6 +621,7 @@ namespace SisUvex.Archivo.Manifiesto
 
                     if (conf.printManifest)
                     {
+                        // ClsPDFManifest pdfManifest = new ClsPDFManifest();
                         ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
                         pdf.desktopPath = conf.manifestFolderPath;
 
@@ -632,12 +633,13 @@ namespace SisUvex.Archivo.Manifiesto
                         isPrint = true;
                     }
 
-                    //if (conf.printManifest)
-                    //{
-                    //    ClsPDFManifiesto pdf = new ClsPDFManifiesto();
-                    //    pdf.desktopPath = conf.manifestFolderPath;
-                    //    pdf.CreatePDFManifest(idManifest);
-                    //}
+                    if (isExcelLayout)
+                    {
+                        ClsManifestExcelLayout exl = new ClsManifestExcelLayout();
+                        exl.CreateExcelLayout(idManifest);
+
+                        isPrint = true;
+                    }
 
                     if (conf.printMaping)
                     {
