@@ -3,6 +3,7 @@ using System;
 using System.Data.SqlClient;
 using SisUvex.Configuracion;
 using System.Configuration;
+using SisUvex.Properties;
 
 
 public static class User
@@ -67,20 +68,18 @@ public static class User
             sql.CloseConectionRead();
         }
     }
-    public static void SetLastUser(string usuario)
-    {
 
-        if (ClsConfig.lastLogin == usuario)
+    public static void SetLastUser(string user)
+    {
+        if (user.Equals(Settings.Default.LastUser))
             return;
 
-        ClsConfig.lastLogin = usuario;
-        ClsXmlArchivos xml = new ClsXmlArchivos();
-        xml.PutInTempFile();
-        conf.Guardar();
-        xml.PutInConfFile();
+        Settings.Default.LastUser = user;
+        Settings.Default.Save();
     }
+
     public static string GetLastUser()
     {
-        return ClsConfig.lastLogin;
+        return Settings.Default.LastUser;
     }
 }
