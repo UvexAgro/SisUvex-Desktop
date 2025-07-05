@@ -1,21 +1,15 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.Spreadsheet;
-using NPOI.SS.Formula.Functions;
-using SisUvex.Catalogos;
+﻿using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.TextBoxes;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using static SisUvex.Catalogos.Metods.ClsObject;
+using SisUvex.Catalogos.Metods.Extentions;
+using DocumentFormat.OpenXml.Office.CoverPageProps;
+using DocumentFormat.OpenXml.Presentation;
 
 namespace SisUvex.Operacion
 {
@@ -583,33 +577,46 @@ namespace SisUvex.Operacion
 
 
             //[CAMBIOS PROXIMOS PARA AÑADIR CUADRILLA, LOTE, ETC]
-            //if (frmCat.cboMaterial.SelectedIndex > 0)
-            //{
-            //    qry += " AND matC.id_matCatalog = @idMaterial ";
-            //    parameters.Add("@idMaterial", frmCat.cboMaterial.SelectedValue);
-            //}
+            if (frmCat.cboLot.SelectedIndex > 0) //SACAR IDLOT Y VARIEDAD DEL cboLot
+            {
+                qry += " AND vw.id_lot = @idLot ";
+                parameters.Add("@idLot", frmCat.cboLot.GetColumnValue(Lot.ColumnId));
 
-            //if (frmCat.cboDistributor.SelectedIndex > 0)
-            //{
-            //    qry += $" AND vw.idDis = '{frmCat.cboDistributor.SelectedValue}' ";
-            //}
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboLot.GetColumnValue(Variety.ColumnId));
+            }
+            else if (frmCat.cboVariety.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboVariety.SelectedValue.ToString());
+                MessageBox.Show(frmCat.cboVariety.SelectedValue.ToString());
+            }
 
-            //if (frmCat.cboGrower.SelectedIndex > 0)
-            //{
-            //    qry += $" AND vw.idGro = '{frmCat.cboGrower.SelectedValue}' ";
-            //}
-
-            //if (frmCat.cboConsignee.SelectedIndex > 0)
-            //{
-            //    qry += $" AND vw.idCons = '{frmCat.cboConsignee.SelectedValue}' ";
-            //}
-
-            //if (frmCat.cboDestination.SelectedIndex > 0)
-            //{
-            //    qry += $" AND vw.idCitDE = '{frmCat.cboDestination.SelectedValue}' ";
-            //}
+            if (frmCat.cboWorkGroup.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_workGroup = @idWorkGroup ";
+                parameters.Add("@idWorkGroup", frmCat.cboWorkGroup.SelectedValue);
+            }
 
             return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+        }
+
+        private void LoadControlsCat()
+        {
+            ClsComboBoxes.CboLoadActives(frmCat.cboLot, Lot.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboVariety, Variety.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboWorkGroup, WorkGroup.Cbo);
+
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboLot, frmCat.chbLotRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboVariety, frmCat.chbVarietyRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboWorkGroup, frmCat.chbWorkGroupRemoved);
+        }
+
+        public void FrmCatLoad()
+        {
+            LoadControlsCat();
+
+            SetDgvCatalog();
         }
     }
 }
