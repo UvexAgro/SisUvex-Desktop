@@ -52,7 +52,7 @@ namespace SisUvex.Operacion
 
         private void FrmCajasGranelRegistroCat_Load(object sender, EventArgs e)
         {
-            cls.SetDgvCatalog();
+            cls.FrmCatLoad();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
