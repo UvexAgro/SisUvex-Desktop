@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SisUvex.Catalogos;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Controls;
+using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.TextBoxes;
 using System.Data;
 using System.Data.SqlClient;
-using SisUvex.Catalogos;
+using static SisUvex.Catalogos.Metods.ClsObject;
+using SisUvex.Catalogos.Metods.Extentions;
+using DocumentFormat.OpenXml.Office.CoverPageProps;
 using DocumentFormat.OpenXml.Presentation;
-using System.Windows.Forms;
-using DocumentFormat.OpenXml.Spreadsheet;
-using System.Linq.Expressions;
-using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.Metods.Controls;
-using SisUvex.Catalogos.Metods.TextBoxes;
 
 namespace SisUvex.Operacion
 {
@@ -24,6 +20,7 @@ namespace SisUvex.Operacion
         public FrmCajasGranelRegistro frmAdd;
         ClsControls controlList;
         public string titulo = "Registro de cajas a granel";
+        string queryCatalogo = " SELECT vw.* FROM vw_Pack_BulkReception vw ";
 
         public ClsCajasGranelRegistro()
         {
@@ -263,7 +260,7 @@ namespace SisUvex.Operacion
                 ProcAñadirRegistrosMenor(idLot, idVariety, boxes, kgBox);
             }
 
-            frmCat.dgvCatalogo.DataSource = CatalogoActivos();
+            SetDgvCatalog();
 
             frmAdd.Close();
         }
@@ -323,28 +320,6 @@ namespace SisUvex.Operacion
             {
                 MessageBox.Show(ex.ToString(), titulo);
             }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-        public DataTable CatalogoActivos()
-        {
-            string fecha = frmCat.dtpFecha.Value.ToString("yyyy-MM-dd");
-            DataTable dt = new DataTable();
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter($"SELECT * FROM vw_Pack_BulkReception WHERE Fecha = '{fecha}'", sql.cnn);
-                da.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), titulo);
-                return dt;
-            }
-
             finally
             {
                 sql.CloseConectionWrite();
@@ -472,7 +447,7 @@ namespace SisUvex.Operacion
             frmAdd.txbTaraCaja.Enabled = false;
             frmAdd.txbTaraTarima.Enabled = false;
 
-            frmCat.dgvCatalogo.DataSource = CatalogoActivos();
+            SetDgvCatalog();
 
             frmAdd.Close();
         }
@@ -585,6 +560,63 @@ namespace SisUvex.Operacion
             {
                 sql.CloseConectionWrite();
             }
+        }
+        public void SetDgvCatalog()
+        {
+            frmCat.dgvCatalogo.DataSource = GetDTCatalogQueryWithFilter();
+        }
+
+        private DataTable GetDTCatalogQueryWithFilter()
+        {
+            Dictionary<string, object> parameters = new();
+            
+            string qry = queryCatalogo + $" WHERE vw.Fecha BETWEEN @date1 AND @date2 ";
+
+            parameters.Add("@date1", frmCat.dtpFecha1.Value.ToString("yyyy-MM-dd"));
+            parameters.Add("@date2", frmCat.dtpFecha2.Value.ToString("yyyy-MM-dd"));
+
+
+            //[CAMBIOS PROXIMOS PARA AÑADIR CUADRILLA, LOTE, ETC]
+            if (frmCat.cboLot.SelectedIndex > 0) //SACAR IDLOT Y VARIEDAD DEL cboLot
+            {
+                qry += " AND vw.id_lot = @idLot ";
+                parameters.Add("@idLot", frmCat.cboLot.GetColumnValue(Lot.ColumnId));
+
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboLot.GetColumnValue(Variety.ColumnId));
+            }
+            else if (frmCat.cboVariety.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboVariety.SelectedValue.ToString());
+                MessageBox.Show(frmCat.cboVariety.SelectedValue.ToString());
+            }
+
+            if (frmCat.cboWorkGroup.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_workGroup = @idWorkGroup ";
+                parameters.Add("@idWorkGroup", frmCat.cboWorkGroup.SelectedValue);
+            }
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+        }
+
+        private void LoadControlsCat()
+        {
+            ClsComboBoxes.CboLoadActives(frmCat.cboLot, Lot.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboVariety, Variety.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboWorkGroup, WorkGroup.Cbo);
+
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboLot, frmCat.chbLotRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboVariety, frmCat.chbVarietyRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboWorkGroup, frmCat.chbWorkGroupRemoved);
+        }
+
+        public void FrmCatLoad()
+        {
+            LoadControlsCat();
+
+            SetDgvCatalog();
         }
     }
 }
