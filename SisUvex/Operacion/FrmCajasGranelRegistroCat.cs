@@ -30,7 +30,7 @@ namespace SisUvex.Operacion
 
                     cls.EliminarRegistroSeleccionado(id);
 
-                    dgvCatalogo.DataSource = cls.CatalogoActivos();
+                    cls.SetDgvCatalog();
                 }
             }
         }
@@ -51,12 +51,12 @@ namespace SisUvex.Operacion
 
         private void FrmCajasGranelRegistroCat_Load(object sender, EventArgs e)
         {
-            dgvCatalogo.DataSource = cls.CatalogoActivos();
+            cls.SetDgvCatalog();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            dgvCatalogo.DataSource = cls.CatalogoActivos();
+            cls.SetDgvCatalog();
         }
     }
 }
