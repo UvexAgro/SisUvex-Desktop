@@ -5,7 +5,6 @@ namespace SisUvex.Operacion
     internal partial class FrmCajasGranelRegistro : Form
     {
         public ClsCajasGranelRegistro cls;
-        bool isFormModificar = false;
 
         public decimal _KgTotalesNetos, _KgTotales, _KgPorCaja, _TaraTarima, _TaraCaja, _CajasFila, _CajasTotales;
 
@@ -16,16 +15,10 @@ namespace SisUvex.Operacion
 
         private void FrmCajasGranelRegistro_Load(object sender, EventArgs e)
         {
-            cls.SetControls();
+            cls ??= new();
+            cls.frmAdd ??= this;
 
-            if (cls.IsFormModificar(txbId))
-            {
-                cls.LlenarFormularioModificar();
-
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboWorkGroup, txbIdWorkGroup);
-
-                isFormModificar = true;
-            }
+            cls.FrmAddModifyBegin();
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -47,12 +40,7 @@ namespace SisUvex.Operacion
 
         private void btnGuardarRegistro_Click(object sender, EventArgs e)
         {
-            if (!isFormModificar)
-                cls.AñadirRegistros();
-            else
-            {
-                cls.ModificarRegistros();
-            }
+            cls.BtnAccept();
         }
 
         private void txbValoresKilogramos_TextChanged(object sender, EventArgs e)

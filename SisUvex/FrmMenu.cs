@@ -334,8 +334,8 @@ namespace SisUvex
 
         private void cajasAGranelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsCajasGranelRegistro cls = new ClsCajasGranelRegistro();
-            AbrirVentanaHijo(cls.frmCat, 1);
+            FrmCajasGranelRegistroCat cat = new();
+            AbrirVentanaHijo(cat, 1);
         }
 
         private void conexiónToolStripMenuItem_Click(object sender, EventArgs e)
