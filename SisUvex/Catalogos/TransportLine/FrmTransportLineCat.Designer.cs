@@ -89,6 +89,7 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 395);
             dgvCatalog.TabIndex = 5;
+            dgvCatalog.CellContentClick += dgvCatalog_CellContentClick;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove

@@ -51,7 +51,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (!string.IsNullOrEmpty(eTag.preLabel)) presentationZPL += " " + eTag.preLabel + " ";
             presentationZPL += eTag.namePresentation;
             if (!string.IsNullOrEmpty(eTag.postLabel)) presentationZPL += " " + eTag.postLabel;
-            presentationZPL += eTag.shortNameTypeBox;
+            presentationZPL += " " + eTag.shortNameTypeBox;
 
             //**Que no jale el nombre corto (si no hay) hasta que se cambie el procedimiento almacenado en hermosillo
             distribuidorZPL = eTag.shortNameDistributor;

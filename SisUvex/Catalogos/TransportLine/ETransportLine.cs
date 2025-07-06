@@ -78,7 +78,7 @@ namespace SisUvex.Catalogos.TransportLine
                 cmd.Parameters.AddWithValue("@RFC", ClsValues.IfEmptyToDBNull(RFC));
                 cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
                 cmd.Parameters.AddWithValue("@SCAC", ClsValues.IfEmptyToDBNull(SCAC));
-                cmd.Parameters.AddWithValue("@SCAAT", ClsValues.IfEmptyToDBNull(SCAAT));
+                cmd.Parameters.AddWithValue("@CAAT", ClsValues.IfEmptyToDBNull(SCAAT));
                 cmd.Parameters.AddWithValue("@active", active);
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 

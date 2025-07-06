@@ -1,6 +1,4 @@
-﻿using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.PlantillaV1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +8,7 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods;
 
 namespace SisUvex.Operacion
 {

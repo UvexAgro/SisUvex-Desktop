@@ -61,9 +61,9 @@ namespace SisUvex.Archivo.Etiquetas.CajaEmpleado
                     $"\r\n" +
                     $"^FX Nombre izquierdo.\r\n" +
                     $"^CF0,30\r\n" +
-                    $"^FO185,70^FD{name}^FS\r\n" +
-                    $"^FO185,110^FD{lastNamePat}^FS\r\n" +
-                    $"^FO185,110^FD{lastNameMat}^FS\r\n" +
+                    $"^FO185,50^FD{name}^FS\r\n" +
+                    $"^FO185,90^FD{lastNamePat}^FS\r\n" +
+                    $"^FO185,130^FD{lastNameMat}^FS\r\n" +
                     $"\r\n" +
                     $"^FX QR derecho\r\n" +
                     $"^FO490,35^BY2,2.0,10^BQN,2,5^FD230{idBox2}^FS\r\n" +
