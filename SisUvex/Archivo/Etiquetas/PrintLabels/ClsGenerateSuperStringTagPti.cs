@@ -38,7 +38,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string GenerateSuperStringTag(ETagInfo eTagInfo, int copies, bool reverseOrientation)
         {
             reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
-            
             eTag = eTagInfo;
             switch (eTag.idPti)
             {
@@ -89,6 +88,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     return SetStringCanadaPtiLabel(copies);
+                case
+                    "08":
+                    //NOMBRE CIENTIFICO (ESTANDAR PARA VARIEDADES CON NOMBRE CIENTIFICO)
+                    string scientificName = string.IsNullOrEmpty(eTag.scientisVarierty) ? eTag.nameVariety : eTag.scientisVarierty; //En caso de que no tenga científico que use el nombre normal (comercial)
+
+                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.scientisVarierty, eTag.nameSize); //VARIEDAD CON NOMBRE CIENTIFICO
+                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
