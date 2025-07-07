@@ -746,5 +746,21 @@ namespace SisUvex.Operacion
 
             dgv.ModifyIdRowInDGV(newIdRow);
         }
+
+        public void BtnSearchInvoice(string invoice)
+        {
+            if (string.IsNullOrEmpty(invoice))
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string qry = queryCatalogo + " WHERE RIGHT(REPLICATE('0', 15) + CAST(vw.Papeleta AS VARCHAR), 15) = RIGHT(REPLICATE('0', 15) + CAST(@invoice AS VARCHAR), 15) ";
+            Dictionary<string, object> parameters = new();
+            parameters.Add("@invoice", invoice);
+            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            dgv = new ClsDGVCatalog(frmCat.dgvCatalogo, dtCatalog);
+            DgvHideColumnsToExitCatalog();
+        }
     }
 }

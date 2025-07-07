@@ -74,5 +74,10 @@ namespace SisUvex.Operacion
             if (cls.IsModifyUpdate)
                 cls.ModifyRowByIdInDGVCatalog();
         }
+
+        private void btnInvoice_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchInvoice(txbInvoice.Text);
+        }
     }
 }

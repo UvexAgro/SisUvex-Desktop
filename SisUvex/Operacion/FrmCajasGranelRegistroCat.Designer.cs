@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCajasGranelRegistroCat));
             btnEliminar = new Button();
             dgvCatalogo = new DataGridView();
@@ -49,12 +49,15 @@
             chbLotRemoved = new CheckBox();
             chbVarietyRemoved = new CheckBox();
             chbWorkGroupRemoved = new CheckBox();
+            btnInvoice = new Button();
+            txbInvoice = new TextBox();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogo).BeginInit();
             SuspendLayout();
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(171, 89);
+            btnEliminar.Location = new Point(171, 98);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 13;
@@ -71,37 +74,37 @@
             dgvCatalogo.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogo.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogo.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvCatalogo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvCatalogo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCatalogo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogo.EnableHeadersVisualStyles = false;
             dgvCatalogo.ImeMode = ImeMode.NoControl;
-            dgvCatalogo.Location = new Point(9, 118);
+            dgvCatalogo.Location = new Point(9, 127);
             dgvCatalogo.Name = "dgvCatalogo";
             dgvCatalogo.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCatalogo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogo.RowHeadersVisible = false;
             dgvCatalogo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogo.Size = new Size(865, 324);
+            dgvCatalogo.Size = new Size(865, 315);
             dgvCatalogo.TabIndex = 11;
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(90, 89);
+            btnModificar.Location = new Point(90, 98);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 10;
@@ -111,7 +114,7 @@
             // 
             // btnAñadir
             // 
-            btnAñadir.Location = new Point(9, 89);
+            btnAñadir.Location = new Point(9, 98);
             btnAñadir.Name = "btnAñadir";
             btnAñadir.Size = new Size(75, 23);
             btnAñadir.TabIndex = 9;
@@ -131,7 +134,7 @@
             // 
             btnSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnSearch.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearch.Location = new Point(470, 59);
+            btnSearch.Location = new Point(457, 59);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(25, 25);
             btnSearch.TabIndex = 15;
@@ -265,11 +268,43 @@
             chbWorkGroupRemoved.Text = "  ";
             chbWorkGroupRemoved.UseVisualStyleBackColor = true;
             // 
+            // btnInvoice
+            // 
+            btnInvoice.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnInvoice.BackgroundImageLayout = ImageLayout.Stretch;
+            btnInvoice.Location = new Point(582, 98);
+            btnInvoice.Name = "btnInvoice";
+            btnInvoice.Size = new Size(23, 23);
+            btnInvoice.TabIndex = 43;
+            btnInvoice.UseVisualStyleBackColor = true;
+            btnInvoice.Click += btnInvoice_Click;
+            // 
+            // txbInvoice
+            // 
+            txbInvoice.Location = new Point(499, 98);
+            txbInvoice.MaxLength = 5;
+            txbInvoice.Name = "txbInvoice";
+            txbInvoice.Size = new Size(83, 23);
+            txbInvoice.TabIndex = 42;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 6.75F);
+            label6.Location = new Point(499, 83);
+            label6.Name = "label6";
+            label6.Size = new Size(40, 12);
+            label6.TabIndex = 44;
+            label6.Text = "Papeleta";
+            // 
             // FrmCajasGranelRegistroCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(882, 450);
+            Controls.Add(label6);
+            Controls.Add(btnInvoice);
+            Controls.Add(txbInvoice);
             Controls.Add(chbWorkGroupRemoved);
             Controls.Add(chbVarietyRemoved);
             Controls.Add(chbLotRemoved);
@@ -317,5 +352,8 @@
         public CheckBox chbLotRemoved;
         public CheckBox chbVarietyRemoved;
         public CheckBox chbWorkGroupRemoved;
+        private Button btnInvoice;
+        private TextBox txbInvoice;
+        private Label label6;
     }
 }
