@@ -282,7 +282,7 @@
             // txbInvoice
             // 
             txbInvoice.Location = new Point(499, 98);
-            txbInvoice.MaxLength = 5;
+            txbInvoice.MaxLength = 11;
             txbInvoice.Name = "txbInvoice";
             txbInvoice.Size = new Size(83, 23);
             txbInvoice.TabIndex = 42;
