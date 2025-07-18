@@ -182,6 +182,7 @@
             // 
             // btnAccept
             // 
+            btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnAccept.Location = new Point(12, 381);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(127, 23);
@@ -192,6 +193,7 @@
             // 
             // btnCancel
             // 
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCancel.Location = new Point(147, 381);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(127, 23);
