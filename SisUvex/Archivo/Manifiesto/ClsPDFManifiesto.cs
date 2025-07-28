@@ -663,12 +663,12 @@ namespace SisUvex.Archivo.Manifiesto
         public void DesignPDFManifestRemisionTable(iText.Layout.Document document, string manifestNumber)
         {
             // Crear una tabla con 3 columnas que ocupa todo el ancho de la página
-            Table tableRemisionDetailed = new Table(5).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionDetailed = new Table(4).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
 
             // Agregar los encabezados de la tabla
             AddCellToTable(tableRemisionDetailed, "Variedad", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Descripción", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            /*AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);*/
             AddCellToTable(tableRemisionDetailed, "Bultos", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Kilos", 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
 
@@ -678,12 +678,12 @@ namespace SisUvex.Archivo.Manifiesto
                 // Agregar cada columna de la fila a la tabla del PDF
                 AddCellToTable(tableRemisionDetailed, detalle["Variedad"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Descripción"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
-                AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+               /* AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);*/
                 AddCellToTable(tableRemisionDetailed, detalle["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
             }
 
-            Table tableRemisionTotal = new Table(5).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionTotal = new Table(4).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
 
 
             if(queryManifest.TotalesCarga.Rows.Count == 0)

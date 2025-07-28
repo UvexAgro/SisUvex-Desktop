@@ -46,9 +46,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idColor { get; set; }
         public string? nameColor { get; set; }
         public string? nameGenericColor { get; set; }
+        public string? nameColorCanEn { get; set; }
+        public string? nameColorCanFr { get; set; }
         public string? voicePickCode { get; set; }
         public string? idContractor { get; set; }
         public string? nameContractor { get; set; }
+        public string? growFarmName { get; set; } // Added for grow farm name
+        public string? idTypeBox { get; set; }
+        public string? nameTypeBox { get; set; }
+        public string? shortNameTypeBox { get; set; } // Added for short name type box
 
         public void ClearFields()
         {
@@ -88,10 +94,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             namePti = null;
             idColor = null;
             nameColor = null;
+            nameColorCanEn = null;
+            nameColorCanFr = null;
             nameGenericColor = null;
             voicePickCode = null;
             idContractor = null;
             nameContractor = null;
+            growFarmName = null; // Clear grow farm name
+            idTypeBox = null;
+            nameTypeBox = null;
+            shortNameTypeBox = null;
         }
     }
 }

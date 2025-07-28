@@ -165,5 +165,10 @@ namespace SisUvex.Archivo.Manifiesto
                 ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(cboFreightContainer, sel.SelectedValue);
             }
         }
+
+        private void txbIdMarket_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

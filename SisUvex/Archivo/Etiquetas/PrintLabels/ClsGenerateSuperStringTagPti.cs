@@ -1,6 +1,7 @@
 ﻿using Azure;
 using DocumentFormat.OpenXml.Drawing.Charts;
-using Microsoft.IdentityModel.Tokens;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.ReportingServices.ReportProcessing.OnDemandReportObjectModel;
 using SisUvex.Catalogos.Metods.Values;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZXing.QrCode.Internal;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SisUvex.Archivo.Etiquetas.PrintLabels
 {
@@ -35,6 +37,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         public string GenerateSuperStringTag(ETagInfo eTagInfo, int copies, bool reverseOrientation)
         {
+            reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
             eTag = eTagInfo;
             switch (eTag.idPti)
             {
@@ -48,9 +51,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "02":
                     //ALBERTONS
-                    SetStringDistributorZPL("Better Living Brands LLC", "P.O. Box 99", "Pleasanton CA 94566");
-                    SetStringAlbertonsSignatureSelect(eTag.nameGenericColor); //VARIEDAD GENERICA
-                    SetStringPresentationZPL("8/2", string.Empty, string.Empty, string.Empty, string.Empty); //PRESENTACION STANDAR
+                    return SetStringAlbertonsPtiLabel(copies);
                     break;
                 case
                     "03":
@@ -80,7 +81,21 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
                     SetStringQrSpaceDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR CON ESPACIO QR
+                    break;
+                case
+                    "07":
+                    //QR CANADA
+                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    return SetStringCanadaPtiLabel(copies);
+                case
+                    "08":
+                    //NOMBRE CIENTIFICO (ESTANDAR PARA VARIEDADES CON NOMBRE CIENTIFICO)
+                    string scientificName = string.IsNullOrEmpty(eTag.scientisVarierty) ? eTag.nameVariety : eTag.scientisVarierty; //En caso de que no tenga científico que use el nombre normal (comercial)
 
+                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.scientisVarierty, eTag.nameSize); //VARIEDAD CON NOMBRE CIENTIFICO
+                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
@@ -88,11 +103,10 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringPresentationZPL(eTag.Lbs, string.Empty, string.Empty, string.Empty, string.Empty); //PRESENTACION STANDAR; //PRESENTACION STANDAR
                     break;
             }
+
             SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
             SetStringUpcZPL(eTag.upcGTIN);
             SetStringVoicePicKCodeZPL(eTag.voicePickCode, eTag.dateWorkPlan);
-
-            reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
 
             if (eTag.idPti == "06") //QR ESPARRAGO
                 return SuperPrintPtiTagWithQrUniqueBox(copies);
@@ -131,6 +145,62 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             }
             return superString;
         }
+        private string SetStringAlbertonsPtiLabel(int copies)
+        {
+
+            string zplAlbertons =   $"\n^CF0,30,30" +
+                                    $"\n^FT32,47^A@N,25,25^FD8/2 lb Clams^FS" +
+                                    $"\n^FT573,47^A@N,25,25^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
+                                    $"\n^FT178,98^A@N,25,25^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
+                                    $"\n^FT321,132^A@N,25,25^FDPack Date: {Juliana(eTag.dateWorkPlan)}^FS" +
+                                    $"\n^FT292,162^A@N,25,25^FDProduce of Mexico^FS" +
+                                    $"\n^FT173,210^A@N,25,25^FDDistributed by Better Living Brands, LLC^FS" +
+                                    $"\n^FT166,246^A@N,25,25^FDP.O. Box 99, Pleasanton, CA 94566-0009^FS" +
+                                    $"\n^FO180,290^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
+            labelsZPLString = zplBegin + zplAlbertons + reverseLabelOrientationZPL + zplEnd;
+            string superString = string.Empty;
+            for (int i = 0; i < copies; i++)
+            {
+                superString += "\n" + labelsZPLString;
+            }
+
+            return superString;
+        }
+        private string SetStringCanadaPtiLabel(int copies)
+        {
+            string stringPresentation = eTag.nameContainer;
+            if (!string.IsNullOrEmpty(eTag.preLabel)) stringPresentation += " " + eTag.preLabel;
+            stringPresentation += " " + eTag.namePresentation;
+            if (!string.IsNullOrEmpty(eTag.postLabel)) stringPresentation += " " + eTag.postLabel;
+
+            string VPC1 = eTag.voicePickCode.Substring(0, 2);
+            string VPC2 = eTag.voicePickCode.Substring(2, 2);
+            string DateMonth = eTag.dateWorkPlan?.ToString("MMM") ?? DateTime.Now.ToString("MMM");
+            string DateDay = eTag.dateWorkPlan?.ToString("dd") ?? DateTime.Now.ToString("dd");
+
+            string zplAlbertons =   $"\n^CFF,10,0 ^FO10,130^FD {eTag.nameColorCanEn}/{eTag.nameColorCanFr} ^FS" +
+                                    $"\n^CFF,10,0 ^FO25,160^FD{eTag.nameVariety} ({eTag.nameSize})^FS" +
+                                    $"\n^CFF,10,0 ^FO25,210^FD{stringPresentation}^FS" +
+                                    $"\n^CFF,10,0 ^FO25,240^FDNet Weight / Poids Net: {eTag.Lbs} lb^FS" +
+                                    $"\n^CFF,10,0 ^FO25,270^FDProduce of / Produit de Mexique^FS" +
+                                    $"\n^CFF,30,10^FO635,175^FDPack date^FS" +
+                                    $"\n^CFF,30,10^FO605,205^FDDate d'emballage^FS" +
+                                    $"\n^CFD,37^FO650,255^FD{DateMonth}^FS" +
+                                    $"\n^CFD,37^FO745,255^FD{DateDay}^FS" +
+                                    $"\n^FO640,235^FR^GB160,70,50^FS" +
+                                    $"\n^CFE,40,30^FO645,355^FD{VPC1}^FS" +
+                                    $"\n^CFE,50,30^FO720,335^FD{VPC2}^FS" +
+                                    $"\n^FO640,325^FR^GB160,70,50^FS";
+
+            labelsZPLString = zplBegin + zplAlbertons + gtinZPL + distributorZPL + upcZPL + reverseLabelOrientationZPL + zplEnd;
+            string superString = string.Empty;
+            for (int i = 0; i < copies; i++)
+            {
+                superString += "\n" + labelsZPLString;
+            }
+
+            return superString;
+        }
         private string SetStringQrcodeEsparragoZPL(string Qrcode, string sizeValue, string idGtin)
         {
             if (Qrcode.Length > 0)
@@ -159,57 +229,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private void SetStringCropVarietySizeZPL(string Crop, string Variety, string Size)
         {
-            //ChangeFontSize(Variety);
-
             varietyZPL = "^FX CROP, SIZE AND VARIETY\n" +
                         $"^CFF,60,10 ^FO25,130^FD{Crop} ({Size}) {Variety}^FS\n";
-            //else if (PtiType == 3) /*Kilos*/
-            //{
-            //varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
-            //            "^CFE,40,30\n" +
-            //            "^FO15,130^FD" + Crop + "^FS\n" +
-            //            "^CFE,50" + fontsize + "\n" +
-            //            "^FO15,170^FD" + Variety + "^FS\n" +
-            //            "^FO15,210^FD" + Weight + " Kgs " + Presentation + " " + Size + "^FS\n" +
-            //            "^FO15,250^FDProduce of Mexico^FS\n";
-            //}
-            //else
-            //{//GENERAL ESPARRAGO / BÁSICO
-            //    varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
-            //                "^CFE,40,30\n" +
-            //                "^FO15,130^FD" + Crop + "^FS\n" +
-            //                "^CFE," + fontsize + "\n" +
-            //                "^FO15,170^FD" + Variety + "^FS\n" +
-            //                "^FO15,205^FD" + Weight + " Lbs " + Presentation + " " + Size + "^FS\n" +
-            //                "^FO15,230^FDProduce of Mexico^FS\n";
-            //}
         }
         private void SetStringCropVarietyZPL(string Crop, string Variety)
         {
-            //ChangeFontSize(Variety);
-
             varietyZPL = "^FX CROP, VARIETY\n" +
                         $"^CFF,60,10 ^FO25,130^FD{Crop} {Variety}^FS\n";
-            //else if (PtiType == 3) /*Kilos*/
-            //{
-            //varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
-            //            "^CFE,40,30\n" +
-            //            "^FO15,130^FD" + Crop + "^FS\n" +
-            //            "^CFE,50" + fontsize + "\n" +
-            //            "^FO15,170^FD" + Variety + "^FS\n" +
-            //            "^FO15,210^FD" + Weight + " Kgs " + Presentation + " " + Size + "^FS\n" +
-            //            "^FO15,250^FDProduce of Mexico^FS\n";
-            //}
-            //else
-            //{//GENERAL ESPARRAGO / BÁSICO
-            //    varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
-            //                "^CFE,40,30\n" +
-            //                "^FO15,130^FD" + Crop + "^FS\n" +
-            //                "^CFE," + fontsize + "\n" +
-            //                "^FO15,170^FD" + Variety + "^FS\n" +
-            //                "^FO15,205^FD" + Weight + " Lbs " + Presentation + " " + Size + "^FS\n" +
-            //                "^FO15,230^FDProduce of Mexico^FS\n";
-            //}
         }
         private void SetStringAlbertonsSignatureSelect(string colorGenericName)
         {
@@ -217,12 +243,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             varietyZPL = "^FX VARIETY, PRESENTATION, DISTRIBUTOR\n" +
                         $"^CFF,60,10 ^FO170,130^FDSIGNATURE SELECT {colorGenericName}^FS\n";
         }
+
         private void SetStringPresentationZPL(string Weight, string Presentation, string container, string preLabel, string postLabel)
         {
             string stringPresentation = container + Weight;
-            if (!preLabel.IsNullOrEmpty()) stringPresentation += " " + preLabel;
+            if (!string.IsNullOrEmpty(preLabel)) stringPresentation += " " + preLabel;
             stringPresentation += " " + Presentation;
-            if (!postLabel.IsNullOrEmpty()) stringPresentation += " " + postLabel;
+            if (!string.IsNullOrEmpty(postLabel)) stringPresentation += " " + postLabel;
 
             presentationZPL = "^FX PRESENTATION\n" +
                         $"^CFF,60,10 ^FO25,190^FD" + stringPresentation + "^FS\n" +
@@ -231,8 +258,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
-            //ChangeFontSize(Distributor);
-
             distributorZPL = "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
                         "^FO25,300^FD" + Distributor + "^FS\n" +
@@ -244,8 +269,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
         private string SetStringQrSpaceDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
-            //ChangeFontSize(Distributor);
-
             distributorZPL = "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
                         "^FO133,300^FD" + Distributor + "^FS\n" +
@@ -286,7 +309,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             {
                 upcZPL = "^FX UPC CODE\n" +
                         "^FO390,320^BY2^BEN,60,Y,N,Y^FD" + upc + "^FS\n";
-            }else
+            }
+            else if (upc.Length == 8)
+            {
+                upcZPL = "^FX UPC CODE\n" +
+                        "^FO390,320^BY2^B8,60,Y,N,Y^FD" + upc + "^FS\n";
+            }
+            else
             {
                 upcZPL = "";
             }
@@ -339,6 +368,20 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             return orientation;
         }
+        private static string textUPCAlbertons(string? upc)
+        {
+            if (string.IsNullOrEmpty(upc) || upc.Length != 12)
+                return string.Empty;
 
+            return $"{upc[0]}-{upc.Substring(1, 5)}-{upc.Substring(6, 5)}-{upc[11]}";
+        }
+
+        public static string Juliana(DateTime? date)
+        {
+            if (date == null)
+                return string.Empty;
+            else
+                return date.Value.DayOfYear.ToString("D3");
+        }
     }
 }

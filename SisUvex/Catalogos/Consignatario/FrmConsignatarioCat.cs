@@ -1,7 +1,4 @@
-﻿
-using SisUvex.Catalogos.Material;
-
-namespace SisUvex.Catalogos.Consignatario
+﻿namespace SisUvex.Catalogos.Consignatario
 {
     public partial class FrmConsignatarioCat : Form
     {

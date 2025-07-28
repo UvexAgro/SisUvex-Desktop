@@ -12,7 +12,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
     internal class ClsConfigManifest
     {
         public string? idSeason { get; set; }
-        public string? market { get; set; }
+        public string? idMarket { get; set; }
         public int? temperature { get; set; }
         public string? temperatureUnit { get; set; }
         public bool printManifest { get; set; }
@@ -55,7 +55,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             {
                 DataRow dr = dt.Rows[0];
                 idSeason = dr["id_season"].ToString();
-                market = dr["c_market"].ToString();
+                idMarket = dr["id_market"].ToString();
                 temperature = Convert.ToInt32(dr["i_temperature"]);
                 temperatureUnit = dr["c_temperatureUnit"].ToString();
                 printManifest = dr["c_printManifest"].ToString() == "1";
@@ -75,7 +75,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             var parameters = new Dictionary<string, object>
                 {
                     { "@idSeason", idSeason ?? (object)DBNull.Value },
-                    { "@market", market ?? (object)DBNull.Value },
+                    { "@idMarket", idMarket ?? (object)DBNull.Value },
                     { "@temperature", temperature ?? (object)DBNull.Value },
                     { "@temperatureUnit", temperatureUnit ?? (object)DBNull.Value },
                     { "@printManifest", printManifest ? "1" : "0" },
@@ -89,7 +89,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             {
                 string qry = @"INSERT INTO Pack_ConfManifest ( 
                                  id_season, 
-                                 c_market, 
+                                 id_market, 
                                  i_temperature, 
                                  c_temperatureUnit, 
                                  c_printManifest, 
@@ -99,7 +99,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                  v_transportType) 
                                  VALUES (
                                  @idSeason, 
-                                 @market, 
+                                 @idMarket, 
                                  @temperature, 
                                  @temperatureUnit, 
                                  @printManifest, 
@@ -114,7 +114,7 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             {
                 string qry = @"UPDATE Pack_ConfManifest SET 
                                 id_season = @idSeason, 
-                                c_market = @market, 
+                                id_market = @idMarket, 
                                 i_temperature = @temperature, 
                                 c_temperatureUnit = @temperatureUnit, 
                                 c_printManifest = @printManifest, 

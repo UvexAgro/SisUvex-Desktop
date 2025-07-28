@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SisUvex.Catalogos;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Controls;
+using SisUvex.Catalogos.Metods.DataGridViews;
+using SisUvex.Catalogos.Metods.Extentions;
+using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Catalogos.Metods.Values;
 using System.Data;
 using System.Data.SqlClient;
-using SisUvex.Catalogos;
-using DocumentFormat.OpenXml.Presentation;
-using System.Windows.Forms;
-using DocumentFormat.OpenXml.Spreadsheet;
-using SisUvex.Catalogos.Chofer;
-using SisUvex.Catalogos.Troque;
-using System.Linq.Expressions;
-using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.Metods.Controls;
-using SisUvex.Catalogos.Metods.TextBoxes;
+using System.Media;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Operacion
 {
@@ -25,34 +20,63 @@ namespace SisUvex.Operacion
         public FrmCajasGranelRegistroCat frmCat;
         public FrmCajasGranelRegistro frmAdd;
         ClsControls controlList;
+        ClsDGVCatalog dgv;
+        DataTable? dtCatalog;
         public string titulo = "Registro de cajas a granel";
+        string queryCatalogo = " SELECT vw.* FROM vw_Pack_BulkReception vw ";
+        public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
+        public string? idAddModify;
 
-        public ClsCajasGranelRegistro()
+        public void OpenFrmAdd()
         {
-            frmCat = new FrmCajasGranelRegistroCat();
-            frmCat.cls = this;
-        }
-        
-        public void OpenAddForm()
-        {
-            frmAdd = new FrmCajasGranelRegistro();
+            idAddModify = null;
+            IsAddOrModify = true;
+            IsAddUpdate = false;
+            frmAdd = new();
             frmAdd.cls = this;
-            frmAdd.Show();
+            frmAdd.Text = "Añadir registro de granel";
+            frmAdd.ShowDialog();
         }
 
-        public void OpenModifyForm()
+        public void FrmAddModifyBegin()
         {
-            if (frmCat.dgvCatalogo.SelectedRows.Count > 0)
+            LoadControlsAddModify();
+
+            if (IsAddOrModify)
             {
-                string idRegistro = frmCat.dgvCatalogo.SelectedRows[0].Cells["Código"].Value.ToString();
-                frmAdd = new FrmCajasGranelRegistro();
-                frmAdd.cls = this;
-                frmAdd.txbId.Text = idRegistro;
-                frmAdd.Show();
+                frmAdd.txbId.Text = ClsQuerysDB.GetData(" SELECT FORMAT(COALESCE(MAX(id_bulk), 0) +1, '00000') AS [Id] from Pack_BulkReception ");
+            }
+            else
+            {
+                frmAdd.txbKgTotales.Enabled = false;
+                frmAdd.txbTaraTarima.Enabled = false;
+                frmAdd.txbTaraCaja.Enabled = false;
+
+                LlenarFormularioModificar(idAddModify);
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(frmAdd.cboWorkGroup, frmAdd.txbIdWorkGroup);
             }
         }
 
-        public void SetControls()
+        public void OpenFrmModify(string? idModify)
+        {
+            IsAddOrModify = false;
+            IsModifyUpdate = false;
+
+            if (string.IsNullOrEmpty(idModify))
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se ha seleccionado un registro de granel.", "Modificar registro de granel");
+                return;
+            }
+            idAddModify = idModify;
+            frmAdd = new();
+            frmAdd.cls = this;
+            frmAdd.Text = "Modificar registro de granel";
+            frmAdd.ShowDialog();
+        }
+
+        public void LoadControlsAddModify()
         {
             frmAdd.cboTroque.DataSource = CboTroqueGranelRegistro();
             frmAdd.cboTroque.DisplayMember = "Nombre";
@@ -243,34 +267,90 @@ namespace SisUvex.Operacion
                 sql.CloseConectionWrite();
             }
         }
-        public void AñadirRegistros()
+        public void BtnAccept()
         {
-            if (frmAdd.dgvRegistros.Rows.Count == 0)
-            {
-                MessageBox.Show("No hay registros para guardar", titulo);
-                return;
-            }
-
             if (!controlList.ValidateControls())
                 return;
 
-            ProcRegistrosGeneral();
-            foreach (DataGridViewRow row in frmAdd.dgvRegistros.Rows)
+            if (IsAddOrModify)
             {
-                string idLot = row.Cells["Lote"].Value.ToString().Substring(0, 4);
-                string idVariety = row.Cells["Lote"].Value.ToString().Substring(5, 2);
-                decimal boxes = decimal.Parse(row.Cells["Cajas"].Value.ToString());
-                decimal kgBox = decimal.Parse(row.Cells["Kilogramos"].Value.ToString());
+                AddProcedure();
+                if (IsAddUpdate)
+                {
+                    frmAdd.txbId.Text = idAddModify;
+                    MessageBox.Show($"Se ha agregado la salida con código: {idAddModify}", "Añadir salida de material");
 
-                ProcAñadirRegistrosMenor(idLot, idVariety, boxes, kgBox);
+                    frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo agregar la salida.", "Añadir salida de material");
+                }
             }
+            else
+            {
+                ModifyProcedure();
 
-            frmCat.dgvCatalogo.DataSource = CatalogoActivos();
+                if (IsModifyUpdate)
+                {
+                    MessageBox.Show($"Se ha modificado la salida con el código: {idAddModify}", "Modificar salida de material");
 
-            frmAdd.Close();
+                    frmAdd.txbCajasTotales.Enabled = false; //ASI ESTABA AQUI ANTES
+                    frmAdd.txbTaraCaja.Enabled = false;
+                    frmAdd.txbTaraTarima.Enabled = false;
+
+                    frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo modificar la salida.", "Modificar salida de material");
+                }
+            }
         }
+        public void AddProcedure()
+        {
+            var result = AddProcedureWithLots();
+            IsAddUpdate = result.Item1;
+            idAddModify = result.Item2;
+        }
+        public (bool, string?) AddProcedureWithLots()
+        {
+            SQLControl sql = new SQLControl();
+            try
+            {
+                sql.OpenConectionWrite();
+                sql.BeginTransaction();
 
-        public void ProcRegistrosGeneral()
+                var (success, idBulkReception) = AddProcedure(sql);
+                if (!success || idBulkReception == null)
+                {
+                    sql.transaction.Rollback();
+                    return (false, null);
+                }
+
+                if (!AddLots(sql, idBulkReception))
+                {
+                    sql.transaction.Rollback();
+                    return (false, null);
+                }
+
+                sql.transaction.Commit();
+                return (true, idBulkReception);
+            }
+            catch (Exception ex)
+            {
+                sql.transaction?.Rollback();
+                MessageBox.Show(ex.ToString(), "Añadir registro de granel");
+                return (false, null);
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+        public (bool, string?) AddProcedure(SQLControl sql)
         {
             decimal lbsNetPallet = decimal.Parse(frmAdd.txbKgNetos.Text) * 2.20462M;
             decimal lbsNetBox = decimal.Parse(frmAdd.txbKgPorCaja.Text) * 2.20462M;
@@ -278,7 +358,7 @@ namespace SisUvex.Operacion
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionAdd", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionAdd", sql.cnn, sql.transaction);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@invoice", frmAdd.txbPapeleta.Text);
                 cmd.Parameters.AddWithValue("@position", frmAdd.cboPosicion.Text);
@@ -291,78 +371,116 @@ namespace SisUvex.Operacion
                 cmd.Parameters.AddWithValue("@kgTot", frmAdd.txbKgTotales.Text);
                 cmd.Parameters.AddWithValue("@kgTarePallet", frmAdd.txbTaraTarima.Text);
                 cmd.Parameters.AddWithValue("@kgTareBox", frmAdd.txbTaraCaja.Text);
-                cmd.Parameters.AddWithValue("@truck", ValorNull(frmAdd.cboTroque.Text));
-                cmd.Parameters.AddWithValue("@driver", ValorNull(frmAdd.cboChofer.Text));
+                cmd.Parameters.AddWithValue("@truck", ClsValues.IfEmptyToDBNull(frmAdd.cboTroque.Text));
+                cmd.Parameters.AddWithValue("@driver", ClsValues.IfEmptyToDBNull(frmAdd.cboChofer.Text));
                 cmd.Parameters.AddWithValue("@idWorkGroup", frmAdd.txbIdWorkGroup.Text);
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
-                cmd.ExecuteNonQuery();
+                SqlDataReader dr = cmd.ExecuteReader();
+                string? idBulkReception = null;
+                if (dr.Read())
+                {
+                    idBulkReception = dr.GetValue(dr.GetOrdinal("Id")).ToString();
+                }
+                dr.Close();
+
+                return idBulkReception != null ? (true, idBulkReception) : (false, null);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), titulo);
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
+                MessageBox.Show(ex.ToString(), "Añadir registro de granel");
+                return (false, null);
             }
         }
-        public void ProcAñadirRegistrosMenor(string idLot, string idVariety, decimal boxes, decimal kgBox)
+
+        private bool AddLots(SQLControl sql, string idBulkReception)
         {
             try
             {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionLotAdd", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionAddLots", sql.cnn, sql.transaction);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@idLot", idLot);
-                cmd.Parameters.AddWithValue("@idVariety", idVariety);
-                cmd.Parameters.AddWithValue("@boxes", boxes);
-                cmd.Parameters.AddWithValue("@kgBox", kgBox);
 
-                cmd.ExecuteNonQuery();
+                int item = 0;
+                foreach (DataGridViewRow row in frmAdd.dgvRegistros.Rows)
+                {
+                    item++;
+
+                    string idLot = row.Cells["Lote"].Value.ToString().Substring(0, 4);
+                    string idVariety = row.Cells["Lote"].Value.ToString().Substring(5, 2);
+                    decimal boxes = decimal.Parse(row.Cells["Cajas"].Value.ToString());
+                    decimal kgBox = decimal.Parse(row.Cells["Kilogramos"].Value.ToString());
+
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@idBulk", idBulkReception);
+                    cmd.Parameters.AddWithValue("@idLot", idLot);
+                    cmd.Parameters.AddWithValue("@idVariety", idVariety);
+                    cmd.Parameters.AddWithValue("@boxes", boxes);
+                    cmd.Parameters.AddWithValue("@kgBox", kgBox);
+                    cmd.Parameters.AddWithValue("@item", item.ToString("00"));
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), titulo);
+                MessageBox.Show(ex.ToString(), "Error al añadir registro de granel (Lotes)");
+                return false;
+            }
+        }
+        public void ModifyProcedure()
+        {
+            var result = ModifyProcedureWithLots();
+            IsModifyUpdate = result.Item1;
+            idAddModify = result.Item2;
+        }
+        public (bool, string?) ModifyProcedureWithLots()
+        {
+            SQLControl sql = new SQLControl();
+            try
+            {
+                sql.OpenConectionWrite();
+                sql.BeginTransaction();
+
+                var (success, idBulkReception) = ModifyProcedure(sql);
+                if (!success || idBulkReception == null)
+                {
+                    sql.transaction.Rollback();
+                    return (false, null);
+                }
+
+                if (!AddLots(sql, idBulkReception))
+                {
+                    sql.transaction.Rollback();
+                    return (false, null);
+                }
+
+                sql.transaction.Commit();
+                return (true, idBulkReception);
+            }
+            catch (Exception ex)
+            {
+                sql.transaction?.Rollback();
+                MessageBox.Show(ex.ToString(), "Modificar registro de granel");
+                return (false, null);
             }
             finally
             {
                 sql.CloseConectionWrite();
             }
         }
-        public DataTable CatalogoActivos()
-        {
-            string fecha = frmCat.dtpFecha.Value.ToString("yyyy-MM-dd");
-            DataTable dt = new DataTable();
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter($"SELECT * FROM vw_Pack_BulkReception WHERE Fecha = '{fecha}'", sql.cnn);
-                da.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), titulo);
-                return dt;
-            }
-
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        public void LlenarFormulario()
+        public void LlenarFormulario(string idModify)
         {
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_BulkReception WHERE id_bulk = '{frmAdd.txbId.Text}'", sql.cnn);
+                SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_BulkReception WHERE id_bulk = '{idModify}'", sql.cnn);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    frmAdd.txbId.Text = dr.GetValue(dr.GetOrdinal("id_bulk")).ToString();
+                    idAddModify = dr.GetValue(dr.GetOrdinal("id_bulk")).ToString();
+                    frmAdd.txbId.Text = idAddModify;
                     frmAdd.txbPapeleta.Text = dr.GetValue(dr.GetOrdinal("v_invoice")).ToString();
                     frmAdd.cboPosicion.Text = dr.GetValue(dr.GetOrdinal("c_position")).ToString();
                     frmAdd.dtpFecha.Value = DateTime.Parse(dr.GetValue(dr.GetOrdinal("d_harvested")).ToString());
@@ -387,13 +505,12 @@ namespace SisUvex.Operacion
             }
         }
 
-        public void LlenarDGVCajas()
+        public void LlenarDGVCajas(string idModify)
         {
             try
             {
-                string id = frmAdd.txbId.Text;
                 sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter($"SELECT id_bulk AS 'Código', CONCAT(lot.id_lot,'|',lot.id_variety) AS 'Lote', CONCAT(lot.v_nameLot,' (',lot.id_lot,'|',lot.id_variety,') ',[var].v_nameComercial,' ',  CASE WHEN [var].v_nameScientis IS NOT NULL AND [var].v_nameScientis != [var].v_nameComercial THEN CONCAT(' (', [var].v_nameScientis, ')') ELSE '' END) AS 'Nombre', i_boxes 'Cajas', n_kg 'Kilogramos' FROM Pack_BulkReceptionLots blkL JOIN Pack_Lot lot ON lot.id_lot = blkL.id_lot  and blkL.id_variety = lot.id_variety JOIN Pack_Variety [var] ON [var].id_variety = blkL.id_variety WHERE id_bulk = '{id}'", sql.cnn);
+                SqlDataAdapter da = new SqlDataAdapter($"SELECT id_bulk AS 'Código', CONCAT(lot.id_lot,'|',lot.id_variety) AS 'Lote', CONCAT(lot.v_nameLot,' (',lot.id_lot,'|',lot.id_variety,') ',[var].v_nameComercial,' ',  CASE WHEN [var].v_nameScientis IS NOT NULL AND [var].v_nameScientis != [var].v_nameComercial THEN CONCAT(' (', [var].v_nameScientis, ')') ELSE '' END) AS 'Nombre', i_boxes 'Cajas', n_kg 'Kilogramos' FROM Pack_BulkReceptionLots blkL JOIN Pack_Lot lot ON lot.id_lot = blkL.id_lot  and blkL.id_variety = lot.id_variety JOIN Pack_Variety [var] ON [var].id_variety = blkL.id_variety WHERE id_bulk = '{idModify}'", sql.cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
@@ -419,11 +536,11 @@ namespace SisUvex.Operacion
             }
         }
 
-        public void LlenarFormularioModificar()
+        public void LlenarFormularioModificar(string idModify)
         {
-            LlenarFormulario();
+            LlenarFormulario(idModify);
 
-            LlenarDGVCajas();
+            LlenarDGVCajas(idModify);
 
             frmAdd._KgTotales = decimal.Parse(frmAdd.txbKgTotales.Text);
             frmAdd._TaraTarima = decimal.Parse(frmAdd.txbTaraTarima.Text);
@@ -443,51 +560,14 @@ namespace SisUvex.Operacion
             return false;
         }
 
-        public void ModificarRegistros()
-        {
-            if (frmAdd.dgvRegistros.Rows.Count == 0)
-            {
-                MessageBox.Show("No hay registros para modificar", titulo);
-                return;
-            }
-
-            if (!controlList.ValidateControls())
-                return;
-
-            ProcRegistrosGeneralModificar();
-
-            ProcEliminarRegistrosMenor();
-
-            string id = frmAdd.txbId.Text;
-
-            foreach (DataGridViewRow row in frmAdd.dgvRegistros.Rows)
-            {
-                string idLot = row.Cells["Lote"].Value.ToString().Substring(0, 4);
-                string idVariety = row.Cells["Lote"].Value.ToString().Substring(5, 2);
-                decimal boxes = decimal.Parse(row.Cells["Cajas"].Value.ToString());
-                decimal kgBox = decimal.Parse(row.Cells["Kilogramos"].Value.ToString());
-
-                ProcModificarRegistrosMenor(id, idLot, idVariety, boxes, kgBox);
-            }
-
-            frmAdd.txbCajasTotales.Enabled = false;
-            frmAdd.txbTaraCaja.Enabled = false;
-            frmAdd.txbTaraTarima.Enabled = false;
-
-            frmCat.dgvCatalogo.DataSource = CatalogoActivos();
-
-            frmAdd.Close();
-        }
-
-        private void ProcRegistrosGeneralModificar()
+        private (bool, string?) ModifyProcedure(SQLControl sql)
         {
             decimal lbsNetPallet = decimal.Parse(frmAdd.txbKgNetos.Text) * 2.20462M;
             decimal lbsNetBox = decimal.Parse(frmAdd.txbKgPorCaja.Text) * 2.20462M;
 
             try
             {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionModify", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionModify", sql.cnn, sql.transaction);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@idBulk", frmAdd.txbId.Text);
                 cmd.Parameters.AddWithValue("@invoice", frmAdd.txbPapeleta.Text);
@@ -506,87 +586,181 @@ namespace SisUvex.Operacion
                 cmd.Parameters.AddWithValue("@idWorkGroup", frmAdd.txbIdWorkGroup.Text);
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
-                cmd.ExecuteNonQuery();
+                SqlDataReader dr = cmd.ExecuteReader();
+                string? idBulkRegister = null;
+                if (dr.Read())
+                {
+                    idBulkRegister = dr.GetValue(dr.GetOrdinal("Id")).ToString();
+                }
+                dr.Close();
+
+                return idBulkRegister != null ? (true, idBulkRegister) : (false, null);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), titulo);
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
+                MessageBox.Show(ex.ToString(), "Modificar registro de granel");
+                return (false, null);
             }
         }
-        public void ProcModificarRegistrosMenor(string id, string idLot, string idVariety, decimal boxes, decimal kgBox)
+
+        public bool DeleteProcedure(string id)
         {
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionLotModify", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@idBulk", id);
-                cmd.Parameters.AddWithValue("@idLot", idLot);
-                cmd.Parameters.AddWithValue("@idVariety", idVariety);
-                cmd.Parameters.AddWithValue("@boxes", boxes);
-                cmd.Parameters.AddWithValue("@kgBox", kgBox);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), titulo);
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        public void ProcEliminarRegistrosMenor()
-        {
-            try
-            {
-                string id = frmAdd.txbId.Text;
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("DELETE FROM Pack_BulkReceptionLots WHERE id_bulk = @idBulk", sql.cnn);
-                cmd.CommandType = CommandType.Text;
-
-                cmd.Parameters.AddWithValue("@idBulk", id);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), titulo);
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        public void EliminarRegistroSeleccionado(string id)
-        {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionDelete", sql.cnn);
+                sql.BeginTransaction();
+                SqlCommand cmd = new SqlCommand("sp_PackBulkReceptionDelete", sql.cnn, sql.transaction);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@idBulk", id);
 
                 cmd.ExecuteNonQuery();
-
-                MessageBox.Show("Registro eliminado.", "Eliminar");
+                sql.transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), titulo);
+                sql.transaction?.Rollback();
+                MessageBox.Show(ex.ToString(), "Eliminar registro de granel");
+                return false;
             }
             finally
             {
                 sql.CloseConectionWrite();
             }
+        }
+
+        public void BtnDeleteSelectedRowFromDGVCatalog(DataGridViewRow selectedRow)
+        {
+            string? idMatOutputExit = selectedRow.Cells[Column.id].Value?.ToString();
+
+            if (!string.IsNullOrEmpty(idMatOutputExit))
+            {
+                DialogResult result = MessageBox.Show($"¿Está seguro de que desea eliminar el registro de granel {idMatOutputExit}?", "Eliminar registro de granel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result != DialogResult.Yes)
+                    return;
+
+                bool isDeleted = DeleteProcedure(idMatOutputExit);
+
+                if (isDeleted)
+                {
+                    for (int i = frmCat.dgvCatalogo.Rows.Count - 1; i >= 0; i--)
+                    {
+                        DataGridViewRow row = frmCat.dgvCatalogo.Rows[i];
+                        if (row.Cells[Column.id].Value?.ToString() == idMatOutputExit)
+                        {
+                            frmCat.dgvCatalogo.Rows.Remove(row);
+                        }
+                    }
+                    MessageBox.Show($"Se ha eliminado el registro de granel con el código: {idMatOutputExit}", "Eliminar registro de granel");
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se eliminó el registro de granel.", "Eliminar registro de granel");
+                }
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("El código del registro de granel no es válido.", "Eliminar registro de granel");
+            }
+        }
+        public void SetDgvCatalog()
+        {
+            dtCatalog = GetDTCatalogQueryWithFilter();
+            dgv = new ClsDGVCatalog(frmCat.dgvCatalogo, dtCatalog);
+            DgvHideColumnsToExitCatalog();
+        }
+        private void DgvHideColumnsToExitCatalog()
+        {
+            if (dtCatalog.Columns.Contains("id_lot"))
+                frmCat.dgvCatalogo.Columns["id_lot"].Visible = false;
+            if (dtCatalog.Columns.Contains("id_variety"))
+                frmCat.dgvCatalogo.Columns["id_variety"].Visible = false;
+            if (dtCatalog.Columns.Contains("id_workGroup"))
+                frmCat.dgvCatalogo.Columns["id_workGroup"].Visible = false;
+        }
+
+        private DataTable GetDTCatalogQueryWithFilter()
+        {
+            Dictionary<string, object> parameters = new();
+            
+            string qry = queryCatalogo + $" WHERE vw.Fecha BETWEEN @date1 AND @date2 ";
+
+            parameters.Add("@date1", frmCat.dtpFecha1.Value.ToString("yyyy-MM-dd"));
+            parameters.Add("@date2", frmCat.dtpFecha2.Value.ToString("yyyy-MM-dd"));
+
+
+            //[CAMBIOS PROXIMOS PARA AÑADIR CUADRILLA, LOTE, ETC]
+            if (frmCat.cboLot.SelectedIndex > 0) //SACAR IDLOT Y VARIEDAD DEL cboLot
+            {
+                qry += " AND vw.id_lot = @idLot ";
+                parameters.Add("@idLot", frmCat.cboLot.GetColumnValue(Lot.ColumnId));
+
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboLot.GetColumnValue(Variety.ColumnId));
+            }
+            else if (frmCat.cboVariety.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_variety = @idVariety ";
+                parameters.Add("@idVariety", frmCat.cboVariety.SelectedValue.ToString());
+            }
+
+            if (frmCat.cboWorkGroup.SelectedIndex > 0) //SACAR idVariety solo si el cboLot no tiene nada seleccionado y esté si, para no intercalar
+            {
+                qry += " AND vw.id_workGroup = @idWorkGroup ";
+                parameters.Add("@idWorkGroup", frmCat.cboWorkGroup.SelectedValue);
+            }
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+        }
+
+        private void LoadControlsCat()
+        {
+            ClsComboBoxes.CboLoadActives(frmCat.cboLot, Lot.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboVariety, Variety.Cbo);
+            ClsComboBoxes.CboLoadActives(frmCat.cboWorkGroup, WorkGroup.Cbo);
+
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboLot, frmCat.chbLotRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboVariety, frmCat.chbVarietyRemoved);
+            ClsComboBoxes.CboApplyClickEvent(frmCat.cboWorkGroup, frmCat.chbWorkGroupRemoved);
+        }
+
+        public void FrmCatLoad()
+        {
+            LoadControlsCat();
+
+            SetDgvCatalog();
+        }
+        public void AddNewRowByIdInDGVCatalog()
+        {
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalogo + $" WHERE vw.[{ClsObject.Column.id}] = '{idAddModify}'");
+
+            dgv.AddNewRowToDGV(newIdRow);
+        }
+
+        public void ModifyRowByIdInDGVCatalog()
+        {
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalogo + $" WHERE vw.[{ClsObject.Column.id}] = '{idAddModify}'");
+
+            dgv.ModifyIdRowInDGV(newIdRow);
+        }
+
+        public void BtnSearchInvoice(string invoice)
+        {
+            if (string.IsNullOrEmpty(invoice))
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string qry = queryCatalogo + " WHERE RIGHT(REPLICATE('0', 15) + CAST(vw.Papeleta AS VARCHAR), 15) = RIGHT(REPLICATE('0', 15) + CAST(@invoice AS VARCHAR), 15) ";
+            Dictionary<string, object> parameters = new();
+            parameters.Add("@invoice", invoice);
+            dtCatalog = ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            dgv = new ClsDGVCatalog(frmCat.dgvCatalogo, dtCatalog);
+            DgvHideColumnsToExitCatalog();
         }
     }
 }

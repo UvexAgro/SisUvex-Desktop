@@ -36,7 +36,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 string directoryPath = Path.GetDirectoryName(cboFiles[catalogName]); //OBTIENE LA DIRECCION DEL ARCHIVO DE ESE CATALOGO
                 if (!Directory.Exists(directoryPath))
                     Directory.CreateDirectory(directoryPath);
-
                 using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Create)) //LE AGREGA EL DATATABLE A ESE ARCHIVO
                 {
                     var serializedData = ConvertDataTableToList(dataTable);    //////////////////////////////////////////
@@ -187,6 +186,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     queryDataTable = ClsObject.Contractor.QueryCbo;
                     break;
+                case ClsObject.GrowFarm.Cbo:
+                    queryDataTable = ClsObject.GrowFarm.QueryCbo;
+                    break;
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
                     break;
@@ -214,8 +216,44 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.FreightContainer.Cbo:
                     queryDataTable = ClsObject.FreightContainer.QueryCbo;
                     break;
+                case ClsObject.FreightContainer.CboTypeContainer:
+                    queryDataTable = ClsObject.FreightContainer.QueryCboTypeContainer;
+                    break;
                 case ClsObject.ManifestTemplate.Cbo:
                     queryDataTable = ClsObject.ManifestTemplate.QueryCbo;
+                    break;
+                case ClsObject.Unit.Cbo:
+                    queryDataTable = ClsObject.Unit.QueryCbo;
+                    break;
+                case ClsObject.MaterialType.Cbo:
+                    queryDataTable = ClsObject.MaterialType.QueryCbo;
+                    break;
+                case ClsObject.MaterialProvider.Cbo:
+                    queryDataTable = ClsObject.MaterialProvider.QueryCbo;
+                    break;
+                case ClsObject.MaterialWarehouse.Cbo:
+                    queryDataTable = ClsObject.MaterialWarehouse.QueryCbo;
+                    break;
+                case ClsObject.MaterialCatalog.Cbo:
+                    queryDataTable = ClsObject.MaterialCatalog.QueryCbo;
+                    break;
+                case ClsObject.ForeignDest.Cbo:
+                    queryDataTable = ClsObject.ForeignDest.QueryCbo;
+                    break;
+                case ClsObject.Farm.Cbo:
+                    queryDataTable = ClsObject.Farm.QueryCbo;
+                    break;
+                case ClsObject.VehicleType.Cbo:
+                    queryDataTable = ClsObject.VehicleType.QueryCbo;
+                    break;
+                case ClsObject.Vehicle.Cbo:
+                    queryDataTable = ClsObject.Vehicle.QueryCbo;
+                    break;
+                case ClsObject.Market.Cbo:
+                    queryDataTable = ClsObject.Market.QueryCbo;
+                    break;
+                case ClsObject.TypeBox.Cbo:
+                    queryDataTable = ClsObject.TypeBox.QueryCbo;
                     break;
                 default:
                     // Handle unknown table names
@@ -233,7 +271,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Variety', 'Pack_Crop')";
                     break;
                 case ClsObject.Lot.Cbo:
-                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot')";
+                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot','Grow_Farm')";
                     break;
                 case ClsObject.Presentation.Cbo:
                     query += " IN ('Pack_Category', 'Pack_Presentation') ";
@@ -246,7 +284,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.WorkPlan.DgvCatalog:
                 case ClsObject.WorkPlan.CboPresentation:
-                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop') ";
+                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox') ";
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
@@ -255,7 +293,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Season', 'Pack_Crop') ";
                     break;
                 case ClsObject.Consignee.Cbo:
-                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";     
+                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";
                     break;
                 case ClsObject.Driver.Cbo:
                     query += " IN ('Pack_TransportLine', 'Pack_Driver') ";
@@ -264,10 +302,17 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_TransportLine', 'Pack_Truck') ";
                     break;
                 case ClsObject.FreightContainer.Cbo:
+                case ClsObject.FreightContainer.CboTypeContainer:
                     query += " IN ('Pack_TransportLine', 'Pack_FreightContainer') ";
                     break;
                 case ClsObject.ManifestTemplate.Cbo:
                     query += " IN ('Pack_ManifestTemplates', 'Pack_Distributor', 'Pack_Grower', 'Pack_Consignee', 'Pack_AgencyTrade', 'Pack_City') ";
+                    break;
+                case ClsObject.MaterialCatalog.Cbo:
+                    query += " IN ('Pack_MaterialCatalog', 'Pack_MaterialType', 'Pack_Distributor', 'Pack_Color', 'Pack_Unit', 'Pack_Category') ";
+                    break;
+                case ClsObject.MaterialType.Cbo:
+                    query += " IN ('Ast_MaterialType', 'Ast_MaterialCatalog') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
@@ -334,9 +379,32 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Truck.Cbo:
                     return ClsObject.Truck.TableName;
                 case ClsObject.FreightContainer.Cbo:
+                case ClsObject.FreightContainer.CboTypeContainer:
                     return ClsObject.FreightContainer.TableName;
                 case ClsObject.ManifestTemplate.Cbo:
                     return ClsObject.ManifestTemplate.TableName;
+                case ClsObject.Unit.Cbo:
+                    return ClsObject.Unit.TableName;
+                case ClsObject.MaterialType.Cbo:
+                    return ClsObject.MaterialType.TableName;
+                case ClsObject.MaterialProvider.Cbo:
+                    return ClsObject.MaterialProvider.TableName;
+                case ClsObject.MaterialWarehouse.Cbo:
+                    return ClsObject.MaterialWarehouse.TableName;
+                case ClsObject.MaterialCatalog.Cbo:
+                    return ClsObject.MaterialCatalog.TableName;
+                case ClsObject.ForeignDest.Cbo:
+                    return ClsObject.ForeignDest.TableName;
+                case ClsObject.Farm.Cbo:
+                    return ClsObject.Farm.TableName;
+                case ClsObject.VehicleType.Cbo:
+                    return ClsObject.VehicleType.TableName;
+                case ClsObject.Vehicle.Cbo:
+                    return ClsObject.Vehicle.TableName;
+                case ClsObject.Market.Cbo:
+                    return ClsObject.Market.TableName;
+                case ClsObject.TypeBox.Cbo:
+                    return ClsObject.TypeBox.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

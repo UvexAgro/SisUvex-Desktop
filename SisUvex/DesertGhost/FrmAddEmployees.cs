@@ -1,10 +1,10 @@
-﻿using System.Data;
-using System.Data.SqlClient;
-using System.Data;
-using Excel = Microsoft.Office.Interop.Excel;
+﻿using System.Data.SqlClient;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods.Values;
-using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Catalogos.Metods.ExcelLoad;
+using Microsoft.IdentityModel.Tokens;
+using System.Media;
+using SisUvex.Catalogos.Metods.Querys;
 
 
 namespace SisUvex.DesertGhost
@@ -12,12 +12,11 @@ namespace SisUvex.DesertGhost
     public partial class FrmAddEmployees : Form
     {
         SQLControl sql = new SQLControl();
-        ClsCatalogos cls = new ClsCatalogos();
         private string titulo = "Actualizar datos empleados";
+        private ClsExcel excel;
 
-        List<string> empleadosNoCumplen;
-        List<string> empleadosSiCumplen;
-        List<string> empleadosRepetidos;
+        List<string> empleadosSiCumplen, empleadosNoCumplen, empleadosRepetidos;
+        List<string?> workGroups, productionLines;
         public FrmAddEmployees()
         {
             InitializeComponent();
@@ -25,197 +24,149 @@ namespace SisUvex.DesertGhost
 
         private void btnExaminar_Click(object sender, EventArgs e)
         {
-            if (ofdExcel.ShowDialog() == DialogResult.OK)
-                textBox1.Text = ofdExcel.FileName;
+            excel = new();
 
-            CargarExcel();
+            excel.OpenFileDialog();
+
+            if (!excel.path.IsNullOrEmpty())
+            {
+                txbExcelPath.Text = excel.path;
+                excel.LoadSheetsIntoComboBox(cboSheets);
+
+                if(cboSheets.Items.Count > 0)
+                    cboSheets.SelectedIndex = 0;
+            }
+            else
+            {
+                cboSheets.DataSource = null;
+            }
         }
-
+        private void btnSheets_Click(object sender, EventArgs e)
+        {
+            if (excel.path.IsNullOrEmpty() || cboSheets.Items.Count == 0)
+                SystemSounds.Exclamation.Play();
+            else
+                dgvEmployees.DataSource = excel.LoadSheetData(cboSheets);
+        }
         private void btnCargarArchivos_Click(object sender, EventArgs e)
         {
-            
+
         }
         private void btnGuardarEmpleados_Click(object sender, EventArgs e)
         {
-            guardar();
+            if (!dgvEmployees.Columns.Contains("CODIGO") || !dgvEmployees.Columns.Contains("NOMBRE") || !dgvEmployees.Columns.Contains("APELLIDO PATERNO") || !dgvEmployees.Columns.Contains("APELLIDO MATERNO") || !dgvEmployees.Columns.Contains("CUADRILLA") || !dgvEmployees.Columns.Contains("BANDA"))
+            {
+                MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO APELLIDO MATERNO, CUADRILLA Y BANDA en la primera fila de la hoja.", titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                LoadEmployeesInDB();
+            }
         }
-        public void CargarExcel()
-        {// Crear una aplicación de Excel
+
+        private void LoadEmployeesInDB()
+        {
             try
             {
-                textBox1.Enabled = false;
-                btnExaminar.Enabled = false;
+                empleadosNoCumplen = new List<string>();
+                empleadosSiCumplen = new List<string>();
+                empleadosRepetidos = new List<string>();
 
+                workGroups = ClsQuerysDB.GetListFromQuery("SELECT id_workGroup FROM Pack_WorkGroup");
 
-                Excel.Application excelApp = new Excel.Application();
-                Excel.Workbook workbook = excelApp.Workbooks.Open(textBox1.Text);
-                Excel.Worksheet worksheet = workbook.Sheets[1];
-                Excel.Range range = worksheet.UsedRange;
+                productionLines = ClsQuerysDB.GetListFromQuery("SELECT id_productionLine FROM Nom_ProductionLine");
 
-                // Obtener el número de filas y columnas
-                int rowCount = range.Rows.Count;
-                int colCount = range.Columns.Count;
-
-                // Crear una tabla de datos para almacenar los datos del archivo de Excel
-                DataTable dt = new DataTable();
-
-                // Iterar a través de las celdas y agregar los valores a la tabla de datos
-                for (int j = 1; j <= colCount; j++)
+                foreach (DataGridViewRow fila in dgvEmployees.Rows)
                 {
-                    Excel.Range cell = range.Cells[1, j] as Excel.Range;
-                    string columnName = cell?.Value2?.ToString();
-                    if (columnName != null)
+                    if (!fila.IsNewRow)
                     {
-                        columnName = (range.Cells[1, j] as Excel.Range).Value2.ToString().ToUpper();
+                        string? idEmployee = ClsValues.FormatZeros(fila.Cells["CODIGO"].Value.ToString(), "000000");
 
-                        switch (columnName)
+                        string? idWorkGroup = ClsValues.FormatZeros(fila.Cells["CUADRILLA"].Value.ToString(),"00");
+
+                        string? idProductionLine = ClsValues.FormatZeros(fila.Cells["BANDA"].Value.ToString(), "000");
+
+
+                        //MessageBox.Show($"EMP:-{idEmployee}-\nCUA:-{idWorkGroup}")
+                        if (IsEmployeeValid(idEmployee, idWorkGroup, idProductionLine))
                         {
-                            case "CODIGO":
-                            case "CÓDIGO":
-                                dt.Columns.Add("CÓDIGO");
-                                break;
-                            case "NOMBRE":
-                                dt.Columns.Add("NOMBRE");
-                                break;
-                            case "APELLIDO PATERNO":
-                                dt.Columns.Add("APELLIDO PATERNO");
-                                break;
-                            case "APELLIDO MATERNO":
-                                dt.Columns.Add("APELLIDO MATERNO");
-                                break;
-                            default:
-                                break;
+                            string? name = fila.Cells["NOMBRE"].Value.ToString();
+
+                            string? lastNamePat = fila.Cells["APELLIDO PATERNO"].Value.ToString();
+
+                            string? lastNameMat = fila.Cells["APELLIDO MATERNO"].Value.ToString();
+
+                            string query = "IF (SELECT COUNT(id_employee) FROM Nom_Employees WHERE id_employee = @idEmployee) = 0 BEGIN INSERT INTO Nom_Employees (id_employee, v_lastNamePat, v_lastNameMat, v_name, id_workGroup, id_productionLine) VALUES (@idEmployee, @lastNamePat, @lastNameMat, @name, @idWorkGroup, @idProductionLine) END ELSE UPDATE Nom_Employees SET v_lastNamePat = @lastNamePat, v_lastNameMat = @lastNameMat, v_name = @name, id_workGroup = @idWorkGroup, id_productionLine = @idProductionLine WHERE id_employee = @idEmployee";
+
+                            sql.OpenConectionWrite();
+
+                            SqlCommand cdm = new SqlCommand(query, sql.cnn);
+                            cdm.Parameters.AddWithValue("@idEmployee", idEmployee);
+                            cdm.Parameters.AddWithValue("@lastNamePat", ClsValues.IfEmptyToDBNull(lastNamePat));
+                            cdm.Parameters.AddWithValue("@lastNameMat", ClsValues.IfEmptyToDBNull(lastNameMat));
+                            cdm.Parameters.AddWithValue("@name", ClsValues.IfEmptyToDBNull(name));
+                            cdm.Parameters.AddWithValue("@idWorkGroup", ClsValues.IfEmptyToDBNull(idWorkGroup));
+                            cdm.Parameters.AddWithValue("@idProductionLine", ClsValues.IfEmptyToDBNull(idProductionLine));
+
+                            cdm.ExecuteNonQuery();
+
+                            empleadosSiCumplen.Add(idEmployee);
                         }
                     }
-                }
+                }//for
 
-                for (int i = 2; i <= rowCount; i++)
-                {
-                    DataRow row = dt.NewRow();
-                    for (int j = 1; j <= dt.Columns.Count; j++)
-                    {
-                        Excel.Range cell = range.Cells[i, j] as Excel.Range;
-                        string cellValue = cell?.Value2?.ToString();
-                        if (cellValue != null)
-                        {
-                            row[j - 1] = cellValue;
-                        }
-                    }
-                    dt.Rows.Add(row);
-                }
-                // Cerrar la aplicación de Excel
-                workbook.Close(false);
-                excelApp.Quit();
+                MostrarMensajeEmpleadosSiCumplen();
+                MostrarMensajeEmpleadosNoCumplen();
+                MostrarMensajeEmpleadosRepetidos();
 
-                if (!dt.Columns.Contains("CÓDIGO") || !dt.Columns.Contains("NOMBRE") || !dt.Columns.Contains("APELLIDO PATERNO") || !dt.Columns.Contains("APELLIDO MATERNO"))
-                {
-                    textBox1.Enabled = true;
-                    btnExaminar.Enabled = true;
-                    MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO y APELLIDO MATERNO en la primera fila de la hoja.", titulo);
-                }
-                else
-                    dataGridView.DataSource = dt;
-            }
-            catch
+            }//try
+            catch (Exception ex)
             {
-                textBox1.Enabled = true;
-                btnExaminar.Enabled = true;
+                txbExcelPath.Text = ex.Message;
+                MessageBox.Show(ex.ToString(), titulo);
             }
             finally
             {
+                sql.CloseConectionWrite();
             }
-        }
-        private void guardar()
-        {
-            if (!dataGridView.Columns.Contains("CÓDIGO") || !dataGridView.Columns.Contains("NOMBRE") || !dataGridView.Columns.Contains("APELLIDO PATERNO") || !dataGridView.Columns.Contains("APELLIDO MATERNO"))
-            {
-                MessageBox.Show("Debe de contener las columnas CODIGO, NOMBRE, APELLIDO PATERNO y APELLIDO MATERNO en la primera fila de la hoja.", titulo);
-            }
-            else
-                try
-                {
-                    empleadosNoCumplen = new List<string>();
-                    empleadosSiCumplen = new List<string>();
-                    empleadosRepetidos = new List<string>();
-
-                    foreach (DataGridViewRow fila in dataGridView.Rows)
-                    {
-                        if (!fila.IsNewRow)
-                        {
-                            // Extraer los datos de la fila del DataGridView
-                            string? codigo = ClsValues.FormatZeros(fila.Cells["CÓDIGO"].Value.ToString(), "000000");
-
-                            if (EsCodigoValido(codigo))
-                            {
-                                string? nombre = fila.Cells["NOMBRE"].Value.ToString();
-
-                                string? apellidoPaterno = fila.Cells["APELLIDO PATERNO"].Value.ToString();
-
-                                string? apellidoMaterno = fila.Cells["APELLIDO MATERNO"].Value.ToString();
-
-                                string query = "IF (SELECT COUNT(id_employee) FROM Nom_Employees WHERE id_employee = @codigo) = 0 BEGIN INSERT INTO Nom_Employees (id_employee, v_lastNamePat, v_lastNameMat, v_name) VALUES (@codigo, @apellidoPaterno, @apellidoMaterno, @nombre) END ELSE UPDATE Nom_Employees SET v_lastNamePat = @apellidoPaterno, v_lastNameMat = @apellidoMaterno, v_name = @nombre WHERE id_employee = @codigo";
-
-                                sql.OpenConectionWrite();
-
-                                SqlCommand cdm = new SqlCommand(query, sql.cnn);
-                                cdm.Parameters.AddWithValue("@codigo", codigo);
-                                cdm.Parameters.AddWithValue("@apellidoPaterno", ClsValues.IfEmptyToDBNull(apellidoPaterno));
-                                cdm.Parameters.AddWithValue("@apellidoMaterno", ClsValues.IfEmptyToDBNull(apellidoMaterno));
-                                cdm.Parameters.AddWithValue("@nombre", ClsValues.IfEmptyToDBNull(nombre));
-
-                                cdm.ExecuteNonQuery();
-
-                                empleadosSiCumplen.Add(codigo);
-                            }
-                        }
-                    }//for
-
-                    MostrarMensajeEmpleadosSiCumplen();
-                    MostrarMensajeEmpleadosNoCumplen();
-                    MostrarMensajeEmpleadosRepetidos();
-
-                }//try
-                catch (Exception ex)
-                {
-                    textBox1.Text = ex.Message;
-                    MessageBox.Show(ex.ToString(), titulo);
-                }
-                finally
-                {
-                    sql.CloseConectionWrite();
-                }
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            textBox1.Text = string.Empty;
-            textBox1.Enabled = true;
+            txbExcelPath.Text = string.Empty;
+            txbExcelPath.Enabled = true;
             btnExaminar.Enabled = true;
-            dataGridView.DataSource = null;
-            dataGridView.Rows.Clear();
+            cboSheets.DataSource = null;
+            dgvEmployees.DataSource = null;
+            dgvEmployees.Rows.Clear();
         }
 
-        public bool EsCodigoValido(string codigo)
+        public bool IsEmployeeValid(string idEmployee, string idWorkGroup, string idProductionLine)
         {
             try
             {
-                if (empleadosNoCumplen.Contains(codigo))
+                if (empleadosNoCumplen.Contains(idEmployee))
                 {
                     return false;
                 }
-                if (codigo.Length > 6)
+                if (idEmployee.Length > 6)
                 {
-                    empleadosNoCumplen.Add(codigo);
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
-                else if (!int.TryParse(codigo, out int noSirve))
+                else if (!int.TryParse(idEmployee, out int noSirve))
                 {
-                    empleadosNoCumplen.Add(codigo);
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
-                else if (empleadosSiCumplen.Contains(codigo))
+                else if (empleadosSiCumplen.Contains(idEmployee))
                 {
-                    empleadosRepetidos.Add(codigo);
+                    empleadosRepetidos.Add(idEmployee);
+                    return false;
+                }
+                else if (!workGroups.Contains(idWorkGroup) || !productionLines.Contains(idProductionLine))
+                {
+                    empleadosNoCumplen.Add(idEmployee);
                     return false;
                 }
                 else
@@ -225,10 +176,11 @@ namespace SisUvex.DesertGhost
             }
             catch
             {
-                empleadosNoCumplen.Add(codigo);
+                empleadosNoCumplen.Add(idEmployee);
                 return false;
             }
         }
+
         private void MostrarMensajeEmpleadosNoCumplen()
         {
             if (empleadosNoCumplen.Count > 0)
@@ -246,6 +198,7 @@ namespace SisUvex.DesertGhost
                 MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
         private void MostrarMensajeEmpleadosRepetidos()
         {
             if (empleadosRepetidos.Count > 0)
@@ -254,7 +207,5 @@ namespace SisUvex.DesertGhost
                 MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        
     }
 }

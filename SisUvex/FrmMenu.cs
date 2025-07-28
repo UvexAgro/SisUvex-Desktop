@@ -3,21 +3,13 @@ using SisUvex.Catalogos.Variedad;
 using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
 using SisUvex.Catalogos.Productor;
-using SisUvex.Catalogos.LineaTransporte;
 using SisUvex.Catalogos.AgenciaAduanal;
-using SisUvex.Catalogos.TipoMaterial;
 using SisUvex.Catalogos.Contratista;
-using SisUvex.Catalogos.Material;
 using SisUvex.Catalogos.Distribuidor;
-using SisUvex.Catalogos.Lote;
-using SisUvex.Catalogos.Chofer;
 using SisUvex.Nomina;
-using SisUvex.Catalogos.Caja;
-using SisUvex.Catalogos.Troque;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Reports;
 using SisUvex.Catalogos.RegistroMaterial;
-using SisUvex.Archivo.Impresoras;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Configuracion;
 using SisUvex.Consultas.Pallets;
@@ -54,6 +46,21 @@ using SisUvex.Nomina.Comedores.EmployeeDiningHallAssignment;
 using SisUvex.Catalogos.Lot;
 using SisUvex.Nomina.Comedores.DiningReports.AbsenceReport;
 using SisUvex.Nomina.Padron.SUA;
+using SisUvex.Packing.Maintenance;
+using SisUvex.Material.MaterialProvider;
+using SisUvex.Material.MaterialWarehouses;
+using SisUvex.Material.MaterialType;
+using SisUvex.Material.MaterialCatalog;
+using SisUvex.Material.MaterialRegister.Entry;
+using SisUvex.Material.MaterialForeignDest;
+using SisUvex.Catalogos.TransportLine;
+using SisUvex.Catalogos.Driver;
+using SisUvex.Catalogos.Truck;
+using SisUvex.Catalogos.FreightContainer;
+using SisUvex.Material.MaterialRegister.Exit;
+using SisUvex.Assets.Vehicle.VehicleType;
+using SisUvex.Material.MaterialRegister.FieldExit;
+using SisUvex.Assets.Vehicle.Vehicle;
 
 namespace SisUvex
 {
@@ -82,6 +89,28 @@ namespace SisUvex
                 if (!va)
                 {
                     f.MdiParent = this;
+                    f.Show();
+                }
+            }
+        }
+        private void AbrirFormulario(Form f, int acs)
+        {
+            if (User.GetAccessLevel() >= acs)
+            {
+                bool va = false;
+
+                foreach (Form ven in Application.OpenForms)
+                {
+                    if (ven.Name.Equals(f.Name))
+                    {
+                        ven.Focus();
+                        va = true;
+                        break;
+                    }
+                }
+
+                if (!va)
+                {
                     f.Show();
                 }
             }
@@ -123,7 +152,7 @@ namespace SisUvex
 
         private void líneaDeTransporteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLineaTransporteCat cat = new FrmLineaTransporteCat();
+            FrmTransportLineCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -133,21 +162,9 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 1);
         }
 
-        private void tipoDeMaterialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmTipoMaterialCat cat = new FrmTipoMaterialCat();
-            AbrirVentanaHijo(cat, 1);
-        }
-
         private void contratistaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmContratistaCat cat = new FrmContratistaCat();
-            AbrirVentanaHijo(cat, 1);
-        }
-
-        private void materialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmMaterialCat cat = new FrmMaterialCat();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -179,18 +196,18 @@ namespace SisUvex
 
         private void choferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmChoferCat cat = new FrmChoferCat();
+            FrmDriverCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCajaCat cat = new FrmCajaCat();
+            FrmFreightContainerCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
         private void troqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmTroqueCat cat = new FrmTroqueCat();
+            FrmTruckCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -209,17 +226,6 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 1);
         }
 
-        private void configurarImpresorasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmSelectPrinter cat = new FrmSelectPrinter();
-
-            AbrirVentanaHijo(cat, 1);
-        }
-
-        private void reportesComedorToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-        }
-
         private void impresoraPalletToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmSetupPrint cat = new FrmSetupPrint();
@@ -228,8 +234,8 @@ namespace SisUvex
 
         private void planDeTrabajoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsWorkPlan cls = new ClsWorkPlan();
-            AbrirVentanaHijo(cls._frmCat, 1);
+            FrmWorkPlanCat cat = new();
+            AbrirVentanaHijo(cat, 1);
         }
 
         private void FrmMenu_FormClosed(object sender, FormClosedEventArgs e)
@@ -291,28 +297,6 @@ namespace SisUvex
             FrmActualizarDatosEmpleados cat = new FrmActualizarDatosEmpleados();
             AbrirVentanaHijo(cat, 4);
         }
-        private void AbrirFormulario(Form f, int acs)
-        {
-            if (User.GetAccessLevel() >= acs)
-            {
-                bool va = false;
-
-                foreach (Form ven in Application.OpenForms)
-                {
-                    if (ven.Name.Equals(f.Name))
-                    {
-                        ven.Focus();
-                        va = true;
-                        break;
-                    }
-                }
-
-                if (!va)
-                {
-                    f.Show();
-                }
-            }
-        }
         public void AbrirFormularioDialog(Form f, int acs)
         {
             if (User.GetAccessLevel() >= acs)
@@ -338,8 +322,8 @@ namespace SisUvex
 
         private void cajasAGranelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsCajasGranelRegistro cls = new ClsCajasGranelRegistro();
-            AbrirVentanaHijo(cls.frmCat, 1);
+            FrmCajasGranelRegistroCat cat = new();
+            AbrirVentanaHijo(cat, 1);
         }
 
         private void conexiónToolStripMenuItem_Click(object sender, EventArgs e)
@@ -374,8 +358,8 @@ namespace SisUvex
 
         private void cajaPalletToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClsPrintLabelsPtiPallets cls = new ClsPrintLabelsPtiPallets();
-            AbrirVentanaHijo(cls.frm, 1);
+            FrmPrintLabelsPtiPallets frm = new();
+            AbrirVentanaHijo(frm, 1);
         }
 
         private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -393,13 +377,13 @@ namespace SisUvex
         private void códigoParaCajaÚnicaEspárragoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmCajaEmpleado cat = new FrmCajaEmpleado();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void uvaNombreYCódigoDeEmpleadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmNombreYCodigo2x1 cat = new FrmNombreYCodigo2x1();
-            AbrirVentanaHijo(cat, 1);
+            AbrirFormulario(cat, 1);
         }
 
         private void CajasPorEmlpeadosYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -510,6 +494,84 @@ namespace SisUvex
         {
             FrmAbsenceReport cat = new FrmAbsenceReport();
             AbrirVentanaHijo(cat, 3);
+        }
+
+        private void mantenimientoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmPackingMaintenance cat = new FrmPackingMaintenance();
+            AbrirFormularioDialog(cat, 1);
+        }
+
+        private void proovedoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void almacénToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void catálogoMaterialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void entradasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterEntryCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void tipoDeMaterialToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            FrmMaterialTypeCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void catálogoMaterialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialCatalog cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void almacenesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialWareHousesCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void proovedoresToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmMaterialProviderCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void destinosExternosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialForeignDestCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void salidasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterExitCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void tipoDeVehículosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmVehicleTypeCat cat = new();
+            AbrirVentanaHijo(cat, 1);
+        }
+
+        private void salidasInternasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMaterialRegisterFieldExitCat cat = new();
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void vehículosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmVehicleCat cat = new();
+            AbrirVentanaHijo(cat, 1);
         }
     }
 }

@@ -48,7 +48,7 @@
             btnRemove.Location = new Point(255, 12);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 61;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -58,7 +58,7 @@
             btnRecover.Location = new Point(336, 12);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 62;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -98,14 +98,14 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 397);
-            dgvCatalog.TabIndex = 64;
+            dgvCatalog.TabIndex = 7;
             // 
             // btnModify
             // 
             btnModify.Location = new Point(93, 12);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 59;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -115,7 +115,7 @@
             btnAdd.Location = new Point(12, 12);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 58;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -138,7 +138,7 @@
             cboVariety.Location = new Point(413, 14);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 21);
-            cboVariety.TabIndex = 65;
+            cboVariety.TabIndex = 5;
             cboVariety.SelectedIndexChanged += cboVariety_SelectedIndexChanged;
             // 
             // chbRemovedVariety
@@ -151,7 +151,7 @@
             chbRemovedVariety.Location = new Point(616, 13);
             chbRemovedVariety.Name = "chbRemovedVariety";
             chbRemovedVariety.Size = new Size(23, 23);
-            chbRemovedVariety.TabIndex = 364;
+            chbRemovedVariety.TabIndex = 6;
             chbRemovedVariety.Text = "  ";
             chbRemovedVariety.UseVisualStyleBackColor = true;
             // 
@@ -161,7 +161,7 @@
             chbRemoved.Location = new Point(174, 12);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 23);
-            chbRemoved.TabIndex = 365;
+            chbRemoved.TabIndex = 2;
             chbRemoved.Text = "Eliminados";
             chbRemoved.UseVisualStyleBackColor = true;
             chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
@@ -182,7 +182,7 @@
             Controls.Add(btnAdd);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmLotCat";
-            Text = "FrmLotCat";
+            Text = "Catálogo de lotes";
             WindowState = FormWindowState.Maximized;
             Load += FrmLotCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();

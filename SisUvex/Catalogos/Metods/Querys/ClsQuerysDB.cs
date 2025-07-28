@@ -16,7 +16,6 @@ namespace SisUvex.Catalogos.Metods.Querys
         public static DataTable GetDataTable(string query)
         {
             DataTable dataTable = new DataTable();
-
             try
             {
                 sql.OpenConectionWrite();
@@ -179,6 +178,45 @@ namespace SisUvex.Catalogos.Metods.Querys
             }
 
             return result;
+        }
+        public static List<string?> GetListFromQuery(string query)
+        {
+            DataTable dt = GetDataTable(query);
+
+            List<string?> ls = new List<string?>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                ls.Add(row[0].ToString());
+            }
+
+            return ls;
+        }
+        public static List<string?> GetListFromQuery(string query, int columnIndex)
+        {
+            DataTable dt = GetDataTable(query);
+
+            List<string?> ls = new List<string?>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                ls.Add(row[columnIndex].ToString());
+            }
+
+            return ls;
+        }
+        public static List<string?> GetListFromQuery(string query, string columnName)
+        {
+            DataTable dt = GetDataTable(query);
+
+            List<string?> ls = new List<string?>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                ls.Add(row[columnName].ToString());
+            }
+
+            return ls;
         }
 
         public static DataTable GetEmployees(string lastNamePat, string lastNameMat, string name, string line, string workGroup, string paymentPlace)

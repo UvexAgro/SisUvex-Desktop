@@ -11,6 +11,7 @@ using iText.Kernel.Pdf.Canvas.Draw;
 using System.Data;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.IdentityModel.Tokens;
+using System.Data.OleDb;
 namespace SisUvex.Archivo.Manifiesto
 {
     internal class ClsPruebaManifiesto
@@ -77,34 +78,30 @@ namespace SisUvex.Archivo.Manifiesto
             table.SetWidth(UnitValue.CreatePercentValue(100));
             table.SetBorder(Border.NO_BORDER);
 
+            Cell logoCell = new Cell();
 
             // Cargar el logo
             if (queryManifest.shipperLogo != null)
             {
-                //string dataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
                 logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", queryManifest.shipperLogo + "Logo.png");
-                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 
-                float scale = maxWidthLogo / logo.GetImageScaledHeight();
-                logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
+                if (File.Exists(logoPath))
+                {
+                    iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
 
-                logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
+                    float scale = maxWidthLogo / logo.GetImageScaledHeight();
+                    logo.ScaleToFit(maxWidthLogo, logo.GetImageScaledHeight() * scale);
 
-                // Agregar el logo a la primera celda de la tabla
-                Cell logoCell = new Cell().Add(logo);
-                logoCell.SetBorder(Border.NO_BORDER);
-                logoCell.SetPaddingRight(0);
-                table.AddCell(logoCell);
+                    logo.SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.LEFT);
 
+                    // Agregar el logo a la primera celda de la tabla
+                    logoCell.Add(logo);
+                    logoCell.SetPaddingRight(0);
+                }
             }
-            else
-            {
-                // Crear una celda vacía para mantener la alineación de la tabla
-                Cell emptyCell = new Cell();
-                emptyCell.SetBorder(Border.NO_BORDER);
-                table.AddCell(emptyCell);
-            }
+
+            logoCell.SetBorder(Border.NO_BORDER);
+            table.AddCell(logoCell);
 
             // Crear un nuevo párrafo para el nombre del embarcador con un tamaño de fuente mayor
             Paragraph shipperNameParagraph = new Paragraph(queryManifest.shipperName)
@@ -839,7 +836,94 @@ namespace SisUvex.Archivo.Manifiesto
             // Create PDF Total
         }
 
+        ////MANIFIESTO CON TOTALES POR CAMPO 
+        ///
+        public void CreatePDFManifestTotalsPerLot(string manifestNumber)
+        {
+            queryManifest.GetManifestData(manifestNumber);
+            queryManifest.GetManifestDetailData(manifestNumber);
+            queryManifest.GetManifestTotalPerField(manifestNumber);
+            queryManifest.GetManifestTotalData(manifestNumber);
 
+            // Crear un nuevo documento PDF
+            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
+
+            if (!queryManifest.distributorShortName.IsNullOrEmpty())
+            {
+                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
+            }
+
+            if (!Directory.Exists(manifestDirectory))
+            {
+                Directory.CreateDirectory(manifestDirectory);
+            }
+
+            string manifestPath = Path.Combine(manifestDirectory, $"MAN {manifestNumber}.pdf");
+            PdfWriter writer = new PdfWriter(manifestPath);
+            PdfDocument pdf = new PdfDocument(writer);
+            iText.Layout.Document document = new iText.Layout.Document(pdf);
+
+            //Metodos que componen el diseño del PDF
+            DesignPDFManifestHeader(document, manifestNumber);
+            DesignPDFManifestClientAndConsigne(document, manifestNumber);
+            DesignPDFManifestCustoms(document, manifestNumber);
+            DesignPDFManifestTransport(document, manifestNumber);
+            DesignPDFManifestDetails(document, manifestNumber);
+            DesignPDFManifestTotalPerLotTable(document, manifestNumber);
+            DesignPDFManifestRemisionTable(document, manifestNumber);
+
+            // Cerrar el documento
+            document.Close();
+        }
+
+        public void DesignPDFManifestTotalPerLotTable(iText.Layout.Document document, string manifestNumber)
+        {
+            Table tableTotalsPerLotDetailed = new Table(4).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
+
+            // Agregar los encabezados de la tabla
+            AddCellToTable(tableTotalsPerLotDetailed, "Campo", 22, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableTotalsPerLotDetailed, "Variedad", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableTotalsPerLotDetailed, "Descripción", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableTotalsPerLotDetailed, "Bultos", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+
+            // Iterar sobre las filas de DetalleCarga
+            foreach (DataRow detalle in queryManifest.TotalesPorCampo.Rows)
+            {
+                // Agregar cada columna de la fila a la tabla del PDF
+                AddCellToTable(tableTotalsPerLotDetailed, detalle["Campo"].ToString(), 16, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableTotalsPerLotDetailed, detalle["Variedad"].ToString(), 39, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableTotalsPerLotDetailed, detalle["Descripción"].ToString(), 39, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableTotalsPerLotDetailed, detalle["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+            }
+
+            if (queryManifest.TotalesPorCampo.Rows.Count == 0)
+                return;
+
+            // Agregar la tabla al documento
+            document.Add(tableTotalsPerLotDetailed);
+
+            // Tabla para el espacio en blanco (salto de línea)
+            Table blankSpaceTable = new Table(1).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
+            AddCellToTable(blankSpaceTable, " ", 100, iText.Layout.Properties.TextAlignment.LEFT, fontSizeTitle, font, Border.NO_BORDER);
+            document.Add(blankSpaceTable);
+            document.Add(blankSpaceTable);
+            document.Add(blankSpaceTable);
+
+            Table tableManifestDetailHeader = new Table(1);
+            tableManifestDetailHeader.SetWidth(UnitValue.CreatePercentValue(100));
+
+            Paragraph manifestDetailHeaderParagraph = new Paragraph("DETALLES DE REMISIÓN")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFontSize(fontSizeTitle) // Cambiar el tamaño de la fuente a 14
+                .SetFont(boldFont);
+
+            Cell manifestDetailTitleCell = new Cell();
+            manifestDetailTitleCell.Add(manifestDetailHeaderParagraph);
+            manifestDetailTitleCell.SetBorder(new SolidBorder(1));
+            manifestDetailTitleCell.SetBackgroundColor(lightGreen);
+            tableManifestDetailHeader.AddCell(manifestDetailTitleCell);
+            document.Add(tableManifestDetailHeader);
+        }
     }
 
 }

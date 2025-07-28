@@ -9,6 +9,7 @@ using iText.Kernel.Pdf;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Office.Interop.Excel;
 using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using SisUvex.Archivo.Etiquetas.LabelInterface;
 using SisUvex.Catalogos.Metods.Values;
 using System;
@@ -32,26 +33,32 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string datePal = string.Empty;
         private string presentationZPL = string.Empty;
         private string distribuidorZPL = string.Empty;
+        private string farmName = string.Empty; // Added for grow farm name
         private bool reverseLabelOrientation = false;
+        private bool isReprint = false;
 
 
         private string labelsZPLString = string.Empty;
-        public string GenerateSuperStringTag(string idPallet, ETagInfo eTagInfo, int copies, int boxes, bool reverseOrientation)
+        public string GenerateSuperStringTag(string idPallet, ETagInfo eTagInfo, int copies, int boxes, bool reverseOrientation, bool isReprint)
         {
             eTag = eTagInfo;
             idPal = idPallet;
             qty = boxes.ToString();
             datePal = eTag.dateWorkPlan?.ToString("MMM-dd");
             reverseLabelOrientation = reverseOrientation;
+            this.isReprint = isReprint;
 
             if (!string.IsNullOrEmpty(eTag.preLabel)) presentationZPL += " " + eTag.preLabel + " ";
             presentationZPL += eTag.namePresentation;
             if (!string.IsNullOrEmpty(eTag.postLabel)) presentationZPL += " " + eTag.postLabel;
+            presentationZPL += " " + eTag.shortNameTypeBox;
 
             //**Que no jale el nombre corto (si no hay) hasta que se cambie el procedimiento almacenado en hermosillo
             distribuidorZPL = eTag.shortNameDistributor;
             if (distribuidorZPL.IsNullOrEmpty()) distribuidorZPL = eTag.nameDistributor;
             //todo esto
+            farmName = eTag.growFarmName;
+
 
             return SuperPrintPalletTag(copies);
         }
@@ -80,19 +87,37 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (presentationZPL.Length < 12)
                 lenghtPresentation = "120";
 
+            // Convierte farmIndentation a int para poder operar
+            int baseIndent = 400;
+            int step = 20;
+
+            if(farmName.IsNullOrEmpty())
+            {
+                farmName = " ";
+            }
+            int farmIndentationValue = baseIndent - (farmName.Length - 1) * step;
+
+            string reprint = string.Empty;
+            if (isReprint)
+                reprint = $"^CF0,80^FO472,115^FD*^FS";
+
+            string farmIndentation = farmIndentationValue.ToString();
+
             string PalletString = "^XA^PW812"
                                 //+ "^POI" //Orientacion de impresion
                                 + "^FX BARCODE AND PALLET NUMBER\n"
                                 + "^BY5,2,90\n"
                                 + $"^FO181,20^BC^FD{idPal}^FS\n"
-
+                                + reprint
                                 + "^FX BIG INFO SECTION.\n"
+                                + "^CF0,80\n"
+                                + $"^FO{farmIndentation},170^FD{farmName}^FS\n"
                                 + "^CF0,150\n"
-                                + $"^FO20,155^FD{distribuidorZPL}^FS\n"
-                                + "^CF0,160,50\n"
-                                + $"^FO25,300^FD{eTag.nameVariety}^FS\n"
-                                + $"^CF0,200,{lenghtPresentation}\n"
-                                + $"^FO5,450^FD{presentationZPL}^FS\n"
+                                + $"^FO20,270^FD{distribuidorZPL}^FS\n"
+                                + "^CF0,130,50\n"
+                                + $"^FO25,420^FD{eTag.nameVariety}^FS\n"
+                                + $"^CF0,130,{lenghtPresentation}\n"
+                                + $"^FO25,540^FD{presentationZPL}^FS\n"
                                 + "^FO100,570^FD^FS\n"
                                 + "^CF0,50\n"
                                 + $"^FO50,650^FD{eTag.nameContainer}{eTag.Lbs} {eTag.nameSize}^FS\n"
@@ -128,10 +153,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string varietyShort = eTag.nameVariety.Length > 22 ? eTag.nameVariety.Substring(0, 22) : eTag.nameVariety;
             string distributorShort = distribuidorZPL.Length > 13 ? distribuidorZPL.Substring(0, 13) : distribuidorZPL;
 
+            string reprint = string.Empty;
+            if (isReprint)
+                reprint = $"^CF0,30^FO{188 + X},{57 + Y}^FD*^FS \n";
+
             string textZPL = "^FX TEXTO EN CUADRICULA\n"
                             + $"^FX {boxNumber}rst Box\n"
                             + "^BY3,3,10\n"
                             + $"^FO{28  + X},{17  + Y}^BCN,35,Y,N,N,A^FD{idPal}^FS\n"
+                            + reprint
                             + "^CF0,25\n"
                             + $"^FO{13  + X},{84  + Y}^FD{varietyShort}^FS\n"
                             + $"^FO{13  + X},{109 + Y}^FD{presentationShort}^FS\n"

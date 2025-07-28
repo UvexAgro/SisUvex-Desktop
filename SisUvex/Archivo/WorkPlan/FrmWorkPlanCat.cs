@@ -13,15 +13,16 @@ namespace SisUvex.Archivo.WorkPlan
 {
     internal partial class FrmWorkPlanCat : Form
     {
-        ClsWorkPlan cls;
-        public FrmWorkPlanCat(ClsWorkPlan clsClass)
+        public ClsWorkPlan cls;
+        public FrmWorkPlanCat()
         {
             InitializeComponent();
-            cls = clsClass;
         }
 
         private void FrmWorkPlanCat_Load(object sender, EventArgs e)
         {
+            cls ??= new();
+            cls._frmCat ??= this;
             cls.BeginFormCat();
         }
 

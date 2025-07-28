@@ -48,6 +48,12 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
             DataTable dtPallet = ClsQuerysDB.GetDataTable(queryPallet + " WHERE Pallet = '" + idPallet + "' ");
 
+            if (dtPallet.Rows.Count < 1)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
             string idPlanTxb = frm.txbIdWorkPlan.Text;
 
             string estiba = dtPallet.Rows[0]["Estiba"].ToString();
@@ -150,30 +156,32 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
         private void UpdatePalletWorkPlan()
         {
-            string userUpdate = User.GetUserName();
-            string selectedWorkPlan = frm.cboWorkPlan.SelectedValue.ToString();
             try
             {
+                string userUpdate = User.GetUserName();
+                string selectedWorkPlan = frm.cboWorkPlan.SelectedValue.ToString();
+
                 sql.BeginTransaction();
+
+                SqlCommand cmd = new SqlCommand("sp_PackPalletConvert", sql.cnn, sql.transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 foreach (DataGridViewRow row in frm.dgvPallet.Rows)
                 {
-                    if (row.Cells["Pallet"].Value != null)
-                    {
-                        string pallet = row.Cells["Pallet"].Value.ToString();
-                        
-                        string query = $"UPDATE Pack_Pallet SET id_workPlan = '{selectedWorkPlan}', userUpdate = '{userUpdate}', d_update = CAST(GETDATE() AS DATE) WHERE id_pallet = '{pallet}'";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@idPallet", row.Cells["Pallet"].Value.ToString());
+                    cmd.Parameters.AddWithValue("@idWorkPlanNew", selectedWorkPlan);
+                    cmd.Parameters.AddWithValue("@user", userUpdate);
 
-                        SqlCommand command = new SqlCommand(query, sql.cnn, sql.transaction);
-                        command.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
                 }
+
                 sql.CommitTransaction();
             }
             catch (Exception ex)
             {
                 sql.RollbackTransaction();
-                MessageBox.Show(ex.ToString(), "Convertir pallet");
+                MessageBox.Show(ex.ToString(), "Error al añadir materiales de salida");
             }
         }
     }

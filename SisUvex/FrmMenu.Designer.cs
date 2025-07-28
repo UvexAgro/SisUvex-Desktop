@@ -72,8 +72,6 @@
             agenciaAduanalToolStripMenuItem = new ToolStripMenuItem();
             actividadToolStripMenuItem = new ToolStripMenuItem();
             ciudadToolStripMenuItem = new ToolStripMenuItem();
-            tipoDeMaterialToolStripMenuItem = new ToolStripMenuItem();
-            materialToolStripMenuItem = new ToolStripMenuItem();
             configuraciónToolStripMenuItem = new ToolStripMenuItem();
             impresoraSetupToolStrip = new ToolStripMenuItem();
             parámetrosToolStripMenuItem = new ToolStripMenuItem();
@@ -105,6 +103,7 @@
             preciosToolStripMenuItem = new ToolStripMenuItem();
             preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
             asistenciaEmpaqueToolStripMenuItem1 = new ToolStripMenuItem();
+            mantenimientoToolStripMenuItem = new ToolStripMenuItem();
             credencialesToolStripMenuItem = new ToolStripMenuItem();
             comedorToolStripMenuItem = new ToolStripMenuItem();
             áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -114,6 +113,7 @@
             sincronizarRegistrosToolStripMenuItem = new ToolStripMenuItem();
             proveedoresToolStripMenuItem1 = new ToolStripMenuItem();
             relaciónEmpleadoscomedorToolStripMenuItem = new ToolStripMenuItem();
+            reporteAucensiasToolStripMenuItem = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             palletsToolStripMenuItem = new ToolStripMenuItem();
             manifiestosToolStripMenuItem = new ToolStripMenuItem();
@@ -121,11 +121,24 @@
             totalDeCajasEmbarcadasToolStripMenuItem = new ToolStripMenuItem();
             operaciónToolStripMenuItem = new ToolStripMenuItem();
             cajasAGranelToolStripMenuItem = new ToolStripMenuItem();
+            materialesToolStripMenuItem = new ToolStripMenuItem();
+            catálogosToolStripMenuItem1 = new ToolStripMenuItem();
+            tipoDeMaterialToolStripMenuItem2 = new ToolStripMenuItem();
+            catálogoMaterialToolStripMenuItem1 = new ToolStripMenuItem();
+            almacenesToolStripMenuItem = new ToolStripMenuItem();
+            proovedoresToolStripMenuItem1 = new ToolStripMenuItem();
+            destinosExternosToolStripMenuItem = new ToolStripMenuItem();
+            registrosToolStripMenuItem = new ToolStripMenuItem();
+            entradasToolStripMenuItem = new ToolStripMenuItem();
+            salidasToolStripMenuItem = new ToolStripMenuItem();
+            salidasInternasToolStripMenuItem = new ToolStripMenuItem();
+            vehículosToolStripMenuItem = new ToolStripMenuItem();
+            tipoDeVehículosToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            reporteAucensiasToolStripMenuItem = new ToolStripMenuItem();
+            vehículosToolStripMenuItem1 = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -290,7 +303,7 @@
             // 
             // catálogosToolStripMenuItem
             // 
-            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { variedadesToolStripMenuItem, lotesToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, contratistaToolStripMenuItem, cuadrillaToolStripMenuItem, categoríaToolStripMenuItem, presentaciónToolStripMenuItem, contenedorToolStripMenuItem, tamañoToolStripMenuItem, gTINUPCToolStripMenuItem, líneaDeTransporteToolStripMenuItem, choferToolStripMenuItem, cajaToolStripMenuItem, troqueToolStripMenuItem, agenciaAduanalToolStripMenuItem, actividadToolStripMenuItem, ciudadToolStripMenuItem, tipoDeMaterialToolStripMenuItem, materialToolStripMenuItem });
+            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { variedadesToolStripMenuItem, lotesToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, contratistaToolStripMenuItem, cuadrillaToolStripMenuItem, categoríaToolStripMenuItem, presentaciónToolStripMenuItem, contenedorToolStripMenuItem, tamañoToolStripMenuItem, gTINUPCToolStripMenuItem, líneaDeTransporteToolStripMenuItem, choferToolStripMenuItem, cajaToolStripMenuItem, troqueToolStripMenuItem, agenciaAduanalToolStripMenuItem, actividadToolStripMenuItem, ciudadToolStripMenuItem });
             catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
             catálogosToolStripMenuItem.Size = new Size(72, 19);
             catálogosToolStripMenuItem.Text = "Catálogos";
@@ -427,20 +440,6 @@
             ciudadToolStripMenuItem.Size = new Size(175, 22);
             ciudadToolStripMenuItem.Text = "Ciudad";
             ciudadToolStripMenuItem.Click += ciudadToolStripMenuItem_Click;
-            // 
-            // tipoDeMaterialToolStripMenuItem
-            // 
-            tipoDeMaterialToolStripMenuItem.Name = "tipoDeMaterialToolStripMenuItem";
-            tipoDeMaterialToolStripMenuItem.Size = new Size(175, 22);
-            tipoDeMaterialToolStripMenuItem.Text = "Tipo de material";
-            tipoDeMaterialToolStripMenuItem.Click += tipoDeMaterialToolStripMenuItem_Click;
-            // 
-            // materialToolStripMenuItem
-            // 
-            materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-            materialToolStripMenuItem.Size = new Size(175, 22);
-            materialToolStripMenuItem.Text = "Material";
-            materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
             // 
             // configuraciónToolStripMenuItem
             // 
@@ -613,7 +612,7 @@
             // 
             // empaqueToolStripMenuItem
             // 
-            empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroHorasToolStripMenuItem, preciosToolStripMenuItem, preciosPorGTINToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1 });
+            empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroHorasToolStripMenuItem, preciosToolStripMenuItem, preciosPorGTINToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1, mantenimientoToolStripMenuItem });
             empaqueToolStripMenuItem.Name = "empaqueToolStripMenuItem";
             empaqueToolStripMenuItem.Size = new Size(189, 22);
             empaqueToolStripMenuItem.Text = "Empaque";
@@ -645,6 +644,13 @@
             asistenciaEmpaqueToolStripMenuItem1.Size = new Size(239, 22);
             asistenciaEmpaqueToolStripMenuItem1.Text = "Asistencia empaque";
             asistenciaEmpaqueToolStripMenuItem1.Click += asistenciaEmpaqueToolStripMenuItem1_Click;
+            // 
+            // mantenimientoToolStripMenuItem
+            // 
+            mantenimientoToolStripMenuItem.Name = "mantenimientoToolStripMenuItem";
+            mantenimientoToolStripMenuItem.Size = new Size(239, 22);
+            mantenimientoToolStripMenuItem.Text = "Mantenimiento";
+            mantenimientoToolStripMenuItem.Click += mantenimientoToolStripMenuItem_Click;
             // 
             // credencialesToolStripMenuItem
             // 
@@ -708,6 +714,13 @@
             relaciónEmpleadoscomedorToolStripMenuItem.Text = "Relación empleados-comedor";
             relaciónEmpleadoscomedorToolStripMenuItem.Click += relaciónEmpleadoscomedorToolStripMenuItem_Click;
             // 
+            // reporteAucensiasToolStripMenuItem
+            // 
+            reporteAucensiasToolStripMenuItem.Name = "reporteAucensiasToolStripMenuItem";
+            reporteAucensiasToolStripMenuItem.Size = new Size(233, 22);
+            reporteAucensiasToolStripMenuItem.Text = "Reporte aucentes";
+            reporteAucensiasToolStripMenuItem.Click += reporteAucensiasToolStripMenuItem_Click;
+            // 
             // consultasToolStripMenuItem
             // 
             consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem });
@@ -718,7 +731,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -726,7 +739,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -745,7 +758,7 @@
             // 
             // operaciónToolStripMenuItem
             // 
-            operaciónToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasAGranelToolStripMenuItem });
+            operaciónToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasAGranelToolStripMenuItem, materialesToolStripMenuItem, vehículosToolStripMenuItem });
             operaciónToolStripMenuItem.Name = "operaciónToolStripMenuItem";
             operaciónToolStripMenuItem.Size = new Size(74, 19);
             operaciónToolStripMenuItem.Text = "Operación";
@@ -753,9 +766,100 @@
             // cajasAGranelToolStripMenuItem
             // 
             cajasAGranelToolStripMenuItem.Name = "cajasAGranelToolStripMenuItem";
-            cajasAGranelToolStripMenuItem.Size = new Size(147, 22);
+            cajasAGranelToolStripMenuItem.Size = new Size(180, 22);
             cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
             cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
+            // 
+            // materialesToolStripMenuItem
+            // 
+            materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem1, registrosToolStripMenuItem });
+            materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
+            materialesToolStripMenuItem.Size = new Size(180, 22);
+            materialesToolStripMenuItem.Text = "Material";
+            // 
+            // catálogosToolStripMenuItem1
+            // 
+            catálogosToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { tipoDeMaterialToolStripMenuItem2, catálogoMaterialToolStripMenuItem1, almacenesToolStripMenuItem, proovedoresToolStripMenuItem1, destinosExternosToolStripMenuItem });
+            catálogosToolStripMenuItem1.Name = "catálogosToolStripMenuItem1";
+            catálogosToolStripMenuItem1.Size = new Size(180, 22);
+            catálogosToolStripMenuItem1.Text = "Catálogos";
+            // 
+            // tipoDeMaterialToolStripMenuItem2
+            // 
+            tipoDeMaterialToolStripMenuItem2.Name = "tipoDeMaterialToolStripMenuItem2";
+            tipoDeMaterialToolStripMenuItem2.Size = new Size(179, 22);
+            tipoDeMaterialToolStripMenuItem2.Text = "Tipos de material";
+            tipoDeMaterialToolStripMenuItem2.Click += tipoDeMaterialToolStripMenuItem2_Click;
+            // 
+            // catálogoMaterialToolStripMenuItem1
+            // 
+            catálogoMaterialToolStripMenuItem1.Name = "catálogoMaterialToolStripMenuItem1";
+            catálogoMaterialToolStripMenuItem1.Size = new Size(179, 22);
+            catálogoMaterialToolStripMenuItem1.Text = "Catálogo materiales";
+            catálogoMaterialToolStripMenuItem1.Click += catálogoMaterialToolStripMenuItem1_Click;
+            // 
+            // almacenesToolStripMenuItem
+            // 
+            almacenesToolStripMenuItem.Name = "almacenesToolStripMenuItem";
+            almacenesToolStripMenuItem.Size = new Size(179, 22);
+            almacenesToolStripMenuItem.Text = "Almacenes";
+            almacenesToolStripMenuItem.Click += almacenesToolStripMenuItem_Click;
+            // 
+            // proovedoresToolStripMenuItem1
+            // 
+            proovedoresToolStripMenuItem1.Name = "proovedoresToolStripMenuItem1";
+            proovedoresToolStripMenuItem1.Size = new Size(179, 22);
+            proovedoresToolStripMenuItem1.Text = "Proovedores";
+            proovedoresToolStripMenuItem1.Click += proovedoresToolStripMenuItem1_Click;
+            // 
+            // destinosExternosToolStripMenuItem
+            // 
+            destinosExternosToolStripMenuItem.Name = "destinosExternosToolStripMenuItem";
+            destinosExternosToolStripMenuItem.Size = new Size(179, 22);
+            destinosExternosToolStripMenuItem.Text = "Destinos externos";
+            destinosExternosToolStripMenuItem.Click += destinosExternosToolStripMenuItem_Click;
+            // 
+            // registrosToolStripMenuItem
+            // 
+            registrosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { entradasToolStripMenuItem, salidasToolStripMenuItem, salidasInternasToolStripMenuItem });
+            registrosToolStripMenuItem.Name = "registrosToolStripMenuItem";
+            registrosToolStripMenuItem.Size = new Size(180, 22);
+            registrosToolStripMenuItem.Text = "Registros";
+            // 
+            // entradasToolStripMenuItem
+            // 
+            entradasToolStripMenuItem.Name = "entradasToolStripMenuItem";
+            entradasToolStripMenuItem.Size = new Size(156, 22);
+            entradasToolStripMenuItem.Text = "Entradas";
+            entradasToolStripMenuItem.Click += entradasToolStripMenuItem_Click;
+            // 
+            // salidasToolStripMenuItem
+            // 
+            salidasToolStripMenuItem.Name = "salidasToolStripMenuItem";
+            salidasToolStripMenuItem.Size = new Size(156, 22);
+            salidasToolStripMenuItem.Text = "Salidas externas";
+            salidasToolStripMenuItem.Click += salidasToolStripMenuItem_Click;
+            // 
+            // salidasInternasToolStripMenuItem
+            // 
+            salidasInternasToolStripMenuItem.Name = "salidasInternasToolStripMenuItem";
+            salidasInternasToolStripMenuItem.Size = new Size(156, 22);
+            salidasInternasToolStripMenuItem.Text = "Salidas internas";
+            salidasInternasToolStripMenuItem.Click += salidasInternasToolStripMenuItem_Click;
+            // 
+            // vehículosToolStripMenuItem
+            // 
+            vehículosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tipoDeVehículosToolStripMenuItem, vehículosToolStripMenuItem1 });
+            vehículosToolStripMenuItem.Name = "vehículosToolStripMenuItem";
+            vehículosToolStripMenuItem.Size = new Size(180, 22);
+            vehículosToolStripMenuItem.Text = "Vehículos";
+            // 
+            // tipoDeVehículosToolStripMenuItem
+            // 
+            tipoDeVehículosToolStripMenuItem.Name = "tipoDeVehículosToolStripMenuItem";
+            tipoDeVehículosToolStripMenuItem.Size = new Size(180, 22);
+            tipoDeVehículosToolStripMenuItem.Text = "Tipo de vehículos";
+            tipoDeVehículosToolStripMenuItem.Click += tipoDeVehículosToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
@@ -784,12 +888,12 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // reporteAucensiasToolStripMenuItem
+            // vehículosToolStripMenuItem1
             // 
-            reporteAucensiasToolStripMenuItem.Name = "reporteAucensiasToolStripMenuItem";
-            reporteAucensiasToolStripMenuItem.Size = new Size(233, 22);
-            reporteAucensiasToolStripMenuItem.Text = "Reporte aucentes";
-            reporteAucensiasToolStripMenuItem.Click += reporteAucensiasToolStripMenuItem_Click;
+            vehículosToolStripMenuItem1.Name = "vehículosToolStripMenuItem1";
+            vehículosToolStripMenuItem1.Size = new Size(180, 22);
+            vehículosToolStripMenuItem1.Text = "Vehículos";
+            vehículosToolStripMenuItem1.Click += vehículosToolStripMenuItem1_Click;
             // 
             // FrmMenu
             // 
@@ -839,7 +943,6 @@
         private ToolStripMenuItem cajaToolStripMenuItem;
         private ToolStripMenuItem troqueToolStripMenuItem;
         private ToolStripMenuItem agenciaAduanalToolStripMenuItem;
-        private ToolStripMenuItem tipoDeMaterialToolStripMenuItem;
         private ToolStripMenuItem gTINUPCToolStripMenuItem;
         private ToolStripMenuItem contratistaToolStripMenuItem;
         private ToolStripMenuItem cuadrillaToolStripMenuItem;
@@ -862,7 +965,6 @@
         private ToolStripMenuItem nóminaExcelToolStripMenuItem;
         private StatusStrip statusStrip1;
         private ToolStripMenuItem ciudadToolStripMenuItem;
-        private ToolStripMenuItem materialToolStripMenuItem;
         private ToolStripMenuItem nóminaToolStripMenuItem;
         private ToolStripMenuItem registroMaterialToolStripMenuItem;
         private ToolStripMenuItem etiquetaPreviewToolStripMenuItem;
@@ -914,5 +1016,20 @@
         private ToolStripMenuItem relaciónEmpleadoscomedorToolStripMenuItem;
         private ToolStripMenuItem sUAToolStripMenuItem;
         private ToolStripMenuItem reporteAucensiasToolStripMenuItem;
+        private ToolStripMenuItem mantenimientoToolStripMenuItem;
+        private ToolStripMenuItem materialesToolStripMenuItem;
+        private ToolStripMenuItem registrosToolStripMenuItem;
+        private ToolStripMenuItem entradasToolStripMenuItem;
+        private ToolStripMenuItem catálogosToolStripMenuItem1;
+        private ToolStripMenuItem tipoDeMaterialToolStripMenuItem2;
+        private ToolStripMenuItem catálogoMaterialToolStripMenuItem1;
+        private ToolStripMenuItem almacenesToolStripMenuItem;
+        private ToolStripMenuItem proovedoresToolStripMenuItem1;
+        private ToolStripMenuItem destinosExternosToolStripMenuItem;
+        private ToolStripMenuItem salidasToolStripMenuItem;
+        private ToolStripMenuItem vehículosToolStripMenuItem;
+        private ToolStripMenuItem tipoDeVehículosToolStripMenuItem;
+        private ToolStripMenuItem salidasInternasToolStripMenuItem;
+        private ToolStripMenuItem vehículosToolStripMenuItem1;
     }
 }

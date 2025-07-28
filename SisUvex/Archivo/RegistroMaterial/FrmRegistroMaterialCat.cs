@@ -1,6 +1,5 @@
 ﻿
 using SisUvex.Archivo.RegistroMaterial;
-using SisUvex.Catalogos.Material;
 
 namespace SisUvex.Catalogos.RegistroMaterial
 {

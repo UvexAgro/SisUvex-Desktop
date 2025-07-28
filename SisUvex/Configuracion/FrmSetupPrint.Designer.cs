@@ -29,32 +29,32 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSetupPrint));
-            cmBxSetupPrintPallet = new ComboBox();
+            cboPrinterPallet = new ComboBox();
             label1 = new Label();
             btnSetupPrintPTI = new Button();
             label2 = new Label();
-            cmBxSetupPrintPTI = new ComboBox();
+            cboPrinterPTI = new ComboBox();
             label3 = new Label();
-            cmBxSetupPrintCode = new ComboBox();
+            cboPrinterCode = new ComboBox();
             label4 = new Label();
-            cmBxSetupPrintDoc = new ComboBox();
+            cboPrinterDoc = new ComboBox();
             lblPallet = new Label();
             lblDoc = new Label();
             lblCode = new Label();
             lblPTI = new Label();
-            button1 = new Button();
             SuspendLayout();
             // 
-            // cmBxSetupPrintPallet
+            // cboPrinterPallet
             // 
-            cmBxSetupPrintPallet.Font = new Font("Segoe UI", 14F);
-            cmBxSetupPrintPallet.FormattingEnabled = true;
-            cmBxSetupPrintPallet.Location = new Point(21, 81);
-            cmBxSetupPrintPallet.Margin = new Padding(1);
-            cmBxSetupPrintPallet.Name = "cmBxSetupPrintPallet";
-            cmBxSetupPrintPallet.Size = new Size(258, 33);
-            cmBxSetupPrintPallet.TabIndex = 0;
-            cmBxSetupPrintPallet.SelectedIndexChanged += cmBxSetupPrintPallet_SelectedIndexChanged;
+            cboPrinterPallet.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPrinterPallet.Font = new Font("Segoe UI", 14F);
+            cboPrinterPallet.FormattingEnabled = true;
+            cboPrinterPallet.Location = new Point(21, 81);
+            cboPrinterPallet.Margin = new Padding(1);
+            cboPrinterPallet.Name = "cboPrinterPallet";
+            cboPrinterPallet.Size = new Size(258, 33);
+            cboPrinterPallet.TabIndex = 0;
+            cboPrinterPallet.SelectedIndexChanged += cmBxSetupPrintPallet_SelectedIndexChanged;
             // 
             // label1
             // 
@@ -70,10 +70,10 @@
             // btnSetupPrintPTI
             // 
             btnSetupPrintPTI.Font = new Font("Segoe UI", 14F);
-            btnSetupPrintPTI.Location = new Point(544, 270);
+            btnSetupPrintPTI.Location = new Point(547, 289);
             btnSetupPrintPTI.Margin = new Padding(1);
             btnSetupPrintPTI.Name = "btnSetupPrintPTI";
-            btnSetupPrintPTI.Size = new Size(78, 30);
+            btnSetupPrintPTI.Size = new Size(78, 33);
             btnSetupPrintPTI.TabIndex = 5;
             btnSetupPrintPTI.Text = "FIJAR";
             btnSetupPrintPTI.UseVisualStyleBackColor = true;
@@ -90,63 +90,66 @@
             label2.TabIndex = 4;
             label2.Text = "IMPRESORA PTI";
             // 
-            // cmBxSetupPrintPTI
+            // cboPrinterPTI
             // 
-            cmBxSetupPrintPTI.Font = new Font("Segoe UI", 14F);
-            cmBxSetupPrintPTI.FormattingEnabled = true;
-            cmBxSetupPrintPTI.Location = new Point(367, 81);
-            cmBxSetupPrintPTI.Margin = new Padding(1);
-            cmBxSetupPrintPTI.Name = "cmBxSetupPrintPTI";
-            cmBxSetupPrintPTI.Size = new Size(258, 33);
-            cmBxSetupPrintPTI.TabIndex = 1;
+            cboPrinterPTI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPrinterPTI.Font = new Font("Segoe UI", 14F);
+            cboPrinterPTI.FormattingEnabled = true;
+            cboPrinterPTI.Location = new Point(367, 81);
+            cboPrinterPTI.Margin = new Padding(1);
+            cboPrinterPTI.Name = "cboPrinterPTI";
+            cboPrinterPTI.Size = new Size(258, 33);
+            cboPrinterPTI.TabIndex = 1;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label3.Location = new Point(47, 145);
+            label3.Location = new Point(47, 167);
             label3.Margin = new Padding(1, 0, 1, 0);
             label3.Name = "label3";
             label3.Size = new Size(199, 25);
             label3.TabIndex = 7;
             label3.Text = "IMPRESORA CODIGO";
             // 
-            // cmBxSetupPrintCode
+            // cboPrinterCode
             // 
-            cmBxSetupPrintCode.Font = new Font("Segoe UI", 14F);
-            cmBxSetupPrintCode.FormattingEnabled = true;
-            cmBxSetupPrintCode.Location = new Point(21, 213);
-            cmBxSetupPrintCode.Margin = new Padding(1);
-            cmBxSetupPrintCode.Name = "cmBxSetupPrintCode";
-            cmBxSetupPrintCode.Size = new Size(258, 33);
-            cmBxSetupPrintCode.TabIndex = 2;
+            cboPrinterCode.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPrinterCode.Font = new Font("Segoe UI", 14F);
+            cboPrinterCode.FormattingEnabled = true;
+            cboPrinterCode.Location = new Point(21, 235);
+            cboPrinterCode.Margin = new Padding(1);
+            cboPrinterCode.Name = "cboPrinterCode";
+            cboPrinterCode.Size = new Size(258, 33);
+            cboPrinterCode.TabIndex = 2;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label4.Location = new Point(367, 141);
+            label4.Location = new Point(367, 163);
             label4.Margin = new Padding(1, 0, 1, 0);
             label4.Name = "label4";
             label4.Size = new Size(257, 25);
             label4.TabIndex = 10;
             label4.Text = "IMPRESORA DOCUMENTOS";
             // 
-            // cmBxSetupPrintDoc
+            // cboPrinterDoc
             // 
-            cmBxSetupPrintDoc.Font = new Font("Segoe UI", 14F);
-            cmBxSetupPrintDoc.FormattingEnabled = true;
-            cmBxSetupPrintDoc.Location = new Point(367, 213);
-            cmBxSetupPrintDoc.Margin = new Padding(1);
-            cmBxSetupPrintDoc.Name = "cmBxSetupPrintDoc";
-            cmBxSetupPrintDoc.Size = new Size(258, 33);
-            cmBxSetupPrintDoc.TabIndex = 3;
+            cboPrinterDoc.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPrinterDoc.Font = new Font("Segoe UI", 14F);
+            cboPrinterDoc.FormattingEnabled = true;
+            cboPrinterDoc.Location = new Point(367, 235);
+            cboPrinterDoc.Margin = new Padding(1);
+            cboPrinterDoc.Name = "cboPrinterDoc";
+            cboPrinterDoc.Size = new Size(258, 33);
+            cboPrinterDoc.TabIndex = 3;
             // 
             // lblPallet
             // 
             lblPallet.AutoSize = true;
             lblPallet.Font = new Font("Segoe UI", 14F);
-            lblPallet.Location = new Point(57, 49);
+            lblPallet.Location = new Point(24, 52);
             lblPallet.Margin = new Padding(1, 0, 1, 0);
             lblPallet.Name = "lblPallet";
             lblPallet.Size = new Size(0, 25);
@@ -156,7 +159,7 @@
             // 
             lblDoc.AutoSize = true;
             lblDoc.Font = new Font("Segoe UI", 14F);
-            lblDoc.Location = new Point(367, 178);
+            lblDoc.Location = new Point(370, 206);
             lblDoc.Margin = new Padding(1, 0, 1, 0);
             lblDoc.Name = "lblDoc";
             lblDoc.Size = new Size(0, 25);
@@ -166,7 +169,7 @@
             // 
             lblCode.AutoSize = true;
             lblCode.Font = new Font("Segoe UI", 14F);
-            lblCode.Location = new Point(21, 175);
+            lblCode.Location = new Point(24, 206);
             lblCode.Margin = new Padding(1, 0, 1, 0);
             lblCode.Name = "lblCode";
             lblCode.Size = new Size(0, 25);
@@ -176,45 +179,35 @@
             // 
             lblPTI.AutoSize = true;
             lblPTI.Font = new Font("Segoe UI", 14F);
-            lblPTI.Location = new Point(366, 41);
+            lblPTI.Location = new Point(370, 52);
             lblPTI.Margin = new Padding(1, 0, 1, 0);
             lblPTI.Name = "lblPTI";
             lblPTI.Size = new Size(0, 25);
             lblPTI.TabIndex = 15;
             // 
-            // button1
-            // 
-            button1.Font = new Font("Segoe UI", 14F);
-            button1.Location = new Point(388, 270);
-            button1.Margin = new Padding(1);
-            button1.Name = "button1";
-            button1.Size = new Size(114, 30);
-            button1.TabIndex = 4;
-            button1.Text = "MOSTRAR";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // FrmSetupPrint
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(668, 322);
-            Controls.Add(button1);
+            ClientSize = new Size(649, 343);
             Controls.Add(lblPTI);
             Controls.Add(lblCode);
             Controls.Add(lblDoc);
             Controls.Add(lblPallet);
             Controls.Add(label4);
-            Controls.Add(cmBxSetupPrintDoc);
+            Controls.Add(cboPrinterDoc);
             Controls.Add(label3);
-            Controls.Add(cmBxSetupPrintCode);
+            Controls.Add(cboPrinterCode);
             Controls.Add(label2);
-            Controls.Add(cmBxSetupPrintPTI);
+            Controls.Add(cboPrinterPTI);
             Controls.Add(btnSetupPrintPTI);
             Controls.Add(label1);
-            Controls.Add(cmBxSetupPrintPallet);
+            Controls.Add(cboPrinterPallet);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(1);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmSetupPrint";
             Text = "Configurar impresoras";
             Load += FrmSetupPrinterPallet_Load;
@@ -224,19 +217,18 @@
 
         #endregion
 
-        private ComboBox cmBxSetupPrintPallet;
+        private ComboBox cboPrinterPallet;
         private Label label1;
         private Button btnSetupPrintPTI;
         private Label label2;
-        private ComboBox cmBxSetupPrintPTI;
+        private ComboBox cboPrinterPTI;
         private Label label3;
-        private ComboBox cmBxSetupPrintCode;
+        private ComboBox cboPrinterCode;
         private Label label4;
-        private ComboBox cmBxSetupPrintDoc;
+        private ComboBox cboPrinterDoc;
         private Label lblPallet;
         private Label lblDoc;
         private Label lblCode;
         private Label lblPTI;
-        private Button button1;
     }
 }

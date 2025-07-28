@@ -11,13 +11,16 @@ using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Distribuidor;
 using SisUvex.Catalogos.Productor;
+using SisUvex.Catalogos.Metods.Extentions;
+using System.Web;
+using SisUvex.Catalogos.Metods.Controls;
 
 namespace SisUvex.Archivo.Manifiesto
 {
     internal class ClsManifest
     {
         SQLControl sql = new SQLControl();
-        //ClsControls controlList;
+        ClsControls controlList;
         public FrmManifestAdd _frmAdd;
         public FrmManifestCat _frmCat;
         public EManifest eManifest;
@@ -88,7 +91,7 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 idManifest = manifestId.ToString("D4");
 
-                qry = queryCatalogo + $" WHERE vw.Manifiesto = 'E{idManifest}' OR vw.Manifiesto = 'N{idManifest}' ";
+                qry = queryCatalogo + $" WHERE RIGHT(vw.Manifiesto, 4) = '{idManifest}' ";
             }
             else
             {
@@ -150,7 +153,7 @@ namespace SisUvex.Archivo.Manifiesto
         {
             clsPallets.dataGridView = _frmAdd.dgvPalletList;
             clsPallets.AddColumnsToDGVPalletList();
-            //AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
+            AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
 
             CargarComboBoxes();
 
@@ -164,20 +167,25 @@ namespace SisUvex.Archivo.Manifiesto
                 _frmAdd.cboTransportType.Text = clsConfManifest.transportTransportType;
 
                 _frmAdd.txbIdSeason.Text = clsConfManifest.idSeason;
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, clsConfManifest.idSeason ?? "");
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, clsConfManifest.idSeason);
 
                 _frmAdd.cboActive.SelectedIndex = 1;
 
-                _frmAdd.cboMarket.Text = clsConfManifest.market ?? "E";
-                _frmAdd.txbId.Text = GetIdNextManifest(_frmAdd.cboMarket.Text);
                 _frmAdd.spnHour.Text = DateTime.Now.AddMinutes((15 - DateTime.Now.Minute % 15) % 15).ToString("HH:mm");
-
-                
 
                 _frmAdd.cboMarket.SelectedIndexChanged += (sender, e) =>
                 {
-                    _frmAdd.txbId.Text = GetIdNextManifest(_frmAdd.cboMarket.Text);
+                    if (_frmAdd.cboMarket.SelectedIndex > 0)
+                    {
+                        string prefixMarket = (string)_frmAdd.cboMarket.GetColumnValue(ClsObject.Market.ColumnPrefix); ;
+                        _frmAdd.txbId.Text = GetIdNextManifest(prefixMarket);
+                    }
+                    else
+                        _frmAdd.txbId.Text = string.Empty;
                 };
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMarket, clsConfManifest.idMarket);
+
             }
             else
             {
@@ -188,7 +196,14 @@ namespace SisUvex.Archivo.Manifiesto
 
             _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
         }
+        private void AddControlsToList()
+        {
+            controlList = new();
 
+            controlList.ChangeHeadMessage("Para registrar un manifiesto debe:\n");
+            controlList.Add(_frmAdd.txbId, "Ingresar el código del manifiesto.");
+            controlList.Add(_frmAdd.txbIdMarket, "Seleccionar el mercado.");
+        }
         private void CargarComboBoxes()
         {
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
@@ -204,6 +219,7 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, ClsObject.FreightContainer.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, ClsObject.Season.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboTemplate, ClsObject.ManifestTemplate.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboMarket, ClsObject.Market.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboConsignee, _frmAdd.txbIdConsignee);
@@ -218,6 +234,7 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTemplate, _frmAdd.txbIdTemplate);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboMarket, _frmAdd.txbIdMarket);
 
             // Diccionario para asignar columnas del DataTable del cmbPrincipal a cada ComboBox secundario
             Dictionary<ComboBox, string> columnasRelacionadas = new Dictionary<ComboBox, string>
@@ -232,12 +249,12 @@ namespace SisUvex.Archivo.Manifiesto
             };
             ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(_frmAdd.cboTemplate, columnasRelacionadas, _frmAdd.txbIdTemplate);
 
-            List<Tuple<ComboBox, CheckBox?>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?>>();
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer));
+            List<Tuple<ComboBox, CheckBox?, string>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId));
+            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId));
 
-            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
+            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, _frmAdd.txbIdTransportLine);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
@@ -259,8 +276,11 @@ namespace SisUvex.Archivo.Manifiesto
             ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTemperature);
         }
 
-        public string GetIdNextManifest(string market)
+        public string GetIdNextManifest(string? market)
         {
+            if (string.IsNullOrWhiteSpace(market))
+                return string.Empty;
+
             string qry = $" SELECT '{market}' + FORMAT(COALESCE(MAX(CAST(RIGHT(id_manifest, 4) AS INT)) + 1, 1), '0000') AS 'Id' FROM Pack_Manifest WHERE id_manifest LIKE '{market}%' "; 
 
             return ClsQuerysDB.GetData(qry);
@@ -273,9 +293,7 @@ namespace SisUvex.Archivo.Manifiesto
             eManifest.SetManifest(_frmAdd.idModify);
 
             _frmAdd.txbId.Text = eManifest.idManifest;
-            //_frmAdd.cboSeason = eManifest.idSeason;
             _frmAdd.cboActive.SelectedIndex = eManifest.active ?? 1;
-            _frmAdd.cboMarket.SelectedIndex = eManifest.idManifest?.Substring(0, 1) == "E" ? 0 : 1;
             _frmAdd.dtpDate.Value = eManifest.shipmentDate ?? DateTime.Now;
             _frmAdd.spnHour.Text = eManifest.shipmentHour;
             _frmAdd.txbPurchaseOrder.Text = eManifest.purchaseOrder;
@@ -297,18 +315,19 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
             _frmAdd.txbObservations.Text = eManifest.observations;
 
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, eManifest.idConsignee ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, eManifest.idGrower ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, eManifest.idUSAgencyTrade ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, eManifest.idMXAgencyTrade ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, eManifest.idCityCrossPoint ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, eManifest.idCityDestiny ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, eManifest.idTransportLine ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboDriver, eManifest.idDriver ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboTruck, eManifest.idTruck ?? "");
-            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboFreightContainer, eManifest.idFreightContainer ?? "");
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, eManifest.idConsignee);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, eManifest.idGrower);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, eManifest.idUSAgencyTrade);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, eManifest.idMXAgencyTrade);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, eManifest.idCityCrossPoint);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, eManifest.idCityDestiny);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, eManifest.idTransportLine);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboDriver, eManifest.idDriver);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboTruck, eManifest.idTruck);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboFreightContainer, eManifest.idFreightContainer);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMarket, eManifest.idMarket);
 
             clsPallets.AddManifestPalletsToDGVPalletList(eManifest.idManifest);
         }
@@ -363,8 +382,11 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void btnAcceptAddModify()
         {
-            //if (!controlList.ValidateControls())
-            //    return;
+            if (!controlList.ValidateControls())
+                return;
+
+            if (!clsPallets.ValidateIdDistributorInPallets(_frmAdd.txbIdDistributor.Text))
+                return;
 
             if (_frmAdd.IsAddModify)
                 AddProcedures();
@@ -373,6 +395,8 @@ namespace SisUvex.Archivo.Manifiesto
 
             //if (_frmAdd.AddIsUpdate)
             //    _frmAdd.Close();
+
+            _frmAdd.cboMarket.Enabled = false;
         }
 
         public void AddProcedures()
@@ -390,9 +414,13 @@ namespace SisUvex.Archivo.Manifiesto
 
                 sql.CommitTransaction();
 
-                MessageBox.Show("Se agregó el manifiesto: " + _frmAdd.txbId.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _frmAdd.txbId.Text = idManifest;
+
+                MessageBox.Show("Se agregó el manifiesto: " + idManifest, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 _frmAdd.AddIsUpdate = true;
+
+                _frmAdd.IsAddModify = false;
             }
             catch (Exception ex)
             {
@@ -441,7 +469,7 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@active", _frmAdd.cboActive.SelectedIndex);
-            cmd.Parameters.AddWithValue("@manifestType", _frmAdd.cboMarket.Text);
+            cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
             cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDistributor.Text));
             cmd.Parameters.AddWithValue("@idConsignee", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdConsignee.Text));
             cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdGrower.Text));
@@ -473,6 +501,7 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@dieselInvoice", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselInvoice.Text));
             cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
+            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
 
             cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
@@ -529,6 +558,8 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@dieselInvoice", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselInvoice.Text));
             cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
+            cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
+            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
 
             cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
@@ -562,14 +593,14 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BtnPrintManifestFrmAdd()
         {
-            PrintManifest(_frmAdd.txbId.Text);
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
         }
 
         public void BtnPrintManifestFrmCat()
         {
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
             }
             else
             {
@@ -577,7 +608,7 @@ namespace SisUvex.Archivo.Manifiesto
             }
         }
 
-        private void PrintManifest(string idManifest)
+        private void PrintManifest(string idManifest, bool isManifestPerField, bool isExcelLayout)
         {
             try
             {
@@ -590,20 +621,25 @@ namespace SisUvex.Archivo.Manifiesto
 
                     if (conf.printManifest)
                     {
+                        // ClsPDFManifest pdfManifest = new ClsPDFManifest();
                         ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
                         pdf.desktopPath = conf.manifestFolderPath;
-                        pdf.CreatePDFManifest(idManifest);
+
+                        if (!isManifestPerField)
+                            pdf.CreatePDFManifest(idManifest);
+                        else
+                            pdf.CreatePDFManifestTotalsPerLot(idManifest);
 
                         isPrint = true;
                     }
 
+                    if (isExcelLayout)
+                    {
+                        ClsManifestExcelLayout exl = new ClsManifestExcelLayout();
+                        exl.CreateExcelLayout(idManifest);
 
-                    //if (conf.printManifest)
-                    //{
-                    //    ClsPDFManifiesto pdf = new ClsPDFManifiesto();
-                    //    pdf.desktopPath = conf.manifestFolderPath;
-                    //    pdf.CreatePDFManifest(idManifest);
-                    //}
+                        isPrint = true;
+                    }
 
                     if (conf.printMaping)
                     {

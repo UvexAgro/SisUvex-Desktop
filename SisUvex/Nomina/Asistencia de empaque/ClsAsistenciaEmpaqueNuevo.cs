@@ -95,11 +95,11 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                     try
                     {
                         // Obtener la hoja seleccionada del archivo de Excel
-                        Excel.Worksheet worksheet = workbook.Sheets[selectedSheet];
+                        Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[selectedSheet];
 
                         // Obtener los datos de la hoja seleccionada y cargarlos en el DataGridView
                         Excel.Range range = worksheet.UsedRange;
-                        object[,] data = range.Value;
+                        object[,] data = (object[,])range.Value;
                         if (data != null)
                         {
                             int rows = data.GetLength(0);

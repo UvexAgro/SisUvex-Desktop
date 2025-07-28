@@ -53,10 +53,6 @@ namespace SisUvex.Archivo.Manifiesto
             cls.btnRecoverProcedure();
         }
 
-        private void btnPrint_Click(object sender, EventArgs e)
-        {
-            cls.BtnPrintManifestFrmCat();
-        }
 
         private void txbIdManifest_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -87,6 +83,16 @@ namespace SisUvex.Archivo.Manifiesto
             FrmManifestTemplatesCat frm = new FrmManifestTemplatesCat();
             frm.MdiParent = this.MdiParent; // Set the MdiParent to the parent of the current form
             frm.Show();
+        }
+
+        private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            cls.OpenFrmModify();
+        }
+
+        private void btnPrintManifest_Click(object sender, EventArgs e)
+        {
+            cls.BtnPrintManifestFrmCat();
         }
     }
 }

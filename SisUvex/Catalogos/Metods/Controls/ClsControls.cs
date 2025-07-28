@@ -30,18 +30,67 @@ namespace SisUvex.Catalogos.Metods.Controls
             {
                 if (control is TextBox textBox)
                 {
-                    if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                    if (textBox.Tag == null)
                     {
-                        isValid = false;
-                        showMessage += "\n    " + message;
+                        if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else if (textBox.Tag?.ToString() == "integerNoEmpty")
+                    {
+                        if (string.IsNullOrEmpty(textBox.Text.Trim()) || !int.TryParse(textBox.Text, out _))
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else if (textBox.Tag?.ToString() == "integerEmpty")
+                    {
+                        if (!int.TryParse(textBox.Text, out _))
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else if (textBox.Tag?.ToString() == "decimalNoEmpty")
+                    {
+                        if (string.IsNullOrEmpty(textBox.Text.Trim()) || !decimal.TryParse(textBox.Text, out _))
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else if (textBox.Tag?.ToString() == "decimalEmpty")
+                    {
+                        if (!decimal.TryParse(textBox.Text, out _) && !string.IsNullOrEmpty(textBox.Text))
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
                     }
                 }
                 else if (control is ComboBox comboBox)
                 {
-                    if (comboBox.SelectedIndex == -1 || comboBox.Text == ClsObject.String.SelectText)
+                    if (comboBox.Tag == null)
                     {
-                        isValid = false;
-                        showMessage += "\n    " + message;
+                        if (comboBox.SelectedIndex == -1 || comboBox.Text == ClsObject.String.SelectText)
+                        {
+                            isValid = false;
+                            showMessage += "\n    " + message;
+                        }
+                    }
+                    else
+                    {
+                        if (comboBox.Tag.ToString() == "text")
+                        {
+                            if (string.IsNullOrEmpty(comboBox.Text))
+                            {
+                                isValid = false;
+                                showMessage += "\n    " + message;
+                            }
+                        }
                     }
                 }
                 else if (control is DateTimePicker dateTimePicker)
@@ -71,6 +120,14 @@ namespace SisUvex.Catalogos.Metods.Controls
                 else if (control is CheckBox checkBox)
                 {
                     if (!checkBox.Checked)
+                    {
+                        isValid = false;
+                        showMessage += "\n    " + message;
+                    }
+                }
+                else if (control is DataGridView dataGridView)
+                {
+                    if (dataGridView.Rows.Count == 0 || dataGridView.Rows.Cast<DataGridViewRow>().All(row => row.IsNewRow))
                     {
                         isValid = false;
                         showMessage += "\n    " + message;

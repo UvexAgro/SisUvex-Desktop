@@ -24,10 +24,9 @@ namespace SisUvex.Archivo.WorkPlan
 
         public ClsWorkPlan()
         {
-            _frmCat = new FrmWorkPlanCat(this);
-            _frmAdd = new FrmWorkPlanAdd(_frmCat, this);
             clsWP = this;
         }
+
         public void BeginFormCat()
         {   
             _frmCat.dtpDate1.Value = DateTime.Now;
@@ -54,7 +53,8 @@ namespace SisUvex.Archivo.WorkPlan
         }
         public void OpenFrmAdd()
         {
-            _frmAdd = new FrmWorkPlanAdd(_frmCat, this);
+            _frmAdd = new();
+            _frmAdd.cls = this;
             _frmAdd.Text = "Añadir plan de trabajo";
             _frmAdd.lblTitle.Text = "Añadir plan de trabajo";
             _frmAdd.IsAddModify = true;
@@ -82,6 +82,7 @@ namespace SisUvex.Archivo.WorkPlan
             controlList.Add(_frmAdd.txbIdSize, "Seleccionar un tamaño.");
             controlList.Add(_frmAdd.txbIdGTIN, "Seleccionar un GTIN.");
             controlList.Add(_frmAdd.txbVPC, "Generar un voice pick code.");
+            controlList.Add(_frmAdd.txbIdTypeBox, "Seleccionar una caja.");
         }
         private void SetControls()
         {
@@ -90,9 +91,11 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSize, ClsObject.Size.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadAll(_frmAdd.cboTypeBox, TypeBox.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSize, _frmAdd.txbIdSize);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTypeBox, _frmAdd.txbIdTypeBox);
             CboApplyTextChangedEventInWorkPlanForLot(_frmAdd.cboLot, _frmAdd.txbIdLot);
             CboApplyTextChangedEventInWorkPlanForVariety(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
             CboApplyTextChangedEventInWorkPlanForDistributor(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
@@ -115,17 +118,14 @@ namespace SisUvex.Archivo.WorkPlan
 
             eWorkPlan.SetWorkPlan(_frmAdd.idModify);
             _frmAdd.txbId.Text = eWorkPlan.IdWorkPlan;
-            _frmAdd.txbIdVariety.Text = eWorkPlan.IdVariety;
-            _frmAdd.txbIdLot.Text = eWorkPlan.IdLot + "|" + eWorkPlan.IdVariety;
-            _frmAdd.txbIdWorkGroup.Text = eWorkPlan.IdWorkGroup;
-            _frmAdd.txbIdSize.Text = eWorkPlan.Size;
             _frmAdd.dtpDateWorkPlan.Value = eWorkPlan.WorkDay;
             _frmAdd.chbActive.Checked = eWorkPlan.Active == 1;
 
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSize, _frmAdd.txbIdSize);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLot, _frmAdd.txbIdLot);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSize, eWorkPlan.Size);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWorkGroup, eWorkPlan.IdWorkGroup);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, eWorkPlan.IdVariety);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLot, eWorkPlan.IdLot + "|" + eWorkPlan.IdVariety);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTypeBox, eWorkPlan.IdTypeBox);
 
             _frmAdd.txbIdGTIN.Text = eWorkPlan.IdGtin;
             _frmAdd.txbVPC.Text = eWorkPlan.VPC;
@@ -137,7 +137,8 @@ namespace SisUvex.Archivo.WorkPlan
         {
             if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                _frmAdd = new FrmWorkPlanAdd(_frmCat, this);
+                _frmAdd = new();
+                _frmAdd.cls = this;
                 _frmAdd.Text = "Modificar plan de trabajo";
                 _frmAdd.lblTitle.Text = "Modificar plan de trabajo";
                 _frmAdd.IsAddModify = false;
@@ -163,7 +164,13 @@ namespace SisUvex.Archivo.WorkPlan
         {
             string idLot = _frmAdd.txbIdLot.Text.Substring(0,4);
             string idVariety = _frmAdd.txbIdLot.Text.Substring(5, 2);
-            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{_frmAdd.txbIdGTIN.Text}' AND wpl.d_workDay = '{_frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd")}' AND wpl.id_workGroup = '{_frmAdd.txbIdWorkGroup.Text}' AND wpl.id_size = '{_frmAdd.txbIdSize.Text}' AND gtn.id_variety = '{idVariety}'";
+            string idTypeBox = _frmAdd.txbIdTypeBox.Text;
+            if (string.IsNullOrEmpty(idTypeBox))
+                idTypeBox = "NULL";
+            else
+                idTypeBox = $"'{idTypeBox}'"; //LAS COMULLAS AQUÍ POR SI FUERA NULL
+
+            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{_frmAdd.txbIdGTIN.Text}' AND wpl.d_workDay = '{_frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd")}' AND wpl.id_workGroup = '{_frmAdd.txbIdWorkGroup.Text}' AND wpl.id_size = '{_frmAdd.txbIdSize.Text}' AND gtn.id_variety = '{idVariety}' AND wpl.id_typeBox = {idTypeBox}";
 
             string result = ClsQuerysDB.GetData(query);
 
@@ -210,6 +217,7 @@ namespace SisUvex.Archivo.WorkPlan
                 cmd.Parameters.AddWithValue("@workDay", _frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@idSize", _frmAdd.txbIdSize.Text);
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@idTypeBox", _frmAdd.txbIdTypeBox.Text);
 
                 string id = cmd.ExecuteScalar().ToString();
 
@@ -241,8 +249,8 @@ namespace SisUvex.Archivo.WorkPlan
                 cmd.Parameters.AddWithValue("@voicePickCode", _frmAdd.txbVPC.Text);
                 cmd.Parameters.AddWithValue("@workDay", _frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@idSize", _frmAdd.txbIdSize.Text);
-
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@idTypeBox", _frmAdd.txbIdTypeBox.Text);
 
                 cmd.ExecuteNonQuery();
 

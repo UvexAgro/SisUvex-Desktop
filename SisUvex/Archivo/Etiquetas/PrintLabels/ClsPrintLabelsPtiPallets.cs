@@ -23,15 +23,10 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public ETagInfo eTagInfo = new ETagInfo();
 
         DataTable? dtLastPallets = null;
-        string queryLastPallets = $"SELECT TOP(10) pal.id_pallet AS 'Pallet', pal.i_boxes AS 'Cajas', CONCAT(con.v_nameContainer,CAST(gtn.n_lbs AS float)) AS 'Contenedor', CONCAT_WS(' ', siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, gtn.v_postLabel) AS 'Presentación', [var].v_shortName AS 'Variedad', dis.v_nameDistShort AS 'Distribuidor', CONCAT_WS(' ', wgp.id_workGroup, ctr.v_nameContractor) AS 'Cuadrilla', CONCAT(lot.v_nameLot, ' (',lot.id_lot,')') AS 'Lote', pal.id_workPlan AS 'Plan' FROM dbo.Pack_Pallet AS pal LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation LEFT JOIN dbo.Pack_Container AS con ON con.id_container = gtn.id_container LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Price AS prc ON prc.id_price = gtn.id_price LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color WHERE pal.userCreate = '{User.GetLastUser()}' ORDER BY id_pallet DESC";
+        string queryLastPallets = $"SELECT TOP(10) pal.id_pallet AS 'Pallet', pal.i_boxes AS 'Cajas', CONCAT(con.v_nameContainer,CAST(gtn.n_lbs AS float)) AS 'Contenedor', CONCAT_WS(' ', siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, gtn.v_postLabel) AS 'Presentación', [var].v_shortName AS 'Variedad', dis.v_nameDistShort AS 'Distribuidor', CONCAT_WS(' ', wgp.id_workGroup, ctr.v_nameContractor) AS 'Cuadrilla', CONCAT(lot.v_nameLot, ' (',lot.id_lot,')') AS 'Lote', pal.id_workPlan AS 'Plan', box.v_shortNameTypeBox AS [Caja] FROM dbo.Pack_Pallet AS pal LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation LEFT JOIN dbo.Pack_Container AS con ON con.id_container = gtn.id_container LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Price AS prc ON prc.id_price = gtn.id_price LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox WHERE pal.userCreate = '{User.GetLastUser()}' ORDER BY id_pallet DESC";
 
         private const int timesPalletPrint = 2;
-
-        public ClsPrintLabelsPtiPallets()
-        {
-            frm = new FrmPrintLabelsPtiPallets(this);
-        }
-
+        
         private string GetFilterDayWG()
         {
             return $"{Column.active} = '1' AND {WorkGroup.ColumnId} = '{frm.cboWorkGroup.SelectedValue}' AND {ClsObject.WorkPlan.ColumnDate} = '{frm.dtpWorkDay.Value.ToString("yyyy-MM-dd")}' OR {Column.name} = '{ClsObject.String.SelectText}'";
@@ -102,13 +97,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             frm.lblGtinNumber.Text          = eTagInfo.valueGTIN;
             frm.lblUpcNumber.Text           = eTagInfo.upcGTIN;
             frm.lblPluNumber.Text           = eTagInfo.PLU;
+            
+            if(!string.IsNullOrEmpty(eTagInfo.shortNameTypeBox))
+                frm.lblTypeBox.Text = eTagInfo.nameTypeBox + " (" + eTagInfo.shortNameTypeBox + ")";
 
             string presentation = "";
-            if (eTagInfo.preLabel.IsNullOrEmpty())
-                presentation += eTagInfo.preLabel;
+            if (!string.IsNullOrEmpty(eTagInfo.preLabel))
+                presentation += eTagInfo.preLabel + " ";
             presentation += eTagInfo.namePresentation;
-            if (eTagInfo.postLabel.IsNullOrEmpty())
-                presentation += eTagInfo.postLabel;
+            if (!string.IsNullOrEmpty(eTagInfo.postLabel))
+                presentation += " " + eTagInfo.postLabel;
             frm.lblPresentationName.Text = presentation;
         }
 
@@ -164,6 +162,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.voicePickCode          = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
                 eTag.idContractor           = rows[0][Contractor.ColumnId].ToString();
                 eTag.nameContractor         = rows[0][Contractor.ColumnName].ToString();
+                eTag.growFarmName           = rows[0][GrowFarm.ColumnName].ToString();
+                eTag.nameColorCanEn         = rows[0][ClsObject.Color.ColumnNameCanEn].ToString();
+                eTag.nameColorCanFr         = rows[0][ClsObject.Color.ColumnNameCanFr].ToString();
+                eTag.idTypeBox              = rows[0][TypeBox.ColumnId].ToString();
+                eTag.nameTypeBox            = rows[0][TypeBox.ColumnName].ToString();
+                eTag.shortNameTypeBox       = rows[0][TypeBox.ColumnShortName].ToString(); // Added for short name type box
             }
         }
 
@@ -219,7 +223,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         else
                         {//imprimir (se creó el pallet)
                             print = new ClsPrintPtiTag();
-                            print.SendToPrintPalletTag(idPallet, eTagInfo, timesPalletPrint, palletBoxes, reverseOrientation);
+                            print.SendToPrintPalletTag(idPallet, eTagInfo, timesPalletPrint, palletBoxes, reverseOrientation, false);
 
                             AddNewRowToLastPallets(idPallet, palletBoxes.ToString());
                         }
@@ -258,6 +262,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             newRow["Cuadrilla"] = $"{eTagInfo.idWorkGroup} {eTagInfo.nameContractor}";
             newRow["Lote"] = $"{eTagInfo.nameLot} ({eTagInfo.idLot})";
             newRow["Plan"] = eTagInfo.idWorkPlan;
+            newRow["Caja"] =eTagInfo.shortNameTypeBox;
 
             dtLastPallets.Rows.InsertAt(newRow, 0);
         }
@@ -282,7 +287,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetTagInfo(selectedPlan, eTagInfoReprint);
                     print = new ClsPrintPtiTag();
 
-                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, timesPalletPrint, selectedBoxes, reverseOrientation);
+                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, timesPalletPrint, selectedBoxes, reverseOrientation, true);
                 }
             }
         }

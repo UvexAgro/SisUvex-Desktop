@@ -36,7 +36,6 @@
             btnSearchDate = new Button();
             lblY = new Label();
             label4 = new Label();
-            btnPrint = new Button();
             btnRemoved = new Button();
             btnRemove = new Button();
             btnRecover = new Button();
@@ -56,6 +55,9 @@
             label6 = new Label();
             btnConfigManifest = new Button();
             btnTemplates = new Button();
+            chbPrintManifestPerField = new CheckBox();
+            btnPrintManifest = new Button();
+            chbExcelLayout = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -104,16 +106,6 @@
             label4.Size = new Size(56, 12);
             label4.TabIndex = 59;
             label4.Text = "Entre fechas:";
-            // 
-            // btnPrint
-            // 
-            btnPrint.Location = new Point(417, 120);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 53;
-            btnPrint.Text = "Imprimir";
-            btnPrint.UseVisualStyleBackColor = true;
-            btnPrint.Click += btnPrint_Click;
             // 
             // btnRemoved
             // 
@@ -181,6 +173,7 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 289);
             dgvCatalog.TabIndex = 57;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnModify
             // 
@@ -313,7 +306,7 @@
             btnConfigManifest.Font = new Font("Microsoft Sans Serif", 9F);
             btnConfigManifest.Image = (Image)resources.GetObject("btnConfigManifest.Image");
             btnConfigManifest.ImageAlign = ContentAlignment.BottomCenter;
-            btnConfigManifest.Location = new Point(498, 120);
+            btnConfigManifest.Location = new Point(417, 120);
             btnConfigManifest.Name = "btnConfigManifest";
             btnConfigManifest.Size = new Size(24, 23);
             btnConfigManifest.TabIndex = 359;
@@ -326,7 +319,7 @@
             btnTemplates.Font = new Font("Microsoft Sans Serif", 9F);
             btnTemplates.Image = Properties.Resources.templateIcon16;
             btnTemplates.ImageAlign = ContentAlignment.BottomCenter;
-            btnTemplates.Location = new Point(528, 120);
+            btnTemplates.Location = new Point(447, 120);
             btnTemplates.Name = "btnTemplates";
             btnTemplates.Size = new Size(24, 23);
             btnTemplates.TabIndex = 360;
@@ -334,11 +327,46 @@
             btnTemplates.UseVisualStyleBackColor = true;
             btnTemplates.Click += btnTemplates_Click;
             // 
+            // chbPrintManifestPerField
+            // 
+            chbPrintManifestPerField.AutoSize = true;
+            chbPrintManifestPerField.Font = new Font("Microsoft Sans Serif", 9F);
+            chbPrintManifestPerField.Location = new Point(531, 123);
+            chbPrintManifestPerField.Name = "chbPrintManifestPerField";
+            chbPrintManifestPerField.Size = new Size(116, 19);
+            chbPrintManifestPerField.TabIndex = 384;
+            chbPrintManifestPerField.Text = "Man. por campo";
+            chbPrintManifestPerField.UseVisualStyleBackColor = true;
+            // 
+            // btnPrintManifest
+            // 
+            btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
+            btnPrintManifest.Location = new Point(499, 119);
+            btnPrintManifest.Name = "btnPrintManifest";
+            btnPrintManifest.Size = new Size(26, 25);
+            btnPrintManifest.TabIndex = 383;
+            btnPrintManifest.UseVisualStyleBackColor = true;
+            btnPrintManifest.Click += btnPrintManifest_Click;
+            // 
+            // chbExcelLayout
+            // 
+            chbExcelLayout.AutoSize = true;
+            chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
+            chbExcelLayout.Location = new Point(653, 124);
+            chbExcelLayout.Name = "chbExcelLayout";
+            chbExcelLayout.Size = new Size(91, 19);
+            chbExcelLayout.TabIndex = 385;
+            chbExcelLayout.Text = "Excel layout";
+            chbExcelLayout.UseVisualStyleBackColor = true;
+            // 
             // FrmManifestCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chbExcelLayout);
+            Controls.Add(chbPrintManifestPerField);
+            Controls.Add(btnPrintManifest);
             Controls.Add(btnTemplates);
             Controls.Add(btnConfigManifest);
             Controls.Add(cboGrower);
@@ -352,7 +380,6 @@
             Controls.Add(label3);
             Controls.Add(lblY);
             Controls.Add(label4);
-            Controls.Add(btnPrint);
             Controls.Add(btnRemoved);
             Controls.Add(label2);
             Controls.Add(btnRemove);
@@ -381,7 +408,6 @@
         private Button btnSearchDate;
         private Label lblY;
         private Label label4;
-        private Button btnPrint;
         private Button btnRemove;
         private Button btnRecover;
         public DataGridView dgvCatalog;
@@ -401,5 +427,8 @@
         public ComboBox cboGrower;
         private Button btnConfigManifest;
         private Button btnTemplates;
+        public CheckBox chbPrintManifestPerField;
+        private Button btnPrintManifest;
+        public CheckBox chbExcelLayout;
     }
 }

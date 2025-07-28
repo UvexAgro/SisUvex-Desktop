@@ -40,7 +40,6 @@
             cboTransportVehicle = new ComboBox();
             label10 = new Label();
             label9 = new Label();
-            cboMarket = new ComboBox();
             label20 = new Label();
             cboSeason = new ComboBox();
             label2 = new Label();
@@ -52,6 +51,8 @@
             txbManifestFolderPath = new TextBox();
             label4 = new Label();
             btnManifestFolderPath = new Button();
+            txbIdMarket = new TextBox();
+            cboMarket = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)nudTemperature).BeginInit();
             SuspendLayout();
             // 
@@ -172,17 +173,6 @@
             label9.Text = "Medio de transporte:";
             label9.TextAlign = ContentAlignment.TopRight;
             // 
-            // cboMarket
-            // 
-            cboMarket.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboMarket.Font = new Font("Microsoft Sans Serif", 9F);
-            cboMarket.FormattingEnabled = true;
-            cboMarket.Items.AddRange(new object[] { "Extranjero", "Nacional" });
-            cboMarket.Location = new Point(13, 75);
-            cboMarket.Name = "cboMarket";
-            cboMarket.Size = new Size(124, 23);
-            cboMarket.TabIndex = 382;
-            // 
             // label20
             // 
             label20.AutoSize = true;
@@ -296,11 +286,33 @@
             btnManifestFolderPath.UseVisualStyleBackColor = true;
             btnManifestFolderPath.Click += btnManifestFolderPath_Click;
             // 
+            // txbIdMarket
+            // 
+            txbIdMarket.Enabled = false;
+            txbIdMarket.Font = new Font("Microsoft Sans Serif", 9F);
+            txbIdMarket.Location = new Point(12, 79);
+            txbIdMarket.Name = "txbIdMarket";
+            txbIdMarket.Size = new Size(29, 21);
+            txbIdMarket.TabIndex = 403;
+            txbIdMarket.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboMarket
+            // 
+            cboMarket.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMarket.Font = new Font("Microsoft Sans Serif", 8.5F);
+            cboMarket.FormattingEnabled = true;
+            cboMarket.Location = new Point(47, 79);
+            cboMarket.Name = "cboMarket";
+            cboMarket.Size = new Size(213, 21);
+            cboMarket.TabIndex = 401;
+            // 
             // FrmConfManifest
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(272, 470);
+            Controls.Add(txbIdMarket);
+            Controls.Add(cboMarket);
             Controls.Add(btnManifestFolderPath);
             Controls.Add(txbManifestFolderPath);
             Controls.Add(nudTemperature);
@@ -316,7 +328,6 @@
             Controls.Add(cboTransportVehicle);
             Controls.Add(label10);
             Controls.Add(label9);
-            Controls.Add(cboMarket);
             Controls.Add(label20);
             Controls.Add(cboSeason);
             Controls.Add(label2);
@@ -349,7 +360,6 @@
         public ComboBox cboTransportVehicle;
         private Label label10;
         private Label label9;
-        public ComboBox cboMarket;
         private Label label20;
         public ComboBox cboSeason;
         private Label label2;
@@ -361,5 +371,7 @@
         private TextBox txbManifestFolderPath;
         private Label label4;
         private Button btnManifestFolderPath;
+        public TextBox txbIdMarket;
+        public ComboBox cboMarket;
     }
 }
