@@ -21,7 +21,7 @@ namespace SisUvex.Catalogos.TransportLine
         public string RFC { get; set; }
         public string phoneNumber { get; set; }
         public string SCAC { get; set; }
-        public string SCAAT { get; set; }
+        public string CAAT { get; set; }
         public int active { get; set; }
 
         public static string GetNextId()
@@ -50,7 +50,7 @@ namespace SisUvex.Catalogos.TransportLine
                     RFC = dr.GetValue(dr.GetOrdinal("v_RFC")).ToString();
                     phoneNumber = dr.GetValue(dr.GetOrdinal("c_phoneNumber")).ToString();
                     SCAC = dr.GetValue(dr.GetOrdinal("c_SCAC")).ToString();
-                    SCAAT = dr.GetValue(dr.GetOrdinal("c_SCAAT")).ToString();
+                    CAAT = dr.GetValue(dr.GetOrdinal("c_CAAT")).ToString();
                     active = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("c_active")));
                 }
             }
@@ -78,7 +78,7 @@ namespace SisUvex.Catalogos.TransportLine
                 cmd.Parameters.AddWithValue("@RFC", ClsValues.IfEmptyToDBNull(RFC));
                 cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
                 cmd.Parameters.AddWithValue("@SCAC", ClsValues.IfEmptyToDBNull(SCAC));
-                cmd.Parameters.AddWithValue("@CAAT", ClsValues.IfEmptyToDBNull(SCAAT));
+                cmd.Parameters.AddWithValue("@CAAT", ClsValues.IfEmptyToDBNull(CAAT));
                 cmd.Parameters.AddWithValue("@active", active);
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
@@ -117,7 +117,7 @@ namespace SisUvex.Catalogos.TransportLine
                 cmd.Parameters.AddWithValue("@RFC", ClsValues.IfEmptyToDBNull(RFC));
                 cmd.Parameters.AddWithValue("@phoneNumber", ClsValues.IfEmptyToDBNull(phoneNumber));
                 cmd.Parameters.AddWithValue("@SCAC", ClsValues.IfEmptyToDBNull(SCAC));
-                cmd.Parameters.AddWithValue("@SCAAT", ClsValues.IfEmptyToDBNull(SCAAT));
+                cmd.Parameters.AddWithValue("@CAAT", ClsValues.IfEmptyToDBNull(CAAT));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
                 cmd.ExecuteNonQuery();
                 return (true, idTransportLine);
