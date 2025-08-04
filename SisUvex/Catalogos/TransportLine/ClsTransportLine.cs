@@ -102,7 +102,7 @@ namespace SisUvex.Catalogos.TransportLine
             _frmAdd.txbRFC.Text = entity.RFC;
             _frmAdd.txbPhoneNumber.Text = entity.phoneNumber;
             _frmAdd.txbSCAC.Text = entity.SCAC;
-            _frmAdd.txbSCAAT.Text = entity.SCAAT;
+            _frmAdd.txbSCAAT.Text = entity.CAAT;
             _frmAdd.cboActive.SelectedIndex = entity.active;
         }
 
@@ -116,7 +116,7 @@ namespace SisUvex.Catalogos.TransportLine
             entity.RFC = _frmAdd.txbRFC.Text;
             entity.phoneNumber = _frmAdd.txbPhoneNumber.Text;
             entity.SCAC = _frmAdd.txbSCAC.Text;
-            entity.SCAAT = _frmAdd.txbSCAAT.Text;
+            entity.CAAT = _frmAdd.txbSCAAT.Text;
             entity.active = _frmAdd.cboActive.SelectedIndex;
 
             return entity;
