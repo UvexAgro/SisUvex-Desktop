@@ -643,12 +643,12 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void DesignPDFManifestRemisionTable(iText.Layout.Document document, string manifestNumber)
         {
-            Table tableRemisionDetailed = new Table(5).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionDetailed = new Table(4).SetBorder(new SolidBorder(1)).SetWidth(UnitValue.CreatePercentValue(100));
 
             // Agregar los encabezados de la tabla
             AddCellToTable(tableRemisionDetailed, "Variedad", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            AddCellToTable(tableRemisionDetailed, "Descripción", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            AddCellToTable(tableRemisionDetailed, "Descripción", 44, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
+            /*AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);*/
             AddCellToTable(tableRemisionDetailed, "Bultos", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Kilos", 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
 
@@ -657,22 +657,22 @@ namespace SisUvex.Archivo.Manifiesto
             {
                 // Agregar cada columna de la fila a la tabla del PDF
                 AddCellToTable(tableRemisionDetailed, detalle["Variedad"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
-                AddCellToTable(tableRemisionDetailed, detalle["Descripción"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
-                AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                AddCellToTable(tableRemisionDetailed, detalle["Descripción"].ToString(), 44, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
+                /*AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);*/
                 AddCellToTable(tableRemisionDetailed, detalle["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
             }
 
-            Table tableRemisionTotal = new Table(5).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
+            Table tableRemisionTotal = new Table(4).SetBorder(Border.NO_BORDER).SetWidth(UnitValue.CreatePercentValue(100));
 
             if (queryManifest.TotalesCarga.Rows.Count == 0)
                 return;
 
             DataRow remisionTotalDT = queryManifest.TotalesCarga.Rows[0];
 
-            AddCellToTable(tableRemisionTotal, "", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            AddCellToTable(tableRemisionTotal, "", 33, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
-            AddCellToTable(tableRemisionTotal, "TOTALES:", 8, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+            AddCellToTable(tableRemisionTotal, "", 69, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
+           /* AddCellToTable(tableRemisionTotal, "", 33, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);*/
+            AddCellToTable(tableRemisionTotal, "TOTALES:", 11, iText.Layout.Properties.TextAlignment.RIGHT, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, remisionTotalDT["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
             AddCellToTable(tableRemisionTotal, remisionTotalDT["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER);
 
