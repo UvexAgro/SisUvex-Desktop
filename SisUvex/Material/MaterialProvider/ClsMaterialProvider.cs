@@ -13,7 +13,7 @@ using SisUvex.Catalogos.Metods;
 using System.Media;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using SisUvex.Catalogos.Metods.CheckBoxes;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Finance;
+//using OfficeOpenXml.FormulaParsing.Excel.Functions.Finance;
 using Microsoft.IdentityModel.Tokens;
 
 namespace SisUvex.Material.MaterialProvider

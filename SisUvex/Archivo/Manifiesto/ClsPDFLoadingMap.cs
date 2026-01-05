@@ -11,7 +11,7 @@ using iText.Kernel.Pdf.Canvas.Draw;
 using System.Data;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Bcpg.OpenPgp;
-using OfficeOpenXml.VBA;
+//using OfficeOpenXml.VBA;
 
 namespace SisUvex.Archivo.Manifiesto
 {
