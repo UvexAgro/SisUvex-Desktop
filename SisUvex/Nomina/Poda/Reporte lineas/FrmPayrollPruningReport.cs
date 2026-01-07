@@ -12,15 +12,28 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 {
     public partial class FrmPayrollPruningReport : Form
     {
+        ClsPayrollPruningReport cls;
         public FrmPayrollPruningReport()
         {
             InitializeComponent();
         }
 
+        private void FrmPayrollPruningReport_Load(object sender, EventArgs e)
+        {
+            cls = new();
+            cls.frm = this;
+            cls.BeginFormCat();
+        }
+
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            ClsPayrollPruningReport reportGenerator = new ClsPayrollPruningReport();
-            reportGenerator.GenerateExcelReport();
+            cls.GenerateExcelReportWithPivot();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

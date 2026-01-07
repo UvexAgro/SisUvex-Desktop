@@ -147,6 +147,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Lot.Cbo:
                     queryDataTable = ClsObject.Lot.QueryCbo;
                     break;
+                case ClsObject.Lot.CboOnlyNameLot:
+                    queryDataTable = ClsObject.Lot.QueryCboOnlyNameLot;
+                    break;
                 case ClsObject.Distributor.Cbo:
                     queryDataTable = ClsObject.Distributor.QueryCbo;
                     break;
@@ -271,7 +274,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Variety', 'Pack_Crop')";
                     break;
                 case ClsObject.Lot.Cbo:
-                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot','Grow_Farm')";
+                case ClsObject.Lot.CboOnlyNameLot:
+                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot', 'Grow_Farm')";
                     break;
                 case ClsObject.Presentation.Cbo:
                     query += " IN ('Pack_Category', 'Pack_Presentation') ";
@@ -336,6 +340,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Variety.Cbo:
                     return ClsObject.Variety.TableName;
                 case ClsObject.Lot.Cbo:
+                case ClsObject.Lot.CboOnlyNameLot:
                     return ClsObject.Lot.TableName;
                 case ClsObject.Distributor.Cbo:
                     return ClsObject.Distributor.TableName;
