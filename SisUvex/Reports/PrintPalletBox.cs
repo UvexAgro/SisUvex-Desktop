@@ -14,7 +14,7 @@ using ZXing.Windows.Compatibility;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Globalization;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+//using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 
 namespace SisUvex.Reports
 {

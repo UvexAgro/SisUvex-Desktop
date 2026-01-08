@@ -54,8 +54,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
-    <PackageReference Include="ClosedXML" Version="0.104.2" />
-    <PackageReference Include="EPPlus" Version="7.5.1" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="ExcelDataReader" Version="3.7.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
     <PackageReference Include="itext.bouncy-castle-adapter" Version="9.0.0" />
@@ -64,10 +63,10 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.WebForms" Version="150.1652.0" />
-    <PackageReference Include="NPOI" Version="2.7.3" />
+    <PackageReference Include="NPOI" Version="2.7.5" />
     <PackageReference Include="PdfiumViewer" Version="2.13.0" />
     <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa" Version="2018.4.8.256" />
-    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.25" />
+    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.29" />
     <PackageReference Include="System.Data.OleDb" Version="9.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.0" />

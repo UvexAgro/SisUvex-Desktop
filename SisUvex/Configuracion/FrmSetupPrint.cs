@@ -1,6 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Vml;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+//using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using System;
 using System.Collections.Generic;

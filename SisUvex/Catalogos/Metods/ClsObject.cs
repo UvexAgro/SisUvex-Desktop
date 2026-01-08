@@ -219,8 +219,10 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnId = "idLot";
             public const string ColumnActive = "ActiveLot";
             public const string Cbo = "CboLot";
+            public const string CboOnlyNameLot = "CboLotOnlyNameLot";
             public const string DgvCatalog = "DgvCatalogLot";
             public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
+            public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.c_active ORDER BY [{Column.name}] ";
             public const string QueryDgvCatalog = "queryLot";
         }
 
@@ -306,7 +308,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveWorkGroup";
             public const string Cbo = "CboWorkGroup";
             public const string DgvCatalog = "DgvCatalogWorkGroup";
-            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT(id_workGroup,COALESCE(' ('+con.v_nameContractor+')',NULL)) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
             public const string QueryDgvCatalog = "queryWorkGroup";
         }
 
