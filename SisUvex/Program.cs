@@ -54,8 +54,7 @@ namespace SisUvex
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new FrmManifestCat());
-            Application.Run(new FrmPayrollPruningReport());
-
+            Application.Run(new PantallaCarga());
         }
     }
 }

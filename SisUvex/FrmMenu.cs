@@ -573,5 +573,11 @@ namespace SisUvex
             FrmVehicleCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
+
+        private void generarReporteDePodaEnExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
+            AbrirFormularioDialog(cat, 3);
+        }
     }
 }

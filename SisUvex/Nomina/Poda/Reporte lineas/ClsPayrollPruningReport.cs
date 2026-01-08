@@ -48,8 +48,6 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
             qry += queryReport1Order;
 
-            Clipboard.SetText(qry);
-
             return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
         }
 
@@ -81,24 +79,49 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
             return false;
         }
 
-        //
-        public void GenerateExcelReportWithPivot()
+        private string? GetFolderPath(string fileReportName)
         {
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string filePath = Path.Combine(desktopPath, "Reporte_Poda_Pivot.xlsx");
-
-            if (IsFileLocked(filePath))
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                MessageBox.Show(
-                    "El archivo 'Reporte_Poda.xlsx' está abierto.\n\n" +
-                    "Ciérralo antes de generar el reporte.",
-                    "Archivo en uso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
+                saveFileDialog.Title = "Guardar reporte de Excel";
+                saveFileDialog.FileName = fileReportName;
+
+                // Filtros de archivo
+                saveFileDialog.Filter =
+                    "Archivo de Excel (*.xlsx)|*.xlsx|" +
+                    "Archivo de Excel 97-2003 (*.xls)|*.xls|" +
+                    "Todos los archivos (*.*)|*.*";
+
+                saveFileDialog.FilterIndex = 1; // Excel xlsx por defecto
+                saveFileDialog.AddExtension = true;
+                saveFileDialog.DefaultExt = "xlsx";
+                saveFileDialog.OverwritePrompt = true;
+
+                // Mostrar diálogo
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return saveFileDialog.FileName; // Ruta completa
+                }
             }
 
+            return null; // Usuario canceló
+        }
+
+        private string GetFileReportName()
+        {
+            string reportName = "Reporte_Poda";
+            if (frm.cboWorkGroup.SelectedIndex > 0)
+                reportName += $"_{frm.cboWorkGroup.GetColumnValue(WorkGroup.ColumnName)}";
+
+            if (frm.cboLot.SelectedIndex > 0)
+                reportName += $"_{frm.cboLot.GetColumnValue(Lot.ColumnName)}";
+
+            return reportName += $"_{frm.dtpDate1.Value:yyyyMMdd}_a_{frm.dtpDate2.Value:yyyyMMdd}.xlsx";
+        }
+
+        public void GenerateExcelReportWithPivot()
+        {
+            //Cargar y verificar si hay datos del reporte
             DataTable data = GetDTDataReportQueryWithFilter();
 
             if (data == null || data.Rows.Count == 0)
@@ -107,21 +130,51 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
                 return;
             }
 
+            //Escoger ruta con nombre de archivo, verificarla, sino se escogió se cancela
+            string? filePath = GetFolderPath(GetFileReportName());
+
+            if (filePath == null)
+                return;
+
+            if (IsFileLocked(filePath))
+            {
+                MessageBox.Show(
+                    $"El archivo '{filePath}' está abierto.\n\n" +
+                    "Ciérralo antes de generar el reporte.",
+                    "Archivo en uso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            //Crear el objeto de excel y cada una de sus hojas; 1 hoja por método
             using (var workbook = new XLWorkbook())
             {
                 var wsData = CreateDataWorksheet(workbook, data);
                 var wsPivotRanges = CreatePivotLinesRangeWorksheet(workbook, wsData);
                 var wsPivotLot = CreatePivotLotsWorksheet(workbook, wsData);
 
-                workbook.SaveAs(filePath);
+                workbook.SaveAs(filePath); //Crear el archivo en la ruta
             }
 
-            MessageBox.Show(
-                "Reporte con tabla dinámica generado correctamente.",
-                "Éxito",
-                MessageBoxButtons.OK,
+            //Mensaje de todo bien y abrir archivo
+            DialogResult result = MessageBox.Show(
+                "Reporte con tabla dinámica generado correctamente.\n\n" +
+                "¿Deseas abrir el archivo?",
+                "Reporte generado",
+                MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information
             );
+
+            if (result == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = filePath,
+                    UseShellExecute = true
+                });
+            }
         }
 
         private IXLWorksheet CreateDataWorksheet(XLWorkbook workbook, DataTable data)
