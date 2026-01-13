@@ -62,11 +62,7 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
             try
             {
-                using (FileStream stream = new FileStream(
-                    filePath,
-                    FileMode.Open,
-                    FileAccess.ReadWrite,
-                    FileShare.None))
+                using (FileStream stream = new FileStream( filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
                 {
                     stream.Close();
                 }
@@ -267,5 +263,288 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
             return wsPivotLot;
         }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+        public void GenerateExcelReportFlat() // GENERAR REPORTE PLANO CON CELDAS, SIN TABLAS DINAMICAS
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string filePath = Path.Combine(desktopPath, "Reporte_Poda_SinPivot.xlsx");
+
+            if (IsFileLocked(filePath))
+            {
+                MessageBox.Show(
+                    $"El archivo '{filePath}' está abierto.\n\nCiérralo antes de generar el reporte.",
+                    "Archivo en uso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            DataTable dt = GetDTDataReportQueryWithFilter();
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos.");
+                return;
+            }
+
+            using (var wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add("REPORTE");
+
+                // =========================================
+                // CONFIGURACIÓN BASE
+                // =========================================
+                int headerRow = 4;             // fila donde van encabezados de empleado y actividad
+                int startRow = headerRow + 1;  // empleados empiezan justo abajo
+                int startCol = 6;              // columna donde empiezan bloques dinámicos
+                int headerCol = startCol - 1;  // columna a la izquierda del bloque (labels finales)
+
+                // Colores
+                var green = XLColor.FromHtml("#E2F0D9");  // Celdas con datos
+                var blueGreen = XLColor.FromHtml("#31869B");  // Plantas activas
+                var colorColumns = XLColor.FromHtml("#538DD5");
+                var colorSubColumns = XLColor.FromHtml("#8DB4E2");
+
+                #region ENCABEZADOS DATOS EMPLEADOS
+                // =========================================
+                // ENCABEZADOS FIJOS (EMPLEADOS)
+                // =========================================
+                ws.Cell(headerRow, 1).Value = "Cuadrilla";
+                ws.Cell(headerRow, 2).Value = "N°";
+                ws.Cell(headerRow, 3).Value = "Código";
+                ws.Cell(headerRow, 4).Value = "LP";
+                ws.Cell(headerRow, 5).Value = "Nombre empleado";
+                #endregion
+
+                #region BLOQUES ÚNICOS (COLUMNAS)  (Fecha/Lote/Rango/Actividad)
+                // =========================================
+                // BLOQUES ÚNICOS (COLUMNAS)  (Fecha/Lote/Rango/Actividad)
+                // =========================================
+                var bloques = dt.AsEnumerable()
+                    .Select(r => new
+                    {
+                        Fecha = Convert.ToDateTime(r["Fecha"]).ToString("dd-MMM-yy"),
+                        Lote = r["Lote"].ToString(),
+                        Rango = r["Rango"].ToString(),
+                        Actividad = r["Actividad"].ToString(),
+
+                        // estos se usan al final (filas resumen)
+                        PlantasTotales = r["Plantas totales"] != DBNull.Value ? Convert.ToDecimal(r["Plantas totales"]) : 0m,
+                        PlantasActivas = r["Plantas activas"] != DBNull.Value ? Convert.ToDecimal(r["Plantas activas"]) : 0m
+                    })
+                    .Distinct()
+                    .ToList();
+                #endregion
+
+                #region COLUMNAS ARRIBA fecha lote rango
+                // =========================================
+                // COLUMNAS DINÁMICAS (arriba: Fecha/Lote/Rango, y en headerRow: Actividad)
+                // =========================================
+                int col = startCol;
+
+                foreach (var b in bloques)
+                {
+                    // Encabezado superior (3 filas)
+                    ws.Cell(1, col).Value = b.Fecha;
+                    ws.Cell(2, col).Value = b.Lote;
+                    ws.Cell(3, col).Value = b.Rango;
+
+                    // Actividad: va en la MISMA fila que los encabezados de empleado
+                    ws.Cell(headerRow, col).Value = b.Actividad;
+
+                    col++;
+                }
+
+                int lastCol = col - 1;
+                //
+                // TEXTO COLUMNAS PRINCIPALES
+                //
+
+                // Labels a la izquierda (columna headerCol)
+                ws.Cell(1, headerCol).Value = "FECHA";
+                ws.Cell(2, headerCol).Value = "LOTE";
+                ws.Cell(3, headerCol).Value = "RANGO";
+                #endregion
+
+                #region FILAS EMPLEADOS 
+                // =========================================
+                // FILAS DE EMPLEADOS (valores de Cantidad por bloque)
+                // =========================================
+                int excelRow = startRow;
+
+                var empleados = dt.AsEnumerable()
+                    .GroupBy(r => new
+                    {
+                        Cuadrilla = r["Cuadrilla"].ToString(),
+                        Numero = r["Numero/Pareja"].ToString(),
+                        Id = r["idEmpleado"].ToString(),
+                        LP = r["LP"].ToString(),
+                        Nombre = r["Nombre empleado"].ToString()
+                    });
+
+                foreach (var emp in empleados)
+                {
+                    ws.Cell(excelRow, 1).Value = emp.Key.Cuadrilla;
+                    ws.Cell(excelRow, 2).Value = emp.Key.Numero;
+                    ws.Cell(excelRow, 3).Value = emp.Key.Id;
+                    ws.Cell(excelRow, 4).Value = emp.Key.LP;
+                    ws.Cell(excelRow, 5).Value = emp.Key.Nombre;
+
+                    int actCol = startCol;
+
+                    foreach (var b in bloques)
+                    {
+                        var fila = emp.FirstOrDefault(r =>
+                            Convert.ToDateTime(r["Fecha"]).ToString("dd-MMM-yy") == b.Fecha && //Fecha como en la parte de arriba
+                            r["Lote"].ToString() == b.Lote &&
+                            r["Rango"].ToString() == b.Rango &&
+                            r["Actividad"].ToString() == b.Actividad);
+
+                        ws.Cell(excelRow, actCol).Value =
+                            fila != null && fila["Cantidad"] != DBNull.Value
+                            ? Convert.ToDecimal(fila["Cantidad"])
+                            : 0m;
+
+                        actCol++;
+                    }
+
+                    excelRow++;
+                }
+
+                int lastEmployeeRow = excelRow - 1;
+                #endregion
+
+                #region COLUMNAS FILAS RESUMEN FINAL
+                // =========================================
+                // FILAS RESUMEN AL FINAL (debajo de empleados)
+                // =========================================
+
+                int rowSumaCapturadas = lastEmployeeRow + 1;
+                int rowPlantasActivas = rowSumaCapturadas + 1;
+                int rowPlantasTotales = rowPlantasActivas + 1;
+                int rowDiferencia = rowPlantasTotales + 1;
+
+                // Labels a la izquierda (columna headerCol)
+                ws.Cell(rowSumaCapturadas, headerCol).Value = "SUMA CAPTURADAS";
+                ws.Cell(rowPlantasActivas, headerCol).Value = "PLANTAS ACTIVAS";
+                ws.Cell(rowPlantasTotales, headerCol).Value = "PLANTAS TOTALES";
+                ws.Cell(rowDiferencia, headerCol).Value = "DIFERENCIA";
+
+                // Valores por columna + fórmulas
+                int ccol = startCol;
+                foreach (var b in bloques)
+                {
+                    // SUMA CAPTURADAS = suma de cantidades de empleados (columna)
+                    ws.Cell(rowSumaCapturadas, ccol).FormulaA1 =
+                        $"SUM({ws.Cell(startRow, ccol).Address}:{ws.Cell(lastEmployeeRow, ccol).Address})";
+
+                    //PLANTAS ACTIVAS/ Activas (valores fijos)
+                    ws.Cell(rowPlantasActivas, ccol).Value = b.PlantasActivas;
+
+                    // DIFERENCIA = Activas - SumaCapturadas
+                    ws.Cell(rowDiferencia, ccol).FormulaA1 =
+                        $"{ws.Cell(rowPlantasActivas, ccol).Address}-{ws.Cell(rowSumaCapturadas, ccol).Address}";
+
+                    // Plantas Totales / Activas (valores fijos)
+                    ws.Cell(rowPlantasTotales, ccol).Value = b.PlantasTotales;
+
+                    ccol++;
+                }
+                #endregion
+
+                #region ESTÉTICA CELDAS, BORDES, AJUSTES, ETC.
+                // =========================================
+                // BORDES / ESTÉTICA
+                //=========================================
+                //Bordes interior en toda el área usada(incluye resumen final)
+                int finalLastRow = rowSumaCapturadas-1;
+
+                ////RANGO DE EMPLEADOS
+                var rangeRmployeeInfo = ws.Range(startRow, 1, lastEmployeeRow, startCol - 1);
+                rangeRmployeeInfo.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                rangeRmployeeInfo.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                //RANGO DE VALORES CANTIDAD
+                var rangeValues = ws.Range(startRow, startCol, lastEmployeeRow, lastCol);
+                rangeValues.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                rangeValues.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeValues.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                //ENCABEZADOS EMPLEADOS
+                var headerEmployee = ws.Range(headerRow, 1, headerRow, headerCol);
+                headerEmployee.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                headerEmployee.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                headerEmployee.Style.Font.SetBold()
+                  .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                  .Fill.SetBackgroundColor(colorColumns);
+
+                //ENCABEZADOS COLUMNAS FECHA/
+                var headerColumns = ws.Range(1, headerCol, headerRow - 1, headerCol);
+                headerColumns.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                headerColumns.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                headerColumns.Style.Font.SetBold()
+                  .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
+                  .Fill.SetBackgroundColor(colorColumns);
+
+                //COLUMNAS BLOQUES DINAMICOS
+                var dinamicColumRange = ws.Range(1, startCol, headerRow, lastCol);
+                dinamicColumRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                dinamicColumRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                dinamicColumRange.Style.Font.SetBold()
+                  .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                  .Fill.SetBackgroundColor(colorSubColumns);
+
+                //TOTALES DEBAJO DE TABLA
+                var totalsRange = ws.Range(rowSumaCapturadas, startCol, rowDiferencia, lastCol);
+                totalsRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                totalsRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                totalsRange.Style.Fill.BackgroundColor = colorSubColumns;
+                
+
+                //ENCABEZADOS COLUMNAS TOTALES DEBAJO DE TABLA
+                var headerTotalsRange = ws.Range(rowSumaCapturadas, headerCol, rowDiferencia, headerCol);
+                headerTotalsRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                headerTotalsRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                headerTotalsRange.Style.Font.SetBold()
+                  .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
+                  .Fill.SetBackgroundColor(colorColumns);
+
+                //COLOR VERDE AZUL EN FILA DE PLANTAS ACTIVAS PARA RESALTARLAS
+                ws.Range(rowPlantasActivas, headerCol, rowPlantasActivas, lastCol).Style.Fill.BackgroundColor = blueGreen;
+
+                // Congelar: arriba hasta el headerRow, y a la izquierda hasta Nombre empleado
+                //ws.SheetView.FreezeRows(headerRow);
+                //ws.SheetView.FreezeColumns(5);
+
+                // Ajustes de columnas
+                ws.Columns().AdjustToContents();
+                ws.Column(2).Width = 3.43;
+                ws.Column(3).Width = 6.45;
+
+                // Color verde a celdas con cantidad > 0 (solo zona de cantidades)
+                ws.Range(startRow, startCol, lastEmployeeRow, lastCol)
+                  .CellsUsed(c => c.DataType == XLDataType.Number && c.GetValue<double>() > 0)
+                  .Style.Fill.SetBackgroundColor(green);
+                #endregion
+
+                // =========================================
+                // GUARDAR Y ABRIR
+                // =========================================
+                wb.SaveAs(filePath);
+
+                MessageBox.Show("Reporte generado correctamente.");
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = filePath,
+                    UseShellExecute = true
+                });
+            }
+        }
+
     }
 }
+

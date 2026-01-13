@@ -39,6 +39,7 @@
             label4 = new Label();
             btnDownload = new Button();
             lblTitle = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label6
@@ -143,11 +144,28 @@
             lblTitle.TabIndex = 53;
             lblTitle.Text = "Generar reporte de poda en Excel";
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button1.BackgroundImageLayout = ImageLayout.Stretch;
+            button1.Image = Properties.Resources.excelIcon16;
+            button1.ImageAlign = ContentAlignment.MiddleRight;
+            button1.Location = new Point(30, 158);
+            button1.Name = "button1";
+            button1.Padding = new Padding(0, 0, 2, 0);
+            button1.Size = new Size(62, 26);
+            button1.TabIndex = 54;
+            button1.Text = "Descargar excel";
+            button1.TextAlign = ContentAlignment.MiddleLeft;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
             // FrmPayrollPruningReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(263, 196);
+            Controls.Add(button1);
             Controls.Add(lblTitle);
             Controls.Add(btnDownload);
             Controls.Add(label5);
@@ -163,7 +181,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmPayrollPruningReport";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Generar reporte de poda en Excel";
             Load += FrmPayrollPruningReport_Load;
             ResumeLayout(false);
@@ -184,5 +202,6 @@
         private Label label4;
         private Button btnDownload;
         private Label lblTitle;
+        private Button button1;
     }
 }
