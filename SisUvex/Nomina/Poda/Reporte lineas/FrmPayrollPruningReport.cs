@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 
 namespace SisUvex.Nomina.Poda.Reporte_lineas
 {
@@ -35,5 +38,10 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
         }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            //cls.GenerateExcelReportWithoutPivot();   ///
+            //cls.GenerateExcelReportFlat();
+        }
     }
 }

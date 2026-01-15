@@ -163,7 +163,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmPayrollPruningReport";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Generar reporte de poda en Excel";
             Load += FrmPayrollPruningReport_Load;
             ResumeLayout(false);
