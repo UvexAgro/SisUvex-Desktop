@@ -36,11 +36,11 @@ namespace SisUvex
             if (sql.Login(txbUser.Text.ToUpper(), txbPassword.Text))
             {
                 User.SetLastUser(txbUser.Text);
-                User.SetProductDay();
+                //User.SetProductDay();
 
                 this.Hide();
                 FrmMenu menu = new FrmMenu();
-                menu.tsslFecha.Text = "Fecha de producción: " + User.GetDate().ToString("dddd, yyyy-MM-dd");
+                //menu.tsslFecha.Text = "Fecha de producción: " + User.GetDate().ToString("dddd, yyyy-MM-dd");
                 menu.tsslUsuario.Text = "Usuario: " + User.GetUserName();
                 menu.Show();
             }

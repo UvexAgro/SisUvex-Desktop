@@ -579,5 +579,12 @@ namespace SisUvex
             Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
             AbrirFormularioDialog(cat, 3);
         }
+
+        private void parámetrosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Configuracion.Parameters.FrmParametersCat cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 4);
+        }
     }
 }

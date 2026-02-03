@@ -11,6 +11,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
     internal class ClsDGVCatalog
     {
         public string idColumn = ClsObject.Column.id;
+        public string id2Column = "id2"; //PARA CUANDO TIENE 2 IDs COMPUESTAS
         public string activeColumn = ClsObject.Column.active;
         private string activeColumnHide = ClsObject.Column.active + "2";
         //public string queryCatalog;
@@ -86,7 +87,15 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             }
             dtCatalog.AcceptChanges();
         }
-
+        public void ChangeActiveCell(string id, string id2, string activeValue)
+        { //SE OCUPA HABERLE DADO EL VALOR DE id2Column ANTERIORMENTE
+            DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}' AND {id2Column} = '{id2}'");
+            if (rows.Length > 0)
+            {
+                rows[0][activeColumn] = activeValue;
+            }
+            dtCatalog.AcceptChanges();
+        }
         public void AddMultipleNewRowsToDGV(DataTable newRows)
         {
             foreach (DataRow newRow in newRows.Rows)
@@ -229,6 +238,83 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
             dtCatalog.AcceptChanges();
         }
+        public void ModifyIdRowInDGV_With2Ids(DataTable modifyRows) //PARA CUANDO TIENE 2 IDs COMPUESTAS
+        {   //Darle el valor a id2Column antes de usar este método
+
+            if (modifyRows == null || modifyRows.Rows.Count == 0) return;
+            if (string.IsNullOrWhiteSpace(id2Column)) return;
+
+            // Validaciones básicas
+            if (!dtCatalog.Columns.Contains(idColumn))
+                throw new ArgumentException($"dtCatalog no contiene la columna '{idColumn}'");
+
+            if (!dtCatalog.Columns.Contains(id2Column))
+                throw new ArgumentException($"dtCatalog no contiene la columna '{id2Column}'");
+
+            if (!modifyRows.Columns.Contains(idColumn))
+                throw new ArgumentException($"modifyRows no contiene la columna '{idColumn}'");
+
+            if (!modifyRows.Columns.Contains(id2Column))
+                throw new ArgumentException($"modifyRows no contiene la columna '{id2Column}'");
+
+            // Helper para evitar errores en DataTable.Select por comillas simples
+            static string EscapeForSelect(string value) => (value ?? "").Replace("'", "''");
+
+            // Agrupar por la combinación (idColumn + id2Column)
+            var groupedRows = modifyRows.AsEnumerable()
+                .GroupBy(row => new
+                {
+                    Id1 = row[idColumn]?.ToString() ?? "",
+                    Id2 = row[id2Column]?.ToString() ?? ""
+                })
+                .ToList();
+
+            foreach (var group in groupedRows)
+            {
+                string currentId1 = group.Key.Id1;
+                string currentId2 = group.Key.Id2;
+
+                string filter =
+                    $"{idColumn} = '{EscapeForSelect(currentId1)}' AND {id2Column} = '{EscapeForSelect(currentId2)}'";
+
+                DataRow[] existingRows = dtCatalog.Select(filter);
+
+                // Determinar la posición donde insertar (la primera coincidencia)
+                int insertPosition = existingRows.Length > 0
+                    ? dtCatalog.Rows.IndexOf(existingRows[0])
+                    : dtCatalog.Rows.Count;
+
+                // Eliminar todas las filas existentes con esta combinación de IDs
+                foreach (DataRow existingRow in existingRows)
+                    dtCatalog.Rows.Remove(existingRow);
+
+                // Insertar todas las nuevas filas con esta combinación en la posición correcta
+                int currentPosition = insertPosition;
+
+                foreach (DataRow newRow in group)
+                {
+                    DataRow dr = dtCatalog.NewRow();
+
+                    // Copiar valores (solo columnas existentes en dtCatalog)
+                    foreach (DataColumn dc in dtCatalog.Columns)
+                    {
+                        if (modifyRows.Columns.Contains(dc.ColumnName))
+                            dr[dc.ColumnName] = newRow[dc.ColumnName];
+                    }
+
+                    if (dtCatalog.Columns.Contains(activeColumnHide))
+                        dr[activeColumnHide] = "1";
+
+                    dtCatalog.Rows.InsertAt(dr, currentPosition);
+                    currentPosition++;
+
+                    SafeSelectRowInDGV(dr);
+                }
+            }
+
+            dtCatalog.AcceptChanges();
+        }
+
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
             dataGridView.CellFormatting += (sender, e) =>
