@@ -76,6 +76,7 @@
             impresoraSetupToolStrip = new ToolStripMenuItem();
             parámetrosToolStripMenuItem = new ToolStripMenuItem();
             conexiónToolStripMenuItem = new ToolStripMenuItem();
+            parámetrosToolStripMenuItem1 = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             cierreDelDíaToolStripMenuItem = new ToolStripMenuItem();
             reportesToolStripMenuItem = new ToolStripMenuItem();
@@ -115,6 +116,7 @@
             relaciónEmpleadoscomedorToolStripMenuItem = new ToolStripMenuItem();
             reporteAucensiasToolStripMenuItem = new ToolStripMenuItem();
             podaToolStripMenuItem = new ToolStripMenuItem();
+            generarReporteDePodaEnExcelToolStripMenuItem = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             palletsToolStripMenuItem = new ToolStripMenuItem();
             manifiestosToolStripMenuItem = new ToolStripMenuItem();
@@ -140,7 +142,6 @@
             tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            generarReporteDePodaEnExcelToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -453,34 +454,41 @@
             // impresoraSetupToolStrip
             // 
             impresoraSetupToolStrip.Name = "impresoraSetupToolStrip";
-            impresoraSetupToolStrip.Size = new Size(143, 22);
+            impresoraSetupToolStrip.Size = new Size(180, 22);
             impresoraSetupToolStrip.Text = "Impresoras";
             impresoraSetupToolStrip.Click += impresoraPalletToolStripMenuItem_Click;
             // 
             // parámetrosToolStripMenuItem
             // 
-            parámetrosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { conexiónToolStripMenuItem });
+            parámetrosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { conexiónToolStripMenuItem, parámetrosToolStripMenuItem1 });
             parámetrosToolStripMenuItem.Name = "parámetrosToolStripMenuItem";
-            parámetrosToolStripMenuItem.Size = new Size(143, 22);
+            parámetrosToolStripMenuItem.Size = new Size(180, 22);
             parámetrosToolStripMenuItem.Text = "Parámetros";
             // 
             // conexiónToolStripMenuItem
             // 
             conexiónToolStripMenuItem.Name = "conexiónToolStripMenuItem";
-            conexiónToolStripMenuItem.Size = new Size(124, 22);
+            conexiónToolStripMenuItem.Size = new Size(180, 22);
             conexiónToolStripMenuItem.Text = "Conexión";
             conexiónToolStripMenuItem.Click += conexiónToolStripMenuItem_Click;
+            // 
+            // parámetrosToolStripMenuItem1
+            // 
+            parámetrosToolStripMenuItem1.Name = "parámetrosToolStripMenuItem1";
+            parámetrosToolStripMenuItem1.Size = new Size(180, 22);
+            parámetrosToolStripMenuItem1.Text = "Parámetros";
+            parámetrosToolStripMenuItem1.Click += parámetrosToolStripMenuItem1_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(140, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // cierreDelDíaToolStripMenuItem
             // 
             cierreDelDíaToolStripMenuItem.Enabled = false;
             cierreDelDíaToolStripMenuItem.Name = "cierreDelDíaToolStripMenuItem";
-            cierreDelDíaToolStripMenuItem.Size = new Size(143, 22);
+            cierreDelDíaToolStripMenuItem.Size = new Size(180, 22);
             cierreDelDíaToolStripMenuItem.Text = "Cierre del día";
             // 
             // reportesToolStripMenuItem
@@ -730,6 +738,13 @@
             podaToolStripMenuItem.Size = new Size(189, 22);
             podaToolStripMenuItem.Text = "Poda";
             // 
+            // generarReporteDePodaEnExcelToolStripMenuItem
+            // 
+            generarReporteDePodaEnExcelToolStripMenuItem.Name = "generarReporteDePodaEnExcelToolStripMenuItem";
+            generarReporteDePodaEnExcelToolStripMenuItem.Size = new Size(247, 22);
+            generarReporteDePodaEnExcelToolStripMenuItem.Text = "Generar reporte de poda en Excel";
+            generarReporteDePodaEnExcelToolStripMenuItem.Click += generarReporteDePodaEnExcelToolStripMenuItem_Click;
+            // 
             // consultasToolStripMenuItem
             // 
             consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem });
@@ -904,13 +919,6 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // generarReporteDePodaEnExcelToolStripMenuItem
-            // 
-            generarReporteDePodaEnExcelToolStripMenuItem.Name = "generarReporteDePodaEnExcelToolStripMenuItem";
-            generarReporteDePodaEnExcelToolStripMenuItem.Size = new Size(247, 22);
-            generarReporteDePodaEnExcelToolStripMenuItem.Text = "Generar reporte de poda en Excel";
-            generarReporteDePodaEnExcelToolStripMenuItem.Click += generarReporteDePodaEnExcelToolStripMenuItem_Click;
-            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1049,5 +1057,6 @@
         private ToolStripMenuItem vehículosToolStripMenuItem1;
         private ToolStripMenuItem podaToolStripMenuItem;
         private ToolStripMenuItem generarReporteDePodaEnExcelToolStripMenuItem;
+        private ToolStripMenuItem parámetrosToolStripMenuItem1;
     }
 }
