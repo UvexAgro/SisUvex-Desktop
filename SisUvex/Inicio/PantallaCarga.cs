@@ -16,7 +16,9 @@ namespace SisUvex.Inicio
             timer1.Stop();
             calis();
             FrmLogin frmLogin = new FrmLogin();
-            frmLogin.Show();
+            frmLogin.ShowDialog();
+
+            this.Hide();
         }
 
         private void PantallaCarga_Load(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace SisUvex.Inicio
 
                 if (sql.ValidateConnection())
                 {
-                    this.Hide();
+                    //this.Hide();
                 }
                 else
                 {
