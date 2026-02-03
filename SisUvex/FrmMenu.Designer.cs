@@ -139,7 +139,6 @@
             tipoDeVehículosToolStripMenuItem = new ToolStripMenuItem();
             vehículosToolStripMenuItem1 = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
-            tsslFecha = new ToolStripStatusLabel();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
@@ -454,7 +453,7 @@
             // impresoraSetupToolStrip
             // 
             impresoraSetupToolStrip.Name = "impresoraSetupToolStrip";
-            impresoraSetupToolStrip.Size = new Size(180, 22);
+            impresoraSetupToolStrip.Size = new Size(143, 22);
             impresoraSetupToolStrip.Text = "Impresoras";
             impresoraSetupToolStrip.Click += impresoraPalletToolStripMenuItem_Click;
             // 
@@ -462,33 +461,33 @@
             // 
             parámetrosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { conexiónToolStripMenuItem, parámetrosToolStripMenuItem1 });
             parámetrosToolStripMenuItem.Name = "parámetrosToolStripMenuItem";
-            parámetrosToolStripMenuItem.Size = new Size(180, 22);
+            parámetrosToolStripMenuItem.Size = new Size(143, 22);
             parámetrosToolStripMenuItem.Text = "Parámetros";
             // 
             // conexiónToolStripMenuItem
             // 
             conexiónToolStripMenuItem.Name = "conexiónToolStripMenuItem";
-            conexiónToolStripMenuItem.Size = new Size(180, 22);
+            conexiónToolStripMenuItem.Size = new Size(134, 22);
             conexiónToolStripMenuItem.Text = "Conexión";
             conexiónToolStripMenuItem.Click += conexiónToolStripMenuItem_Click;
             // 
             // parámetrosToolStripMenuItem1
             // 
             parámetrosToolStripMenuItem1.Name = "parámetrosToolStripMenuItem1";
-            parámetrosToolStripMenuItem1.Size = new Size(180, 22);
+            parámetrosToolStripMenuItem1.Size = new Size(134, 22);
             parámetrosToolStripMenuItem1.Text = "Parámetros";
             parámetrosToolStripMenuItem1.Click += parámetrosToolStripMenuItem1_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(140, 6);
             // 
             // cierreDelDíaToolStripMenuItem
             // 
             cierreDelDíaToolStripMenuItem.Enabled = false;
             cierreDelDíaToolStripMenuItem.Name = "cierreDelDíaToolStripMenuItem";
-            cierreDelDíaToolStripMenuItem.Size = new Size(180, 22);
+            cierreDelDíaToolStripMenuItem.Size = new Size(143, 22);
             cierreDelDíaToolStripMenuItem.Text = "Cierre del día";
             // 
             // reportesToolStripMenuItem
@@ -895,18 +894,12 @@
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(40, 40);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { tsslFecha, tsslUsuario });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { tsslUsuario });
             statusStrip1.Location = new Point(0, 366);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(792, 22);
             statusStrip1.TabIndex = 4;
             statusStrip1.Text = "statusStrip1";
-            // 
-            // tsslFecha
-            // 
-            tsslFecha.Name = "tsslFecha";
-            tsslFecha.Size = new Size(153, 17);
-            tsslFecha.Text = "Fecha: Día, 00 de 00 de 0000";
             // 
             // tsslUsuario
             // 
