@@ -189,9 +189,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     queryDataTable = ClsObject.Contractor.QueryCbo;
                     break;
-                case ClsObject.GrowFarm.Cbo:
-                    queryDataTable = ClsObject.GrowFarm.QueryCbo;
-                    break;
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
                     break;

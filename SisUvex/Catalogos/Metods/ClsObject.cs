@@ -76,8 +76,8 @@ namespace SisUvex.Catalogos.Metods
                                                         , wpl.c_voicePickCode AS [{ColumnVpc}]
                                                         , ctr.id_contractor AS [{Contractor.ColumnId}]
                                                         , ctr.v_nameContractor AS [{Contractor.ColumnName}]
-                                                        , farm.id_farm AS [{GrowFarm.ColumnId}]
-                                                        , farm.v_farmName as [{GrowFarm.ColumnName}]
+                                                        , farm.id_farm AS [{Farm.ColumnId}]
+                                                        , farm.v_farmName as [{Farm.ColumnName}]
                                                         , box.v_nameTypeBox AS [{TypeBox.ColumnName}]
                                                         , box.id_typeBox AS [{TypeBox.ColumnId}]
                                                         , box.v_shortNameTypeBox AS [{TypeBox.ColumnShortName}]
@@ -184,18 +184,6 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogContractor";
             public const string QueryCbo = $" SELECT id_contractor AS [{Column.id}], CONCAT(v_nameContractor, ' | ', id_contractor, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameContractor AS [{ColumnName}] FROM Pack_Contractor ORDER BY [{Column.name}] ";
             public const string QueryDgvCatalog = "queryContractor";
-        }
-
-        public static class GrowFarm
-        {
-            public const string TableName = "Grow_Farm";
-            public const string ColumnName = "FarmName";
-            public const string ColumnId = "idFarm";
-            public const string ColumnActive = "ActiveFarm";
-            public const string Cbo = "CboGrowFarm";
-            public const string DgvCatalog = "DgvCatalogGrowFarm";
-            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(v_farmName, ' | ', id_farm, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_farmName AS [{ColumnName}] FROM Grow_Farm ORDER BY [{Column.name}] ";
-            public const string QueryDgvCatalog = "queryGrowFarm";
         }
 
         public static class Variety
@@ -554,7 +542,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveFarm";
             public const string Cbo = "CboFarm";
             public const string DgvCatalog = "DgvCatalogFarm";
-            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(id_farm,' | ',v_farmName) AS [{Column.name}], v_farmName AS [{ColumnName}] FROM Grow_Farm ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(v_farmName,' | ',id_farm) AS [{Column.name}], v_farmName AS [{ColumnName}], c_active AS [{Column.active}] FROM Grow_Farm ORDER BY [{Column.name}] ";
         }
 
         public static class VehicleType
