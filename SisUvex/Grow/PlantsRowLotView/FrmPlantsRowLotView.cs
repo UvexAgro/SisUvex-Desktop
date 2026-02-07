@@ -12,9 +12,27 @@ namespace SisUvex.Grow.PlantsRowLot
 {
     public partial class FrmPlantsRowLotView : Form
     {
+        ClsPlantsRowLotView cls;
         public FrmPlantsRowLotView()
         {
             InitializeComponent();
+        }
+
+        private void FrmPlantsRowLotView_Load(object sender, EventArgs e)
+        {
+            cls = new();
+            cls.frm = this;
+            cls.BeginFormCat();
+        }
+
+        private void cboField_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            cls.SetDtLots();
         }
     }
 }
