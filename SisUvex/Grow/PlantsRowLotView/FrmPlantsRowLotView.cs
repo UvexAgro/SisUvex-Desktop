@@ -32,7 +32,7 @@ namespace SisUvex.Grow.PlantsRowLot
 
         private void button3_Click(object sender, EventArgs e)
         {
-            cls.SetDtLots();
+            
         }
     }
 }

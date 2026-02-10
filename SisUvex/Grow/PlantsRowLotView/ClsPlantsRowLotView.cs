@@ -1,4 +1,5 @@
-﻿using SisUvex.Catalogos.Lot;
+﻿using Org.BouncyCastle.Asn1.BC;
+using SisUvex.Catalogos.Lot;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.DataGridViews;
@@ -96,6 +97,14 @@ namespace SisUvex.Grow.PlantsRowLot
             dtCboLotFilter += $" OR {frm.cboLot.DisplayMember} = '{ClsComboBoxes.textSelect}' "; //Dejarle el "---Seleccionar---" siempre
 
             dtCboLot.DefaultView.RowFilter = dtCboLotFilter;
+        }
+
+        public void SetDgvPlants()
+        {
+            string idLot = frm.cboLot.SelectedValue?.ToString() ?? string.Empty;
+            MessageBox.Show($"Aquí se cargarían las plantas del lote con id: {idLot}");
+
+
         }
     }
 }

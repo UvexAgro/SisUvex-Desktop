@@ -60,7 +60,13 @@
             label13 = new Label();
             lblTitle = new Label();
             btnExcel = new Button();
-            button3 = new Button();
+            btnSearchLot = new Button();
+            lblFormation = new Label();
+            label15 = new Label();
+            lblFinal = new Label();
+            lblStart = new Label();
+            label17 = new Label();
+            label18 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvPlants).BeginInit();
             gpbFilters.SuspendLayout();
             bgpLotInfo.SuspendLayout();
@@ -76,6 +82,7 @@
             label9.Size = new Size(152, 21);
             label9.TabIndex = 42;
             label9.Text = "Última actualización:";
+            label9.TextAlign = ContentAlignment.TopRight;
             // 
             // label5
             // 
@@ -86,6 +93,7 @@
             label5.Size = new Size(51, 21);
             label5.TabIndex = 34;
             label5.Text = "Fallas:";
+            label5.TextAlign = ContentAlignment.TopRight;
             // 
             // label4
             // 
@@ -96,6 +104,7 @@
             label4.Size = new Size(127, 21);
             label4.TabIndex = 32;
             label4.Text = "Plantas efectivas:";
+            label4.TextAlign = ContentAlignment.TopRight;
             // 
             // label3
             // 
@@ -106,6 +115,7 @@
             label3.Size = new Size(113, 21);
             label3.TabIndex = 30;
             label3.Text = "Plantas totales:";
+            label3.TextAlign = ContentAlignment.TopRight;
             // 
             // cboLot
             // 
@@ -132,7 +142,7 @@
             // 
             cboFarm.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFarm.FormattingEnabled = true;
-            cboFarm.Location = new Point(66, 21);
+            cboFarm.Location = new Point(72, 59);
             cboFarm.Margin = new Padding(0, 3, 3, 3);
             cboFarm.Name = "cboFarm";
             cboFarm.Size = new Size(245, 29);
@@ -142,7 +152,7 @@
             // lblField
             // 
             lblField.AutoSize = true;
-            lblField.Location = new Point(6, 25);
+            lblField.Location = new Point(12, 63);
             lblField.Margin = new Padding(0);
             lblField.Name = "lblField";
             lblField.Size = new Size(60, 21);
@@ -173,7 +183,7 @@
             // 
             cboCrop.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCrop.FormattingEnabled = true;
-            cboCrop.Location = new Point(66, 59);
+            cboCrop.Location = new Point(72, 22);
             cboCrop.Margin = new Padding(0, 3, 3, 3);
             cboCrop.Name = "cboCrop";
             cboCrop.Size = new Size(245, 29);
@@ -182,7 +192,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(7, 63);
+            label11.Location = new Point(13, 26);
             label11.Margin = new Padding(0);
             label11.Name = "label11";
             label11.Size = new Size(59, 21);
@@ -195,9 +205,9 @@
             dgvPlants.BackgroundColor = SystemColors.ControlLight;
             dgvPlants.BorderStyle = BorderStyle.Fixed3D;
             dgvPlants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPlants.Location = new Point(12, 291);
+            dgvPlants.Location = new Point(12, 390);
             dgvPlants.Name = "dgvPlants";
-            dgvPlants.Size = new Size(820, 255);
+            dgvPlants.Size = new Size(820, 156);
             dgvPlants.TabIndex = 25;
             // 
             // label12
@@ -210,6 +220,7 @@
             label12.Size = new Size(76, 21);
             label12.TabIndex = 49;
             label12.Text = "Actualizó:";
+            label12.TextAlign = ContentAlignment.TopRight;
             // 
             // gpbFilters
             // 
@@ -218,9 +229,9 @@
             gpbFilters.Controls.Add(button1);
             gpbFilters.Controls.Add(button2);
             gpbFilters.Controls.Add(lblField);
-            gpbFilters.Controls.Add(cboFarm);
             gpbFilters.Controls.Add(label1);
             gpbFilters.Controls.Add(cboCrop);
+            gpbFilters.Controls.Add(cboFarm);
             gpbFilters.Controls.Add(cboLot);
             gpbFilters.Controls.Add(label11);
             gpbFilters.Controls.Add(label10);
@@ -281,6 +292,12 @@
             // 
             // bgpLotInfo
             // 
+            bgpLotInfo.Controls.Add(lblFinal);
+            bgpLotInfo.Controls.Add(lblStart);
+            bgpLotInfo.Controls.Add(label17);
+            bgpLotInfo.Controls.Add(label18);
+            bgpLotInfo.Controls.Add(lblFormation);
+            bgpLotInfo.Controls.Add(label15);
             bgpLotInfo.Controls.Add(lblUserUpdate);
             bgpLotInfo.Controls.Add(lblPlantsFail);
             bgpLotInfo.Controls.Add(lblPlantsTotal);
@@ -298,7 +315,7 @@
             bgpLotInfo.Font = new Font("Segoe UI", 12F);
             bgpLotInfo.Location = new Point(12, 143);
             bgpLotInfo.Name = "bgpLotInfo";
-            bgpLotInfo.Size = new Size(820, 121);
+            bgpLotInfo.Size = new Size(820, 156);
             bgpLotInfo.TabIndex = 51;
             bgpLotInfo.TabStop = false;
             bgpLotInfo.Text = "Datos del lote";
@@ -396,6 +413,7 @@
             label8.Size = new Size(63, 21);
             label8.TabIndex = 53;
             label8.Text = "Código:";
+            label8.TextAlign = ContentAlignment.TopRight;
             // 
             // label7
             // 
@@ -406,12 +424,13 @@
             label7.Size = new Size(71, 21);
             label7.TabIndex = 52;
             label7.Text = "Nombre:";
+            label7.TextAlign = ContentAlignment.TopRight;
             // 
             // label13
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 12F);
-            label13.Location = new Point(18, 267);
+            label13.Location = new Point(12, 366);
             label13.Name = "label13";
             label13.Size = new Size(109, 21);
             label13.TabIndex = 61;
@@ -433,36 +452,109 @@
             // 
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon16;
-            btnExcel.Location = new Point(133, 265);
+            btnExcel.Location = new Point(127, 364);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 1, 0);
             btnExcel.Size = new Size(23, 23);
             btnExcel.TabIndex = 62;
             btnExcel.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnSearchLot
             // 
-            button3.Font = new Font("Segoe UI", 12F);
-            button3.Image = Properties.Resources.BuscarLupa1;
-            button3.Location = new Point(838, 132);
-            button3.Name = "button3";
-            button3.Size = new Size(31, 31);
-            button3.TabIndex = 67;
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            btnSearchLot.Font = new Font("Segoe UI", 12F);
+            btnSearchLot.Image = Properties.Resources.BuscarLupa1;
+            btnSearchLot.ImageAlign = ContentAlignment.MiddleRight;
+            btnSearchLot.Location = new Point(749, 131);
+            btnSearchLot.Name = "btnSearchLot";
+            btnSearchLot.Padding = new Padding(0, 0, 4, 0);
+            btnSearchLot.Size = new Size(83, 31);
+            btnSearchLot.TabIndex = 67;
+            btnSearchLot.Text = "Buscar";
+            btnSearchLot.TextAlign = ContentAlignment.TopLeft;
+            btnSearchLot.UseVisualStyleBackColor = true;
+            btnSearchLot.Click += button3_Click;
+            // 
+            // lblFormation
+            // 
+            lblFormation.AutoSize = true;
+            lblFormation.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblFormation.Location = new Point(439, 121);
+            lblFormation.Margin = new Padding(0);
+            lblFormation.Name = "lblFormation";
+            lblFormation.Size = new Size(109, 21);
+            lblFormation.TabIndex = 62;
+            lblFormation.Tag = "lotData";
+            lblFormation.Text = "lblFormation";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(351, 121);
+            label15.Margin = new Padding(0);
+            label15.Name = "label15";
+            label15.Size = new Size(87, 21);
+            label15.TabIndex = 61;
+            label15.Text = "Formación:";
+            label15.TextAlign = ContentAlignment.TopRight;
+            // 
+            // lblFinal
+            // 
+            lblFinal.AutoSize = true;
+            lblFinal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblFinal.Location = new Point(78, 118);
+            lblFinal.Margin = new Padding(0);
+            lblFinal.Name = "lblFinal";
+            lblFinal.Size = new Size(67, 21);
+            lblFinal.TabIndex = 66;
+            lblFinal.Tag = "lotData";
+            lblFinal.Text = "lblFinal";
+            // 
+            // lblStart
+            // 
+            lblStart.AutoSize = true;
+            lblStart.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblStart.Location = new Point(78, 88);
+            lblStart.Margin = new Padding(0);
+            lblStart.Name = "lblStart";
+            lblStart.Size = new Size(66, 21);
+            lblStart.TabIndex = 65;
+            lblStart.Tag = "lotData";
+            lblStart.Text = "lblStart";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(32, 118);
+            label17.Margin = new Padding(0);
+            label17.Name = "label17";
+            label17.Size = new Size(46, 21);
+            label17.TabIndex = 64;
+            label17.Text = "Final:";
+            label17.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(25, 88);
+            label18.Margin = new Padding(0);
+            label18.Name = "label18";
+            label18.Size = new Size(53, 21);
+            label18.TabIndex = 63;
+            label18.Text = "Inicial:";
+            label18.TextAlign = ContentAlignment.TopRight;
             // 
             // FrmPlantsRowLotView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(915, 559);
-            Controls.Add(button3);
+            Controls.Add(btnSearchLot);
             Controls.Add(btnExcel);
             Controls.Add(lblTitle);
             Controls.Add(label13);
             Controls.Add(bgpLotInfo);
-            Controls.Add(gpbFilters);
             Controls.Add(dgvPlants);
+            Controls.Add(gpbFilters);
             Name = "FrmPlantsRowLotView";
             Text = "FrmPlantsRowLotView";
             Load += FrmPlantsRowLotView_Load;
@@ -517,6 +609,12 @@
         private Button button2;
         public CheckBox chbLotActives;
         public CheckBox chbVarietyActives;
-        private Button button3;
+        private Button btnSearchLot;
+        public Label lblFinal;
+        public Label lblStart;
+        private Label label17;
+        private Label label18;
+        public Label lblFormation;
+        private Label label15;
     }
 }
