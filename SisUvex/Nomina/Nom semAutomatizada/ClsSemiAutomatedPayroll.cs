@@ -13,8 +13,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		 public FrmSemiAutomatedPayroll frm;
 
 		public void BeginForm()
-		{
-			ClsComboBoxes.CboLoadActives(frm.cmbLote, ClsObject.Lot.Cbo);
+		{ 
+			ClsComboBoxes.CboLoadActives(frm.cmbLote, ClsObject.Lot.Cbo); 
 		}
 	}
 }
