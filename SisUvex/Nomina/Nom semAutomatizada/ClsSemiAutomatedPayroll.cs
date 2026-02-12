@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
@@ -47,7 +48,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 
 			//Metodo para generar el archivo CSV
-			frm.dgvEmployee.DataSource = GetDtCSV();
+			GenerarArchivoCsv();
 		}
 		private DataTable GetDtCSV()
 		{
@@ -129,6 +130,30 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 		}
 
+		public void ExportarExcel(DataTable dt)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
+			sfd.FileName = $"Nomina_{DateTime.Now:yyyyMMdd}.xlsx";
+
+			if (sfd.ShowDialog() != DialogResult.OK)
+				return;
+
+			using (XLWorkbook wb = new XLWorkbook())
+			{
+				var hoja = wb.Worksheets.Add("Nomina");
+
+				// Insertar DataTable completo
+				hoja.Cell(1, 1).InsertTable(dt);
+
+				// Ajustar tamaño columnas
+				hoja.Columns().AdjustToContents();
+
+				wb.SaveAs(sfd.FileName);
+			}
+
+			MessageBox.Show("Excel generado correctamente");
+		}
 
 
 		private string GetQueryNom()

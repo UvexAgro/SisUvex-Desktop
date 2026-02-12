@@ -118,6 +118,7 @@
 			btnExcel.TabIndex = 8;
 			btnExcel.Text = "Excel";
 			btnExcel.UseVisualStyleBackColor = true;
+			btnExcel.Click += btnExcel_Click;
 			// 
 			// btncargar
 			// 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using ClosedXML.Excel;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
 {
@@ -30,9 +31,10 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		private void btnCVS_Click(object sender, EventArgs e)
 		{
-			cls.GenerarArchivoCsv();
+			cls.BtnCsv();
 		}
-		
+
+
 
 		private void dtpFecha_ValueChanged(object sender, EventArgs e)
 		{
@@ -45,5 +47,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		}
 
+		private void btnExcel_Click(object sender, EventArgs e)
+		{
+			if (dgvEmployee.Rows.Count > 0)
+			{
+				DataTable dt = (DataTable)dgvEmployee.DataSource;
+				cls.ExportarExcel(dt);
+			}
+			else
+				SystemSounds.Exclamation.Play();
+		}
 	}
 }
