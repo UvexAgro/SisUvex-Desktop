@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -70,7 +71,15 @@ namespace SisUvex.Catalogos.Metods.Controls
                             showMessage += "\n    " + message;
                         }
                     }
-                }
+					else if (textBox.Tag?.ToString() == "sixDigit")
+					{
+						if (textBox.Text.Length != 6 || !Regex.IsMatch(textBox.Text, @"^[a-zA-Z0-9]+$"))
+						{
+							isValid = false;
+							showMessage += "\n    " + message;
+						}
+					}
+				}
                 else if (control is ComboBox comboBox)
                 {
                     if (comboBox.Tag == null)

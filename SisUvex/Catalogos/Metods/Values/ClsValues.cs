@@ -32,30 +32,34 @@ namespace SisUvex.Catalogos.Metods.Values
                 return input;
             }
         }
-        public static string FormatZeros(string numberString, string formatZeros)
-        {
-            string formatClean = formatZeros.Replace(".", string.Empty);
+		public static string FormatZeros(string numberString, string formatZeros)
+		{
+			// Separar formato en parte entera y decimal
+			string[] formatParts = formatZeros.Split('.');
+			int lengthInt = formatParts[0].Length;
+			int lengthDecimal = formatParts.Length > 1 ? formatParts[1].Length : 0;
 
-            string[] parts = formatClean.Split('.');
-            int lengthInt = parts[0].Length;
-            int lengthDecimal = parts.Length > 1 ? parts[1].Length : 0;
+			// Separar número en parte entera y decimal
+			string[] numberParts = numberString.Split('.');
+			string partInt = numberParts[0].PadLeft(lengthInt, '0');
 
-            string[] numeros = numberString.Split('.');
-            string partiInt = numeros[0].PadLeft(lengthInt, '0');
-            string partDecimal = numeros.Length > 1 ? numeros[1].PadRight(lengthDecimal, '0') : string.Empty;
+			string partDecimal = "";
 
-            string result = partiInt;
+			if (lengthDecimal > 0)
+			{
+				partDecimal = numberParts.Length > 1
+					? numberParts[1].PadRight(lengthDecimal, '0')
+					: "".PadRight(lengthDecimal, '0');
+			}
 
-            if (lengthDecimal > 0)
-            {
-                result += "." + partDecimal;
-            }
+			// Construir resultado
+			return lengthDecimal > 0
+				? partInt + "." + partDecimal
+				: partInt;
+		}
 
-            return result;
-        }
-
-        // Reemplaza el método TryGetDecimal por una versión corregida y más flexible
-        public static decimal? TryGetDecimal(object? value)
+		// Reemplaza el método TryGetDecimal por una versión corregida y más flexible
+		public static decimal? TryGetDecimal(object? value)
         {
             if (value == null)
                 return null;

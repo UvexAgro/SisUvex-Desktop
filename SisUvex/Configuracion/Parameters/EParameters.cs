@@ -1,4 +1,5 @@
-﻿using SisUvex.Catalogos.Metods;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
 using System;
@@ -44,7 +45,7 @@ namespace SisUvex.Configuracion.Parameters
         // =========================
         public static string GetNextId(string? idTypeParameter)
         {
-            string idType = string.IsNullOrWhiteSpace(idTypeParameter) ? "00" : idTypeParameter;
+            string idType = string.IsNullOrWhiteSpace(idTypeParameter) ? "**" : idTypeParameter;
 
             // OJO: aquí el parámetro debe llamarse igual que en el query
             var parameters = new Dictionary<string, object>
@@ -58,6 +59,24 @@ namespace SisUvex.Configuracion.Parameters
                 parameters
             );
         }
+        public static string GetValue(string idParameter, string idTypeParameter)
+        {
+			string idType = string.IsNullOrWhiteSpace(idTypeParameter) ? "**" : idTypeParameter;
+			string id = string.IsNullOrWhiteSpace(idParameter) ? "***" : idParameter;
+
+            // OJO: aquí el parámetro debe llamarse igual que en el query
+            var parameters = new Dictionary<string, object>
+            {
+                { "@idTypeParameter", idType },
+                { "@idParameter", id }
+            };
+
+			return ClsQuerysDB.GetStringExecuteParameterizedQuery(
+				"select v_valueParameters from Conf_Parameters where id_typeParameter = @idTypeParameter and id_parameter = @idParameter",
+				parameters
+			);
+		}
+
 
         //== VERIFICAR ID EXISTENTE
         public static bool ExistsId(string idParameter, string idTypeParameter)
@@ -98,9 +117,9 @@ namespace SisUvex.Configuracion.Parameters
         public void GetParameter(string? idParameter, string? idTypeParameter)
         {
             if (string.IsNullOrWhiteSpace(idParameter))
-                idParameter = "000";
+                idParameter = "***";
             if (string.IsNullOrWhiteSpace(idTypeParameter))
-                idTypeParameter = "00";
+                idTypeParameter = "**";
 
             SQLControl sql = new SQLControl();
 

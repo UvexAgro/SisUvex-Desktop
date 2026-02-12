@@ -28,17 +28,19 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			lblLote = new Label();
 			lblReferencia = new Label();
 			dtpFecha = new DateTimePicker();
-			txtReferencia = new TextBox();
-			cmbLote = new ComboBox();
+			txbReferencia = new TextBox();
+			cboLote = new ComboBox();
 			lbencabezado = new Label();
-			dataGridView1 = new DataGridView();
 			btnCVS = new Button();
 			btnExcel = new Button();
 			btncargar = new Button();
-			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+			dgvEmployee = new DataGridView();
+			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			SuspendLayout();
 			// 
 			// lblLote
@@ -67,22 +69,24 @@
 			dtpFecha.Name = "dtpFecha";
 			dtpFecha.Size = new Size(260, 23);
 			dtpFecha.TabIndex = 2;
+			dtpFecha.ValueChanged += dtpFecha_ValueChanged;
 			// 
-			// txtReferencia
+			// txbReferencia
 			// 
-			txtReferencia.Location = new Point(208, 240);
-			txtReferencia.Multiline = true;
-			txtReferencia.Name = "txtReferencia";
-			txtReferencia.Size = new Size(135, 25);
-			txtReferencia.TabIndex = 3;
+			txbReferencia.Location = new Point(208, 240);
+			txbReferencia.Multiline = true;
+			txbReferencia.Name = "txbReferencia";
+			txbReferencia.Size = new Size(135, 25);
+			txbReferencia.TabIndex = 3;
 			// 
-			// cmbLote
+			// cboLote
 			// 
-			cmbLote.FormattingEnabled = true;
-			cmbLote.Location = new Point(208, 184);
-			cmbLote.Name = "cmbLote";
-			cmbLote.Size = new Size(135, 23);
-			cmbLote.TabIndex = 4;
+			cboLote.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboLote.FormattingEnabled = true;
+			cboLote.Location = new Point(208, 184);
+			cboLote.Name = "cboLote";
+			cboLote.Size = new Size(135, 23);
+			cboLote.TabIndex = 4;
 			// 
 			// lbencabezado
 			// 
@@ -93,16 +97,6 @@
 			lbencabezado.Size = new Size(345, 32);
 			lbencabezado.TabIndex = 5;
 			lbencabezado.Text = "Generar Reporte de Esparrago";
-			// 
-			// dataGridView1
-			// 
-			dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			dataGridView1.BackgroundColor = SystemColors.ButtonHighlight;
-			dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridView1.Location = new Point(48, 350);
-			dataGridView1.Name = "dataGridView1";
-			dataGridView1.Size = new Size(829, 288);
-			dataGridView1.TabIndex = 6;
 			// 
 			// btnCVS
 			// 
@@ -134,26 +128,66 @@
 			btncargar.TabIndex = 9;
 			btncargar.Text = "Cargar Datos";
 			btncargar.UseVisualStyleBackColor = true;
+			btncargar.Click += btncargar_Click;
+			// 
+			// dgvEmployee
+			// 
+			dgvEmployee.AllowUserToAddRows = false;
+			dgvEmployee.AllowUserToDeleteRows = false;
+			dgvEmployee.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvEmployee.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			dgvEmployee.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgvEmployee.BackgroundColor = SystemColors.ControlLightLight;
+			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
+			dgvEmployee.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dgvEmployee.ColumnHeadersHeight = 58;
+			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dgvEmployee.EnableHeadersVisualStyles = false;
+			dgvEmployee.ImeMode = ImeMode.NoControl;
+			dgvEmployee.Location = new Point(12, 377);
+			dgvEmployee.Name = "dgvEmployee";
+			dgvEmployee.ReadOnly = true;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dgvEmployee.RowHeadersVisible = false;
+			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+			dgvEmployee.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgvEmployee.Size = new Size(858, 271);
+			dgvEmployee.TabIndex = 17;
 			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(922, 660);
+			Controls.Add(dgvEmployee);
 			Controls.Add(btncargar);
 			Controls.Add(btnExcel);
 			Controls.Add(btnCVS);
-			Controls.Add(dataGridView1);
 			Controls.Add(lbencabezado);
-			Controls.Add(cmbLote);
-			Controls.Add(txtReferencia);
+			Controls.Add(cboLote);
+			Controls.Add(txbReferencia);
 			Controls.Add(dtpFecha);
 			Controls.Add(lblReferencia);
 			Controls.Add(lblLote);
 			Name = "FrmSemiAutomatedPayroll";
 			Text = "FrmSemiAutomatedPayroll";
 			Load += FrmSemiAutomatedPayroll_Load;
-			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+			((System.ComponentModel.ISupportInitialize)dgvEmployee).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -167,8 +201,8 @@
 		private Button btnExcel;
 		private Button btncargar;
 		public DateTimePicker dtpFecha;
-		public TextBox txtReferencia;
-		public ComboBox cmbLote;
-		public DataGridView dataGridView1;
+		public TextBox txbReferencia;
+		public ComboBox cboLote;
+		public DataGridView dgvEmployee;
 	}
 }
