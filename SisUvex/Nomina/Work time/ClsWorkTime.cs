@@ -26,7 +26,7 @@ namespace SisUvex.Nomina.Work_time
         public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
 
         private const string ColumnDateWtm = "idFecha";
-        private string queryCatalog = $" SELECT [id_workTime] AS '{ClsObject.Column.id}' , FORMAT(d_workTime, 'yyyy-MMM-dd, dddd', 'es-MX') AS 'Fecha' ,FORMAT([d_workTime], 'yyyy-MM-dd') AS '{ColumnDateWtm}', id_ProductionLine AS '{ClsObject.ProductionLine.ColumnName}', [id_workGroup] AS '{ClsObject.WorkGroup.ColumnName}' ,FORMAT([d_dateHourBeginNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Incio hora normal' ,FORMAT([d_dateHourEndNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora normal' ,FORMAT([d_dateHourBeginExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Inicio hora extra' ,FORMAT([d_dateHourEndExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora extra', i_workers AS 'Trabajadores' FROM [Nom_WorkTime]";
+        private string queryCatalog = $" SELECT [id_workTime] AS '{ClsObject.Column.id}' , FORMAT(d_workTime, 'yyyy-MMM-dd, dddd', 'es-MX') AS 'Fecha' ,FORMAT([d_workTime], 'yyyy-MM-dd') AS '{ColumnDateWtm}', id_ProductionLine AS '{ClsObject.ProductionLine.ColumnName}', [id_workGroup] AS '{ClsObject.WorkGroup.ColumnName}' ,FORMAT([d_dateHourBeginNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Incio hora normal' ,FORMAT([d_dateHourEndNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora normal' ,FORMAT([d_dateHourBeginExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Inicio hora extra' ,FORMAT([d_dateHourEndExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora extra',d_overtime AS 'Horas Extras', i_workers AS 'Trabajadores' FROM [Nom_WorkTime] ";
         private string queryOrderBy = " ORDER BY [d_workTime] DESC";
         public DataTable dtCatalog;
         public DataTable dtCatalogActives;
@@ -130,6 +130,7 @@ namespace SisUvex.Nomina.Work_time
             _frmAdd.dtpEndNormal.Value = eWorkTime.dateHourEndNormal;
             _frmAdd.dtpEndExtra.Value = eWorkTime.dateHourEndExtra;
             _frmAdd.txbWorkers.Text = eWorkTime.workers;
+            _frmAdd.nudOvertime.Value = eWorkTime.overTime;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboProductionLine, eWorkTime.idProductionLine);
         }
@@ -164,6 +165,7 @@ namespace SisUvex.Nomina.Work_time
                 cmd.Parameters.AddWithValue("@dateHourEndExtra", _frmAdd.dtpEndExtra.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@workers", _frmAdd.txbWorkers.Text);
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value.ToString());
 
                 cmd.ExecuteNonQuery();
                 _frmAdd.AddIsUpdate = true;
@@ -193,8 +195,9 @@ namespace SisUvex.Nomina.Work_time
                 cmd.Parameters.AddWithValue("@dateHourEndExtra", _frmAdd.dtpEndExtra.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@workers", _frmAdd.txbWorkers.Text);
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+				cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value.ToString());
 
-                cmd.ExecuteNonQuery();
+				cmd.ExecuteNonQuery();
                 _frmAdd.AddIsUpdate = true;
             }
             catch (Exception ex)

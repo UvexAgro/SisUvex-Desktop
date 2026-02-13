@@ -16,6 +16,7 @@ namespace SisUvex.Nomina.Work_time
         public DateTime dateHourBeginExtra { get; set; }
         public DateTime dateHourEndExtra { get; set; }
         public string workers { get; set; }
+        public int overTime { get; set; }
 
         public void SetWorkTime(string IdWorkTime)
         {
@@ -36,8 +37,9 @@ namespace SisUvex.Nomina.Work_time
                     dateHourBeginExtra = DateTime.Parse(dr.GetValue(dr.GetOrdinal("d_dateHourBeginExtra")).ToString());
                     dateHourEndExtra = DateTime.Parse(dr.GetValue(dr.GetOrdinal("d_dateHourEndExtra")).ToString());
                     workers = dr.GetValue(dr.GetOrdinal("i_workers")).ToString();
+                    overTime = int.Parse(dr.GetValue(dr.GetOrdinal("d_overtime")).ToString());
 
-                }
+				}
             }
             catch (Exception ex)
             {
