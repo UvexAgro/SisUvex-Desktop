@@ -166,14 +166,14 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
         public void BotonAceptar()
         {
-            if (!frm.dgvLista.Columns.Contains(frm.idEmpleado) || !frm.dgvLista.Columns.Contains(frm.idActividad) || !frm.dgvLista.Columns.Contains(frm.horasExtras))
+            if (!frm.dgvLista.Columns.Contains(frm.idEmpleado) || !frm.dgvLista.Columns.Contains(frm.idActividad) || !frm.dgvLista.Columns.Contains(frm.idBanda))
             {
-                MessageBox.Show($"Se ocupan las columnas '{frm.idEmpleado}', '{frm.idActividad}' y '{frm.horasExtras}' en el Excel.");
+                MessageBox.Show($"Se ocupan las columnas '{frm.idEmpleado}', '{frm.idActividad}' y '{frm.idBanda}'  en el Excel.");
             }
             else
             {//GUARDAR REGISTROS
 
-                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaHorasExtras(frm.dgvLista))
+                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaBanda(frm.dgvLista))
                 {
                     ConfirmarAccionAceptar();
                 }
@@ -217,27 +217,56 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
             return true;
         }
+		private bool ValidarColumnaBanda(DataGridView dataGridView)
+		{
+			foreach (DataGridViewRow row in dataGridView.Rows)
+			{
 
-        private bool ValidarColumnaHorasExtras(DataGridView dataGridView)
-        {
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
+				object cellValue = row.Cells[frm.idBanda].Value;
+				string codigo = cellValue != null ? cellValue.ToString().Trim() : "";
 
-                if (!string.IsNullOrEmpty(_horasExtras))
-                {
-                    decimal horasExtrasDecimal;
+				//  Permitir vacío
+				if (string.IsNullOrEmpty(codigo))
+					continue;
 
-                    if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
-                    {
-                        MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
-                        return false;
-                    }
-                }
-            }
+				int codigoInt;
 
-            return true;
-        }
+				// Validar que sea entero y esté entre 1 y 999
+				if (!int.TryParse(codigo, out codigoInt) || codigoInt < 1 || codigoInt > 999)
+				{
+					MessageBox.Show($"El valor: '{codigo}'\nNo cumple con el formato esperado para la columna {frm.idBanda}.", "Columna " + frm.idBanda);
+					return false;
+				}
+
+				//  3 dígitos
+				row.Cells[frm.idBanda].Value = codigoInt.ToString("000");
+			}
+
+			return true;
+		}
+
+
+
+		//private bool ValidarColumnaHorasExtras(DataGridView dataGridView)
+  //      {
+  //          foreach (DataGridViewRow row in dataGridView.Rows)
+  //          {
+  //              string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
+
+  //              if (!string.IsNullOrEmpty(_horasExtras))
+  //              {
+  //                  decimal horasExtrasDecimal;
+
+  //                  if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
+  //                  {
+  //                      MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
+  //                      return false;
+  //                  }
+  //              }
+  //          }
+
+  //          return true;
+  //      }
 
         public void ConfirmarAccionAceptar()
         {
@@ -251,45 +280,47 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                 if (registros == 0)
                 {
 
-                    try
-                    {
-                        sql.BeginTransaction(); //aquí abre la conexion
+                    //try
+                    //{
+                    //    sql.BeginTransaction(); //aquí abre la conexion
 
-                        InsertarRegistrosDeAsistencia();
+                    //    InsertarRegistrosDeAsistencia();
 
-                        sql.CommitTransaction(); //aquí cierra la conexion
-                    }
-                    catch (Exception ex)
-                    {
-                        sql.RollbackTransaction(); //aquí cierra la conexion
-                        MessageBox.Show(ex.ToString(), titulo);
-                    }
+                    //    sql.CommitTransaction(); //aquí cierra la conexion
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    sql.RollbackTransaction(); //aquí cierra la conexion
+                    //    MessageBox.Show(ex.ToString(), titulo);  
+                    //}
+
+                    MessageBox.Show("Procedimiento base de datos");
                 }
                 else
                 {
                     DialogResult overwriteResult = MessageBox.Show($"Ya existen {registros} registros para la fecha {fecha}. \n¿Desea sobreescribirlos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 
-                    if (overwriteResult == DialogResult.Yes)
-                    {
-                        try
-                        {
-                            sql.BeginTransaction(); //aquí abre la conexion
+                    //if (overwriteResult == DialogResult.Yes)
+                    //{
+                    //    try
+                    //    {
+                    //        sql.BeginTransaction(); //aquí abre la conexion
 
-                            EliminarRegistrosPorFecha(fecha);
+                    //        EliminarRegistrosPorFecha(fecha);
 
-                            InsertarRegistrosDeAsistencia();
-                            sql.CommitTransaction();
-                        }
-                        catch (Exception ex) 
-                        {
-                            sql.RollbackTransaction();
-                            MessageBox.Show(ex.ToString(), titulo);
-                        }
+                    //        InsertarRegistrosDeAsistencia();
+                    //        sql.CommitTransaction();
+                    //    }
+                    //    catch (Exception ex) 
+                    //    {
+                    //        sql.RollbackTransaction();
+                    //        MessageBox.Show(ex.ToString(), titulo);
+                    //    }
                         
                     }
                 }
             }
-        }
+        
 
         public void InsertarRegistrosDeAsistencia()
         { //USAR SOLO SI YA SE ABRIO LA CONEXION
@@ -305,14 +336,14 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                 {
                     string codigo = row.Cells[frm.idEmpleado].Value?.ToString() ?? "";
                     string actividad = row.Cells[frm.idActividad].Value?.ToString() ?? "";
-                    string horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "0";
+                    string banda = row.Cells[frm.idBanda].Value?.ToString() ?? "";
 
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@idEmployee", FormatoCeros(codigo, "000000"));
                     cmd.Parameters.AddWithValue("@dAttendence", fecha);
                     cmd.Parameters.AddWithValue("@codigoTab", FormatoCeros(actividad, "0000"));
-                    cmd.Parameters.AddWithValue("@overTime", horasExtras);
                     cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+                    cmd.Parameters.AddWithValue("@banda", banda);
 
                     try
                     {

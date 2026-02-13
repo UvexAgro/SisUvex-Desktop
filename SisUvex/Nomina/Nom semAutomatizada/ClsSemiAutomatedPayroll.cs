@@ -72,7 +72,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				string fechaFormateada = Convert.ToDateTime(dr[0]).ToString("yyyy/MM/dd");
 				string sueldo = ClsValues.FormatZeros(dr[6].ToString(), "0000.00");
-				
+				//string empleado = ClsValues.FormatZeros(dr[1].ToString(), "000000")
 				dtCsv.Rows.Add(
 					fechaFormateada,
 					referencias,
@@ -134,7 +134,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
-			sfd.FileName = $"Nomina_{DateTime.Now:yyyyMMdd}.xlsx";
+			sfd.FileName = $"Nomina_{frm.dtpFecha.Value:yyyyMMdd}.xlsx";
 
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;

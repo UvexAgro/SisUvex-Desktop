@@ -13,7 +13,7 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
     public partial class FrmAsistenciaEmpaqueNuevo : Form
     {
         ClsAsistenciaEmpaqueNuevo cls;
-        public string idEmpleado = "EMPLEADO", idActividad = "ACTIVIDAD", horasExtras = "HORAS EXTRAS";
+        public string idEmpleado = "EMPLEADO", idActividad = "ACTIVIDAD", idBanda = "BANDA";
         public FrmAsistenciaEmpaqueNuevo()
         {
             InitializeComponent();
