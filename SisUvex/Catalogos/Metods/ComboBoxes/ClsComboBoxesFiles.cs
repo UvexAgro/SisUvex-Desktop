@@ -150,6 +150,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Lot.CboOnlyNameLot:
                     queryDataTable = ClsObject.Lot.QueryCboOnlyNameLot;
                     break;
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
+                    queryDataTable = ClsObject.Lot.QueryOnlyNameLotPlantTracking;
+                    break;
                 case ClsObject.Distributor.Cbo:
                     queryDataTable = ClsObject.Distributor.QueryCbo;
                     break;
@@ -188,9 +191,6 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.Contractor.Cbo:
                     queryDataTable = ClsObject.Contractor.QueryCbo;
-                    break;
-                case ClsObject.GrowFarm.Cbo:
-                    queryDataTable = ClsObject.GrowFarm.QueryCbo;
                     break;
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
@@ -275,6 +275,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.Lot.Cbo:
                 case ClsObject.Lot.CboOnlyNameLot:
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
                     query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot', 'Grow_Farm')";
                     break;
                 case ClsObject.Presentation.Cbo:
@@ -341,6 +342,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Variety.TableName;
                 case ClsObject.Lot.Cbo:
                 case ClsObject.Lot.CboOnlyNameLot:
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
                     return ClsObject.Lot.TableName;
                 case ClsObject.Distributor.Cbo:
                     return ClsObject.Distributor.TableName;

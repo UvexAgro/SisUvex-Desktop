@@ -586,5 +586,12 @@ namespace SisUvex
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat, 4);
         }
+
+        private void plantasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Grow.PlantsRowLot.FrmPlantsRowLotView cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 1);
+        }
     }
 }
