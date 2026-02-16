@@ -54,7 +54,7 @@ namespace SisUvex
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new FrmManifestCat());
-            Application.Run(new SisUvex.Grow.PlantsRowLot.FrmPlantsRowLotView());
+            Application.Run(new PantallaCarga());
         }
     }
 }

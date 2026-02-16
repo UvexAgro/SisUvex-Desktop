@@ -141,6 +141,7 @@
             statusStrip1 = new StatusStrip();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+            plantasToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -746,7 +747,7 @@
             // 
             // consultasToolStripMenuItem
             // 
-            consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem });
+            consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem, plantasToolStripMenuItem });
             consultasToolStripMenuItem.Name = "consultasToolStripMenuItem";
             consultasToolStripMenuItem.Size = new Size(71, 19);
             consultasToolStripMenuItem.Text = "Consultas";
@@ -754,7 +755,7 @@
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -762,7 +763,7 @@
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -912,6 +913,13 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
+            // plantasToolStripMenuItem
+            // 
+            plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
+            plantasToolStripMenuItem.Size = new Size(180, 22);
+            plantasToolStripMenuItem.Text = "Plantas";
+            plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
+            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1051,5 +1059,6 @@
         private ToolStripMenuItem podaToolStripMenuItem;
         private ToolStripMenuItem generarReporteDePodaEnExcelToolStripMenuItem;
         private ToolStripMenuItem parámetrosToolStripMenuItem1;
+        private ToolStripMenuItem plantasToolStripMenuItem;
     }
 }
