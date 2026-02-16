@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
+using Microsoft.Data.SqlClient;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
@@ -13,8 +16,10 @@ using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion.Parameters;
+using ZXing;
 using static SisUvex.Catalogos.Metods.ClsObject;
 namespace SisUvex.Nomina.Nom_semAutomatizada
+
 {
 	internal class ClsSemiAutomatedPayroll
 	{
@@ -61,7 +66,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			DataTable dtCsv = new();
 			dtCsv.Columns.Add("Fecha", typeof(string));   //0
 			dtCsv.Columns.Add("Referencia", typeof(string));
-			dtCsv.Columns.Add("IdEmploye", typeof(string));		//1
+			dtCsv.Columns.Add("IdEmploye", typeof(string));     //1
 			dtCsv.Columns.Add("Sueldo", typeof(string));    //6
 			dtCsv.Columns.Add("Lote", typeof(string));
 			dtCsv.Columns.Add("Actividad", typeof(string));    //3
@@ -85,7 +90,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				);
 			}
 
-		
+
 
 
 			return dtCsv;
@@ -134,7 +139,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
-			sfd.FileName = $"Nomina_{frm.dtpFecha.Value:yyyyMMdd}.xlsx";
+			sfd.FileName = $"Nomina{frm.dtpFecha.Value:yyyy-MM-dd}.xlsx";
 
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
@@ -197,6 +202,178 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			frm.dgvEmployee.DataSource = dtNomina;
 		}
+
+
+		public void EjecutarCalculoProduccion()
+		{
+			try
+			{
+				string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
+
+				if (!ValidarHorarioDeEmpaque(fecha))
+				{
+					MessageBox.Show($"No existe horario de empaque para la fecha {fecha}",
+									"Sistema",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
+					return;
+				}
+
+				if (YaHayRegistrosdeProduccion(fecha))
+				{
+					DialogResult respuesta = MessageBox.Show($"Ya tienes datos para la {fecha}.\n ¿Deseas sobreecribir los datos?",
+														"Sistema",
+														MessageBoxButtons.YesNo,
+														MessageBoxIcon.Exclamation);
+					if (respuesta == DialogResult.No)
+					{
+						return;
+					}
+
+				}
+
+				if (!ValidarTabladeWorkTimeAndProductionTotal(fecha))
+					return;
+
+				string query = $@"EXEC sp_GuardarLibrasProductionLine '{fecha}'";
+
+				bool result = ClsQuerysDB.ExecuteQuery(query);
+				if (result)
+				{
+					MessageBox.Show("Producción actualizada correctamente",
+									"Sistema",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show("Error al actualizar la produccion",
+														"Sistema",
+														MessageBoxButtons.OK,
+														MessageBoxIcon.Error);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+		private bool YaHayRegistrosdeProduccion(string fecha)
+		{
+			int result;
+			string count = ClsQuerysDB.GetData($"select count(d_workDay) from Nom_ProductionTotal where d_workDay = '{fecha}'");
+			result = int.Parse(count);
+			if (result == 0)
+				return false;
+			else
+				return true;
+		}
+		private bool ValidarHorarioDeEmpaque(string fecha)
+		{
+			int result;
+			string count = ClsQuerysDB.GetData($"select count(d_workTime) from Nom_WorkTime where d_workTime = '{fecha}'");
+			result = int.Parse(count);
+			if (result == 0)
+				return false;
+			else
+				return true;
+		}
+		private DataTable ObtenerWorkTimeVsProduction(string fecha)
+		{
+			string query = $@"SELECT
+			ISNULL(wt.id_productionLine, pt.id_productionLine) AS id_productionLine,
+			ISNULL(CAST(wt.d_workTime AS DATE), CAST(pt.d_workDay AS DATE)) AS Fecha,
+
+			CASE WHEN wt.id_productionLine IS NULL THEN 0 ELSE 1 END AS TieneWorkTime,
+			CASE WHEN pt.id_productionLine IS NULL THEN 0 ELSE 1 END AS TieneProduction,
+
+			ISNULL(pt.n_poundsNormalTime,0) + ISNULL(pt.n_poundsOvertime,0) AS TotalLibras
+
+			FROM Nom_WorkTime wt
+			FULL JOIN Nom_ProductionTotal pt
+			ON wt.id_ProductionLine = pt.id_productionLine
+			AND CAST(wt.d_workTime AS DATE) = CAST(pt.d_workDay AS DATE)
+
+			WHERE CAST(ISNULL(wt.d_workTime,pt.d_workDay) AS DATE) = '{fecha}'";
+
+			return ClsQuerysDB.GetDataTable(query);
+		}
+		private bool ValidarTabladeWorkTimeAndProductionTotal(string fecha)
+		{
+			DataTable dt = ObtenerWorkTimeVsProduction(fecha);
+
+			bool error = false;
+			bool warning = false;
+
+			StringBuilder detalleError = new StringBuilder();
+			StringBuilder detalleWarning = new StringBuilder();
+
+			foreach (DataRow row in dt.Rows)
+			{
+				int linea = Convert.ToInt32(row["id_productionLine"]);
+				bool tieneWT = Convert.ToInt32(row["TieneWorkTime"]) == 1;
+				bool tienePT = Convert.ToInt32(row["TieneProduction"]) == 1;
+				decimal total = Convert.ToDecimal(row["TotalLibras"]);
+
+				// Coinciden
+				if (tieneWT && tienePT)
+				{
+					if (total <= 0)
+					{
+						error = true;
+						detalleError.AppendLine($"• Línea {linea}: producción en 0 o negativa");
+					}
+				}
+				else if (!tieneWT)
+				{
+					warning = true;
+
+					if (!tieneWT)
+						detalleWarning.AppendLine($"• Línea {linea}: existe producción pero NO tiene horario");
+
+					//if (!tienePT)
+					//	detalleWarning.AppendLine($"• Línea {linea}: tiene horario pero NO tiene producción");
+				}
+			}
+
+			if (error)
+			{
+				MessageBox.Show(
+					"No es posible realizar el cálculo de producción.\n\n" +
+					"Se detectaron líneas con producción incorrecta (0 o negativa).\n" +
+					"Verifique la captura de datos antes de continuar.\n\n" +
+					detalleError.ToString(),
+					"Validación de Producción",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Exclamation);
+
+				return false;
+			}
+
+		
+		//	if (warning)
+		//	{
+		//		DialogResult r = MessageBox.Show(
+		//			"Se encontraron diferencias entre horario y producción.\n\n" +
+		//			"Revise la información antes de continuar.\n\n" +
+		//			detalleWarning.ToString() +
+		//			"\n¿Deseas continuar?",
+		//			"Advertencia",
+		//			MessageBoxButtons.OK,
+		//			MessageBoxIcon.Warning);
+
+		//		if (r == DialogResult.No)
+		//			return false;
+		//	}
+
+		//	return true;
+		//
+		}
+
+
 	}
 
+
 }
+
+

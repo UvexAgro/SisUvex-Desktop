@@ -40,6 +40,7 @@
 			btnExcel = new Button();
 			btncargar = new Button();
 			dgvEmployee = new DataGridView();
+			btnCalcularLibra = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			SuspendLayout();
 			// 
@@ -170,11 +171,23 @@
 			dgvEmployee.Size = new Size(858, 271);
 			dgvEmployee.TabIndex = 17;
 			// 
+			// btnCalcularLibra
+			// 
+			btnCalcularLibra.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnCalcularLibra.Location = new Point(71, 308);
+			btnCalcularLibra.Name = "btnCalcularLibra";
+			btnCalcularLibra.Size = new Size(131, 39);
+			btnCalcularLibra.TabIndex = 18;
+			btnCalcularLibra.Text = "Cargar Libras";
+			btnCalcularLibra.UseVisualStyleBackColor = true;
+			btnCalcularLibra.Click += btnCalcularLibra_Click;
+			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(922, 660);
+			Controls.Add(btnCalcularLibra);
 			Controls.Add(dgvEmployee);
 			Controls.Add(btncargar);
 			Controls.Add(btnExcel);
@@ -205,5 +218,6 @@
 		public TextBox txbReferencia;
 		public ComboBox cboLote;
 		public DataGridView dgvEmployee;
+		private Button btnCalcularLibra;
 	}
 }

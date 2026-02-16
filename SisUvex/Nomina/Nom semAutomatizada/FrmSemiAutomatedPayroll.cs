@@ -8,8 +8,9 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static SisUvex.Catalogos.Metods.ClsObject;
 using ClosedXML.Excel;
+using SisUvex.Catalogos.Metods.Querys;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
 {
@@ -36,7 +37,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 
 
-		private void dtpFecha_ValueChanged(object sender, EventArgs e)
+		public void dtpFecha_ValueChanged(object sender, EventArgs e)
 		{
 			cls.SetTxbReferencia();
 		}
@@ -57,5 +58,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			else
 				SystemSounds.Exclamation.Play();
 		}
+
+		private void btnCalcularLibra_Click(object sender, EventArgs e)
+		{
+			cls.EjecutarCalculoProduccion();
+		}
+
 	}
 }
+

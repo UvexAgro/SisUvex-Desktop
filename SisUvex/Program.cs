@@ -54,7 +54,7 @@ namespace SisUvex
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new FrmManifestCat());
-            Application.Run(new SisUvex.Nomina.Nom_semAutomatizada.FrmSemiAutomatedPayroll());
+            Application.Run(new SisUvex.FrmMenu());
 
         }
     }
