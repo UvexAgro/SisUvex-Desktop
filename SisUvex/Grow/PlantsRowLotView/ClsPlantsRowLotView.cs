@@ -1,15 +1,9 @@
-﻿using Org.BouncyCastle.Asn1.BC;
-using SisUvex.Catalogos.Lot;
-using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods.DataGridViews;
+﻿using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
-using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static iText.Layout.Borders.Border;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Grow.PlantsRowLot
@@ -19,11 +13,14 @@ namespace SisUvex.Grow.PlantsRowLot
         public FrmPlantsRowLotView frm;
         DataView? dvLotsList;
         DataTable? dtCboLot;
+        string cIdVariety = Variety.ColumnId, cVariety = Variety.ColumnName, cIdFormation = "idFormation", cFormation = "Tipo Formación", cIdRootStock = "idPatron", cRootStock = "Patron", cUserUpdate = "Modificó", cDateUpdate = "Última modificación", cIdLot = Lot.ColumnId, cLotName = Lot.ColumnName;
         public void BeginFormCat()
         {
             frm.WindowState = FormWindowState.Maximized;
 
             SetControls();
+
+            ClearLotLabels();
         }
 
         private void SetControls()
@@ -99,12 +96,141 @@ namespace SisUvex.Grow.PlantsRowLot
             dtCboLot.DefaultView.RowFilter = dtCboLotFilter;
         }
 
-        public void SetDgvPlants()
+        public void BtnLoadPlantsLot()
         {
             string idLot = frm.cboLot.SelectedValue?.ToString() ?? string.Empty;
-            MessageBox.Show($"Aquí se cargarían las plantas del lote con id: {idLot}");
 
+            SetLabelsLotInfo(idLot);
 
+            SetDgvLotPlants(idLot);
+        }
+
+        private void SetLabelsLotInfo(string idLot)
+        {
+            DataTable dtLabels = ClsQuerysDB.GetDataTable(GetQueryTotalLot(idLot));
+
+            if (dtLabels == null || dtLabels.Rows.Count == 0)
+            {
+                ClearLotLabels(); // opcional
+                return;
+            }
+
+            DataRow r = dtLabels.Rows[0];
+
+            frm.lblIdLot.Text = r["Lot"]?.ToString() ?? "";
+            frm.lblNameLot.Text = (string)frm.cboLot.GetColumnValue(Lot.ColumnName); //Lo jala del combobox
+            frm.lblStart.Text = r["StartLine"]?.ToString() ?? "";
+            frm.lblFinal.Text = r["EndLine"]?.ToString() ?? "";
+
+            frm.lblPlantsTotal.Text = r["Total_Plants"].ToString() ?? "";
+            frm.lblPlantsEfective.Text = r["Actual_Plants"].ToString() ?? "";
+            frm.lblPlantsFail.Text = r["Failed_Plants"].ToString() ?? "";
+            frm.lblFormation.Text = r["Formation_Stage_Plants"].ToString() ?? "";
+
+            frm.lblLastUpdate.Text = r["LastUpdate"]?.ToString() ?? "";
+            frm.lblUserUpdate.Text = r["LastUser"]?.ToString() ?? "";
+        }
+
+        private void SetDgvLotPlants(string idLot)
+        {
+            DataTable? dtLabels = ClsQuerysDB.GetDataTable(GetQueryPlantsLot(idLot));
+
+            frm.dgvPlants.DataSource = dtLabels;
+
+            ShowOrHideColumns(frm.chbShowOrHideColumns.Checked);
+        }
+
+        private string GetQueryTotalLot(string idLot)
+        {
+            return @$"   SELECT
+                            T.id_lot AS Lot,
+                            MIN(T.n_lotLine) AS StartLine,
+                            MAX(T.n_lotLine) AS EndLine,
+                            SUM(T.n_plannedPlants) AS Total_Plants,
+                            SUM(T.n_actualPlants) AS Actual_Plants,
+                            SUM(T.n_failedPlants) AS Failed_Plants,
+                            SUM(T.n_formationStagePlants) AS Formation_Stage_Plants,
+                            FORMAT(MAX(ISNULL(T.d_update, T.d_create)), 'yyyy-MMM-dd', 'es-MX') AS LastUpdate,
+                            U.LastUser
+                        FROM Grow_PlantsRowLot T
+                        --
+                        OUTER APPLY
+                        (
+                            SELECT TOP 1 ISNULL(userUpdate, userCreate) AS LastUser
+                            FROM Grow_PlantsRowLot
+                            WHERE id_lot = T.id_lot
+                            ORDER BY ISNULL(d_update, d_create) DESC
+                        ) U
+
+                        WHERE T.id_lot = '{idLot}'
+
+                        GROUP BY T.id_lot, U.LastUser;";
+        }
+        private List<string> ListColumnsToHide()
+        {
+            List<string> values = new List<string>();
+
+            values.Add(cIdFormation);
+            //values.Add(cFormation);
+            values.Add(cIdRootStock);
+            //values.Add(cRootStock);
+            values.Add(cIdVariety);
+            //values.Add(cVariety);
+            values.Add(cUserUpdate);
+            values.Add(cDateUpdate);
+            values.Add(cIdLot);
+            values.Add(cLotName);
+
+            return values;
+        }
+        public void ShowOrHideColumns(bool show)
+        {
+            foreach (string columnName in ListColumnsToHide())
+            {
+                if (frm.dgvPlants.Columns.Contains(columnName))
+                    frm.dgvPlants.Columns[columnName].Visible = show;
+            }
+        }
+        private string GetQueryPlantsLot(string idLot)
+        {
+            return @$"   SELECT 
+	                        grow.n_lotLine AS [Línea],
+	                        grow.n_plannedPlants AS [Total],
+	                        grow.n_actualPlants AS [Activas],
+	                        grow.n_failedPlants AS [Fallas],
+	                        grow.n_formationStagePlants AS [Formación],
+	                        grow.id_formation AS [{cIdFormation}],
+	                        frm.v_nameFormation AS [{cFormation}],
+	                        grow.id_rootstock AS [{cIdRootStock}],
+	                        rot.v_nameRootstock AS [{cRootStock}],
+	                        grow.id_variety AS [{cIdVariety}],
+	                        vrt.v_nameComercial AS [{cVariety}],
+	                        ISNULL(grow.userUpdate, grow.userCreate) AS [{cUserUpdate}],
+	                        ISNULL(grow.d_update, grow.d_create) AS [{cDateUpdate}],
+	                        grow.id_lot AS [{cIdLot}],
+	                        lot.v_nameLot AS [{cLotName}]
+
+                        FROM Grow_PlantsRowLot grow
+                        left JOIN Pack_Lot lot ON lot.id_lot = grow.id_lot AND lot.id_variety = grow.id_variety
+                        left JOIN Pack_Variety vrt ON vrt.id_variety = grow.id_variety
+                        LEFT JOIN Grow_FormationType frm ON frm.id_formation = grow.id_formation
+                        LEFT JOIN Grow_Rootstock rot ON rot.id_rootstock = grow.id_rootstock
+                        WHERE
+	                        grow.id_lot = '{idLot}'
+                        ORDER BY grow.id_lot, grow.n_lotLine";
+        }
+        private void ClearLotLabels()
+        {
+            frm.lblNameLot.Text = "";
+            frm.lblIdLot.Text = "";
+            frm.lblStart.Text = "";
+            frm.lblFinal.Text = "";
+            frm.lblPlantsTotal.Text = "";
+            frm.lblPlantsEfective.Text = "";
+            frm.lblPlantsFail.Text = "";
+            frm.lblFormation.Text = "";
+            frm.lblLastUpdate.Text = "";
+            frm.lblUserUpdate.Text = "";
         }
     }
 }

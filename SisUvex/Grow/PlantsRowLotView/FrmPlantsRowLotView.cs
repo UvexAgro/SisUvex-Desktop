@@ -30,9 +30,19 @@ namespace SisUvex.Grow.PlantsRowLot
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnLoadPlantsLot_Click(object sender, EventArgs e)
         {
-            
+            cls.BtnLoadPlantsLot();
+        }
+
+        private void chbHideOrShowColumns_CheckedChanged(object sender, EventArgs e)
+        {
+            cls.ShowOrHideColumns(chbShowOrHideColumns.Checked);
+        }
+
+        private void btnExcel_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Próximamente...", "A te la creiste");
         }
     }
 }
