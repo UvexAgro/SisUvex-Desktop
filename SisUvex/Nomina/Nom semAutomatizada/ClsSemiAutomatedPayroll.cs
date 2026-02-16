@@ -330,9 +330,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 					if (!tieneWT)
 						detalleWarning.AppendLine($"• Línea {linea}: existe producción pero NO tiene horario");
-
-					//if (!tienePT)
-					//	detalleWarning.AppendLine($"• Línea {linea}: tiene horario pero NO tiene producción");
 				}
 			}
 
@@ -350,24 +347,23 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return false;
 			}
 
-		
-		//	if (warning)
-		//	{
-		//		DialogResult r = MessageBox.Show(
-		//			"Se encontraron diferencias entre horario y producción.\n\n" +
-		//			"Revise la información antes de continuar.\n\n" +
-		//			detalleWarning.ToString() +
-		//			"\n¿Deseas continuar?",
-		//			"Advertencia",
-		//			MessageBoxButtons.OK,
-		//			MessageBoxIcon.Warning);
 
-		//		if (r == DialogResult.No)
-		//			return false;
-		//	}
+			if (warning)
+			{
+				DialogResult r = MessageBox.Show(
+					"Se encontraron diferencias entre horario y producción.\n\n" +
+					"Revise la información antes de continuar.\n\n" +
+					detalleWarning.ToString() +
+					"\n¿Deseas continuar?",
+					"Advertencia",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
 
-		//	return true;
-		//
+				if (r == DialogResult.No)
+					return false;
+			}
+
+			return true;
 		}
 
 
