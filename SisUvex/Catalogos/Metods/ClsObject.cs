@@ -1,4 +1,4 @@
-﻿
+
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
 using System.Diagnostics.Metrics;
@@ -591,6 +591,30 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboTypeBox";
             public const string DgvCatalog = "DgvCatalogTypeBox";
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
+        }
+
+        public static class Payroll_AttendancePeriod
+        {
+            public const string TableName = "Payroll_AttendancePeriod";
+            public const string ColumnId = "idPeriod";
+            public const string ColumnSequence = "Secuencia";
+            public const string ColumnName = "Nombre periodo";
+            public const string ColumnStartDate = "Fecha inicio";
+            public const string ColumnEndDate = "Fecha fin";
+            public const string ColumnActive = "ActiveAttendancePeriod";
+            public const string ColumnCreated = "d_created";
+            public const string ColumnUpdated = "d_updated";
+            public const string Cbo = "CboAttendancePeriod";
+            public const string DgvCatalog = "DgvCatalogAttendancePeriod";
+            public const string QueryCbo = $@" SELECT CONCAT(id_period, '|', c_sequence_per) AS [{Column.id}], 
+                                            v_name_per AS [{Column.name}], 
+                                            c_active AS [{Column.active}], 
+                                            id_period AS [{ColumnId}], 
+                                            c_sequence_per AS [{ColumnSequence}], 
+                                            d_startDate_per AS [{ColumnStartDate}], 
+                                            d_endDate_per AS [{ColumnEndDate}], 
+                                            id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+            public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
         }
     }
 }
