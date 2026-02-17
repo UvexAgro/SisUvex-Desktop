@@ -574,12 +574,6 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 1);
         }
 
-        private void generarReporteDePodaEnExcelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
-            AbrirFormularioDialog(cat, 3);
-        }
-
         private void parámetrosToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Configuracion.Parameters.FrmParametersCat cat = new();
@@ -592,6 +586,19 @@ namespace SisUvex
             Grow.PlantsRowLot.FrmPlantsRowLotView cat = new();
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat, 1);
+        }
+
+        private void reporteDeAsistenciaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Asistencia_contrato.Consulta.FrmPayrollAttendance cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
+            AbrirFormularioDialog(cat, 3);
         }
     }
 }
