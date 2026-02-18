@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPlantsRowLotView));
             label9 = new Label();
             label5 = new Label();
             label4 = new Label();
@@ -79,7 +80,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 12F);
-            label9.Location = new Point(530, 25);
+            label9.Location = new Point(530, 20);
             label9.Margin = new Padding(0);
             label9.Name = "label9";
             label9.Size = new Size(152, 21);
@@ -90,7 +91,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(388, 88);
+            label5.Location = new Point(388, 60);
             label5.Margin = new Padding(0);
             label5.Name = "label5";
             label5.Size = new Size(51, 21);
@@ -101,7 +102,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(312, 25);
+            label4.Location = new Point(312, 20);
             label4.Margin = new Padding(0);
             label4.Name = "label4";
             label4.Size = new Size(127, 21);
@@ -112,7 +113,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(326, 55);
+            label3.Location = new Point(326, 40);
             label3.Margin = new Padding(0);
             label3.Name = "label3";
             label3.Size = new Size(113, 21);
@@ -206,7 +207,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 12F);
-            label12.Location = new Point(606, 55);
+            label12.Location = new Point(606, 40);
             label12.Margin = new Padding(0);
             label12.Name = "label12";
             label12.Size = new Size(76, 21);
@@ -305,9 +306,9 @@
             bgpLotInfo.Controls.Add(label4);
             bgpLotInfo.Controls.Add(label5);
             bgpLotInfo.Font = new Font("Segoe UI", 12F);
-            bgpLotInfo.Location = new Point(12, 170);
+            bgpLotInfo.Location = new Point(12, 137);
             bgpLotInfo.Name = "bgpLotInfo";
-            bgpLotInfo.Size = new Size(820, 156);
+            bgpLotInfo.Size = new Size(820, 115);
             bgpLotInfo.TabIndex = 51;
             bgpLotInfo.TabStop = false;
             bgpLotInfo.Text = "Datos del lote";
@@ -316,7 +317,7 @@
             // 
             lblFinal.AutoSize = true;
             lblFinal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblFinal.Location = new Point(78, 118);
+            lblFinal.Location = new Point(78, 80);
             lblFinal.Margin = new Padding(0);
             lblFinal.Name = "lblFinal";
             lblFinal.Size = new Size(67, 21);
@@ -328,7 +329,7 @@
             // 
             lblStart.AutoSize = true;
             lblStart.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblStart.Location = new Point(78, 88);
+            lblStart.Location = new Point(78, 60);
             lblStart.Margin = new Padding(0);
             lblStart.Name = "lblStart";
             lblStart.Size = new Size(66, 21);
@@ -339,7 +340,7 @@
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(32, 118);
+            label17.Location = new Point(32, 80);
             label17.Margin = new Padding(0);
             label17.Name = "label17";
             label17.Size = new Size(46, 21);
@@ -350,7 +351,7 @@
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(25, 88);
+            label18.Location = new Point(25, 60);
             label18.Margin = new Padding(0);
             label18.Name = "label18";
             label18.Size = new Size(53, 21);
@@ -362,7 +363,7 @@
             // 
             lblFormation.AutoSize = true;
             lblFormation.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblFormation.Location = new Point(439, 121);
+            lblFormation.Location = new Point(439, 83);
             lblFormation.Margin = new Padding(0);
             lblFormation.Name = "lblFormation";
             lblFormation.Size = new Size(109, 21);
@@ -373,7 +374,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(351, 121);
+            label15.Location = new Point(351, 83);
             label15.Margin = new Padding(0);
             label15.Name = "label15";
             label15.Size = new Size(87, 21);
@@ -385,7 +386,7 @@
             // 
             lblUserUpdate.AutoSize = true;
             lblUserUpdate.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblUserUpdate.Location = new Point(682, 55);
+            lblUserUpdate.Location = new Point(682, 40);
             lblUserUpdate.Margin = new Padding(0);
             lblUserUpdate.Name = "lblUserUpdate";
             lblUserUpdate.Size = new Size(120, 21);
@@ -397,7 +398,7 @@
             // 
             lblPlantsFail.AutoSize = true;
             lblPlantsFail.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblPlantsFail.Location = new Point(439, 88);
+            lblPlantsFail.Location = new Point(439, 60);
             lblPlantsFail.Margin = new Padding(0);
             lblPlantsFail.Name = "lblPlantsFail";
             lblPlantsFail.Size = new Size(57, 21);
@@ -409,7 +410,7 @@
             // 
             lblPlantsTotal.AutoSize = true;
             lblPlantsTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblPlantsTotal.Location = new Point(439, 55);
+            lblPlantsTotal.Location = new Point(439, 40);
             lblPlantsTotal.Margin = new Padding(0);
             lblPlantsTotal.Name = "lblPlantsTotal";
             lblPlantsTotal.Size = new Size(68, 21);
@@ -421,7 +422,7 @@
             // 
             lblLastUpdate.AutoSize = true;
             lblLastUpdate.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblLastUpdate.Location = new Point(682, 25);
+            lblLastUpdate.Location = new Point(682, 20);
             lblLastUpdate.Margin = new Padding(0);
             lblLastUpdate.Name = "lblLastUpdate";
             lblLastUpdate.Size = new Size(116, 21);
@@ -433,7 +434,7 @@
             // 
             lblPlantsEfective.AutoSize = true;
             lblPlantsEfective.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblPlantsEfective.Location = new Point(439, 25);
+            lblPlantsEfective.Location = new Point(439, 20);
             lblPlantsEfective.Margin = new Padding(0);
             lblPlantsEfective.Name = "lblPlantsEfective";
             lblPlantsEfective.Size = new Size(91, 21);
@@ -445,7 +446,7 @@
             // 
             lblIdLot.AutoSize = true;
             lblIdLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblIdLot.Location = new Point(78, 55);
+            lblIdLot.Location = new Point(78, 40);
             lblIdLot.Margin = new Padding(0);
             lblIdLot.Name = "lblIdLot";
             lblIdLot.Size = new Size(69, 21);
@@ -457,7 +458,7 @@
             // 
             lblNameLot.AutoSize = true;
             lblNameLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblNameLot.Location = new Point(78, 25);
+            lblNameLot.Location = new Point(78, 20);
             lblNameLot.Margin = new Padding(0);
             lblNameLot.Name = "lblNameLot";
             lblNameLot.Size = new Size(100, 21);
@@ -468,7 +469,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(15, 55);
+            label8.Location = new Point(15, 40);
             label8.Margin = new Padding(0);
             label8.Name = "label8";
             label8.Size = new Size(63, 21);
@@ -479,7 +480,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(7, 25);
+            label7.Location = new Point(7, 20);
             label7.Margin = new Padding(0);
             label7.Name = "label7";
             label7.Size = new Size(71, 21);
@@ -491,7 +492,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 12F);
-            label13.Location = new Point(12, 329);
+            label13.Location = new Point(12, 260);
             label13.Name = "label13";
             label13.Size = new Size(109, 21);
             label13.TabIndex = 61;
@@ -513,7 +514,7 @@
             // 
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon16;
-            btnExcel.Location = new Point(127, 327);
+            btnExcel.Location = new Point(127, 258);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 1, 0);
             btnExcel.Size = new Size(23, 23);
@@ -526,7 +527,7 @@
             btnLoadPlantsLot.Font = new Font("Segoe UI", 12F);
             btnLoadPlantsLot.Image = Properties.Resources.BuscarLupa1;
             btnLoadPlantsLot.ImageAlign = ContentAlignment.MiddleRight;
-            btnLoadPlantsLot.Location = new Point(745, 143);
+            btnLoadPlantsLot.Location = new Point(838, 96);
             btnLoadPlantsLot.Name = "btnLoadPlantsLot";
             btnLoadPlantsLot.Padding = new Padding(0, 0, 4, 0);
             btnLoadPlantsLot.Size = new Size(87, 31);
@@ -541,7 +542,7 @@
             chbShowOrHideColumns.AutoSize = true;
             chbShowOrHideColumns.BackColor = Color.Transparent;
             chbShowOrHideColumns.CheckAlign = ContentAlignment.MiddleRight;
-            chbShowOrHideColumns.Location = new Point(670, 337);
+            chbShowOrHideColumns.Location = new Point(670, 268);
             chbShowOrHideColumns.Margin = new Padding(0);
             chbShowOrHideColumns.Name = "chbShowOrHideColumns";
             chbShowOrHideColumns.Size = new Size(163, 19);
@@ -572,7 +573,7 @@
             dgvPlants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvPlants.EnableHeadersVisualStyles = false;
             dgvPlants.ImeMode = ImeMode.NoControl;
-            dgvPlants.Location = new Point(12, 353);
+            dgvPlants.Location = new Point(12, 284);
             dgvPlants.Name = "dgvPlants";
             dgvPlants.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -586,14 +587,16 @@
             dgvPlants.RowHeadersVisible = false;
             dgvPlants.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPlants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPlants.Size = new Size(819, 194);
+            dgvPlants.Size = new Size(913, 302);
             dgvPlants.TabIndex = 69;
             // 
             // FrmPlantsRowLotView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(843, 559);
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(951, 598);
+            ClientSize = new Size(968, 544);
             Controls.Add(dgvPlants);
             Controls.Add(btnLoadPlantsLot);
             Controls.Add(btnExcel);
@@ -602,8 +605,9 @@
             Controls.Add(bgpLotInfo);
             Controls.Add(gpbFilters);
             Controls.Add(chbShowOrHideColumns);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPlantsRowLotView";
-            Text = "FrmPlantsRowLotView";
+            Text = "Reporte líneas por lote";
             Load += FrmPlantsRowLotView_Load;
             gpbFilters.ResumeLayout(false);
             gpbFilters.PerformLayout();
