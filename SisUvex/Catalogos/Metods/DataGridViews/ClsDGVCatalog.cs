@@ -351,5 +351,20 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 }
             }
         }
-    }
+		public void DeleteRowInDGV(string id)
+		{
+			if (!dtCatalog.Columns.Contains(idColumn))
+				return;
+
+			DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
+
+			foreach (DataRow row in rows)
+			{
+				dtCatalog.Rows.Remove(row);
+			}
+
+			dtCatalog.AcceptChanges();
+		}
+
+	}
 }

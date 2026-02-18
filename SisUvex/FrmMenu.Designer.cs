@@ -105,6 +105,10 @@
 			preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
 			asistenciaEmpaqueToolStripMenuItem1 = new ToolStripMenuItem();
 			mantenimientoToolStripMenuItem = new ToolStripMenuItem();
+			nominaEmpaqueToolStripMenuItem = new ToolStripMenuItem();
+			calculToolStripMenuItem = new ToolStripMenuItem();
+			conceptosSobreSueldoToolStripMenuItem = new ToolStripMenuItem();
+			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
 			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -141,7 +145,6 @@
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			nominaEmpaqueToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -662,6 +665,34 @@
 			mantenimientoToolStripMenuItem.Text = "Mantenimiento";
 			mantenimientoToolStripMenuItem.Click += mantenimientoToolStripMenuItem_Click;
 			// 
+			// nominaEmpaqueToolStripMenuItem
+			// 
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, conceptosSobreSueldoToolStripMenuItem, salarioDiversosToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
+			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
+			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
+			nominaEmpaqueToolStripMenuItem.Click += nominaEmpaqueToolStripMenuItem_Click;
+			// 
+			// calculToolStripMenuItem
+			// 
+			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
+			calculToolStripMenuItem.Size = new Size(200, 22);
+			calculToolStripMenuItem.Text = "Calculo de Nomina";
+			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
+			// 
+			// conceptosSobreSueldoToolStripMenuItem
+			// 
+			conceptosSobreSueldoToolStripMenuItem.Name = "conceptosSobreSueldoToolStripMenuItem";
+			conceptosSobreSueldoToolStripMenuItem.Size = new Size(200, 22);
+			conceptosSobreSueldoToolStripMenuItem.Text = "Conceptos SobreSueldo";
+			conceptosSobreSueldoToolStripMenuItem.Click += conceptosSobreSueldoToolStripMenuItem_Click;
+			// 
+			// salarioDiversosToolStripMenuItem
+			// 
+			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
+			salarioDiversosToolStripMenuItem.Size = new Size(200, 22);
+			salarioDiversosToolStripMenuItem.Text = "Salario Diversos";
+			// 
 			// credencialesToolStripMenuItem
 			// 
 			credencialesToolStripMenuItem.Name = "credencialesToolStripMenuItem";
@@ -755,7 +786,7 @@
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(180, 22);
+			palletsToolStripMenuItem.Size = new Size(135, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -763,7 +794,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(180, 22);
+			manifiestosToolStripMenuItem.Size = new Size(135, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
@@ -913,13 +944,6 @@
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// nominaEmpaqueToolStripMenuItem
-			// 
-			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
-			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
-			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
-			nominaEmpaqueToolStripMenuItem.Click += nominaEmpaqueToolStripMenuItem_Click;
-			// 
 			// FrmMenu
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1060,5 +1084,8 @@
         private ToolStripMenuItem generarReporteDePodaEnExcelToolStripMenuItem;
         private ToolStripMenuItem parámetrosToolStripMenuItem1;
 		private ToolStripMenuItem nominaEmpaqueToolStripMenuItem;
+		private ToolStripMenuItem calculToolStripMenuItem;
+		private ToolStripMenuItem conceptosSobreSueldoToolStripMenuItem;
+		private ToolStripMenuItem salarioDiversosToolStripMenuItem;
 	}
 }

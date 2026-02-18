@@ -589,8 +589,20 @@ namespace SisUvex
 
 		private void nominaEmpaqueToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+
+		}
+
+		private void calculToolStripMenuItem_Click(object sender, EventArgs e)
+		{
 			Nomina.Nom_semAutomatizada.FrmSemiAutomatedPayroll cat = new();
-			cat.WindowState= FormWindowState.Maximized;
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Conceptos_Ingresos_Diversos.FrmIncomeConcepts cat = new();
+			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
 	}
