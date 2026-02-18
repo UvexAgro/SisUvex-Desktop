@@ -71,6 +71,8 @@
             btnLoadPlantsLot = new Button();
             chbShowOrHideColumns = new CheckBox();
             dgvPlants = new DataGridView();
+            chbDgvCrop = new CheckBox();
+            chbDgvVariety = new CheckBox();
             gpbFilters.SuspendLayout();
             bgpLotInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlants).BeginInit();
@@ -492,7 +494,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 12F);
-            label13.Location = new Point(12, 260);
+            label13.Location = new Point(12, 254);
             label13.Name = "label13";
             label13.Size = new Size(109, 21);
             label13.TabIndex = 61;
@@ -514,7 +516,7 @@
             // 
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon16;
-            btnExcel.Location = new Point(127, 258);
+            btnExcel.Location = new Point(127, 253);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 1, 0);
             btnExcel.Size = new Size(23, 23);
@@ -542,7 +544,7 @@
             chbShowOrHideColumns.AutoSize = true;
             chbShowOrHideColumns.BackColor = Color.Transparent;
             chbShowOrHideColumns.CheckAlign = ContentAlignment.MiddleRight;
-            chbShowOrHideColumns.Location = new Point(670, 268);
+            chbShowOrHideColumns.Location = new Point(670, 261);
             chbShowOrHideColumns.Margin = new Padding(0);
             chbShowOrHideColumns.Name = "chbShowOrHideColumns";
             chbShowOrHideColumns.Size = new Size(163, 19);
@@ -573,7 +575,7 @@
             dgvPlants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvPlants.EnableHeadersVisualStyles = false;
             dgvPlants.ImeMode = ImeMode.NoControl;
-            dgvPlants.Location = new Point(12, 284);
+            dgvPlants.Location = new Point(12, 278);
             dgvPlants.Name = "dgvPlants";
             dgvPlants.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -590,13 +592,45 @@
             dgvPlants.Size = new Size(913, 302);
             dgvPlants.TabIndex = 69;
             // 
+            // chbDgvCrop
+            // 
+            chbDgvCrop.Appearance = Appearance.Button;
+            chbDgvCrop.AutoSize = true;
+            chbDgvCrop.BackColor = Color.Transparent;
+            chbDgvCrop.CheckAlign = ContentAlignment.MiddleRight;
+            chbDgvCrop.Location = new Point(151, 252);
+            chbDgvCrop.Margin = new Padding(0);
+            chbDgvCrop.Name = "chbDgvCrop";
+            chbDgvCrop.Size = new Size(60, 25);
+            chbDgvCrop.TabIndex = 70;
+            chbDgvCrop.Text = "Cultivos";
+            chbDgvCrop.TextAlign = ContentAlignment.TopRight;
+            chbDgvCrop.UseVisualStyleBackColor = false;
+            // 
+            // chbDgvVariety
+            // 
+            chbDgvVariety.Appearance = Appearance.Button;
+            chbDgvVariety.AutoSize = true;
+            chbDgvVariety.BackColor = Color.Transparent;
+            chbDgvVariety.CheckAlign = ContentAlignment.MiddleRight;
+            chbDgvVariety.Location = new Point(211, 252);
+            chbDgvVariety.Margin = new Padding(0);
+            chbDgvVariety.Name = "chbDgvVariety";
+            chbDgvVariety.Size = new Size(73, 25);
+            chbDgvVariety.TabIndex = 71;
+            chbDgvVariety.Text = "Variedades";
+            chbDgvVariety.TextAlign = ContentAlignment.TopRight;
+            chbDgvVariety.UseVisualStyleBackColor = false;
+            // 
             // FrmPlantsRowLotView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            AutoScrollMinSize = new Size(951, 598);
-            ClientSize = new Size(968, 544);
+            AutoScrollMinSize = new Size(930, 598);
+            ClientSize = new Size(954, 544);
+            Controls.Add(chbDgvVariety);
+            Controls.Add(chbDgvCrop);
             Controls.Add(dgvPlants);
             Controls.Add(btnLoadPlantsLot);
             Controls.Add(btnExcel);
@@ -668,5 +702,7 @@
         private Label label15;
         public CheckBox chbShowOrHideColumns;
         public DataGridView dgvPlants;
+        public CheckBox chbDgvCrop;
+        public CheckBox chbDgvVariety;
     }
 }

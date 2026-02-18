@@ -1,4 +1,4 @@
-﻿using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
 using System.Configuration;
@@ -13,7 +13,10 @@ namespace SisUvex.Grow.PlantsRowLot
         public FrmPlantsRowLotView frm;
         DataView? dvLotsList;
         DataTable? dtCboLot;
-        string cIdVariety = Variety.ColumnId, cVariety = Variety.ColumnName, cIdFormation = "idFormation", cFormation = "Tipo Formación", cIdRootStock = "idPatron", cRootStock = "Patron", cUserUpdate = "Modificó", cDateUpdate = "Última modificación", cIdLot = Lot.ColumnId, cLotName = Lot.ColumnName;
+        DataView? _dvPlants;
+        string _loadedCropId = "";
+        string _loadedVarietyId = "";
+        const string cIdVariety = Variety.ColumnId, cVariety = Variety.ColumnName, cIdFormation = "idFormation", cFormation = "Tipo Formación", cIdRootStock = "idPatron", cRootStock = "Patron", cUserUpdate = "Modificó", cDateUpdate = "Última modificación", cIdLot = Lot.ColumnId, cLotName = Lot.ColumnName, cIdCultivo = Crop.ColumnId;
         public void BeginFormCat()
         {
             frm.WindowState = FormWindowState.Maximized;
@@ -41,6 +44,13 @@ namespace SisUvex.Grow.PlantsRowLot
             frm.cboVariety.SelectedValueChanged += (s, e) => SetDtLots();
             frm.cboFarm.SelectedValueChanged += (s, e) => SetDtLots();
             frm.chbLotActives.CheckedChanged += (s, e) => SetDtLots();
+
+            frm.chbDgvCrop.Enabled = false;
+            frm.chbDgvVariety.Enabled = false;
+            frm.chbDgvCrop.Checked = false;
+            frm.chbDgvVariety.Checked = false;
+            frm.chbDgvCrop.CheckedChanged += (s, e) => ApplyDgvPlantsFilter();
+            frm.chbDgvVariety.CheckedChanged += (s, e) => ApplyDgvPlantsFilter();
         }
 
         private void CboLoadActivesLot(ComboBox cboLot, string LotCatalogName)
@@ -133,11 +143,48 @@ namespace SisUvex.Grow.PlantsRowLot
 
         private void SetDgvLotPlants(string idLot)
         {
-            DataTable? dtLabels = ClsQuerysDB.GetDataTable(GetQueryPlantsLot(idLot));
+            DataTable? dt = ClsQuerysDB.GetDataTable(GetQueryPlantsLot(idLot));
+            if (dt == null)
+            {
+                frm.dgvPlants.DataSource = null;
+                _dvPlants = null;
+                return;
+            }
 
-            frm.dgvPlants.DataSource = dtLabels;
+            _dvPlants = dt.DefaultView;
+            frm.dgvPlants.DataSource = _dvPlants;
 
+            _loadedCropId = frm.cboCrop.SelectedValue?.ToString() ?? "";
+            _loadedVarietyId = frm.cboVariety.SelectedValue?.ToString() ?? "";
+
+            bool multipleCrops = dt.AsEnumerable().Select(r => r[cIdCultivo]?.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().Count() > 1;
+            bool multipleVarieties = dt.AsEnumerable().Select(r => r[cIdVariety]?.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().Count() > 1;
+
+            frm.chbDgvCrop.Enabled = multipleCrops && frm.cboCrop.SelectedIndex > 0;
+            frm.chbDgvVariety.Enabled = multipleVarieties && frm.cboVariety.SelectedIndex > 0;
+            frm.chbDgvCrop.Checked = false;
+            frm.chbDgvVariety.Checked = false;
+
+            ApplyDgvPlantsFilter();
             ShowOrHideColumns(frm.chbShowOrHideColumns.Checked);
+        }
+
+        private void ApplyDgvPlantsFilter()
+        {
+            if (_dvPlants == null) return;
+
+            var parts = new List<string>();
+            if (!frm.chbDgvCrop.Checked && !string.IsNullOrWhiteSpace(_loadedCropId))
+            {
+                string safe = _loadedCropId.Replace("'", "''");
+                parts.Add($"{cIdCultivo} = '{safe}'");
+            }
+            if (!frm.chbDgvVariety.Checked && !string.IsNullOrWhiteSpace(_loadedVarietyId))
+            {
+                string safe = _loadedVarietyId.Replace("'", "''");
+                parts.Add($"{cIdVariety} = '{safe}'");
+            }
+            _dvPlants.RowFilter = parts.Count > 0 ? string.Join(" AND ", parts) : "";
         }
 
         private string GetQueryTotalLot(string idLot)
@@ -208,13 +255,15 @@ namespace SisUvex.Grow.PlantsRowLot
 	                        ISNULL(grow.userUpdate, grow.userCreate) AS [{cUserUpdate}],
 	                        ISNULL(grow.d_update, grow.d_create) AS [{cDateUpdate}],
 	                        grow.id_lot AS [{cIdLot}],
-	                        lot.v_nameLot AS [{cLotName}]
-
+	                        lot.v_nameLot AS [{cLotName}],
+	                        vrt.id_crop AS [{cIdCultivo}],
+	                        crop.v_nameCrop AS [Cultivo]
                         FROM Grow_PlantsRowLot grow
-                        left JOIN Pack_Lot lot ON lot.id_lot = grow.id_lot AND lot.id_variety = grow.id_variety
-                        left JOIN Pack_Variety vrt ON vrt.id_variety = grow.id_variety
-                        LEFT JOIN Grow_FormationType frm ON frm.id_formation = grow.id_formation
-                        LEFT JOIN Grow_Rootstock rot ON rot.id_rootstock = grow.id_rootstock
+                            left JOIN Pack_Lot lot ON lot.id_lot = grow.id_lot AND lot.id_variety = grow.id_variety
+                            left JOIN Pack_Variety vrt ON vrt.id_variety = grow.id_variety
+                            LEFT JOIN Grow_FormationType frm ON frm.id_formation = grow.id_formation
+                            LEFT JOIN Grow_Rootstock rot ON rot.id_rootstock = grow.id_rootstock
+                            LEFT JOIN Pack_Crop crop ON crop.id_crop = vrt.id_crop 
                         WHERE
 	                        grow.id_lot = '{idLot}'
                         ORDER BY grow.id_lot, grow.n_lotLine";
