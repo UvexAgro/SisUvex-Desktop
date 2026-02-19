@@ -30,6 +30,8 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPlantsRowLotView));
             label9 = new Label();
             label5 = new Label();
@@ -73,9 +75,11 @@
             dgvPlants = new DataGridView();
             chbDgvCrop = new CheckBox();
             chbDgvVariety = new CheckBox();
+            dgvLotTotals = new DataGridView();
             gpbFilters.SuspendLayout();
             bgpLotInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlants).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLotTotals).BeginInit();
             SuspendLayout();
             // 
             // label9
@@ -128,7 +132,7 @@
             cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLot.FlatStyle = FlatStyle.System;
             cboLot.FormattingEnabled = true;
-            cboLot.Location = new Point(391, 59);
+            cboLot.Location = new Point(391, 53);
             cboLot.Margin = new Padding(0, 3, 3, 3);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(350, 29);
@@ -137,7 +141,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(351, 63);
+            label1.Location = new Point(351, 57);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(40, 21);
@@ -148,7 +152,7 @@
             // 
             cboFarm.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFarm.FormattingEnabled = true;
-            cboFarm.Location = new Point(72, 59);
+            cboFarm.Location = new Point(72, 53);
             cboFarm.Margin = new Padding(0, 3, 3, 3);
             cboFarm.Name = "cboFarm";
             cboFarm.Size = new Size(245, 29);
@@ -158,7 +162,7 @@
             // lblField
             // 
             lblField.AutoSize = true;
-            lblField.Location = new Point(12, 63);
+            lblField.Location = new Point(12, 57);
             lblField.Margin = new Padding(0);
             lblField.Name = "lblField";
             lblField.Size = new Size(60, 21);
@@ -169,7 +173,7 @@
             // 
             cboVariety.DropDownStyle = ComboBoxStyle.DropDownList;
             cboVariety.FormattingEnabled = true;
-            cboVariety.Location = new Point(391, 21);
+            cboVariety.Location = new Point(391, 15);
             cboVariety.Margin = new Padding(0, 3, 3, 3);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(350, 29);
@@ -178,7 +182,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(320, 25);
+            label10.Location = new Point(320, 19);
             label10.Margin = new Padding(0);
             label10.Name = "label10";
             label10.Size = new Size(71, 21);
@@ -189,7 +193,7 @@
             // 
             cboCrop.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCrop.FormattingEnabled = true;
-            cboCrop.Location = new Point(72, 22);
+            cboCrop.Location = new Point(72, 16);
             cboCrop.Margin = new Padding(0, 3, 3, 3);
             cboCrop.Name = "cboCrop";
             cboCrop.Size = new Size(245, 29);
@@ -198,7 +202,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(13, 26);
+            label11.Location = new Point(13, 20);
             label11.Margin = new Padding(0);
             label11.Name = "label11";
             label11.Size = new Size(59, 21);
@@ -234,7 +238,7 @@
             gpbFilters.Font = new Font("Segoe UI", 12F);
             gpbFilters.Location = new Point(12, 37);
             gpbFilters.Name = "gpbFilters";
-            gpbFilters.Size = new Size(820, 100);
+            gpbFilters.Size = new Size(820, 94);
             gpbFilters.TabIndex = 50;
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
@@ -245,7 +249,7 @@
             chbLotActives.BackgroundImage = Properties.Resources.Imagen6;
             chbLotActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbLotActives.Font = new Font("Segoe UI", 10F);
-            chbLotActives.Location = new Point(773, 58);
+            chbLotActives.Location = new Point(773, 52);
             chbLotActives.Name = "chbLotActives";
             chbLotActives.Size = new Size(39, 31);
             chbLotActives.TabIndex = 66;
@@ -258,7 +262,7 @@
             chbVarietyActives.BackgroundImage = Properties.Resources.Imagen6;
             chbVarietyActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbVarietyActives.Font = new Font("Segoe UI", 10F);
-            chbVarietyActives.Location = new Point(773, 20);
+            chbVarietyActives.Location = new Point(773, 14);
             chbVarietyActives.Name = "chbVarietyActives";
             chbVarietyActives.Size = new Size(39, 31);
             chbVarietyActives.TabIndex = 65;
@@ -269,7 +273,7 @@
             // 
             button1.Font = new Font("Segoe UI", 12F);
             button1.Image = Properties.Resources.BuscarLupa1;
-            button1.Location = new Point(742, 20);
+            button1.Location = new Point(742, 14);
             button1.Name = "button1";
             button1.Size = new Size(31, 31);
             button1.TabIndex = 64;
@@ -279,7 +283,7 @@
             // 
             button2.Font = new Font("Segoe UI", 12F);
             button2.Image = Properties.Resources.BuscarLupa1;
-            button2.Location = new Point(742, 58);
+            button2.Location = new Point(742, 52);
             button2.Name = "button2";
             button2.Size = new Size(31, 31);
             button2.TabIndex = 63;
@@ -308,7 +312,7 @@
             bgpLotInfo.Controls.Add(label4);
             bgpLotInfo.Controls.Add(label5);
             bgpLotInfo.Font = new Font("Segoe UI", 12F);
-            bgpLotInfo.Location = new Point(12, 137);
+            bgpLotInfo.Location = new Point(12, 131);
             bgpLotInfo.Name = "bgpLotInfo";
             bgpLotInfo.Size = new Size(820, 115);
             bgpLotInfo.TabIndex = 51;
@@ -494,7 +498,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 12F);
-            label13.Location = new Point(12, 254);
+            label13.Location = new Point(7, 374);
             label13.Name = "label13";
             label13.Size = new Size(109, 21);
             label13.TabIndex = 61;
@@ -516,7 +520,7 @@
             // 
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon16;
-            btnExcel.Location = new Point(127, 253);
+            btnExcel.Location = new Point(127, 373);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 1, 0);
             btnExcel.Size = new Size(23, 23);
@@ -529,7 +533,7 @@
             btnLoadPlantsLot.Font = new Font("Segoe UI", 12F);
             btnLoadPlantsLot.Image = Properties.Resources.BuscarLupa1;
             btnLoadPlantsLot.ImageAlign = ContentAlignment.MiddleRight;
-            btnLoadPlantsLot.Location = new Point(838, 96);
+            btnLoadPlantsLot.Location = new Point(838, 89);
             btnLoadPlantsLot.Name = "btnLoadPlantsLot";
             btnLoadPlantsLot.Padding = new Padding(0, 0, 4, 0);
             btnLoadPlantsLot.Size = new Size(87, 31);
@@ -544,7 +548,7 @@
             chbShowOrHideColumns.AutoSize = true;
             chbShowOrHideColumns.BackColor = Color.Transparent;
             chbShowOrHideColumns.CheckAlign = ContentAlignment.MiddleRight;
-            chbShowOrHideColumns.Location = new Point(670, 261);
+            chbShowOrHideColumns.Location = new Point(762, 381);
             chbShowOrHideColumns.Margin = new Padding(0);
             chbShowOrHideColumns.Name = "chbShowOrHideColumns";
             chbShowOrHideColumns.Size = new Size(163, 19);
@@ -575,7 +579,7 @@
             dgvPlants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvPlants.EnableHeadersVisualStyles = false;
             dgvPlants.ImeMode = ImeMode.NoControl;
-            dgvPlants.Location = new Point(12, 278);
+            dgvPlants.Location = new Point(12, 398);
             dgvPlants.Name = "dgvPlants";
             dgvPlants.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -589,7 +593,7 @@
             dgvPlants.RowHeadersVisible = false;
             dgvPlants.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPlants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPlants.Size = new Size(913, 302);
+            dgvPlants.Size = new Size(913, 182);
             dgvPlants.TabIndex = 69;
             // 
             // chbDgvCrop
@@ -598,7 +602,7 @@
             chbDgvCrop.AutoSize = true;
             chbDgvCrop.BackColor = Color.Transparent;
             chbDgvCrop.CheckAlign = ContentAlignment.MiddleRight;
-            chbDgvCrop.Location = new Point(151, 252);
+            chbDgvCrop.Location = new Point(151, 372);
             chbDgvCrop.Margin = new Padding(0);
             chbDgvCrop.Name = "chbDgvCrop";
             chbDgvCrop.Size = new Size(60, 25);
@@ -613,7 +617,7 @@
             chbDgvVariety.AutoSize = true;
             chbDgvVariety.BackColor = Color.Transparent;
             chbDgvVariety.CheckAlign = ContentAlignment.MiddleRight;
-            chbDgvVariety.Location = new Point(211, 252);
+            chbDgvVariety.Location = new Point(211, 372);
             chbDgvVariety.Margin = new Padding(0);
             chbDgvVariety.Name = "chbDgvVariety";
             chbDgvVariety.Size = new Size(73, 25);
@@ -622,6 +626,43 @@
             chbDgvVariety.TextAlign = ContentAlignment.TopRight;
             chbDgvVariety.UseVisualStyleBackColor = false;
             // 
+            // dgvLotTotals
+            // 
+            dgvLotTotals.AllowUserToAddRows = false;
+            dgvLotTotals.AllowUserToDeleteRows = false;
+            dgvLotTotals.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvLotTotals.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvLotTotals.BackgroundColor = SystemColors.ButtonFace;
+            dgvLotTotals.BorderStyle = BorderStyle.Fixed3D;
+            dgvLotTotals.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvLotTotals.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dgvLotTotals.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvLotTotals.EnableHeadersVisualStyles = false;
+            dgvLotTotals.ImeMode = ImeMode.NoControl;
+            dgvLotTotals.Location = new Point(12, 245);
+            dgvLotTotals.Name = "dgvLotTotals";
+            dgvLotTotals.ReadOnly = true;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvLotTotals.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dgvLotTotals.RowHeadersVisible = false;
+            dgvLotTotals.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvLotTotals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvLotTotals.Size = new Size(913, 126);
+            dgvLotTotals.TabIndex = 72;
+            // 
             // FrmPlantsRowLotView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -629,6 +670,7 @@
             AutoScroll = true;
             AutoScrollMinSize = new Size(930, 598);
             ClientSize = new Size(954, 544);
+            Controls.Add(dgvLotTotals);
             Controls.Add(chbDgvVariety);
             Controls.Add(chbDgvCrop);
             Controls.Add(dgvPlants);
@@ -648,6 +690,7 @@
             bgpLotInfo.ResumeLayout(false);
             bgpLotInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlants).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLotTotals).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -704,5 +747,6 @@
         public DataGridView dgvPlants;
         public CheckBox chbDgvCrop;
         public CheckBox chbDgvVariety;
+        public DataGridView dgvLotTotals;
     }
 }

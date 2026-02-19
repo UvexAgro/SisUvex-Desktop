@@ -16,7 +16,7 @@ namespace SisUvex.Grow.PlantsRowLot
         DataView? _dvPlants;
         string _loadedCropId = "";
         string _loadedVarietyId = "";
-        const string cIdVariety = Variety.ColumnId, cVariety = Variety.ColumnName, cIdFormation = "idFormation", cFormation = "Tipo Formación", cIdRootStock = "idPatron", cRootStock = "Patron", cUserUpdate = "Modificó", cDateUpdate = "Última modificación", cIdLot = Lot.ColumnId, cLotName = Lot.ColumnName, cIdCultivo = Crop.ColumnId;
+        const string cIdVariety = Variety.ColumnId, cVariety = Variety.ColumnName, cIdFormation = "idFormation", cFormation = "Tipo Formación", cIdRootStock = "idPatron", cRootStock = "Patron", cUserUpdate = "Modificó", cDateUpdate = "Última modificación", cIdLot = Lot.ColumnId, cLotName = Lot.ColumnName, cIdCultivo = Crop.ColumnId, cCultivo = Crop.ColumnName;
         public void BeginFormCat()
         {
             frm.WindowState = FormWindowState.Maximized;
@@ -111,6 +111,8 @@ namespace SisUvex.Grow.PlantsRowLot
             string idLot = frm.cboLot.SelectedValue?.ToString() ?? string.Empty;
 
             SetLabelsLotInfo(idLot);
+
+            frm.dgvLotTotals.DataSource = ClsQuerysDB.GetDataTable(GetQueryTotalLot2(idLot));
 
             SetDgvLotPlants(idLot);
         }
@@ -213,6 +215,39 @@ namespace SisUvex.Grow.PlantsRowLot
 
                         GROUP BY T.id_lot, U.LastUser;";
         }
+        private string GetQueryTotalLot2(string idLot)
+        {
+            return @$"SELECT
+                            --T.id_lot                      AS [{cIdLot}],
+                            crop.v_nameCrop                 AS [{cCultivo}],
+                            vrt.v_nameComercial             AS [{cVariety}],
+                            MIN(T.n_lotLine)                AS [Inicio],
+                            MAX(T.n_lotLine)                AS [Final],
+                            SUM(T.n_plannedPlants)          AS [Totales],
+                            SUM(T.n_actualPlants)           AS [Activas],
+                            SUM(T.n_failedPlants)           AS [Fallas],
+                            SUM(T.n_formationStagePlants)   AS [Formación],
+                            FORMAT(MAX(ISNULL(T.d_update, T.d_create)), 'dd-MM-yyyy') AS [U. Actualización],
+                            U.LastUser
+                        FROM Grow_PlantsRowLot T
+                            LEFT JOIN Pack_Variety vrt ON vrt.id_variety = T.id_variety
+                            LEFT JOIN Pack_Crop crop ON crop.id_crop = vrt.id_crop
+
+                        --
+                        OUTER APPLY
+                        (
+                            SELECT TOP 1 ISNULL(userUpdate, userCreate) AS LastUser
+                            FROM Grow_PlantsRowLot
+                            WHERE id_lot = T.id_lot
+                            ORDER BY ISNULL(d_update, d_create) DESC
+                        ) U
+
+                        WHERE T.id_lot = '{idLot}'
+
+                        GROUP BY T.id_lot, U.LastUser, crop.v_nameCrop, vrt.v_nameComercial
+                        
+                        ORDER BY Inicio;";
+        }
         private List<string> ListColumnsToHide()
         {
             List<string> values = new List<string>();
@@ -227,6 +262,8 @@ namespace SisUvex.Grow.PlantsRowLot
             values.Add(cDateUpdate);
             values.Add(cIdLot);
             values.Add(cLotName);
+            values.Add(cIdCultivo);
+            values.Add(cCultivo);
 
             return values;
         }
@@ -257,7 +294,7 @@ namespace SisUvex.Grow.PlantsRowLot
 	                        grow.id_lot AS [{cIdLot}],
 	                        lot.v_nameLot AS [{cLotName}],
 	                        vrt.id_crop AS [{cIdCultivo}],
-	                        crop.v_nameCrop AS [Cultivo]
+	                        crop.v_nameCrop AS [{cCultivo}]
                         FROM Grow_PlantsRowLot grow
                             left JOIN Pack_Lot lot ON lot.id_lot = grow.id_lot AND lot.id_variety = grow.id_variety
                             left JOIN Pack_Variety vrt ON vrt.id_variety = grow.id_variety
