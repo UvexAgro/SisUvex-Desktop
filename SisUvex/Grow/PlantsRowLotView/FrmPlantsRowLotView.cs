@@ -26,11 +26,6 @@ namespace SisUvex.Grow.PlantsRowLot
             cls.BeginFormCat();
         }
 
-        private void cboField_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnLoadPlantsLot_Click(object sender, EventArgs e)
         {
             cls.BtnLoadPlantsLot();
@@ -45,5 +40,7 @@ namespace SisUvex.Grow.PlantsRowLot
         {
             MessageBox.Show("Próximamente...", "A te la creiste");
         }
+
+
     }
 }

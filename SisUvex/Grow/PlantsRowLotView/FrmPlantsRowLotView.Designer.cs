@@ -157,7 +157,6 @@
             cboFarm.Name = "cboFarm";
             cboFarm.Size = new Size(245, 29);
             cboFarm.TabIndex = 24;
-            cboFarm.SelectedIndexChanged += cboField_SelectedIndexChanged;
             // 
             // lblField
             // 
@@ -520,10 +519,10 @@
             // 
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon16;
-            btnExcel.Location = new Point(127, 373);
+            btnExcel.Location = new Point(126, 372);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 1, 0);
-            btnExcel.Size = new Size(23, 23);
+            btnExcel.Size = new Size(25, 25);
             btnExcel.TabIndex = 62;
             btnExcel.UseVisualStyleBackColor = true;
             btnExcel.Click += btnExcel_Click;
@@ -593,7 +592,7 @@
             dgvPlants.RowHeadersVisible = false;
             dgvPlants.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPlants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPlants.Size = new Size(913, 182);
+            dgvPlants.Size = new Size(896, 182);
             dgvPlants.TabIndex = 69;
             // 
             // chbDgvCrop
