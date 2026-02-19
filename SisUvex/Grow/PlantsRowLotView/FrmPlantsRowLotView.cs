@@ -16,12 +16,13 @@ namespace SisUvex.Grow.PlantsRowLot
         public FrmPlantsRowLotView()
         {
             InitializeComponent();
+
+            cls = new();
+            cls.frm = this;
         }
 
         private void FrmPlantsRowLotView_Load(object sender, EventArgs e)
         {
-            cls = new();
-            cls.frm = this;
             cls.BeginFormCat();
         }
 
