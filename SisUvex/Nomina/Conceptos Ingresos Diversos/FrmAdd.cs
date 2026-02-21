@@ -13,6 +13,7 @@ using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.Metods.TextBoxes;
 
 namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
 {
@@ -23,7 +24,10 @@ namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
 		public FrmAdd()
 		{
 			InitializeComponent();
+			ClsTextBoxes.TxbApplyKeyPressEventNumericWithLimit(txbMonto, 9, 2);
+			ClsTextBoxes.TxbApplyKeyPressEventNumericWithLimit(txbHoras, 9, 2);
 		}
+		
 
 		private void FrmAdd_Load(object sender, EventArgs e)
 		{
@@ -36,7 +40,12 @@ namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-	     this.Close();
+			this.Close();
+		}
+
+		private void txbMonto_TextChanged(object sender, EventArgs e)
+		{
+			
 		}
 	}
 }

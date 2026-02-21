@@ -32,6 +32,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			SetTxbReferencia();
 			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLot);
 			AddControlsToList();
+			ClsComboBoxes.CboLoadActives(frm.cboLineas, ClsObject.ProductionLine.Cbo);
+			frm.cboLineas.SelectedIndexChanged += (s, e) => dgvFiltrarBanda();
 		}
 		public void SetTxbReferencia()
 		{
@@ -130,10 +132,34 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 						sw.WriteLine(string.Join(separador, campos));
 					}
 				}
+			}
 
-				MessageBox.Show($"CSV generado con separador '{separador}' ");
+			if (!File.Exists(sfd.FileName))
+			{
+				MessageBox.Show($"El Archivo no se pudo Guardar {sfd.FileName}");
+				return;
+			}
+
+			//Mensaje de todo bien y abrir archivo
+			DialogResult result = MessageBox.Show(
+				"Reporte en CSV generado correctamente.\n\n" +
+				"¿Deseas abrir el archivo?",
+				"Reporte generado",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information
+			);
+
+			if (result == DialogResult.Yes)
+			{
+				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "notepad.exe",
+					Arguments = $"\"{sfd.FileName}\"",
+					UseShellExecute = true
+				});
 			}
 		}
+
 
 		public void ExportarExcel(DataTable dt)
 		{
@@ -154,10 +180,49 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				// Ajustar tamaño columnas
 				hoja.Columns().AdjustToContents();
 
+
+				if (IsFileLocked(sfd.FileName))
+				{
+					MessageBox.Show(
+						$"El archivo '{sfd.FileName}' está abierto.\n\n" +
+						"Ciérralo antes de generar el reporte.",
+						"Archivo en uso",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+					return;
+				}
+
+
 				wb.SaveAs(sfd.FileName);
 			}
+			if (sfd.FileName == null)
+				return;
 
-			MessageBox.Show("Excel generado correctamente");
+			
+			if (!File.Exists(sfd.FileName))
+			{
+				MessageBox.Show($"El Archivo no se pudo Guardar {sfd.FileName}");
+				return;
+			}
+
+			//Mensaje de todo bien y abrir archivo
+			DialogResult result = MessageBox.Show(
+				"Reporte en excel generado correctamente.\n\n" +
+				"¿Deseas abrir el archivo?",
+				"Reporte generado",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information
+			);
+
+			if (result == DialogResult.Yes)
+			{
+				System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = sfd.FileName,
+					UseShellExecute = true
+				});
+			}
 		}
 
 
@@ -165,35 +230,37 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
 			string query = $@"SELECT
-								r.Fecha,
-								r.IdEmpleado,
-								r.NombreCompleto,
-								r.CodigoActividad,
-								t.v_descripcion_tab AS NombreActividad,   
-								r.LineaProduccion,
-								r.SueldoTotal
+							r.Fecha,
+							r.IdEmpleado,
+							CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreCompleto,
+							r.CodigoActividad,
+							t.v_descripcion_tab AS NombreActividad,
+							r.LineaProduccion,
+							r.SueldoTotal
 							FROM (
-								SELECT DISTINCT
-									al.d_attendence      AS Fecha,
-									al.id_employee       AS IdEmpleado,
-									al.c_codigo_tab      AS CodigoActividad,
-									al.id_productionLine AS LineaProduccion
-								FROM dbo.Nom_AttendenceList al
-								WHERE al.d_attendence = '{fecha}'
-							) x
+							SELECT DISTINCT
+							al.d_attendence      AS Fecha,
+							al.id_employee       AS IdEmpleado,
+							al.c_codigo_tab      AS CodigoActividad,
+							al.id_productionLine AS LineaProduccion
+							FROM dbo.Nom_AttendenceList al
+							WHERE al.d_attendence = '20250219'
+								) x
 							CROSS APPLY dbo.fn_salary_tab(
-								x.Fecha,
-								CAST(x.CodigoActividad AS VARCHAR(20)),
-								x.LineaProduccion,
-								x.IdEmpleado,
-								'2'
+							x.Fecha,
+							CAST(x.CodigoActividad AS VARCHAR(20)),
+							x.LineaProduccion,
+							x.IdEmpleado,
+							'2'
 							) r
 							LEFT JOIN dbo.Nom_Tabulador t
-								ON CAST(t.c_codigo_tab AS VARCHAR(20)) = r.CodigoActividad
+							ON CAST(t.c_codigo_tab AS VARCHAR(20)) = r.CodigoActividad
+							LEFT JOIN dbo.Nom_Employees e
+							ON e.id_employee = r.IdEmpleado
 							ORDER BY
-								r.CodigoActividad,
-								r.LineaProduccion,
-								r.IdEmpleado;";
+							e.v_lastNamePat,
+							e.v_lastNameMat,
+							e.v_name ;";
 			return query;
 		}
 		public void BtnCargarDatos()
@@ -365,7 +432,41 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return true;
 		}
+		private void dgvFiltrarBanda()
+		{
+			if (dtNomina == null || dtNomina.Rows.Count < 1 || !dtNomina.Columns.Contains("LineaProduccion"))
+				{ return; }
 
+			string idBanda;
+			if (frm.cboLineas.SelectedIndex < 1)
+			{
+				dtNomina.DefaultView.RowFilter = null;
+				return;
+			}
+
+			idBanda = frm.cboLineas.SelectedValue.ToString();
+
+			dtNomina.DefaultView.RowFilter = $" LineaProduccion = '{idBanda}' ";
+		}
+		private bool IsFileLocked(string filePath)
+		{
+			if (!File.Exists(filePath))
+				return false;
+
+			try
+			{
+				using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+				{
+					stream.Close();
+				}
+			}
+			catch (IOException)
+			{
+				return true;
+			}
+
+			return false;
+		}
 
 	}
 

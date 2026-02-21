@@ -132,6 +132,13 @@ namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
 			if (!controlList.ValidateControls())
 				return;
 
+			if (!string.IsNullOrEmpty(_FrmAdd.txbMonto.Text) &&
+		!string.IsNullOrEmpty(_FrmAdd.txbHoras.Text))
+			{
+				MessageBox.Show("Solo puede capturar Monto o Horas Extras, no ambos");
+				return;
+			}
+
 			if (IsAddOrModify)
 			{
 				AddProcedure();

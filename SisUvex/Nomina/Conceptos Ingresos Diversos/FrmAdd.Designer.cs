@@ -119,6 +119,7 @@
 			txbMonto.Name = "txbMonto";
 			txbMonto.Size = new Size(54, 29);
 			txbMonto.TabIndex = 98;
+			txbMonto.TextChanged += txbMonto_TextChanged;
 			// 
 			// txbHoras
 			// 

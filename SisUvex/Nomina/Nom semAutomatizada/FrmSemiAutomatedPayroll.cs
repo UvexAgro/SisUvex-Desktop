@@ -64,6 +64,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			cls.EjecutarCalculoProduccion();
 		}
 
+		
 	}
 }
 

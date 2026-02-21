@@ -41,6 +41,8 @@
 			btncargar = new Button();
 			dgvEmployee = new DataGridView();
 			btnCalcularLibra = new Button();
+			cboLineas = new ComboBox();
+			lblLineas = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			SuspendLayout();
 			// 
@@ -154,7 +156,7 @@
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
-			dgvEmployee.Location = new Point(12, 377);
+			dgvEmployee.Location = new Point(27, 448);
 			dgvEmployee.Name = "dgvEmployee";
 			dgvEmployee.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -168,7 +170,7 @@
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEmployee.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvEmployee.Size = new Size(858, 271);
+			dgvEmployee.Size = new Size(858, 355);
 			dgvEmployee.TabIndex = 17;
 			// 
 			// btnCalcularLibra
@@ -182,11 +184,32 @@
 			btnCalcularLibra.UseVisualStyleBackColor = true;
 			btnCalcularLibra.Click += btnCalcularLibra_Click;
 			// 
+			// cboLineas
+			// 
+			cboLineas.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboLineas.FormattingEnabled = true;
+			cboLineas.Location = new Point(680, 404);
+			cboLineas.Name = "cboLineas";
+			cboLineas.Size = new Size(131, 23);
+			cboLineas.TabIndex = 19;
+			// 
+			// lblLineas
+			// 
+			lblLineas.AutoSize = true;
+			lblLineas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblLineas.Location = new Point(611, 404);
+			lblLineas.Name = "lblLineas";
+			lblLineas.Size = new Size(63, 21);
+			lblLineas.TabIndex = 20;
+			lblLineas.Text = "Bandas:";
+			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(922, 660);
+			ClientSize = new Size(922, 815);
+			Controls.Add(lblLineas);
+			Controls.Add(cboLineas);
 			Controls.Add(btnCalcularLibra);
 			Controls.Add(dgvEmployee);
 			Controls.Add(btncargar);
@@ -219,5 +242,7 @@
 		public ComboBox cboLote;
 		public DataGridView dgvEmployee;
 		private Button btnCalcularLibra;
+		private Label lblLineas;
+		public ComboBox cboLineas;
 	}
 }
