@@ -692,6 +692,7 @@
 			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
 			salarioDiversosToolStripMenuItem.Size = new Size(200, 22);
 			salarioDiversosToolStripMenuItem.Text = "Salario Diversos";
+			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
 			// credencialesToolStripMenuItem
 			// 

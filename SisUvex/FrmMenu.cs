@@ -61,6 +61,7 @@ using SisUvex.Material.MaterialRegister.Exit;
 using SisUvex.Assets.Vehicle.VehicleType;
 using SisUvex.Material.MaterialRegister.FieldExit;
 using SisUvex.Assets.Vehicle.Vehicle;
+using SisUvex.Nomina.Ingresos_Diversos;
 
 namespace SisUvex
 {
@@ -603,6 +604,13 @@ namespace SisUvex
 		{
 			Nomina.Conceptos_Ingresos_Diversos.FrmIncomeConcepts cat = new();
 			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Ingresos_Diversos.FrmIngresosDiversos cat = new(this);
+			cat.WindowState = FormWindowState.Normal;
 			AbrirVentanaHijo(cat, 3);
 		}
 	}
