@@ -115,32 +115,35 @@ namespace SisUvex.Grow.PlantsRowLot
             frm.dgvLotTotals.DataSource = ClsQuerysDB.GetDataTable(GetQueryTotalLot2(idLot));
 
             SetDgvLotPlants(idLot);
+
+
         }
 
         private void SetLabelsLotInfo(string idLot)
         {
-            DataTable dtLabels = ClsQuerysDB.GetDataTable(GetQueryTotalLot(idLot));
+            //DataTable dtLabels = ClsQuerysDB.GetDataTable(GetQueryTotalLot(idLot));
 
-            if (dtLabels == null || dtLabels.Rows.Count == 0)
-            {
+            //if (dtLabels == null || dtLabels.Rows.Count == 0)
+            //{
                 ClearLotLabels(); // opcional
-                return;
-            }
+            //    return;
+            //}
 
-            DataRow r = dtLabels.Rows[0];
+            //DataRow r = dtLabels.Rows[0];
 
-            frm.lblIdLot.Text = r["Lot"]?.ToString() ?? "";
+            //frm.lblIdLot.Text = r["Lot"]?.ToString() ?? "";
+            frm.lblIdLot.Text = (string)frm.cboLot.GetColumnValue(Column.id);
             frm.lblNameLot.Text = (string)frm.cboLot.GetColumnValue(Lot.ColumnName); //Lo jala del combobox
-            frm.lblStart.Text = r["StartLine"]?.ToString() ?? "";
-            frm.lblFinal.Text = r["EndLine"]?.ToString() ?? "";
+            //frm.lblStart.Text = r["StartLine"]?.ToString() ?? "";
+            //frm.lblFinal.Text = r["EndLine"]?.ToString() ?? "";
 
-            frm.lblPlantsTotal.Text = r["Total_Plants"].ToString() ?? "";
-            frm.lblPlantsEfective.Text = r["Actual_Plants"].ToString() ?? "";
-            frm.lblPlantsFail.Text = r["Failed_Plants"].ToString() ?? "";
-            frm.lblFormation.Text = r["Formation_Stage_Plants"].ToString() ?? "";
+            //frm.lblPlantsTotal.Text = r["Total_Plants"].ToString() ?? "";
+            //frm.lblPlantsEfective.Text = r["Actual_Plants"].ToString() ?? "";
+            //frm.lblPlantsFail.Text = r["Failed_Plants"].ToString() ?? "";
+            //frm.lblFormation.Text = r["Formation_Stage_Plants"].ToString() ?? "";
 
-            frm.lblLastUpdate.Text = r["LastUpdate"]?.ToString() ?? "";
-            frm.lblUserUpdate.Text = r["LastUser"]?.ToString() ?? "";
+            //frm.lblLastUpdate.Text = r["LastUpdate"]?.ToString() ?? "";
+            //frm.lblUserUpdate.Text = r["LastUser"]?.ToString() ?? "";
         }
 
         private void SetDgvLotPlants(string idLot)
@@ -195,7 +198,7 @@ namespace SisUvex.Grow.PlantsRowLot
                             T.id_lot AS Lot,
                             MIN(T.n_lotLine) AS StartLine,
                             MAX(T.n_lotLine) AS EndLine,
-                            SUM(T.n_plannedPlants) AS Total_Plants,
+                            SUM(T.n_plannedPlants) AS Target_Plants,
                             SUM(T.n_actualPlants) AS Actual_Plants,
                             SUM(T.n_failedPlants) AS Failed_Plants,
                             SUM(T.n_formationStagePlants) AS Formation_Stage_Plants,
@@ -279,7 +282,7 @@ namespace SisUvex.Grow.PlantsRowLot
         {
             return @$"   SELECT 
 	                        grow.n_lotLine AS [Línea],
-	                        grow.n_plannedPlants AS [Total],
+	                        grow.n_plannedPlants AS [Objetivo],
 	                        grow.n_actualPlants AS [Activas],
 	                        grow.n_failedPlants AS [Fallas],
 	                        grow.n_formationStagePlants AS [Formación],
@@ -309,14 +312,63 @@ namespace SisUvex.Grow.PlantsRowLot
         {
             frm.lblNameLot.Text = "";
             frm.lblIdLot.Text = "";
-            frm.lblStart.Text = "";
-            frm.lblFinal.Text = "";
-            frm.lblPlantsTotal.Text = "";
-            frm.lblPlantsEfective.Text = "";
-            frm.lblPlantsFail.Text = "";
-            frm.lblFormation.Text = "";
-            frm.lblLastUpdate.Text = "";
-            frm.lblUserUpdate.Text = "";
+            //frm.lblStart.Text = "";
+            //frm.lblFinal.Text = "";
+            //frm.lblPlantsTotal.Text = "";
+            //frm.lblPlantsEfective.Text = "";
+            //frm.lblPlantsFail.Text = "";
+            //frm.lblFormation.Text = "";
+            //frm.lblLastUpdate.Text = "";
+            //frm.lblUserUpdate.Text = "";
+        }
+
+        public void BtnGenerateExcelReport()
+        {
+            // Validar que haya datos cargados
+            if (_dvPlants == null || _dvPlants.Count == 0)
+            {
+                System.Windows.Forms.MessageBox.Show(
+                    "No hay datos de plantas cargados para generar el reporte.\n\n" +
+                    "Por favor, carga los datos del lote primero.",
+                    "Sin datos",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            // Validar que haya un lote seleccionado
+            if (frm.cboLot.SelectedIndex < 1)
+            {
+                System.Windows.Forms.MessageBox.Show(
+                    "Debe seleccionar un lote para generar el reporte.",
+                    "Lote requerido",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            // Obtener idLot y nombre del lote
+            string idLot = frm.cboLot.SelectedValue?.ToString() ?? string.Empty;
+            string lotName = frm.cboLot.GetColumnValue(Lot.ColumnName)?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(idLot))
+            {
+                System.Windows.Forms.MessageBox.Show(
+                    "No se pudo obtener el código del lote seleccionado.",
+                    "Error",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Error
+                );
+                return;
+            }
+
+            // Crear instancia de la clase de Excel y generar reporte.
+            // Usar vista sin filtro para que la primera tabla muestre todas las líneas del lote (no lo filtrado en el DGV).
+            DataView dvFullPlants = new DataView(_dvPlants.Table) { RowFilter = "" };
+            ClsExcelPlantsRowLotView excelGenerator = new ClsExcelPlantsRowLotView();
+            excelGenerator.GenerateExcelReport(dvFullPlants, idLot, lotName);
         }
     }
 }

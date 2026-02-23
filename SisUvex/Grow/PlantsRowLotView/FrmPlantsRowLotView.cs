@@ -38,9 +38,8 @@ namespace SisUvex.Grow.PlantsRowLot
 
         private void btnExcel_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Próximamente...", "A te la creiste");
+            cls.BtnGenerateExcelReport();
+            //MessageBox.Show("Próximamente...", "A te la creiste");
         }
-
-
     }
 }

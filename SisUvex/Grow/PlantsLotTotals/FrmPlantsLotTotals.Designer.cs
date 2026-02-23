@@ -211,14 +211,14 @@
             dgvLotTotals.RowHeadersVisible = false;
             dgvLotTotals.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvLotTotals.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dgvLotTotals.Size = new Size(817, 313);
+            dgvLotTotals.Size = new Size(817, 301);
             dgvLotTotals.TabIndex = 73;
             // 
             // FrmPlantsLotTotals
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(839, 458);
+            ClientSize = new Size(839, 446);
             Controls.Add(dgvLotTotals);
             Controls.Add(lblTitle);
             Controls.Add(gpbFilters);
