@@ -119,9 +119,9 @@
 			lblIngresos.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
 			lblIngresos.Location = new Point(37, 9);
 			lblIngresos.Name = "lblIngresos";
-			lblIngresos.Size = new Size(186, 30);
+			lblIngresos.Size = new Size(293, 30);
 			lblIngresos.TabIndex = 68;
-			lblIngresos.Text = "Ingresos Diversos";
+			lblIngresos.Text = "Percepciones y Deducciones";
 			// 
 			// FrmIngresosDiversos
 			// 
@@ -138,7 +138,7 @@
 			Controls.Add(dtpDia);
 			Controls.Add(lblDia);
 			Name = "FrmIngresosDiversos";
-			Text = "FrmIngresosDiversos";
+			Text = "Percepciones y Deducciones";
 			Load += FrmIngresosDiversos_Load;
 			ResumeLayout(false);
 			PerformLayout();
