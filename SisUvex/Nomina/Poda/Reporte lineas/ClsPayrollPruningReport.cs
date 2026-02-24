@@ -1,17 +1,18 @@
 ﻿//-----
 using ClosedXML.Excel;
 using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
+using System.Collections.Generic;
 using System.Data;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using SisUvex.Catalogos.Metods.Extentions;
 
 namespace SisUvex.Nomina.Poda.Reporte_lineas
 {
     internal class ClsPayrollPruningReport
     {
         string queryReport1 = $" SELECT * FROM vw_PayrollPiece_BoxPerNumber_Info "; 
-        string queryReport1Order = $" ORDER BY Cuadrilla, [Numero/Pareja], Fecha ";
+        string queryReport1Order = $" ORDER BY [Cuadrilla], [Numero/Pareja], [Orden], [Fecha] ";
 
         public FrmPayrollPruningReport frm;
 
@@ -22,6 +23,14 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
             ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboLot, Lot.CboOnlyNameLot);
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboContractor, Contractor.Cbo);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsAllForOneWorkGroup = new();
+            lsAllForOneWorkGroup.Add((frm.cboSeason, Season.ColumnId));
+            lsAllForOneWorkGroup.Add((frm.cboContractor, Contractor.ColumnId));
+
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null /*No tiene chb*/, lsAllForOneWorkGroup);
         }
 
         private DataTable GetDTDataReportQueryWithFilter()
