@@ -288,7 +288,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_Category', 'Pack_Presentation') ";
                     break;
                 case ClsObject.WorkGroup.Cbo:
-                    query += " IN ('Pack_Contractor', 'Pack_WorkGroup') ";
+                    query += " IN ('Pack_Contractor', 'Pack_WorkGroup', 'Pack_Season', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.Gtin.DgvCatalog:
                     query += " IN ('Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Price', 'Pack_Pti', 'Pack_Presentation') ";
@@ -301,7 +301,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
                     break;
                 case ClsObject.Season.Cbo:
-                    query += " IN ('Pack_Season', 'Pack_Crop') ";
+                    query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.PlacePayment.Cbo:
                     query += " IN ('Pack_PlacePayment', 'Pack_Grower') ";

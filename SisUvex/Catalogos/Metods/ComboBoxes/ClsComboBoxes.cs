@@ -1,11 +1,16 @@
 ﻿using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2021.Excel.NamedSheetViews;
 using DocumentFormat.OpenXml.Presentation;
+using MathNet.Numerics.Distributions;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.IdentityModel.Tokens;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -89,7 +94,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 }
                 else
                 {
-                    if (dt.Columns.Contains(ClsObject.Column.active))           
+                    if (dt.Columns.Contains(ClsObject.Column.active))
                         dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
                 }
 
@@ -362,6 +367,168 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             comboBoxDependent.DataSource = dt;
             comboBoxDependent.SelectedIndex = 0;
             comboBoxDependent.DroppedDown = true;
+        }
+
+        public class Events()
+        {
+            /// <summary>
+            /// Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal. Si el índice seleccionado del ComboBox principal es mayor a 0, se filtran los ComboBox dependientes para mostrar solo los elementos relacionados con la selección del ComboBox principal. Si el índice seleccionado es 0 o menor, se eliminan los filtros y se muestran todos los elementos en los ComboBox dependientes.
+            /// </summary>
+            public static void CboApplyEventFilterOneForAll(ComboBox comboBoxOnePrincipal, string? idColumnPrincipal, CheckBox? checkBoxPrincipal, List<Tuple<ComboBox, CheckBox?>> comboBoxesList)
+            {
+                //TERMINAR DE CHECARLO BIEN, EN LO QUE SE HACE EL EVENTO CONTRARIO 
+                foreach (var item in comboBoxesList)
+                {
+                    ComboBox dependentCbo = item.Item1;
+                    CheckBox? dependentChb = item.Item2;
+
+                    comboBoxOnePrincipal.SelectedValueChanged += (sender, e) =>
+                    {
+                        if (comboBoxOnePrincipal.SelectedIndex > 0)
+                        {
+                            //DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                            //if (dt != null)
+                            //{
+                            //    dt.DefaultView.RowFilter = $" 1=1 {idColumnPrincipal} = '{comboBoxOnePrincipal.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
+                            //    dependentCbo.DataSource = dt;
+                            //    dependentCbo.SelectedIndex = 0;
+                            //}
+                        }
+                        else
+                        {
+                            //DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                            //if (dt != null)
+                            //{
+                            //    dt.DefaultView.RowFilter = null;
+                            //    dependentCbo.DataSource = dt;
+                            //    dependentCbo.SelectedIndex = 0;
+                            //}
+                        }
+                    };
+                }
+            }
+
+
+            /// <summary>
+            /// Aplica un filtro a un ComboBox principal basado en la selección de varios ComboBox dependientes. Si el índice seleccionado de cada ComboBox dependiente es mayor a 0, se filtra el ComboBox principal para mostrar solo los elementos relacionados con las selecciones de los ComboBox dependientes. Si el índice seleccionado de algún ComboBox dependiente es 0 o menor, se eliminan los filtros y se muestran todos los elementos en el ComboBox principal.
+            /// </summary>
+            /// <param name="comboBoxPrincipal"></param>
+            /// <param name="checkBoxPrincipal"></param>
+            /// <param name="comboBoxesDependents"></param>
+            public static void CboApplyEventFilterAllForOne(ComboBox comboBoxPrincipal, CheckBox? checkBoxPrincipal, List<(ComboBox Cbo, string IdColumnFilter)>/*idColumnFilter*/ comboBoxesDependents)
+            {
+                foreach (var item in comboBoxesDependents) //Aplicarle a cada combobox dependiente el Evento para calcular el filtro al principal por cada cambio en los dependientes
+                {
+                    ComboBox dependentCbo = item.Cbo;
+                    string idColumnFilter = item.IdColumnFilter;
+
+                    //En caso de que ya se haya asignado este evento, se elimina para no duplicarlo
+                    EventHandler handler = (s, e) =>
+                    {
+                        Metods.CboFilterAllForOne(comboBoxPrincipal, checkBoxPrincipal, comboBoxesDependents);
+                        comboBoxPrincipal.SelectedIndex = 0;
+                    };
+
+                    dependentCbo.SelectedValueChanged -= handler;
+                    dependentCbo.SelectedValueChanged += handler;
+
+                    if (checkBoxPrincipal != null) //Aplicar metodos si hay un chb que cambie de valor
+                    {
+                        checkBoxPrincipal.CheckedChanged -= handler;
+                        checkBoxPrincipal.CheckedChanged += handler;
+                    }
+                }
+            }
+
+        }
+        public class Metods()
+        {
+            public static void CboFilterAllForOne(ComboBox comboBoxPrincipal, CheckBox? checkBoxPrincipal, List<(ComboBox Cbo, string IdColumnFilter)>/*idColumnFilter*/ comboBoxesDependents)
+            {//EL CboPrincipal NO OCUPA LOS CHECKBOX DE LOS DEMAS, SOLO EL SUYO
+                DataTable? dt = (DataTable?)comboBoxPrincipal.DataSource;
+                if (dt == null) return;
+
+                string? filter = StringFilterActives_Principal(dt, checkBoxPrincipal);
+
+                foreach (var item in comboBoxesDependents) //Filtro por cada columna de cboDependiente
+                {
+                    ComboBox dependentCbo = item.Cbo;
+                    string idColumnFilter = item.IdColumnFilter;
+
+                    if (dependentCbo.SelectedIndex < 1 || !dt.Columns.Contains(idColumnFilter))
+                        continue;
+
+                    if (!string.IsNullOrEmpty(filter))
+                        filter += " AND ";
+
+                    filter += $" {idColumnFilter} = '{dependentCbo.SelectedValue}' ";
+                }
+
+                if (!string.IsNullOrEmpty(filter)) //Añadir texto seleccion si hay otro filtro por columna
+                    filter += $" OR {ClsObject.Column.name} = '{textSelect}' ";
+                dt.DefaultView.RowFilter = filter;
+            }
+
+            /// <summary>
+            ///Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal. Si el índice seleccionado del ComboBox principal es mayor a 0, se filtran los ComboBox dependientes para mostrar solo los elementos relacionados con la selección del ComboBox principal. Si el índice seleccionado es 0 o menor, se eliminan los filtros y se muestran todos los elementos en los ComboBox dependientes.
+            /// </summary>
+            public static void CboFilterOneForAll(ComboBox comboBoxPrincipal, List<Tuple<ComboBox, string, CheckBox?>> comboBoxesDependents)
+            {
+                if (comboBoxPrincipal.SelectedIndex > 0)
+                {
+                    foreach (var item in comboBoxesDependents)
+                    {
+                        ComboBox dependentCbo = item.Item1;
+                        string columnFilterName = item.Item2;
+                        DataTable? dt = (DataTable?)dependentCbo.DataSource;
+                        if (dt != null)
+                        {
+                            dt.DefaultView.RowFilter = $"{columnFilterName} = '{comboBoxPrincipal.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
+                            dependentCbo.DataSource = dt;
+                            dependentCbo.SelectedIndex = 0;
+                        }
+                    }
+                }
+                else //Dejar de mostrar filtros / (conservando del cboPrincipal activos o mostrando todos)
+                {
+                    foreach (var item in comboBoxesDependents)
+                    {
+                        ComboBox dependentCbo = item.Item1;
+                        CheckBox? checkBox = item.Item3;
+                        CboActivesFilter(dependentCbo, checkBox);
+                    }
+                }
+            }
+
+            private static void CboActivesFilter(ComboBox cbo, CheckBox? checkBox)
+            {
+                DataTable? dt = (DataTable?)cbo.DataSource;
+                if (dt != null)
+                {
+                    string? filterActives = StringFilterActives_Principal(dt, checkBox);
+                    dt.DefaultView.RowFilter = filterActives;
+                    cbo.DataSource = dt;
+                    cbo.SelectedIndex = 0;
+                }
+            }
+
+            private static string? StringFilterActives_Principal(DataTable? dataTable, CheckBox? checkBox)
+            {//Si el CheckBox es nulo o el DataTable no tiene la columna de activos, no se aplica ningún filtro y se muestran todos los elementos
+             //Intentar dejar antes de aquí el 1 = 1;
+                if (checkBox == null || dataTable == null || !dataTable.Columns.Contains(ClsObject.Column.active))
+                    return null;
+
+                if (checkBox.Checked)   //Mostrar solo activos '1'
+                {
+                    string? filterAnd = string.Empty;
+                    if (!string.IsNullOrEmpty(dataTable.DefaultView.RowFilter))
+                        filterAnd = " AND ";
+
+                    return $"{filterAnd} [{ClsObject.Column.active}] = '1' ";
+                }
+                else
+                    return null;
+            }
         }
     }
 }
