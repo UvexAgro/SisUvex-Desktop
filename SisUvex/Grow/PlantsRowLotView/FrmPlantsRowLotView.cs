@@ -16,18 +16,14 @@ namespace SisUvex.Grow.PlantsRowLot
         public FrmPlantsRowLotView()
         {
             InitializeComponent();
+
+            cls = new();
+            cls.frm = this;
         }
 
         private void FrmPlantsRowLotView_Load(object sender, EventArgs e)
         {
-            cls = new();
-            cls.frm = this;
             cls.BeginFormCat();
-        }
-
-        private void cboField_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void btnLoadPlantsLot_Click(object sender, EventArgs e)
@@ -42,7 +38,8 @@ namespace SisUvex.Grow.PlantsRowLot
 
         private void btnExcel_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Próximamente...", "A te la creiste");
+            cls.BtnGenerateExcelReport();
+            //MessageBox.Show("Próximamente...", "A te la creiste");
         }
     }
 }

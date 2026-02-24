@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using NPOI.HSSF.UserModel; // Para xls
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel; // Para xlsx
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel; // Para xlsx
-using NPOI.HSSF.UserModel; // Para xls
 
 namespace SisUvex.Catalogos.Metods.ExcelLoad
 {
@@ -184,6 +185,28 @@ namespace SisUvex.Catalogos.Metods.ExcelLoad
         // METODOS PARA GUARDAR EXCELES
 
 
+        /// <summary>
+        /// Asigna un valor a una celda convirtiendo object al tipo que ClosedXML acepta (XLCellValue).
+        /// </summary>
+        public static void SetCellValue(IXLCell cell, object? value)
+        {
+            if (value == null || value == DBNull.Value) return;
+
+            switch (value)
+            {
+                case string s: cell.Value = s; break;
+                case int i: cell.Value = i; break;
+                case long l: cell.Value = l; break;
+                case double d: cell.Value = d; break;
+                case decimal dec: cell.Value = (double)dec; break;
+                case float f: cell.Value = (double)f; break;
+                case DateTime dt: cell.Value = dt; break;
+                case bool b: cell.Value = b; break;
+                default: cell.Value = value.ToString() ?? ""; break;
+            }
+        }
+
+        /// <summary>
 
     }
 }
