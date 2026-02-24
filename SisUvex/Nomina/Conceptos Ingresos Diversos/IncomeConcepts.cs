@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
-using SisUvex.Catalogos.Metods.Controls;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using System.Data;
 using SisUvex.Catalogos.Metods.Querys;

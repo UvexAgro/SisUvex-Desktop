@@ -72,6 +72,8 @@
 			agenciaAduanalToolStripMenuItem = new ToolStripMenuItem();
 			actividadToolStripMenuItem = new ToolStripMenuItem();
 			ciudadToolStripMenuItem = new ToolStripMenuItem();
+			nominaToolStripMenuItem = new ToolStripMenuItem();
+			ingresosDiversosToolStripMenuItem = new ToolStripMenuItem();
 			configuraciónToolStripMenuItem = new ToolStripMenuItem();
 			impresoraSetupToolStrip = new ToolStripMenuItem();
 			parámetrosToolStripMenuItem = new ToolStripMenuItem();
@@ -107,7 +109,6 @@
 			mantenimientoToolStripMenuItem = new ToolStripMenuItem();
 			nominaEmpaqueToolStripMenuItem = new ToolStripMenuItem();
 			calculToolStripMenuItem = new ToolStripMenuItem();
-			conceptosSobreSueldoToolStripMenuItem = new ToolStripMenuItem();
 			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
@@ -309,7 +310,7 @@
 			// 
 			// catálogosToolStripMenuItem
 			// 
-			catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { variedadesToolStripMenuItem, lotesToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, contratistaToolStripMenuItem, cuadrillaToolStripMenuItem, categoríaToolStripMenuItem, presentaciónToolStripMenuItem, contenedorToolStripMenuItem, tamañoToolStripMenuItem, gTINUPCToolStripMenuItem, líneaDeTransporteToolStripMenuItem, choferToolStripMenuItem, cajaToolStripMenuItem, troqueToolStripMenuItem, agenciaAduanalToolStripMenuItem, actividadToolStripMenuItem, ciudadToolStripMenuItem });
+			catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { variedadesToolStripMenuItem, lotesToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, contratistaToolStripMenuItem, cuadrillaToolStripMenuItem, categoríaToolStripMenuItem, presentaciónToolStripMenuItem, contenedorToolStripMenuItem, tamañoToolStripMenuItem, gTINUPCToolStripMenuItem, líneaDeTransporteToolStripMenuItem, choferToolStripMenuItem, cajaToolStripMenuItem, troqueToolStripMenuItem, agenciaAduanalToolStripMenuItem, actividadToolStripMenuItem, ciudadToolStripMenuItem, nominaToolStripMenuItem });
 			catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
 			catálogosToolStripMenuItem.Size = new Size(72, 19);
 			catálogosToolStripMenuItem.Text = "Catálogos";
@@ -446,6 +447,20 @@
 			ciudadToolStripMenuItem.Size = new Size(175, 22);
 			ciudadToolStripMenuItem.Text = "Ciudad";
 			ciudadToolStripMenuItem.Click += ciudadToolStripMenuItem_Click;
+			// 
+			// nominaToolStripMenuItem
+			// 
+			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ingresosDiversosToolStripMenuItem });
+			nominaToolStripMenuItem.Name = "nominaToolStripMenuItem";
+			nominaToolStripMenuItem.Size = new Size(175, 22);
+			nominaToolStripMenuItem.Text = "Nomina";
+			// 
+			// ingresosDiversosToolStripMenuItem
+			// 
+			ingresosDiversosToolStripMenuItem.Name = "ingresosDiversosToolStripMenuItem";
+			ingresosDiversosToolStripMenuItem.Size = new Size(165, 22);
+			ingresosDiversosToolStripMenuItem.Text = "Ingresos Diversos";
+			ingresosDiversosToolStripMenuItem.Click += ingresosDiversosToolStripMenuItem_Click;
 			// 
 			// configuraciónToolStripMenuItem
 			// 
@@ -667,7 +682,7 @@
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, conceptosSobreSueldoToolStripMenuItem, salarioDiversosToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, salarioDiversosToolStripMenuItem });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
 			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
@@ -676,22 +691,15 @@
 			// calculToolStripMenuItem
 			// 
 			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
-			calculToolStripMenuItem.Size = new Size(200, 22);
+			calculToolStripMenuItem.Size = new Size(180, 22);
 			calculToolStripMenuItem.Text = "Calculo de Nomina";
 			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
-			// 
-			// conceptosSobreSueldoToolStripMenuItem
-			// 
-			conceptosSobreSueldoToolStripMenuItem.Name = "conceptosSobreSueldoToolStripMenuItem";
-			conceptosSobreSueldoToolStripMenuItem.Size = new Size(200, 22);
-			conceptosSobreSueldoToolStripMenuItem.Text = "Conceptos SobreSueldo";
-			conceptosSobreSueldoToolStripMenuItem.Click += conceptosSobreSueldoToolStripMenuItem_Click;
 			// 
 			// salarioDiversosToolStripMenuItem
 			// 
 			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
-			salarioDiversosToolStripMenuItem.Size = new Size(200, 22);
-			salarioDiversosToolStripMenuItem.Text = "Salario Diversos";
+			salarioDiversosToolStripMenuItem.Size = new Size(180, 22);
+			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
 			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
 			// credencialesToolStripMenuItem
@@ -787,7 +795,7 @@
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(135, 22);
+			palletsToolStripMenuItem.Size = new Size(180, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -795,7 +803,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(135, 22);
+			manifiestosToolStripMenuItem.Size = new Size(180, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
@@ -1086,7 +1094,8 @@
         private ToolStripMenuItem parámetrosToolStripMenuItem1;
 		private ToolStripMenuItem nominaEmpaqueToolStripMenuItem;
 		private ToolStripMenuItem calculToolStripMenuItem;
-		private ToolStripMenuItem conceptosSobreSueldoToolStripMenuItem;
 		private ToolStripMenuItem salarioDiversosToolStripMenuItem;
+		private ToolStripMenuItem nominaToolStripMenuItem;
+		private ToolStripMenuItem ingresosDiversosToolStripMenuItem;
 	}
 }

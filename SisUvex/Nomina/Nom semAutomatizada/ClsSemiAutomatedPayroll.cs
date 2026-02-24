@@ -244,7 +244,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 							al.c_codigo_tab      AS CodigoActividad,
 							al.id_productionLine AS LineaProduccion
 							FROM dbo.Nom_AttendenceList al
-							WHERE al.d_attendence = '20250219'
+							WHERE al.d_attendence = '{fecha}'
 								) x
 							CROSS APPLY dbo.fn_salary_tab(
 							x.Fecha,
@@ -266,6 +266,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BtnCargarDatos()
 		{
 			dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
+
+			if (dtNomina.Rows.Count == 0)
+			{
+				MessageBox.Show("No existen registros para la fecha seleccionada.",
+								"Sistema",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information);
+				return;
+			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
 		}

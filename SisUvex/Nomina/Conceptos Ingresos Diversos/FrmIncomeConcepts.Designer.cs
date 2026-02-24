@@ -89,7 +89,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(12, 65);
+			dgvCatalog.Location = new Point(12, 41);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -103,14 +103,14 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(776, 363);
+			dgvCatalog.Size = new Size(696, 387);
 			dgvCatalog.TabIndex = 11;
 			// 
 			// FrmIncomeConcepts
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 454);
+			ClientSize = new Size(720, 454);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);

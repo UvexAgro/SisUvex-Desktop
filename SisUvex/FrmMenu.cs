@@ -602,15 +602,20 @@ namespace SisUvex
 
 		private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Nomina.Conceptos_Ingresos_Diversos.FrmIncomeConcepts cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
+			
 		}
 
 		private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Nomina.Ingresos_Diversos.FrmIngresosDiversos cat = new(this);
 			cat.WindowState = FormWindowState.Normal;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void ingresosDiversosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Conceptos_Ingresos_Diversos.FrmIncomeConcepts cat = new();
+			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
 	}

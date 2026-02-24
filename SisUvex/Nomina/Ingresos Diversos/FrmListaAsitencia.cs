@@ -16,9 +16,14 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	{
 		ClsIngresosDiversos cls;
 
+		ClsDeducciones clsDeu;
+
 		public FrmListaAsitencia()
 		{
 			InitializeComponent();
+			
+			cls = new ClsIngresosDiversos();
+			clsDeu = new ClsDeducciones();
 		}
 
 		private void FrmListaAsitencia_Load(object sender, EventArgs e)
@@ -81,7 +86,57 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		{
 			cls.EliminarIngresoDesdeGrid(dgvLista);
 		}
+
+		private void btnAñadirD_Click(object sender, EventArgs e)
+		{
+			if (dgvLista.CurrentRow == null)
+			{
+				MessageBox.Show("Seleccione una asistencia");
+				return;
+			}
+
+			string idAttendence = dgvLista.CurrentRow.Cells["id_attendence"].Value.ToString();
+
+			FrmDeducciones frm = new FrmDeducciones(idAttendence);
+
+			if (frm.ShowDialog() == DialogResult.OK)
+			{
+				cls.ObtenerAsistenciaEmpaqueDia();
+			}
+		}
+
+		private void btnModificarDed_Click(object sender, EventArgs e)
+		{
+			if (dgvLista.CurrentRow == null)
+			{
+				MessageBox.Show("Seleccione un registro");
+				return;
+			}
+
+			if (dgvLista.CurrentRow.Cells["id_Deductions"].Value == DBNull.Value)
+			{
+				MessageBox.Show("Esta asistencia no tiene ingreso para modificar");
+				return;
+			}
+
+			string idAttendence = dgvLista.CurrentRow.Cells["id_attendence"].Value.ToString();
+			string IdDeductions = dgvLista.CurrentRow.Cells["id_Deductions"].Value.ToString();
+			decimal montoD = dgvLista.CurrentRow.Cells["Descuento"].Value == DBNull.Value
+			? 0
+			: Convert.ToDecimal(dgvLista.CurrentRow.Cells["Descuento"].Value);
+
+			FrmDeducciones frm = new FrmDeducciones(idAttendence, IdDeductions, montoD);
+
+			if (frm.ShowDialog() == DialogResult.OK)
+			{
+				cls.ObtenerAsistenciaEmpaqueDia();
+			}
+		}
+
+		private void EliminarD_Click(object sender, EventArgs e)
+		{
+			clsDeu.EliminarDeduccionDesdeGrid(dgvLista, cls);
+		}
 	}
-	
 
 }

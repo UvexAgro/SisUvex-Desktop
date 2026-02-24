@@ -132,7 +132,7 @@
 			// 
 			// btnAccept
 			// 
-			btnAccept.Location = new Point(427, 234);
+			btnAccept.Location = new Point(405, 223);
 			btnAccept.Name = "btnAccept";
 			btnAccept.Size = new Size(75, 29);
 			btnAccept.TabIndex = 100;
@@ -142,7 +142,7 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new Point(508, 234);
+			btnCancel.Location = new Point(508, 223);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new Size(75, 29);
 			btnCancel.TabIndex = 101;
