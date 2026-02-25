@@ -226,7 +226,7 @@ namespace SisUvex.Grow.PlantsRowLot
                             vrt.v_nameComercial             AS [{cVariety}],
                             MIN(T.n_lotLine)                AS [Inicio],
                             MAX(T.n_lotLine)                AS [Final],
-                            SUM(T.n_plannedPlants)          AS [Totales],
+                            SUM(T.n_plannedPlants)          AS [Objetivo],
                             SUM(T.n_actualPlants)           AS [Activas],
                             SUM(T.n_failedPlants)           AS [Fallas],
                             SUM(T.n_formationStagePlants)   AS [Formación],
