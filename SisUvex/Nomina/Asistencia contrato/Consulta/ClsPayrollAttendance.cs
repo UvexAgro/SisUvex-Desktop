@@ -10,6 +10,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
     internal class ClsPayrollAttendance
     {
         public FrmPayrollAttendance frm;
+        DataTable? _dtAttendance;
 
         public void BeginFormCat()
         {
@@ -20,16 +21,17 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
 
         private void SetControls()
         {
+            ClsComboBoxes.CboLoadActives(frm.cboPeriod, Payroll_AttendancePeriod.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboPaymentPlace, PlacePayment.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboContractor, Contractor.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
 
-            List<Tuple<ComboBox, CheckBox?, string>> cboContractorDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
-            cboContractorDepends.Add(new Tuple<ComboBox, CheckBox?, string>(frm.cboWorkGroup, null, Contractor.ColumnId));
-            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(frm.cboContractor, cboContractorDepends, null);
+            List<(ComboBox, string)> lscboWorkGroupFilter = new List<(ComboBox, string)>();
+            lscboWorkGroupFilter.Add((frm.cboContractor, Contractor.ColumnId));
+            lscboWorkGroupFilter.Add((frm.cboSeason, Season.ColumnId));
 
-            ClsComboBoxes.CboLoadActives(frm.cboPeriod, Payroll_AttendancePeriod.Cbo);
-
-            ClsComboBoxes.CboLoadActives(frm.cboPaymentPlace, PlacePayment.Cbo);
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lscboWorkGroupFilter);
         }
 
         public void BtnLoadAttendance()
@@ -49,13 +51,16 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
         {
             ClearLabels();
             if (frm.cboPeriod.SelectedIndex > 0)
-                frm.lblPeriod.Text = frm.cboPeriod.Text;
+                frm.lblPeriod.Text = frm.cboPeriod.Text; //Porque así está mejor en este caso
             if (frm.cboContractor.SelectedIndex > 0)
-                frm.lblContractor.Text = frm.cboContractor.Text;
+                frm.lblContractor.Text = frm.cboContractor.GetColumnValue(Contractor.ColumnName).ToString();
             if (frm.cboWorkGroup.SelectedIndex > 0)
-                frm.lblWorkGroup.Text = frm.cboWorkGroup.Text;
+            {
+                frm.lblWorkGroup.Text = frm.cboWorkGroup.GetColumnValue(WorkGroup.ColumnName).ToString();
+                frm.lblContractor.Text = frm.cboWorkGroup.GetColumnValue(Contractor.ColumnName).ToString();
+            }
             if (frm.cboPaymentPlace.SelectedIndex > 0)
-                frm.lblPaymentPlace.Text = frm.cboPaymentPlace.Text;
+                frm.lblPaymentPlace.Text = frm.cboPaymentPlace.SelectedValue + " - " + frm.cboPaymentPlace.GetColumnValue(PlacePayment.ColumnName).ToString();
 
         }
         private void ClearLabels()
@@ -70,6 +75,8 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
         {
             string query = GetQueryAttendance();
             DataTable? dt = ClsQuerysDB.GetDataTable(query);
+
+            _dtAttendance = dt;
             frm.dgvAttendence.DataSource = dt;
         }
 
@@ -158,5 +165,22 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
                             @Semana = @Semana;";
         }
 
+        public void BtnGenerateExcelReport()
+        {
+            if (_dtAttendance == null || _dtAttendance.Rows.Count == 0)
+            {
+                MessageBox.Show(
+                    "No hay datos de asistencia para generar el reporte.",
+                    "Asistencia contrato",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            // Crear instancia de la clase de Excel y generar reporte
+            ClsExcelPayrollAttendance excelGenerator = new ClsExcelPayrollAttendance();
+            excelGenerator.GenerateExcelReport(_dtAttendance, frm.lblPeriod.Text, frm.lblContractor.Text, frm.lblWorkGroup.Text, frm.lblPaymentPlace.Text);
+        }
     }
 }
