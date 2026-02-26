@@ -32,6 +32,8 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPayrollAttendance));
             gpbFilters = new GroupBox();
+            cboSeason = new ComboBox();
+            label4 = new Label();
             lblField = new Label();
             label1 = new Label();
             cboPeriod = new ComboBox();
@@ -51,6 +53,8 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             label3 = new Label();
             lblPeriod = new Label();
             label7 = new Label();
+            btnExcel = new Button();
+            lblTitle = new Label();
             gpbFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAttendence).BeginInit();
             bgpLotInfo.SuspendLayout();
@@ -58,6 +62,8 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             // 
             // gpbFilters
             // 
+            gpbFilters.Controls.Add(cboSeason);
+            gpbFilters.Controls.Add(label4);
             gpbFilters.Controls.Add(lblField);
             gpbFilters.Controls.Add(label1);
             gpbFilters.Controls.Add(cboPeriod);
@@ -67,17 +73,37 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             gpbFilters.Controls.Add(cboWorkGroup);
             gpbFilters.Controls.Add(label11);
             gpbFilters.Font = new Font("Segoe UI", 12F);
-            gpbFilters.Location = new Point(12, 12);
+            gpbFilters.Location = new Point(12, 33);
             gpbFilters.Name = "gpbFilters";
-            gpbFilters.Size = new Size(855, 100);
+            gpbFilters.Size = new Size(859, 126);
             gpbFilters.TabIndex = 51;
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
             // 
+            // cboSeason
+            // 
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Location = new Point(659, 20);
+            cboSeason.Margin = new Padding(0, 3, 3, 3);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(190, 29);
+            cboSeason.TabIndex = 49;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(573, 23);
+            label4.Margin = new Padding(0);
+            label4.Name = "label4";
+            label4.Size = new Size(87, 21);
+            label4.TabIndex = 48;
+            label4.Text = "Temporada";
+            // 
             // lblField
             // 
             lblField.AutoSize = true;
-            lblField.Location = new Point(565, 26);
+            lblField.Location = new Point(573, 57);
             lblField.Margin = new Padding(0);
             lblField.Name = "lblField";
             lblField.Size = new Size(86, 21);
@@ -108,7 +134,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             // 
             cboContractor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboContractor.FormattingEnabled = true;
-            cboContractor.Location = new Point(651, 21);
+            cboContractor.Location = new Point(659, 52);
             cboContractor.Margin = new Padding(0, 3, 3, 3);
             cboContractor.Name = "cboContractor";
             cboContractor.Size = new Size(190, 29);
@@ -117,7 +143,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(486, 59);
+            label10.Location = new Point(494, 88);
             label10.Margin = new Padding(0);
             label10.Name = "label10";
             label10.Size = new Size(72, 21);
@@ -139,7 +165,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             // 
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkGroup.FormattingEnabled = true;
-            cboWorkGroup.Location = new Point(558, 56);
+            cboWorkGroup.Location = new Point(566, 85);
             cboWorkGroup.Margin = new Padding(0, 3, 3, 3);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(283, 29);
@@ -160,7 +186,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             btnLoadPlantsLot.Font = new Font("Segoe UI", 12F);
             btnLoadPlantsLot.Image = Properties.Resources.BuscarLupa1;
             btnLoadPlantsLot.ImageAlign = ContentAlignment.MiddleRight;
-            btnLoadPlantsLot.Location = new Point(782, 120);
+            btnLoadPlantsLot.Location = new Point(774, 169);
             btnLoadPlantsLot.Name = "btnLoadPlantsLot";
             btnLoadPlantsLot.Padding = new Padding(0, 0, 4, 0);
             btnLoadPlantsLot.Size = new Size(87, 31);
@@ -191,7 +217,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             dgvAttendence.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvAttendence.EnableHeadersVisualStyles = false;
             dgvAttendence.ImeMode = ImeMode.NoControl;
-            dgvAttendence.Location = new Point(12, 247);
+            dgvAttendence.Location = new Point(12, 300);
             dgvAttendence.Name = "dgvAttendence";
             dgvAttendence.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -205,7 +231,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             dgvAttendence.RowHeadersVisible = false;
             dgvAttendence.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvAttendence.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAttendence.Size = new Size(857, 377);
+            dgvAttendence.Size = new Size(859, 355);
             dgvAttendence.TabIndex = 69;
             // 
             // bgpLotInfo
@@ -219,9 +245,9 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             bgpLotInfo.Controls.Add(lblPeriod);
             bgpLotInfo.Controls.Add(label7);
             bgpLotInfo.Font = new Font("Segoe UI", 12F);
-            bgpLotInfo.Location = new Point(12, 111);
+            bgpLotInfo.Location = new Point(12, 159);
             bgpLotInfo.Name = "bgpLotInfo";
-            bgpLotInfo.Size = new Size(761, 130);
+            bgpLotInfo.Size = new Size(756, 130);
             bgpLotInfo.TabIndex = 70;
             bgpLotInfo.TabStop = false;
             bgpLotInfo.Text = "Detalles";
@@ -318,11 +344,43 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             label7.Text = "Semana:";
             label7.TextAlign = ContentAlignment.TopRight;
             // 
+            // btnExcel
+            // 
+            btnExcel.Font = new Font("Segoe UI", 12F);
+            btnExcel.Image = Properties.Resources.excelIcon;
+            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+            btnExcel.Location = new Point(774, 258);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Padding = new Padding(0, 0, 4, 0);
+            btnExcel.Size = new Size(97, 31);
+            btnExcel.TabIndex = 71;
+            btnExcel.Text = "Excel";
+            btnExcel.TextAlign = ContentAlignment.TopLeft;
+            btnExcel.UseVisualStyleBackColor = true;
+            btnExcel.Click += btnExcel_Click;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTitle.Location = new Point(12, 9);
+            lblTitle.Margin = new Padding(0);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(179, 21);
+            lblTitle.TabIndex = 61;
+            lblTitle.Tag = "lotData";
+            lblTitle.Text = "Asistencia de contrato";
+            // 
             // FrmPayrollAttendance
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(881, 636);
+            AutoScroll = true;
+            AutoScrollMargin = new Size(10, 10);
+            AutoScrollMinSize = new Size(0, 650);
+            ClientSize = new Size(883, 667);
+            Controls.Add(lblTitle);
+            Controls.Add(btnExcel);
             Controls.Add(btnLoadPlantsLot);
             Controls.Add(bgpLotInfo);
             Controls.Add(dgvAttendence);
@@ -337,6 +395,7 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
             bgpLotInfo.ResumeLayout(false);
             bgpLotInfo.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -361,5 +420,9 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
         private Label label2;
         public Label lblContractor;
         private Label label3;
+        private Label label4;
+        public ComboBox cboSeason;
+        private Button btnExcel;
+        public Label lblTitle;
     }
 }

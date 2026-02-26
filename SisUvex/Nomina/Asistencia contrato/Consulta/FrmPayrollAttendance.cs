@@ -30,5 +30,10 @@ namespace SisUvex.Nomina.Asistencia_contrato.Consulta
         {
             cls.BtnLoadAttendance();
         }
+
+        private void btnExcel_Click(object sender, EventArgs e)
+        {
+            cls.BtnGenerateExcelReport();
+        }
     }
 }
