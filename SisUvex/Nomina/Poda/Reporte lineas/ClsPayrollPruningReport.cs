@@ -221,8 +221,8 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
             pivot.ColumnLabels.Add("Fecha");
             pivot.ColumnLabels.Add("Lote");
             pivot.ColumnLabels.Add("Rango");
-            pivot.ColumnLabels.Add("Plantas totales");
-            pivot.ColumnLabels.Add("Plantas activas");
+            //pivot.ColumnLabels.Add("Plantas totales");
+            pivot.ColumnLabels.Add("Plantas reales");
             pivot.ColumnLabels.Add("Actividad");
 
             // VALORES =============================
@@ -296,7 +296,7 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
                 // Colores
                 var green = XLColor.FromHtml("#E2F0D9");  // Celdas con datos
-                var blueGreen = XLColor.FromHtml("#31869B");  // Plantas activas
+                var blueGreen = XLColor.FromHtml("#31869B");  // Plantas reales (activas/objetivo)
                 var colorColumns = XLColor.FromHtml("#538DD5");
                 var colorSubColumns = XLColor.FromHtml("#8DB4E2");
 
@@ -325,8 +325,8 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
                         Actividad = r["Actividad"].ToString(),
 
                         // estos se usan al final (filas resumen)
-                        PlantasTotales = r["Plantas totales"] != DBNull.Value ? Convert.ToDecimal(r["Plantas totales"]) : 0m,
-                        PlantasActivas = r["Plantas activas"] != DBNull.Value ? Convert.ToDecimal(r["Plantas activas"]) : 0m
+                        //PlantasTotales = r["Plantas totales"] != DBNull.Value ? Convert.ToDecimal(r["Plantas totales"]) : 0m,
+                        PlantasActivas = r["Plantas reales"] != DBNull.Value ? Convert.ToDecimal(r["Plantas reales"]) : 0m
                     })
                     .Distinct()
                     .ToList();
@@ -427,13 +427,13 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
 
                 int rowSumaCapturadas = lastEmployeeRow + 1;
                 int rowPlantasActivas = rowSumaCapturadas + 1;
-                int rowPlantasTotales = rowPlantasActivas + 1;
-                int rowDiferencia = rowPlantasTotales + 1;
+                //int rowPlantasTotales = rowPlantasActivas + 1;
+                int rowDiferencia = rowPlantasActivas + 1;
 
                 // Labels a la izquierda (columna headerCol)
                 ws.Cell(rowSumaCapturadas, headerCol).Value = "SUMA CAPTURADAS";
-                ws.Cell(rowPlantasActivas, headerCol).Value = "PLANTAS ACTIVAS";
-                ws.Cell(rowPlantasTotales, headerCol).Value = "PLANTAS TOTALES";
+                ws.Cell(rowPlantasActivas, headerCol).Value = "PLANTAS REALES";
+                //ws.Cell(rowPlantasTotales, headerCol).Value = "PLANTAS TOTALES";
                 ws.Cell(rowDiferencia, headerCol).Value = "DIFERENCIA";
 
                 // Valores por columna + fórmulas
@@ -451,8 +451,8 @@ namespace SisUvex.Nomina.Poda.Reporte_lineas
                     ws.Cell(rowDiferencia, ccol).FormulaA1 =
                         $"{ws.Cell(rowPlantasActivas, ccol).Address}-{ws.Cell(rowSumaCapturadas, ccol).Address}";
 
-                    // Plantas Totales / Activas (valores fijos)
-                    ws.Cell(rowPlantasTotales, ccol).Value = b.PlantasTotales;
+                    //// Plantas Totales / Activas (valores fijos)
+                    //ws.Cell(rowPlantasTotales, ccol).Value = b.PlantasTotales;
 
                     ccol++;
                 }
