@@ -10,6 +10,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace SisUvex.Catalogos.Metods.DataGridViews
 {
@@ -219,6 +220,21 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     {
                         e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
                         e.CellStyle.ForeColor = System.Drawing.Color.Green;
+                    }
+                }
+            };
+        }
+        public static void SetColorRow(DataGridView dataGridView, string columnName, string valor, System.Drawing.Color colorFila)
+        {
+            dataGridView.CellFormatting += (sender, e) =>
+            {
+                if (dataGridView.Columns[e.ColumnIndex].Name == columnName)
+                {
+                    if (e.Value != null && e.Value.ToString() == valor)
+                    {
+                        DataGridViewRow row = dataGridView.Rows[e.RowIndex];
+                        row.DefaultCellStyle.BackColor = colorFila;
+                       
                     }
                 }
             };

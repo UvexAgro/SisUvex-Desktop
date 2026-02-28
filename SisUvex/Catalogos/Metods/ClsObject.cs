@@ -189,7 +189,7 @@ namespace SisUvex.Catalogos.Metods
         public static class GrowFarm
         {
             public const string TableName = "Grow_Farm";
-            public const string ColumnName = "FarmName";
+            public const string ColumnName = "Campo";
             public const string ColumnId = "idFarm";
             public const string ColumnActive = "ActiveFarm";
             public const string Cbo = "CboGrowFarm";

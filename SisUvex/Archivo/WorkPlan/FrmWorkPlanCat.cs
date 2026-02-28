@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using SisUvex.Catalogos.Metods.DataGridViews;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace SisUvex.Archivo.WorkPlan
             cls ??= new();
             cls._frmCat ??= this;
             cls.BeginFormCat();
-        }
+		}
 
         private void btnAdd_Click(object sender, EventArgs e)
         {

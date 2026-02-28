@@ -110,7 +110,9 @@ namespace SisUvex.Archivo.WorkPlan
             CboApplyClickEventChbGtinActivesForDgv(_frmAdd.chbGtinActives);
 
             CboApplyValueChangedEventDateTimePicker(_frmAdd.dtpDateWorkPlan);
-        }
+            ClsDataGridViewCatalogs.SetColorRow(_frmAdd.dgvGTIN, "Post etiqueta", "-", System.Drawing.Color.Yellow);
+
+		}
 
         private void LoadControlsModify()
         {
