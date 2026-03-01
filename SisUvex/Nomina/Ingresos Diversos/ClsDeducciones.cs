@@ -25,8 +25,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	{
 		ClsIngresosDiversos cls;
 		public FrmMenu frmMenu;
-		public FrmAsistenciaEmpleado frmAsitencia;
-		public FrmIngresosDiversos frmIngresos;
+		
 		public FrmListaAsitencia frmDia;
 		public FrmAddIngresos frmAdd;
 		public FrmDeducciones frmDeu;

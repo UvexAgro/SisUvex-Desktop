@@ -7,22 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Nomina.Asistencia_de_empaque;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace SisUvex.Nomina.Ingresos_Diversos
 {
 	public partial class FrmListaAsitencia : Form
 	{
-		ClsIngresosDiversos cls;
+		public FrmMenu frmMenu;
 
+		ClsIngresosDiversos cls;
 		ClsDeducciones clsDeu;
 
-		public FrmListaAsitencia()
+
+		public string empleadoValor;
+
+		public FrmListaAsitencia(FrmMenu frmMenu)
 		{
 			InitializeComponent();
-			
+			this.frmMenu = frmMenu;
+
 			cls = new ClsIngresosDiversos();
+			cls.frmMenu = this.frmMenu;
+			cls.frmDia = this;
+
 			clsDeu = new ClsDeducciones();
 		}
 
@@ -136,6 +147,27 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		private void EliminarD_Click(object sender, EventArgs e)
 		{
 			clsDeu.EliminarDeduccionDesdeGrid(dgvLista, cls);
+		}
+
+		private void btnEmpleado_Click(object sender, EventArgs e)
+		{
+			empleadoValor = txbEmpleado.Text;
+			cls.ObtenerAsistenciaEmpaquePorEmpleadoYFecha();
+			//this.Close();
+		}
+
+		private void btnFrmSearchEmployeeId_Click(object sender, EventArgs e)
+		{
+			ClsSelectionForm sel = new ClsSelectionForm();
+
+			sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+			if (!sel.SelectedValue.IsNullOrEmpty())
+				txbEmpleado.Text = sel.SelectedValue;
+
+			txbEmpleado.Focus();
+
+			txbEmpleado.SelectAll();
 		}
 	}
 

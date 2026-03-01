@@ -12,6 +12,7 @@ using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Nomina.Asistencia_de_empaque;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 
@@ -21,31 +22,9 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	{
 		ClsIngresosDiversos cls;
 		public FrmMenu frmMenu;
-		public FrmAsistenciaEmpleado frmAsitencia;
-		public FrmIngresosDiversos frmIngresos;
 		public FrmListaAsitencia frmDia;
 		public FrmAddIngresos frmAdd;
 		public FrmDeducciones frmDeu;
-
-		public void AbrirFrmAsistenciaEmpaque(string frmkey)
-		{
-			switch (frmkey)
-			{
-				case "Dia":
-					frmDia = new();
-					frmDia.dtpDia.Value = frmIngresos.dtpDia.Value;
-					frmMenu.AbrirVentanaHijo(frmDia, 1);
-					break;
-				case "Asistencia":
-					frmAsitencia = new();
-					frmAsitencia.txbIdEmpleado.Text = frmIngresos.txbEmpleado.Text;
-					frmMenu.AbrirVentanaHijo(frmAsitencia, 1);
-					break;
-				default:
-					frmIngresos.Close();
-					break;
-			}
-		}
 
 		string query = @"SELECT  
 						lst.id_attendence,      
@@ -93,7 +72,30 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
 				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
 		}
+		public void ObtenerAsistenciaEmpaquePorEmpleadoYFecha()
+		{
+			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
+			string idEmpleado = frmDia.txbEmpleado.Text.Trim();
 
+			if (string.IsNullOrEmpty(idEmpleado))
+			{
+				MessageBox.Show("Ingrese un empleado");
+				return;
+			}
+
+			string queryFinal = $"{query} WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}'AND lst.id_employee = '{idEmpleado}'{ queryOrder}";
+
+			frmDia.dgvLista.DataSource = ClsQuerysDB.GetDataTable(queryFinal);
+
+			if (frmDia.dgvLista.Columns.Contains("id_attendence"))
+				frmDia.dgvLista.Columns["id_attendence"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("id_concept"))
+				frmDia.dgvLista.Columns["id_concept"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
+				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
+		}
 
 		public void CboConceptos()
 		{

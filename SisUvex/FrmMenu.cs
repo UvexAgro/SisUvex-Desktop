@@ -607,8 +607,8 @@ namespace SisUvex
 
 		private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Nomina.Ingresos_Diversos.FrmIngresosDiversos cat = new(this);
-			cat.WindowState = FormWindowState.Normal;
+			Nomina.Ingresos_Diversos.FrmListaAsitencia cat = new(this);
+			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
 

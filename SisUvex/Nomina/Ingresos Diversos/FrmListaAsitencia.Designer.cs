@@ -41,6 +41,10 @@
 			btnAñadirD = new Button();
 			button2 = new Button();
 			btnModificarDed = new Button();
+			lblEmpleado = new Label();
+			txbEmpleado = new TextBox();
+			btnEmpleado = new Button();
+			btnFrmSearchEmployeeId = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -185,11 +189,53 @@
 			btnModificarDed.UseVisualStyleBackColor = true;
 			btnModificarDed.Click += btnModificarDed_Click;
 			// 
+			// lblEmpleado
+			// 
+			lblEmpleado.AutoSize = true;
+			lblEmpleado.Location = new Point(12, 50);
+			lblEmpleado.Name = "lblEmpleado";
+			lblEmpleado.Size = new Size(84, 15);
+			lblEmpleado.TabIndex = 11;
+			lblEmpleado.Text = "Por empleado:";
+			// 
+			// txbEmpleado
+			// 
+			txbEmpleado.Location = new Point(12, 75);
+			txbEmpleado.Name = "txbEmpleado";
+			txbEmpleado.Size = new Size(186, 23);
+			txbEmpleado.TabIndex = 13;
+			// 
+			// btnEmpleado
+			// 
+			btnEmpleado.BackgroundImage = Properties.Resources.BuscarLupa1;
+			btnEmpleado.BackgroundImageLayout = ImageLayout.Stretch;
+			btnEmpleado.Location = new Point(204, 75);
+			btnEmpleado.Name = "btnEmpleado";
+			btnEmpleado.Size = new Size(23, 23);
+			btnEmpleado.TabIndex = 14;
+			btnEmpleado.UseVisualStyleBackColor = true;
+			btnEmpleado.Click += btnEmpleado_Click;
+			// 
+			// btnFrmSearchEmployeeId
+			// 
+			btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
+			btnFrmSearchEmployeeId.Location = new Point(233, 75);
+			btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
+			btnFrmSearchEmployeeId.Size = new Size(26, 23);
+			btnFrmSearchEmployeeId.TabIndex = 68;
+			btnFrmSearchEmployeeId.Text = "...";
+			btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
+			btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
+			// 
 			// FrmListaAsitencia
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1069, 483);
+			Controls.Add(btnFrmSearchEmployeeId);
+			Controls.Add(btnEmpleado);
+			Controls.Add(txbEmpleado);
+			Controls.Add(lblEmpleado);
 			Controls.Add(groupBox2);
 			Controls.Add(groupBox1);
 			Controls.Add(btnBuscar);
@@ -203,6 +249,7 @@
 			groupBox1.ResumeLayout(false);
 			groupBox2.ResumeLayout(false);
 			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
@@ -218,5 +265,9 @@
 		private Button btnAñadirD;
 		private Button button2;
 		private Button btnModificarDed;
+		private Label lblEmpleado;
+		public TextBox txbEmpleado;
+		private Button btnEmpleado;
+		private Button btnFrmSearchEmployeeId;
 	}
 }
