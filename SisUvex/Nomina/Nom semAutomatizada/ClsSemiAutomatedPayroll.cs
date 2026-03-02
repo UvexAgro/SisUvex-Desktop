@@ -229,37 +229,35 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
 			string query = $@"SELECT
-							r.Fecha,
-							r.IdEmpleado,
-							CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreCompleto,
-							r.CodigoActividad,
-							t.v_descripcion_tab AS NombreActividad,
-							r.LineaProduccion,
-							r.SueldoTotal
-							FROM (
-							SELECT DISTINCT
-							al.d_attendence      AS Fecha,
-							al.id_employee       AS IdEmpleado,
-							al.c_codigo_tab      AS CodigoActividad,
-							al.id_productionLine AS LineaProduccion
-							FROM dbo.Nom_AttendenceList al
-							WHERE al.d_attendence = '{fecha}'
-								) x
-							CROSS APPLY dbo.fn_salary_tab(
-							x.Fecha,
-							CAST(x.CodigoActividad AS VARCHAR(20)),
-							x.LineaProduccion,
-							x.IdEmpleado,
-							'2'
-							) r
-							LEFT JOIN dbo.Nom_Tabulador t
-							ON CAST(t.c_codigo_tab AS VARCHAR(20)) = r.CodigoActividad
-							LEFT JOIN dbo.Nom_Employees e
-							ON e.id_employee = r.IdEmpleado
-							ORDER BY
-							e.v_lastNamePat,
-							e.v_lastNameMat,
-							e.v_name ;";
+			r.Fecha,
+			r.IdEmpleado,
+			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreCompleto,
+			r.CodigoActividad,
+			t.v_descripcion_tab AS NombreActividad,
+			r.LineaProduccion,
+			r.SueldoTotal
+			FROM (
+			SELECT DISTINCT
+			al.d_attendence      AS Fecha,
+			al.id_employee       AS IdEmpleado,
+			al.c_codigo_tab      AS CodigoActividad,
+			al.id_productionLine AS LineaProduccion
+			FROM dbo.Nom_AttendenceList al
+			WHERE al.d_attendence = '{fecha}'
+			) x
+			CROSS APPLY dbo.fn_salary_tab(
+			x.Fecha,
+			CAST(x.CodigoActividad AS VARCHAR(20)),
+			x.LineaProduccion,
+			x.IdEmpleado,
+			'2'
+			) r
+			LEFT JOIN dbo.Nom_Tabulador t
+			ON CAST(t.c_codigo_tab AS VARCHAR(20)) = r.CodigoActividad
+			LEFT JOIN dbo.Nom_Employees e
+			ON e.id_employee = r.IdEmpleado
+			ORDER BY 
+			CAST(r.CodigoActividad AS INT) ASC ;";
 			return query;
 		}
 		public void BtnCargarDatos()

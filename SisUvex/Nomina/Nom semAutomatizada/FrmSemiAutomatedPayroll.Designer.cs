@@ -97,9 +97,9 @@
 			lbencabezado.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lbencabezado.Location = new Point(258, 9);
 			lbencabezado.Name = "lbencabezado";
-			lbencabezado.Size = new Size(345, 32);
+			lbencabezado.Size = new Size(424, 32);
 			lbencabezado.TabIndex = 5;
-			lbencabezado.Text = "Generar Reporte de Esparrago";
+			lbencabezado.Text = "Generar Reporte de Empaque Central";
 			// 
 			// btnCVS
 			// 
