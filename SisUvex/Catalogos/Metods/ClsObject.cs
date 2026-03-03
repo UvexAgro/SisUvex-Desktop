@@ -1,4 +1,4 @@
-﻿
+
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
 using System.Diagnostics.Metrics;
@@ -76,8 +76,8 @@ namespace SisUvex.Catalogos.Metods
                                                         , wpl.c_voicePickCode AS [{ColumnVpc}]
                                                         , ctr.id_contractor AS [{Contractor.ColumnId}]
                                                         , ctr.v_nameContractor AS [{Contractor.ColumnName}]
-                                                        , farm.id_farm AS [{GrowFarm.ColumnId}]
-                                                        , farm.v_farmName as [{GrowFarm.ColumnName}]
+                                                        , farm.id_farm AS [{Farm.ColumnId}]
+                                                        , farm.v_farmName as [{Farm.ColumnName}]
                                                         , box.v_nameTypeBox AS [{TypeBox.ColumnName}]
                                                         , box.id_typeBox AS [{TypeBox.ColumnId}]
                                                         , box.v_shortNameTypeBox AS [{TypeBox.ColumnShortName}]
@@ -186,18 +186,6 @@ namespace SisUvex.Catalogos.Metods
             public const string QueryDgvCatalog = "queryContractor";
         }
 
-        public static class GrowFarm
-        {
-            public const string TableName = "Grow_Farm";
-            public const string ColumnName = "Campo";
-            public const string ColumnId = "idFarm";
-            public const string ColumnActive = "ActiveFarm";
-            public const string Cbo = "CboGrowFarm";
-            public const string DgvCatalog = "DgvCatalogGrowFarm";
-            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(v_farmName, ' | ', id_farm, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_farmName AS [{ColumnName}] FROM Grow_Farm ORDER BY [{Column.name}] ";
-            public const string QueryDgvCatalog = "queryGrowFarm";
-        }
-
         public static class Variety
         {
             public const string TableName = "Pack_Variety";
@@ -208,7 +196,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveVariety";
             public const string Cbo = "CboVariety";
             public const string DgvCatalog = "DgvCatalogVariety";
-            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (',c_active,') ',v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS 'Color.ColumnId', id_crop AS 'Crop.ColumnId', v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}] FROM Pack_Variety ORDER BY [{Column.name}]  ";
+            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (',c_active,') ',v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS 'Color.ColumnId', id_crop AS [{Crop.ColumnId}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}] FROM Pack_Variety ORDER BY [{Column.name}]  ";
             public const string QueryDgvCatalog = "queryVariety";
         }
 
@@ -220,10 +208,14 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveLot";
             public const string Cbo = "CboLot";
             public const string CboOnlyNameLot = "CboLotOnlyNameLot";
-            public const string DgvCatalog = "DgvCatalogLot";
-            public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
-            public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.c_active ORDER BY [{Column.name}] ";
-            public const string QueryDgvCatalog = "queryLot";
+            public const string CboOnlyNameLotPlantTracking = "CboOnlyNameLotPlantTracking";
+			public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
+			public const string DgvCatalog = "DgvCatalogLot";
+            public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}], id_farm AS [{Farm.ColumnId}]  FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
+            public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm ORDER BY [{Column.name}] ";
+            public const string QueryOnlyNameLotPlantTracking = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_plantTracking = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+			public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UserFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+			public const string QueryDgvCatalog = "queryLot";
         }
 
         public static class Presentation
@@ -308,7 +300,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveWorkGroup";
             public const string Cbo = "CboWorkGroup";
             public const string DgvCatalog = "DgvCatalogWorkGroup";
-            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
             public const string QueryDgvCatalog = "queryWorkGroup";
         }
 
@@ -554,7 +546,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveFarm";
             public const string Cbo = "CboFarm";
             public const string DgvCatalog = "DgvCatalogFarm";
-            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(id_farm,' | ',v_farmName) AS [{Column.name}], v_farmName AS [{ColumnName}] FROM Grow_Farm ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(v_farmName,' | ',id_farm) AS [{Column.name}], v_farmName AS [{ColumnName}], c_active AS [{Column.active}] FROM Grow_Farm ORDER BY [{Column.name}] ";
         }
 
         public static class VehicleType
@@ -601,6 +593,30 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboTypeBox";
             public const string DgvCatalog = "DgvCatalogTypeBox";
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
+        }
+
+        public static class Payroll_AttendancePeriod
+        {
+            public const string TableName = "Payroll_AttendancePeriod";
+            public const string ColumnId = "idPeriod";
+            public const string ColumnSequence = "Secuencia";
+            public const string ColumnName = "Nombre periodo";
+            public const string ColumnStartDate = "Fecha inicio";
+            public const string ColumnEndDate = "Fecha fin";
+            public const string ColumnActive = "ActiveAttendancePeriod";
+            public const string ColumnCreated = "d_created";
+            public const string ColumnUpdated = "d_updated";
+            public const string Cbo = "CboAttendancePeriod";
+            public const string DgvCatalog = "DgvCatalogAttendancePeriod";
+            public const string QueryCbo = $@" SELECT CONCAT(id_period, '|', c_sequence_per) AS [{Column.id}], 
+                                            v_name_per AS [{Column.name}], 
+                                            c_active AS [{Column.active}], 
+                                            id_period AS [{ColumnId}], 
+                                            c_sequence_per AS [{ColumnSequence}], 
+                                            d_startDate_per AS [{ColumnStartDate}], 
+                                            d_endDate_per AS [{ColumnEndDate}], 
+                                            id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+            public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
         }
     }
 }

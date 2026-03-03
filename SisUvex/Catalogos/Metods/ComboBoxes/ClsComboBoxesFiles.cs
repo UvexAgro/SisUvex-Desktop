@@ -150,6 +150,12 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Lot.CboOnlyNameLot:
                     queryDataTable = ClsObject.Lot.QueryCboOnlyNameLot;
                     break;
+                case ClsObject.Lot.CboOnlyNameLotFacility:
+                    queryDataTable = ClsObject.Lot.QueryCboOnlyNameLotFacility;
+					break;
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
+                    queryDataTable = ClsObject.Lot.QueryOnlyNameLotPlantTracking;
+                    break;
                 case ClsObject.Distributor.Cbo:
                     queryDataTable = ClsObject.Distributor.QueryCbo;
                     break;
@@ -189,11 +195,14 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     queryDataTable = ClsObject.Contractor.QueryCbo;
                     break;
-                case ClsObject.GrowFarm.Cbo:
-                    queryDataTable = ClsObject.GrowFarm.QueryCbo;
-                    break;
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
+                    break;
+                case ClsObject.PlacePayment.Cbo:
+                        queryDataTable = ClsObject.PlacePayment.QueryCbo;
+                    break;
+                case ClsObject.Payroll_AttendancePeriod.Cbo:
+                    queryDataTable = ClsObject.Payroll_AttendancePeriod.QueryCbo;
                     break;
                 case ClsObject.City.Cbo:
                     queryDataTable = ClsObject.City.QueryCbo;
@@ -275,13 +284,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.Lot.Cbo:
                 case ClsObject.Lot.CboOnlyNameLot:
-                    query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot', 'Grow_Farm')";
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
+                case ClsObject.Lot.CboOnlyNameLotFacility:
+					query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot', 'Grow_Farm')";
                     break;
                 case ClsObject.Presentation.Cbo:
                     query += " IN ('Pack_Category', 'Pack_Presentation') ";
                     break;
                 case ClsObject.WorkGroup.Cbo:
-                    query += " IN ('Pack_Contractor', 'Pack_WorkGroup') ";
+                    query += " IN ('Pack_Contractor', 'Pack_WorkGroup', 'Pack_Season', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.Gtin.DgvCatalog:
                     query += " IN ('Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Price', 'Pack_Pti', 'Pack_Presentation') ";
@@ -294,7 +305,13 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
                     break;
                 case ClsObject.Season.Cbo:
-                    query += " IN ('Pack_Season', 'Pack_Crop') ";
+                    query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
+                    break;
+                case ClsObject.PlacePayment.Cbo:
+                    query += " IN ('Pack_PlacePayment', 'Pack_Grower') ";
+                    break;
+                case ClsObject.Payroll_AttendancePeriod.Cbo:
+                    query += " IN ('Payroll_AttendancePeriod', 'Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.Consignee.Cbo:
                     query += " IN ('Pack_Consignee', 'Pack_Distributor') ";
@@ -341,7 +358,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Variety.TableName;
                 case ClsObject.Lot.Cbo:
                 case ClsObject.Lot.CboOnlyNameLot:
-                    return ClsObject.Lot.TableName;
+                case ClsObject.Lot.CboOnlyNameLotPlantTracking:
+                case ClsObject.Lot.CboOnlyNameLotFacility:
+					return ClsObject.Lot.TableName;
                 case ClsObject.Distributor.Cbo:
                     return ClsObject.Distributor.TableName;
                 case ClsObject.Container.Cbo:
@@ -369,6 +388,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Contractor.TableName;
                 case ClsObject.Season.Cbo:
                     return ClsObject.Season.TableName;
+                case ClsObject.PlacePayment.Cbo:
+                        return ClsObject.PlacePayment.TableName;
+                case ClsObject.Payroll_AttendancePeriod.Cbo:
+                    return ClsObject.Payroll_AttendancePeriod.TableName;
                 case ClsObject.City.Cbo:
                     return ClsObject.City.TableName;
                 case ClsObject.Consignee.Cbo:

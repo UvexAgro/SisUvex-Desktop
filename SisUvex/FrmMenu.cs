@@ -618,5 +618,25 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
+
+		private void plantasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Grow.PlantsRowLot.FrmPlantsRowLotView cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 1);
+		}
+
+		private void reporteDeAsistenciaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Asistencia_contrato.Consulta.FrmPayrollAttendance cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
+			AbrirFormularioDialog(cat, 3);
+		}
 	}
 }

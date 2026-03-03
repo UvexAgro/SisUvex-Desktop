@@ -29,7 +29,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BeginForm()
 		{
 			SetTxbReferencia();
-			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLot);
+			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLotFacility);
 			AddControlsToList();
 			ClsComboBoxes.CboLoadActives(frm.cboLineas, ClsObject.ProductionLine.Cbo);
 			frm.cboLineas.SelectedIndexChanged += (s, e) => dgvFiltrarBanda();
