@@ -20,48 +20,48 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmInstruccionesExcelAsistencia));
-            pbxImagen = new PictureBox();
-            ((System.ComponentModel.ISupportInitialize)pbxImagen).BeginInit();
-            SuspendLayout();
-            // 
-            // pbxImagen
-            // 
-            pbxImagen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pbxImagen.Image = Properties.Resources.Instrucciones_cargar_excel_asistencia_de_empaque;
-            pbxImagen.Location = new Point(12, 12);
-            pbxImagen.Name = "pbxImagen";
-            pbxImagen.Size = new Size(592, 358);
-            pbxImagen.SizeMode = PictureBoxSizeMode.StretchImage;
-            pbxImagen.TabIndex = 0;
-            pbxImagen.TabStop = false;
-            // 
-            // FrmInstruccionesExcelAsistencia
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(616, 382);
-            Controls.Add(pbxImagen);
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "FrmInstruccionesExcelAsistencia";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Instrucciones cargar archivo excel de asistencia de empaque";
-            ((System.ComponentModel.ISupportInitialize)pbxImagen).EndInit();
-            ResumeLayout(false);
-        }
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmInstruccionesExcelAsistencia));
+			pbxImagen = new PictureBox();
+			((System.ComponentModel.ISupportInitialize)pbxImagen).BeginInit();
+			SuspendLayout();
+			// 
+			// pbxImagen
+			// 
+			pbxImagen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			pbxImagen.Image = (Image)resources.GetObject("pbxImagen.Image");
+			pbxImagen.Location = new Point(12, 12);
+			pbxImagen.Name = "pbxImagen";
+			pbxImagen.Size = new Size(592, 358);
+			pbxImagen.SizeMode = PictureBoxSizeMode.StretchImage;
+			pbxImagen.TabIndex = 0;
+			pbxImagen.TabStop = false;
+			// 
+			// FrmInstruccionesExcelAsistencia
+			// 
+			AutoScaleDimensions = new SizeF(7F, 15F);
+			AutoScaleMode = AutoScaleMode.Font;
+			ClientSize = new Size(616, 382);
+			Controls.Add(pbxImagen);
+			Icon = (Icon)resources.GetObject("$this.Icon");
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "FrmInstruccionesExcelAsistencia";
+			StartPosition = FormStartPosition.CenterScreen;
+			Text = "Instrucciones cargar archivo excel de asistencia de empaque";
+			((System.ComponentModel.ISupportInitialize)pbxImagen).EndInit();
+			ResumeLayout(false);
+		}
 
-        #endregion
+		#endregion
 
-        private PictureBox pbxImagen;
+		private PictureBox pbxImagen;
     }
 }
