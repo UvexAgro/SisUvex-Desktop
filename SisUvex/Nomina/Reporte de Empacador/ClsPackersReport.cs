@@ -68,10 +68,11 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 
 			string codigo = frmPack.txbCodigo.Text.Trim();
 			string nombre = frmPack.txbNombre.Text.Trim();
-			string nombreLimpio = Regex.Replace(nombre, @"[^\w\s]", "").Replace(" ", "_");
-			string fechaHora = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
-			string nombreArchivo = $"Reporte_{codigo}_{nombreLimpio}.xlsx";
+			DateTime fechaInicio = frmPack.dtpFecha1.Value;
+			DateTime fechaFin = frmPack.dtpFecha2.Value;
+
+			string nombreArchivo = $"Reporte {codigo} {nombre} {fechaInicio:dd-MM-yyyy} al {fechaFin:dd-MM-yyyy}.xlsx";
 
 			using (SaveFileDialog sfd = new SaveFileDialog())
 			{
@@ -84,99 +85,120 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 					{
 						var ws = wb.Worksheets.Add("Reporte");
 
+						DataTable dt = (DataTable)frmPack.dgvEmployee.DataSource;
 
-						ws.Cell("A1").Value = "REPORTE DE EMPACADOR";
-						ws.Range("A1:D1").Merge();
-						ws.Range("A1").Style.Font.Bold = true;
-						ws.Range("A1").Style.Font.FontSize = 16;
-						ws.Range("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						var dias = dt.AsEnumerable()
+							.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
+							.Distinct()
+							.OrderBy(d => d)
+							.ToList();
 
+						int fila = 1;
 
-						ws.Cell("A3").Value = "Empleado:";
-						ws.Cell("B3").Value = $"{codigo} - {nombre}";
+						int totalColumnas = dias.Count + 4;
 
-						ws.Cell("A4").Value = "Periodo:";
-						ws.Cell("B4").Value = $"{frmPack.dtpFecha1.Value:dd/MM/yyyy} al {frmPack.dtpFecha2.Value:dd/MM/yyyy}";
+						// ===== EMPLEADO =====
+						ws.Cell(fila, 1).Value = $"Empleado: {codigo} - {nombre}";
+						ws.Range(fila, 1, fila, totalColumnas).Merge();
+						ws.Range(fila, 1, fila, totalColumnas).Style.Font.Bold = true;
+						ws.Range(fila, 1, fila, totalColumnas).Style.Fill.BackgroundColor = XLColor.LightGray;
+						fila++;
 
+						// ===== PERIODO =====
+						ws.Cell(fila, 1).Value =
+							$"Periodo: {frmPack.dtpFecha1.Value:dd/MM/yyyy} al {frmPack.dtpFecha2.Value:dd/MM/yyyy}";
+						ws.Range(fila, 1, fila, totalColumnas).Merge();
+						fila += 2;
 
-						DataTable dtOriginal = (DataTable)frmPack.dgvEmployee.DataSource;
-						DataTable dt = dtOriginal.Copy();
+						// ===== ENCABEZADOS =====
+						ws.Cell(fila, 1).Value = "Tamaño";
+						ws.Cell(fila, 2).Value = "Presentación";
+						ws.Cell(fila, 3).Value = "Tipo";
 
-						if (dt.Columns.Contains("CodigoEmpleado"))
-							dt.Columns.Remove("CodigoEmpleado");
+						int col = 4;
 
-						if (dt.Columns.Contains("NombreCompleto"))
-							dt.Columns.Remove("NombreCompleto");
+						foreach (var dia in dias)
+						{
+							ws.Cell(fila, col).Value =
+								dia.ToString("ddd", new System.Globalization.CultureInfo("es-MX")).ToUpper();
+							col++;
+						}
 
-						int fila = 6;
-						int totalGeneral = 0;
+						ws.Cell(fila, col).Value = "TOTAL";
 
+						ws.Range(fila, 1, fila, col).Style.Font.Bold = true;
+						ws.Range(fila, 1, fila, col).Style.Fill.BackgroundColor = XLColor.FromHtml("#1F4E78");
+						ws.Range(fila, 1, fila, col).Style.Font.FontColor = XLColor.White;
+						ws.Range(fila, 1, fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+						fila++;
+
+						// ===== AGRUPAR DATOS =====
 						var datosAgrupados = dt.AsEnumerable()
-							.GroupBy(r => Convert.ToDateTime(r["Fecha"]).ToString("dd/MM/yyyy"))
-							.OrderBy(g => g.Key);
+							.GroupBy(r => new
+							{
+								Tamaño = r["Tamaño"].ToString(),
+								Presentacion = r["Presentacion"].ToString()
+							})
+							.ToList();
 
 						foreach (var grupo in datosAgrupados)
 						{
+							// NORMAL
+							ws.Cell(fila, 1).Value = grupo.Key.Tamaño;
+							ws.Cell(fila, 2).Value = grupo.Key.Presentacion;
+							ws.Cell(fila, 3).Value = "Normal";
 
-							ws.Cell(fila, 1).Value = $"Fecha: {grupo.Key}";
-							ws.Range(fila, 1, fila, 4).Merge();
-							ws.Cell(fila, 1).Style.Font.Bold = true;
-							ws.Cell(fila, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
-							fila++;
+							col = 4;
+							int totalNormal = 0;
 
-
-							ws.Cell(fila, 1).Value = "Presentación";
-							ws.Cell(fila, 2).Value = "Normal";
-							ws.Cell(fila, 3).Value = "Extra";
-							ws.Cell(fila, 4).Value = "Total";
-
-							ws.Range(fila, 1, fila, 4).Style.Font.Bold = true;
-							ws.Range(fila, 1, fila, 4).Style.Fill.BackgroundColor = XLColor.FromHtml("#D9E1F2");
-							ws.Range(fila, 1, fila, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-							fila++;
-
-							int totalDia = 0;
-
-							foreach (var row in grupo)
+							foreach (var dia in dias)
 							{
-								ws.Cell(fila, 1).Value = row["Presentacion"].ToString();
-								ws.Cell(fila, 2).Value = Convert.ToInt32(row["CajasNormal"]);
-								ws.Cell(fila, 3).Value = Convert.ToInt32(row["CajasExtra"]);
-								ws.Cell(fila, 4).Value = Convert.ToInt32(row["TotalCajas"]);
+								int normal = grupo
+									.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+									.Sum(r => Convert.ToInt32(r["CajasNormal"]));
 
-								ws.Cell(fila, 2).Style.NumberFormat.Format = "#,##0";
-								ws.Cell(fila, 3).Style.NumberFormat.Format = "#,##0";
-								ws.Cell(fila, 4).Style.NumberFormat.Format = "#,##0";
+								ws.Cell(fila, col).Value = normal == 0 ? "" : normal;
+								ws.Cell(fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-								ws.Range(fila, 1, fila, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-								totalDia += Convert.ToInt32(row["TotalCajas"]);
-								fila++;
+								totalNormal += normal;
+								col++;
 							}
 
+							ws.Cell(fila, col).Value = totalNormal;
+							ws.Cell(fila, col).Style.Font.Bold = true;
 
-							ws.Cell(fila, 3).Value = "Total Día:";
-							ws.Cell(fila, 4).Value = totalDia;
+							fila++;
 
-							ws.Cell(fila, 3).Style.Font.Bold = true;
-							ws.Cell(fila, 4).Style.Font.Bold = true;
+							// EXTRA
+							int totalExtraGrupo = grupo.Sum(r => Convert.ToInt32(r["CajasExtra"]));
 
-							ws.Range(fila, 3, fila, 4).Style.Fill.BackgroundColor = XLColor.LightGray;
+							if (totalExtraGrupo > 0)
+							{
+								ws.Cell(fila, 3).Value = "Extra";
 
-							totalGeneral += totalDia;
-							fila += 2;
+								col = 4;
+								int totalExtra = 0;
+
+								foreach (var dia in dias)
+								{
+									int extra = grupo
+										.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+										.Sum(r => Convert.ToInt32(r["CajasExtra"]));
+
+									ws.Cell(fila, col).Value = extra == 0 ? "" : extra;
+									ws.Cell(fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+									totalExtra += extra;
+									col++;
+								}
+
+								ws.Cell(fila, col).Value = totalExtra;
+								ws.Cell(fila, col).Style.Font.Bold = true;
+
+								fila++;
+							}
 						}
-
-
-						ws.Cell(fila, 3).Value = "TOTAL GENERAL:";
-						ws.Cell(fila, 4).Value = totalGeneral;
-
-						ws.Cell(fila, 3).Style.Font.Bold = true;
-						ws.Cell(fila, 4).Style.Font.Bold = true;
-
-						ws.Range(fila, 3, fila, 4).Style.Fill.BackgroundColor = XLColor.Gray;
-						ws.Range(fila, 3, fila, 4).Style.Font.FontColor = XLColor.White;
 
 						ws.Columns().AdjustToContents();
 
@@ -216,10 +238,10 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 			string query = $@"
 			SELECT *
 			FROM dbo.fn_PackersReport(
-            '{fechaInicio:yyyy-MM-dd}',
-            '{fechaFin:yyyy-MM-dd}',
-            '{linea}',
-            NULL
+			'{fechaInicio:yyyy-MM-dd}',
+			'{fechaFin:yyyy-MM-dd}',
+			'{linea}',
+			NULL
 			)
 			ORDER BY CodigoEmpleado, Fecha";
 
@@ -231,8 +253,8 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 				return;
 			}
 
-			string fecha = $"{fechaInicio:yyyy-MM-dd}_{fechaFin:yyyy-MM-dd}";
-			string nombreArchivo = $"Reporte_Linea_{linea}_{fecha}.xlsx";
+			string fechaHora = DateTime.Now.ToString("yyyyMMdd");
+			string nombreArchivo = $"Reporte Linea {linea} {fechaInicio:yyyy-MM-dd} al {fechaFin:yyyy-MM-dd}.xlsx";
 
 			using (SaveFileDialog sfd = new SaveFileDialog())
 			{
@@ -243,104 +265,174 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 				{
 					using (XLWorkbook wb = new XLWorkbook())
 					{
-
 						var empleados = dt.AsEnumerable()
 							.GroupBy(r => new
 							{
 								Codigo = r["CodigoEmpleado"].ToString(),
 								Nombre = r["NombreCompleto"].ToString()
-							});
+							})
+							.ToList();
 
-						foreach (var emp in empleados)
+						
+						for (int i = 0; i < empleados.Count; i += 3)
 						{
-							string nombreHoja = emp.Key.Codigo;
+							var ws = wb.Worksheets.Add($"Hoja_{(i / 2) + 1}");
+							int fila = 1;
 
-							var ws = wb.Worksheets.Add(nombreHoja);
-
-
-							ws.Cell("A1").Value = "REPORTE DE EMPACADOR";
-							ws.Range("A1:D1").Merge();
-							ws.Cell("A1").Style.Font.Bold = true;
-							ws.Cell("A1").Style.Font.FontSize = 16;
-							ws.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-							ws.Cell("A3").Value = "Empleado:";
-							ws.Cell("B3").Value = $"{emp.Key.Codigo} - {emp.Key.Nombre}";
-
-							ws.Cell("A4").Value = "Periodo:";
-							ws.Cell("B4").Value = $"{fechaInicio:dd/MM/yyyy} al {fechaFin:dd/MM/yyyy}";
-
-							int fila = 6;
-							int totalGeneral = 0;
-
-							var datosPorFecha = emp
-								.GroupBy(r => Convert.ToDateTime(r["Fecha"]).ToString("dd/MM/yyyy"))
-								.OrderBy(g => g.Key);
-
-							foreach (var grupoFecha in datosPorFecha)
+							void ImprimirEmpleado(IGrouping<dynamic, DataRow> emp)
 							{
-								ws.Cell(fila, 1).Value = $"Fecha: {grupoFecha.Key}";
-								ws.Range(fila, 1, fila, 4).Merge();
-								ws.Cell(fila, 1).Style.Font.Bold = true;
-								ws.Cell(fila, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+								var dias = emp
+									.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
+									.Distinct()
+									.OrderBy(d => d)
+									.ToList();
+
+								var datosAgrupados = emp
+									.GroupBy(r => new
+									{
+										Tamaño = r["Tamaño"].ToString(),
+										Presentacion = r["Presentacion"].ToString()
+									})
+									.ToList();
+
+								int totalColumnas = dias.Count + 4;
+								int inicioBloque = fila;
+
+								// ===== ENCABEZADO EMPLEADO =====
+								ws.Cell(fila, 1).Value =
+									$"Empleado: {emp.Key.Codigo} - {emp.Key.Nombre}";
+								ws.Range(fila, 1, fila, totalColumnas).Merge();
+								ws.Range(fila, 1, fila, totalColumnas).Style.Font.Bold = true;
+								ws.Range(fila, 1, fila, totalColumnas).Style.Fill.BackgroundColor =
+									XLColor.FromHtml("#E7E6E6");
 								fila++;
 
-								ws.Cell(fila, 1).Value = "Presentación";
-								ws.Cell(fila, 2).Value = "Normal";
-								ws.Cell(fila, 3).Value = "Extra";
-								ws.Cell(fila, 4).Value = "Total";
+								// ===== PERIODO =====
+								ws.Cell(fila, 1).Value =
+									$"Periodo: {fechaInicio:dd/MM/yyyy} al {fechaFin:dd/MM/yyyy}";
+								ws.Range(fila, 1, fila, totalColumnas).Merge();
+								fila += 2;
 
-								ws.Range(fila, 1, fila, 4).Style.Font.Bold = true;
-								ws.Range(fila, 1, fila, 4).Style.Fill.BackgroundColor = XLColor.FromHtml("#D9E1F2");
-								fila++;
+								// ===== ENCABEZADOS TABLA =====
+								ws.Cell(fila, 1).Value = "Tamaño";
+								ws.Cell(fila, 2).Value = "Presentación";
+								ws.Cell(fila, 3).Value = "Tipo";
 
-								int totalDia = 0;
+								int col = 4;
 
-								foreach (var row in grupoFecha)
+								foreach (var dia in dias)
 								{
-									ws.Cell(fila, 1).Value = row["Presentacion"].ToString();
-									ws.Cell(fila, 2).Value = Convert.ToInt32(row["CajasNormal"]);
-									ws.Cell(fila, 3).Value = Convert.ToInt32(row["CajasExtra"]);
-									ws.Cell(fila, 4).Value = Convert.ToInt32(row["TotalCajas"]);
-
-									ws.Cell(fila, 2).Style.NumberFormat.Format = "#,##0";
-									ws.Cell(fila, 3).Style.NumberFormat.Format = "#,##0";
-									ws.Cell(fila, 4).Style.NumberFormat.Format = "#,##0";
-
-									totalDia += Convert.ToInt32(row["TotalCajas"]);
-									fila++;
+									ws.Cell(fila, col).Value =
+										dia.ToString("ddd", new System.Globalization.CultureInfo("es-MX")).ToUpper();
+									col++;
 								}
 
-								ws.Cell(fila, 3).Value = "Total Día:";
-								ws.Cell(fila, 4).Value = totalDia;
-								ws.Cell(fila, 3).Style.Font.Bold = true;
-								ws.Cell(fila, 4).Style.Font.Bold = true;
+								ws.Cell(fila, col).Value = "TOTAL";
 
-								totalGeneral += totalDia;
-								fila += 2;
+								ws.Range(fila, 1, fila, col).Style.Font.Bold = true;
+								ws.Range(fila, 1, fila, col).Style.Fill.BackgroundColor =
+									XLColor.FromHtml("#1F4E78");
+								ws.Range(fila, 1, fila, col).Style.Font.FontColor = XLColor.White;
+								ws.Range(fila, 1, fila, col).Style.Alignment.Horizontal =
+									XLAlignmentHorizontalValues.Center;
+
+								fila++;
+
+								// ===== DATOS =====
+								foreach (var grupo in datosAgrupados)
+								{
+									// NORMAL
+									ws.Cell(fila, 1).Value = grupo.Key.Tamaño;
+									ws.Cell(fila, 2).Value = grupo.Key.Presentacion;
+									ws.Cell(fila, 3).Value = "Normal";
+
+									col = 4;
+									int totalNormal = 0;
+
+									foreach (var dia in dias)
+									{
+										int normal = grupo
+											.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+											.Sum(r => Convert.ToInt32(r["CajasNormal"]));
+
+										ws.Cell(fila, col).Value = normal == 0 ? "" : normal;
+										ws.Cell(fila, col).Style.Alignment.Horizontal =
+											XLAlignmentHorizontalValues.Center;
+
+										totalNormal += normal;
+										col++;
+									}
+
+									ws.Cell(fila, col).Value = totalNormal;
+									ws.Cell(fila, col).Style.Font.Bold = true;
+									fila++;
+
+									// EXTRA (solo si hay)
+									int totalExtraGrupo =
+										grupo.Sum(r => Convert.ToInt32(r["CajasExtra"]));
+
+									if (totalExtraGrupo > 0)
+									{
+										ws.Cell(fila, 3).Value = "Extra";
+
+										col = 4;
+										int totalExtra = 0;
+
+										foreach (var dia in dias)
+										{
+											int extra = grupo
+												.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+												.Sum(r => Convert.ToInt32(r["CajasExtra"]));
+
+											ws.Cell(fila, col).Value = extra == 0 ? "" : extra;
+											ws.Cell(fila, col).Style.Alignment.Horizontal =
+												XLAlignmentHorizontalValues.Center;
+
+											totalExtra += extra;
+											col++;
+										}
+
+										ws.Cell(fila, col).Value = totalExtra;
+										ws.Cell(fila, col).Style.Font.Bold = true;
+										fila++;
+									}
+								}
+
+								// ===== BORDE SOLO EXTERIOR (SIN LINEAS INTERNAS) =====
+								ws.Range(inicioBloque, 1, fila - 1, totalColumnas)
+									.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+
+								fila = inicioBloque + 26; // Espacio entre empleados
 							}
 
-							ws.Cell(fila, 3).Value = "TOTAL GENERAL:";
-							ws.Cell(fila, 4).Value = totalGeneral;
+							ImprimirEmpleado(empleados[i]);
 
-							ws.Cell(fila, 3).Style.Font.Bold = true;
-							ws.Cell(fila, 4).Style.Font.Bold = true;
-							ws.Range(fila, 3, fila, 4).Style.Fill.BackgroundColor = XLColor.Gray;
-							ws.Range(fila, 3, fila, 4).Style.Font.FontColor = XLColor.White;
+							if (i + 1 < empleados.Count)
+								ImprimirEmpleado(empleados[i + 1]);
+
+							//if (i + 2 < empleados.Count)
+							//	ImprimirEmpleado(empleados[i + 2]);
 
 							ws.Columns().AdjustToContents();
 						}
 
 						wb.SaveAs(sfd.FileName);
+
+						try
+						{
+							wb.SaveAs(sfd.FileName);
+						}
+						catch
+						{
+							MessageBox.Show("El archivo está abierto. Cierre Excel e intente nuevamente.");
+							return;
+						}
 					}
 
-					DialogResult result = MessageBox.Show(
-					"Reporte por línea generado correctamente.\n\n¿Desea abrirlo?",
-					"Abrir archivo",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Question);
-
-					if (result == DialogResult.Yes)
+					if (MessageBox.Show("Reporte generado correctamente.\n¿Desea abrirlo?",
+						"Abrir archivo",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question) == DialogResult.Yes)
 					{
 						Process.Start(new ProcessStartInfo(sfd.FileName)
 						{
@@ -350,15 +442,7 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 				}
 			}
 		}
+
 	}
-}
-		
-
 	
-
-
-
-
-
-
-
+}
