@@ -123,7 +123,6 @@
 			contratoToolStripMenuItem = new ToolStripMenuItem();
 			reporteDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
 			reporteToolStripMenuItem = new ToolStripMenuItem();
-			generarReporteDePodaEnExcelToolStripMenuItem = new ToolStripMenuItem();
 			consultasToolStripMenuItem = new ToolStripMenuItem();
 			palletsToolStripMenuItem = new ToolStripMenuItem();
 			manifiestosToolStripMenuItem = new ToolStripMenuItem();
@@ -146,9 +145,11 @@
 			vehículosToolStripMenuItem = new ToolStripMenuItem();
 			tipoDeVehículosToolStripMenuItem = new ToolStripMenuItem();
 			vehículosToolStripMenuItem1 = new ToolStripMenuItem();
+			generarReporteDePodaEnExcelToolStripMenuItem = new ToolStripMenuItem();
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -685,7 +686,7 @@
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, salarioDiversosToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, salarioDiversosToolStripMenuItem, reporteDeEmpacadorToolStripMenuItem });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
 			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
@@ -694,14 +695,14 @@
 			// calculToolStripMenuItem
 			// 
 			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
-			calculToolStripMenuItem.Size = new Size(180, 22);
+			calculToolStripMenuItem.Size = new Size(194, 22);
 			calculToolStripMenuItem.Text = "Calculo de Nomina";
 			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
 			// 
 			// salarioDiversosToolStripMenuItem
 			// 
 			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
-			salarioDiversosToolStripMenuItem.Size = new Size(180, 22);
+			salarioDiversosToolStripMenuItem.Size = new Size(194, 22);
 			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
 			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
@@ -797,21 +798,7 @@
 			// 
 			// consultasToolStripMenuItem
 			// 
-			consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem, plantasToolStripMenuItem });
-			consultasToolStripMenuItem.Name = "consultasToolStripMenuItem";
-			consultasToolStripMenuItem.Size = new Size(71, 19);
-			consultasToolStripMenuItem.Text = "Consultas";
-			// 
-			// generarReporteDePodaEnExcelToolStripMenuItem
-			// 
-			generarReporteDePodaEnExcelToolStripMenuItem.Name = "generarReporteDePodaEnExcelToolStripMenuItem";
-			generarReporteDePodaEnExcelToolStripMenuItem.Size = new Size(247, 22);
-			generarReporteDePodaEnExcelToolStripMenuItem.Text = "Generar reporte de poda en Excel";
-			generarReporteDePodaEnExcelToolStripMenuItem.Click += generarReporteDePodaEnExcelToolStripMenuItem_Click;
-			// 
-			// consultasToolStripMenuItem
-			// 
-			consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { palletsToolStripMenuItem, manifiestosToolStripMenuItem });
+			consultasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { plantasToolStripMenuItem, palletsToolStripMenuItem, manifiestosToolStripMenuItem });
 			consultasToolStripMenuItem.Name = "consultasToolStripMenuItem";
 			consultasToolStripMenuItem.Size = new Size(71, 19);
 			consultasToolStripMenuItem.Text = "Consultas";
@@ -819,7 +806,7 @@
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(180, 22);
+			palletsToolStripMenuItem.Size = new Size(135, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -827,7 +814,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(180, 22);
+			manifiestosToolStripMenuItem.Size = new Size(135, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
@@ -963,6 +950,13 @@
 			vehículosToolStripMenuItem1.Text = "Vehículos";
 			vehículosToolStripMenuItem1.Click += vehículosToolStripMenuItem1_Click;
 			// 
+			// generarReporteDePodaEnExcelToolStripMenuItem
+			// 
+			generarReporteDePodaEnExcelToolStripMenuItem.Name = "generarReporteDePodaEnExcelToolStripMenuItem";
+			generarReporteDePodaEnExcelToolStripMenuItem.Size = new Size(247, 22);
+			generarReporteDePodaEnExcelToolStripMenuItem.Text = "Generar reporte de poda en Excel";
+			generarReporteDePodaEnExcelToolStripMenuItem.Click += generarReporteDePodaEnExcelToolStripMenuItem_Click;
+			// 
 			// statusStrip1
 			// 
 			statusStrip1.ImageScalingSize = new Size(40, 40);
@@ -983,6 +977,13 @@
 			// 
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
+			// 
+			// reporteDeEmpacadorToolStripMenuItem
+			// 
+			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
+			reporteDeEmpacadorToolStripMenuItem.Size = new Size(194, 22);
+			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
+			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1132,5 +1133,6 @@
         private ToolStripMenuItem contratoToolStripMenuItem;
         private ToolStripMenuItem reporteDeAsistenciaToolStripMenuItem;
         private ToolStripMenuItem reporteToolStripMenuItem;
-    }
+		private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem;
+	}
 }

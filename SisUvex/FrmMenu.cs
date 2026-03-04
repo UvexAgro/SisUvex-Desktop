@@ -602,7 +602,7 @@ namespace SisUvex
 
 		private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -637,6 +637,13 @@ namespace SisUvex
 		{
 			Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
 			AbrirFormularioDialog(cat, 3);
+		}
+
+		private void reporteDeEmpacadorToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Reporte_de_Empacador.FrmPackersReport cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
 		}
 	}
 }
