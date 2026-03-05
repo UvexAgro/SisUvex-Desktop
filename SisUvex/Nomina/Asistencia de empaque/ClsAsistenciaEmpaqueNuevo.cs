@@ -155,7 +155,7 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
             else
             {//GUARDAR REGISTROS
 
-                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaBanda(frm.dgvLista))
+                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaBanda(frm.dgvLista) && ValidarEmpleadoRepetido(frm.dgvLista)) 
                 {
                     ConfirmarAccionAceptar();
                 }
@@ -230,31 +230,60 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
 			return true;
 		}
+		private bool ValidarEmpleadoRepetido(DataGridView dgv)
+		{
+			HashSet<string> empleados = new HashSet<string>();
+
+			foreach (DataGridViewRow row in dgv.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				string idEmpleado = row.Cells[frm.idEmpleado].Value?.ToString();
+
+				if (string.IsNullOrEmpty(idEmpleado))
+					continue;
+
+				if (!empleados.Add(idEmpleado))
+				{
+					MessageBox.Show(
+						$"El empleado {idEmpleado} está repetido en el Excel.",
+						"Validación",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 
 
-        //private bool ValidarColumnaHorasExtras(DataGridView dataGridView)
-        //      {
-        //          foreach (DataGridViewRow row in dataGridView.Rows)
-        //          {
-        //              string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
+		//private bool ValidarColumnaHorasExtras(DataGridView dataGridView)
+		//      {
+		//          foreach (DataGridViewRow row in dataGridView.Rows)
+		//          {
+		//              string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
 
-        //              if (!string.IsNullOrEmpty(_horasExtras))
-        //              {
-        //                  decimal horasExtrasDecimal;
+		//              if (!string.IsNullOrEmpty(_horasExtras))
+		//              {
+		//                  decimal horasExtrasDecimal;
 
-        //                  if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
-        //                  {
-        //                      MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
-        //                      return false;
-        //                  }
-        //              }
-        //          }
+		//                  if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
+		//                  {
+		//                      MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
+		//                      return false;
+		//                  }
+		//              }
+		//          }
 
-        //          return true;
-        //      }
+		//          return true;
+		//      }
 
-        public void ConfirmarAccionAceptar()
+		public void ConfirmarAccionAceptar()
         {
             DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos del Excel?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
