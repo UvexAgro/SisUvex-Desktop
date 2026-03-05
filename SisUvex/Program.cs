@@ -54,8 +54,8 @@ namespace SisUvex
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 			//Application.Run(new FrmManifestCat());
-			//Application.Run(new PantallaCarga());
-			Application.Run(new Nomina.Reporte_de_Empacador.FrmPackersReport());
+			Application.Run(new PantallaCarga());
+
 		}
     }
 }

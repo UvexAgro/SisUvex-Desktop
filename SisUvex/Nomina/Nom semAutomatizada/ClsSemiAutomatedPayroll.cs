@@ -62,7 +62,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			string referencias = frm.txbReferencia.Text;
 			string idLot = frm.cboLote.GetColumnValue(Column.id).ToString();
 			string horasTrabajadas = EParameters.GetValue("016", "01");//Parametro Duracion de la jornada laboral
-			string cajas = "0"; // Cajas Destajos (valor fijo)
 
 
 			DataTable dtCsv = new();
@@ -72,13 +71,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			dtCsv.Columns.Add("Sueldo", typeof(string));    //6
 			dtCsv.Columns.Add("Lote", typeof(string));
 			dtCsv.Columns.Add("Actividad", typeof(string));    //3
-			dtCsv.Columns.Add("Destajo", typeof(string));
+			dtCsv.Columns.Add("TotalCajas", typeof(string));
 			dtCsv.Columns.Add("HorasTrabajadas", typeof(string));
 
 			foreach (DataRow dr in dtNomina.Rows)
 			{
 				string fechaFormateada = Convert.ToDateTime(dr[0]).ToString("yyyy/MM/dd");
-				string sueldo = ClsValues.FormatZeros(dr[6].ToString(), "0000.00");
+				string sueldo = ClsValues.FormatZeros(dr[7].ToString(), "0000.00");
 				//string empleado = ClsValues.FormatZeros(dr[1].ToString(), "000000")
 				dtCsv.Rows.Add(
 					fechaFormateada,
@@ -87,7 +86,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					sueldo,
 					idLot,
 					dr[3],
-					cajas,
+					dr[6],
 					horasTrabajadas
 				);
 			}
@@ -236,6 +235,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			r.CodigoActividad,
 			t.v_descripcion_tab AS NombreActividad,
 			r.LineaProduccion,
+			r.TotalCajas,
 			r.SueldoTotal
 			FROM (
 			SELECT DISTINCT
@@ -258,7 +258,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			LEFT JOIN dbo.Nom_Employees e
 			ON e.id_employee = r.IdEmpleado
 			ORDER BY 
-			CAST(r.CodigoActividad AS INT) ASC ;";
+			CAST(r.CodigoActividad AS INT); ;";
 			return query;
 		}
 		public void BtnCargarDatos()
@@ -483,7 +483,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			SELECT DISTINCT
 			p.id_employee,
 			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreEmpleado
-			FROM Pack_PackedUniqueBoxBackUp2 p
+			FROM vw_PackedUniqueBoxUnionBackUp p
 			LEFT JOIN Nom_AttendenceList a
 			ON a.id_employee = p.id_employee
 			AND CAST(a.d_attendence AS DATE) = CAST(p.d_scan AS DATE)
