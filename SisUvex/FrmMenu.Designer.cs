@@ -110,6 +110,7 @@
 			nominaEmpaqueToolStripMenuItem = new ToolStripMenuItem();
 			calculToolStripMenuItem = new ToolStripMenuItem();
 			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
 			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -124,11 +125,11 @@
 			reporteDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
 			reporteToolStripMenuItem = new ToolStripMenuItem();
 			consultasToolStripMenuItem = new ToolStripMenuItem();
+			plantasToolStripMenuItem = new ToolStripMenuItem();
 			palletsToolStripMenuItem = new ToolStripMenuItem();
 			manifiestosToolStripMenuItem = new ToolStripMenuItem();
 			totalesPorManifiestoToolStripMenuItem = new ToolStripMenuItem();
 			totalDeCajasEmbarcadasToolStripMenuItem = new ToolStripMenuItem();
-			plantasToolStripMenuItem = new ToolStripMenuItem();
 			operaciónToolStripMenuItem = new ToolStripMenuItem();
 			cajasAGranelToolStripMenuItem = new ToolStripMenuItem();
 			materialesToolStripMenuItem = new ToolStripMenuItem();
@@ -149,7 +150,6 @@
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -706,6 +706,14 @@
 			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
 			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
+			// reporteDeEmpacadorToolStripMenuItem
+			// 
+			reporteDeEmpacadorToolStripMenuItem.Enabled = false;
+			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
+			reporteDeEmpacadorToolStripMenuItem.Size = new Size(194, 22);
+			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
+			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
+			// 
 			// credencialesToolStripMenuItem
 			// 
 			credencialesToolStripMenuItem.Name = "credencialesToolStripMenuItem";
@@ -803,6 +811,13 @@
 			consultasToolStripMenuItem.Size = new Size(71, 19);
 			consultasToolStripMenuItem.Text = "Consultas";
 			// 
+			// plantasToolStripMenuItem
+			// 
+			plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
+			plantasToolStripMenuItem.Size = new Size(135, 22);
+			plantasToolStripMenuItem.Text = "Plantas";
+			plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
+			// 
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
@@ -830,13 +845,6 @@
 			totalDeCajasEmbarcadasToolStripMenuItem.Size = new Size(212, 22);
 			totalDeCajasEmbarcadasToolStripMenuItem.Text = "Total de cajas embarcadas";
 			totalDeCajasEmbarcadasToolStripMenuItem.Click += totalDeCajasEmbarcadasToolStripMenuItem_Click;
-			// 
-			// plantasToolStripMenuItem
-			// 
-			plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
-			plantasToolStripMenuItem.Size = new Size(135, 22);
-			plantasToolStripMenuItem.Text = "Plantas";
-			plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
 			// 
 			// operaciónToolStripMenuItem
 			// 
@@ -977,13 +985,6 @@
 			// 
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
-			// 
-			// reporteDeEmpacadorToolStripMenuItem
-			// 
-			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
-			reporteDeEmpacadorToolStripMenuItem.Size = new Size(194, 22);
-			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
-			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 

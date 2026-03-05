@@ -641,9 +641,9 @@ namespace SisUvex
 
 		private void reporteDeEmpacadorToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Nomina.Reporte_de_Empacador.FrmPackersReport cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
+			//Nomina.Reporte_de_Empacador.FrmPackersReport cat = new();
+			//cat.WindowState = FormWindowState.Maximized;
+			//AbrirVentanaHijo(cat, 3);
 		}
 	}
 }
