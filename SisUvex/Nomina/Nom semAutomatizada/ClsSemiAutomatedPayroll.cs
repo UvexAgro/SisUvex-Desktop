@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -283,6 +284,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
 
+				if (!ValidarCajasSinAsistencia(fecha))
+					return;
+
 				if (!ValidarHorarioDeEmpaque(fecha))
 				{
 					MessageBox.Show($"No existe horario de empaque para la fecha {fecha}",
@@ -473,7 +477,61 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return false;
 		}
+		private bool ValidarCajasSinAsistencia(string fecha)
+		{
+			string query = $@"
+			SELECT DISTINCT
+			p.id_employee,
+			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreEmpleado
+			FROM Pack_PackedUniqueBoxBackUp2 p
+			LEFT JOIN Nom_AttendenceList a
+			ON a.id_employee = p.id_employee
+			AND CAST(a.d_attendence AS DATE) = CAST(p.d_scan AS DATE)
+			LEFT JOIN Nom_Employees e
+			ON e.id_employee = p.id_employee
+			WHERE 
+			a.id_employee IS NULL
+			AND CAST(p.d_scan AS DATE) = '{fecha}'";
 
+			DataTable dt = ClsQuerysDB.GetDataTable(query);
+
+			if (dt.Rows.Count == 0)
+				return true;
+
+			StringBuilder empleados = new StringBuilder();
+
+			foreach (DataRow row in dt.Rows)
+			{
+				empleados.AppendLine($"{row["id_employee"]} - {row["NombreEmpleado"]}");
+			}
+
+			string listaEmpleados = empleados.ToString();
+
+			DialogResult result = MessageBox.Show(
+			"Los siguientes empleados tienen cajas pero no asistencia:\n\n" +
+			listaEmpleados +
+			"\n¿Deseas abrir la lista en Bloc de notas?",
+			"Validación de asistencia",
+			MessageBoxButtons.YesNo,
+			MessageBoxIcon.Warning
+			);
+
+			if (result == DialogResult.Yes)
+			{
+				string rutaArchivo = Path.Combine(Path.GetTempPath(), "EmpleadosSinAsistencia.txt");
+
+				File.WriteAllText(rutaArchivo, listaEmpleados);
+
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = "notepad.exe",
+					Arguments = $"\"{rutaArchivo}\"",
+					UseShellExecute = true
+				});
+			}
+
+			return false;
+		}
 	}
 
 
