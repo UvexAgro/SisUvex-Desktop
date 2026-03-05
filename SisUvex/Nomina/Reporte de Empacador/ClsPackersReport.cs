@@ -2,17 +2,30 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
+using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using MathNet.Numerics.RootFinding;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Nomina.Nom_semAutomatizada;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using SisUvex.Catalogos.Metods.Extentions;
 
 namespace SisUvex.Nomina.Reporte_de_Empacador
 {
@@ -28,408 +41,253 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 		}
 		public void ObtenerPackersReport()
 		{
-			string fechaInicio = frmPack.dtpFecha1.Value.ToString("yyyy-MM-dd");
-			string fechaFin = frmPack.dtpFecha2.Value.ToString("yyyy-MM-dd");
-			string idEmpleado = frmPack.txbCodigo.Text.Trim();
-			string linea = frmPack.cboLineas.SelectedValue.ToString();
-
-			if (string.IsNullOrEmpty(idEmpleado))
+			try
 			{
-				MessageBox.Show("Ingrese un empleado");
-				return;
-			}
+				string idEmpleado = frmPack.txbCodigo.Text.Trim();
+				string linea = frmPack.cboLineas.SelectedValue?.ToString();
 
-			string queryFinal = $@"
-			SELECT *
-			FROM dbo.fn_PackersReport(
-			'{fechaInicio}',
-			'{fechaFin}',
-			'{linea}',
-			'{idEmpleado}'
-			)
-			ORDER BY Fecha";
-
-			DataTable dt = ClsQuerysDB.GetDataTable(queryFinal);
-
-			frmPack.dgvEmployee.DataSource = dt;
-
-			if (dt.Rows.Count > 0)
-				frmPack.txbNombre.Text = dt.Rows[0]["NombreCompleto"].ToString();
-			else
-				frmPack.txbNombre.Text = "";
-		}
-		public void ExportarExcelPorEmpacador()
-		{
-			if (frmPack.dgvEmployee.Rows.Count == 0)
-			{
-				MessageBox.Show("No hay datos para exportar.");
-				return;
-			}
-
-			string codigo = frmPack.txbCodigo.Text.Trim();
-			string nombre = frmPack.txbNombre.Text.Trim();
-
-			DateTime fechaInicio = frmPack.dtpFecha1.Value;
-			DateTime fechaFin = frmPack.dtpFecha2.Value;
-
-			string nombreArchivo = $"Reporte {codigo} {nombre} {fechaInicio:dd-MM-yyyy} al {fechaFin:dd-MM-yyyy}.xlsx";
-
-			using (SaveFileDialog sfd = new SaveFileDialog())
-			{
-				sfd.Filter = "Excel (*.xlsx)|*.xlsx";
-				sfd.FileName = nombreArchivo;
-
-				if (sfd.ShowDialog() == DialogResult.OK)
+				if (string.IsNullOrEmpty(idEmpleado))
 				{
-					using (XLWorkbook wb = new XLWorkbook())
-					{
-						var ws = wb.Worksheets.Add("Reporte");
+					MessageBox.Show("Ingrese un empleado");
+					frmPack.txbCodigo.Focus();
+					return;
+				}
 
-						DataTable dt = (DataTable)frmPack.dgvEmployee.DataSource;
+				if (string.IsNullOrEmpty(linea))
+				{
+					MessageBox.Show("Seleccione una línea");
+					return;
+				}
 
-						var dias = dt.AsEnumerable()
-							.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
-							.Distinct()
-							.OrderBy(d => d)
-							.ToList();
+				if (frmPack.cboSemana.SelectedItem == null)
+				{
+					MessageBox.Show("Seleccione una semana.");
+					return;
+				}
 
-						int fila = 1;
+				DataRowView row = (DataRowView)frmPack.cboSemana.SelectedItem;
 
-						int totalColumnas = dias.Count + 4;
+				DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
+				DateTime fechaFin = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnEndDate]);
 
-						// ===== EMPLEADO =====
-						ws.Cell(fila, 1).Value = $"Empleado: {codigo} - {nombre}";
-						ws.Range(fila, 1, fila, totalColumnas).Merge();
-						ws.Range(fila, 1, fila, totalColumnas).Style.Font.Bold = true;
-						ws.Range(fila, 1, fila, totalColumnas).Style.Fill.BackgroundColor = XLColor.LightGray;
-						fila++;
+				string query = $@"
+				SELECT *
+				FROM dbo.fn_PackersReport(
+				'{fechaInicio:yyyy-MM-dd}',
+				'{fechaFin:yyyy-MM-dd}',
+				'{linea}',
+				'{idEmpleado}')
+				ORDER BY CodigoEmpleado, Fecha";
 
-						// ===== PERIODO =====
-						ws.Cell(fila, 1).Value =
-							$"Periodo: {frmPack.dtpFecha1.Value:dd/MM/yyyy} al {frmPack.dtpFecha2.Value:dd/MM/yyyy}";
-						ws.Range(fila, 1, fila, totalColumnas).Merge();
-						fila += 2;
+				DataTable dt = ClsQuerysDB.GetDataTable(query);
 
-						// ===== ENCABEZADOS =====
-						ws.Cell(fila, 1).Value = "Tamaño";
-						ws.Cell(fila, 2).Value = "Presentación";
-						ws.Cell(fila, 3).Value = "Tipo";
+				frmPack.dgvEmployee.DataSource = dt;
 
-						int col = 4;
+				if (dt.Rows.Count > 0)
+				{
+					frmPack.txbNombre.Text = dt.Rows[0]["NombreCompleto"].ToString();
+				}
+				else
+				{
+					frmPack.txbNombre.Text = "";
+					MessageBox.Show("No se encontraron registros.");
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al obtener datos:\n" + ex.Message);
+			}
+		}
+		public void CargarPeriodos()
+		{
+			ClsComboBoxes.CboLoadActives(frmPack.cboSemana, Payroll_AttendancePeriod.Cbo);
 
-						foreach (var dia in dias)
-						{
-							ws.Cell(fila, col).Value =
-								dia.ToString("ddd", new System.Globalization.CultureInfo("es-MX")).ToUpper();
-							col++;
-						}
+			DateTime hoy = DateTime.Today;
 
-						ws.Cell(fila, col).Value = "TOTAL";
+			for (int i = 0; i < frmPack.cboSemana.Items.Count; i++)
+			{
+				DataRowView row = (DataRowView)frmPack.cboSemana.Items[i];
 
-						ws.Range(fila, 1, fila, col).Style.Font.Bold = true;
-						ws.Range(fila, 1, fila, col).Style.Fill.BackgroundColor = XLColor.FromHtml("#1F4E78");
-						ws.Range(fila, 1, fila, col).Style.Font.FontColor = XLColor.White;
-						ws.Range(fila, 1, fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+				if (row[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value ||
+					row[Payroll_AttendancePeriod.ColumnEndDate] == DBNull.Value)
+				{
+					continue;
+				}
 
-						fila++;
+				DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
+				DateTime fechaFin = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnEndDate]);
 
-						// ===== AGRUPAR DATOS =====
-						var datosAgrupados = dt.AsEnumerable()
-							.GroupBy(r => new
-							{
-								Tamaño = r["Tamaño"].ToString(),
-								Presentacion = r["Presentacion"].ToString()
-							})
-							.ToList();
-
-						foreach (var grupo in datosAgrupados)
-						{
-							// NORMAL
-							ws.Cell(fila, 1).Value = grupo.Key.Tamaño;
-							ws.Cell(fila, 2).Value = grupo.Key.Presentacion;
-							ws.Cell(fila, 3).Value = "Normal";
-
-							col = 4;
-							int totalNormal = 0;
-
-							foreach (var dia in dias)
-							{
-								int normal = grupo
-									.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
-									.Sum(r => Convert.ToInt32(r["CajasNormal"]));
-
-								ws.Cell(fila, col).Value = normal == 0 ? "" : normal;
-								ws.Cell(fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-								totalNormal += normal;
-								col++;
-							}
-
-							ws.Cell(fila, col).Value = totalNormal;
-							ws.Cell(fila, col).Style.Font.Bold = true;
-
-							fila++;
-
-							// EXTRA
-							int totalExtraGrupo = grupo.Sum(r => Convert.ToInt32(r["CajasExtra"]));
-
-							if (totalExtraGrupo > 0)
-							{
-								ws.Cell(fila, 3).Value = "Extra";
-
-								col = 4;
-								int totalExtra = 0;
-
-								foreach (var dia in dias)
-								{
-									int extra = grupo
-										.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
-										.Sum(r => Convert.ToInt32(r["CajasExtra"]));
-
-									ws.Cell(fila, col).Value = extra == 0 ? "" : extra;
-									ws.Cell(fila, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-									totalExtra += extra;
-									col++;
-								}
-
-								ws.Cell(fila, col).Value = totalExtra;
-								ws.Cell(fila, col).Style.Font.Bold = true;
-
-								fila++;
-							}
-						}
-
-						ws.Columns().AdjustToContents();
-
-						try
-						{
-							wb.SaveAs(sfd.FileName);
-						}
-						catch
-						{
-							MessageBox.Show("El archivo está abierto. Cierre Excel e intente nuevamente.");
-							return;
-						}
-					}
-
-					DialogResult result = MessageBox.Show(
-						"Excel generado correctamente.\n\n¿Desea abrirlo?",
-						"Abrir archivo",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question);
-
-					if (result == DialogResult.Yes)
-					{
-						Process.Start(new ProcessStartInfo(sfd.FileName)
-						{
-							UseShellExecute = true
-						});
-					}
+				if (hoy >= fechaInicio && hoy <= fechaFin)
+				{
+					frmPack.cboSemana.SelectedIndex = i;
+					break;
 				}
 			}
 		}
-		public void ExportarExcelPorLinea()
+		public void ExportarPdfPorEmpacador()
 		{
-			string linea = frmPack.cboLineas.SelectedValue.ToString();
-			DateTime fechaInicio = frmPack.dtpFecha1.Value;
-			DateTime fechaFin = frmPack.dtpFecha2.Value;
-
-			string query = $@"
-			SELECT *
-			FROM dbo.fn_PackersReport(
-			'{fechaInicio:yyyy-MM-dd}',
-			'{fechaFin:yyyy-MM-dd}',
-			'{linea}',
-			NULL
-			)
-			ORDER BY CodigoEmpleado, Fecha";
-
-			DataTable dt = ClsQuerysDB.GetDataTable(query);
-
-			if (dt.Rows.Count == 0)
+			try
 			{
-				MessageBox.Show("No hay datos para exportar.");
-				return;
-			}
+				// Obtener datos del reporte desde el DataGridView
+				DataTable dt = frmPack.dgvEmployee.DataSource as DataTable;
 
-			string fechaHora = DateTime.Now.ToString("yyyyMMdd");
-			string nombreArchivo = $"Reporte Linea {linea} {fechaInicio:yyyy-MM-dd} al {fechaFin:yyyy-MM-dd}.xlsx";
-
-			using (SaveFileDialog sfd = new SaveFileDialog())
-			{
-				sfd.Filter = "Excel (*.xlsx)|*.xlsx";
-				sfd.FileName = nombreArchivo;
-
-				if (sfd.ShowDialog() == DialogResult.OK)
+				if (dt == null || dt.Rows.Count == 0)
 				{
-					using (XLWorkbook wb = new XLWorkbook())
+					MessageBox.Show("No hay datos para exportar.");
+					return;
+				}
+
+				string codigo = frmPack.txbCodigo.Text.Trim();
+				string nombre = frmPack.txbNombre.Text.Trim();
+
+				// Obtener fechas desde el ComboBox de semanas
+				DataRowView row = (DataRowView)frmPack.cboSemana.SelectedItem;
+
+				DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
+				DateTime fechaFin = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnEndDate]);
+
+				string nombreArchivo = $"Reporte {codigo} {nombre} {fechaInicio:dd-MM-yyyy} al {fechaFin:dd-MM-yyyy}.pdf";
+
+				using (SaveFileDialog sfd = new SaveFileDialog())
+				{
+					sfd.Filter = "PDF (*.pdf)|*.pdf";
+					sfd.FileName = nombreArchivo;
+
+					if (sfd.ShowDialog() != DialogResult.OK)
+						return;
+
+					// Obtener días del reporte
+					var dias = dt.AsEnumerable()
+						.Where(r => r["Fecha"] != DBNull.Value)
+						.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
+						.Distinct()
+						.OrderBy(d => d)
+						.ToList();
+
+					PdfWriter writer = new PdfWriter(sfd.FileName);
+					PdfDocument pdf = new PdfDocument(writer);
+					Document document = new Document(pdf);
+
+					PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+					PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+
+					int totalColumnas = dias.Count + 4;
+
+					float[] columnWidths = new float[totalColumnas];
+					for (int i = 0; i < totalColumnas; i++)
+						columnWidths[i] = 1;
+
+					Table table = new Table(columnWidths);
+					table.SetWidth(UnitValue.CreatePercentValue(100));
+
+					// ===== EMPLEADO =====
+					table.AddCell(
+						new Cell(1, totalColumnas)
+						.Add(new Paragraph($"Empleado: {codigo} - {nombre}").SetFont(fontBold))
+						.SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+						.SetTextAlignment(TextAlignment.CENTER)
+					);
+
+					// ===== PERIODO =====
+					table.AddCell(
+						new Cell(1, totalColumnas)
+						.Add(new Paragraph($"Periodo: {fechaInicio:dd/MM/yyyy} al {fechaFin:dd/MM/yyyy}").SetFont(font))
+						.SetTextAlignment(TextAlignment.CENTER)
+					);
+
+					// ===== ENCABEZADOS =====
+					table.AddCell(new Paragraph("Tamaño").SetFont(fontBold));
+					table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+					table.AddCell(new Paragraph("Tipo").SetFont(fontBold));
+
+					foreach (var dia in dias)
 					{
-						var empleados = dt.AsEnumerable()
-							.GroupBy(r => new
-							{
-								Codigo = r["CodigoEmpleado"].ToString(),
-								Nombre = r["NombreCompleto"].ToString()
-							})
-							.ToList();
+						string nombreDia = dia
+							.ToString("ddd", new System.Globalization.CultureInfo("es-MX"))
+							.ToUpper();
 
-						
-						for (int i = 0; i < empleados.Count; i += 3)
+						table.AddCell(
+							new Cell()
+							.Add(new Paragraph(nombreDia).SetFont(fontBold))
+							.SetTextAlignment(TextAlignment.CENTER));
+					}
+
+					table.AddCell(
+						new Cell()
+						.Add(new Paragraph("TOTAL").SetFont(fontBold))
+						.SetTextAlignment(TextAlignment.CENTER));
+
+					// ===== AGRUPAR DATOS =====
+					var datosAgrupados = dt.AsEnumerable()
+						.GroupBy(r => new
 						{
-							var ws = wb.Worksheets.Add($"Hoja_{(i / 2) + 1}");
-							int fila = 1;
+							Tamaño = r["Tamaño"].ToString(),
+							Presentacion = r["Presentacion"].ToString()
+						})
+						.ToList();
 
-							void ImprimirEmpleado(IGrouping<dynamic, DataRow> emp)
+					foreach (var grupo in datosAgrupados)
+					{
+						table.AddCell(new Paragraph(grupo.Key.Tamaño).SetFont(font));
+						table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+						table.AddCell(new Paragraph("Normal").SetFont(font));
+
+						int totalNormal = 0;
+
+						foreach (var dia in dias)
+						{
+							int normal = grupo
+								.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+								.Sum(r => r["CajasNormal"] == DBNull.Value ? 0 : Convert.ToInt32(r["CajasNormal"]));
+
+							table.AddCell(
+								new Cell()
+								.Add(new Paragraph(normal == 0 ? "" : normal.ToString()).SetFont(font))
+								.SetTextAlignment(TextAlignment.CENTER));
+
+							totalNormal += normal;
+						}
+
+						table.AddCell(
+							new Cell()
+							.Add(new Paragraph(totalNormal.ToString()).SetFont(fontBold))
+							.SetTextAlignment(TextAlignment.CENTER));
+
+						int totalExtraGrupo = grupo.Sum(r => r["CajasExtra"] == DBNull.Value ? 0 : Convert.ToInt32(r["CajasExtra"]));
+
+						if (totalExtraGrupo > 0)
+						{
+							table.AddCell("");
+							table.AddCell("");
+							table.AddCell(new Paragraph("Extra").SetFont(font));
+
+							int totalExtra = 0;
+
+							foreach (var dia in dias)
 							{
-								var dias = emp
-									.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
-									.Distinct()
-									.OrderBy(d => d)
-									.ToList();
+								int extra = grupo
+									.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+									.Sum(r => r["CajasExtra"] == DBNull.Value ? 0 : Convert.ToInt32(r["CajasExtra"]));
 
-								var datosAgrupados = emp
-									.GroupBy(r => new
-									{
-										Tamaño = r["Tamaño"].ToString(),
-										Presentacion = r["Presentacion"].ToString()
-									})
-									.ToList();
+								table.AddCell(
+									new Cell()
+									.Add(new Paragraph(extra == 0 ? "" : extra.ToString()).SetFont(font))
+									.SetTextAlignment(TextAlignment.CENTER));
 
-								int totalColumnas = dias.Count + 4;
-								int inicioBloque = fila;
-
-								// ===== ENCABEZADO EMPLEADO =====
-								ws.Cell(fila, 1).Value =
-									$"Empleado: {emp.Key.Codigo} - {emp.Key.Nombre}";
-								ws.Range(fila, 1, fila, totalColumnas).Merge();
-								ws.Range(fila, 1, fila, totalColumnas).Style.Font.Bold = true;
-								ws.Range(fila, 1, fila, totalColumnas).Style.Fill.BackgroundColor =
-									XLColor.FromHtml("#E7E6E6");
-								fila++;
-
-								// ===== PERIODO =====
-								ws.Cell(fila, 1).Value =
-									$"Periodo: {fechaInicio:dd/MM/yyyy} al {fechaFin:dd/MM/yyyy}";
-								ws.Range(fila, 1, fila, totalColumnas).Merge();
-								fila += 2;
-
-								// ===== ENCABEZADOS TABLA =====
-								ws.Cell(fila, 1).Value = "Tamaño";
-								ws.Cell(fila, 2).Value = "Presentación";
-								ws.Cell(fila, 3).Value = "Tipo";
-
-								int col = 4;
-
-								foreach (var dia in dias)
-								{
-									ws.Cell(fila, col).Value =
-										dia.ToString("ddd", new System.Globalization.CultureInfo("es-MX")).ToUpper();
-									col++;
-								}
-
-								ws.Cell(fila, col).Value = "TOTAL";
-
-								ws.Range(fila, 1, fila, col).Style.Font.Bold = true;
-								ws.Range(fila, 1, fila, col).Style.Fill.BackgroundColor =
-									XLColor.FromHtml("#1F4E78");
-								ws.Range(fila, 1, fila, col).Style.Font.FontColor = XLColor.White;
-								ws.Range(fila, 1, fila, col).Style.Alignment.Horizontal =
-									XLAlignmentHorizontalValues.Center;
-
-								fila++;
-
-								// ===== DATOS =====
-								foreach (var grupo in datosAgrupados)
-								{
-									// NORMAL
-									ws.Cell(fila, 1).Value = grupo.Key.Tamaño;
-									ws.Cell(fila, 2).Value = grupo.Key.Presentacion;
-									ws.Cell(fila, 3).Value = "Normal";
-
-									col = 4;
-									int totalNormal = 0;
-
-									foreach (var dia in dias)
-									{
-										int normal = grupo
-											.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
-											.Sum(r => Convert.ToInt32(r["CajasNormal"]));
-
-										ws.Cell(fila, col).Value = normal == 0 ? "" : normal;
-										ws.Cell(fila, col).Style.Alignment.Horizontal =
-											XLAlignmentHorizontalValues.Center;
-
-										totalNormal += normal;
-										col++;
-									}
-
-									ws.Cell(fila, col).Value = totalNormal;
-									ws.Cell(fila, col).Style.Font.Bold = true;
-									fila++;
-
-									// EXTRA (solo si hay)
-									int totalExtraGrupo =
-										grupo.Sum(r => Convert.ToInt32(r["CajasExtra"]));
-
-									if (totalExtraGrupo > 0)
-									{
-										ws.Cell(fila, 3).Value = "Extra";
-
-										col = 4;
-										int totalExtra = 0;
-
-										foreach (var dia in dias)
-										{
-											int extra = grupo
-												.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
-												.Sum(r => Convert.ToInt32(r["CajasExtra"]));
-
-											ws.Cell(fila, col).Value = extra == 0 ? "" : extra;
-											ws.Cell(fila, col).Style.Alignment.Horizontal =
-												XLAlignmentHorizontalValues.Center;
-
-											totalExtra += extra;
-											col++;
-										}
-
-										ws.Cell(fila, col).Value = totalExtra;
-										ws.Cell(fila, col).Style.Font.Bold = true;
-										fila++;
-									}
-								}
-
-								// ===== BORDE SOLO EXTERIOR (SIN LINEAS INTERNAS) =====
-								ws.Range(inicioBloque, 1, fila - 1, totalColumnas)
-									.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-
-								fila = inicioBloque + 26; // Espacio entre empleados
+								totalExtra += extra;
 							}
 
-							ImprimirEmpleado(empleados[i]);
-
-							if (i + 1 < empleados.Count)
-								ImprimirEmpleado(empleados[i + 1]);
-
-							//if (i + 2 < empleados.Count)
-							//	ImprimirEmpleado(empleados[i + 2]);
-
-							ws.Columns().AdjustToContents();
-						}
-
-						wb.SaveAs(sfd.FileName);
-
-						try
-						{
-							wb.SaveAs(sfd.FileName);
-						}
-						catch
-						{
-							MessageBox.Show("El archivo está abierto. Cierre Excel e intente nuevamente.");
-							return;
+							table.AddCell(
+								new Cell()
+								.Add(new Paragraph(totalExtra.ToString()).SetFont(fontBold))
+								.SetTextAlignment(TextAlignment.CENTER));
 						}
 					}
 
-					if (MessageBox.Show("Reporte generado correctamente.\n¿Desea abrirlo?",
+					document.Add(table);
+					document.Close();
+
+					if (MessageBox.Show("PDF generado correctamente.\n¿Desea abrirlo?",
 						"Abrir archivo",
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Question) == DialogResult.Yes)
@@ -441,8 +299,227 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 					}
 				}
 			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al generar el PDF:\n" + ex.Message);
+			}
 		}
+		public void ExportarPdfPorLinea()
+		{
+			string linea = frmPack.cboLineas.SelectedValue?.ToString();
 
+			string lineaSql = "NULL";
+
+			if (!string.IsNullOrEmpty(linea) && linea != "0")
+			{
+				lineaSql = $"'{linea}'";
+			}
+
+			// Obtener semana y fechas desde el ComboBox
+			DateTime fechaInicio = Convert.ToDateTime(frmPack.cboSemana.GetColumnValue(Payroll_AttendancePeriod.ColumnStartDate));
+			DateTime fechaFin = Convert.ToDateTime(frmPack.cboSemana.GetColumnValue(Payroll_AttendancePeriod.ColumnEndDate));
+
+			string query = $@"
+			SELECT *
+			FROM dbo.fn_PackersReport(
+			'{fechaInicio:yyyy-MM-dd}',
+			'{fechaFin:yyyy-MM-dd}',
+			{lineaSql},
+			NULL)
+			ORDER BY CodigoEmpleado, Fecha";
+
+			DataTable dt = ClsQuerysDB.GetDataTable(query);
+
+			if (dt.Rows.Count == 0)
+			{
+				MessageBox.Show("No hay datos para exportar.");
+				return;
+			}
+
+			string nombreArchivo =
+			$"Reporte Linea {linea} {fechaInicio:yyyy-MM-dd} al {fechaFin:yyyy-MM-dd}.pdf";
+
+			using (SaveFileDialog sfd = new SaveFileDialog())
+			{
+				sfd.Filter = "PDF (*.pdf)|*.pdf";
+				sfd.FileName = nombreArchivo;
+
+				if (sfd.ShowDialog() == DialogResult.OK)
+				{
+					try
+					{
+						PdfWriter writer = new PdfWriter(sfd.FileName);
+						PdfDocument pdf = new PdfDocument(writer);
+						Document document = new Document(pdf);
+
+						PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+						PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+
+						var empleados = dt.AsEnumerable()
+						.GroupBy(r => new
+						{
+							Codigo = r["CodigoEmpleado"].ToString(),
+							Nombre = r["NombreCompleto"].ToString()
+						})
+						.ToList();
+
+						for (int i = 0; i < empleados.Count; i++)
+						{
+							var emp = empleados[i];
+
+							var dias = emp
+							.Select(r => Convert.ToDateTime(r["Fecha"]).Date)
+							.Distinct()
+							.OrderBy(d => d)
+							.ToList();
+
+							int totalColumnas = dias.Count + 4;
+
+							float[] columnas = new float[totalColumnas];
+							for (int c = 0; c < totalColumnas; c++)
+								columnas[c] = 1;
+
+							Table table = new Table(columnas);
+							table.SetWidth(UnitValue.CreatePercentValue(100));
+
+							// ===== EMPLEADO =====
+							table.AddCell(
+							new Cell(1, totalColumnas)
+							.Add(new Paragraph($"Empleado: {emp.Key.Codigo} - {emp.Key.Nombre}")
+							.SetFont(fontBold))
+							.SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+							.SetTextAlignment(TextAlignment.CENTER));
+
+							// ===== PERIODO =====
+							table.AddCell(
+							new Cell(1, totalColumnas)
+							.Add(new Paragraph($"Periodo: {fechaInicio:dd/MM/yyyy} al {fechaFin:dd/MM/yyyy}")
+							.SetFont(font))
+							.SetTextAlignment(TextAlignment.CENTER));
+
+							// ===== ENCABEZADOS =====
+							table.AddCell(new Paragraph("Tamaño").SetFont(fontBold));
+							table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+							table.AddCell(new Paragraph("Tipo").SetFont(fontBold));
+
+							foreach (var dia in dias)
+							{
+								string nombreDia = dia
+								.ToString("ddd", new System.Globalization.CultureInfo("es-MX"))
+								.ToUpper();
+
+								table.AddCell(
+								new Cell()
+								.Add(new Paragraph(nombreDia).SetFont(fontBold))
+								.SetTextAlignment(TextAlignment.CENTER));
+							}
+
+							table.AddCell(
+							new Cell()
+							.Add(new Paragraph("TOTAL").SetFont(fontBold))
+							.SetTextAlignment(TextAlignment.CENTER));
+
+							// ===== DATOS =====
+							var datosAgrupados = emp
+							.GroupBy(r => new
+							{
+								Tamaño = r["Tamaño"].ToString(),
+								Presentacion = r["Presentacion"].ToString()
+							})
+							.ToList();
+
+							foreach (var grupo in datosAgrupados)
+							{
+								table.AddCell(new Paragraph(grupo.Key.Tamaño).SetFont(font));
+								table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+								table.AddCell(new Paragraph("Normal").SetFont(font));
+
+								int totalNormal = 0;
+
+								foreach (var dia in dias)
+								{
+									int normal = grupo
+									.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+									.Sum(r => Convert.ToInt32(r["CajasNormal"]));
+
+									table.AddCell(
+									new Cell()
+									.Add(new Paragraph(normal == 0 ? "" : normal.ToString()).SetFont(font))
+									.SetTextAlignment(TextAlignment.CENTER));
+
+									totalNormal += normal;
+								}
+
+								table.AddCell(
+								new Cell()
+								.Add(new Paragraph(totalNormal.ToString()).SetFont(fontBold))
+								.SetTextAlignment(TextAlignment.CENTER));
+
+								int totalExtraGrupo = grupo.Sum(r => Convert.ToInt32(r["CajasExtra"]));
+
+								if (totalExtraGrupo > 0)
+								{
+									table.AddCell("");
+									table.AddCell("");
+									table.AddCell(new Paragraph("Extra").SetFont(font));
+
+									int totalExtra = 0;
+
+									foreach (var dia in dias)
+									{
+										int extra = grupo
+										.Where(r => Convert.ToDateTime(r["Fecha"]).Date == dia)
+										.Sum(r => Convert.ToInt32(r["CajasExtra"]));
+
+										table.AddCell(
+										new Cell()
+										.Add(new Paragraph(extra == 0 ? "" : extra.ToString()).SetFont(font))
+										.SetTextAlignment(TextAlignment.CENTER));
+
+										totalExtra += extra;
+									}
+
+									table.AddCell(
+									new Cell()
+									.Add(new Paragraph(totalExtra.ToString()).SetFont(fontBold))
+									.SetTextAlignment(TextAlignment.CENTER));
+								}
+							}
+
+							document.Add(table);
+
+							// ===== 2 EMPLEADOS POR HOJA =====
+							if (i % 2 == 0)
+							{
+								Paragraph espacio = new Paragraph("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+								document.Add(espacio);
+							}
+							else
+							{
+								document.Add(new AreaBreak());
+							}
+						}
+
+						document.Close();
+					}
+					catch
+					{
+						MessageBox.Show("Error al generar el PDF.");
+						return;
+					}
+
+					if (MessageBox.Show("Reporte generado correctamente.\n¿Desea abrirlo?",
+					"Abrir archivo",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question) == DialogResult.Yes)
+					{
+						Process.Start(new ProcessStartInfo(sfd.FileName)
+						{
+							UseShellExecute = true
+						});
+					}
+				}
+			}
+		}
 	}
-	
 }

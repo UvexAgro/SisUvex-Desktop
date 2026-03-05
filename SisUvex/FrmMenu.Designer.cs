@@ -708,7 +708,6 @@
 			// 
 			// reporteDeEmpacadorToolStripMenuItem
 			// 
-			reporteDeEmpacadorToolStripMenuItem.Enabled = false;
 			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
 			reporteDeEmpacadorToolStripMenuItem.Size = new Size(194, 22);
 			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
