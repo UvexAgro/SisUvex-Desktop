@@ -245,7 +245,7 @@ namespace SisUvex.Grow.PlantsRowLot
                             ORDER BY ISNULL(d_update, d_create) DESC
                         ) U
 
-                        WHERE T.id_lot = '{idLot}'
+                        WHERE T.id_lot = '{idLot}' AND T.c_active = '{1}'
 
                         GROUP BY T.id_lot, U.LastUser, crop.v_nameCrop, vrt.v_nameComercial
                         
@@ -305,7 +305,7 @@ namespace SisUvex.Grow.PlantsRowLot
                             LEFT JOIN Grow_Rootstock rot ON rot.id_rootstock = grow.id_rootstock
                             LEFT JOIN Pack_Crop crop ON crop.id_crop = vrt.id_crop 
                         WHERE
-	                        grow.id_lot = '{idLot}'
+	                        grow.id_lot = '{idLot}' AND grow.c_active = '1' 
                         ORDER BY grow.id_lot, grow.n_lotLine";
         }
         private void ClearLotLabels()
