@@ -284,8 +284,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
 
-				if (!ValidarCajasSinAsistencia(fecha))
-					return;
 
 				if (!ValidarHorarioDeEmpaque(fecha))
 				{
@@ -308,6 +306,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					}
 
 				}
+				ValidarCajasSinAsistencia(fecha);
 
 				if (!ValidarTabladeWorkTimeAndProductionTotal(fecha))
 					return;
@@ -491,6 +490,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			ON e.id_employee = p.id_employee
 			WHERE 
 			a.id_employee IS NULL
+			and p.id_employee is not null
 			AND CAST(p.d_scan AS DATE) = '{fecha}'";
 
 			DataTable dt = ClsQuerysDB.GetDataTable(query);
