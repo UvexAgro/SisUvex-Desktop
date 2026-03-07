@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +12,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
 {
     internal partial class FrmPricesGtinCat : Form
     {
-        public ClsPricesGtin cls;
+        public ClsPricesGtin? cls;
         public FrmPricesGtinCat()
         {
             InitializeComponent();
@@ -21,6 +21,9 @@ namespace SisUvex.Nomina.Prices.PricesGtin
 
         private void FrmPricesGtinCat_Load(object sender, EventArgs e)
         {
+            cls ??= new();
+            cls._frmCat ??= this;
+
             cls.BeginFormCat();
         }
 
@@ -32,6 +35,16 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         private void btnModify_Click(object sender, EventArgs e)
         {
             cls.OpenFrmAdd();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchFilter();
+        }
+
+        private void btnSearchSize_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchFilterSize();
         }
     }
 }

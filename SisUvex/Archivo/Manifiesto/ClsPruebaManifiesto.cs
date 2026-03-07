@@ -648,7 +648,7 @@ namespace SisUvex.Archivo.Manifiesto
             // Agregar los encabezados de la tabla
             AddCellToTable(tableRemisionDetailed, "Variedad", 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Descripción", 44, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
-            /*AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);*/
+            AddCellToTable(tableRemisionDetailed, "Tamaño", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Bultos", 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
             AddCellToTable(tableRemisionDetailed, "Kilos", 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeSubtitle, boldFont, Border.NO_BORDER, lightGreen);
 
@@ -658,7 +658,7 @@ namespace SisUvex.Archivo.Manifiesto
                 // Agregar cada columna de la fila a la tabla del PDF
                 AddCellToTable(tableRemisionDetailed, detalle["Variedad"].ToString(), 36, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Descripción"].ToString(), 44, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
-                /*AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);*/
+                AddCellToTable(tableRemisionDetailed, detalle["Tamaño"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Bultos"].ToString(), 8, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
                 AddCellToTable(tableRemisionDetailed, detalle["Kilos"].ToString(), 12, iText.Layout.Properties.TextAlignment.CENTER, fontSizeBody, font);
             }

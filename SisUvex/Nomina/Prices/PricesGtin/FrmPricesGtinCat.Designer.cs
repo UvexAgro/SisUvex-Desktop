@@ -1,4 +1,4 @@
-﻿namespace SisUvex.Nomina.Prices.PricesGtin
+namespace SisUvex.Nomina.Prices.PricesGtin
 {
     partial class FrmPricesGtinCat
     {
@@ -28,22 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesGtinCat));
             dgvCatalogPrices = new DataGridView();
             btnModify = new Button();
             dgvCatalogGtin = new DataGridView();
-            btnSeleccionar = new Button();
             splitContainer1 = new SplitContainer();
+            btnSeleccionar = new Button();
+            label9 = new Label();
+            splitContainer2 = new SplitContainer();
+            label1 = new Label();
+            dgvCatalogSize = new DataGridView();
+            label2 = new Label();
+            button1 = new Button();
+            btnSearch = new Button();
+            cboVariety = new ComboBox();
+            label3 = new Label();
+            label4 = new Label();
+            cboContainer = new ComboBox();
+            cboDistributor = new ComboBox();
+            lblDistribuidor = new Label();
+            label5 = new Label();
+            cboPresentation = new ComboBox();
+            label6 = new Label();
+            cboCrop = new ComboBox();
+            label7 = new Label();
+            txbLbs = new TextBox();
+            label8 = new Label();
+            cboSize = new ComboBox();
+            btnSearchSize = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogPrices).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogGtin).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvCatalogSize).BeginInit();
             SuspendLayout();
             // 
             // dgvCatalogPrices
@@ -56,37 +85,37 @@
             dgvCatalogPrices.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogPrices.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogPrices.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvCatalogPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgvCatalogPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgvCatalogPrices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogPrices.EnableHeadersVisualStyles = false;
             dgvCatalogPrices.ImeMode = ImeMode.NoControl;
-            dgvCatalogPrices.Location = new Point(3, 3);
+            dgvCatalogPrices.Location = new Point(3, 29);
             dgvCatalogPrices.Name = "dgvCatalogPrices";
             dgvCatalogPrices.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvCatalogPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = SystemColors.Control;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dgvCatalogPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dgvCatalogPrices.RowHeadersVisible = false;
             dgvCatalogPrices.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogPrices.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogPrices.Size = new Size(369, 394);
+            dgvCatalogPrices.Size = new Size(369, 320);
             dgvCatalogPrices.TabIndex = 2;
             // 
             // btnModify
             // 
-            btnModify.Location = new Point(96, 12);
+            btnModify.Location = new Point(3, 4);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
             btnModify.TabIndex = 1;
@@ -99,73 +128,347 @@
             dgvCatalogGtin.AllowUserToAddRows = false;
             dgvCatalogGtin.AllowUserToDeleteRows = false;
             dgvCatalogGtin.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvCatalogGtin.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
             dgvCatalogGtin.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvCatalogGtin.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogGtin.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogGtin.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvCatalogGtin.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgvCatalogGtin.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dgvCatalogGtin.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogGtin.EnableHeadersVisualStyles = false;
             dgvCatalogGtin.ImeMode = ImeMode.NoControl;
-            dgvCatalogGtin.Location = new Point(3, 3);
+            dgvCatalogGtin.Location = new Point(3, 29);
             dgvCatalogGtin.Name = "dgvCatalogGtin";
             dgvCatalogGtin.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvCatalogGtin.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = SystemColors.Control;
+            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle10.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            dgvCatalogGtin.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgvCatalogGtin.RowHeadersVisible = false;
             dgvCatalogGtin.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogGtin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogGtin.Size = new Size(391, 394);
+            dgvCatalogGtin.Size = new Size(391, 139);
             dgvCatalogGtin.TabIndex = 3;
-            // 
-            // btnSeleccionar
-            // 
-            btnSeleccionar.Location = new Point(15, 12);
-            btnSeleccionar.Name = "btnSeleccionar";
-            btnSeleccionar.Size = new Size(75, 23);
-            btnSeleccionar.TabIndex = 0;
-            btnSeleccionar.Text = "Seleccionar";
-            btnSeleccionar.UseVisualStyleBackColor = true;
-            btnSeleccionar.Click += btnSeleccionar_Click;
             // 
             // splitContainer1
             // 
             splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            splitContainer1.Location = new Point(12, 38);
+            splitContainer1.Location = new Point(12, 86);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(dgvCatalogPrices);
+            splitContainer1.Panel1.Controls.Add(btnSeleccionar);
+            splitContainer1.Panel1.Controls.Add(label9);
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(dgvCatalogGtin);
-            splitContainer1.Size = new Size(776, 400);
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
+            splitContainer1.Size = new Size(776, 352);
             splitContainer1.SplitterDistance = 375;
             splitContainer1.TabIndex = 28;
+            // 
+            // btnSeleccionar
+            // 
+            btnSeleccionar.Location = new Point(3, 4);
+            btnSeleccionar.Name = "btnSeleccionar";
+            btnSeleccionar.Size = new Size(59, 23);
+            btnSeleccionar.TabIndex = 0;
+            btnSeleccionar.Text = "Mostrar";
+            btnSeleccionar.UseVisualStyleBackColor = true;
+            btnSeleccionar.Click += btnSeleccionar_Click;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Location = new Point(62, 4);
+            label9.Name = "label9";
+            label9.Size = new Size(75, 21);
+            label9.TabIndex = 30;
+            label9.Text = "PRECIOS";
+            // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(label1);
+            splitContainer2.Panel1.Controls.Add(dgvCatalogGtin);
+            splitContainer2.Panel1.Controls.Add(btnModify);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(btnSearchSize);
+            splitContainer2.Panel2.Controls.Add(cboSize);
+            splitContainer2.Panel2.Controls.Add(dgvCatalogSize);
+            splitContainer2.Panel2.Controls.Add(label2);
+            splitContainer2.Panel2.Controls.Add(button1);
+            splitContainer2.Size = new Size(397, 352);
+            splitContainer2.SplitterDistance = 171;
+            splitContainer2.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(77, 4);
+            label1.Name = "label1";
+            label1.Size = new Size(48, 21);
+            label1.TabIndex = 29;
+            label1.Text = "GTIN";
+            // 
+            // dgvCatalogSize
+            // 
+            dgvCatalogSize.AllowUserToAddRows = false;
+            dgvCatalogSize.AllowUserToDeleteRows = false;
+            dgvCatalogSize.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvCatalogSize.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
+            dgvCatalogSize.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvCatalogSize.BackgroundColor = SystemColors.ControlLightLight;
+            dgvCatalogSize.BorderStyle = BorderStyle.Fixed3D;
+            dgvCatalogSize.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = SystemColors.Control;
+            dataGridViewCellStyle11.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle11.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.True;
+            dgvCatalogSize.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dgvCatalogSize.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvCatalogSize.EnableHeadersVisualStyles = false;
+            dgvCatalogSize.ImeMode = ImeMode.NoControl;
+            dgvCatalogSize.Location = new Point(3, 29);
+            dgvCatalogSize.Name = "dgvCatalogSize";
+            dgvCatalogSize.ReadOnly = true;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = SystemColors.Control;
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle12.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
+            dgvCatalogSize.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dgvCatalogSize.RowHeadersVisible = false;
+            dgvCatalogSize.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvCatalogSize.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCatalogSize.Size = new Size(391, 145);
+            dgvCatalogSize.TabIndex = 30;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(77, 4);
+            label2.Name = "label2";
+            label2.Size = new Size(80, 21);
+            label2.TabIndex = 30;
+            label2.Text = "TAMAÑO";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(3, 4);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 4;
+            button1.Text = "Modificar";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // btnSearch
+            // 
+            btnSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearch.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearch.Location = new Point(610, 47);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(23, 23);
+            btnSearch.TabIndex = 52;
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // cboVariety
+            // 
+            cboVariety.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboVariety.DropDownWidth = 400;
+            cboVariety.FormattingEnabled = true;
+            cboVariety.Location = new Point(12, 47);
+            cboVariety.Name = "cboVariety";
+            cboVariety.Size = new Size(203, 23);
+            cboVariety.TabIndex = 50;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 6.75F);
+            label3.Location = new Point(12, 35);
+            label3.Name = "label3";
+            label3.Size = new Size(40, 12);
+            label3.TabIndex = 55;
+            label3.Text = "Variedad";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 6.75F);
+            label4.Location = new Point(221, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(52, 12);
+            label4.TabIndex = 56;
+            label4.Text = "Contenedor";
+            // 
+            // cboContainer
+            // 
+            cboContainer.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboContainer.DropDownWidth = 400;
+            cboContainer.FormattingEnabled = true;
+            cboContainer.Location = new Point(221, 12);
+            cboContainer.Name = "cboContainer";
+            cboContainer.Size = new Size(203, 23);
+            cboContainer.TabIndex = 49;
+            // 
+            // cboDistributor
+            // 
+            cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDistributor.DropDownWidth = 400;
+            cboDistributor.FormattingEnabled = true;
+            cboDistributor.Location = new Point(430, 12);
+            cboDistributor.Name = "cboDistributor";
+            cboDistributor.Size = new Size(203, 23);
+            cboDistributor.TabIndex = 48;
+            // 
+            // lblDistribuidor
+            // 
+            lblDistribuidor.AutoSize = true;
+            lblDistribuidor.Font = new Font("Segoe UI", 6.75F);
+            lblDistribuidor.Location = new Point(430, 0);
+            lblDistribuidor.Name = "lblDistribuidor";
+            lblDistribuidor.Size = new Size(50, 12);
+            lblDistribuidor.TabIndex = 53;
+            lblDistribuidor.Text = "Distribuidor";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 6.75F);
+            label5.Location = new Point(221, 35);
+            label5.Name = "label5";
+            label5.Size = new Size(56, 12);
+            label5.TabIndex = 54;
+            label5.Text = "Presentación";
+            // 
+            // cboPresentation
+            // 
+            cboPresentation.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPresentation.DropDownWidth = 400;
+            cboPresentation.FormattingEnabled = true;
+            cboPresentation.Location = new Point(221, 47);
+            cboPresentation.Name = "cboPresentation";
+            cboPresentation.Size = new Size(203, 23);
+            cboPresentation.TabIndex = 51;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 6.75F);
+            label6.Location = new Point(12, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(32, 12);
+            label6.TabIndex = 58;
+            label6.Text = "Cultivo";
+            // 
+            // cboCrop
+            // 
+            cboCrop.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboCrop.DropDownWidth = 400;
+            cboCrop.FormattingEnabled = true;
+            cboCrop.Location = new Point(12, 12);
+            cboCrop.Name = "cboCrop";
+            cboCrop.Size = new Size(203, 23);
+            cboCrop.TabIndex = 57;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 6.75F);
+            label7.Location = new Point(606, 35);
+            label7.Name = "label7";
+            label7.Size = new Size(27, 12);
+            label7.TabIndex = 59;
+            label7.Text = "Filtrar";
+            // 
+            // txbLbs
+            // 
+            txbLbs.Location = new Point(430, 47);
+            txbLbs.MaxLength = 6;
+            txbLbs.Name = "txbLbs";
+            txbLbs.Size = new Size(86, 23);
+            txbLbs.TabIndex = 60;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 6.75F);
+            label8.Location = new Point(430, 35);
+            label8.Name = "label8";
+            label8.Size = new Size(28, 12);
+            label8.TabIndex = 61;
+            label8.Text = "Libras";
+            // 
+            // cboSize
+            // 
+            cboSize.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSize.DropDownWidth = 400;
+            cboSize.FormattingEnabled = true;
+            cboSize.Location = new Point(155, 4);
+            cboSize.Name = "cboSize";
+            cboSize.Size = new Size(203, 23);
+            cboSize.TabIndex = 62;
+            // 
+            // btnSearchSize
+            // 
+            btnSearchSize.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchSize.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchSize.Location = new Point(361, 4);
+            btnSearchSize.Name = "btnSearchSize";
+            btnSearchSize.Size = new Size(23, 23);
+            btnSearchSize.TabIndex = 62;
+            btnSearchSize.UseVisualStyleBackColor = true;
+            btnSearchSize.Click += btnSearchSize_Click;
             // 
             // FrmPricesGtinCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnSeleccionar);
-            Controls.Add(btnModify);
+            Controls.Add(label8);
+            Controls.Add(txbLbs);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(cboCrop);
+            Controls.Add(btnSearch);
+            Controls.Add(cboVariety);
+            Controls.Add(label3);
+            Controls.Add(label4);
+            Controls.Add(cboContainer);
+            Controls.Add(cboDistributor);
+            Controls.Add(lblDistribuidor);
+            Controls.Add(label5);
+            Controls.Add(cboPresentation);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPricesGtinCat";
@@ -175,10 +478,19 @@
             ((System.ComponentModel.ISupportInitialize)dgvCatalogPrices).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogGtin).EndInit();
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel1.PerformLayout();
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvCatalogSize).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -186,7 +498,29 @@
         public DataGridView dgvCatalogPrices;
         private Button btnModify;
         public DataGridView dgvCatalogGtin;
-        private Button btnSeleccionar;
         private SplitContainer splitContainer1;
+        private SplitContainer splitContainer2;
+        private Button button1;
+        private Label label1;
+        public DataGridView dgvCatalogSize;
+        private Label label2;
+        private Button btnSearch;
+        public ComboBox cboVariety;
+        private Label label3;
+        private Label label4;
+        public ComboBox cboContainer;
+        public ComboBox cboDistributor;
+        private Label lblDistribuidor;
+        private Label label5;
+        public ComboBox cboPresentation;
+        private Label label6;
+        public ComboBox cboCrop;
+        private Label label7;
+        private Label label8;
+        public TextBox txbLbs;
+        private Button btnSeleccionar;
+        private Label label9;
+        private Button btnSearchSize;
+        public ComboBox cboSize;
     }
 }
