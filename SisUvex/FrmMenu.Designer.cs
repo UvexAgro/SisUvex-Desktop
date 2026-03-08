@@ -150,6 +150,7 @@
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+			factorToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -847,7 +848,7 @@
 			// 
 			// operaciónToolStripMenuItem
 			// 
-			operaciónToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasAGranelToolStripMenuItem, materialesToolStripMenuItem, vehículosToolStripMenuItem });
+			operaciónToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasAGranelToolStripMenuItem, materialesToolStripMenuItem, vehículosToolStripMenuItem, factorToolStripMenuItem });
 			operaciónToolStripMenuItem.Name = "operaciónToolStripMenuItem";
 			operaciónToolStripMenuItem.Size = new Size(74, 19);
 			operaciónToolStripMenuItem.Text = "Operación";
@@ -855,7 +856,7 @@
 			// cajasAGranelToolStripMenuItem
 			// 
 			cajasAGranelToolStripMenuItem.Name = "cajasAGranelToolStripMenuItem";
-			cajasAGranelToolStripMenuItem.Size = new Size(147, 22);
+			cajasAGranelToolStripMenuItem.Size = new Size(180, 22);
 			cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
 			cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
 			// 
@@ -863,14 +864,14 @@
 			// 
 			materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem1, registrosToolStripMenuItem });
 			materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
-			materialesToolStripMenuItem.Size = new Size(147, 22);
+			materialesToolStripMenuItem.Size = new Size(180, 22);
 			materialesToolStripMenuItem.Text = "Material";
 			// 
 			// catálogosToolStripMenuItem1
 			// 
 			catálogosToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { tipoDeMaterialToolStripMenuItem2, catálogoMaterialToolStripMenuItem1, almacenesToolStripMenuItem, proovedoresToolStripMenuItem1, destinosExternosToolStripMenuItem });
 			catálogosToolStripMenuItem1.Name = "catálogosToolStripMenuItem1";
-			catálogosToolStripMenuItem1.Size = new Size(127, 22);
+			catálogosToolStripMenuItem1.Size = new Size(180, 22);
 			catálogosToolStripMenuItem1.Text = "Catálogos";
 			// 
 			// tipoDeMaterialToolStripMenuItem2
@@ -912,7 +913,7 @@
 			// 
 			registrosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { entradasToolStripMenuItem, salidasToolStripMenuItem, salidasInternasToolStripMenuItem });
 			registrosToolStripMenuItem.Name = "registrosToolStripMenuItem";
-			registrosToolStripMenuItem.Size = new Size(127, 22);
+			registrosToolStripMenuItem.Size = new Size(180, 22);
 			registrosToolStripMenuItem.Text = "Registros";
 			// 
 			// entradasToolStripMenuItem
@@ -940,20 +941,20 @@
 			// 
 			vehículosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tipoDeVehículosToolStripMenuItem, vehículosToolStripMenuItem1 });
 			vehículosToolStripMenuItem.Name = "vehículosToolStripMenuItem";
-			vehículosToolStripMenuItem.Size = new Size(147, 22);
+			vehículosToolStripMenuItem.Size = new Size(180, 22);
 			vehículosToolStripMenuItem.Text = "Vehículos";
 			// 
 			// tipoDeVehículosToolStripMenuItem
 			// 
 			tipoDeVehículosToolStripMenuItem.Name = "tipoDeVehículosToolStripMenuItem";
-			tipoDeVehículosToolStripMenuItem.Size = new Size(167, 22);
+			tipoDeVehículosToolStripMenuItem.Size = new Size(180, 22);
 			tipoDeVehículosToolStripMenuItem.Text = "Tipo de vehículos";
 			tipoDeVehículosToolStripMenuItem.Click += tipoDeVehículosToolStripMenuItem_Click;
 			// 
 			// vehículosToolStripMenuItem1
 			// 
 			vehículosToolStripMenuItem1.Name = "vehículosToolStripMenuItem1";
-			vehículosToolStripMenuItem1.Size = new Size(167, 22);
+			vehículosToolStripMenuItem1.Size = new Size(180, 22);
 			vehículosToolStripMenuItem1.Text = "Vehículos";
 			vehículosToolStripMenuItem1.Click += vehículosToolStripMenuItem1_Click;
 			// 
@@ -984,6 +985,13 @@
 			// 
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
+			// 
+			// factorToolStripMenuItem
+			// 
+			factorToolStripMenuItem.Name = "factorToolStripMenuItem";
+			factorToolStripMenuItem.Size = new Size(180, 22);
+			factorToolStripMenuItem.Text = "Factor de Esparrago";
+			factorToolStripMenuItem.Click += factorToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1134,5 +1142,6 @@
         private ToolStripMenuItem reporteDeAsistenciaToolStripMenuItem;
         private ToolStripMenuItem reporteToolStripMenuItem;
 		private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem;
+		private ToolStripMenuItem factorToolStripMenuItem;
 	}
 }
