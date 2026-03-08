@@ -16,7 +16,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             {
                 string SuperString = GenPti.GenerateSuperStringTag(eTagInfo, copies, reverseOrientation);
                 PrintZPL(SuperString, printerName);
-                Clipboard.SetText(SuperString);
+                //Clipboard.SetText(SuperString);
             }
             else
                 MessageBox.Show("Seleccione una impresora válida", "Impresora");
