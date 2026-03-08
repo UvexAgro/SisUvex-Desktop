@@ -645,5 +645,12 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
+
+		private void factorToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Operacion_Factor.FrmFactor cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
 	}
 }
