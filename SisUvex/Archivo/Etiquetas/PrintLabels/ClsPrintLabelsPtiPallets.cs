@@ -181,6 +181,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             else
             {
                 print = new ClsPrintPtiTag();
+
+                eTagInfo.showDate = !frm.chbFechaOmitidaPti.Checked;
+
                 print.SendToPrintPtiTag(eTagInfo, (int)frm.nudPtiTotal.Value, frm.chbReversePtiTag.Checked);
             }
         }
@@ -223,6 +226,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         else
                         {//imprimir (se creó el pallet)
                             print = new ClsPrintPtiTag();
+
+                            eTagInfo.showDate = !frm.chbFechaOmitidaPallet.Checked;
+
                             print.SendToPrintPalletTag(idPallet, eTagInfo, timesPalletPrint, palletBoxes, reverseOrientation, false);
 
                             AddNewRowToLastPallets(idPallet, palletBoxes.ToString());
@@ -285,6 +291,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 if (rows.Length > 0)
                 {
                     SetTagInfo(selectedPlan, eTagInfoReprint);
+
+                    eTagInfoReprint.showDate = !frm.chbFechaOmitidaReimprimirPallet.Checked;
+
                     print = new ClsPrintPtiTag();
 
                     print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, timesPalletPrint, selectedBoxes, reverseOrientation, true);

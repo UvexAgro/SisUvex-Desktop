@@ -418,8 +418,8 @@ namespace SisUvex
 
 		private void preciosPorGTINToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ClsPricesGtin cls = new ClsPricesGtin();
-			AbrirVentanaHijo(cls._frmCat, 1);
+			SisUvex.Nomina.Prices.PricesGtin.FrmPricesGtinCat cat = new();
+            AbrirVentanaHijo(cat, 1);
 		}
 
 		private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)

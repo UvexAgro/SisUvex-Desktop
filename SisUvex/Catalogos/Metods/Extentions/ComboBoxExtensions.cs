@@ -76,5 +76,35 @@ namespace SisUvex.Catalogos.Metods.Extentions
                 throw new InvalidCastException($"Cannot convert column '{columnName}' value to type {typeof(T).Name}");
             }
         }
+
+
+        /// <summary>
+        /// Valida si el ComboBox tiene un valor seleccionado y lo devuelve a través del parámetro de salida.
+        /// Se puede usar en las validaciones antes de un filtro o consulta para sacar el id que muestra el combobox.
+        /// </summary>
+        public static bool TryGetValue(this ComboBox cbo, out string value)
+        {
+            value = string.Empty;
+
+            if (cbo == null)
+                return false;
+
+            if (cbo.DataSource == null)
+                return false;
+
+            if (cbo.SelectedValue == null)
+                return false;
+
+            if (cbo.SelectedValue is DataRowView)
+                return false;
+
+            var text = cbo.SelectedValue.ToString();
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            value = text;
+            return true;
+        }
     }
 }

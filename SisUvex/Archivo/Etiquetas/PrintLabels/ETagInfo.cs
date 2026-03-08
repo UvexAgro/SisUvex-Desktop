@@ -9,6 +9,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 {
     internal class ETagInfo
     {
+        public bool? showDate { get; set; } //DETERMINA SI EN LA ETIQUETA SE VA A MOSTRAR LA FECHA O NO (DE MOMENTO SOLO AL IMPRIMIR EL PTI)
         public string? nameProduct { get; set; }
         public string? active { get; set; }
         public string? idWorkPlan { get; set; }

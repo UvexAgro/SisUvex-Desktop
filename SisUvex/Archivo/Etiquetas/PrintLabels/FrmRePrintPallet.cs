@@ -1,11 +1,12 @@
 ﻿using SisUvex.Archivo.Etiquetas.PrintLabels;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Values;
-using SisUvex.Catalogos.Metods;
+using SisUvex.Configuracion;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using SisUvex.Configuracion;
 
 namespace SisUvex.Archivo.Reimprimir
 {
@@ -54,8 +55,9 @@ namespace SisUvex.Archivo.Reimprimir
 
 
                 SetTagInfo(workPlan);
-                
 
+
+                eTagInfo.showDate = !chbFechaOmitidaPallet.Checked; //MOSTRAR U OCULTAR FECHA DEL PALLET
 
 
                 if (txbUpdateBoxes.Text == "")

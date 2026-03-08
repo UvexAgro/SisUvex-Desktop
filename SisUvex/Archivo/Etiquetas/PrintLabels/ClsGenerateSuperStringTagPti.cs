@@ -85,7 +85,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "07":
                     //QR CANADA
-                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
+                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, eTag.idWorkGroup);
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     return SetStringCanadaPtiLabel(copies);
                 case
@@ -104,9 +104,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     break;
             }
 
-            SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.idLot, eTag.idWorkGroup);
+            SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, eTag.idWorkGroup);
             SetStringUpcZPL(eTag.upcGTIN);
-            SetStringVoicePicKCodeZPL(eTag.voicePickCode, eTag.dateWorkPlan);
+            SetStringVoicePicKCodeAndPackDateZPL(eTag.voicePickCode, eTag.dateWorkPlan, eTag.showDate);
 
             if (eTag.idPti == "06") //QR ESPARRAGO
                 return SuperPrintPtiTagWithQrUniqueBox(copies);
@@ -214,7 +214,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             return qrcodeZPL;
         }
 
-        private void SetStringGtinZPL(string Gtin, DateTime? Date, string Lote, string Workgroup)
+        private void SetStringGtinZPL(string Gtin, DateTime? Date, bool? showDate, string Lote, string Workgroup)
         {
             string DateShortUS = Date?.ToString("yyMMdd") ?? DateTime.Now.ToString("yyMMdd");
 
@@ -223,8 +223,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         "^FO0,15\n" +
                         "^BRN,11,3,1,25,10^FD01" + Gtin + "13" + DateShortUS + "10" + Lote + "C" + Workgroup + "^FS\n" +
                         "^CFF,30,10\n" +
-                        "^FX GTIN HUMAN READABLE\n" +
-                        "^FO100,95^FD(01)" + Gtin + "(13)" + DateShortUS + "(10)" + Lote + "C" + Workgroup + "^FS\n";
+                        "^FX GTIN HUMAN READABLE\n";
+            if (showDate == true || showDate == null)
+            {
+                gtinZPL += "^FO100,95^FD(01)" + Gtin;
+                gtinZPL += "(13)" + DateShortUS;
+                gtinZPL += "(10)" + Lote + "C" + Workgroup + "^FS\n";
+            }
+            else
+            {
+                gtinZPL += "^FO170,95^FD(01)" + Gtin;
+                gtinZPL += "(10)" + Lote + "C" + Workgroup + "^FS\n";
+            }
+
         }
 
         private void SetStringCropVarietySizeZPL(string Crop, string Variety, string Size)
@@ -322,7 +333,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         /*Se crea el string ZPL para el Voice Pick Code*/
-        private void SetStringVoicePicKCodeZPL(string VPC, DateTime? Date)
+        private void SetStringVoicePicKCodeAndPackDateZPL(string VPC, DateTime? Date, bool? showDate) //Y FECHA EN CUADRO NEGRO
         {
             string VPC1 = VPC.Substring(0, 2);
             string VPC2 = VPC.Substring(2, 2);
@@ -331,18 +342,26 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
 
             voicePickCodeZPL = "^FX PACK DATE, VOICE PICK CODE\n" +
-                        "^CFF,30,10\n" +
-                        "^FO570,245^FDPack^FS\n" +
-                        "^FO570,275^FDDate^FS\n" +
-                        "^CFD,37\n" +
-                        "^FO650,255^FD" + DateMonth + "^FS\n" +
-                        "^FO745,255^FD" + DateDay + "^FS\n" +
-                        "^FO640,235^FR^GB160,70,50^FS\n" +
                         "^CFE,40,30\n" +
                         "^FO645,355^FD" + VPC1 + "^FS\n" +
                         "^CFE,50,30\n" +
                         "^FO720,335^FD" + VPC2 + "^FS\n" +
                         "^FO640,325^FR^GB160,70,50^FS\n";
+
+
+            if (showDate == true || showDate == null)
+            {
+                voicePickCodeZPL += "^CFF,30,10\n" +
+                        "^FO570,245^FDPack^FS\n" +
+                        "^FO570,275^FDDate^FS\n" +
+                        "^CFD,37\n" +
+                        "^FO650,255^FD" + DateMonth + "^FS\n" +
+                        "^FO745,255^FD" + DateDay + "^FS\n" +
+                        "^FO640,235^FR^GB160,70,50^FS\n";
+            }
+            else
+            {// de momento solo no muestra la fecha y su cuadro negro
+            }
         }
 
         private void ChangeFontSize(string inputText)

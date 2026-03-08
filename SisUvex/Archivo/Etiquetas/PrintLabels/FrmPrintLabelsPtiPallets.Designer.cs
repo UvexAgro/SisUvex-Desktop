@@ -90,14 +90,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             lblWorkDay = new Label();
             btnPrintPalletTag = new Button();
             grbPrint = new GroupBox();
+            chbFechaOmitidaPti = new CheckBox();
             chbReversePtiTag = new CheckBox();
             gpbLastPallets = new GroupBox();
             btnReprintPallet = new Button();
             dgvLastUserPallet = new DataGridView();
             chbReverseReprintPallet = new CheckBox();
             groupBox1 = new GroupBox();
+            chbFechaOmitidaPallet = new CheckBox();
             chbRevesePalletTag = new CheckBox();
             label2 = new Label();
+            chbFechaOmitidaReimprimirPallet = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -771,6 +774,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // grbPrint
             // 
+            grbPrint.Controls.Add(chbFechaOmitidaPti);
             grbPrint.Controls.Add(chbReversePtiTag);
             grbPrint.Controls.Add(label7);
             grbPrint.Controls.Add(nudPtiTotal);
@@ -784,6 +788,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbPrint.TabIndex = 62;
             grbPrint.TabStop = false;
             grbPrint.Text = "CAJA / PTI";
+            // 
+            // chbFechaOmitidaPti
+            // 
+            chbFechaOmitidaPti.AutoSize = true;
+            chbFechaOmitidaPti.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chbFechaOmitidaPti.Location = new Point(78, 105);
+            chbFechaOmitidaPti.Name = "chbFechaOmitidaPti";
+            chbFechaOmitidaPti.Size = new Size(139, 25);
+            chbFechaOmitidaPti.TabIndex = 64;
+            chbFechaOmitidaPti.Text = "OMITIR FECHA";
+            chbFechaOmitidaPti.UseVisualStyleBackColor = true;
             // 
             // chbReversePtiTag
             // 
@@ -799,10 +814,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // gpbLastPallets
             // 
             gpbLastPallets.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            gpbLastPallets.Controls.Add(btnReprintPallet);
-            gpbLastPallets.Controls.Add(btnLastPallets);
             gpbLastPallets.Controls.Add(dgvLastUserPallet);
             gpbLastPallets.Controls.Add(chbReverseReprintPallet);
+            gpbLastPallets.Controls.Add(chbFechaOmitidaReimprimirPallet);
+            gpbLastPallets.Controls.Add(btnReprintPallet);
+            gpbLastPallets.Controls.Add(btnLastPallets);
             gpbLastPallets.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             gpbLastPallets.Location = new Point(359, 417);
             gpbLastPallets.Margin = new Padding(1);
@@ -854,7 +870,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dgvLastUserPallet.DefaultCellStyle = dataGridViewCellStyle2;
             dgvLastUserPallet.EnableHeadersVisualStyles = false;
             dgvLastUserPallet.ImeMode = ImeMode.NoControl;
-            dgvLastUserPallet.Location = new Point(4, 53);
+            dgvLastUserPallet.Location = new Point(4, 55);
             dgvLastUserPallet.Name = "dgvLastUserPallet";
             dgvLastUserPallet.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -875,7 +891,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             chbReverseReprintPallet.AutoSize = true;
             chbReverseReprintPallet.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            chbReverseReprintPallet.Location = new Point(67, 36);
+            chbReverseReprintPallet.Location = new Point(67, 39);
             chbReverseReprintPallet.Name = "chbReverseReprintPallet";
             chbReverseReprintPallet.Size = new Size(109, 19);
             chbReverseReprintPallet.TabIndex = 13;
@@ -884,6 +900,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(chbFechaOmitidaPallet);
             groupBox1.Controls.Add(chbRevesePalletTag);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(nudPalletTotal);
@@ -899,6 +916,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1.TabIndex = 68;
             groupBox1.TabStop = false;
             groupBox1.Text = "PALLET";
+            // 
+            // chbFechaOmitidaPallet
+            // 
+            chbFechaOmitidaPallet.AutoSize = true;
+            chbFechaOmitidaPallet.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chbFechaOmitidaPallet.Location = new Point(78, 144);
+            chbFechaOmitidaPallet.Name = "chbFechaOmitidaPallet";
+            chbFechaOmitidaPallet.Size = new Size(139, 25);
+            chbFechaOmitidaPallet.TabIndex = 65;
+            chbFechaOmitidaPallet.Text = "OMITIR FECHA";
+            chbFechaOmitidaPallet.UseVisualStyleBackColor = true;
             // 
             // chbRevesePalletTag
             // 
@@ -922,13 +950,23 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label2.TabIndex = 68;
             label2.Text = "Cantidad:";
             // 
+            // chbFechaOmitidaReimprimirPallet
+            // 
+            chbFechaOmitidaReimprimirPallet.AutoSize = true;
+            chbFechaOmitidaReimprimirPallet.Font = new Font("Segoe UI", 9F);
+            chbFechaOmitidaReimprimirPallet.Location = new Point(67, 24);
+            chbFechaOmitidaReimprimirPallet.Name = "chbFechaOmitidaReimprimirPallet";
+            chbFechaOmitidaReimprimirPallet.Size = new Size(92, 19);
+            chbFechaOmitidaReimprimirPallet.TabIndex = 77;
+            chbFechaOmitidaReimprimirPallet.Text = "Omitir fecha";
+            chbFechaOmitidaReimprimirPallet.UseVisualStyleBackColor = true;
+            // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(822, 730);
             Controls.Add(groupBox1);
-            Controls.Add(gpbLastPallets);
             Controls.Add(grbPrint);
             Controls.Add(lblWorkDay);
             Controls.Add(grbDistributor);
@@ -944,6 +982,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Controls.Add(cboWorkGroup);
             Controls.Add(lblTagWorkGroup);
             Controls.Add(lblTagHead);
+            Controls.Add(gpbLastPallets);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrintLabelsPtiPallets";
             Text = "Impresión de etiquetas PTI y Pallet";
@@ -1037,5 +1076,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public CheckBox chbReverseReprintPallet;
         private Label label3;
         public Label lblTypeBox;
+        public CheckBox chbFechaOmitidaPti;
+        public CheckBox chbFechaOmitidaPallet;
+        public CheckBox chbFechaOmitidaReimprimirPallet;
     }
 }
