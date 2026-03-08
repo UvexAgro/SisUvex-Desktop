@@ -181,6 +181,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             else
             {
                 print = new ClsPrintPtiTag();
+
+                if (frm.chbFechaOmitida.Checked)
+                    eTagInfo.showDate = false; ////DETERMINA SI EN LA ETIQUETA SE VA A MOSTRAR LA FECHA O NO (DE MOMENTO SOLO AL IMPRIMIR EL PTI)
+                else
+                    eTagInfo.showDate = true;
+
                 print.SendToPrintPtiTag(eTagInfo, (int)frm.nudPtiTotal.Value, frm.chbReversePtiTag.Checked);
             }
         }

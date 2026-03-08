@@ -98,6 +98,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1 = new GroupBox();
             chbRevesePalletTag = new CheckBox();
             label2 = new Label();
+            chbFechaOmitida = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -771,6 +772,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // grbPrint
             // 
+            grbPrint.Controls.Add(chbFechaOmitida);
             grbPrint.Controls.Add(chbReversePtiTag);
             grbPrint.Controls.Add(label7);
             grbPrint.Controls.Add(nudPtiTotal);
@@ -922,13 +924,23 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label2.TabIndex = 68;
             label2.Text = "Cantidad:";
             // 
+            // chbFechaOmitida
+            // 
+            chbFechaOmitida.AutoSize = true;
+            chbFechaOmitida.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chbFechaOmitida.Location = new Point(78, 105);
+            chbFechaOmitida.Name = "chbFechaOmitida";
+            chbFechaOmitida.Size = new Size(139, 25);
+            chbFechaOmitida.TabIndex = 64;
+            chbFechaOmitida.Text = "OMITIR FECHA";
+            chbFechaOmitida.UseVisualStyleBackColor = true;
+            // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(822, 730);
             Controls.Add(groupBox1);
-            Controls.Add(gpbLastPallets);
             Controls.Add(grbPrint);
             Controls.Add(lblWorkDay);
             Controls.Add(grbDistributor);
@@ -944,6 +956,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Controls.Add(cboWorkGroup);
             Controls.Add(lblTagWorkGroup);
             Controls.Add(lblTagHead);
+            Controls.Add(gpbLastPallets);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrintLabelsPtiPallets";
             Text = "Impresión de etiquetas PTI y Pallet";
@@ -1037,5 +1050,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public CheckBox chbReverseReprintPallet;
         private Label label3;
         public Label lblTypeBox;
+        public CheckBox chbFechaOmitida;
     }
 }
