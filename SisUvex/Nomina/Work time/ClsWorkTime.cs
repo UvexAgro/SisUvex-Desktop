@@ -165,7 +165,7 @@ namespace SisUvex.Nomina.Work_time
                 cmd.Parameters.AddWithValue("@dateHourEndExtra", _frmAdd.dtpEndExtra.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@workers", _frmAdd.txbWorkers.Text);
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-                cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value.ToString());
+                cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value);
 
                 cmd.ExecuteNonQuery();
                 _frmAdd.AddIsUpdate = true;
@@ -195,7 +195,7 @@ namespace SisUvex.Nomina.Work_time
                 cmd.Parameters.AddWithValue("@dateHourEndExtra", _frmAdd.dtpEndExtra.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@workers", _frmAdd.txbWorkers.Text);
                 cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-				cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value.ToString());
+				cmd.Parameters.AddWithValue("@overTime", _frmAdd.nudOvertime.Value);
 
 				cmd.ExecuteNonQuery();
                 _frmAdd.AddIsUpdate = true;

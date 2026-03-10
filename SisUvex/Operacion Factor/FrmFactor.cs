@@ -30,8 +30,10 @@ namespace SisUvex.Operacion_Factor
 
 		private void FrmFactor_Load(object sender, EventArgs e)
 		{
+			ClsFactor factor = new ClsFactor();
+			factor.frm = this;
 
-			cls.CargarPromedioLbs();
+			factor.CargarTablaPackingHouse();
 		}
 
 		private void dtpFecha_ValueChanged(object sender, EventArgs e)
@@ -57,6 +59,17 @@ namespace SisUvex.Operacion_Factor
 				MessageBox.Show("Las libras no son válidas");
 				return;
 			}
+			if (cls.ExisteRegistro(fecha))
+			{
+				DialogResult resultado = MessageBox.Show(
+					"Ya existen registros con cajas en piso para esta fecha.\n¿Desea modificarlos?",
+					"Advertencia",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning);
+
+				if (resultado == DialogResult.No)
+					return;
+			}
 
 			for (int i = 0; i < 2; i++)
 			{
@@ -73,7 +86,7 @@ namespace SisUvex.Operacion_Factor
 		private void txbCajasenPiso_TextChanged(object sender, EventArgs e)
 		{
 			if (decimal.TryParse(txbPesodeCaja.Text, out decimal pesoCaja) &&
-				decimal.TryParse(txbCajasenPiso.Text, out decimal cajas))
+				int.TryParse(txbCajasenPiso.Text, out int cajas))
 			{
 				decimal libras = pesoCaja * cajas;
 

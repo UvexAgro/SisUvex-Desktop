@@ -198,7 +198,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
                     break;
-                case ClsObject.PlacePayment.Cbo:
+				case ClsObject.Season.CboWithDates:
+					queryDataTable = ClsObject.Season.QueryCboWithDates;
+					break;
+				case ClsObject.PlacePayment.Cbo:
                         queryDataTable = ClsObject.PlacePayment.QueryCbo;
                     break;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
@@ -305,7 +308,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
                     break;
                 case ClsObject.Season.Cbo:
-                    query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
+				case ClsObject.Season.CboWithDates:
+					query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.PlacePayment.Cbo:
                     query += " IN ('Pack_PlacePayment', 'Pack_Grower') ";
@@ -387,7 +391,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     return ClsObject.Contractor.TableName;
                 case ClsObject.Season.Cbo:
-                    return ClsObject.Season.TableName;
+				case ClsObject.Season.CboWithDates:
+					return ClsObject.Season.TableName;
                 case ClsObject.PlacePayment.Cbo:
                         return ClsObject.PlacePayment.TableName;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
