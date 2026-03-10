@@ -652,5 +652,12 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
+
+		private void reporteDeHorariosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Nomina.Reporte_de_horas.FrmPackingHours cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
 	}
 }
