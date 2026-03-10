@@ -50,28 +50,31 @@ namespace SisUvex.Nomina.Work_time
 		}
 		private void dtpDay_ValueChanged(object sender, EventArgs e)
 		{
-			if (dtpDay.Value > dtpBeginNormal.Value)
-			{
-				dtpBeginNormal.Value = dtpDay.Value;
-			}
 			dtpBeginNormal.MinDate = dtpDay.Value;
+			//if (dtpDay.Value > dtpBeginNormal.Value)
+			//{
+			dtpBeginNormal.Value = dtpDay.Value;
+			//}
+			
 		}
 		private void dtpBeginNormal_ValueChanged(object sender, EventArgs e)
 		{
-			if (dtpBeginNormal.Value > dtpEndNormal.Value)
-			{
-				dtpEndNormal.Value = dtpBeginNormal.Value;
-			}
 			dtpEndNormal.MinDate = dtpBeginNormal.Value;
+			//if (dtpBeginNormal.Value > dtpEndNormal.Value)
+			//{
+			dtpEndNormal.Value = dtpBeginNormal.Value;
+			//}
+		
 
 		}
 		private void dtpEndNormal_ValueChanged(object sender, EventArgs e)
 		{
-			if (dtpEndNormal.Value > dtpEndExtra.Value)
-			{
-				dtpEndExtra.Value = dtpEndNormal.Value;
-			}
 			dtpEndExtra.MinDate = dtpEndNormal.Value;
+			//if (dtpEndNormal.Value > dtpEndExtra.Value)
+			//{
+			dtpEndExtra.Value = dtpEndNormal.Value;
+			//}
+			
 
 		}
 		private void dtpEndExtra_ValueChanged(object sender, EventArgs e)
