@@ -31,6 +31,10 @@ namespace SisUvex.Nomina.Work_time
 			dtpEndNormal.CustomFormat = "dd/MM/yyyy HH:mm:ss";
 			dtpEndExtra.CustomFormat = "dd/MM/yyyy HH:mm:ss";
 			cls.BeginFormAdd();
+
+			dtpBeginNormal.MinDate = dtpDay.Value;
+			dtpEndNormal.MinDate = dtpBeginNormal.Value;
+			dtpEndExtra.MinDate = dtpEndNormal.Value;
 		}
 
 		private void btnAcept_Click(object sender, EventArgs e)

@@ -26,7 +26,7 @@ namespace SisUvex.Operacion_Factor
 
 			string query = $@"
 			SELECT 
-			SUM([Lbs Netas]) / SUM(Cajas) AS PromedioLbsPorCaja
+			ISNULL(SUM([Lbs Netas]) / NULLIF(SUM(Cajas),0),0) AS PromedioLbsPorCaja
 			FROM dbo.vw_Pack_BulkReception
 			WHERE Fecha = '{fecha}'";
 
@@ -36,13 +36,10 @@ namespace SisUvex.Operacion_Factor
 		{
 			DataTable dt = ClsQuerysDB.GetDataTable(GetQueryPromedioLbs());
 
-			if (dt.Rows.Count == 0)
-			{
-				frm.txbPesodeCaja.Text = "0.00";
-				return;
-			}
+			decimal promedio = 0;
 
-			decimal promedio = Convert.ToDecimal(dt.Rows[0]["PromedioLbsPorCaja"]);
+			if (dt.Rows.Count > 0)
+				promedio = dt.Rows[0].Field<decimal>("PromedioLbsPorCaja");
 
 			frm.txbPesodeCaja.Text = promedio.ToString("0.00");
 		}
@@ -94,6 +91,17 @@ namespace SisUvex.Operacion_Factor
 			{
 				sql.CloseConectionWrite();
 			}
+		}
+		public bool ExisteRegistro(DateTime fecha)
+		{
+			string query = $@"
+			SELECT COUNT(*)
+			FROM Pack_PackingHouseData
+			WHERE id_workdayRecord = '{fecha:yyyy-MM-dd}'";
+
+			DataTable dt = ClsQuerysDB.GetDataTable(query);
+
+			return Convert.ToInt32(dt.Rows[0][0]) > 0;
 		}
 
 	}
