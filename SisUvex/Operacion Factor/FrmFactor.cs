@@ -30,10 +30,8 @@ namespace SisUvex.Operacion_Factor
 
 		private void FrmFactor_Load(object sender, EventArgs e)
 		{
-			ClsFactor factor = new ClsFactor();
-			factor.frm = this;
-
-			factor.CargarTablaPackingHouse();
+			cls.CargarPromedioLbs();
+			cls.CargarTablaPackingHouse();
 		}
 
 		private void dtpFecha_ValueChanged(object sender, EventArgs e)
