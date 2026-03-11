@@ -34,12 +34,13 @@ namespace SisUvex.Operacion_Factor
 		}
 		public void CargarPromedioLbs()
 		{
+			decimal promedio = 0.00m;
 			DataTable dt = ClsQuerysDB.GetDataTable(GetQueryPromedioLbs());
 
-			decimal promedio = 0;
-
-			if (dt.Rows.Count > 0)
-				promedio = dt.Rows[0].Field<decimal>("PromedioLbsPorCaja");
+			if (dt != null && dt.Rows.Count > 0 && dt.Rows[0]["PromedioLbsPorCaja"] != DBNull.Value)
+			{
+				promedio = Convert.ToDecimal(dt.Rows[0]["PromedioLbsPorCaja"]);
+			}
 
 			frm.txbPesodeCaja.Text = promedio.ToString("0.00");
 		}
