@@ -103,6 +103,7 @@
 			cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
 			empaqueToolStripMenuItem = new ToolStripMenuItem();
 			registroHorasToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeHorariosToolStripMenuItem = new ToolStripMenuItem();
 			preciosToolStripMenuItem = new ToolStripMenuItem();
 			preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
 			asistenciaEmpaqueToolStripMenuItem1 = new ToolStripMenuItem();
@@ -132,6 +133,7 @@
 			totalDeCajasEmbarcadasToolStripMenuItem = new ToolStripMenuItem();
 			operaciónToolStripMenuItem = new ToolStripMenuItem();
 			cajasAGranelToolStripMenuItem = new ToolStripMenuItem();
+			factorToolStripMenuItem = new ToolStripMenuItem();
 			materialesToolStripMenuItem = new ToolStripMenuItem();
 			catálogosToolStripMenuItem1 = new ToolStripMenuItem();
 			tipoDeMaterialToolStripMenuItem2 = new ToolStripMenuItem();
@@ -146,12 +148,11 @@
 			vehículosToolStripMenuItem = new ToolStripMenuItem();
 			tipoDeVehículosToolStripMenuItem = new ToolStripMenuItem();
 			vehículosToolStripMenuItem1 = new ToolStripMenuItem();
-			factorToolStripMenuItem = new ToolStripMenuItem();
 			generarReporteDePodaEnExcelToolStripMenuItem = new ToolStripMenuItem();
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorariosToolStripMenuItem = new ToolStripMenuItem();
+			reporteToolStripMenuItem1 = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -658,6 +659,13 @@
 			registroHorasToolStripMenuItem.Text = "Cajas por empleados y horarios";
 			registroHorasToolStripMenuItem.Click += CajasPorEmlpeadosYHorariosToolStripMenuItem_Click;
 			// 
+			// reporteDeHorariosToolStripMenuItem
+			// 
+			reporteDeHorariosToolStripMenuItem.Name = "reporteDeHorariosToolStripMenuItem";
+			reporteDeHorariosToolStripMenuItem.Size = new Size(239, 22);
+			reporteDeHorariosToolStripMenuItem.Text = "Reporte de horarios";
+			reporteDeHorariosToolStripMenuItem.Click += reporteDeHorariosToolStripMenuItem_Click;
+			// 
 			// preciosToolStripMenuItem
 			// 
 			preciosToolStripMenuItem.Name = "preciosToolStripMenuItem";
@@ -688,7 +696,7 @@
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, salarioDiversosToolStripMenuItem, reporteDeEmpacadorToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, reporteToolStripMenuItem1, salarioDiversosToolStripMenuItem, reporteDeEmpacadorToolStripMenuItem });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
 			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
@@ -697,21 +705,21 @@
 			// calculToolStripMenuItem
 			// 
 			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
-			calculToolStripMenuItem.Size = new Size(194, 22);
+			calculToolStripMenuItem.Size = new Size(232, 22);
 			calculToolStripMenuItem.Text = "Calculo de Nomina";
 			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
 			// 
 			// salarioDiversosToolStripMenuItem
 			// 
 			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
-			salarioDiversosToolStripMenuItem.Size = new Size(194, 22);
+			salarioDiversosToolStripMenuItem.Size = new Size(232, 22);
 			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
 			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
 			// reporteDeEmpacadorToolStripMenuItem
 			// 
 			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
-			reporteDeEmpacadorToolStripMenuItem.Size = new Size(194, 22);
+			reporteDeEmpacadorToolStripMenuItem.Size = new Size(232, 22);
 			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
 			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
 			// 
@@ -815,14 +823,14 @@
 			// plantasToolStripMenuItem
 			// 
 			plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
-			plantasToolStripMenuItem.Size = new Size(180, 22);
+			plantasToolStripMenuItem.Size = new Size(135, 22);
 			plantasToolStripMenuItem.Text = "Plantas";
 			plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
 			// 
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(180, 22);
+			palletsToolStripMenuItem.Size = new Size(135, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -830,7 +838,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(180, 22);
+			manifiestosToolStripMenuItem.Size = new Size(135, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
@@ -860,6 +868,13 @@
 			cajasAGranelToolStripMenuItem.Size = new Size(178, 22);
 			cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
 			cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
+			// 
+			// factorToolStripMenuItem
+			// 
+			factorToolStripMenuItem.Name = "factorToolStripMenuItem";
+			factorToolStripMenuItem.Size = new Size(178, 22);
+			factorToolStripMenuItem.Text = "Factor de Esparrago";
+			factorToolStripMenuItem.Click += factorToolStripMenuItem_Click;
 			// 
 			// materialesToolStripMenuItem
 			// 
@@ -959,13 +974,6 @@
 			vehículosToolStripMenuItem1.Text = "Vehículos";
 			vehículosToolStripMenuItem1.Click += vehículosToolStripMenuItem1_Click;
 			// 
-			// factorToolStripMenuItem
-			// 
-			factorToolStripMenuItem.Name = "factorToolStripMenuItem";
-			factorToolStripMenuItem.Size = new Size(178, 22);
-			factorToolStripMenuItem.Text = "Factor de Esparrago";
-			factorToolStripMenuItem.Click += factorToolStripMenuItem_Click;
-			// 
 			// generarReporteDePodaEnExcelToolStripMenuItem
 			// 
 			generarReporteDePodaEnExcelToolStripMenuItem.Name = "generarReporteDePodaEnExcelToolStripMenuItem";
@@ -994,12 +1002,12 @@
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// reporteDeHorariosToolStripMenuItem
+			// reporteToolStripMenuItem1
 			// 
-			reporteDeHorariosToolStripMenuItem.Name = "reporteDeHorariosToolStripMenuItem";
-			reporteDeHorariosToolStripMenuItem.Size = new Size(239, 22);
-			reporteDeHorariosToolStripMenuItem.Text = "Reporte de horarios";
-			reporteDeHorariosToolStripMenuItem.Click += reporteDeHorariosToolStripMenuItem_Click;
+			reporteToolStripMenuItem1.Name = "reporteToolStripMenuItem1";
+			reporteToolStripMenuItem1.Size = new Size(232, 22);
+			reporteToolStripMenuItem1.Text = "Reporte Semanal de Empaque";
+			reporteToolStripMenuItem1.Click += reporteToolStripMenuItem1_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1152,5 +1160,6 @@
 		private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem;
 		private ToolStripMenuItem factorToolStripMenuItem;
 		private ToolStripMenuItem reporteDeHorariosToolStripMenuItem;
+		private ToolStripMenuItem reporteToolStripMenuItem1;
 	}
 }

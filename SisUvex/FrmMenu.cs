@@ -659,5 +659,12 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
+
+		private void reporteToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			Nomina.Nom_Reporte_de_sueldos_diarios.FrmNomsemana cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
 	}
 }
