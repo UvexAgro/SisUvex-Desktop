@@ -68,14 +68,12 @@ namespace SisUvex.Operacion_Factor
 				if (resultado == DialogResult.No)
 					return;
 			}
-
-			for (int i = 0; i < 2; i++)
-			{
-				cls.GuardarPackingHouse(fecha, cajasPiso, libras);
-			}
-
+			cls.GuardarPackingHouse(fecha, cajasPiso, libras);
+			cls.GuardarPackingHouse(fecha, cajasPiso, libras);
+			cls.ReprocesarSiNoTrabajo(fecha);
 
 			cls.CargarTablaPackingHouse();
+
 
 			MessageBox.Show("Datos guardados correctamente.");
 

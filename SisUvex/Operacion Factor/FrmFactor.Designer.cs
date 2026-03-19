@@ -135,7 +135,7 @@
 			txbCajasenPiso.Location = new Point(150, 235);
 			txbCajasenPiso.Multiline = true;
 			txbCajasenPiso.Name = "txbCajasenPiso";
-			txbCajasenPiso.Size = new Size(64, 25);
+			txbCajasenPiso.Size = new Size(112, 25);
 			txbCajasenPiso.TabIndex = 23;
 			txbCajasenPiso.TextChanged += txbCajasenPiso_TextChanged;
 			// 

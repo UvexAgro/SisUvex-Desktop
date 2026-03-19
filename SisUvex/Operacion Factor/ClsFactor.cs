@@ -104,6 +104,32 @@ namespace SisUvex.Operacion_Factor
 
 			return Convert.ToInt32(dt.Rows[0][0]) > 0;
 		}
+		public void ReprocesarSiNoTrabajo(DateTime fecha)
+		{
+			SQLControl sql = new SQLControl();
 
-	}
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand("sp_CorregirPackingSinTrabajo", sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					// Parámetro tipado correctamente
+					cmd.Parameters.Add("@fecha", SqlDbType.Date).Value = fecha;
+
+					cmd.ExecuteNonQuery();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Reproceso");
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+	}	
 }
