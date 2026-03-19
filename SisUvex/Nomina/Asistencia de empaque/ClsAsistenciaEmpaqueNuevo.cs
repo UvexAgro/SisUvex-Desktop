@@ -318,22 +318,44 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                     {
                         try
                         {
-                            sql.BeginTransaction(); //aquí abre la conexion
+							sql.BeginTransaction();
 
-                            EliminarRegistrosPorFecha(fecha);
+							if (ExisteMiscellaneousPorFecha(fecha))
+							{
+								DialogResult resp = MessageBox.Show(
+									"Existen ingresos/deducciones relacionados a esta fecha.\n\n¿Desea eliminarlos también?",
+									titulo,
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Warning
+								);
 
-                            InsertarRegistrosDeAsistencia();
-                            sql.CommitTransaction();
-                        }
-                        catch (Exception ex)
-                        {
-                            sql.RollbackTransaction();
-                            MessageBox.Show(ex.ToString(), titulo);
-                        }
+								if (resp == DialogResult.Yes)
+								{
+									EliminarMiscellaneousPorFecha(fecha);
+								}
+								else
+								{
+									sql.RollbackTransaction();
+									return;
+								}
+							}
 
-                    }
-                }
-            }
+							//  BORRA ASISTENCIA
+							EliminarRegistrosPorFecha(fecha);
+
+							//  INSERTA NUEVO
+							InsertarRegistrosDeAsistencia();
+
+							sql.CommitTransaction();
+						}
+						catch (Exception ex)
+						{
+							sql.RollbackTransaction();
+							MessageBox.Show(ex.ToString(), titulo);
+						}
+					}
+				}
+			}
         }
 
         public void InsertarRegistrosDeAsistencia()
@@ -426,6 +448,51 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
             return registros;
         }
-    }
+		private bool ExisteMiscellaneousPorFecha(string fecha)
+		{
+			int count = 0;
+
+			try
+			{
+				SqlCommand cmd = new SqlCommand(@"
+				SELECT COUNT(*)
+				FROM dbo.Nom_MiscellaneousIncome mi
+				INNER JOIN dbo.Nom_AttendenceList a
+				ON mi.id_attendence = a.id_attendence
+				WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
+
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+
+				count = (int)cmd.ExecuteScalar();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), titulo);
+			}
+
+			return count > 0;
+		}
+		private void EliminarMiscellaneousPorFecha(string fecha)
+		{
+			try
+			{
+				SqlCommand cmd = new SqlCommand(@"
+        DELETE mi
+        FROM dbo.Nom_MiscellaneousIncome mi
+        INNER JOIN dbo.Nom_AttendenceList a
+            ON mi.id_attendence = a.id_attendence
+        WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
+
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+				cmd.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), titulo);
+				throw;
+			}
+		}
+
+	}
 }
 
