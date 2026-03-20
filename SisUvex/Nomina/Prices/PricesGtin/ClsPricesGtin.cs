@@ -216,11 +216,11 @@ namespace SisUvex.Nomina.Prices.PricesGtin
                     {
                         string query = $@"
                             IF EXISTS (SELECT 1 FROM Pack_PricePerSize WHERE id_GTIN = '{idGtin}' AND id_size = '{idSize}')
-                                UPDATE Pack_PricePerSize SET id_price = '{idPrice}', userUpdate = '{User.GetUserName().Substring(0, 12)}', d_update = CAST(GETDATE() AS DATE) 
+                                UPDATE Pack_PricePerSize SET id_price = '{idPrice}', userUpdate = '{User.GetUserName()}', d_update = CAST(GETDATE() AS DATE) 
                                 WHERE id_GTIN = '{idGtin}' AND id_size = '{idSize}'
                             ELSE
                                 INSERT INTO Pack_PricePerSize (id_price, id_GTIN, id_size, userCreate, d_create)
-                                VALUES ('{idPrice}', '{idGtin}', '{idSize}', '{User.GetUserName().Substring(0, 12)}', CAST(GETDATE() AS DATE))";
+                                VALUES ('{idPrice}', '{idGtin}', '{idSize}', '{User.GetUserName()}', CAST(GETDATE() AS DATE))";
 
                         SqlCommand cmd = new SqlCommand(query, sql.cnn);
                         cmd.ExecuteNonQuery();
@@ -230,7 +230,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
                     // Limpiar los registros que no están en la lista seleccionada
                     string queryCleanup = $@"
                         UPDATE Pack_PricePerSize 
-                        SET id_price = NULL, userUpdate = '{User.GetUserName().Substring(0, 12)}', d_update = CAST(GETDATE() AS DATE)
+                        SET id_price = NULL, userUpdate = '{User.GetUserName()}', d_update = CAST(GETDATE() AS DATE)
                         WHERE id_price = '{idPrice}' 
                         AND CONCAT(id_GTIN, id_size) NOT IN ({concatValues})";
 
@@ -246,7 +246,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
                     // Si no hay combinaciones seleccionadas, limpiar todos los registros con este precio
                     string query = $@"
                         UPDATE Pack_PricePerSize 
-                        SET id_price = NULL, userUpdate = '{User.GetUserName().Substring(0, 12)}', d_update = CAST(GETDATE() AS DATE)
+                        SET id_price = NULL, userUpdate = '{User.GetUserName()}', d_update = CAST(GETDATE() AS DATE)
                         WHERE id_price = '{idPrice}'";
 
                     SqlCommand cmd = new SqlCommand(query, sql.cnn);
