@@ -28,24 +28,26 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPricesGtinCat));
             dgvCatalogPrices = new DataGridView();
-            btnModify = new Button();
+            btnModifyGtin = new Button();
             dgvCatalogGtin = new DataGridView();
             splitContainer1 = new SplitContainer();
             btnSeleccionar = new Button();
             label9 = new Label();
+            btnModifySize = new Button();
             splitContainer2 = new SplitContainer();
             label1 = new Label();
+            btnSearchSize = new Button();
+            cboSize = new ComboBox();
             dgvCatalogSize = new DataGridView();
             label2 = new Label();
-            button1 = new Button();
             btnSearch = new Button();
             cboVariety = new ComboBox();
             label3 = new Label();
@@ -60,8 +62,6 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             label7 = new Label();
             txbLbs = new TextBox();
             label8 = new Label();
-            cboSize = new ComboBox();
-            btnSearchSize = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogPrices).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCatalogGtin).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -85,43 +85,43 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvCatalogPrices.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogPrices.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogPrices.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = SystemColors.Control;
-            dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            dgvCatalogPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvCatalogPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCatalogPrices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogPrices.EnableHeadersVisualStyles = false;
             dgvCatalogPrices.ImeMode = ImeMode.NoControl;
             dgvCatalogPrices.Location = new Point(3, 29);
             dgvCatalogPrices.Name = "dgvCatalogPrices";
             dgvCatalogPrices.ReadOnly = true;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Control;
-            dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
-            dgvCatalogPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCatalogPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvCatalogPrices.RowHeadersVisible = false;
             dgvCatalogPrices.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogPrices.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogPrices.Size = new Size(369, 320);
+            dgvCatalogPrices.Size = new Size(448, 570);
             dgvCatalogPrices.TabIndex = 2;
             // 
-            // btnModify
+            // btnModifyGtin
             // 
-            btnModify.Location = new Point(3, 4);
-            btnModify.Name = "btnModify";
-            btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 1;
-            btnModify.Text = "Modificar";
-            btnModify.UseVisualStyleBackColor = true;
-            btnModify.Click += btnModify_Click;
+            btnModifyGtin.Location = new Point(156, 4);
+            btnModifyGtin.Name = "btnModifyGtin";
+            btnModifyGtin.Size = new Size(98, 23);
+            btnModifyGtin.TabIndex = 1;
+            btnModifyGtin.Text = "Modificar GTIN";
+            btnModifyGtin.UseVisualStyleBackColor = true;
+            btnModifyGtin.Click += btnModify_Click;
             // 
             // dgvCatalogGtin
             // 
@@ -132,32 +132,32 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvCatalogGtin.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogGtin.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogGtin.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            dgvCatalogGtin.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvCatalogGtin.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvCatalogGtin.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogGtin.EnableHeadersVisualStyles = false;
             dgvCatalogGtin.ImeMode = ImeMode.NoControl;
             dgvCatalogGtin.Location = new Point(3, 29);
             dgvCatalogGtin.Name = "dgvCatalogGtin";
             dgvCatalogGtin.ReadOnly = true;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = SystemColors.Control;
-            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            dgvCatalogGtin.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvCatalogGtin.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvCatalogGtin.RowHeadersVisible = false;
             dgvCatalogGtin.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogGtin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogGtin.Size = new Size(391, 139);
+            dgvCatalogGtin.Size = new Size(712, 260);
             dgvCatalogGtin.TabIndex = 3;
             // 
             // splitContainer1
@@ -170,18 +170,20 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             // 
             splitContainer1.Panel1.Controls.Add(dgvCatalogPrices);
             splitContainer1.Panel1.Controls.Add(btnSeleccionar);
+            splitContainer1.Panel1.Controls.Add(btnModifyGtin);
             splitContainer1.Panel1.Controls.Add(label9);
+            splitContainer1.Panel1.Controls.Add(btnModifySize);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(776, 352);
-            splitContainer1.SplitterDistance = 375;
+            splitContainer1.Size = new Size(1176, 602);
+            splitContainer1.SplitterDistance = 454;
             splitContainer1.TabIndex = 28;
             // 
             // btnSeleccionar
             // 
-            btnSeleccionar.Location = new Point(3, 4);
+            btnSeleccionar.Location = new Point(96, 4);
             btnSeleccionar.Name = "btnSeleccionar";
             btnSeleccionar.Size = new Size(59, 23);
             btnSeleccionar.TabIndex = 0;
@@ -193,11 +195,21 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.Location = new Point(62, 4);
+            label9.Location = new Point(3, 6);
             label9.Name = "label9";
             label9.Size = new Size(75, 21);
             label9.TabIndex = 30;
             label9.Text = "PRECIOS";
+            // 
+            // btnModifySize
+            // 
+            btnModifySize.Location = new Point(255, 4);
+            btnModifySize.Name = "btnModifySize";
+            btnModifySize.Size = new Size(118, 23);
+            btnModifySize.TabIndex = 4;
+            btnModifySize.Text = "Modificar tamaños";
+            btnModifySize.UseVisualStyleBackColor = true;
+            btnModifySize.Click += btnSize_Click;
             // 
             // splitContainer2
             // 
@@ -208,9 +220,8 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(label1);
             splitContainer2.Panel1.Controls.Add(dgvCatalogGtin);
-            splitContainer2.Panel1.Controls.Add(btnModify);
+            splitContainer2.Panel1.Controls.Add(label1);
             // 
             // splitContainer2.Panel2
             // 
@@ -218,77 +229,87 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             splitContainer2.Panel2.Controls.Add(cboSize);
             splitContainer2.Panel2.Controls.Add(dgvCatalogSize);
             splitContainer2.Panel2.Controls.Add(label2);
-            splitContainer2.Panel2.Controls.Add(button1);
-            splitContainer2.Size = new Size(397, 352);
-            splitContainer2.SplitterDistance = 171;
+            splitContainer2.Size = new Size(718, 602);
+            splitContainer2.SplitterDistance = 292;
             splitContainer2.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(77, 4);
+            label1.Location = new Point(3, 6);
             label1.Name = "label1";
             label1.Size = new Size(48, 21);
             label1.TabIndex = 29;
             label1.Text = "GTIN";
+            // 
+            // btnSearchSize
+            // 
+            btnSearchSize.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchSize.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchSize.Location = new Point(287, 5);
+            btnSearchSize.Name = "btnSearchSize";
+            btnSearchSize.Size = new Size(23, 23);
+            btnSearchSize.TabIndex = 62;
+            btnSearchSize.UseVisualStyleBackColor = true;
+            btnSearchSize.Click += btnSearchSize_Click;
+            // 
+            // cboSize
+            // 
+            cboSize.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSize.DropDownWidth = 400;
+            cboSize.FormattingEnabled = true;
+            cboSize.Location = new Point(81, 5);
+            cboSize.Name = "cboSize";
+            cboSize.Size = new Size(203, 23);
+            cboSize.TabIndex = 62;
             // 
             // dgvCatalogSize
             // 
             dgvCatalogSize.AllowUserToAddRows = false;
             dgvCatalogSize.AllowUserToDeleteRows = false;
             dgvCatalogSize.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvCatalogSize.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
             dgvCatalogSize.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvCatalogSize.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogSize.BorderStyle = BorderStyle.Fixed3D;
             dgvCatalogSize.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = SystemColors.Control;
-            dataGridViewCellStyle11.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle11.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.True;
-            dgvCatalogSize.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvCatalogSize.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgvCatalogSize.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalogSize.EnableHeadersVisualStyles = false;
             dgvCatalogSize.ImeMode = ImeMode.NoControl;
             dgvCatalogSize.Location = new Point(3, 29);
             dgvCatalogSize.Name = "dgvCatalogSize";
             dgvCatalogSize.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = SystemColors.Control;
-            dataGridViewCellStyle12.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle12.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
-            dgvCatalogSize.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvCatalogSize.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvCatalogSize.RowHeadersVisible = false;
             dgvCatalogSize.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalogSize.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalogSize.Size = new Size(391, 145);
+            dgvCatalogSize.Size = new Size(712, 274);
             dgvCatalogSize.TabIndex = 30;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(77, 4);
+            label2.Location = new Point(3, 6);
             label2.Name = "label2";
             label2.Size = new Size(80, 21);
             label2.TabIndex = 30;
             label2.Text = "TAMAÑO";
-            // 
-            // button1
-            // 
-            button1.Location = new Point(3, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Modificar";
-            button1.UseVisualStyleBackColor = true;
             // 
             // btnSearch
             // 
@@ -429,32 +450,13 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             label8.TabIndex = 61;
             label8.Text = "Libras";
             // 
-            // cboSize
-            // 
-            cboSize.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboSize.DropDownWidth = 400;
-            cboSize.FormattingEnabled = true;
-            cboSize.Location = new Point(155, 4);
-            cboSize.Name = "cboSize";
-            cboSize.Size = new Size(203, 23);
-            cboSize.TabIndex = 62;
-            // 
-            // btnSearchSize
-            // 
-            btnSearchSize.BackgroundImage = Properties.Resources.BuscarLupa1;
-            btnSearchSize.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSearchSize.Location = new Point(361, 4);
-            btnSearchSize.Name = "btnSearchSize";
-            btnSearchSize.Size = new Size(23, 23);
-            btnSearchSize.TabIndex = 62;
-            btnSearchSize.UseVisualStyleBackColor = true;
-            btnSearchSize.Click += btnSearchSize_Click;
-            // 
             // FrmPricesGtinCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(1200, 700);
+            ClientSize = new Size(1184, 661);
             Controls.Add(label8);
             Controls.Add(txbLbs);
             Controls.Add(label7);
@@ -496,11 +498,11 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         #endregion
 
         public DataGridView dgvCatalogPrices;
-        private Button btnModify;
+        private Button btnModifyGtin;
         public DataGridView dgvCatalogGtin;
         private SplitContainer splitContainer1;
         private SplitContainer splitContainer2;
-        private Button button1;
+        private Button btnModifySize;
         private Label label1;
         public DataGridView dgvCatalogSize;
         private Label label2;
