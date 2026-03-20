@@ -51,8 +51,8 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             btnAccept = new Button();
             btnCancel = new Button();
             dgvPricesRight = new DataGridView();
-            button1 = new Button();
-            button2 = new Button();
+            btnAddToRigt = new Button();
+            btnQuitRight = new Button();
             label8 = new Label();
             txbLbs = new TextBox();
             label7 = new Label();
@@ -68,11 +68,21 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             label9 = new Label();
             cboPresentation = new ComboBox();
             Filtros = new GroupBox();
+            cboSize = new ComboBox();
+            lblSize = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel1 = new Panel();
+            panel3 = new Panel();
+            panel2 = new Panel();
             gpbField.SuspendLayout();
             gpbFacility.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPricesLeft).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvPricesRight).BeginInit();
             Filtros.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
+            panel3.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // lblTitle
@@ -81,7 +91,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             lblTitle.Font = new Font("Arial Black", 16F);
             lblTitle.Location = new Point(12, 9);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(410, 31);
+            lblTitle.Size = new Size(333, 31);
             lblTitle.TabIndex = 28;
             lblTitle.Text = "Precios por Gtin y Tamaño";
             // 
@@ -93,6 +103,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbId.ReadOnly = true;
             txbId.Size = new Size(29, 24);
             txbId.TabIndex = 0;
+            txbId.TabStop = false;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblPrice
@@ -114,6 +125,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbDescription.ReadOnly = true;
             txbDescription.Size = new Size(622, 24);
             txbDescription.TabIndex = 1;
+            txbDescription.TabStop = false;
             // 
             // gpbField
             // 
@@ -138,6 +150,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbFieldOver.ReadOnly = true;
             txbFieldOver.Size = new Size(61, 24);
             txbFieldOver.TabIndex = 3;
+            txbFieldOver.TabStop = false;
             // 
             // txbFieldNormal
             // 
@@ -148,6 +161,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbFieldNormal.ReadOnly = true;
             txbFieldNormal.Size = new Size(61, 24);
             txbFieldNormal.TabIndex = 2;
+            txbFieldNormal.TabStop = false;
             // 
             // label1
             // 
@@ -192,6 +206,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbFacilityOver.ReadOnly = true;
             txbFacilityOver.Size = new Size(61, 24);
             txbFacilityOver.TabIndex = 5;
+            txbFacilityOver.TabStop = false;
             // 
             // txbFacilityNormal
             // 
@@ -202,6 +217,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbFacilityNormal.ReadOnly = true;
             txbFacilityNormal.Size = new Size(61, 24);
             txbFacilityNormal.TabIndex = 4;
+            txbFacilityNormal.TabStop = false;
             // 
             // label2
             // 
@@ -227,7 +243,6 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             // 
             dgvPricesLeft.AllowUserToAddRows = false;
             dgvPricesLeft.AllowUserToDeleteRows = false;
-            dgvPricesLeft.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvPricesLeft.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
             dgvPricesLeft.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPricesLeft.BackgroundColor = SystemColors.ControlLightLight;
@@ -242,9 +257,10 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvPricesLeft.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvPricesLeft.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvPricesLeft.Dock = DockStyle.Fill;
             dgvPricesLeft.EnableHeadersVisualStyles = false;
             dgvPricesLeft.ImeMode = ImeMode.NoControl;
-            dgvPricesLeft.Location = new Point(12, 243);
+            dgvPricesLeft.Location = new Point(0, 0);
             dgvPricesLeft.Name = "dgvPricesLeft";
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
@@ -257,8 +273,8 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvPricesLeft.RowHeadersVisible = false;
             dgvPricesLeft.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPricesLeft.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPricesLeft.Size = new Size(356, 392);
-            dgvPricesLeft.TabIndex = 6;
+            dgvPricesLeft.Size = new Size(311, 399);
+            dgvPricesLeft.TabIndex = 0;
             // 
             // btnAccept
             // 
@@ -266,7 +282,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             btnAccept.Location = new Point(12, 644);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 7;
+            btnAccept.TabIndex = 0;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -277,7 +293,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             btnCancel.Location = new Point(93, 644);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 8;
+            btnCancel.TabIndex = 1;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -286,7 +302,6 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             // 
             dgvPricesRight.AllowUserToAddRows = false;
             dgvPricesRight.AllowUserToDeleteRows = false;
-            dgvPricesRight.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvPricesRight.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
             dgvPricesRight.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPricesRight.BackgroundColor = SystemColors.ControlLightLight;
@@ -301,9 +316,10 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
             dgvPricesRight.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvPricesRight.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvPricesRight.Dock = DockStyle.Fill;
             dgvPricesRight.EnableHeadersVisualStyles = false;
             dgvPricesRight.ImeMode = ImeMode.NoControl;
-            dgvPricesRight.Location = new Point(455, 243);
+            dgvPricesRight.Location = new Point(0, 0);
             dgvPricesRight.Name = "dgvPricesRight";
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = SystemColors.Control;
@@ -316,30 +332,30 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvPricesRight.RowHeadersVisible = false;
             dgvPricesRight.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPricesRight.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPricesRight.Size = new Size(356, 392);
-            dgvPricesRight.TabIndex = 37;
+            dgvPricesRight.Size = new Size(312, 399);
+            dgvPricesRight.TabIndex = 0;
             // 
-            // button1
+            // btnAddToRigt
             // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            button1.Location = new Point(374, 334);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 41);
-            button1.TabIndex = 38;
-            button1.Text = "Agregar\r\n--->";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnAddToRigt.Anchor = AnchorStyles.Top;
+            btnAddToRigt.Location = new Point(0, 115);
+            btnAddToRigt.Name = "btnAddToRigt";
+            btnAddToRigt.Size = new Size(75, 41);
+            btnAddToRigt.TabIndex = 1;
+            btnAddToRigt.Text = "Agregar\r\n--->";
+            btnAddToRigt.UseVisualStyleBackColor = true;
+            btnAddToRigt.Click += btnAddToRigt_Click;
             // 
-            // button2
+            // btnQuitRight
             // 
-            button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            button2.Location = new Point(374, 381);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 41);
-            button2.TabIndex = 39;
-            button2.Text = "Quitar\r\n<---";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            btnQuitRight.Anchor = AnchorStyles.Top;
+            btnQuitRight.Location = new Point(0, 201);
+            btnQuitRight.Name = "btnQuitRight";
+            btnQuitRight.Size = new Size(75, 41);
+            btnQuitRight.TabIndex = 2;
+            btnQuitRight.Text = "Quitar\r\n<---";
+            btnQuitRight.UseVisualStyleBackColor = true;
+            btnQuitRight.Click += btnQuitRight_Click;
             // 
             // label8
             // 
@@ -357,7 +373,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             txbLbs.MaxLength = 6;
             txbLbs.Name = "txbLbs";
             txbLbs.Size = new Size(86, 23);
-            txbLbs.TabIndex = 74;
+            txbLbs.TabIndex = 5;
             // 
             // label7
             // 
@@ -387,7 +403,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             cboCrop.Location = new Point(48, 22);
             cboCrop.Name = "cboCrop";
             cboCrop.Size = new Size(203, 23);
-            cboCrop.TabIndex = 71;
+            cboCrop.TabIndex = 0;
             // 
             // btnSearch
             // 
@@ -396,7 +412,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             btnSearch.Location = new Point(646, 57);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(23, 23);
-            btnSearch.TabIndex = 66;
+            btnSearch.TabIndex = 6;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -408,7 +424,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             cboVariety.Location = new Point(48, 57);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 23);
-            cboVariety.TabIndex = 64;
+            cboVariety.TabIndex = 3;
             // 
             // label4
             // 
@@ -438,7 +454,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             cboContainer.Location = new Point(257, 22);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(203, 23);
-            cboContainer.TabIndex = 63;
+            cboContainer.TabIndex = 1;
             // 
             // cboDistributor
             // 
@@ -448,7 +464,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             cboDistributor.Location = new Point(466, 22);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(203, 23);
-            cboDistributor.TabIndex = 62;
+            cboDistributor.TabIndex = 2;
             // 
             // lblDistribuidor
             // 
@@ -478,7 +494,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             cboPresentation.Location = new Point(257, 57);
             cboPresentation.Name = "cboPresentation";
             cboPresentation.Size = new Size(203, 23);
-            cboPresentation.TabIndex = 65;
+            cboPresentation.TabIndex = 4;
             // 
             // Filtros
             // 
@@ -503,18 +519,84 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             Filtros.TabStop = false;
             Filtros.Text = "Filtros";
             // 
+            // cboSize
+            // 
+            cboSize.Anchor = AnchorStyles.Top;
+            cboSize.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSize.DropDownWidth = 400;
+            cboSize.FormattingEnabled = true;
+            cboSize.Location = new Point(0, 86);
+            cboSize.Name = "cboSize";
+            cboSize.Size = new Size(75, 23);
+            cboSize.TabIndex = 0;
+            // 
+            // lblSize
+            // 
+            lblSize.Anchor = AnchorStyles.Top;
+            lblSize.AutoSize = true;
+            lblSize.Font = new Font("Segoe UI", 12F);
+            lblSize.Location = new Point(6, 66);
+            lblSize.Name = "lblSize";
+            lblSize.Size = new Size(64, 21);
+            lblSize.TabIndex = 28;
+            lblSize.Text = "Tamaño";
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 81F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(panel1, 1, 0);
+            tableLayoutPanel1.Controls.Add(panel3, 0, 0);
+            tableLayoutPanel1.Controls.Add(panel2, 2, 0);
+            tableLayoutPanel1.Location = new Point(14, 233);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(716, 405);
+            tableLayoutPanel1.TabIndex = 80;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(cboSize);
+            panel1.Controls.Add(btnQuitRight);
+            panel1.Controls.Add(btnAddToRigt);
+            panel1.Controls.Add(lblSize);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(320, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(75, 399);
+            panel1.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(dgvPricesLeft);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(3, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(311, 399);
+            panel3.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(dgvPricesRight);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(401, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(312, 399);
+            panel2.TabIndex = 1;
+            // 
             // FrmPricesGtinAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1129, 685);
+            ClientSize = new Size(741, 685);
+            Controls.Add(tableLayoutPanel1);
             Controls.Add(Filtros);
-            Controls.Add(button1);
-            Controls.Add(button2);
-            Controls.Add(dgvPricesRight);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
-            Controls.Add(dgvPricesLeft);
             Controls.Add(gpbFacility);
             Controls.Add(gpbField);
             Controls.Add(txbDescription);
@@ -533,6 +615,11 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             ((System.ComponentModel.ISupportInitialize)dgvPricesRight).EndInit();
             Filtros.ResumeLayout(false);
             Filtros.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -556,8 +643,8 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         private Button btnAccept;
         private Button btnCancel;
         public DataGridView dgvPricesRight;
-        private Button button1;
-        private Button button2;
+        private Button btnAddToRigt;
+        private Button btnQuitRight;
         private Label label8;
         public TextBox txbLbs;
         private Label label7;
@@ -573,5 +660,11 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         private Label label9;
         public ComboBox cboPresentation;
         private GroupBox Filtros;
+        public ComboBox cboSize;
+        private Label lblSize;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel1;
+        private Panel panel3;
+        private Panel panel2;
     }
 }

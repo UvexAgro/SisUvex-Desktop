@@ -1,3 +1,4 @@
+using SisUvex.Catalogos.Metods.DataGridViews;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +17,6 @@ namespace SisUvex.Nomina.Prices.PricesGtin
         public FrmPricesGtinCat()
         {
             InitializeComponent();
-
         }
 
         private void FrmPricesGtinCat_Load(object sender, EventArgs e)
@@ -34,17 +34,33 @@ namespace SisUvex.Nomina.Prices.PricesGtin
 
         private void btnModify_Click(object sender, EventArgs e)
         {
-            cls.OpenFrmAdd();
+            cls.OpenFrmModify(PricingType.Gtin);
+
+            if (cls.isModifyUpdate)
+                cls.ModifyDgvGtinCatalog();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
             cls.BtnSearchFilter();
+
+            cboSize.SelectedIndex = 0; //para quitarle el filtro de tamaño antes de
+            cls.BtnSearchFilterSize();
         }
 
         private void btnSearchSize_Click(object sender, EventArgs e)
         {
+            cls.BtnSearchFilter();
+
             cls.BtnSearchFilterSize();
+        }
+
+        private void btnSize_Click(object sender, EventArgs e)
+        {
+            cls.OpenFrmModify(PricingType.GtinAndSize);
+
+            if (cls.isModifyUpdate)
+                cls.ModifyDgvGtinAndSizeCatalog();
         }
     }
 }
