@@ -666,5 +666,12 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
+
+		private void fechasFestivasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Catalogos.FechasFestivas.FrmCatFestivo cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
 	}
 }
