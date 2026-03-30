@@ -32,11 +32,12 @@
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			dgvHoras = new DataGridView();
 			lbencabezado = new Label();
-			lblSemana = new Label();
+			lblFechaInicial = new Label();
 			cboSemana = new ComboBox();
 			lblTemporada = new Label();
 			cboTemporada = new ComboBox();
-			btncargar = new Button();
+			lblFechaFinal = new Label();
+			cboFinal = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)dgvHoras).BeginInit();
 			SuspendLayout();
 			// 
@@ -62,7 +63,7 @@
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvHoras.EnableHeadersVisualStyles = false;
 			dgvHoras.ImeMode = ImeMode.NoControl;
-			dgvHoras.Location = new Point(25, 255);
+			dgvHoras.Location = new Point(25, 343);
 			dgvHoras.Name = "dgvHoras";
 			dgvHoras.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -76,37 +77,38 @@
 			dgvHoras.RowHeadersVisible = false;
 			dgvHoras.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvHoras.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvHoras.Size = new Size(550, 183);
+			dgvHoras.Size = new Size(550, 218);
 			dgvHoras.TabIndex = 19;
 			// 
 			// lbencabezado
 			// 
 			lbencabezado.AutoSize = true;
 			lbencabezado.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lbencabezado.Location = new Point(121, 28);
+			lbencabezado.Location = new Point(144, 25);
 			lbencabezado.Name = "lbencabezado";
 			lbencabezado.Size = new Size(314, 32);
 			lbencabezado.TabIndex = 20;
 			lbencabezado.Text = "Reporte de Horas Empaque";
 			// 
-			// lblSemana
+			// lblFechaInicial
 			// 
-			lblSemana.AutoSize = true;
-			lblSemana.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblSemana.Location = new Point(25, 185);
-			lblSemana.Name = "lblSemana";
-			lblSemana.Size = new Size(69, 21);
-			lblSemana.TabIndex = 29;
-			lblSemana.Text = "Semana:";
+			lblFechaInicial.AutoSize = true;
+			lblFechaInicial.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblFechaInicial.Location = new Point(25, 185);
+			lblFechaInicial.Name = "lblFechaInicial";
+			lblFechaInicial.Size = new Size(113, 21);
+			lblFechaInicial.TabIndex = 29;
+			lblFechaInicial.Text = "Semana Inicial:";
 			// 
 			// cboSemana
 			// 
 			cboSemana.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(100, 187);
+			cboSemana.Location = new Point(144, 187);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(235, 23);
 			cboSemana.TabIndex = 30;
+			cboSemana.SelectedIndexChanged += cboSemana_SelectedIndexChanged;
 			// 
 			// lblTemporada
 			// 
@@ -122,32 +124,42 @@
 			// 
 			cboTemporada.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboTemporada.FormattingEnabled = true;
-			cboTemporada.Location = new Point(121, 121);
+			cboTemporada.Location = new Point(144, 121);
 			cboTemporada.Name = "cboTemporada";
 			cboTemporada.Size = new Size(235, 23);
 			cboTemporada.TabIndex = 32;
 			// 
-			// btncargar
+			// lblFechaFinal
 			// 
-			btncargar.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btncargar.Location = new Point(444, 185);
-			btncargar.Name = "btncargar";
-			btncargar.Size = new Size(131, 38);
-			btncargar.TabIndex = 33;
-			btncargar.Text = "Cargar Datos";
-			btncargar.UseVisualStyleBackColor = true;
-			btncargar.Click += btncargar_Click;
+			lblFechaFinal.AutoSize = true;
+			lblFechaFinal.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblFechaFinal.Location = new Point(25, 256);
+			lblFechaFinal.Name = "lblFechaFinal";
+			lblFechaFinal.Size = new Size(106, 21);
+			lblFechaFinal.TabIndex = 33;
+			lblFechaFinal.Text = "Semana Final:";
+			// 
+			// cboFinal
+			// 
+			cboFinal.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboFinal.FormattingEnabled = true;
+			cboFinal.Location = new Point(144, 258);
+			cboFinal.Name = "cboFinal";
+			cboFinal.Size = new Size(235, 23);
+			cboFinal.TabIndex = 34;
+			cboFinal.SelectedIndexChanged += cboFinal_SelectedIndexChanged;
 			// 
 			// FrmPackingHours
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(600, 450);
-			Controls.Add(btncargar);
+			ClientSize = new Size(600, 573);
+			Controls.Add(cboFinal);
+			Controls.Add(lblFechaFinal);
 			Controls.Add(cboTemporada);
 			Controls.Add(lblTemporada);
 			Controls.Add(cboSemana);
-			Controls.Add(lblSemana);
+			Controls.Add(lblFechaInicial);
 			Controls.Add(lbencabezado);
 			Controls.Add(dgvHoras);
 			Name = "FrmPackingHours";
@@ -162,10 +174,11 @@
 
 		public DataGridView dgvHoras;
 		private Label lbencabezado;
-		private Label lblSemana;
+		private Label lblFechaInicial;
 		public ComboBox cboSemana;
 		private Label lblTemporada;
 		public ComboBox cboTemporada;
-		private Button btncargar;
+		private Label lblFechaFinal;
+		public ComboBox cboFinal;
 	}
 }

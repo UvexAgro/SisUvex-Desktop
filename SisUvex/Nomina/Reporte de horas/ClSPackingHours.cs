@@ -20,7 +20,9 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 		public void CargarPeriodos()
 		{
+			// Cargar combos
 			ClsComboBoxes.CboLoadActives(frmPacki.cboSemana, Payroll_AttendancePeriod.Cbo);
+			ClsComboBoxes.CboLoadActives(frmPacki.cboFinal, Payroll_AttendancePeriod.Cbo);
 
 			DateTime hoy = DateTime.Today;
 
@@ -40,6 +42,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				if (hoy >= fechaInicio && hoy <= fechaFin)
 				{
 					frmPacki.cboSemana.SelectedIndex = i;
+					frmPacki.cboFinal.SelectedIndex = i; 
 					break;
 				}
 			}
@@ -75,46 +78,48 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 			}
 		}
-		public DataTable ObtenerHorasEmpaque(int temporada, int? periodo, int? semana)
+		
+		public void CargarHoras()
 		{
-			SQLControl sql = new SQLControl();
-			DataTable dt = new DataTable();
-
 			try
 			{
+				if (frmPacki.cboTemporada.SelectedValue == null ||
+					frmPacki.cboSemana.SelectedItem == null ||
+					frmPacki.cboFinal.SelectedItem == null)
+					return;
+
+				DataRowView rowInicio = (DataRowView)frmPacki.cboSemana.SelectedItem;
+				DataRowView rowFin = (DataRowView)frmPacki.cboFinal.SelectedItem;
+
+				int temporada = Convert.ToInt32(frmPacki.cboTemporada.SelectedValue);
+
+				int periodo = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnId]);        
+				int semanaInicio = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnSequence]); 
+				int semanaFin = Convert.ToInt32(rowFin[Payroll_AttendancePeriod.ColumnSequence]);
+
+				DataTable dt = new DataTable();
+
+				SQLControl sql = new SQLControl();
 				sql.OpenConectionWrite();
 
-				string query = "SELECT * FROM dbo.fn_PackHorasEmpaque(@Temporada,@Periodo,@Semana)";
+				SqlCommand cmd = new SqlCommand(
+					"SELECT * FROM dbo.fn_PackHorasEmpaque(@Temporada, @Periodo, @SemanaInicio, @SemanaFin)",
+					sql.cnn);
 
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-
-				// ESTE ES EL BLOQUE QUE TE DI
 				cmd.Parameters.AddWithValue("@Temporada", temporada);
-
-				if (semana == null)
-				{
-					cmd.Parameters.AddWithValue("@Periodo", DBNull.Value);
-					cmd.Parameters.AddWithValue("@Semana", DBNull.Value);
-				}
-				else
-				{
-					cmd.Parameters.AddWithValue("@Periodo", periodo);
-					cmd.Parameters.AddWithValue("@Semana", semana);
-				}
+				cmd.Parameters.AddWithValue("@Periodo", periodo);
+				cmd.Parameters.AddWithValue("@SemanaInicio", semanaInicio);
+				cmd.Parameters.AddWithValue("@SemanaFin", semanaFin);
 
 				SqlDataAdapter da = new SqlDataAdapter(cmd);
 				da.Fill(dt);
+
+				frmPacki.dgvHoras.DataSource = dt;
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Reporte horas");
+				MessageBox.Show(ex.Message);
 			}
-			finally
-			{
-				sql.OpenConectionWrite();
-			}
-
-			return dt;
 		}
 	}
 }

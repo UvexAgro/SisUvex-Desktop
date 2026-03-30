@@ -26,30 +26,30 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			cls.CargarPeriodos();
 
 			cls.CargarTemporada();
+
+			cls.CargarHoras();
 		}
 
-		private void btncargar_Click(object sender, EventArgs e)
+		private void cboFinal_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ClSPackingHours cls = new ClSPackingHours();
-			int temporada = Convert.ToInt32(cboTemporada.Text.Split('|')[1].Trim());
-
-			int? periodo = null;
-			int? semanaNum = null;
-
-			if (cboSemana.SelectedValue != null && cboSemana.SelectedValue.ToString().Contains("|"))
+			if (cboFinal.SelectedIndex < cboSemana.SelectedIndex)
 			{
-				string[] semana = cboSemana.SelectedValue.ToString().Split('|');
-
-				if (!string.IsNullOrWhiteSpace(semana[0]))
-					periodo = Convert.ToInt32(semana[0]);
-
-				if (!string.IsNullOrWhiteSpace(semana[1]))
-					semanaNum = Convert.ToInt32(semana[1]);
+				cboFinal.SelectedIndex = cboSemana.SelectedIndex;
 			}
+			cls.CargarHoras();
+		}
 
-			DataTable dt = cls.ObtenerHorasEmpaque(temporada, periodo, semanaNum);
+		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboFinal.Items.Count == 0) return;
 
-			dgvHoras.DataSource = dt;
+			int index = cboSemana.SelectedIndex;
+
+			if (index >= 0 && index < cboFinal.Items.Count)
+			{
+				cboFinal.SelectedIndex = index;
+			}
+			cls.CargarHoras();
 		}
 	}
 }
