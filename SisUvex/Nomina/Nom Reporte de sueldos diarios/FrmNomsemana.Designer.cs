@@ -215,10 +215,10 @@
 			btncargar.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btncargar.Image = (Image)resources.GetObject("btncargar.Image");
 			btncargar.ImageAlign = ContentAlignment.MiddleLeft;
-			btncargar.Location = new Point(533, 448);
+			btncargar.Location = new Point(523, 448);
 			btncargar.Name = "btncargar";
 			btncargar.Padding = new Padding(10, 0, 10, 0);
-			btncargar.Size = new Size(148, 38);
+			btncargar.Size = new Size(154, 38);
 			btncargar.TabIndex = 54;
 			btncargar.Text = "Cargar Datos";
 			btncargar.TextAlign = ContentAlignment.MiddleRight;
@@ -377,8 +377,9 @@
 			Controls.Add(lblSemana);
 			Controls.Add(lblReporteEmpacadores);
 			Controls.Add(dgvEmployee);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmNomsemana";
-			Text = "FrmNomsemana";
+			Text = "Reporte de nomina Semanal";
 			Load += FrmNomsemana_Load;
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).EndInit();
 			((System.ComponentModel.ISupportInitialize)dgvListaEmpleado).EndInit();

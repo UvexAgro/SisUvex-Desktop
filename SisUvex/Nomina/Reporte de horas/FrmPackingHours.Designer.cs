@@ -30,6 +30,7 @@
 		{
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPackingHours));
 			dgvHoras = new DataGridView();
 			lbencabezado = new Label();
 			lblFechaInicial = new Label();
@@ -162,8 +163,9 @@
 			Controls.Add(lblFechaInicial);
 			Controls.Add(lbencabezado);
 			Controls.Add(dgvHoras);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmPackingHours";
-			Text = "FrmPackingHours";
+			Text = "Reporte de Horas";
 			Load += FrmPackingHours_Load;
 			((System.ComponentModel.ISupportInitialize)dgvHoras).EndInit();
 			ResumeLayout(false);

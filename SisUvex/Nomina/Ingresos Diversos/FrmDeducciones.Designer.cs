@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDeducciones));
 			lblAdd = new Label();
 			lblMmodificarD = new Label();
 			cboDeducciones = new ComboBox();
@@ -142,8 +143,9 @@
 			Controls.Add(cboDeducciones);
 			Controls.Add(lblMontoDeduccion);
 			Controls.Add(lblAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmDeducciones";
-			Text = "FrmDeducciones";
+			Text = "Deducciones";
 			Load += FrmDeducciones_Load;
 			ResumeLayout(false);
 			PerformLayout();
