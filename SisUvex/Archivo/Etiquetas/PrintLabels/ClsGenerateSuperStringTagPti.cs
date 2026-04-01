@@ -97,6 +97,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
+                case 
+                    "09":
+                    //DAYKA - WALMART 
+                    string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
+                    SetStringWalmartBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE");
+                    SetStringWalmartPackedByDistributedByNameAndProductOfMexicoZPL("Uvex Agro Internacional", eTag.nameDistributor);
+                    break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); ; //DISTRIBUIDOR STANDAR
@@ -221,18 +228,18 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             gtinZPL = "^FX GTIN\n" +
                         "^FX GTIN BARCODE\n" +
                         "^FO0,15\n" +
-                        "^BRN,11,3,1,25,10^FD01" + Gtin + "13" + DateShortUS + "10" + Lote + "C" + Workgroup + "^FS\n" +
+                        "^BRN,11,3,1,20,10^FD01" + Gtin + "13" + DateShortUS + "10" + Lote + "C" + Workgroup + "^FS\n" +
                         "^CFF,30,10\n" +
                         "^FX GTIN HUMAN READABLE\n";
             if (showDate == true || showDate == null)
             {
-                gtinZPL += "^FO100,95^FD(01)" + Gtin;
+                gtinZPL += "^FO100,80^FD(01)" + Gtin;
                 gtinZPL += "(13)" + DateShortUS;
                 gtinZPL += "(10)" + Lote + "C" + Workgroup + "^FS\n";
             }
             else
             {
-                gtinZPL += "^FO170,95^FD(01)" + Gtin;
+                gtinZPL += "^FO170,80^FD(01)" + Gtin;
                 gtinZPL += "(10)" + Lote + "C" + Workgroup + "^FS\n";
             }
 
@@ -357,11 +364,39 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         "^CFD,37\n" +
                         "^FO650,255^FD" + DateMonth + "^FS\n" +
                         "^FO745,255^FD" + DateDay + "^FS\n" +
-                        "^FO640,235^FR^GB160,70,50^FS\n";
+                        "^FO640,235^GB160,70,3^FS"; //RECTANGULO BLANCO CON BORDES NEGROS
+                        //"^FO640,235^FR^GB160,70,50^FS\n"; //RECTANGULO NEGRO
             }
             else
             {// de momento solo no muestra la fecha y su cuadro negro
             }
+        }
+        /// <summary>
+        /// (2026-DAYKA WALMART) EJ: BLACK SEEDLESS GRAPE, /n MIDNIGHT BEAUTY, /n 18Lb / 8.2Kg CASE, /n Product of Mexico
+        /// </summary>
+        /// <param name="Crop"></param>
+        /// <param name="Variety"></param>
+        private void SetStringWalmartBoldColorVarietyLbsZPL(string ColorLine1, string VarietyLine2, string WeightLine3)
+        {
+            //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
+            varietyZPL = "^FX COLOR\n" +
+                        $"^CF0,30,35 ^FO25,110^FD{ColorLine1}^FS\n"
+                        +"^FX VARIETY\n" +
+                        $"^CF0,30,35 ^FO25,145^FD{VarietyLine2}^FS\n"
+                        +"^FX WEIGHT\n" +
+                        $"^CF0,30,40 ^FO23,180^FD{WeightLine3}^FS\n";
+        }
+        private void SetStringWalmartPackedByDistributedByNameAndProductOfMexicoZPL(string GrowerLine1, string DistributorLine2)
+        {
+            //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
+            distributorZPL = "^FX  PRODUCTO DE\n" +
+                        $"^CF0,30,50^FO22,220^FDProduct of Mexico^FS\n"
+                        + "^FX GROWER\n" +
+                        $"^CFF,30,10^FO23,260^FDGrown/Packed by:^FS\n" + 
+                        $"^FO25,290^FD{GrowerLine1}^FS\n"
+                        + "^FX DISTRIBUIDOR\n" + 
+                        $"^CFF,30,10^FO25,330^FDDistributed by:^FS\n" +
+                        $"^FO25,360^FD{DistributorLine2}^FS\n";
         }
 
         private void ChangeFontSize(string inputText)
