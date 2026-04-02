@@ -74,6 +74,7 @@
 			ciudadToolStripMenuItem = new ToolStripMenuItem();
 			nominaToolStripMenuItem = new ToolStripMenuItem();
 			ingresosDiversosToolStripMenuItem = new ToolStripMenuItem();
+			fechasFestivasToolStripMenuItem = new ToolStripMenuItem();
 			configuraciónToolStripMenuItem = new ToolStripMenuItem();
 			impresoraSetupToolStrip = new ToolStripMenuItem();
 			parámetrosToolStripMenuItem = new ToolStripMenuItem();
@@ -102,8 +103,6 @@
 			desertGhostToolStripMenuItem = new ToolStripMenuItem();
 			cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
 			empaqueToolStripMenuItem = new ToolStripMenuItem();
-			registroHorasToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorariosToolStripMenuItem = new ToolStripMenuItem();
 			preciosToolStripMenuItem = new ToolStripMenuItem();
 			preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
 			asistenciaEmpaqueToolStripMenuItem1 = new ToolStripMenuItem();
@@ -113,6 +112,8 @@
 			reporteToolStripMenuItem1 = new ToolStripMenuItem();
 			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
 			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
+			cajasPorEmpleadoYHorariosToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
 			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -153,7 +154,6 @@
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			fechasFestivasToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -326,119 +326,119 @@
 			// variedadesToolStripMenuItem
 			// 
 			variedadesToolStripMenuItem.Name = "variedadesToolStripMenuItem";
-			variedadesToolStripMenuItem.Size = new Size(180, 22);
+			variedadesToolStripMenuItem.Size = new Size(175, 22);
 			variedadesToolStripMenuItem.Text = "Variedades";
 			variedadesToolStripMenuItem.Click += variedadesToolStripMenuItem_Click;
 			// 
 			// lotesToolStripMenuItem
 			// 
 			lotesToolStripMenuItem.Name = "lotesToolStripMenuItem";
-			lotesToolStripMenuItem.Size = new Size(180, 22);
+			lotesToolStripMenuItem.Size = new Size(175, 22);
 			lotesToolStripMenuItem.Text = "Lotes";
 			lotesToolStripMenuItem.Click += lotesToolStripMenuItem_Click;
 			// 
 			// productorToolStripMenuItem
 			// 
 			productorToolStripMenuItem.Name = "productorToolStripMenuItem";
-			productorToolStripMenuItem.Size = new Size(180, 22);
+			productorToolStripMenuItem.Size = new Size(175, 22);
 			productorToolStripMenuItem.Text = "Productor";
 			productorToolStripMenuItem.Click += productorToolStripMenuItem_Click;
 			// 
 			// distribuidorToolStripMenuItem
 			// 
 			distribuidorToolStripMenuItem.Name = "distribuidorToolStripMenuItem";
-			distribuidorToolStripMenuItem.Size = new Size(180, 22);
+			distribuidorToolStripMenuItem.Size = new Size(175, 22);
 			distribuidorToolStripMenuItem.Text = "Distribuidor";
 			distribuidorToolStripMenuItem.Click += distribuidorToolStripMenuItem_Click;
 			// 
 			// consigToolStripMenuItem
 			// 
 			consigToolStripMenuItem.Name = "consigToolStripMenuItem";
-			consigToolStripMenuItem.Size = new Size(180, 22);
+			consigToolStripMenuItem.Size = new Size(175, 22);
 			consigToolStripMenuItem.Text = "Consignatario";
 			consigToolStripMenuItem.Click += consigToolStripMenuItem_Click;
 			// 
 			// contratistaToolStripMenuItem
 			// 
 			contratistaToolStripMenuItem.Name = "contratistaToolStripMenuItem";
-			contratistaToolStripMenuItem.Size = new Size(180, 22);
+			contratistaToolStripMenuItem.Size = new Size(175, 22);
 			contratistaToolStripMenuItem.Text = "Contratista";
 			contratistaToolStripMenuItem.Click += contratistaToolStripMenuItem_Click;
 			// 
 			// cuadrillaToolStripMenuItem
 			// 
 			cuadrillaToolStripMenuItem.Name = "cuadrillaToolStripMenuItem";
-			cuadrillaToolStripMenuItem.Size = new Size(180, 22);
+			cuadrillaToolStripMenuItem.Size = new Size(175, 22);
 			cuadrillaToolStripMenuItem.Text = "Cuadrilla";
 			cuadrillaToolStripMenuItem.Click += cuadrillaToolStripMenuItem_Click;
 			// 
 			// categoríaToolStripMenuItem
 			// 
 			categoríaToolStripMenuItem.Name = "categoríaToolStripMenuItem";
-			categoríaToolStripMenuItem.Size = new Size(180, 22);
+			categoríaToolStripMenuItem.Size = new Size(175, 22);
 			categoríaToolStripMenuItem.Text = "Categoría";
 			categoríaToolStripMenuItem.Click += categoríaToolStripMenuItem_Click;
 			// 
 			// presentaciónToolStripMenuItem
 			// 
 			presentaciónToolStripMenuItem.Name = "presentaciónToolStripMenuItem";
-			presentaciónToolStripMenuItem.Size = new Size(180, 22);
+			presentaciónToolStripMenuItem.Size = new Size(175, 22);
 			presentaciónToolStripMenuItem.Text = "Presentación";
 			presentaciónToolStripMenuItem.Click += presentaciónToolStripMenuItem_Click;
 			// 
 			// contenedorToolStripMenuItem
 			// 
 			contenedorToolStripMenuItem.Name = "contenedorToolStripMenuItem";
-			contenedorToolStripMenuItem.Size = new Size(180, 22);
+			contenedorToolStripMenuItem.Size = new Size(175, 22);
 			contenedorToolStripMenuItem.Text = "Contenedor";
 			contenedorToolStripMenuItem.Click += contenedorToolStripMenuItem_Click;
 			// 
 			// tamañoToolStripMenuItem
 			// 
 			tamañoToolStripMenuItem.Name = "tamañoToolStripMenuItem";
-			tamañoToolStripMenuItem.Size = new Size(180, 22);
+			tamañoToolStripMenuItem.Size = new Size(175, 22);
 			tamañoToolStripMenuItem.Text = "Tamaño";
 			tamañoToolStripMenuItem.Click += tamañoToolStripMenuItem_Click;
 			// 
 			// gTINUPCToolStripMenuItem
 			// 
 			gTINUPCToolStripMenuItem.Name = "gTINUPCToolStripMenuItem";
-			gTINUPCToolStripMenuItem.Size = new Size(180, 22);
+			gTINUPCToolStripMenuItem.Size = new Size(175, 22);
 			gTINUPCToolStripMenuItem.Text = "GTIN - UPC";
 			gTINUPCToolStripMenuItem.Click += gTINUPCToolStripMenuItem_Click;
 			// 
 			// líneaDeTransporteToolStripMenuItem
 			// 
 			líneaDeTransporteToolStripMenuItem.Name = "líneaDeTransporteToolStripMenuItem";
-			líneaDeTransporteToolStripMenuItem.Size = new Size(180, 22);
+			líneaDeTransporteToolStripMenuItem.Size = new Size(175, 22);
 			líneaDeTransporteToolStripMenuItem.Text = "Línea de transporte";
 			líneaDeTransporteToolStripMenuItem.Click += líneaDeTransporteToolStripMenuItem_Click;
 			// 
 			// choferToolStripMenuItem
 			// 
 			choferToolStripMenuItem.Name = "choferToolStripMenuItem";
-			choferToolStripMenuItem.Size = new Size(180, 22);
+			choferToolStripMenuItem.Size = new Size(175, 22);
 			choferToolStripMenuItem.Text = "Chofer";
 			choferToolStripMenuItem.Click += choferToolStripMenuItem_Click;
 			// 
 			// cajaToolStripMenuItem
 			// 
 			cajaToolStripMenuItem.Name = "cajaToolStripMenuItem";
-			cajaToolStripMenuItem.Size = new Size(180, 22);
+			cajaToolStripMenuItem.Size = new Size(175, 22);
 			cajaToolStripMenuItem.Text = "Caja";
 			cajaToolStripMenuItem.Click += cajaToolStripMenuItem_Click;
 			// 
 			// troqueToolStripMenuItem
 			// 
 			troqueToolStripMenuItem.Name = "troqueToolStripMenuItem";
-			troqueToolStripMenuItem.Size = new Size(180, 22);
+			troqueToolStripMenuItem.Size = new Size(175, 22);
 			troqueToolStripMenuItem.Text = "Troque";
 			troqueToolStripMenuItem.Click += troqueToolStripMenuItem_Click;
 			// 
 			// agenciaAduanalToolStripMenuItem
 			// 
 			agenciaAduanalToolStripMenuItem.Name = "agenciaAduanalToolStripMenuItem";
-			agenciaAduanalToolStripMenuItem.Size = new Size(180, 22);
+			agenciaAduanalToolStripMenuItem.Size = new Size(175, 22);
 			agenciaAduanalToolStripMenuItem.Text = "Agencia Aduanal";
 			agenciaAduanalToolStripMenuItem.Click += agenciaAduanalToolStripMenuItem_Click;
 			// 
@@ -446,13 +446,13 @@
 			// 
 			actividadToolStripMenuItem.Enabled = false;
 			actividadToolStripMenuItem.Name = "actividadToolStripMenuItem";
-			actividadToolStripMenuItem.Size = new Size(180, 22);
+			actividadToolStripMenuItem.Size = new Size(175, 22);
 			actividadToolStripMenuItem.Text = "Actividad";
 			// 
 			// ciudadToolStripMenuItem
 			// 
 			ciudadToolStripMenuItem.Name = "ciudadToolStripMenuItem";
-			ciudadToolStripMenuItem.Size = new Size(180, 22);
+			ciudadToolStripMenuItem.Size = new Size(175, 22);
 			ciudadToolStripMenuItem.Text = "Ciudad";
 			ciudadToolStripMenuItem.Click += ciudadToolStripMenuItem_Click;
 			// 
@@ -460,15 +460,22 @@
 			// 
 			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ingresosDiversosToolStripMenuItem, fechasFestivasToolStripMenuItem });
 			nominaToolStripMenuItem.Name = "nominaToolStripMenuItem";
-			nominaToolStripMenuItem.Size = new Size(180, 22);
+			nominaToolStripMenuItem.Size = new Size(175, 22);
 			nominaToolStripMenuItem.Text = "Nomina";
 			// 
 			// ingresosDiversosToolStripMenuItem
 			// 
 			ingresosDiversosToolStripMenuItem.Name = "ingresosDiversosToolStripMenuItem";
-			ingresosDiversosToolStripMenuItem.Size = new Size(180, 22);
+			ingresosDiversosToolStripMenuItem.Size = new Size(165, 22);
 			ingresosDiversosToolStripMenuItem.Text = "Ingresos Diversos";
 			ingresosDiversosToolStripMenuItem.Click += ingresosDiversosToolStripMenuItem_Click;
+			// 
+			// fechasFestivasToolStripMenuItem
+			// 
+			fechasFestivasToolStripMenuItem.Name = "fechasFestivasToolStripMenuItem";
+			fechasFestivasToolStripMenuItem.Size = new Size(165, 22);
+			fechasFestivasToolStripMenuItem.Text = "Fechas Festivas";
+			fechasFestivasToolStripMenuItem.Click += fechasFestivasToolStripMenuItem_Click;
 			// 
 			// configuraciónToolStripMenuItem
 			// 
@@ -648,88 +655,88 @@
 			// 
 			// empaqueToolStripMenuItem
 			// 
-			empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroHorasToolStripMenuItem, reporteDeHorariosToolStripMenuItem, preciosToolStripMenuItem, preciosPorGTINToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1, mantenimientoToolStripMenuItem, nominaEmpaqueToolStripMenuItem });
+			empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { preciosToolStripMenuItem, preciosPorGTINToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1, mantenimientoToolStripMenuItem, nominaEmpaqueToolStripMenuItem });
 			empaqueToolStripMenuItem.Name = "empaqueToolStripMenuItem";
 			empaqueToolStripMenuItem.Size = new Size(189, 22);
 			empaqueToolStripMenuItem.Text = "Empaque";
 			// 
-			// registroHorasToolStripMenuItem
-			// 
-			registroHorasToolStripMenuItem.Name = "registroHorasToolStripMenuItem";
-			registroHorasToolStripMenuItem.Size = new Size(239, 22);
-			registroHorasToolStripMenuItem.Text = "Cajas por empleados y horarios";
-			registroHorasToolStripMenuItem.Click += CajasPorEmlpeadosYHorariosToolStripMenuItem_Click;
-			// 
-			// reporteDeHorariosToolStripMenuItem
-			// 
-			reporteDeHorariosToolStripMenuItem.Name = "reporteDeHorariosToolStripMenuItem";
-			reporteDeHorariosToolStripMenuItem.Size = new Size(239, 22);
-			reporteDeHorariosToolStripMenuItem.Text = "Reporte de horarios";
-			reporteDeHorariosToolStripMenuItem.Click += reporteDeHorariosToolStripMenuItem_Click;
-			// 
 			// preciosToolStripMenuItem
 			// 
 			preciosToolStripMenuItem.Name = "preciosToolStripMenuItem";
-			preciosToolStripMenuItem.Size = new Size(239, 22);
+			preciosToolStripMenuItem.Size = new Size(257, 22);
 			preciosToolStripMenuItem.Text = "Precios";
 			preciosToolStripMenuItem.Click += preciosToolStripMenuItem_Click;
 			// 
 			// preciosPorGTINToolStripMenuItem
 			// 
 			preciosPorGTINToolStripMenuItem.Name = "preciosPorGTINToolStripMenuItem";
-			preciosPorGTINToolStripMenuItem.Size = new Size(239, 22);
+			preciosPorGTINToolStripMenuItem.Size = new Size(257, 22);
 			preciosPorGTINToolStripMenuItem.Text = "Precios por GTIN";
 			preciosPorGTINToolStripMenuItem.Click += preciosPorGTINToolStripMenuItem_Click;
 			// 
 			// asistenciaEmpaqueToolStripMenuItem1
 			// 
 			asistenciaEmpaqueToolStripMenuItem1.Name = "asistenciaEmpaqueToolStripMenuItem1";
-			asistenciaEmpaqueToolStripMenuItem1.Size = new Size(239, 22);
+			asistenciaEmpaqueToolStripMenuItem1.Size = new Size(257, 22);
 			asistenciaEmpaqueToolStripMenuItem1.Text = "Asistencia empaque";
 			asistenciaEmpaqueToolStripMenuItem1.Click += asistenciaEmpaqueToolStripMenuItem1_Click;
 			// 
 			// mantenimientoToolStripMenuItem
 			// 
 			mantenimientoToolStripMenuItem.Name = "mantenimientoToolStripMenuItem";
-			mantenimientoToolStripMenuItem.Size = new Size(239, 22);
-			mantenimientoToolStripMenuItem.Text = "Mantenimiento";
+			mantenimientoToolStripMenuItem.Size = new Size(257, 22);
+			mantenimientoToolStripMenuItem.Text = "Limpieza de etiquetas no utilizadas";
 			mantenimientoToolStripMenuItem.Click += mantenimientoToolStripMenuItem_Click;
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { calculToolStripMenuItem, reporteToolStripMenuItem1, salarioDiversosToolStripMenuItem, reporteDeEmpacadorToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, calculToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
-			nominaEmpaqueToolStripMenuItem.Size = new Size(239, 22);
+			nominaEmpaqueToolStripMenuItem.Size = new Size(257, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
 			nominaEmpaqueToolStripMenuItem.Click += nominaEmpaqueToolStripMenuItem_Click;
 			// 
 			// calculToolStripMenuItem
 			// 
 			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
-			calculToolStripMenuItem.Size = new Size(232, 22);
+			calculToolStripMenuItem.Size = new Size(234, 22);
 			calculToolStripMenuItem.Text = "Calculo de Nomina";
 			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
 			// 
 			// reporteToolStripMenuItem1
 			// 
 			reporteToolStripMenuItem1.Name = "reporteToolStripMenuItem1";
-			reporteToolStripMenuItem1.Size = new Size(232, 22);
+			reporteToolStripMenuItem1.Size = new Size(234, 22);
 			reporteToolStripMenuItem1.Text = "Reporte Semanal de Empaque";
 			reporteToolStripMenuItem1.Click += reporteToolStripMenuItem1_Click;
 			// 
 			// salarioDiversosToolStripMenuItem
 			// 
 			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
-			salarioDiversosToolStripMenuItem.Size = new Size(232, 22);
+			salarioDiversosToolStripMenuItem.Size = new Size(234, 22);
 			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
 			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
 			// 
 			// reporteDeEmpacadorToolStripMenuItem
 			// 
 			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
-			reporteDeEmpacadorToolStripMenuItem.Size = new Size(232, 22);
+			reporteDeEmpacadorToolStripMenuItem.Size = new Size(234, 22);
 			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
 			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
+			// 
+			// cajasPorEmpleadoYHorariosToolStripMenuItem
+			// 
+			cajasPorEmpleadoYHorariosToolStripMenuItem.Name = "cajasPorEmpleadoYHorariosToolStripMenuItem";
+			cajasPorEmpleadoYHorariosToolStripMenuItem.Size = new Size(234, 22);
+			cajasPorEmpleadoYHorariosToolStripMenuItem.Text = "Cajas por empleado y horarios";
+			cajasPorEmpleadoYHorariosToolStripMenuItem.Click += cajasPorEmpleadoYHorariosToolStripMenuItem_Click;
+			// 
+			// reporteDeHorariosToolStripMenuItem1
+			// 
+			reporteDeHorariosToolStripMenuItem1.Name = "reporteDeHorariosToolStripMenuItem1";
+			reporteDeHorariosToolStripMenuItem1.Size = new Size(234, 22);
+			reporteDeHorariosToolStripMenuItem1.Text = "Reporte de horarios";
+			reporteDeHorariosToolStripMenuItem1.Click += reporteDeHorariosToolStripMenuItem1_Click;
 			// 
 			// credencialesToolStripMenuItem
 			// 
@@ -831,14 +838,14 @@
 			// plantasToolStripMenuItem
 			// 
 			plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
-			plantasToolStripMenuItem.Size = new Size(135, 22);
+			plantasToolStripMenuItem.Size = new Size(180, 22);
 			plantasToolStripMenuItem.Text = "Plantas";
 			plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
 			// 
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(135, 22);
+			palletsToolStripMenuItem.Size = new Size(180, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -846,7 +853,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(135, 22);
+			manifiestosToolStripMenuItem.Size = new Size(180, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
@@ -1010,13 +1017,6 @@
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// fechasFestivasToolStripMenuItem
-			// 
-			fechasFestivasToolStripMenuItem.Name = "fechasFestivasToolStripMenuItem";
-			fechasFestivasToolStripMenuItem.Size = new Size(180, 22);
-			fechasFestivasToolStripMenuItem.Text = "Fechas Festivas";
-			fechasFestivasToolStripMenuItem.Click += fechasFestivasToolStripMenuItem_Click;
-			// 
 			// FrmMenu
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1032,7 +1032,6 @@
 			Text = "SisUvex";
 			WindowState = FormWindowState.Maximized;
 			FormClosed += FrmMenu_FormClosed;
-			Load += FrmMenu_Load;
 			contextMenuStrip1.ResumeLayout(false);
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
@@ -1118,7 +1117,6 @@
         private ToolStripMenuItem códigoParaCajaÚnicaEspárragoToolStripMenuItem;
         private ToolStripMenuItem uvaNombreYCódigoDeEmpleadoToolStripMenuItem;
         private ToolStripMenuItem empaqueToolStripMenuItem;
-        private ToolStripMenuItem registroHorasToolStripMenuItem;
         private ToolStripMenuItem preciosToolStripMenuItem;
         private ToolStripMenuItem manifiestosToolStripMenuItem;
         private ToolStripMenuItem totalesPorManifiestoToolStripMenuItem;
@@ -1167,8 +1165,9 @@
         private ToolStripMenuItem reporteToolStripMenuItem;
 		private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem;
 		private ToolStripMenuItem factorToolStripMenuItem;
-		private ToolStripMenuItem reporteDeHorariosToolStripMenuItem;
 		private ToolStripMenuItem reporteToolStripMenuItem1;
 		private ToolStripMenuItem fechasFestivasToolStripMenuItem;
+		private ToolStripMenuItem cajasPorEmpleadoYHorariosToolStripMenuItem;
+		private ToolStripMenuItem reporteDeHorariosToolStripMenuItem1;
 	}
 }

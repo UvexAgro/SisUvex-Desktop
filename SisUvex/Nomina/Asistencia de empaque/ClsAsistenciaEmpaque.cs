@@ -22,29 +22,29 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
             frmAsistenciaEmpaque = new FrmAsistenciaEmpaque();
         }
 
-        public void AbrirFrmAsistenciaEmpaque()
-        {
-            frmMenu.AbrirFormularioDialog(frmAsistenciaEmpaque,3);
+        //public void AbrirFrmAsistenciaEmpaque()
+        //{
+        //    frmMenu.AbrirFormularioDialog(frmAsistenciaEmpaque,3);
 
-            switch (frmAsistenciaEmpaque.abrir)
-            {
-                case "Nuevo":
-                    frmNuevo = new FrmAsistenciaEmpaqueNuevo();
-                    frmMenu.AbrirVentanaHijo(frmNuevo, 1); break;
-                case "Día":
-                    frmVista = new FrmAsistenciaEmpaqueVista();
-                    frmVista.dtpDia.Value = frmAsistenciaEmpaque.dtpDia.Value;
-                    frmMenu.AbrirVentanaHijo(frmVista, 1);
-                    break;
-                case "Empleado":
-                    frmEmpleado = new FrmAsistenciaEmpaqueEmpleado();
-                    frmEmpleado.txbIdEmpleado.Text = frmAsistenciaEmpaque.txbEmpleado.Text;
-                    frmMenu.AbrirVentanaHijo(frmEmpleado, 1);
-                    break;
-                default:
-                    frmAsistenciaEmpaque.Close();
-                    break;
-            }
-        }
+        //    switch (frmAsistenciaEmpaque.abrir)
+        //    {
+        //        case "Nuevo":
+        //            frmNuevo = new FrmAsistenciaEmpaqueNuevo();
+        //            frmMenu.AbrirVentanaHijo(frmNuevo, 1); break;
+        //        case "Día":
+        //            frmVista = new FrmAsistenciaEmpaqueVista();
+        //            frmVista.dtpDia.Value = frmAsistenciaEmpaque.dtpDia.Value;
+        //            frmMenu.AbrirVentanaHijo(frmVista, 1);
+        //            break;
+        //        case "Empleado":
+        //            frmEmpleado = new FrmAsistenciaEmpaqueEmpleado();
+        //            frmEmpleado.txbIdEmpleado.Text = frmAsistenciaEmpaque.txbEmpleado.Text;
+        //            frmMenu.AbrirVentanaHijo(frmEmpleado, 1);
+        //            break;
+        //        default:
+        //            frmAsistenciaEmpaque.Close();
+        //            break;
+            
+        
     }
 }
