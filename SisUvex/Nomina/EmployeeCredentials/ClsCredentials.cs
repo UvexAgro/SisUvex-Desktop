@@ -1,4 +1,4 @@
-﻿using iText.Kernel.Pdf;
+using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
@@ -70,8 +70,8 @@ namespace SisUvex.Nomina.EmployeeCredentials
             };
             frm.pnlPrincipal.Controls.Add(pdfViewer);
 
-            pdfViewer.Document?.Dispose(); // Libera el documento anterior
-            pdfViewer.Document = PdfiumViewer.PdfDocument.Load(outputPathVarias); // Cargar el nuevo PDF
+            pdfViewer.Document?.Dispose();
+            pdfViewer.Document = PdfiumViewer.PdfDocument.Load(outputPathVarias);
             pdfViewer.ZoomMode = PdfViewerZoomMode.FitHeight;
 
             frm.btnCargarCredenciales.Enabled = false;
@@ -550,7 +550,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
             if (pdfViewer != null)
             {
                 pdfViewer.Document?.Dispose();
-                pdfViewer.Dispose();
+                pdfViewer?.Dispose();
                 pdfViewer = null;
             }
         }
