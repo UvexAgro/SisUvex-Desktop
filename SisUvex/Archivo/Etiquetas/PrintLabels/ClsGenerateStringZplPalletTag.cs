@@ -44,7 +44,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             eTag = eTagInfo;
             idPal = idPallet;
             qty = boxes.ToString();
-            datePal = eTag.dateWorkPlan?.ToString("MMM-dd");
+
+            if (eTag.showDate == true || eTag.showDate == null) //Si se desea mostrar la fecha en el pallet o no (dependiendo del botón/showDate)
+                datePal = eTag.dateWorkPlan?.ToString("MMM-dd");
+            else
+                datePal = string.Empty;
+
             reverseLabelOrientation = reverseOrientation;
             this.isReprint = isReprint;
 

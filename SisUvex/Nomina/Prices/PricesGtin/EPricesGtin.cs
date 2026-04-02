@@ -40,5 +40,6 @@ namespace SisUvex.Nomina.Prices.PricesGtin
                 sql.CloseConectionWrite();
             }
         }
+
     }
 }

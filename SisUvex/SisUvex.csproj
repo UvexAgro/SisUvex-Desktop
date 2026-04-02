@@ -23,6 +23,7 @@
 
 
 
+  <!-- COM References disabled for .NET Core compatibility
   <ItemGroup>
     <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
       <WrapperTool>tlbimp</WrapperTool>
@@ -40,6 +41,7 @@
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  -->
 
   <ItemGroup>
     <Content Include="Resources\DESERTLogo.png">
@@ -64,8 +66,7 @@
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.WebForms" Version="150.1652.0" />
     <PackageReference Include="NPOI" Version="2.7.5" />
-    <PackageReference Include="PdfiumViewer" Version="2.13.0" />
-    <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa" Version="2018.4.8.256" />
+    <PackageReference Include="PdfiumViewer.Core" Version="1.0.4" />
     <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.29" />
     <PackageReference Include="System.Data.OleDb" Version="9.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />

@@ -36,6 +36,7 @@
             label3 = new Label();
             button2 = new Button();
             chbRevesePalletTag = new CheckBox();
+            chbFechaOmitidaPallet = new CheckBox();
             SuspendLayout();
             // 
             // txbRePrintCode
@@ -112,11 +113,23 @@
             chbRevesePalletTag.Text = "Invertir etiqueta";
             chbRevesePalletTag.UseVisualStyleBackColor = true;
             // 
+            // chbFechaOmitidaPallet
+            // 
+            chbFechaOmitidaPallet.AutoSize = true;
+            chbFechaOmitidaPallet.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chbFechaOmitidaPallet.Location = new Point(141, 302);
+            chbFechaOmitidaPallet.Name = "chbFechaOmitidaPallet";
+            chbFechaOmitidaPallet.Size = new Size(139, 25);
+            chbFechaOmitidaPallet.TabIndex = 65;
+            chbFechaOmitidaPallet.Text = "OMITIR FECHA";
+            chbFechaOmitidaPallet.UseVisualStyleBackColor = true;
+            // 
             // FrmRePrintPallet
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(391, 339);
+            Controls.Add(chbFechaOmitidaPallet);
             Controls.Add(chbRevesePalletTag);
             Controls.Add(button2);
             Controls.Add(label3);
@@ -142,5 +155,6 @@
         private Label label3;
         private Button button2;
         public CheckBox chbRevesePalletTag;
+        public CheckBox chbFechaOmitidaPallet;
     }
 }
