@@ -99,7 +99,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     break;
                 case 
                     "09":
-                    //DAYKA - WALMART 
+                    //DAYKA - WALMART (2026)
                     string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
                     SetStringWalmartBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE");
                     SetStringWalmartPackedByDistributedByNameAndProductOfMexicoZPL("Uvex Agro Internacional", eTag.nameDistributor);

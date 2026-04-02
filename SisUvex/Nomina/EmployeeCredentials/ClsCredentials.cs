@@ -1,4 +1,4 @@
-﻿using iText.Kernel.Pdf;
+using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
@@ -23,6 +23,7 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
         public FrmCredentials frm;
         private PdfViewer? pdfViewer;
+        private MemoryStream? pdfMemoryStream; // Almacenar PDF en memoria
         PageSize credentialSize = new PageSize(242.64f, 153.72f); //tamaño de la credencial (85.6 mm x 54 mm en puntos)
         string photoPath = "\\\\SVRCAMPOSANAN\\Inventum\\FOTOS"; // Cambia esta 
         string outputPathVarias = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", Environment.MachineName, "EmployeesCardsPrinting.pdf");
@@ -53,7 +54,8 @@ namespace SisUvex.Nomina.EmployeeCredentials
                 pdfViewer.Document = null;
             }
 
-            CreateEmployeesCards(empleados);
+            // Generar PDF en memoria
+            pdfMemoryStream = CreateEmployeesCardsInMemory(empleados);
 
             ShowPdfViewer();
 
@@ -70,11 +72,49 @@ namespace SisUvex.Nomina.EmployeeCredentials
             };
             frm.pnlPrincipal.Controls.Add(pdfViewer);
 
-            pdfViewer.Document?.Dispose(); // Libera el documento anterior
-            pdfViewer.Document = PdfiumViewer.PdfDocument.Load(outputPathVarias); // Cargar el nuevo PDF
+            pdfViewer.Document?.Dispose();
+            
+            // Cargar PDF desde memoria
+            if (pdfMemoryStream != null)
+            {
+                pdfMemoryStream.Position = 0; // Resetear posición del stream
+                pdfViewer.Document = PdfiumViewer.PdfDocument.Load(pdfMemoryStream);
+            }
+            
             pdfViewer.ZoomMode = PdfViewerZoomMode.FitHeight;
 
             frm.btnCargarCredenciales.Enabled = false;
+        }
+
+        /// <summary>
+        /// Genera el PDF de credenciales en memoria sin crear archivo en disco
+        /// </summary>
+        private MemoryStream CreateEmployeesCardsInMemory(DataTable empleados)
+        {
+            // Disponer del stream anterior si existe
+            pdfMemoryStream?.Dispose();
+            
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Inicializa el escritor con MemoryStream
+            PdfWriter writer = new PdfWriter(memoryStream);
+            writer.SetCloseStream(false); // Importante: no cerrar el stream al finalizar
+            iText.Kernel.Pdf.PdfDocument pdf = new iText.Kernel.Pdf.PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            foreach (DataRow empleado in empleados.Rows)
+            {
+                pdf.AddNewPage(1, credentialSize);
+                AgregarDatosCredencial(document, empleado, pdf);
+            }
+
+            document.Close();
+            pdf.Close();
+            writer.Close();
+            
+            // Resetear la posición para lectura
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
         void CreateEmployeesCards(DataTable empleados)
@@ -550,9 +590,13 @@ namespace SisUvex.Nomina.EmployeeCredentials
             if (pdfViewer != null)
             {
                 pdfViewer.Document?.Dispose();
-                pdfViewer.Dispose();
+                pdfViewer?.Dispose();
                 pdfViewer = null;
             }
+            
+            // Liberar el MemoryStream
+            pdfMemoryStream?.Dispose();
+            pdfMemoryStream = null;
         }
 
         public void BtnShowEmployeeList()
