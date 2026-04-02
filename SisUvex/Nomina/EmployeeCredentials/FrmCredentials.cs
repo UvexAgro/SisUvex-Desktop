@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 using PdfiumViewer;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 
