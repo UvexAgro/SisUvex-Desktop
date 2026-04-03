@@ -144,8 +144,14 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 				SqlDataAdapter da = new SqlDataAdapter(cmd);
 				da.Fill(dt);
+				if (dt.Rows.Count == 0)
+				{
+					frmR.dgvEmployee.DataSource = null; 
+					MessageBox.Show("La cuadrilla seleccionada no tiene asistencia en el periodo indicado.");
+					return;
+				}
 
-				
+
 				frmR.dgvEmployee.DataSource = null;
 				frmR.dgvEmployee.DataSource = dt;
 
@@ -360,11 +366,36 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			string idEmpleado = ObtenerIdEmpleadoSeleccionado();
 
+		
+			DateTime fechaInicial = ObtenerFechaDesdeSemana(frmR.cboSemanaInicial.Text, true);
+			DateTime fechaFinal = ObtenerFechaDesdeSemana(frmR.cboSemanaFinal.Text, false);
+
 			if (string.IsNullOrWhiteSpace(idEmpleado))
 			{
 				MessageBox.Show("Seleccione un empleado.");
 				return;
 			}
+
+			var resultado = ValidarEmpleado(idEmpleado, fechaInicial, fechaFinal);
+
+			if (!resultado.tieneCuadrilla && !resultado.tieneAsistencia)
+			{
+				MessageBox.Show("El empleado no tiene ni cuadrilla ni asistencia.");
+				return;
+			}
+
+			if (!resultado.tieneCuadrilla)
+			{
+				MessageBox.Show("El empleado no tiene cuadrilla.");
+				return;
+			}
+
+			if (!resultado.tieneAsistencia)
+			{
+				MessageBox.Show("El empleado no tiene asistencia .");
+				return;
+			}
+			
 
 			DataTable dtEmpleado = ObtenerEmpleadoPorId(idEmpleado);
 
@@ -378,70 +409,88 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			string id = dtEmpleado.Rows[0]["id_employee"].ToString();
 			string idWorkGroup = dtEmpleado.Rows[0]["id_workGroup"].ToString();
 
-			foreach (DataRow row in dtDgvEmpleados.Rows)
-			{
-				if (row["id_employee"].ToString() == id)
-				{
-					MessageBox.Show("El empleado ya fue agregado.");
-					return;
-				}
-			}
+			//foreach (DataRow row in dtDgvEmpleados.Rows)
+			//{
+			//	if (row["id_employee"].ToString() == id)
+			//	{
+			//		MessageBox.Show("El empleado ya fue agregado.");
+			//		return;
+			//	}
+			//}
 
 			dtDgvEmpleados.Rows.Add(empleado, id, idWorkGroup);
 		}
-		public bool TieneCuadrilla(string idEmpleado)
+		public DateTime ObtenerFechaDesdeSemana(string texto, bool esInicio)
 		{
-			SQLControl sql = new SQLControl();
-
 			try
 			{
-				sql.OpenConectionWrite();
+				string[] partes = texto.Split('-');
 
-				string query = @"
-        SELECT id_workGroup
-        FROM Nom_Employees
-        WHERE id_employee = @id_employee";
+				if (partes.Length < 2)
+					return DateTime.Now;
 
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-				cmd.Parameters.AddWithValue("@id_employee", idEmpleado);
+				string rango = partes[1].Trim();
 
-				object result = cmd.ExecuteScalar();
+				string[] fechas = rango.Split('a');
 
-				if (result == null || result == DBNull.Value)
-					return false;
+				if (fechas.Length < 2)
+					return DateTime.Now;
 
-				return Convert.ToInt32(result) > 0;
+				DateTime fechaInicio = DateTime.Parse(fechas[0].Trim());
+				DateTime fechaFin = DateTime.Parse(fechas[1].Trim());
+
+				return esInicio ? fechaInicio : fechaFin;
 			}
-			catch (Exception ex)
+			catch
 			{
-				MessageBox.Show(ex.Message);
-				return false;
+				return DateTime.Now;
 			}
 		}
-		public bool TieneAsistenciaEmpleado(string idEmpleado)
+		public (bool tieneCuadrilla, bool tieneAsistencia) ValidarEmpleado(string idEmpleado, DateTime inicio, DateTime fin)
 		{
 			SQLControl sql = new SQLControl();
+
+			bool tieneCuadrilla = false;
+			bool tieneAsistencia = false;
 
 			try
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-        SELECT COUNT(*)
-        FROM Nom_AttendenceList
-        WHERE id_employee = @id_employee";
+				//  VALIDAR CUADRILLA
+				string queryCuadrilla = $@"
+				SELECT COUNT(*)
+				FROM Nom_Employees
+				WHERE id_employee = @id_employee
+				  AND id_workGroup IS NOT NULL";
 
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-				cmd.Parameters.AddWithValue("@id_employee", idEmpleado);
+				SqlCommand cmd1 = new SqlCommand(queryCuadrilla, sql.cnn);
+				cmd1.Parameters.AddWithValue("@id_employee", idEmpleado);
 
-				int count = Convert.ToInt32(cmd.ExecuteScalar());
-				return count > 0;
+				tieneCuadrilla = Convert.ToInt32(cmd1.ExecuteScalar()) > 0;
+
+				//  VALIDAR ASISTENCIA
+				string queryAsistencia = $@"
+				SELECT COUNT(*)
+				FROM Nom_AttendenceList
+				WHERE id_employee = @id_employee
+				  AND CAST(d_attendence AS DATE) BETWEEN @inicio AND @fin";
+
+				SqlCommand cmd2 = new SqlCommand(queryAsistencia, sql.cnn);
+				cmd2.Parameters.AddWithValue("@id_employee", idEmpleado);
+				cmd2.Parameters.AddWithValue("@inicio", inicio);
+				cmd2.Parameters.AddWithValue("@fin", fin);
+
+				tieneAsistencia = Convert.ToInt32(cmd2.ExecuteScalar()) > 0;
+
+				sql.CloseConectionWrite();
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
-				return false;
 			}
+
+			return (tieneCuadrilla, tieneAsistencia);
 		}
 		public void EstiloTabla(DataGridView dgv)
 		{

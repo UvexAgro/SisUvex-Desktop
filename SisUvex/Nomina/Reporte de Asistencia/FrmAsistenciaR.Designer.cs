@@ -59,7 +59,7 @@
 			// 
 			lblReporte.AutoSize = true;
 			lblReporte.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblReporte.Location = new Point(12, 21);
+			lblReporte.Location = new Point(58, 19);
 			lblReporte.Name = "lblReporte";
 			lblReporte.Size = new Size(250, 32);
 			lblReporte.TabIndex = 1;
@@ -69,7 +69,7 @@
 			// 
 			lblEmpleado.AutoSize = true;
 			lblEmpleado.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEmpleado.Location = new Point(12, 129);
+			lblEmpleado.Location = new Point(58, 127);
 			lblEmpleado.Name = "lblEmpleado";
 			lblEmpleado.Size = new Size(83, 21);
 			lblEmpleado.TabIndex = 108;
@@ -82,7 +82,7 @@
 			pllEmpleado.Controls.Add(cboEmployee);
 			pllEmpleado.Controls.Add(btnAcceptarEmpleado);
 			pllEmpleado.Controls.Add(label1);
-			pllEmpleado.Location = new Point(12, 153);
+			pllEmpleado.Location = new Point(58, 151);
 			pllEmpleado.Name = "pllEmpleado";
 			pllEmpleado.Size = new Size(408, 76);
 			pllEmpleado.TabIndex = 107;
@@ -122,7 +122,7 @@
 			pllCuadrilla.Controls.Add(cboCuadrilla);
 			pllCuadrilla.Controls.Add(btnAceptarCuadrilla);
 			pllCuadrilla.Controls.Add(label3);
-			pllCuadrilla.Location = new Point(523, 153);
+			pllCuadrilla.Location = new Point(569, 151);
 			pllCuadrilla.Name = "pllCuadrilla";
 			pllCuadrilla.Size = new Size(373, 76);
 			pllCuadrilla.TabIndex = 109;
@@ -160,7 +160,7 @@
 			// 
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(801, 470);
+			btnImprimir.Location = new Point(847, 468);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(10, 0, 10, 0);
 			btnImprimir.Size = new Size(126, 34);
@@ -174,7 +174,7 @@
 			// 
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCuadrilla.Location = new Point(523, 129);
+			lblCuadrilla.Location = new Point(569, 127);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(73, 21);
 			lblCuadrilla.TabIndex = 110;
@@ -184,7 +184,7 @@
 			// 
 			dgvAsistencia.AllowUserToAddRows = false;
 			dgvAsistencia.AllowUserToDeleteRows = false;
-			dgvAsistencia.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvAsistencia.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			dgvAsistencia.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvAsistencia.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
@@ -202,7 +202,7 @@
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
 			dgvAsistencia.ImeMode = ImeMode.NoControl;
-			dgvAsistencia.Location = new Point(6, 510);
+			dgvAsistencia.Location = new Point(12, 508);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -216,7 +216,7 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(920, 273);
+			dgvAsistencia.Size = new Size(998, 273);
 			dgvAsistencia.TabIndex = 112;
 			// 
 			// dgvEmployee
@@ -226,7 +226,7 @@
 			dgvEmployee.BackgroundColor = Color.White;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvEmployee.Location = new Point(5, 272);
+			dgvEmployee.Location = new Point(51, 270);
 			dgvEmployee.Name = "dgvEmployee";
 			dgvEmployee.Size = new Size(922, 181);
 			dgvEmployee.TabIndex = 111;
@@ -235,7 +235,7 @@
 			// 
 			lblSemanaFinal.AutoSize = true;
 			lblSemanaFinal.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblSemanaFinal.Location = new Point(523, 70);
+			lblSemanaFinal.Location = new Point(569, 68);
 			lblSemanaFinal.Name = "lblSemanaFinal";
 			lblSemanaFinal.Size = new Size(108, 21);
 			lblSemanaFinal.TabIndex = 106;
@@ -245,7 +245,7 @@
 			// 
 			cboSemanaFinal.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaFinal.FormattingEnabled = true;
-			cboSemanaFinal.Location = new Point(637, 72);
+			cboSemanaFinal.Location = new Point(683, 70);
 			cboSemanaFinal.Name = "cboSemanaFinal";
 			cboSemanaFinal.Size = new Size(235, 23);
 			cboSemanaFinal.TabIndex = 105;
@@ -255,7 +255,7 @@
 			// 
 			cboSemanaInicial.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaInicial.FormattingEnabled = true;
-			cboSemanaInicial.Location = new Point(135, 72);
+			cboSemanaInicial.Location = new Point(181, 70);
 			cboSemanaInicial.Name = "cboSemanaInicial";
 			cboSemanaInicial.Size = new Size(235, 23);
 			cboSemanaInicial.TabIndex = 104;
@@ -265,7 +265,7 @@
 			// 
 			lblsub.AutoSize = true;
 			lblsub.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblsub.Location = new Point(12, 74);
+			lblsub.Location = new Point(58, 72);
 			lblsub.Name = "lblsub";
 			lblsub.Size = new Size(117, 21);
 			lblsub.TabIndex = 103;
@@ -275,7 +275,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(938, 795);
+			ClientSize = new Size(1047, 795);
 			Controls.Add(lblEmpleado);
 			Controls.Add(pllEmpleado);
 			Controls.Add(pllCuadrilla);
@@ -314,7 +314,6 @@
 		public ComboBox cboCuadrilla;
 		private Button btnAceptarCuadrilla;
 		private Label label3;
-		private Button btnImprimir;
 		private Label lblCuadrilla;
 		public DataGridView dgvAsistencia;
 		public DataGridView dgvEmployee;
@@ -322,5 +321,6 @@
 		public ComboBox cboSemanaFinal;
 		public ComboBox cboSemanaInicial;
 		private Label lblsub;
+		public Button btnImprimir;
 	}
 }

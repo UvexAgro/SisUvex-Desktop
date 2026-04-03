@@ -40,6 +40,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			clsDgv = new ClsDgvAsistncia(this);
 
 			cls.EstiloTabla(dgvEmployee);
+			clsDgv.EstiloDGVAsistencia(dgvAsistencia);
 
 
 			cls.CargarCuadrillas();
@@ -49,6 +50,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			cboEmployee.Text = "";
 			cboEmployee.SelectedIndex = -1;
 			cargando = false;
+
 		}
 
 
@@ -66,19 +68,48 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 		private void btnAceptarCuadrilla_Click(object sender, EventArgs e)
 		{
+			
 			cls.CargarAsistencia();
 			clsDgv.CargarDgvAsistencia();
+
 		}
 
 		private void btnAcceptarEmpleado_Click(object sender, EventArgs e)
 		{
 			cls.CargarEmpleadoEnDgv();
-			clsDgv.CargarDgvAsistencia();
+			clsDgv.CargarAsistenciaDesdeDGV();
 		}
 
 		private void btnImprimir_Click(object sender, EventArgs e)
 		{
-			clsDgv.ExportarDgv(dgvAsistencia);
+			try
+			{
+				//  Validar datos
+				if (dgvAsistencia.DataSource == null)
+				{
+					MessageBox.Show("No hay datos para imprimir");
+					return;
+				}
+
+				DataTable datos = (DataTable)dgvAsistencia.DataSource;
+
+				if (datos.Rows.Count == 0)
+				{
+					MessageBox.Show("No hay registros para imprimir");
+					return;
+				}
+
+				// Generar PDF
+			
+				MemoryStream ms = clsDgv.GenerarPdfAsistenciaPorEmpleado(datos);
+
+				//  Mostrar PDF
+				clsDgv.ShowPdfViewer(ms);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al generar el PDF: " + ex.Message);
+			}
 		}
 	}
 
