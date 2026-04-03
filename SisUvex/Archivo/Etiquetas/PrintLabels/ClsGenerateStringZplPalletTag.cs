@@ -72,7 +72,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             labelsZPLString = PrintPalletString();
             string superSring = string.Empty;
-
+            Clipboard.SetText(labelsZPLString);
             for (int i = 0; i < copies; i++)
             {
                 superSring += "\n" + labelsZPLString;
