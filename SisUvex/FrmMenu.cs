@@ -419,7 +419,7 @@ namespace SisUvex
 		private void preciosPorGTINToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			SisUvex.Nomina.Prices.PricesGtin.FrmPricesGtinCat cat = new();
-            AbrirVentanaHijo(cat, 1);
+			AbrirVentanaHijo(cat, 1);
 		}
 
 		private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -682,6 +682,13 @@ namespace SisUvex
 		private void reporteDeHorariosToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			Nomina.Reporte_de_horas.FrmPackingHours cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void reporteDeAsistenciaToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			Nomina.Reporte_de_Asistencia.FrmAsistenciaR cat = new();
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
