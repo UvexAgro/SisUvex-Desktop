@@ -39,6 +39,9 @@
 			cboTemporada = new ComboBox();
 			lblFechaFinal = new Label();
 			cboFinal = new ComboBox();
+			btnAdd = new Button();
+			btnModify = new Button();
+			label1 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvHoras).BeginInit();
 			SuspendLayout();
 			// 
@@ -46,7 +49,7 @@
 			// 
 			dgvHoras.AllowUserToAddRows = false;
 			dgvHoras.AllowUserToDeleteRows = false;
-			dgvHoras.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvHoras.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			dgvHoras.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvHoras.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvHoras.BackgroundColor = SystemColors.ControlLightLight;
@@ -63,8 +66,9 @@
 			dgvHoras.ColumnHeadersHeight = 58;
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvHoras.EnableHeadersVisualStyles = false;
+			dgvHoras.GridColor = SystemColors.InactiveCaption;
 			dgvHoras.ImeMode = ImeMode.NoControl;
-			dgvHoras.Location = new Point(25, 343);
+			dgvHoras.Location = new Point(40, 186);
 			dgvHoras.Name = "dgvHoras";
 			dgvHoras.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -78,14 +82,14 @@
 			dgvHoras.RowHeadersVisible = false;
 			dgvHoras.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvHoras.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvHoras.Size = new Size(550, 218);
+			dgvHoras.Size = new Size(952, 615);
 			dgvHoras.TabIndex = 19;
 			// 
 			// lbencabezado
 			// 
 			lbencabezado.AutoSize = true;
 			lbencabezado.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lbencabezado.Location = new Point(144, 25);
+			lbencabezado.Location = new Point(352, 9);
 			lbencabezado.Name = "lbencabezado";
 			lbencabezado.Size = new Size(314, 32);
 			lbencabezado.TabIndex = 20;
@@ -94,10 +98,10 @@
 			// lblFechaInicial
 			// 
 			lblFechaInicial.AutoSize = true;
-			lblFechaInicial.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblFechaInicial.Location = new Point(25, 185);
+			lblFechaInicial.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblFechaInicial.Location = new Point(39, 127);
 			lblFechaInicial.Name = "lblFechaInicial";
-			lblFechaInicial.Size = new Size(113, 21);
+			lblFechaInicial.Size = new Size(88, 15);
 			lblFechaInicial.TabIndex = 29;
 			lblFechaInicial.Text = "Semana Inicial:";
 			// 
@@ -105,7 +109,7 @@
 			// 
 			cboSemana.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(144, 187);
+			cboSemana.Location = new Point(39, 145);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(235, 23);
 			cboSemana.TabIndex = 30;
@@ -114,10 +118,10 @@
 			// lblTemporada
 			// 
 			lblTemporada.AutoSize = true;
-			lblTemporada.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblTemporada.Location = new Point(25, 119);
+			lblTemporada.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblTemporada.Location = new Point(40, 49);
 			lblTemporada.Name = "lblTemporada";
-			lblTemporada.Size = new Size(90, 21);
+			lblTemporada.Size = new Size(79, 17);
 			lblTemporada.TabIndex = 31;
 			lblTemporada.Text = "Temporada:";
 			// 
@@ -125,18 +129,18 @@
 			// 
 			cboTemporada.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboTemporada.FormattingEnabled = true;
-			cboTemporada.Location = new Point(144, 121);
+			cboTemporada.Location = new Point(40, 73);
 			cboTemporada.Name = "cboTemporada";
-			cboTemporada.Size = new Size(235, 23);
+			cboTemporada.Size = new Size(256, 23);
 			cboTemporada.TabIndex = 32;
 			// 
 			// lblFechaFinal
 			// 
 			lblFechaFinal.AutoSize = true;
-			lblFechaFinal.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblFechaFinal.Location = new Point(25, 256);
+			lblFechaFinal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblFechaFinal.Location = new Point(333, 127);
 			lblFechaFinal.Name = "lblFechaFinal";
-			lblFechaFinal.Size = new Size(106, 21);
+			lblFechaFinal.Size = new Size(81, 15);
 			lblFechaFinal.TabIndex = 33;
 			lblFechaFinal.Text = "Semana Final:";
 			// 
@@ -144,17 +148,50 @@
 			// 
 			cboFinal.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboFinal.FormattingEnabled = true;
-			cboFinal.Location = new Point(144, 258);
+			cboFinal.Location = new Point(333, 145);
 			cboFinal.Name = "cboFinal";
 			cboFinal.Size = new Size(235, 23);
 			cboFinal.TabIndex = 34;
 			cboFinal.SelectedIndexChanged += cboFinal_SelectedIndexChanged;
 			// 
+			// btnAdd
+			// 
+			btnAdd.Location = new Point(752, 145);
+			btnAdd.Name = "btnAdd";
+			btnAdd.Size = new Size(117, 26);
+			btnAdd.TabIndex = 37;
+			btnAdd.Text = "Añadir";
+			btnAdd.UseVisualStyleBackColor = true;
+			btnAdd.Click += btnAdd_Click;
+			// 
+			// btnModify
+			// 
+			btnModify.Location = new Point(875, 143);
+			btnModify.Name = "btnModify";
+			btnModify.Size = new Size(117, 28);
+			btnModify.TabIndex = 38;
+			btnModify.Text = "Modificar";
+			btnModify.UseVisualStyleBackColor = true;
+			btnModify.Click += btnModify_Click;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.Location = new Point(781, 121);
+			label1.Name = "label1";
+			label1.Size = new Size(178, 17);
+			label1.TabIndex = 39;
+			label1.Text = "Añadir Horario de Empaque";
+			// 
 			// FrmPackingHours
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(600, 573);
+			ClientSize = new Size(1020, 813);
+			Controls.Add(label1);
+			Controls.Add(btnModify);
+			Controls.Add(btnAdd);
 			Controls.Add(cboFinal);
 			Controls.Add(lblFechaFinal);
 			Controls.Add(cboTemporada);
@@ -182,5 +219,8 @@
 		public ComboBox cboTemporada;
 		private Label lblFechaFinal;
 		public ComboBox cboFinal;
+		private Button btnAdd;
+		private Button btnModify;
+		private Label label1;
 	}
 }

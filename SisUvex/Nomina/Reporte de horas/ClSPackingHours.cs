@@ -78,48 +78,5 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 			}
 		}
-		
-		public void CargarHoras()
-		{
-			try
-			{
-				if (frmPacki.cboTemporada.SelectedValue == null ||
-					frmPacki.cboSemana.SelectedItem == null ||
-					frmPacki.cboFinal.SelectedItem == null)
-					return;
-
-				DataRowView rowInicio = (DataRowView)frmPacki.cboSemana.SelectedItem;
-				DataRowView rowFin = (DataRowView)frmPacki.cboFinal.SelectedItem;
-
-				int temporada = Convert.ToInt32(frmPacki.cboTemporada.SelectedValue);
-
-				int periodo = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnId]);        
-				int semanaInicio = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnSequence]); 
-				int semanaFin = Convert.ToInt32(rowFin[Payroll_AttendancePeriod.ColumnSequence]);
-
-				DataTable dt = new DataTable();
-
-				SQLControl sql = new SQLControl();
-				sql.OpenConectionWrite();
-
-				SqlCommand cmd = new SqlCommand(
-					"SELECT * FROM dbo.fn_PackHorasEmpaque(@Temporada, @Periodo, @SemanaInicio, @SemanaFin)",
-					sql.cnn);
-
-				cmd.Parameters.AddWithValue("@Temporada", temporada);
-				cmd.Parameters.AddWithValue("@Periodo", periodo);
-				cmd.Parameters.AddWithValue("@SemanaInicio", semanaInicio);
-				cmd.Parameters.AddWithValue("@SemanaFin", semanaFin);
-
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				da.Fill(dt);
-
-				frmPacki.dgvHoras.DataSource = dt;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
 	}
 }

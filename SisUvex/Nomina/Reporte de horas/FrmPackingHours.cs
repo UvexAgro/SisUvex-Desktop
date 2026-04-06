@@ -13,6 +13,9 @@ namespace SisUvex.Nomina.Reporte_de_horas
 	public partial class FrmPackingHours : Form
 	{
 		ClSPackingHours cls;
+		ClsAñadir clsA;
+		bool isLoaded = false;
+
 		public FrmPackingHours()
 		{
 			InitializeComponent();
@@ -23,11 +26,16 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			cls ??= new();
 			cls.frmPacki ??= this;
 
+
+			clsA ??= new();
+			clsA.frmPacki ??= this;
+
 			cls.CargarPeriodos();
 
 			cls.CargarTemporada();
+			clsA.CargarHorasInicial();
 
-			cls.CargarHoras();
+			isLoaded = true;
 		}
 
 		private void cboFinal_SelectedIndexChanged(object sender, EventArgs e)
@@ -36,11 +44,13 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			{
 				cboFinal.SelectedIndex = cboSemana.SelectedIndex;
 			}
-			cls.CargarHoras();
+			clsA.CargarHorasInicial();
 		}
 
 		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (!isLoaded) return;
+
 			if (cboFinal.Items.Count == 0) return;
 
 			int index = cboSemana.SelectedIndex;
@@ -49,7 +59,18 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			{
 				cboFinal.SelectedIndex = index;
 			}
-			cls.CargarHoras();
+
+			clsA.CargarHorasInicial();
+		}
+
+		private void btnAdd_Click(object sender, EventArgs e)
+		{
+			clsA.OpenFrmAdd();
+		}
+
+		private void btnModify_Click(object sender, EventArgs e)
+		{
+			clsA.OpenFrmModify();
 		}
 	}
 }
