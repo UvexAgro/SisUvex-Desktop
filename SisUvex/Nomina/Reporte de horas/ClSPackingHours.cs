@@ -20,7 +20,9 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 		public void CargarPeriodos()
 		{
+			// Cargar combos
 			ClsComboBoxes.CboLoadActives(frmPacki.cboSemana, Payroll_AttendancePeriod.Cbo);
+			ClsComboBoxes.CboLoadActives(frmPacki.cboFinal, Payroll_AttendancePeriod.Cbo);
 
 			DateTime hoy = DateTime.Today;
 
@@ -40,6 +42,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				if (hoy >= fechaInicio && hoy <= fechaFin)
 				{
 					frmPacki.cboSemana.SelectedIndex = i;
+					frmPacki.cboFinal.SelectedIndex = i; 
 					break;
 				}
 			}
@@ -74,47 +77,6 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					return;
 				}
 			}
-		}
-		public DataTable ObtenerHorasEmpaque(int temporada, int? periodo, int? semana)
-		{
-			SQLControl sql = new SQLControl();
-			DataTable dt = new DataTable();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				string query = "SELECT * FROM dbo.fn_PackHorasEmpaque(@Temporada,@Periodo,@Semana)";
-
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-
-				// ESTE ES EL BLOQUE QUE TE DI
-				cmd.Parameters.AddWithValue("@Temporada", temporada);
-
-				if (semana == null)
-				{
-					cmd.Parameters.AddWithValue("@Periodo", DBNull.Value);
-					cmd.Parameters.AddWithValue("@Semana", DBNull.Value);
-				}
-				else
-				{
-					cmd.Parameters.AddWithValue("@Periodo", periodo);
-					cmd.Parameters.AddWithValue("@Semana", semana);
-				}
-
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				da.Fill(dt);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, "Reporte horas");
-			}
-			finally
-			{
-				sql.OpenConectionWrite();
-			}
-
-			return dt;
 		}
 	}
 }

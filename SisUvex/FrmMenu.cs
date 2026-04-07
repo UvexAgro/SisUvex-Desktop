@@ -419,7 +419,7 @@ namespace SisUvex
 		private void preciosPorGTINToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			SisUvex.Nomina.Prices.PricesGtin.FrmPricesGtinCat cat = new();
-            AbrirVentanaHijo(cat, 1);
+			AbrirVentanaHijo(cat, 1);
 		}
 
 		private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -467,10 +467,9 @@ namespace SisUvex
 
 		private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			ClsAsistenciaEmpaque cls = new ClsAsistenciaEmpaque();
-			cls.frmMenu = this;
-
-			cls.AbrirFrmAsistenciaEmpaque();
+			Nomina.Asistencia_de_empaque.FrmAsistenciaEmpaqueNuevo cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
 		}
 
 		private void altaDeEmpleadosSinRegistroToolStripMenuItem_Click(object sender, EventArgs e)
@@ -663,6 +662,33 @@ namespace SisUvex
 		private void reporteToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			Nomina.Nom_Reporte_de_sueldos_diarios.FrmNomsemana cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void fechasFestivasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Catalogos.FechasFestivas.FrmCatFestivo cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void cajasPorEmpleadoYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			ClsWorkTime cls = new ClsWorkTime();
+			AbrirVentanaHijo(cls._frmCat, 1);
+		}
+
+		private void reporteDeHorariosToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			Nomina.Reporte_de_horas.FrmPackingHours cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
+
+		private void reporteDeAsistenciaToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			Nomina.Reporte_de_Asistencia.FrmAsistenciaR cat = new();
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}

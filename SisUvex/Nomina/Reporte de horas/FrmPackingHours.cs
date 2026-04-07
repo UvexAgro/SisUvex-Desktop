@@ -13,6 +13,9 @@ namespace SisUvex.Nomina.Reporte_de_horas
 	public partial class FrmPackingHours : Form
 	{
 		ClSPackingHours cls;
+		ClsAñadir clsA;
+		bool isLoaded = false;
+
 		public FrmPackingHours()
 		{
 			InitializeComponent();
@@ -23,33 +26,51 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			cls ??= new();
 			cls.frmPacki ??= this;
 
+
+			clsA ??= new();
+			clsA.frmPacki ??= this;
+
 			cls.CargarPeriodos();
 
 			cls.CargarTemporada();
+			clsA.CargarHorasInicial();
+
+			isLoaded = true;
 		}
 
-		private void btncargar_Click(object sender, EventArgs e)
+		private void cboFinal_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ClSPackingHours cls = new ClSPackingHours();
-			int temporada = Convert.ToInt32(cboTemporada.Text.Split('|')[1].Trim());
-
-			int? periodo = null;
-			int? semanaNum = null;
-
-			if (cboSemana.SelectedValue != null && cboSemana.SelectedValue.ToString().Contains("|"))
+			if (cboFinal.SelectedIndex < cboSemana.SelectedIndex)
 			{
-				string[] semana = cboSemana.SelectedValue.ToString().Split('|');
+				cboFinal.SelectedIndex = cboSemana.SelectedIndex;
+			}
+			clsA.CargarHorasInicial();
+		}
 
-				if (!string.IsNullOrWhiteSpace(semana[0]))
-					periodo = Convert.ToInt32(semana[0]);
+		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!isLoaded) return;
 
-				if (!string.IsNullOrWhiteSpace(semana[1]))
-					semanaNum = Convert.ToInt32(semana[1]);
+			if (cboFinal.Items.Count == 0) return;
+
+			int index = cboSemana.SelectedIndex;
+
+			if (index >= 0 && index < cboFinal.Items.Count)
+			{
+				cboFinal.SelectedIndex = index;
 			}
 
-			DataTable dt = cls.ObtenerHorasEmpaque(temporada, periodo, semanaNum);
+			clsA.CargarHorasInicial();
+		}
 
-			dgvHoras.DataSource = dt;
+		private void btnAdd_Click(object sender, EventArgs e)
+		{
+			clsA.OpenFrmAdd();
+		}
+
+		private void btnModify_Click(object sender, EventArgs e)
+		{
+			clsA.OpenFrmModify();
 		}
 	}
 }

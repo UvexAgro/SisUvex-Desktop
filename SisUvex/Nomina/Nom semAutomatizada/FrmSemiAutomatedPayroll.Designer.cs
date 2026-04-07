@@ -272,8 +272,9 @@
 			Controls.Add(btncargar);
 			Controls.Add(lbencabezado);
 			Controls.Add(dtpFecha);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmSemiAutomatedPayroll";
-			Text = "FrmSemiAutomatedPayroll";
+			Text = "Reporte de Empaque Cntral";
 			Load += FrmSemiAutomatedPayroll_Load;
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).EndInit();
 			panel1.ResumeLayout(false);
