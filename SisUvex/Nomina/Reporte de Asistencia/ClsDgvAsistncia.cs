@@ -38,7 +38,6 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		int filaActual = 0;
 		private PdfViewer? pdfViewer;
 		private MemoryStream? pdfMemoryStream;
-		private DataTable dtDgvEmpleados;
 		private DataTable dtAsistenciaGlobal;
 
 		public ClsDgvAsistncia(FrmAsistenciaR frm)
@@ -135,37 +134,6 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			if (dgv.Columns.Contains("HoraSalida"))
 				dgv.Columns["HoraSalida"].FillWeight = 15;
 		}
-		private void EstiloDGV(DataGridView dgv)
-		{
-			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv.MultiSelect = false;
-			dgv.ReadOnly = true;
-			dgv.AllowUserToAddRows = false;
-			dgv.AllowUserToDeleteRows = false;
-			dgv.RowHeadersVisible = false;
-			dgv.BorderStyle = BorderStyle.None;
-			dgv.BackgroundColor = DrawingColor.White;
-			dgv.EnableHeadersVisualStyles = false;
-
-			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-			
-			// Encabezado
-			dgv.ColumnHeadersDefaultCellStyle.BackColor = DrawingColor.FromArgb(220, 230, 241);
-			dgv.ColumnHeadersDefaultCellStyle.ForeColor = DrawingColor.Black;
-			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-			// Filas
-			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 9);
-			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(0, 120, 215);
-			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.White;
-
-			// Filas alternadas (esto hace que se vea MUCHO mejor)
-			dgv.AlternatingRowsDefaultCellStyle.BackColor = DrawingColor.FromArgb(240, 240, 240);
-
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-		}
 		
 		private DateTime ObtenerFechaDesdeSemana(string textoSemana, bool fechaInicio)
 		{
@@ -187,7 +155,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			PdfDocument pdf = new PdfDocument(writer);
 			Document document = new Document(pdf);
 
-			document.SetMargins(20, 20, 40, 20);
+			document.SetMargins(40, 40, 50, 40); //  mejor margen
 
 			var empleados = datos.AsEnumerable()
 				.GroupBy(x => new
@@ -218,13 +186,14 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				Table tabla = new Table(UnitValue.CreatePercentArray(columnas))
 					.UseAllAvailableWidth();
 
+				tabla.SetKeepTogether(false);
+
 				//  ENCABEZADOS
 				tabla.AddHeaderCell(CrearHeader("Codigo"));
 				tabla.AddHeaderCell(CrearHeader("Nombre Completo"));
 				tabla.AddHeaderCell(CrearHeader("Fecha"));
 				tabla.AddHeaderCell(CrearHeader("Hora Entrada"));
 				tabla.AddHeaderCell(CrearHeader("Hora Salida"));
-				tabla.SetKeepTogether(true);
 
 				//  DATOS
 				foreach (var fila in emp)
@@ -235,16 +204,14 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 					tabla.AddCell(CrearCelda(fila["Codigo"].ToString()));
 					tabla.AddCell(CrearCelda(fila["NombreCompleto"].ToString()));
 
-					//  FECHA 
 					string fechaTexto = "";
 					if (fila["Fecha"] != DBNull.Value)
 					{
 						DateTime fecha = Convert.ToDateTime(fila["Fecha"]);
 						fechaTexto = fecha.ToString("dd/MM/yyyy");
 					}
-					tabla.AddCell(CrearCelda(fechaTexto));
 
-					// HORAS 
+					tabla.AddCell(CrearCelda(fechaTexto));
 					tabla.AddCell(CrearCelda(fila["HoraEntrada"].ToString()));
 					tabla.AddCell(CrearCelda(fila["HoraSalida"].ToString()));
 				}
@@ -257,7 +224,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			return ms;
 		}
-	
+
 		public void ShowPdfViewer(MemoryStream ms)
 		{
 			Form visor = new Form();
@@ -298,144 +265,8 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 					.SetKeepTogether(true)) 
 				.SetBorder(new SolidBorder(1));
 		}
-		public DataTable ObtenerAsistenciaPorEmpleado(
-			DateTime fechaInicial,
-			DateTime fechaFinal,
-			string idEmpleado)
-		{
-			DataTable dt = new DataTable();
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				// Obtener cuadrilla del empleado
-				string idWorkGroup = "";
-
-				string queryGrupo = @"
-			SELECT id_workGroup
-			FROM Nom_Employees
-			WHERE id_employee = @empleado";
-
-				SqlCommand cmdGrupo = new SqlCommand(queryGrupo, sql.cnn);
-				cmdGrupo.Parameters.AddWithValue("@empleado", idEmpleado);
-
-				object result = cmdGrupo.ExecuteScalar();
-
-				if (result == null)
-				{
-					MessageBox.Show("El empleado no tiene cuadrilla.");
-					return dt;
-				}
-
-				idWorkGroup = result.ToString();
-
-				//  2. Ejecutar SP
-				SqlCommand cmdSP = new SqlCommand("sp_PackingAttendenceChecker", sql.cnn);
-				cmdSP.CommandType = CommandType.StoredProcedure;
-
-				cmdSP.Parameters.AddWithValue("@FechaInicio", fechaInicial);
-				cmdSP.Parameters.AddWithValue("@FechaFin", fechaFinal);
-				cmdSP.Parameters.AddWithValue("@idWorkGroup", idWorkGroup);
-
-				cmdSP.ExecuteNonQuery();
-
-				// Obtener asistencia SOLO del empleado
-				string query = @"
-			SELECT 
-				a.id_employee AS Codigo,
-				e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name AS NombreCompleto,
-				a.d_Date AS Fecha,
-				a.t_CheckInTime AS HoraEntrada,
-				a.t_CheckOutTime AS HoraSalida
-			FROM dbo.PackingAttendanceChecker a
-			INNER JOIN dbo.Nom_Employees e ON e.id_employee = a.id_employee
-			WHERE a.d_Date BETWEEN @inicio AND @fin
-			  AND a.id_employee = @empleado
-			ORDER BY a.d_Date";
-
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-
-				cmd.Parameters.AddWithValue("@inicio", fechaInicial);
-				cmd.Parameters.AddWithValue("@fin", fechaFinal);
-				cmd.Parameters.AddWithValue("@empleado", idEmpleado);
-
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				da.Fill(dt);
-
-				sql.CloseConectionWrite();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-
-			return dt;
-		}
-		public void CargarAsistenciaDesdeDGV()
-		{
-			try
-			{
-				//  Tomar empleados del grid
-				DataTable dtEmpleados = (DataTable)frmR.dgvEmployee.DataSource;
-
-				if (dtEmpleados == null || dtEmpleados.Rows.Count == 0)
-				{
-					MessageBox.Show("No hay empleados agregados.");
-					return;
-				}
-
-				InicializarTablaAsistencia();
-				dtAsistenciaGlobal.Clear();
-
-				DateTime fechaInicial = ObtenerFechaDesdeSemana(frmR.cboSemanaInicial.Text, true);
-				DateTime fechaFinal = ObtenerFechaDesdeSemana(frmR.cboSemanaFinal.Text, false);
-
-				foreach (DataRow emp in dtEmpleados.Rows)
-				{
-					string idEmpleado = emp["id_employee"].ToString();
-
-					//  Traer asistencia de cada empleado
-					DataTable dt = ObtenerAsistenciaPorEmpleado(
-						fechaInicial,
-						fechaFinal,
-						idEmpleado
-					);
-
-					//  Agregar al acumulado
-					foreach (DataRow row in dt.Rows)
-					{
-						dtAsistenciaGlobal.ImportRow(row);
-					}
-				}
-
-				//  Mostrar en dgvAsistencia
-				frmR.dgvAsistencia.DataSource = null;
-				frmR.dgvAsistencia.DataSource = dtAsistenciaGlobal;
-
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
-		public void InicializarTablaAsistencia()
-		{
-			if (dtAsistenciaGlobal == null)
-			{
-				dtAsistenciaGlobal = new DataTable();
-			}
-
-			if (dtAsistenciaGlobal.Columns.Count == 0)
-			{
-				dtAsistenciaGlobal.Columns.Add("Codigo");
-				dtAsistenciaGlobal.Columns.Add("NombreCompleto");
-				dtAsistenciaGlobal.Columns.Add("Fecha");
-				dtAsistenciaGlobal.Columns.Add("HoraEntrada");
-				dtAsistenciaGlobal.Columns.Add("HoraSalida");
-			}
-		}
+		
+		
 		public void EstiloDGVAsistencia(DataGridView dgv)
 		{
 			// Quitar bordes
@@ -462,7 +293,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgv.DefaultCellStyle.BackColor = DrawingColor.White;
 			dgv.DefaultCellStyle.ForeColor = DrawingColor.Black;
 
-			// 🔥 IMPORTANTE: mantener sin selección visual
+			//  IMPORTANTE: mantener sin selección visual
 			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.White;
 			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.Black;
 
@@ -496,6 +327,85 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			// Quitar selección inicial
 			dgv.ClearSelection();
+		}
+		public DataTable ObtenerAsistenciaDesdeGrid(DateTime fechaInicial, DateTime fechaFinal)
+		{
+			DataTable dt = new DataTable();
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				if (frmR.dgvEmployee.Rows.Count == 0)
+				{
+					MessageBox.Show("No hay empleados en la lista");
+					return null;
+				}
+
+				sql.OpenConectionWrite();
+
+				List<string> empleados = new List<string>();
+
+				
+				foreach (DataGridViewRow row in frmR.dgvEmployee.Rows)
+				{
+					if (row.IsNewRow) continue;
+
+					if (row.Cells["Codigo"].Value == null)
+						continue;
+
+					string idEmpleado = row.Cells["Codigo"].Value.ToString();
+
+					empleados.Add("'" + idEmpleado + "'");
+
+					SqlCommand cmdSP = new SqlCommand("sp_PackingAttendenceChecker", sql.cnn);
+					cmdSP.CommandType = CommandType.StoredProcedure;
+
+					cmdSP.Parameters.AddWithValue("@FechaInicio", fechaInicial);
+					cmdSP.Parameters.AddWithValue("@FechaFin", fechaFinal);
+					cmdSP.Parameters.AddWithValue("@idWorkGroup", DBNull.Value);
+					cmdSP.Parameters.AddWithValue("@idEmployee", idEmpleado);
+
+					cmdSP.ExecuteNonQuery();
+				}
+
+				if (empleados.Count == 0)
+				{
+					MessageBox.Show("No hay empleados válidos");
+					return null;
+				}
+
+				string lista = string.Join(",", empleados);
+
+				string query = $@"
+				SELECT 
+					a.id_employee AS Codigo,
+					e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name AS NombreCompleto,
+					a.d_Date AS Fecha,
+					a.t_CheckInTime AS HoraEntrada,
+					a.t_CheckOutTime AS HoraSalida
+				FROM dbo.PackingAttendanceChecker a
+				INNER JOIN dbo.Nom_Employees e ON e.id_employee = a.id_employee
+				WHERE a.d_Date BETWEEN @inicio AND @fin
+				AND a.id_employee IN ({lista})
+				ORDER BY a.d_Date, NombreCompleto";
+
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
+				cmd.Parameters.AddWithValue("@inicio", fechaInicial);
+				cmd.Parameters.AddWithValue("@fin", fechaFinal);
+
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				da.Fill(dt);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
 		}
 	}
 }

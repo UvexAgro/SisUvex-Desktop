@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NPOI.SS.Formula.Functions;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.Metods.Values;
+using static NPOI.HSSF.Util.HSSFColor;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using DrawingColor = System.Drawing.Color;
 
@@ -22,6 +26,12 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		bool escribiendo = false;
 		public DataTable dtEmpleados;
 		ClsDgvAsistncia clsDgv;
+		string codigo;
+		string lastNamePat;
+		string lastNameMat;
+		string name;
+		bool cuadrilla_Empleado = false; //false es empleados y true es cuadrilla 
+
 
 
 		public FrmAsistenciaR()
@@ -38,17 +48,15 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			cls.frmR = this;
 
 			clsDgv = new ClsDgvAsistncia(this);
-
 			cls.EstiloTabla(dgvEmployee);
 			clsDgv.EstiloDGVAsistencia(dgvAsistencia);
 
-
 			cls.CargarCuadrillas();
 			cls.CargarPeriodos();
-			cls.CargarCombo();
-			cboEmployee.DroppedDown = false;
-			cboEmployee.Text = "";
-			cboEmployee.SelectedIndex = -1;
+			dtEmpleados = new DataTable();
+			dtEmpleados.Columns.Add("Codigo");
+			dtEmpleados.Columns.Add("Nombre");
+			dgvEmployee.DataSource = dtEmpleados;
 			cargando = false;
 
 		}
@@ -68,16 +76,27 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 		private void btnAceptarCuadrilla_Click(object sender, EventArgs e)
 		{
-			
+			dtEmpleados.Rows.Clear();
 			cls.CargarAsistencia();
 			clsDgv.CargarDgvAsistencia();
+			cuadrilla_Empleado = true;
 
 		}
 
 		private void btnAcceptarEmpleado_Click(object sender, EventArgs e)
 		{
-			cls.CargarEmpleadoEnDgv();
-			clsDgv.CargarAsistenciaDesdeDGV();
+			DateTime? fechaInicio = cls.GetFechaInicio();
+			DateTime? fechaFin = cls.GetFechaFin();
+
+			if (fechaInicio == null || fechaFin == null)
+				return;
+
+			DataTable dt = clsDgv.ObtenerAsistenciaDesdeGrid(
+				fechaInicio.Value,
+				fechaFin.Value
+			);
+
+			dgvAsistencia.DataSource = dt;
 		}
 
 		private void btnImprimir_Click(object sender, EventArgs e)
@@ -100,7 +119,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				}
 
 				// Generar PDF
-			
+
 				MemoryStream ms = clsDgv.GenerarPdfAsistenciaPorEmpleado(datos);
 
 				//  Mostrar PDF
@@ -111,6 +130,58 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				MessageBox.Show("Error al generar el PDF: " + ex.Message);
 			}
 		}
-	}
 
+		private void btnSearch_Click(object sender, EventArgs e)
+		{
+
+			ClsSelectionForm sel = new ClsSelectionForm();
+			sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+			if (string.IsNullOrEmpty(sel.SelectedValue) ||
+				sel.dtQuery == null ||
+				sel.dtQuery.Rows.Count == 0)
+				return;
+
+			txbCodigo.Text = sel.SelectedValue;
+			btnAgregarEmpleado();
+
+		}
+
+		private void btnAgregarListado_Click(object sender, EventArgs e)
+		{
+			btnAgregarEmpleado();
+		}
+		public void btnAgregarEmpleado()
+		{
+
+			if (cuadrilla_Empleado)
+				dtEmpleados.Rows.Clear();
+
+			string idEmpleado = ClsValues.FormatZeros(txbCodigo.Text, "000000");
+			if (ExisteEmpleado(idEmpleado))
+			{
+				MessageBox.Show("El empleado ya esta en la lista");
+				return;
+			}
+
+			txbEmpleado.Text = "";
+			txbCodigo.Focus();
+			txbCodigo.SelectAll();
+
+			DateTime? fechaInicio = cls.GetFechaInicio();
+			DateTime? fechaFin = cls.GetFechaFin();
+
+			cls.Empleado(idEmpleado, fechaInicio, fechaFin);
+
+			cuadrilla_Empleado = false;
+		}
+		public bool ExisteEmpleado(string idEmpleado)
+		{
+			if (dtEmpleados == null || dtEmpleados.Rows.Count == 0)
+				return false;
+
+			return dtEmpleados.AsEnumerable()
+				.Any(row => row["Codigo"].ToString() == idEmpleado);
+		}
+	}
 }

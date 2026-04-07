@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iText.Kernel.Geom;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.WorkGroup;
+using static NPOI.HSSF.Util.HSSFColor;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using System.Drawing;
 using DrawingColor = System.Drawing.Color;
 
 
@@ -25,8 +31,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		bool cargando = false;
 		bool navegando = false;
 		bool seleccionando = false;
-		private DataTable dtEmpleados;
-		private DataTable dtDgvEmpleados;
+
 
 		public void CargarPeriodos()
 		{
@@ -64,8 +69,8 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 					break;
 				}
 			}
-					cargando = false;
-			
+			cargando = false;
+
 		}
 		public void CargarCuadrillas()
 		{
@@ -87,19 +92,20 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		}
 		public void CargarAsistencia()
 		{
+
 			SQLControl sql = new SQLControl();
 			DataTable dt = new DataTable();
 
 			try
 			{
-				
+
 				if (frmR.cboCuadrilla.SelectedValue == null)
 				{
 					MessageBox.Show("Selecciona una cuadrilla");
 					return;
 				}
 
-				
+
 				if (frmR.cboSemanaInicial.SelectedItem == null || frmR.cboSemanaFinal.SelectedItem == null)
 				{
 					MessageBox.Show("Selecciona las semanas");
@@ -109,7 +115,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				DataRowView rowInicio = (DataRowView)frmR.cboSemanaInicial.SelectedItem;
 				DataRowView rowFin = (DataRowView)frmR.cboSemanaFinal.SelectedItem;
 
-				
+
 				if (rowInicio[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value ||
 					rowFin[Payroll_AttendancePeriod.ColumnEndDate] == DBNull.Value)
 				{
@@ -120,7 +126,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				DateTime fechaInicio = Convert.ToDateTime(rowInicio[Payroll_AttendancePeriod.ColumnStartDate]);
 				DateTime fechaFin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnEndDate]);
 
-				
+
 				if (fechaInicio > fechaFin)
 				{
 					MessageBox.Show("La semana inicial no puede ser mayor a la final");
@@ -146,352 +152,23 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				da.Fill(dt);
 				if (dt.Rows.Count == 0)
 				{
-					frmR.dgvEmployee.DataSource = null; 
 					MessageBox.Show("La cuadrilla seleccionada no tiene asistencia en el periodo indicado.");
 					return;
 				}
 
-
-				frmR.dgvEmployee.DataSource = null;
-				frmR.dgvEmployee.DataSource = dt;
-
-				EstiloDGV(frmR.dgvEmployee);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
-		private void EstiloDGV(DataGridView dgv)
-		{
-			// Quitar bordes
-			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-			dgv.RowHeadersVisible = false;
-
-			// Colores generales
-			dgv.BackgroundColor = DrawingColor.White;
-			dgv.GridColor = DrawingColor.LightGray;
-
-			// Encabezados
-			dgv.EnableHeadersVisualStyles = false;
-			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
-			dgv.ColumnHeadersDefaultCellStyle.BackColor = DrawingColor.FromArgb(220, 230, 241);
-			dgv.ColumnHeadersDefaultCellStyle.ForeColor = DrawingColor.Black;
-			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-			dgv.ColumnHeadersHeight = 35;
-
-			// Filas
-			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-			dgv.DefaultCellStyle.BackColor = DrawingColor.White;
-			dgv.DefaultCellStyle.ForeColor = DrawingColor.Black;
-			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.White;
-			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.Black;
-
-			// Filas alternadas
-			dgv.AlternatingRowsDefaultCellStyle.BackColor = DrawingColor.FromArgb(245, 245, 245);
-			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(245, 245, 245);
-			dgv.AlternatingRowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
-
-			dgv.RowsDefaultCellStyle.SelectionBackColor = DrawingColor.White;
-			dgv.RowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
-
-			// Ajuste automático
-			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-			// Altura de filas
-			dgv.RowTemplate.Height = 30;
-
-			// Quitar selección visual de fila
-			dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
-			dgv.MultiSelect = false;
-
-			// Opcional: solo lectura
-			dgv.ReadOnly = true;
-
-			dgv.ClearSelection();
-		}
-		public DataTable ObtenerEmpleados()
-		{
-			SQLControl sql = new SQLControl();
-			DataTable dt = new DataTable();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				string query = @"
-			SELECT 
-				id_employee,
-				RIGHT('000000' + CAST(id_employee AS VARCHAR), 6) + ' - ' +
-				UPPER(v_lastNamePat + ' ' + v_lastNameMat + ' ' + v_name) AS NombreCompleto
-			FROM Nom_Employees";
-
-				SqlDataAdapter da = new SqlDataAdapter(query, sql.cnn);
-				da.Fill(dt);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-
-			return dt;
-		}
-		public void CargarCombo()
-		{
-			dtEmpleados = ObtenerEmpleados();
-
-			frmR.cboEmployee.DataSource = dtEmpleados;
-			frmR.cboEmployee.DisplayMember = "NombreCompleto";
-			frmR.cboEmployee.ValueMember = "id_employee";
-			frmR.cboEmployee.DropDownStyle = ComboBoxStyle.DropDown;
-			frmR.cboEmployee.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			frmR.cboEmployee.AutoCompleteSource = AutoCompleteSource.CustomSource;
-
-			AutoCompleteStringCollection coleccion = new AutoCompleteStringCollection();
-
-			foreach (DataRow row in dtEmpleados.Rows)
-			{
-				string id = row["id_employee"].ToString().PadLeft(6, '0');
-				string nombreCompleto = row["NombreCompleto"].ToString();
-
-				string[] partes = nombreCompleto.Split('-');
-				string soloNombre = partes.Length > 1 ? partes[1].Trim() : nombreCompleto;
-
-				coleccion.Add(id + " - " + soloNombre);
-				coleccion.Add(soloNombre + " - " + id);
-			}
-
-			frmR.cboEmployee.AutoCompleteCustomSource = coleccion;
-
-			frmR.cboEmployee.SelectedIndex = -1;
-			frmR.cboEmployee.Text = "";
-		}
-		public void InicializarTablaEmpleadosAgregados()
-		{
-			if (dtDgvEmpleados != null) return;
-
-			dtDgvEmpleados = new DataTable();
-			dtDgvEmpleados.Columns.Add("Empleado");
-			dtDgvEmpleados.Columns.Add("id_employee");
-			dtDgvEmpleados.Columns.Add("id_workGroup");
-		}
-		public void MostrarTablaEmpleadosAgregados()
-		{
-			if (dtDgvEmpleados == null)
-				InicializarTablaEmpleadosAgregados();
-
-			frmR.dgvEmployee.AutoGenerateColumns = true;
-			frmR.dgvEmployee.DataSource = dtDgvEmpleados;
-
-			if (frmR.dgvEmployee.Columns.Contains("id_employee"))
-				frmR.dgvEmployee.Columns["id_employee"].Visible = false;
-
-			if (frmR.dgvEmployee.Columns.Contains("id_workGroup"))
-				frmR.dgvEmployee.Columns["id_workGroup"].Visible = false;
-		}
-		public DataTable ObtenerEmpleadoPorId(string idEmpleado)
-		{
-			SQLControl sql = new SQLControl();
-			DataTable dt = new DataTable();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				string query = @"
-        SELECT 
-            CAST(id_employee AS VARCHAR(20)) + ' - ' +
-            UPPER(v_lastNamePat + ' ' + v_lastNameMat + ' ' + v_name) AS Empleado,
-            id_employee,
-            id_workGroup
-        FROM Nom_Employees
-        WHERE CAST(id_employee AS VARCHAR(20)) = @id_employee";
-
-				SqlCommand cmd = new SqlCommand(query, sql.cnn);
-				cmd.Parameters.AddWithValue("@id_employee", idEmpleado);
-
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				da.Fill(dt);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-
-			return dt;
-		}
-		public string ObtenerIdEmpleadoSeleccionado()
-		{
-			if (frmR.cboEmployee.SelectedValue != null && frmR.cboEmployee.SelectedIndex >= 0)
-				return frmR.cboEmployee.SelectedValue.ToString();
-
-			string texto = frmR.cboEmployee.Text.Trim().ToUpper();
-
-			if (string.IsNullOrWhiteSpace(texto))
-				return null;
-
-			if (texto.Contains("-"))
-			{
-				string[] partes = texto.Split('-');
-
-				foreach (string parte in partes)
+				foreach (DataRow row in dt.Rows)
 				{
-					string valor = parte.Trim();
-
-					if (!string.IsNullOrWhiteSpace(valor) && valor.All(char.IsDigit))
-						return valor;
+					frmR.dtEmpleados.ImportRow(row);
 				}
-			}
 
-			foreach (DataRow row in dtEmpleados.Rows)
-			{
-				string id = row["id_employee"].ToString().Trim().ToUpper();
-				string nombre = row["NombreCompleto"].ToString().Trim().ToUpper();
-
-				if (nombre.Contains(texto) || texto.Contains(nombre) || id == texto)
-					return id;
-			}
-
-			return null;
-		}
-		public void CargarEmpleadoEnDgv()
-		{
-			if (dtDgvEmpleados == null)
-				InicializarTablaEmpleadosAgregados();
-
-			MostrarTablaEmpleadosAgregados();
-
-			string idEmpleado = ObtenerIdEmpleadoSeleccionado();
-
-		
-			DateTime fechaInicial = ObtenerFechaDesdeSemana(frmR.cboSemanaInicial.Text, true);
-			DateTime fechaFinal = ObtenerFechaDesdeSemana(frmR.cboSemanaFinal.Text, false);
-
-			if (string.IsNullOrWhiteSpace(idEmpleado))
-			{
-				MessageBox.Show("Seleccione un empleado.");
-				return;
-			}
-
-			var resultado = ValidarEmpleado(idEmpleado, fechaInicial, fechaFinal);
-
-			if (!resultado.tieneCuadrilla && !resultado.tieneAsistencia)
-			{
-				MessageBox.Show("El empleado no tiene ni cuadrilla ni asistencia.");
-				return;
-			}
-
-			if (!resultado.tieneCuadrilla)
-			{
-				MessageBox.Show("El empleado no tiene cuadrilla.");
-				return;
-			}
-
-			if (!resultado.tieneAsistencia)
-			{
-				MessageBox.Show("El empleado no tiene asistencia .");
-				return;
-			}
-			
-
-			DataTable dtEmpleado = ObtenerEmpleadoPorId(idEmpleado);
-
-			if (dtEmpleado.Rows.Count == 0)
-			{
-				MessageBox.Show("No se encontró el empleado.");
-				return;
-			}
-
-			string empleado = dtEmpleado.Rows[0]["Empleado"].ToString();
-			string id = dtEmpleado.Rows[0]["id_employee"].ToString();
-			string idWorkGroup = dtEmpleado.Rows[0]["id_workGroup"].ToString();
-
-			//foreach (DataRow row in dtDgvEmpleados.Rows)
-			//{
-			//	if (row["id_employee"].ToString() == id)
-			//	{
-			//		MessageBox.Show("El empleado ya fue agregado.");
-			//		return;
-			//	}
-			//}
-
-			dtDgvEmpleados.Rows.Add(empleado, id, idWorkGroup);
-		}
-		public DateTime ObtenerFechaDesdeSemana(string texto, bool esInicio)
-		{
-			try
-			{
-				string[] partes = texto.Split('-');
-
-				if (partes.Length < 2)
-					return DateTime.Now;
-
-				string rango = partes[1].Trim();
-
-				string[] fechas = rango.Split('a');
-
-				if (fechas.Length < 2)
-					return DateTime.Now;
-
-				DateTime fechaInicio = DateTime.Parse(fechas[0].Trim());
-				DateTime fechaFin = DateTime.Parse(fechas[1].Trim());
-
-				return esInicio ? fechaInicio : fechaFin;
-			}
-			catch
-			{
-				return DateTime.Now;
-			}
-		}
-		public (bool tieneCuadrilla, bool tieneAsistencia) ValidarEmpleado(string idEmpleado, DateTime inicio, DateTime fin)
-		{
-			SQLControl sql = new SQLControl();
-
-			bool tieneCuadrilla = false;
-			bool tieneAsistencia = false;
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				//  VALIDAR CUADRILLA
-				string queryCuadrilla = $@"
-				SELECT COUNT(*)
-				FROM Nom_Employees
-				WHERE id_employee = @id_employee
-				  AND id_workGroup IS NOT NULL";
-
-				SqlCommand cmd1 = new SqlCommand(queryCuadrilla, sql.cnn);
-				cmd1.Parameters.AddWithValue("@id_employee", idEmpleado);
-
-				tieneCuadrilla = Convert.ToInt32(cmd1.ExecuteScalar()) > 0;
-
-				//  VALIDAR ASISTENCIA
-				string queryAsistencia = $@"
-				SELECT COUNT(*)
-				FROM Nom_AttendenceList
-				WHERE id_employee = @id_employee
-				  AND CAST(d_attendence AS DATE) BETWEEN @inicio AND @fin";
-
-				SqlCommand cmd2 = new SqlCommand(queryAsistencia, sql.cnn);
-				cmd2.Parameters.AddWithValue("@id_employee", idEmpleado);
-				cmd2.Parameters.AddWithValue("@inicio", inicio);
-				cmd2.Parameters.AddWithValue("@fin", fin);
-
-				tieneAsistencia = Convert.ToInt32(cmd2.ExecuteScalar()) > 0;
-
-				sql.CloseConectionWrite();
+				
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
 			}
-
-			return (tieneCuadrilla, tieneAsistencia);
 		}
+		
 		public void EstiloTabla(DataGridView dgv)
 		{
 			dgv.BorderStyle = BorderStyle.None;
@@ -552,6 +229,85 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				frmR.cboSemanaFinal.SelectedIndex = frmR.cboSemanaInicial.SelectedIndex;
 			}
 		}
+		
+		public void Empleado(string idEmpleado, DateTime? fechaInicio, DateTime? fechaFin)
+		{ 
+			if (fechaInicio == null || fechaFin == null)
+			{
+					MessageBox.Show("Fechas no Validas");
+					return;
+			}
+
+				string query = $@"SELECT top (1)
+				e.id_employee AS Codigo,
+				e.v_name + ' ' + e.v_lastNamePat + ' ' + e.v_lastNameMat AS Nombre,
+				e.id_workGroup,
+				a.d_attendence
+			FROM dbo.Nom_Employees e
+			INNER JOIN dbo.Nom_AttendenceList a 
+				ON e.id_employee = a.id_employee
+			WHERE
+				e.id_employee = @id_Empleado
+				AND a.d_attendence BETWEEN @FechaInicio AND @FechaFin
+			ORDER BY Codigo; ";
+
+			Dictionary<string, object> parameters = new Dictionary<string, object>
+			{
+				{ "@FechaInicio", fechaInicio },
+				{ "@FechaFin", fechaFin },
+				{ "@id_Empleado", idEmpleado }
+			};
+
+			DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
+
+			if (dt.Rows.Count > 0)
+			{
+				if (dt.Rows[0]["id_workGroup"] == DBNull.Value)
+				{
+					MessageBox.Show("El empleado no tiene cuadrilla");
+					return;
+				}
+				string name = dt.Rows[0]["Nombre"].ToString();
+				string codigo = dt.Rows[0]["Codigo"].ToString();
+
+				frmR.txbCodigo.Text = codigo;
+				frmR.txbEmpleado.Text = name;
+				frmR.dtEmpleados.Rows.Add(codigo, name);
+			}
+			else
+			{
+				MessageBox.Show("El empleado no tiene Asistencia");
+				return;
+			}		
+		}
+		public DateTime? GetFechaInicio()
+		{
+
+			DataRowView rowInicio = (DataRowView)frmR.cboSemanaInicial.SelectedItem;
+
+
+			if (rowInicio[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value)
+			{
+				MessageBox.Show("Las semanas seleccionadas no son válidas");
+				return null;
+			}
+
+			DateTime fechaInicio = Convert.ToDateTime(rowInicio[Payroll_AttendancePeriod.ColumnStartDate]);
+			return fechaInicio;
+		}
+		public DateTime? GetFechaFin()
+		{
+			DataRowView rowFin = (DataRowView)frmR.cboSemanaFinal.SelectedItem;
+
+
+			if (rowFin[Payroll_AttendancePeriod.ColumnEndDate] == DBNull.Value)
+			{
+				MessageBox.Show("Las semanas seleccionadas no son válidas");
+				return null;
+			}
+
+			DateTime fechaFin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnEndDate]);
+			return fechaFin;
+		}
 	}
-	
 }

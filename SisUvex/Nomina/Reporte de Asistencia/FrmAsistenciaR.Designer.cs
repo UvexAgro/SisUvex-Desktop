@@ -29,12 +29,16 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaR));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			lblReporte = new Label();
 			lblEmpleado = new Label();
 			pllEmpleado = new Panel();
-			cboEmployee = new ComboBox();
+			btnAgregarListado = new Button();
+			btnSearch = new Button();
+			lbl = new Label();
+			txbCodigo = new TextBox();
+			txbEmpleado = new TextBox();
 			btnAcceptarEmpleado = new Button();
 			label1 = new Label();
 			pllCuadrilla = new Panel();
@@ -49,6 +53,8 @@
 			cboSemanaFinal = new ComboBox();
 			cboSemanaInicial = new ComboBox();
 			lblsub = new Label();
+			label2 = new Label();
+			label4 = new Label();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -59,7 +65,7 @@
 			// 
 			lblReporte.AutoSize = true;
 			lblReporte.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblReporte.Location = new Point(58, 19);
+			lblReporte.Location = new Point(72, 19);
 			lblReporte.Name = "lblReporte";
 			lblReporte.Size = new Size(250, 32);
 			lblReporte.TabIndex = 1;
@@ -69,7 +75,7 @@
 			// 
 			lblEmpleado.AutoSize = true;
 			lblEmpleado.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEmpleado.Location = new Point(58, 127);
+			lblEmpleado.Location = new Point(68, 118);
 			lblEmpleado.Name = "lblEmpleado";
 			lblEmpleado.Size = new Size(83, 21);
 			lblEmpleado.TabIndex = 108;
@@ -79,25 +85,70 @@
 			// 
 			pllEmpleado.BackColor = SystemColors.ActiveCaption;
 			pllEmpleado.BorderStyle = BorderStyle.FixedSingle;
-			pllEmpleado.Controls.Add(cboEmployee);
+			pllEmpleado.Controls.Add(btnAgregarListado);
+			pllEmpleado.Controls.Add(btnSearch);
+			pllEmpleado.Controls.Add(lbl);
+			pllEmpleado.Controls.Add(txbCodigo);
+			pllEmpleado.Controls.Add(txbEmpleado);
 			pllEmpleado.Controls.Add(btnAcceptarEmpleado);
 			pllEmpleado.Controls.Add(label1);
-			pllEmpleado.Location = new Point(58, 151);
+			pllEmpleado.Location = new Point(68, 142);
 			pllEmpleado.Name = "pllEmpleado";
-			pllEmpleado.Size = new Size(408, 76);
+			pllEmpleado.Size = new Size(418, 92);
 			pllEmpleado.TabIndex = 107;
 			// 
-			// cboEmployee
+			// btnAgregarListado
 			// 
-			cboEmployee.FormattingEnabled = true;
-			cboEmployee.Location = new Point(78, 12);
-			cboEmployee.Name = "cboEmployee";
-			cboEmployee.Size = new Size(309, 23);
-			cboEmployee.TabIndex = 104;
+			btnAgregarListado.Image = Properties.Resources.mas_16;
+			btnAgregarListado.Location = new Point(190, 49);
+			btnAgregarListado.Margin = new Padding(1);
+			btnAgregarListado.Name = "btnAgregarListado";
+			btnAgregarListado.Size = new Size(25, 25);
+			btnAgregarListado.TabIndex = 106;
+			btnAgregarListado.UseVisualStyleBackColor = true;
+			btnAgregarListado.Click += btnAgregarListado_Click;
+			// 
+			// btnSearch
+			// 
+			btnSearch.BackgroundImageLayout = ImageLayout.Stretch;
+			btnSearch.Font = new Font("Segoe UI", 14F);
+			btnSearch.Image = Properties.Resources.BuscarLupa1;
+			btnSearch.Location = new Point(377, 12);
+			btnSearch.Name = "btnSearch";
+			btnSearch.Size = new Size(25, 25);
+			btnSearch.TabIndex = 105;
+			btnSearch.UseVisualStyleBackColor = true;
+			btnSearch.Click += btnSearch_Click;
+			// 
+			// lbl
+			// 
+			lbl.AutoSize = true;
+			lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lbl.Location = new Point(3, 53);
+			lbl.Name = "lbl";
+			lbl.Size = new Size(54, 19);
+			lbl.TabIndex = 104;
+			lbl.Text = "Codigo";
+			// 
+			// txbCodigo
+			// 
+			txbCodigo.Location = new Point(93, 49);
+			txbCodigo.MaxLength = 6;
+			txbCodigo.Name = "txbCodigo";
+			txbCodigo.Size = new Size(93, 23);
+			txbCodigo.TabIndex = 103;
+			// 
+			// txbEmpleado
+			// 
+			txbEmpleado.Enabled = false;
+			txbEmpleado.Location = new Point(93, 12);
+			txbEmpleado.Name = "txbEmpleado";
+			txbEmpleado.Size = new Size(278, 23);
+			txbEmpleado.TabIndex = 102;
 			// 
 			// btnAcceptarEmpleado
 			// 
-			btnAcceptarEmpleado.Location = new Point(324, 47);
+			btnAcceptarEmpleado.Location = new Point(308, 53);
 			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
 			btnAcceptarEmpleado.Size = new Size(63, 24);
 			btnAcceptarEmpleado.TabIndex = 101;
@@ -122,9 +173,9 @@
 			pllCuadrilla.Controls.Add(cboCuadrilla);
 			pllCuadrilla.Controls.Add(btnAceptarCuadrilla);
 			pllCuadrilla.Controls.Add(label3);
-			pllCuadrilla.Location = new Point(569, 151);
+			pllCuadrilla.Location = new Point(579, 142);
 			pllCuadrilla.Name = "pllCuadrilla";
-			pllCuadrilla.Size = new Size(373, 76);
+			pllCuadrilla.Size = new Size(373, 92);
 			pllCuadrilla.TabIndex = 109;
 			// 
 			// cboCuadrilla
@@ -138,7 +189,7 @@
 			// 
 			// btnAceptarCuadrilla
 			// 
-			btnAceptarCuadrilla.Location = new Point(289, 47);
+			btnAceptarCuadrilla.Location = new Point(289, 53);
 			btnAceptarCuadrilla.Name = "btnAceptarCuadrilla";
 			btnAceptarCuadrilla.Size = new Size(63, 24);
 			btnAceptarCuadrilla.TabIndex = 102;
@@ -174,7 +225,7 @@
 			// 
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCuadrilla.Location = new Point(569, 127);
+			lblCuadrilla.Location = new Point(579, 118);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(73, 21);
 			lblCuadrilla.TabIndex = 110;
@@ -190,14 +241,14 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvAsistencia.ColumnHeadersHeight = 58;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
@@ -205,14 +256,14 @@
 			dgvAsistencia.Location = new Point(12, 508);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -226,16 +277,16 @@
 			dgvEmployee.BackgroundColor = Color.White;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvEmployee.Location = new Point(51, 270);
+			dgvEmployee.Location = new Point(51, 289);
 			dgvEmployee.Name = "dgvEmployee";
-			dgvEmployee.Size = new Size(922, 181);
+			dgvEmployee.Size = new Size(922, 173);
 			dgvEmployee.TabIndex = 111;
 			// 
 			// lblSemanaFinal
 			// 
 			lblSemanaFinal.AutoSize = true;
 			lblSemanaFinal.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblSemanaFinal.Location = new Point(569, 68);
+			lblSemanaFinal.Location = new Point(583, 68);
 			lblSemanaFinal.Name = "lblSemanaFinal";
 			lblSemanaFinal.Size = new Size(108, 21);
 			lblSemanaFinal.TabIndex = 106;
@@ -245,7 +296,7 @@
 			// 
 			cboSemanaFinal.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaFinal.FormattingEnabled = true;
-			cboSemanaFinal.Location = new Point(683, 70);
+			cboSemanaFinal.Location = new Point(697, 70);
 			cboSemanaFinal.Name = "cboSemanaFinal";
 			cboSemanaFinal.Size = new Size(235, 23);
 			cboSemanaFinal.TabIndex = 105;
@@ -255,7 +306,7 @@
 			// 
 			cboSemanaInicial.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaInicial.FormattingEnabled = true;
-			cboSemanaInicial.Location = new Point(181, 70);
+			cboSemanaInicial.Location = new Point(195, 70);
 			cboSemanaInicial.Name = "cboSemanaInicial";
 			cboSemanaInicial.Size = new Size(235, 23);
 			cboSemanaInicial.TabIndex = 104;
@@ -265,17 +316,39 @@
 			// 
 			lblsub.AutoSize = true;
 			lblsub.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblsub.Location = new Point(58, 72);
+			lblsub.Location = new Point(72, 72);
 			lblsub.Name = "lblsub";
 			lblsub.Size = new Size(117, 21);
 			lblsub.TabIndex = 103;
 			lblsub.Text = "Semana Inicial:";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			label2.Location = new Point(51, 267);
+			label2.Name = "label2";
+			label2.Size = new Size(119, 19);
+			label2.TabIndex = 114;
+			label2.Text = "Listado Empleado";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			label4.Location = new Point(12, 486);
+			label4.Name = "label4";
+			label4.Size = new Size(140, 19);
+			label4.TabIndex = 115;
+			label4.Text = "Listado de Asistencia";
 			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1047, 795);
+			Controls.Add(label4);
+			Controls.Add(label2);
 			Controls.Add(lblEmpleado);
 			Controls.Add(pllEmpleado);
 			Controls.Add(pllCuadrilla);
@@ -307,7 +380,6 @@
 		private Label lblReporte;
 		private Label lblEmpleado;
 		private Panel pllEmpleado;
-		public ComboBox cboEmployee;
 		private Button btnAcceptarEmpleado;
 		private Label label1;
 		private Panel pllCuadrilla;
@@ -322,5 +394,12 @@
 		public ComboBox cboSemanaInicial;
 		private Label lblsub;
 		public Button btnImprimir;
+		private Label lbl;
+		private Button btnSearch;
+		public TextBox txbEmpleado;
+		public TextBox txbCodigo;
+		private Button btnAgregarListado;
+		private Label label2;
+		private Label label4;
 	}
 }
