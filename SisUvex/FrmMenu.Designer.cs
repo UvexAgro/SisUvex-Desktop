@@ -114,6 +114,7 @@
 			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeAsistenciaToolStripMenuItem1 = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
 			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -154,7 +155,6 @@
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeAsistenciaToolStripMenuItem1 = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -691,7 +691,7 @@
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, calculToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem, reporteDeAsistenciaToolStripMenuItem1 });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, calculToolStripMenuItem, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteDeAsistenciaToolStripMenuItem1 });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
 			nominaEmpaqueToolStripMenuItem.Size = new Size(257, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
@@ -738,6 +738,13 @@
 			reporteDeEmpacadorToolStripMenuItem.Size = new Size(234, 22);
 			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
 			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
+			// 
+			// reporteDeAsistenciaToolStripMenuItem1
+			// 
+			reporteDeAsistenciaToolStripMenuItem1.Name = "reporteDeAsistenciaToolStripMenuItem1";
+			reporteDeAsistenciaToolStripMenuItem1.Size = new Size(234, 22);
+			reporteDeAsistenciaToolStripMenuItem1.Text = "Reporte de Asistencia";
+			reporteDeAsistenciaToolStripMenuItem1.Click += reporteDeAsistenciaToolStripMenuItem1_Click;
 			// 
 			// credencialesToolStripMenuItem
 			// 
@@ -1017,13 +1024,6 @@
 			// 
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
-			// 
-			// reporteDeAsistenciaToolStripMenuItem1
-			// 
-			reporteDeAsistenciaToolStripMenuItem1.Name = "reporteDeAsistenciaToolStripMenuItem1";
-			reporteDeAsistenciaToolStripMenuItem1.Size = new Size(234, 22);
-			reporteDeAsistenciaToolStripMenuItem1.Text = "Reporte de Asistencia";
-			reporteDeAsistenciaToolStripMenuItem1.Click += reporteDeAsistenciaToolStripMenuItem1_Click;
 			// 
 			// FrmMenu
 			// 
