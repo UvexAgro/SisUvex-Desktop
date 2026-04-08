@@ -72,5 +72,10 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			clsA.OpenFrmModify();
 		}
+
+		private void btnExcel_Click(object sender, EventArgs e)
+		{
+			cls.ExportarDGVHorasExcel(dgvHoras);
+		}
 	}
 }

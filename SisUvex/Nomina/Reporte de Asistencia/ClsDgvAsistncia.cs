@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
+using ClosedXML.Excel;
 using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
@@ -56,7 +57,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			{
 				sql.OpenConectionWrite();
 
-				
+
 				SqlCommand cmdSP = new SqlCommand("sp_PackingAttendenceChecker", sql.cnn);
 				cmdSP.CommandType = CommandType.StoredProcedure;
 
@@ -66,7 +67,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 				cmdSP.ExecuteNonQuery();
 
-			
+
 				string query = @"
 					SELECT 
 					a.id_employee AS Codigo,
@@ -108,8 +109,8 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				fechaFinal,
 				idWorkGroup);
 
-		
-			AjustarColumnas(frmR.dgvAsistencia); 
+
+			AjustarColumnas(frmR.dgvAsistencia);
 			frmR.dgvAsistencia.ClearSelection();
 		}
 		public void AjustarColumnas(DataGridView dgv)
@@ -134,7 +135,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			if (dgv.Columns.Contains("HoraSalida"))
 				dgv.Columns["HoraSalida"].FillWeight = 15;
 		}
-		
+
 		private DateTime ObtenerFechaDesdeSemana(string textoSemana, bool fechaInicio)
 		{
 			string[] partes = textoSemana.Split('-');
@@ -262,11 +263,11 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				.Add(new Paragraph(texto)
 					.SetTextAlignment(TextAlignment.CENTER)
 					.SetFontSize(9)
-					.SetKeepTogether(true)) 
+					.SetKeepTogether(true))
 				.SetBorder(new SolidBorder(1));
 		}
-		
-		
+
+
 		public void EstiloDGVAsistencia(DataGridView dgv)
 		{
 			// Quitar bordes
@@ -345,7 +346,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 				List<string> empleados = new List<string>();
 
-				
+
 				foreach (DataGridViewRow row in frmR.dgvEmployee.Rows)
 				{
 					if (row.IsNewRow) continue;
@@ -406,6 +407,126 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			}
 
 			return dt;
+		}
+
+
+
+
+		public void ExportarDGVaExcel(DataGridView dgv)
+		{
+			if (dgv.Rows.Count == 0)
+			{
+				MessageBox.Show("No hay datos para exportar");
+				return;
+			}
+
+			using (SaveFileDialog sfd = new SaveFileDialog())
+			{
+				sfd.Filter = "Excel (*.xlsx)|*.xlsx";
+				sfd.FileName = "Reporte_Asistencia.xlsx";
+
+				if (sfd.ShowDialog() == DialogResult.OK)
+				{
+					string ruta = sfd.FileName;
+
+					using (XLWorkbook wb = new XLWorkbook())
+					{
+						var ws = wb.Worksheets.Add("Asistencia");
+
+						int filaExcel = 1;
+
+						//  TÍTULO GENERAL
+						ws.Cell(filaExcel, 1).Value = "REPORTE DE ASISTENCIA";
+						ws.Range(filaExcel, 1, filaExcel, dgv.Columns.Count).Merge();
+						ws.Cell(filaExcel, 1).Style.Font.Bold = true;
+						ws.Cell(filaExcel, 1).Style.Font.FontSize = 16;
+						ws.Cell(filaExcel, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+						filaExcel += 2;
+
+						//  AGRUPAR POR FECHA
+						var grupos = dgv.Rows
+							.Cast<DataGridViewRow>()
+							.Where(r => !r.IsNewRow && r.Cells["Fecha"].Value != null)
+							.GroupBy(r => Convert.ToDateTime(r.Cells["Fecha"].Value).Date)
+							.OrderBy(g => g.Key);
+
+						foreach (var grupo in grupos)
+						{
+							// TÍTULO POR FECHA
+							ws.Cell(filaExcel, 1).Value = $"Fecha: {grupo.Key:dd/MM/yyyy}";
+							ws.Cell(filaExcel, 1).Style.Font.Bold = true;
+							ws.Cell(filaExcel, 1).Style.Font.FontSize = 12;
+
+							filaExcel++;
+
+							//  ENCABEZADOS
+							for (int i = 0; i < dgv.Columns.Count; i++)
+							{
+								var cell = ws.Cell(filaExcel, i + 1);
+								cell.Value = dgv.Columns[i].HeaderText;
+
+								cell.Style.Font.Bold = true;
+								cell.Style.Font.FontColor = XLColor.Black;
+								cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+								cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							}
+
+							filaExcel++;
+
+							//  DATOS DEL GRUPO
+							foreach (var row in grupo)
+							{
+								for (int j = 0; j < dgv.Columns.Count; j++)
+								{
+									var valor = row.Cells[j].Value;
+									var cell = ws.Cell(filaExcel, j + 1);
+
+									if (dgv.Columns[j].Name == "Fecha" && valor != null)
+									{
+										DateTime fecha = Convert.ToDateTime(valor);
+										cell.Value = fecha;
+										cell.Style.DateFormat.Format = "dd/MM/yyyy";
+									}
+									else
+									{
+										cell.Value = valor?.ToString();
+									}
+
+									cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+								}
+
+								filaExcel++;
+							}
+
+							//  ESPACIO ENTRE GRUPOS
+							filaExcel += 2;
+						}
+
+						//  AJUSTAR COLUMNAS
+						ws.Columns().AdjustToContents();
+
+						wb.SaveAs(ruta);
+					}
+
+					//  PREGUNTAR SI ABRIR
+					DialogResult result = MessageBox.Show(
+						"Excel generado correctamente.\n¿Deseas abrirlo?",
+						"Abrir archivo",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
+					);
+
+					if (result == DialogResult.Yes)
+					{
+						Process.Start(new ProcessStartInfo()
+						{
+							FileName = ruta,
+							UseShellExecute = true
+						});
+					}
+				}
+			}
 		}
 	}
 }

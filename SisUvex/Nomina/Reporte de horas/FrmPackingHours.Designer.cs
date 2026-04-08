@@ -42,6 +42,7 @@
 			btnAdd = new Button();
 			btnModify = new Button();
 			label1 = new Label();
+			btnExcel = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvHoras).BeginInit();
 			SuspendLayout();
 			// 
@@ -184,11 +185,26 @@
 			label1.TabIndex = 39;
 			label1.Text = "Añadir Horario de Empaque";
 			// 
+			// btnExcel
+			// 
+			btnExcel.Image = (Image)resources.GetObject("btnExcel.Image");
+			btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+			btnExcel.Location = new Point(866, 62);
+			btnExcel.Name = "btnExcel";
+			btnExcel.Padding = new Padding(10, 0, 10, 0);
+			btnExcel.Size = new Size(126, 34);
+			btnExcel.TabIndex = 117;
+			btnExcel.Text = "Exportar ";
+			btnExcel.TextAlign = ContentAlignment.MiddleLeft;
+			btnExcel.UseVisualStyleBackColor = true;
+			btnExcel.Click += btnExcel_Click;
+			// 
 			// FrmPackingHours
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1020, 813);
+			Controls.Add(btnExcel);
 			Controls.Add(label1);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
@@ -222,5 +238,6 @@
 		private Button btnAdd;
 		private Button btnModify;
 		private Label label1;
+		public Button btnExcel;
 	}
 }

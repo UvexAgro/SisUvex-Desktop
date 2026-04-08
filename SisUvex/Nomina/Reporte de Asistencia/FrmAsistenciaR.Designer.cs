@@ -55,6 +55,7 @@
 			lblsub = new Label();
 			label2 = new Label();
 			label4 = new Label();
+			btnExcel = new Button();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -211,7 +212,7 @@
 			// 
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(847, 468);
+			btnImprimir.Location = new Point(752, 471);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(10, 0, 10, 0);
 			btnImprimir.Size = new Size(126, 34);
@@ -267,7 +268,7 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(998, 273);
+			dgvAsistencia.Size = new Size(998, 303);
 			dgvAsistencia.TabIndex = 112;
 			// 
 			// dgvEmployee
@@ -342,11 +343,26 @@
 			label4.TabIndex = 115;
 			label4.Text = "Listado de Asistencia";
 			// 
+			// btnExcel
+			// 
+			btnExcel.Image = (Image)resources.GetObject("btnExcel.Image");
+			btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+			btnExcel.Location = new Point(884, 471);
+			btnExcel.Name = "btnExcel";
+			btnExcel.Padding = new Padding(10, 0, 10, 0);
+			btnExcel.Size = new Size(126, 34);
+			btnExcel.TabIndex = 116;
+			btnExcel.Text = "Exportar ";
+			btnExcel.TextAlign = ContentAlignment.MiddleLeft;
+			btnExcel.UseVisualStyleBackColor = true;
+			btnExcel.Click += btnExcel_Click;
+			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1047, 795);
+			ClientSize = new Size(1047, 825);
+			Controls.Add(btnExcel);
 			Controls.Add(label4);
 			Controls.Add(label2);
 			Controls.Add(lblEmpleado);
@@ -401,5 +417,6 @@
 		private Button btnAgregarListado;
 		private Label label2;
 		private Label label4;
+		public Button btnExcel;
 	}
 }

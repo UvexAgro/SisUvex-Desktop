@@ -183,5 +183,10 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			return dtEmpleados.AsEnumerable()
 				.Any(row => row["Codigo"].ToString() == idEmpleado);
 		}
+
+		private void btnExcel_Click(object sender, EventArgs e)
+		{
+			clsDgv.ExportarDGVaExcel(dgvAsistencia);
+		}
 	}
 }
