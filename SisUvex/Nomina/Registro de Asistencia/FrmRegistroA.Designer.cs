@@ -28,24 +28,30 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroA));
 			pllManual = new Panel();
-			txbBanda = new TextBox();
+			btnMostrarEmpleado = new Button();
+			btnAgregarListado = new Button();
+			btnSearch = new Button();
+			txbCodigo = new TextBox();
+			lblCodigo = new Label();
+			cboLinea = new ComboBox();
+			cboActividad = new ComboBox();
 			lblActividad = new Label();
 			lblBanda = new Label();
-			txbActividad = new TextBox();
 			txbEmpleado = new TextBox();
 			btnAcceptarEmpleado = new Button();
 			lblEmpleado = new Label();
 			dtpDay = new DateTimePicker();
 			lblManual = new Label();
 			pllExcel = new Panel();
+			btnCancelar = new Button();
+			cboHoja = new ComboBox();
 			btnInstrucciones = new Button();
 			btnMostrar = new Button();
 			btnExaminar = new Button();
-			txbHoja = new TextBox();
 			lblHoja = new Label();
 			txbRuta = new TextBox();
 			btnExcelAceptar = new Button();
@@ -62,31 +68,95 @@
 			// 
 			pllManual.BackColor = SystemColors.ActiveCaption;
 			pllManual.BorderStyle = BorderStyle.FixedSingle;
-			pllManual.Controls.Add(txbBanda);
+			pllManual.Controls.Add(btnMostrarEmpleado);
+			pllManual.Controls.Add(btnAgregarListado);
+			pllManual.Controls.Add(btnSearch);
+			pllManual.Controls.Add(txbCodigo);
+			pllManual.Controls.Add(lblCodigo);
+			pllManual.Controls.Add(cboLinea);
+			pllManual.Controls.Add(cboActividad);
 			pllManual.Controls.Add(lblActividad);
 			pllManual.Controls.Add(lblBanda);
-			pllManual.Controls.Add(txbActividad);
 			pllManual.Controls.Add(txbEmpleado);
 			pllManual.Controls.Add(btnAcceptarEmpleado);
 			pllManual.Controls.Add(lblEmpleado);
-			pllManual.Location = new Point(50, 147);
+			pllManual.Location = new Point(32, 147);
 			pllManual.Name = "pllManual";
-			pllManual.Size = new Size(443, 153);
+			pllManual.Size = new Size(456, 204);
 			pllManual.TabIndex = 108;
 			// 
-			// txbBanda
+			// btnMostrarEmpleado
 			// 
-			txbBanda.Location = new Point(103, 104);
-			txbBanda.MaxLength = 6;
-			txbBanda.Name = "txbBanda";
-			txbBanda.Size = new Size(93, 23);
-			txbBanda.TabIndex = 106;
+			btnMostrarEmpleado.Location = new Point(299, 166);
+			btnMostrarEmpleado.Name = "btnMostrarEmpleado";
+			btnMostrarEmpleado.Size = new Size(63, 24);
+			btnMostrarEmpleado.TabIndex = 113;
+			btnMostrarEmpleado.Text = "Mostrar";
+			btnMostrarEmpleado.UseVisualStyleBackColor = true;
+			btnMostrarEmpleado.Click += btnMostrarEmpleado_Click;
+			// 
+			// btnAgregarListado
+			// 
+			btnAgregarListado.Image = Properties.Resources.mas_16;
+			btnAgregarListado.Location = new Point(196, 66);
+			btnAgregarListado.Margin = new Padding(1);
+			btnAgregarListado.Name = "btnAgregarListado";
+			btnAgregarListado.Size = new Size(25, 25);
+			btnAgregarListado.TabIndex = 112;
+			btnAgregarListado.UseVisualStyleBackColor = true;
+			btnAgregarListado.Click += btnAgregarListado_Click;
+			// 
+			// btnSearch
+			// 
+			btnSearch.BackgroundImageLayout = ImageLayout.Stretch;
+			btnSearch.Font = new Font("Segoe UI", 14F);
+			btnSearch.Image = Properties.Resources.BuscarLupa1;
+			btnSearch.Location = new Point(394, 18);
+			btnSearch.Name = "btnSearch";
+			btnSearch.Size = new Size(25, 25);
+			btnSearch.TabIndex = 111;
+			btnSearch.UseVisualStyleBackColor = true;
+			btnSearch.Click += btnSearch_Click;
+			// 
+			// txbCodigo
+			// 
+			txbCodigo.Location = new Point(90, 66);
+			txbCodigo.MaxLength = 6;
+			txbCodigo.Name = "txbCodigo";
+			txbCodigo.Size = new Size(102, 23);
+			txbCodigo.TabIndex = 110;
+			// 
+			// lblCodigo
+			// 
+			lblCodigo.AutoSize = true;
+			lblCodigo.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblCodigo.Location = new Point(13, 66);
+			lblCodigo.Name = "lblCodigo";
+			lblCodigo.Size = new Size(57, 19);
+			lblCodigo.TabIndex = 109;
+			lblCodigo.Text = "Codigo:";
+			// 
+			// cboLinea
+			// 
+			cboLinea.FormattingEnabled = true;
+			cboLinea.Location = new Point(90, 143);
+			cboLinea.Name = "cboLinea";
+			cboLinea.Size = new Size(121, 23);
+			cboLinea.TabIndex = 108;
+			// 
+			// cboActividad
+			// 
+			cboActividad.FormattingEnabled = true;
+			cboActividad.Location = new Point(90, 105);
+			cboActividad.Name = "cboActividad";
+			cboActividad.Size = new Size(298, 23);
+			cboActividad.TabIndex = 107;
 			// 
 			// lblActividad
 			// 
 			lblActividad.AutoSize = true;
 			lblActividad.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblActividad.Location = new Point(13, 64);
+			lblActividad.Location = new Point(13, 106);
 			lblActividad.Name = "lblActividad";
 			lblActividad.Size = new Size(71, 19);
 			lblActividad.TabIndex = 105;
@@ -96,30 +166,22 @@
 			// 
 			lblBanda.AutoSize = true;
 			lblBanda.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblBanda.Location = new Point(19, 104);
+			lblBanda.Location = new Point(13, 147);
 			lblBanda.Name = "lblBanda";
 			lblBanda.Size = new Size(50, 19);
 			lblBanda.TabIndex = 104;
 			lblBanda.Text = "Banda:";
 			// 
-			// txbActividad
-			// 
-			txbActividad.Location = new Point(103, 60);
-			txbActividad.MaxLength = 6;
-			txbActividad.Name = "txbActividad";
-			txbActividad.Size = new Size(93, 23);
-			txbActividad.TabIndex = 103;
-			// 
 			// txbEmpleado
 			// 
-			txbEmpleado.Location = new Point(103, 23);
+			txbEmpleado.Location = new Point(90, 20);
 			txbEmpleado.Name = "txbEmpleado";
 			txbEmpleado.Size = new Size(298, 23);
 			txbEmpleado.TabIndex = 102;
 			// 
 			// btnAcceptarEmpleado
 			// 
-			btnAcceptarEmpleado.Location = new Point(338, 115);
+			btnAcceptarEmpleado.Location = new Point(378, 166);
 			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
 			btnAcceptarEmpleado.Size = new Size(63, 24);
 			btnAcceptarEmpleado.TabIndex = 101;
@@ -157,59 +219,74 @@
 			// 
 			pllExcel.BackColor = SystemColors.ActiveCaption;
 			pllExcel.BorderStyle = BorderStyle.FixedSingle;
+			pllExcel.Controls.Add(btnCancelar);
+			pllExcel.Controls.Add(cboHoja);
 			pllExcel.Controls.Add(btnInstrucciones);
 			pllExcel.Controls.Add(btnMostrar);
 			pllExcel.Controls.Add(btnExaminar);
-			pllExcel.Controls.Add(txbHoja);
 			pllExcel.Controls.Add(lblHoja);
 			pllExcel.Controls.Add(txbRuta);
 			pllExcel.Controls.Add(btnExcelAceptar);
 			pllExcel.Controls.Add(lblRuta);
 			pllExcel.Location = new Point(569, 147);
 			pllExcel.Name = "pllExcel";
-			pllExcel.Size = new Size(443, 153);
+			pllExcel.Size = new Size(443, 204);
 			pllExcel.TabIndex = 153;
+			// 
+			// btnCancelar
+			// 
+			btnCancelar.Location = new Point(366, 168);
+			btnCancelar.Name = "btnCancelar";
+			btnCancelar.Size = new Size(63, 23);
+			btnCancelar.TabIndex = 110;
+			btnCancelar.Text = "Cancelar";
+			btnCancelar.UseVisualStyleBackColor = true;
+			btnCancelar.Click += btnCancelar_Click;
+			// 
+			// cboHoja
+			// 
+			cboHoja.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboHoja.FormattingEnabled = true;
+			cboHoja.Location = new Point(60, 85);
+			cboHoja.Name = "cboHoja";
+			cboHoja.Size = new Size(270, 23);
+			cboHoja.TabIndex = 109;
 			// 
 			// btnInstrucciones
 			// 
-			btnInstrucciones.Location = new Point(13, 115);
+			btnInstrucciones.Location = new Point(13, 166);
 			btnInstrucciones.Name = "btnInstrucciones";
 			btnInstrucciones.Size = new Size(129, 24);
 			btnInstrucciones.TabIndex = 108;
 			btnInstrucciones.Text = "Instrucciones";
 			btnInstrucciones.UseVisualStyleBackColor = true;
+			btnInstrucciones.Click += btnInstrucciones_Click;
 			// 
 			// btnMostrar
 			// 
-			btnMostrar.Location = new Point(356, 61);
+			btnMostrar.Location = new Point(356, 86);
 			btnMostrar.Name = "btnMostrar";
 			btnMostrar.Size = new Size(63, 24);
 			btnMostrar.TabIndex = 107;
 			btnMostrar.Text = "Mostrar";
 			btnMostrar.UseVisualStyleBackColor = true;
+			btnMostrar.Click += btnMostrar_Click;
 			// 
 			// btnExaminar
 			// 
 			btnExaminar.Location = new Point(356, 18);
 			btnExaminar.Name = "btnExaminar";
-			btnExaminar.Size = new Size(63, 24);
+			btnExaminar.Size = new Size(73, 24);
 			btnExaminar.TabIndex = 106;
 			btnExaminar.Text = "Examinar";
 			btnExaminar.UseVisualStyleBackColor = true;
-			// 
-			// txbHoja
-			// 
-			txbHoja.Enabled = false;
-			txbHoja.Location = new Point(60, 60);
-			txbHoja.Name = "txbHoja";
-			txbHoja.Size = new Size(255, 23);
-			txbHoja.TabIndex = 105;
+			btnExaminar.Click += btnExaminar_Click;
 			// 
 			// lblHoja
 			// 
 			lblHoja.AutoSize = true;
 			lblHoja.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblHoja.Location = new Point(13, 64);
+			lblHoja.Location = new Point(13, 89);
 			lblHoja.Name = "lblHoja";
 			lblHoja.Size = new Size(41, 19);
 			lblHoja.TabIndex = 104;
@@ -217,7 +294,6 @@
 			// 
 			// txbRuta
 			// 
-			txbRuta.Enabled = false;
 			txbRuta.Location = new Point(60, 20);
 			txbRuta.Name = "txbRuta";
 			txbRuta.Size = new Size(290, 23);
@@ -225,12 +301,13 @@
 			// 
 			// btnExcelAceptar
 			// 
-			btnExcelAceptar.Location = new Point(356, 115);
+			btnExcelAceptar.Location = new Point(287, 167);
 			btnExcelAceptar.Name = "btnExcelAceptar";
 			btnExcelAceptar.Size = new Size(63, 24);
 			btnExcelAceptar.TabIndex = 101;
 			btnExcelAceptar.Text = "Aceptar";
 			btnExcelAceptar.UseVisualStyleBackColor = true;
+			btnExcelAceptar.Click += btnExcelAceptar_Click;
 			// 
 			// lblRuta
 			// 
@@ -272,34 +349,35 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvAsistencia.ColumnHeadersHeight = 58;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
 			dgvAsistencia.ImeMode = ImeMode.NoControl;
-			dgvAsistencia.Location = new Point(32, 324);
+			dgvAsistencia.Location = new Point(32, 367);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(1001, 475);
+			dgvAsistencia.Size = new Size(1001, 432);
 			dgvAsistencia.TabIndex = 113;
+			dgvAsistencia.CellFormatting += dgvAsistencia_CellFormatting;
 			// 
 			// FrmRegistroA
 			// 
@@ -316,6 +394,7 @@
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmRegistroA";
 			Text = "Registro de Asistencia ";
+			Load += FrmRegistroA_Load;
 			pllManual.ResumeLayout(false);
 			pllManual.PerformLayout();
 			pllExcel.ResumeLayout(false);
@@ -328,26 +407,32 @@
 		#endregion
 		private Panel pllManual;
 		private Label lblBanda;
-		public TextBox txbBanda;
 		public TextBox txbEmpleado;
-		private Button btnAcceptarEmpleado;
 		private Label lblEmpleado;
 		private Label lblActividad;
 		public DateTimePicker dtpDay;
 		private Label lblFecha;
-		public TextBox txbActividad;
 		private Label lblManual;
 		private Panel pllExcel;
 		public TextBox txbRuta;
 		private Label lblHoja;
-		private Button btnExcelAceptar;
 		private Label lblRuta;
 		private Label lblExcel;
 		private Label lblReporte;
-		private Button btnMostrar;
-		private Button btnExaminar;
-		public TextBox txbHoja;
-		private Button btnInstrucciones;
 		public DataGridView dgvAsistencia;
+		public ComboBox cboHoja;
+		public Button btnAcceptarEmpleado;
+		public Button btnExcelAceptar;
+		public Button btnMostrar;
+		public Button btnExaminar;
+		public Button btnInstrucciones;
+		public Button btnCancelar;
+		public ComboBox cboLinea;
+		public ComboBox cboActividad;
+		public TextBox txbCodigo;
+		private Label lblCodigo;
+		private Button btnSearch;
+		private Button btnAgregarListado;
+		public Button btnMostrarEmpleado;
 	}
 }
