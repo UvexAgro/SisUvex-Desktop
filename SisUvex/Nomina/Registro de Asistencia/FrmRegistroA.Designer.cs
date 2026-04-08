@@ -31,7 +31,7 @@
 			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroA));
-			this.pllManual = new Panel();
+			pllManual = new Panel();
 			txbBanda = new TextBox();
 			lblActividad = new Label();
 			lblBanda = new Label();
@@ -53,26 +53,26 @@
 			lblExcel = new Label();
 			lblReporte = new Label();
 			dgvAsistencia = new DataGridView();
-			this.pllManual.SuspendLayout();
+			pllManual.SuspendLayout();
 			pllExcel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
 			SuspendLayout();
 			// 
 			// pllManual
 			// 
-			this.pllManual.BackColor = SystemColors.ActiveCaption;
-			this.pllManual.BorderStyle = BorderStyle.FixedSingle;
-			this.pllManual.Controls.Add(txbBanda);
-			this.pllManual.Controls.Add(lblActividad);
-			this.pllManual.Controls.Add(lblBanda);
-			this.pllManual.Controls.Add(txbActividad);
-			this.pllManual.Controls.Add(txbEmpleado);
-			this.pllManual.Controls.Add(btnAcceptarEmpleado);
-			this.pllManual.Controls.Add(lblEmpleado);
-			this.pllManual.Location = new Point(50, 147);
-			this.pllManual.Name = "pllManual";
-			this.pllManual.Size = new Size(443, 153);
-			this.pllManual.TabIndex = 108;
+			pllManual.BackColor = SystemColors.ActiveCaption;
+			pllManual.BorderStyle = BorderStyle.FixedSingle;
+			pllManual.Controls.Add(txbBanda);
+			pllManual.Controls.Add(lblActividad);
+			pllManual.Controls.Add(lblBanda);
+			pllManual.Controls.Add(txbActividad);
+			pllManual.Controls.Add(txbEmpleado);
+			pllManual.Controls.Add(btnAcceptarEmpleado);
+			pllManual.Controls.Add(lblEmpleado);
+			pllManual.Location = new Point(50, 147);
+			pllManual.Name = "pllManual";
+			pllManual.Size = new Size(443, 153);
+			pllManual.TabIndex = 108;
 			// 
 			// txbBanda
 			// 
@@ -311,13 +311,13 @@
 			Controls.Add(lblManual);
 			Controls.Add(dtpDay);
 			Controls.Add(dgvAsistencia);
-			Controls.Add(this.pllManual);
+			Controls.Add(pllManual);
 			Controls.Add(lblReporte);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmRegistroA";
 			Text = "Registro de Asistencia ";
-			this.pllManual.ResumeLayout(false);
-			this.pllManual.PerformLayout();
+			pllManual.ResumeLayout(false);
+			pllManual.PerformLayout();
 			pllExcel.ResumeLayout(false);
 			pllExcel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).EndInit();
@@ -326,7 +326,7 @@
 		}
 
 		#endregion
-		private Panel pllEmpleado;
+		private Panel pllManual;
 		private Label lblBanda;
 		public TextBox txbBanda;
 		public TextBox txbEmpleado;

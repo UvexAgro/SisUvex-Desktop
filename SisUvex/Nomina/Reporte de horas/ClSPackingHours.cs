@@ -1,15 +1,17 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using ClosedXML.Excel;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using System;
-using System.Data.SqlClient;
-using System.Windows.Forms;
 
 
 namespace SisUvex.Nomina.Reporte_de_horas
@@ -78,5 +80,111 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 			}
 		}
+
+		public void ExportarDGVHorasExcel(DataGridView dgv)
+		{
+			if (dgv.Rows.Count == 0)
+			{
+				MessageBox.Show("No hay datos para exportar");
+				return;
+			}
+
+			using (SaveFileDialog sfd = new SaveFileDialog())
+			{
+			sfd.Filter = "Excel (*.xlsx)|*.xlsx";
+			sfd.FileName = "Reporte_Horarios.xlsx";
+
+			if (sfd.ShowDialog() == DialogResult.OK)
+			{
+				string ruta = sfd.FileName;
+
+				using (XLWorkbook wb = new XLWorkbook())
+				{
+					var ws = wb.Worksheets.Add("Horarios");
+
+					int fila = 1;
+
+					//  TÍTULO
+					ws.Cell(fila, 1).Value = "REPORTE DE HORARIOS";
+					ws.Range(fila, 1, fila, dgv.Columns.Count).Merge();
+					ws.Cell(fila, 1).Style.Font.Bold = true;
+					ws.Cell(fila, 1).Style.Font.FontSize = 16;
+					ws.Cell(fila, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+					fila += 2;
+
+					//  ENCABEZADOS
+					for (int i = 0; i < dgv.Columns.Count; i++)
+					{
+						var cell = ws.Cell(fila, i + 1);
+						cell.Value = dgv.Columns[i].HeaderText;
+
+						cell.Style.Font.Bold = true;
+						cell.Style.Font.FontColor = XLColor.Black;
+						cell.Style.Fill.BackgroundColor = XLColor.FromHtml("#34495E"); // oscuro
+						cell.Style.Font.FontColor = XLColor.White; // letras blancas
+						cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+					}
+
+					fila++;
+
+					//  DATOS
+					for (int i = 0; i < dgv.Rows.Count; i++)
+					{
+						if (dgv.Rows[i].IsNewRow) continue;
+
+						for (int j = 0; j < dgv.Columns.Count; j++)
+						{
+							var valor = dgv.Rows[i].Cells[j].Value;
+							var cell = ws.Cell(fila, j + 1);
+
+							//  FORMATO FECHA
+							if (dgv.Columns[j].Name == "Fecha" && valor != null)
+							{
+								DateTime fecha = Convert.ToDateTime(valor);
+								cell.Value = fecha;
+								cell.Style.DateFormat.Format = "dd/MM/yyyy";
+							}
+							else
+							{
+								cell.Value = valor?.ToString();
+							}
+
+							cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						}
+
+						fila++;
+					}
+
+					//  BORDES
+					var rango = ws.Range(3, 1, fila - 1, dgv.Columns.Count);
+					rango.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+					rango.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+					//  AJUSTAR COLUMNAS
+					ws.Columns().AdjustToContents();
+
+					wb.SaveAs(ruta);
+				}
+
+				//  PREGUNTAR SI ABRIR
+				DialogResult result = MessageBox.Show(
+					"Excel generado correctamente.\n¿Deseas abrirlo?",
+					"Abrir archivo",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question
+				);
+
+				if (result == DialogResult.Yes)
+				{
+					Process.Start(new ProcessStartInfo()
+					{
+						FileName = ruta,
+						UseShellExecute = true
+					});
+				}
+			}
+		}
 	}
+}
 }
