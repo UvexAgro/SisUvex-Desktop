@@ -115,7 +115,6 @@
 			// 
 			// nudOvertime
 			// 
-			nudOvertime.DecimalPlaces = 2;
 			nudOvertime.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
 			nudOvertime.Location = new Point(9, 251);
 			nudOvertime.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
