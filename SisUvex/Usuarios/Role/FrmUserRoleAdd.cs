@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SisUvex.Cuadro_de_herramientas.ToggleButton;
+using SisUvex.Cuadro_de_herramientas;
 
 namespace SisUvex.Usuarios.Role
 {
@@ -25,6 +25,9 @@ namespace SisUvex.Usuarios.Role
         public FrmUserRoleAdd()
         {
             InitializeComponent();
+
+            tgbAudit.Enabled = false;
+            tgbCostReports.Enabled = false;
 
             AddToggleButtonToPanel(tgbPrintLabels, pnlChbPrintLabels);
             AddToggleButtonToPanel(tgbViewCatalogs, pnlChbViewCatalogs);

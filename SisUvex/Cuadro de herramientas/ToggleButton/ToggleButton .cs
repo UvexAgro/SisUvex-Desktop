@@ -1,97 +1,178 @@
-﻿
-
-namespace SisUvex.Cuadro_de_herramientas.ToggleButton;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 using SisUvex.Cuadro_de_herramientas.Colors;
-public class ToggleButton : CheckBox
+
+namespace SisUvex.Cuadro_de_herramientas
 {
-    private Timer animationTimer;
-    private float togglePosition = 2; // posición actual
-    private float targetPosition;     // destino
-
-    public Color OnBackColor { get; set; } = ColorUvex.Purple;
-    public Color OffBackColor { get; set; } = Color.LightGray;
-    public Color ToggleColor { get; set; } = Color.White;
-
-    public int AnimationSpeed { get; set; } = 4; // más alto = más rápido
-
-    public ToggleButton()
+    public class ToggleButton : CheckBox
     {
-        this.MinimumSize = new Size(20, 10);
+        private readonly Timer animationTimer = new Timer();
+        private float togglePosition = 2f;
+        private float targetPosition = 2f;
+        private bool isFocused = false;
 
-        animationTimer = new Timer();
-        animationTimer.Interval = 10;
-        animationTimer.Tick += AnimateToggle;
-    }
+        public Color OnBackColor { get; set; } = ColorUvex.Purple;
+        public Color OffBackColor { get; set; } = Color.LightGray;
+        public Color ToggleColor { get; set; } = Color.White;
+        public Color FocusBorderColor { get; set; } = ColorUvex.Purple;
+        public Color FocusBackColor { get; set; } = ColorUvex.Purplely; //ColorUvex.PurpleMedium;
 
-    protected override void OnCheckedChanged(EventArgs e)
-    {
-        base.OnCheckedChanged(e);
+        public int AnimationSpeed { get; set; } = 4;
 
-        int diameter = this.Height - 4;
-
-        targetPosition = this.Checked
-            ? this.Width - diameter - 2
-            : 2;
-
-        animationTimer.Start();
-    }
-
-    private void AnimateToggle(object sender, EventArgs e)
-    {
-        if (Math.Abs(togglePosition - targetPosition) < 1)
+        public ToggleButton()
         {
+            MinimumSize = new Size(20, 10);
+            Size = new Size(40, 20);
+            TabStop = true;
+            Appearance = Appearance.Button;
+
+            animationTimer.Interval = 10;
+            animationTimer.Tick += AnimateToggle;
+
+            SetStyle(
+                ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.UserPaint |
+                ControlStyles.ResizeRedraw |
+                ControlStyles.OptimizedDoubleBuffer |
+                ControlStyles.SupportsTransparentBackColor,
+                true);
+
+            BackColor = Color.Transparent;
+
+            UpdateTargetPosition();
             togglePosition = targetPosition;
-            animationTimer.Stop();
         }
-        else
+
+        protected override void OnCheckedChanged(EventArgs e)
         {
-            togglePosition += (targetPosition - togglePosition) / AnimationSpeed;
+            base.OnCheckedChanged(e);
+            UpdateTargetPosition();
+            animationTimer.Start();
         }
 
-        this.Invalidate();
-    }
-
-    protected override void OnPaint(PaintEventArgs pevent)
-    {
-        pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        pevent.Graphics.Clear(this.Parent.BackColor);
-
-        int padding = 2;
-        int diameter = this.Height - padding * 2;
-
-        Rectangle rect = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
-
-        using (var path = GetFigurePath(rect, this.Height))
-        using (var brush = new SolidBrush(this.Checked ? OnBackColor : OffBackColor))
+        protected override void OnResize(EventArgs e)
         {
-            pevent.Graphics.FillPath(brush, path);
+            base.OnResize(e);
+
+            if (Height < 10)
+                Height = 10;
+
+            UpdateTargetPosition();
+
+            if (!animationTimer.Enabled)
+                togglePosition = targetPosition;
+
+            Invalidate();
         }
 
-        using (var brush = new SolidBrush(ToggleColor))
+        protected override void OnEnter(EventArgs e)
         {
-            pevent.Graphics.FillEllipse(
-                brush,
-                togglePosition,
-                padding,
-                diameter,
-                diameter
-            );
+            base.OnEnter(e);
+            isFocused = true;
+            Invalidate();
         }
-    }
 
-    private GraphicsPath GetFigurePath(Rectangle rect, int radius)
-    {
-        GraphicsPath path = new GraphicsPath();
-        int curveSize = radius;
+        protected override void OnLeave(EventArgs e)
+        {
+            base.OnLeave(e);
+            isFocused = false;
+            Invalidate();
+        }
 
-        path.StartFigure();
-        path.AddArc(rect.X, rect.Y, curveSize, curveSize, 90, 180);
-        path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 180);
-        path.CloseFigure();
+        protected override void OnMouseUp(MouseEventArgs mevent)
+        {
+            base.OnMouseUp(mevent);
+            Focus();
+        }
 
-        return path;
+        private void UpdateTargetPosition()
+        {
+            int padding = GetPaddingSize();
+            int diameter = Math.Max(Height - padding * 2, 1);
+
+            targetPosition = Checked
+                ? Width - diameter - padding
+                : padding;
+        }
+
+        private int GetPaddingSize()
+        {
+            return Height <= 14 ? 1 : 2;
+        }
+
+        private void AnimateToggle(object? sender, EventArgs e)
+        {
+            if (Math.Abs(togglePosition - targetPosition) < 0.5f)
+            {
+                togglePosition = targetPosition;
+                animationTimer.Stop();
+            }
+            else
+            {
+                togglePosition += (targetPosition - togglePosition) / AnimationSpeed;
+            }
+
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs pevent)
+        {
+            Graphics g = pevent.Graphics;
+
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.CompositingQuality = CompositingQuality.HighQuality;
+
+            Color parentBackColor = Parent?.BackColor ?? SystemColors.Control;
+            g.Clear(parentBackColor);
+
+            int padding = GetPaddingSize();
+            int diameter = Math.Max(Height - padding * 2, 1);
+            Rectangle backRect = new Rectangle(0, 0, Width - 1, Height - 1);
+
+            Color currentBackColor = isFocused
+                ? FocusBackColor
+                : (Checked ? OnBackColor : OffBackColor);
+
+            using (GraphicsPath backPath = GetFigurePath(backRect))
+            using (SolidBrush backBrush = new SolidBrush(currentBackColor))
+            {
+                g.FillPath(backBrush, backPath);
+
+                if (isFocused)
+                {
+                    float focusWidth = Height <= 21 ? 1.2f : 1.6f;
+                    Rectangle focusRect = new Rectangle(1, 1, Width - 3, Height - 3);
+
+                    using (GraphicsPath focusPath = GetFigurePath(focusRect))
+                    using (Pen focusPen = new Pen(FocusBorderColor, focusWidth))
+                    {
+                        focusPen.Alignment = PenAlignment.Center;
+                        g.DrawPath(focusPen, focusPath);
+                    }
+                }
+            }
+
+            using (SolidBrush toggleBrush = new SolidBrush(ToggleColor))
+            {
+                g.FillEllipse(toggleBrush, togglePosition, padding, diameter, diameter);
+            }
+        }
+
+        private GraphicsPath GetFigurePath(Rectangle rect)
+        {
+            GraphicsPath path = new GraphicsPath();
+            int arc = rect.Height;
+
+            path.StartFigure();
+            path.AddArc(rect.X, rect.Y, arc, arc, 90, 180);
+            path.AddArc(rect.Right - arc, rect.Y, arc, arc, 270, 180);
+            path.CloseFigure();
+
+            return path;
+        }
     }
 }
