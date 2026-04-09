@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SisUvex.Usuarios
+namespace SisUvex.Usuarios.Role
 {
-    internal class AccessLevel
+    internal class ClsUserRole
     {
     }
 }
