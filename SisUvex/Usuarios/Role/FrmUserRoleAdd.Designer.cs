@@ -401,5 +401,6 @@
         private Label label10;
         private Panel pnlTgbOwnFilter;
         private Label label11;
+        private CheckBox checkBox1;
     }
 }
