@@ -90,6 +90,7 @@
             btnAccept.TabIndex = 94;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
             // 
             // btnCancel
             // 
@@ -100,6 +101,7 @@
             btnCancel.TabIndex = 95;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // txbId
             // 
@@ -145,7 +147,7 @@
             // 
             txbName.Font = new Font("Segoe UI", 12F);
             txbName.Location = new Point(14, 74);
-            txbName.MaxLength = 30;
+            txbName.MaxLength = 50;
             txbName.Name = "txbName";
             txbName.Size = new Size(397, 29);
             txbName.TabIndex = 89;
@@ -363,6 +365,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmUserRoleAdd";
             Text = "Añadir rol";
+            Load += FrmUserRoleAdd_Load;
             ResumeLayout(false);
             PerformLayout();
         }

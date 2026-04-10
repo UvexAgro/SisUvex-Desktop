@@ -1,5 +1,4 @@
-﻿using SisUvex.Catalogos.Metods.Querys;
-using SisUvex.Catalogos.Metods.Values;
+﻿using SisUvex.Usuarios;
 using System.Data.SqlClient;
 using System.Data;
 
@@ -21,11 +20,21 @@ namespace SisUvex.Usuarios.Role
         public int ownFilter { get; set; }
         public static string GetNextId()
         {
-            object result = ClsQuerysDB.GetData("SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST([id_role] AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM [Conf_Role]");
+            string result = ClsQuerysUsuarios.GetData("SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST([id_role] AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM [Conf_Role]");
 
-            return result?.ToString() ?? "01";
+            return string.IsNullOrEmpty(result) ? "01" : result;
         }
         /* ========================= GET ========================= */
+        private static int CharFlagToInt(object? value)
+        {
+            if (value == null || value == DBNull.Value)
+                return 0;
+            string? s = value.ToString();
+            if (string.IsNullOrEmpty(s))
+                return 0;
+            return s == "1" ? 1 : 0;
+        }
+
         public void GetRole(string? idRole)
         {
             if (idRole == null)
@@ -34,7 +43,7 @@ namespace SisUvex.Usuarios.Role
             SQLControl sql = new SQLControl();
             try
             {
-                sql.OpenConectionWrite();
+                sql.OpenConectionRead();
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Conf_Role WHERE id_role = @idRole", sql.cnn);
                 cmd.Parameters.AddWithValue("@idRole", idRole);
 
@@ -44,15 +53,15 @@ namespace SisUvex.Usuarios.Role
                     this.idRole = dr["id_role"].ToString();
                     roleName = dr["v_roleName"].ToString();
 
-                    active = Convert.ToInt32(dr["c_active"]);
-                    printLabels = Convert.ToInt32(dr["c_printLabels"]);
-                    viewCatalogs = Convert.ToInt32(dr["c_viewCatalogs"]);
-                    editCatalogs = Convert.ToInt32(dr["c_editCatalogs"]);
-                    createRecords = Convert.ToInt32(dr["c_createRecords"]);
-                    productionReports = Convert.ToInt32(dr["c_productionReports"]);
-                    costReports = Convert.ToInt32(dr["c_costReports"]);
-                    audit = Convert.ToInt32(dr["c_audit"]);
-                    ownFilter = Convert.ToInt32(dr["c_ownFilter"]);
+                    active = CharFlagToInt(dr["c_active"]);
+                    printLabels = CharFlagToInt(dr["c_printLabels"]);
+                    viewCatalogs = CharFlagToInt(dr["c_viewCatalogs"]);
+                    editCatalogs = CharFlagToInt(dr["c_editCatalogs"]);
+                    createRecords = CharFlagToInt(dr["c_createRecords"]);
+                    productionReports = CharFlagToInt(dr["c_productionReports"]);
+                    costReports = CharFlagToInt(dr["c_costReports"]);
+                    audit = CharFlagToInt(dr["c_audit"]);
+                    ownFilter = CharFlagToInt(dr["c_ownFilter"]);
                 }
             }
             catch (Exception ex)
@@ -61,7 +70,7 @@ namespace SisUvex.Usuarios.Role
             }
             finally
             {
-                sql.CloseConectionWrite();
+                sql.CloseConectionRead();
             }
         }
 
@@ -71,22 +80,22 @@ namespace SisUvex.Usuarios.Role
             SQLControl sql = new SQLControl();
             try
             {
-                sql.OpenConectionWrite();
+                sql.OpenConectionRead();
 
                 SqlCommand cmd = new SqlCommand("sp_ConfRoleExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@action", "ADD");
                 cmd.Parameters.AddWithValue("@v_roleName", roleName);
-                cmd.Parameters.AddWithValue("@c_active", active);
-                cmd.Parameters.AddWithValue("@c_printLabels", printLabels);
-                cmd.Parameters.AddWithValue("@c_viewCatalogs", viewCatalogs);
-                cmd.Parameters.AddWithValue("@c_editCatalogs", editCatalogs);
-                cmd.Parameters.AddWithValue("@c_createRecords", createRecords);
-                cmd.Parameters.AddWithValue("@c_productionReports", productionReports);
-                cmd.Parameters.AddWithValue("@c_costReports", costReports);
-                cmd.Parameters.AddWithValue("@c_audit", audit);
-                cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter);
+                cmd.Parameters.AddWithValue("@c_active", active == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_printLabels", printLabels == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_viewCatalogs", viewCatalogs == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_editCatalogs", editCatalogs == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_createRecords", createRecords == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_productionReports", productionReports == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_costReports", costReports == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_audit", audit == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -105,7 +114,7 @@ namespace SisUvex.Usuarios.Role
             }
             finally
             {
-                sql.CloseConectionWrite();
+                sql.CloseConectionRead();
             }
         }
 
@@ -115,7 +124,7 @@ namespace SisUvex.Usuarios.Role
             SQLControl sql = new SQLControl();
             try
             {
-                sql.OpenConectionWrite();
+                sql.OpenConectionRead();
 
                 SqlCommand cmd = new SqlCommand("sp_ConfRoleExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -123,15 +132,15 @@ namespace SisUvex.Usuarios.Role
                 cmd.Parameters.AddWithValue("@action", "MODIFY");
                 cmd.Parameters.AddWithValue("@id_role", idRole);
                 cmd.Parameters.AddWithValue("@v_roleName", roleName);
-                cmd.Parameters.AddWithValue("@c_active", active);
-                cmd.Parameters.AddWithValue("@c_printLabels", printLabels);
-                cmd.Parameters.AddWithValue("@c_viewCatalogs", viewCatalogs);
-                cmd.Parameters.AddWithValue("@c_editCatalogs", editCatalogs);
-                cmd.Parameters.AddWithValue("@c_createRecords", createRecords);
-                cmd.Parameters.AddWithValue("@c_productionReports", productionReports);
-                cmd.Parameters.AddWithValue("@c_costReports", costReports);
-                cmd.Parameters.AddWithValue("@c_audit", audit);
-                cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter);
+                cmd.Parameters.AddWithValue("@c_active", active == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_printLabels", printLabels == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_viewCatalogs", viewCatalogs == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_editCatalogs", editCatalogs == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_createRecords", createRecords == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_productionReports", productionReports == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_costReports", costReports == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_audit", audit == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -150,7 +159,7 @@ namespace SisUvex.Usuarios.Role
             }
             finally
             {
-                sql.CloseConectionWrite();
+                sql.CloseConectionRead();
             }
         }
 
@@ -160,7 +169,7 @@ namespace SisUvex.Usuarios.Role
             SQLControl sql = new SQLControl();
             try
             {
-                sql.OpenConectionWrite();
+                sql.OpenConectionRead();
 
                 SqlCommand cmd = new SqlCommand("sp_ConfRoleExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -180,7 +189,7 @@ namespace SisUvex.Usuarios.Role
             }
             finally
             {
-                sql.CloseConectionWrite();
+                sql.CloseConectionRead();
             }
         }
     }

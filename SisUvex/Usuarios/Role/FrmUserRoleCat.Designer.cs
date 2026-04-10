@@ -50,6 +50,7 @@
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
+            chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
             // 
             // dgvCatalog
             // 
@@ -88,6 +89,7 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 397);
             dgvCatalog.TabIndex = 16;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
             // 
@@ -97,6 +99,7 @@
             btnRemove.TabIndex = 14;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // btnRecover
             // 
@@ -106,6 +109,7 @@
             btnRecover.TabIndex = 15;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
+            btnRecover.Click += btnRecover_Click;
             // 
             // btnModify
             // 
@@ -115,6 +119,7 @@
             btnModify.TabIndex = 12;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -124,6 +129,7 @@
             btnAdd.TabIndex = 11;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // FrmUserRoleCat
             // 
@@ -139,6 +145,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmUserRoleCat";
             Text = "Catálogo de roles de usuario";
+            Load += FrmUserRoleCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
         }

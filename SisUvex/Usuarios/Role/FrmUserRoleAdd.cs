@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using SisUvex.Cuadro_de_herramientas;
+﻿using SisUvex.Cuadro_de_herramientas;
 
 namespace SisUvex.Usuarios.Role
 {
-    public partial class FrmUserRoleAdd : Form
+    internal partial class FrmUserRoleAdd : Form
     {
+        public ClsUserRole cls = null!;
         public ToggleButton tgbPrintLabels = new();
         public ToggleButton tgbViewCatalogs = new();
         public ToggleButton tgbEditCatalogs = new();
@@ -26,9 +18,6 @@ namespace SisUvex.Usuarios.Role
         {
             InitializeComponent();
 
-            tgbAudit.Enabled = false;
-            tgbCostReports.Enabled = false;
-
             AddToggleButtonToPanel(tgbPrintLabels, pnlChbPrintLabels);
             AddToggleButtonToPanel(tgbViewCatalogs, pnlChbViewCatalogs);
             AddToggleButtonToPanel(tgbEditCatalogs, pnlChbEditCatalogs);
@@ -41,8 +30,25 @@ namespace SisUvex.Usuarios.Role
 
         private void AddToggleButtonToPanel(ToggleButton toggleButton, Panel panel)
         {
-            toggleButton.Dock = DockStyle.Fill; // Hace que el ToggleButton ocupe todo el espacio del panel
+            toggleButton.Dock = DockStyle.Fill;
             panel.Controls.Add(toggleButton);
+        }
+
+        private void FrmUserRoleAdd_Load(object sender, EventArgs e)
+        {
+            cls ??= new();
+            cls._frmAdd ??= this;
+            cls.BeginFormAdd();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            cls.BtnAccept();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
