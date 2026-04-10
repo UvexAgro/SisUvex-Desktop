@@ -36,6 +36,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			clsA.CargarHorasInicial();
 
 			isLoaded = true;
+			
 		}
 
 		private void cboFinal_SelectedIndexChanged(object sender, EventArgs e)
@@ -76,6 +77,11 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		private void btnExcel_Click(object sender, EventArgs e)
 		{
 			cls.ExportarDGVHorasExcel(dgvHoras);
+		}
+
+		private void btnEliminar_Click(object sender, EventArgs e)
+		{
+			clsA.DeleteProcedure();
 		}
 	}
 }

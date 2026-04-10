@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPackingHours));
 			dgvHoras = new DataGridView();
 			lbencabezado = new Label();
@@ -43,6 +43,7 @@
 			btnModify = new Button();
 			label1 = new Label();
 			btnExcel = new Button();
+			btnEliminar = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvHoras).BeginInit();
 			SuspendLayout();
 			// 
@@ -56,14 +57,14 @@
 			dgvHoras.BackgroundColor = SystemColors.ControlLightLight;
 			dgvHoras.BorderStyle = BorderStyle.Fixed3D;
 			dgvHoras.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvHoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = SystemColors.Control;
+			dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+			dgvHoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			dgvHoras.ColumnHeadersHeight = 58;
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvHoras.EnableHeadersVisualStyles = false;
@@ -72,14 +73,14 @@
 			dgvHoras.Location = new Point(40, 186);
 			dgvHoras.Name = "dgvHoras";
 			dgvHoras.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvHoras.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = SystemColors.Control;
+			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+			dgvHoras.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			dgvHoras.RowHeadersVisible = false;
 			dgvHoras.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvHoras.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -157,9 +158,9 @@
 			// 
 			// btnAdd
 			// 
-			btnAdd.Location = new Point(752, 145);
+			btnAdd.Location = new Point(737, 147);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(117, 26);
+			btnAdd.Size = new Size(81, 26);
 			btnAdd.TabIndex = 37;
 			btnAdd.Text = "Añadir";
 			btnAdd.UseVisualStyleBackColor = true;
@@ -167,9 +168,9 @@
 			// 
 			// btnModify
 			// 
-			btnModify.Location = new Point(875, 143);
+			btnModify.Location = new Point(824, 145);
 			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(117, 28);
+			btnModify.Size = new Size(81, 28);
 			btnModify.TabIndex = 38;
 			btnModify.Text = "Modificar";
 			btnModify.UseVisualStyleBackColor = true;
@@ -179,7 +180,7 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(781, 121);
+			label1.Location = new Point(771, 125);
 			label1.Name = "label1";
 			label1.Size = new Size(178, 17);
 			label1.TabIndex = 39;
@@ -199,11 +200,22 @@
 			btnExcel.UseVisualStyleBackColor = true;
 			btnExcel.Click += btnExcel_Click;
 			// 
+			// btnEliminar
+			// 
+			btnEliminar.Location = new Point(911, 145);
+			btnEliminar.Name = "btnEliminar";
+			btnEliminar.Size = new Size(81, 28);
+			btnEliminar.TabIndex = 118;
+			btnEliminar.Text = "Eliminar";
+			btnEliminar.UseVisualStyleBackColor = true;
+			btnEliminar.Click += btnEliminar_Click;
+			// 
 			// FrmPackingHours
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1020, 813);
+			Controls.Add(btnEliminar);
 			Controls.Add(btnExcel);
 			Controls.Add(label1);
 			Controls.Add(btnModify);
@@ -239,5 +251,6 @@
 		private Button btnModify;
 		private Label label1;
 		public Button btnExcel;
+		private Button btnEliminar;
 	}
 }

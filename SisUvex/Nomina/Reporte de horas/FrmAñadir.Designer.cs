@@ -43,6 +43,8 @@
 			lblBeginNormal = new Label();
 			btnAcept = new Button();
 			btnCancel = new Button();
+			clbCuadrilla = new CheckedListBox();
+			lblCuadrilla = new Label();
 			gpbNormal.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)nudOvertime).BeginInit();
 			SuspendLayout();
@@ -176,7 +178,7 @@
 			// 
 			// btnAcept
 			// 
-			btnAcept.Location = new Point(126, 413);
+			btnAcept.Location = new Point(151, 597);
 			btnAcept.Name = "btnAcept";
 			btnAcept.Size = new Size(75, 23);
 			btnAcept.TabIndex = 152;
@@ -186,7 +188,7 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new Point(217, 413);
+			btnCancel.Location = new Point(232, 597);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new Size(75, 23);
 			btnCancel.TabIndex = 153;
@@ -194,11 +196,31 @@
 			btnCancel.UseVisualStyleBackColor = true;
 			btnCancel.Click += btnCancel_Click;
 			// 
+			// clbCuadrilla
+			// 
+			clbCuadrilla.FormattingEnabled = true;
+			clbCuadrilla.Location = new Point(12, 425);
+			clbCuadrilla.Name = "clbCuadrilla";
+			clbCuadrilla.Size = new Size(295, 166);
+			clbCuadrilla.TabIndex = 154;
+			// 
+			// lblCuadrilla
+			// 
+			lblCuadrilla.AutoSize = true;
+			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCuadrilla.Location = new Point(12, 403);
+			lblCuadrilla.Name = "lblCuadrilla";
+			lblCuadrilla.Size = new Size(66, 17);
+			lblCuadrilla.TabIndex = 155;
+			lblCuadrilla.Text = "Cuadrillas";
+			// 
 			// FrmAñadir
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(315, 444);
+			ClientSize = new Size(317, 632);
+			Controls.Add(lblCuadrilla);
+			Controls.Add(clbCuadrilla);
 			Controls.Add(btnCancel);
 			Controls.Add(btnAcept);
 			Controls.Add(gpbNormal);
@@ -232,5 +254,7 @@
 		private Label lblBeginNormal;
 		private Button btnAcept;
 		private Button btnCancel;
+		public CheckedListBox clbCuadrilla;
+		private Label lblCuadrilla;
 	}
 }

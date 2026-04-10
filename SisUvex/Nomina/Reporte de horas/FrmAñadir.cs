@@ -29,19 +29,34 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			dtpBeginNormal.Format = DateTimePickerFormat.Custom;
 			dtpBeginNormal.CustomFormat = "dd/MM/yyyy HH:mm:ss";
-			dtpBeginNormal.ShowUpDown = true;
 
 			dtpEndNormal.Format = DateTimePickerFormat.Custom;
 			dtpEndNormal.CustomFormat = "dd/MM/yyyy HH:mm:ss";
-			dtpEndNormal.ShowUpDown = true;
 
 			dtpEndExtra.Format = DateTimePickerFormat.Custom;
 			dtpEndExtra.CustomFormat = "dd/MM/yyyy HH:mm:ss";
-			dtpEndExtra.ShowUpDown = true;
+			clsA.CargarCuadrillasCheckList();
 		}
 
 		private void btnAcept_Click(object sender, EventArgs e)
 		{
+		
+			//  Validar si cruza de día
+			if (dtpEndExtra.Value.Date > dtpBeginNormal.Value.Date)
+			{
+				DialogResult res = MessageBox.Show(
+					"El horario de fin extra pasa al siguiente día.\n\n¿Desea continuar?",
+					"Turno nocturno",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question
+				);
+
+				if (res == DialogResult.No)
+				{
+					return; 
+				}
+			}
+
 			if (IsAddModify)
 			{
 				clsA.AddProcedure();
@@ -58,25 +73,22 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			this.Close();
 		}
 
-		private void dtpDay_ValueChanged(object sender, EventArgs e)
-		{
-			clsA.ActualizarFecha(dtpBeginNormal);
-			clsA.ActualizarFecha(dtpEndNormal);
-			clsA.ActualizarFecha(dtpEndExtra);
-		}
-
 		private void dtpBeginNormal_ValueChanged(object sender, EventArgs e)
 		{
-			if (dtpEndNormal.Value < dtpBeginNormal.Value)
-				dtpEndNormal.Value = dtpBeginNormal.Value;
+			clsA.AjustarTurno(dtpBeginNormal, dtpEndNormal);
 		}
 
 		private void dtpEndNormal_ValueChanged(object sender, EventArgs e)
 		{
-			if (dtpEndExtra.Value < dtpEndNormal.Value)
-				dtpEndExtra.Value = dtpEndNormal.Value;
+			clsA.AjustarTurno(dtpEndNormal, dtpEndExtra);
 		}
 
+		private void dtpDay_ValueChanged(object sender, EventArgs e)
+		{
+			dtpBeginNormal.Value = dtpDay.Value;
+			dtpEndNormal.Value = dtpBeginNormal.Value;
+			dtpEndExtra.Value = dtpEndNormal.Value;
+		}
 	}
-	
+
 }
