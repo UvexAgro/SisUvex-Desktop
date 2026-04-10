@@ -181,16 +181,16 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				string formato = "dd/MM/yyyy HH:mm";
 
 				if (frmPacki.dgvHoras.Columns.Contains("InicioNormal"))
-					frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = formato;
+					frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
 				if (frmPacki.dgvHoras.Columns.Contains("FinNormal"))
-					frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = formato;
+					frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
 				if (frmPacki.dgvHoras.Columns.Contains("InicioExtra"))
-					frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = formato;
+					frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
 				if (frmPacki.dgvHoras.Columns.Contains("FinExtra"))
-					frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = formato;
+					frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
 				if (frmPacki.dgvHoras.Columns.Contains("Cuadrilla"))
 					frmPacki.dgvHoras.Columns["Cuadrilla"].HeaderText = "Cuadrilla";
