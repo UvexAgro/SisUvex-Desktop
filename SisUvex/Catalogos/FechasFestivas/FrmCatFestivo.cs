@@ -30,6 +30,7 @@ namespace SisUvex.Catalogos.FechasFestivas
 			cls ??= new();
 			cls.frmCat = this;
 			cls.BeginFormCat();
+			cls.EstiloGrid();
 		}
 
 		private void btnAdd_Click(object sender, EventArgs e)

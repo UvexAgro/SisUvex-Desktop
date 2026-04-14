@@ -28,8 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCatFestivo));
 			btnAdd = new Button();
 			btnModify = new Button();
 			btnRemove = new Button();
@@ -71,34 +72,34 @@
 			// 
 			dgvCatalog.AllowUserToAddRows = false;
 			dgvCatalog.AllowUserToDeleteRows = false;
-			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			dgvCatalog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvCatalog.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
 			dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
 			dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.BackColor = SystemColors.Control;
-			dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
 			dgvCatalog.Location = new Point(12, 51);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
-			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle6.BackColor = SystemColors.Control;
-			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -114,6 +115,7 @@
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmCatFestivo";
 			Text = "Catalago Fechas Festivas";
 			Load += FrmCatFestivo_Load;

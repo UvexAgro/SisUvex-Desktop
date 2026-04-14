@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDiasFestivos));
 			lblAdd = new Label();
 			lblConcepto = new Label();
 			txbDescripccion = new TextBox();
@@ -36,7 +37,7 @@
 			btnAccept = new Button();
 			btnCancel = new Button();
 			lblFecha = new Label();
-			txbFecha = new TextBox();
+			dtpDay = new DateTimePicker();
 			SuspendLayout();
 			// 
 			// lblAdd
@@ -118,21 +119,19 @@
 			lblFecha.TabIndex = 103;
 			lblFecha.Text = "Fecha:";
 			// 
-			// txbFecha
+			// dtpDay
 			// 
-			txbFecha.Font = new Font("Segoe UI", 12F);
-			txbFecha.Location = new Point(71, 101);
-			txbFecha.MaxLength = 15;
-			txbFecha.Name = "txbFecha";
-			txbFecha.Size = new Size(193, 29);
-			txbFecha.TabIndex = 104;
+			dtpDay.Location = new Point(71, 104);
+			dtpDay.Name = "dtpDay";
+			dtpDay.Size = new Size(216, 23);
+			dtpDay.TabIndex = 150;
 			// 
 			// FrmDiasFestivos
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(519, 271);
-			Controls.Add(txbFecha);
+			Controls.Add(dtpDay);
 			Controls.Add(lblFecha);
 			Controls.Add(btnCancel);
 			Controls.Add(btnAccept);
@@ -141,8 +140,9 @@
 			Controls.Add(txbDescripccion);
 			Controls.Add(lblConcepto);
 			Controls.Add(lblAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmDiasFestivos";
-			Text = "FrmDiasFestivos";
+			Text = "Dias Festivos";
 			Load += FrmDiasFestivos_Load;
 			ResumeLayout(false);
 			PerformLayout();
@@ -158,6 +158,6 @@
 		private Button btnAccept;
 		private Button btnCancel;
 		private Label lblFecha;
-		public TextBox txbFecha;
+		public DateTimePicker dtpDay;
 	}
 }

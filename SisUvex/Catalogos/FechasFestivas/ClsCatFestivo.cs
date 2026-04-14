@@ -85,7 +85,7 @@ namespace SisUvex.Catalogos.FechasFestivas
 			controlList = new ClsControls();
 
 			controlList.ChangeHeadMessage("Para guardar la fecha  debe:\n");
-			controlList.Add(frmDia.txbFecha, "Ingresa una Fecha");
+			controlList.Add(frmDia.dtpDay, "Ingresa una Fecha");
 		}
 		private void LoadControlsModify()
 		{
@@ -97,9 +97,8 @@ namespace SisUvex.Catalogos.FechasFestivas
 		
 			frmDia.txbId.Text = dt.Rows[0]["id_festivo"].ToString();
 
-			
-			frmDia.txbFecha.Text = Convert.ToDateTime(dt.Rows[0]["d_fecha"])
-				.ToString("dd/MM/yyyy");
+
+			frmDia.dtpDay.Value = Convert.ToDateTime(dt.Rows[0]["d_fecha"]);
 
 			frmDia.txbDescripccion.Text = dt.Rows[0]["v_descripcion"].ToString();
 
@@ -108,24 +107,12 @@ namespace SisUvex.Catalogos.FechasFestivas
 		{
 			entity = new ClsDiasFestivos();
 
-			entity.id_festivo = idAddModify;
+			entity.id_festivo = frmDia.txbId.Text;
 			entity.v_descripcion = frmDia.txbDescripccion.Text;
 
-			try
-			{
-				entity.d_fecha = DateTime.ParseExact(
-					frmDia.txbFecha.Text.Trim(),
-					"dd/MM/yyyy",
-					CultureInfo.InvariantCulture
-				);
-			}
-			catch
-			{
-				MessageBox.Show("La fecha no tiene el formato correcto (dd/MM/yyyy)");
-				return null;
-			}
+			entity.d_fecha = frmDia.dtpDay.Value;
 
-			return entity; 
+			return entity;
 		}
 		public void AddProcedure()
 		{
@@ -136,6 +123,7 @@ namespace SisUvex.Catalogos.FechasFestivas
 			IsAddUpdate = result.Item1;
 			idAddModify = data.id_festivo;
 		}
+		
 		public void ModifyProcedure()
 		{
 			var data = SetEntity();
@@ -208,7 +196,8 @@ namespace SisUvex.Catalogos.FechasFestivas
 			if (result)
 			{
 				MessageBox.Show("Fecha eliminada correctamente");
-				dgv.DeleteRowInDGV(id);   
+				dgv.DeleteRowInDGV(id);
+				RefreshGrid();
 			}
 			else
 			{
@@ -229,8 +218,50 @@ namespace SisUvex.Catalogos.FechasFestivas
 		}
 		public void RefreshGrid()
 		{
+			frmCat.dgvCatalog.DataSource = null;
+
 			dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog);
-			dgv = new ClsDGVCatalog(frmCat.dgvCatalog, dtCatalog);
+
+			
+			frmCat.dgvCatalog.DataSource = dtCatalog;
+		}
+		
+		public void EstiloGrid()
+		{
+			var dgv = frmCat.dgvCatalog;
+
+			//  Líneas
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+			dgv.GridColor = System.Drawing.Color.LightGray;
+
+			dgv.EnableHeadersVisualStyles = false;
+
+			//  Encabezado
+			dgv.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(210, 230, 250);
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+			dgv.ColumnHeadersHeight = 35;
+
+			//  EVITA QUE SE PINTE AL SELECCIONAR
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgv.ColumnHeadersDefaultCellStyle.BackColor;
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgv.ColumnHeadersDefaultCellStyle.ForeColor;
+
+			//  Filas
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+			dgv.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 120, 215);
+			dgv.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+			//  Alternar filas
+			dgv.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+
+			//  Ajustes
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			dgv.RowTemplate.Height = 30;
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
+			dgv.AllowUserToAddRows = false;
 		}
 	}
 }
