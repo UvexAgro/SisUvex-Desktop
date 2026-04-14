@@ -142,7 +142,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			string actividadFmt = ClsValues.FormatZeros(actividad, "0000");
 			string bandaFmt = string.IsNullOrEmpty(banda) ? "" : banda.PadLeft(3, '0');
 
-			// 🔎 obtener nombre
+			//  obtener nombre
 			string nombre = ObtenerNombreEmpleado(codigoFmt);
 
 			if (string.IsNullOrEmpty(nombre))
@@ -151,13 +151,15 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				return;
 			}
 
-			// 🔎 texto del combo (YA incluye código + nombre)
+			//  texto del combo (YA incluye código + nombre)
 			string actividadTexto = frm.cboActividad.Text;
 
-			// 🚫 evitar duplicados
+			//  evitar duplicados
 			foreach (DataGridViewRow row in frm.dgvAsistencia.Rows)
 			{
-				string codigoExistente = row.Cells["idEmpleado"].Tag?.ToString();
+				if (row.IsNewRow) continue;
+
+				string codigoExistente = row.Cells["EMPLEADO"].Tag?.ToString() ?? "";
 
 				if (codigoExistente == codigoFmt)
 				{
@@ -166,7 +168,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				}
 			}
 
-			// 👇 lo que se muestra
+			//  lo que se muestra
 			string empleadoTexto = codigoFmt + " - " + nombre;
 			string actividadMostrar = actividadTexto; // 👈 SIN duplicar código
 
@@ -176,10 +178,10 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				bandaFmt
 			);
 
-			// 🔥 datos reales (para SQL)
-			frm.dgvAsistencia.Rows[rowIndex].Cells["idEmpleado"].Tag = codigoFmt;
-			frm.dgvAsistencia.Rows[rowIndex].Cells["idActividad"].Tag = actividadFmt;
-			frm.dgvAsistencia.Rows[rowIndex].Cells["idBanda"].Tag = bandaFmt;
+			//  datos reales (para SQL)
+			frm.dgvAsistencia.Rows[rowIndex].Cells["EMPLEADO"].Tag = codigoFmt;
+			frm.dgvAsistencia.Rows[rowIndex].Cells["ACTIVIDAD"].Tag = actividadFmt;
+			frm.dgvAsistencia.Rows[rowIndex].Cells["BANDA"].Tag = bandaFmt;
 
 			// 🧹 limpiar
 			frm.txbCodigo.Clear();
@@ -193,14 +195,15 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		{
 			frm.dgvAsistencia.Columns.Clear();
 
-			frm.dgvAsistencia.Columns.Add("idEmpleado", "Codigo");
-			frm.dgvAsistencia.Columns.Add("idActividad", "Actividad");
-			frm.dgvAsistencia.Columns.Add("idBanda", "Banda");
+			//  CREAR COLUMNAS
+			frm.dgvAsistencia.Columns.Add("EMPLEADO", "Codigo");
+			frm.dgvAsistencia.Columns.Add("ACTIVIDAD", "Actividad");
+			frm.dgvAsistencia.Columns.Add("BANDA", "Banda");
 
 			// Opcional (mejor vista)
-			frm.dgvAsistencia.Columns["idEmpleado"].Width = 250;
-			frm.dgvAsistencia.Columns["idActividad"].Width = 200;
-			frm.dgvAsistencia.Columns["idBanda"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			frm.dgvAsistencia.Columns["EMPLEADO"].Width = 250;
+			frm.dgvAsistencia.Columns["ACTIVIDAD"].Width = 200;
+			frm.dgvAsistencia.Columns["BANDA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 		}
 		public string ObtenerNombreEmpleado(string idEmpleado)
 		{
@@ -222,7 +225,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			dgv.GridColor = Color.LightGray;
 			dgv.RowHeadersVisible = false;
 
-			// 🔹 encabezado
+			//  encabezado
 			dgv.EnableHeadersVisualStyles = false;
 			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
@@ -231,16 +234,16 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 			dgv.ColumnHeadersHeight = 35;
 
-			// ❌ quitar sombreado encabezado
+			//  quitar sombreado encabezado
 			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgv.ColumnHeadersDefaultCellStyle.BackColor;
 			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgv.ColumnHeadersDefaultCellStyle.ForeColor;
 
-			// 🔹 celdas
+			//  celdas
 			dgv.DefaultCellStyle.BackColor = Color.White;
 			dgv.DefaultCellStyle.ForeColor = Color.Black;
 			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
 
-			// ❌ quitar sombreado selección
+			//  quitar sombreado selección
 			dgv.DefaultCellStyle.SelectionBackColor = dgv.DefaultCellStyle.BackColor;
 			dgv.DefaultCellStyle.SelectionForeColor = dgv.DefaultCellStyle.ForeColor;
 
@@ -248,6 +251,91 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgv.MultiSelect = false;
 			dgv.AllowUserToAddRows = false;
+		}
+		public void ConvertirIdsANombres()
+		{
+			List<string> empleados = new List<string>();
+			List<string> actividades = new List<string>();
+
+			// Obtener IDs del grid
+			foreach (DataGridViewRow row in frm.dgvAsistencia.Rows)
+			{
+				if (row.IsNewRow) continue;
+
+				var emp = row.Cells["EMPLEADO"].Value?.ToString();
+				var act = row.Cells["ACTIVIDAD"].Value?.ToString();
+
+				if (!string.IsNullOrEmpty(emp))
+					empleados.Add(emp);
+
+				if (!string.IsNullOrEmpty(act))
+					actividades.Add(act);
+			}
+
+			empleados = empleados.Distinct().ToList();
+			actividades = actividades.Distinct().ToList();
+
+			if (empleados.Count == 0 && actividades.Count == 0)
+				return;
+
+			// QUERIES CON TUS TABLAS REALES
+			string queryEmpleados = $@"
+			SELECT id_employee,
+				    v_lastNamePat + ' ' + v_lastNameMat + ' ' + v_name AS Nombre
+			FROM Nom_Employees
+			WHERE id_employee IN ({string.Join(",", empleados.Select(x => $"'{x}'"))})";
+
+					string queryActividades = $@"
+			SELECT c_codigo_tab, v_descripcion_tab
+			FROM Nom_Tabulador
+			WHERE c_codigo_tab IN ({string.Join(",", actividades.Select(x => $"'{x}'"))})";
+
+			Dictionary<string, string> dicEmpleados = new Dictionary<string, string>();
+			Dictionary<string, string> dicActividades = new Dictionary<string, string>();
+
+		
+			sql.OpenConectionWrite();
+
+			//  EMPLEADOS
+			using (SqlCommand cmd = new SqlCommand(queryEmpleados, sql.cnn))
+			{
+				using (SqlDataReader dr = cmd.ExecuteReader())
+				{
+					while (dr.Read())
+					{
+						dicEmpleados[dr["id_employee"].ToString()] = dr["Nombre"].ToString();
+					}
+				}
+			}
+
+			//  ACTIVIDADES
+			using (SqlCommand cmd = new SqlCommand(queryActividades, sql.cnn))
+			{
+				using (SqlDataReader dr = cmd.ExecuteReader())
+				{
+					while (dr.Read())
+					{
+						dicActividades[dr["c_codigo_tab"].ToString()] = dr["v_descripcion_tab"].ToString();
+					}
+				}
+			}
+
+			sql.CloseConectionWrite(); // si tienes método
+
+			//  REEMPLAZAR EN EL GRID (ID + NOMBRE)
+			foreach (DataGridViewRow row in frm.dgvAsistencia.Rows)
+			{
+				if (row.IsNewRow) continue;
+
+				string idEmpleado = row.Cells["EMPLEADO"].Value?.ToString();
+				string idActividad = row.Cells["ACTIVIDAD"].Value?.ToString();
+
+				if (dicEmpleados.ContainsKey(idEmpleado))
+					row.Cells["EMPLEADO"].Value = $"{idEmpleado} - {dicEmpleados[idEmpleado]}";
+
+				if (dicActividades.ContainsKey(idActividad))
+					row.Cells["ACTIVIDAD"].Value = $"{idActividad} - {dicActividades[idActividad]}";
+			}
 		}
 	}
 }
