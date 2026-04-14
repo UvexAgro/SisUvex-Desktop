@@ -467,7 +467,7 @@ namespace SisUvex
 
 		private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			Nomina.Asistencia_de_empaque.FrmAsistenciaEmpaqueNuevo cat = new();
+			Nomina.Registro_de_Asistencia.FrmRegistroA cat = new();
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat, 3);
 		}
