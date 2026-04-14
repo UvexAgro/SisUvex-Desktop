@@ -18,6 +18,7 @@ using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion.Parameters;
 using ZXing;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using System.Drawing;
 namespace SisUvex.Nomina.Nom_semAutomatizada
 
 {
@@ -26,7 +27,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public FrmSemiAutomatedPayroll frm;
 		ClsControls controlList;
 		DataTable dtNomina;
-
+		public string TipoNomina = "E";
 		public void BeginForm()
 		{
 			SetTxbReferencia();
@@ -63,11 +64,19 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			string idLot = frm.cboLote.GetColumnValue(Column.id).ToString();
 			string horasTrabajadas = EParameters.GetValue("016", "01");//Parametro Duracion de la jornada laboral
 
+			DataTable dtNomina = (DataTable)frm.dgvEmployee.DataSource;
+
+
+			if (dtNomina == null || dtNomina.Rows.Count == 0)
+			{
+				MessageBox.Show("No hay datos para generar.");
+				return null;
+			}
 
 			DataTable dtCsv = new();
 			dtCsv.Columns.Add("Fecha", typeof(string));   //0
 			dtCsv.Columns.Add("Referencia", typeof(string));
-			dtCsv.Columns.Add("IdEmploye", typeof(string));     //1
+			dtCsv.Columns.Add("Codigo", typeof(string));     //1
 			dtCsv.Columns.Add("Sueldo", typeof(string));    //6
 			dtCsv.Columns.Add("Lote", typeof(string));
 			dtCsv.Columns.Add("Actividad", typeof(string));    //3
@@ -198,7 +207,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (sfd.FileName == null)
 				return;
 
-			
+
 			if (!File.Exists(sfd.FileName))
 			{
 				MessageBox.Show($"El Archivo no se pudo Guardar {sfd.FileName}");
@@ -225,16 +234,64 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 
 
+		//private string GetQueryNom()
+		//{
+		//	string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
+		//	string query = $@"EXEC sp_ReporteNomina '{fecha}'";
+
+		//	return query;
+		//}
 		private string GetQueryNom()
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
-			string query = $@"EXEC sp_ReporteNomina '{fecha}'";
 
-			return query;
+			//  Validar selección
+			if (!frm.rbtEsparrago.Checked && !frm.rbtUva.Checked)
+			{
+				MessageBox.Show("Seleccione un tipo de nómina.");
+				return "";
+			}
+
+			//  ESPÁRRAGO
+			if (frm.rbtEsparrago.Checked)
+			{
+				TipoNomina = "E"; //  guardar tipo
+				return $"EXEC dbo.sp_ReporteNomina '{fecha}'";
+			}
+
+			//  UVA
+			if (frm.rbtUva.Checked)
+			{
+				TipoNomina = "U"; //  guardar tipo
+				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}'";
+			}
+
+			return "";
 		}
+		//public void BtnCargarDatos()
+		//{
+		//	dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
+
+		//	if (dtNomina.Rows.Count == 0)
+		//	{
+		//		MessageBox.Show("No existen registros para la fecha seleccionada.",
+		//						"Sistema",
+		//						MessageBoxButtons.OK,
+		//						MessageBoxIcon.Information);
+		//		return;
+		//	}
+
+		//	frm.dgvEmployee.DataSource = dtNomina;
+		//}
+
 		public void BtnCargarDatos()
 		{
-			dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
+			string query = GetQueryNom();
+
+			if (string.IsNullOrEmpty(query))
+				return;
+
+			dtNomina = ClsQuerysDB.GetDataTable(query);
 
 			if (dtNomina.Rows.Count == 0)
 			{
@@ -246,8 +303,19 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
-		}
+			if (TipoNomina == "E") // 🌵
+			{
+				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
+			}
+			else // 🍇
+			{
+				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
+			}
 
+			// 🔥 aplicar estilo al grid
+			ActivarEstiloGrid(frm.dgvEmployee);
+			ActivarEstiloGrid(frm.dgvEmployee);
+		}
 
 		public void EjecutarCalculoProduccion()
 		{
@@ -415,7 +483,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		private void dgvFiltrarBanda()
 		{
 			if (dtNomina == null || dtNomina.Rows.Count < 1 || !dtNomina.Columns.Contains("LineaProduccion"))
-				{ return; }
+			{ return; }
 
 			string idBanda;
 			if (frm.cboLineas.SelectedIndex < 1)
@@ -503,9 +571,129 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return false;
 		}
+		private void PintarCeldaGrid(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			var dgv = sender as DataGridView;
+			if (dgv == null) return;
+
+			// 🎨 COLORES SEGÚN TIPO
+			System.Drawing.Color colorHeader = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(34, 139, 34)     // 🌵 verde fuerte
+				: System.Drawing.Color.FromArgb(102, 0, 153);    // 🍇 morado fuerte
+
+			System.Drawing.Color fondoBase = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(240, 255, 240)   // verde suave
+				: System.Drawing.Color.FromArgb(245, 240, 255);  // morado suave
+
+			System.Drawing.Color colorLinea = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(180, 220, 180)
+				: System.Drawing.Color.FromArgb(210, 180, 230);
+
+			// 🔵 HEADER
+			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
+			{
+				using (SolidBrush brush = new SolidBrush(colorHeader))
+				{
+					e.Graphics.FillRectangle(brush, e.CellBounds);
+				}
+
+				TextRenderer.DrawText(
+					e.Graphics,
+					e.FormattedValue?.ToString() ?? "",
+					new Font("Segoe UI", 10, FontStyle.Bold),
+					e.CellBounds,
+					System.Drawing.Color.White,
+					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+				);
+
+				// línea header
+				using (Pen pen = new Pen(colorLinea))
+				{
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Top,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Bottom
+					);
+				}
+
+				e.Handled = true;
+				return;
+			}
+
+			// 🔹 CELDAS
+			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+			{
+				// 🔥 alternado con color base
+				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
+					? fondoBase
+					: System.Drawing.Color.White;
+
+				// 🔥 SIN SELECCIÓN
+				using (SolidBrush brush = new SolidBrush(fondo))
+				{
+					e.Graphics.FillRectangle(brush, e.CellBounds);
+				}
+
+				TextRenderer.DrawText(
+					e.Graphics,
+					e.FormattedValue?.ToString() ?? "",
+					new Font("Segoe UI", 10),
+					e.CellBounds,
+					System.Drawing.Color.Black,
+					TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+				);
+
+				// 🔥 líneas
+				using (Pen pen = new Pen(colorLinea))
+				{
+					// vertical
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Top,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Bottom
+					);
+
+					// horizontal
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Left,
+						e.CellBounds.Bottom - 1,
+						e.CellBounds.Right,
+						e.CellBounds.Bottom - 1
+					);
+				}
+
+				e.Handled = true;
+			}
+		}
+		public void ActivarEstiloGrid(DataGridView dgv)
+		{
+			if (dgv == null) return;
+
+			dgv.EnableHeadersVisualStyles = false;
+			dgv.RowHeadersVisible = false;
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.BackgroundColor = System.Drawing.Color.White;
+			dgv.ColumnHeadersHeight = 40;
+
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+
+			dgv.DefaultCellStyle.SelectionBackColor = dgv.DefaultCellStyle.BackColor;
+			dgv.DefaultCellStyle.SelectionForeColor = dgv.DefaultCellStyle.ForeColor;
+
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.None;
+
+			dgv.CellPainting -= PintarCeldaGrid;
+			dgv.CellPainting += PintarCeldaGrid;
+
+			dgv.SelectionChanged += (s, e) => dgv.ClearSelection();
+		}
 	}
-
-
 }
+
 
 
