@@ -28,7 +28,7 @@ namespace SisUvex.Catalogos.FechasFestivas
 		}
 		private void FrmDiasFestivos_Shown(object sender, EventArgs e)
 		{
-			txbFecha.Focus();   
+			dtpDay.Focus();   
 		}
 
 		private void FrmDiasFestivos_Load(object sender, EventArgs e)
@@ -38,7 +38,6 @@ namespace SisUvex.Catalogos.FechasFestivas
 
 		private void btnAccept_Click(object sender, EventArgs e)
 		{
-
 			cls.BtnAccept();
 		}
 
