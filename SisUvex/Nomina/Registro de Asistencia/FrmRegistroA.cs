@@ -42,12 +42,14 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			clsM.InicializarDgv();
 			clsM.EstiloDgv();
 			clsM.CargarComboActividades();
+			cls.CargarAsistenciasPorFecha();
 
 		}
 
 		private void btnMostrar_Click(object sender, EventArgs e)
 		{
 			cls.CargarHojaExcelEnDatagridView();
+			clsM.ConvertirIdsANombres();
 		}
 
 		private void btnExcelAceptar_Click(object sender, EventArgs e)
@@ -105,14 +107,58 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				{
 					string codigo = e.Value.ToString();
 
-					// 🔎 Buscar nombre (puedes usar tu DataTable o método)
+
 					string nombre = clsM.ObtenerNombreEmpleado(codigo);
 
 					if (!string.IsNullOrEmpty(nombre))
 					{
-						e.Value = nombre; // 👈 lo que VE el usuario
+						e.Value = nombre;
 						e.FormattingApplied = true;
 					}
+				}
+			}
+		}
+
+		private void btnAcceptarEmpleado_Click(object sender, EventArgs e)
+		{
+			cls.BotonAceptar();
+		}
+
+		private void dtpDay_ValueChanged(object sender, EventArgs e)
+		{
+			cls.CargarAsistenciasPorFecha();
+		}
+
+		private void btnEliminar_Click(object sender, EventArgs e)
+		{
+			string fecha = dtpDay.Value.ToString("yyyy-MM-dd");
+
+			DialogResult resp = MessageBox.Show(
+				$"¿Deseas eliminar los registros del día {fecha}?",
+				"Confirmar eliminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning
+			);
+
+			if (resp == DialogResult.Yes)
+			{
+				try
+				{
+					cls.EliminarRegistrosPorFechaDgv(fecha);
+
+					MessageBox.Show(
+						"Los registros se eliminaron correctamente.",
+						"Éxito",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
+
+
+					cls.CargarAsistenciasPorFecha();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.ToString(), "Error");
 				}
 			}
 		}

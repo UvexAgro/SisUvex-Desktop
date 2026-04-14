@@ -59,6 +59,7 @@
 			lblExcel = new Label();
 			lblReporte = new Label();
 			dgvAsistencia = new DataGridView();
+			btnEliminar = new Button();
 			pllManual.SuspendLayout();
 			pllExcel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -187,6 +188,7 @@
 			btnAcceptarEmpleado.TabIndex = 101;
 			btnAcceptarEmpleado.Text = "Aceptar";
 			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
+			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
 			// 
 			// lblEmpleado
 			// 
@@ -204,6 +206,7 @@
 			dtpDay.Name = "dtpDay";
 			dtpDay.Size = new Size(308, 23);
 			dtpDay.TabIndex = 150;
+			dtpDay.ValueChanged += dtpDay_ValueChanged;
 			// 
 			// lblManual
 			// 
@@ -235,9 +238,9 @@
 			// 
 			// btnCancelar
 			// 
-			btnCancelar.Location = new Point(366, 168);
+			btnCancelar.Location = new Point(366, 166);
 			btnCancelar.Name = "btnCancelar";
-			btnCancelar.Size = new Size(63, 23);
+			btnCancelar.Size = new Size(63, 25);
 			btnCancelar.TabIndex = 110;
 			btnCancelar.Text = "Cancelar";
 			btnCancelar.UseVisualStyleBackColor = true;
@@ -361,7 +364,7 @@
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
 			dgvAsistencia.ImeMode = ImeMode.NoControl;
-			dgvAsistencia.Location = new Point(32, 367);
+			dgvAsistencia.Location = new Point(32, 420);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -375,15 +378,27 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(1001, 432);
+			dgvAsistencia.Size = new Size(1001, 379);
 			dgvAsistencia.TabIndex = 113;
 			dgvAsistencia.CellFormatting += dgvAsistencia_CellFormatting;
+			// 
+			// btnEliminar
+			// 
+			btnEliminar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnEliminar.Location = new Point(905, 385);
+			btnEliminar.Name = "btnEliminar";
+			btnEliminar.Size = new Size(107, 29);
+			btnEliminar.TabIndex = 155;
+			btnEliminar.Text = "Eliminar";
+			btnEliminar.UseVisualStyleBackColor = true;
+			btnEliminar.Click += btnEliminar_Click;
 			// 
 			// FrmRegistroA
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1069, 811);
+			Controls.Add(btnEliminar);
 			Controls.Add(lblExcel);
 			Controls.Add(pllExcel);
 			Controls.Add(lblManual);
@@ -434,5 +449,6 @@
 		private Button btnSearch;
 		private Button btnAgregarListado;
 		public Button btnMostrarEmpleado;
+		public Button btnEliminar;
 	}
 }

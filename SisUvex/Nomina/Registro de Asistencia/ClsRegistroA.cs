@@ -143,6 +143,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				}
 			}
 		}
+		
 		public void BotonAceptar()
 		{
 			if (!frm.dgvAsistencia.Columns.Contains(frm.idEmpleado) || !frm.dgvAsistencia.Columns.Contains(frm.idActividad) || !frm.dgvAsistencia.Columns.Contains(frm.idBanda))
@@ -163,7 +164,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				object cellValue = row.Cells[frm.idEmpleado].Value;
-				string codigo = cellValue != null ? cellValue.ToString() : "";
+				string codigo = cellValue != null ? cellValue.ToString().Split('-')[0].Trim() : "";
 
 				int codigoInt;
 
@@ -182,7 +183,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				object cellValue = row.Cells[frm.idActividad].Value;
-				string codigo = cellValue != null ? cellValue.ToString() : "";
+				string codigo = cellValue != null ? cellValue.ToString().Split('-')[0].Trim() : "";
 
 				int codigoInt;
 
@@ -226,38 +227,85 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return true;
 		}
+		//private bool ValidarEmpleadoRepetido(DataGridView dgv)
+		//{
+		//	HashSet<string> empleados = new HashSet<string>();
+
+		//	foreach (DataGridViewRow row in dgv.Rows)
+		//	{
+		//		if (row.IsNewRow)
+		//			continue;
+
+		//		string idEmpleado = row.Cells[frm.idEmpleado].Value?.ToString().Split('-')[0].Trim();
+
+		//		if (string.IsNullOrEmpty(idEmpleado))
+		//			continue;
+
+		//		if (!empleados.Add(idEmpleado))
+		//		{
+		//			MessageBox.Show(
+		//				$"El empleado {idEmpleado} está repetido en el Excel.",
+		//				"Validación",
+		//				MessageBoxButtons.OK,
+		//				MessageBoxIcon.Warning
+		//			);
+
+		//			return false;
+		//		}
+		//	}
+
+		//	return true;
+		//}
 		private bool ValidarEmpleadoRepetido(DataGridView dgv)
 		{
-			HashSet<string> empleados = new HashSet<string>();
+			Dictionary<string, DataGridViewRow> empleados = new Dictionary<string, DataGridViewRow>();
 
 			foreach (DataGridViewRow row in dgv.Rows)
 			{
 				if (row.IsNewRow)
 					continue;
 
-				string idEmpleado = row.Cells[frm.idEmpleado].Value?.ToString();
+				string idEmpleado = row.Cells["EMPLEADO"].Value?.ToString().Split('-')[0].Trim();
 
 				if (string.IsNullOrEmpty(idEmpleado))
 					continue;
 
-				if (!empleados.Add(idEmpleado))
+				// 🔥 SI YA EXISTE
+				if (empleados.ContainsKey(idEmpleado))
 				{
-					MessageBox.Show(
-						$"El empleado {idEmpleado} está repetido en el Excel.",
-						"Validación",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+					var filaOriginal = empleados[idEmpleado];
+
+					DialogResult resp = MessageBox.Show(
+						$"El empleado {idEmpleado} ya tiene actividad:\n{filaOriginal.Cells["ACTIVIDAD"].Value}\n\n¿Deseas cambiarla por:\n{row.Cells["ACTIVIDAD"].Value}?",
+						"Confirmar cambio",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
 					);
 
-					return false;
+					if (resp == DialogResult.Yes)
+					{
+						// 🔥 ACTUALIZA LA FILA ORIGINAL
+						filaOriginal.Cells["ACTIVIDAD"].Value = row.Cells["ACTIVIDAD"].Value;
+						filaOriginal.Cells["BANDA"].Value = row.Cells["BANDA"].Value;
+
+						// 🔥 ACTUALIZA TAGS (IMPORTANTE)
+						filaOriginal.Cells["ACTIVIDAD"].Tag = row.Cells["ACTIVIDAD"].Tag;
+						filaOriginal.Cells["BANDA"].Tag = row.Cells["BANDA"].Tag;
+					}
+
+					// 🔥 ELIMINA LA FILA DUPLICADA
+					dgv.Rows.Remove(row);
+					continue;
 				}
+
+				empleados.Add(idEmpleado, row);
 			}
 
 			return true;
 		}
 		public void ConfirmarAccionAceptar()
 		{
-			DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos del Excel?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
 			if (result == DialogResult.Yes)
 			{
@@ -364,8 +412,8 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				foreach (DataGridViewRow row in frm.dgvAsistencia.Rows)
 				{
-					string codigo = row.Cells[frm.idEmpleado].Value?.ToString() ?? "";
-					string actividad = row.Cells[frm.idActividad].Value?.ToString() ?? "";
+					string codigo = row.Cells[frm.idEmpleado].Value?.ToString().Split('-')[0].Trim() ?? "";
+					string actividad = row.Cells[frm.idActividad].Value?.ToString().Split('-')[0].Trim() ?? "";
 					string banda = row.Cells[frm.idBanda].Value?.ToString() ?? "";
 
 					cmd.Parameters.Clear();
@@ -459,6 +507,84 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.ToString(), titulo);
+			}
+		}
+		public void CargarAsistenciasPorFecha()
+		{
+			DateTime fecha = frm.dtpDay.Value.Date;
+
+			string query = @"
+			SELECT 
+				a.id_employee + ' - ' + 
+				(e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name) AS Codigo,
+
+				a.c_codigo_tab + ' - ' + t.v_descripcion_tab AS Actividad,
+
+				a.id_productionLine AS Banda
+
+			FROM Nom_AttendenceList a
+			LEFT JOIN Nom_Employees e 
+				ON a.id_employee = e.id_employee
+			LEFT JOIN Nom_Tabulador t 
+				ON a.c_codigo_tab = t.c_codigo_tab
+			WHERE CAST(a.d_attendence AS DATE) = @Fecha
+			ORDER BY a.id_employee
+			";
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				da.Fill(dt);
+
+				frm.dgvAsistencia.Rows.Clear();
+
+				foreach (DataRow dr in dt.Rows)
+				{
+					frm.dgvAsistencia.Rows.Add(
+						dr["Codigo"].ToString(),
+						dr["Actividad"].ToString(),
+						dr["Banda"].ToString()
+					);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), "Error");
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public void EliminarRegistrosPorFechaDgv(string fecha)
+		{
+			try
+			{
+				sql.OpenConectionWrite(); 
+
+				SqlCommand cmd = new SqlCommand(
+					"DELETE FROM Nom_AttendenceList WHERE CAST(d_attendence AS DATE) = @Fecha",
+					sql.cnn
+				);
+
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+
+				cmd.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), titulo);
+			}
+			finally
+			{
+				sql.CloseConectionWrite(); 
 			}
 		}
 	}

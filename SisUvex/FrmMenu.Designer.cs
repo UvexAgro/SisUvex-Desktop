@@ -111,9 +111,9 @@
 			cajasPorEmpleadoYHorariosToolStripMenuItem = new ToolStripMenuItem();
 			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
 			calculToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteDeAsistenciaToolStripMenuItem1 = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
@@ -679,7 +679,7 @@
 			// 
 			asistenciaEmpaqueToolStripMenuItem1.Name = "asistenciaEmpaqueToolStripMenuItem1";
 			asistenciaEmpaqueToolStripMenuItem1.Size = new Size(257, 22);
-			asistenciaEmpaqueToolStripMenuItem1.Text = "Asistencia empaque";
+			asistenciaEmpaqueToolStripMenuItem1.Text = "Registro de Asistencia";
 			asistenciaEmpaqueToolStripMenuItem1.Click += asistenciaEmpaqueToolStripMenuItem1_Click;
 			// 
 			// mantenimientoToolStripMenuItem
@@ -718,13 +718,6 @@
 			calculToolStripMenuItem.Text = "Calculo de Nomina";
 			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
 			// 
-			// reporteDeHorariosToolStripMenuItem1
-			// 
-			reporteDeHorariosToolStripMenuItem1.Name = "reporteDeHorariosToolStripMenuItem1";
-			reporteDeHorariosToolStripMenuItem1.Size = new Size(234, 22);
-			reporteDeHorariosToolStripMenuItem1.Text = "Reporte de horarios";
-			reporteDeHorariosToolStripMenuItem1.Click += reporteDeHorariosToolStripMenuItem1_Click;
-			// 
 			// reporteToolStripMenuItem1
 			// 
 			reporteToolStripMenuItem1.Name = "reporteToolStripMenuItem1";
@@ -738,6 +731,13 @@
 			reporteDeEmpacadorToolStripMenuItem.Size = new Size(234, 22);
 			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
 			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
+			// 
+			// reporteDeHorariosToolStripMenuItem1
+			// 
+			reporteDeHorariosToolStripMenuItem1.Name = "reporteDeHorariosToolStripMenuItem1";
+			reporteDeHorariosToolStripMenuItem1.Size = new Size(234, 22);
+			reporteDeHorariosToolStripMenuItem1.Text = "Reporte de horarios";
+			reporteDeHorariosToolStripMenuItem1.Click += reporteDeHorariosToolStripMenuItem1_Click;
 			// 
 			// reporteDeAsistenciaToolStripMenuItem1
 			// 
@@ -846,14 +846,14 @@
 			// plantasToolStripMenuItem
 			// 
 			plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
-			plantasToolStripMenuItem.Size = new Size(135, 22);
+			plantasToolStripMenuItem.Size = new Size(180, 22);
 			plantasToolStripMenuItem.Text = "Plantas";
 			plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
 			// 
 			// palletsToolStripMenuItem
 			// 
 			palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-			palletsToolStripMenuItem.Size = new Size(135, 22);
+			palletsToolStripMenuItem.Size = new Size(180, 22);
 			palletsToolStripMenuItem.Text = "Pallets";
 			palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
 			// 
@@ -861,7 +861,7 @@
 			// 
 			manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
 			manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-			manifiestosToolStripMenuItem.Size = new Size(135, 22);
+			manifiestosToolStripMenuItem.Size = new Size(180, 22);
 			manifiestosToolStripMenuItem.Text = "Manifiestos";
 			// 
 			// totalesPorManifiestoToolStripMenuItem
