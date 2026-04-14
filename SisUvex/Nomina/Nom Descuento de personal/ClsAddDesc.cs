@@ -58,7 +58,7 @@ namespace SisUvex.Nomina.Nom_Descuento_de_personal
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Agregar Descuwnto de Sorteador");
+				MessageBox.Show(ex.Message, "Agregar Descuento de Sorteador");
 				return (false, null);
 			}
 			finally

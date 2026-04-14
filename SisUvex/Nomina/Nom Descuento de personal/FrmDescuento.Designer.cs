@@ -30,6 +30,7 @@
 		{
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDescuento));
 			btnAdd = new Button();
 			btnModify = new Button();
 			btnRemove = new Button();
@@ -45,6 +46,7 @@
 			btnAdd.TabIndex = 2;
 			btnAdd.Text = "Añadir";
 			btnAdd.UseVisualStyleBackColor = true;
+			btnAdd.Click += btnAdd_Click;
 			// 
 			// btnModify
 			// 
@@ -111,8 +113,10 @@
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmDescuento";
 			Text = "Descuento de Personal por Linea ";
+			Load += FrmDescuento_Load;
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
 			ResumeLayout(false);
 		}
