@@ -303,17 +303,16 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
-			if (TipoNomina == "E") // 🌵
+			if (TipoNomina == "E") // esparrago
 			{
 				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
 			}
-			else // 🍇
+			else // uva
 			{
 				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
 			}
 
-			// 🔥 aplicar estilo al grid
-			ActivarEstiloGrid(frm.dgvEmployee);
+			//  aplicar estilo al grid
 			ActivarEstiloGrid(frm.dgvEmployee);
 		}
 
@@ -576,10 +575,10 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			var dgv = sender as DataGridView;
 			if (dgv == null) return;
 
-			// 🎨 COLORES SEGÚN TIPO
+			//  COLORES SEGÚN TIPO
 			System.Drawing.Color colorHeader = TipoNomina == "E"
-				? System.Drawing.Color.FromArgb(34, 139, 34)     // 🌵 verde fuerte
-				: System.Drawing.Color.FromArgb(102, 0, 153);    // 🍇 morado fuerte
+				? System.Drawing.Color.FromArgb(34, 139, 34)     //  verde fuerte
+				: System.Drawing.Color.FromArgb(102, 0, 153);    //  morado fuerte
 
 			System.Drawing.Color fondoBase = TipoNomina == "E"
 				? System.Drawing.Color.FromArgb(240, 255, 240)   // verde suave
