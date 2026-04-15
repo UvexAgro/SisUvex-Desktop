@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using SisUvex.Usuarios;
 using System.Security.Cryptography;
 using SisUvex.Configuracion;
+using System.ServiceModel.Security;
 
 namespace SisUvex
 {
@@ -13,8 +14,8 @@ namespace SisUvex
         public FrmLogin()
         {
             InitializeComponent();
-            
-            calis();
+
+            validateFirstConnectionTry();
 
             this.FormClosed += ExitApplication;
             pictureBox2.MouseClick += ExitApplication;
@@ -32,10 +33,13 @@ namespace SisUvex
 
         public void IniciarSesion()
         {
-            
-            if (sql.Login(txbUser.Text.ToUpper(), txbPassword.Text))
+            string userLogin = txbUser.Text.ToUpper();
+
+            if (sql.Login(userLogin, txbPassword.Text))
             {
-                User.SetLastUser(txbUser.Text);
+                User.SetLastUser(userLogin);
+                User.SetUserInfo(userLogin);
+
                 //User.SetProductDay();
 
                 this.Hide();
@@ -57,7 +61,7 @@ namespace SisUvex
                 IniciarSesion();
             }
         }
-        public void calis()
+        public void validateFirstConnectionTry()
         {
             try
             {

@@ -93,9 +93,10 @@ namespace SisUvex
 
                     if (druser == username && BCrypt.Net.BCrypt.Verify(pass, drpass) == true)
                     {
-                        User.SetUserName(druser);
-                        User.SetAccessLevel(int.Parse(dracces));
-                        cadenaConexion = ""; //Para poder leer la que 
+                        //AHORA ES POR FUERA EN EL OTRO METODO
+                        //User.SetUserName(druser);
+                        //User.SetAccessLevel(int.Parse(dracces));
+                        //cadenaConexion = ""; //Para poder leer la que 
                         return confirm = true;
                     }
                 }

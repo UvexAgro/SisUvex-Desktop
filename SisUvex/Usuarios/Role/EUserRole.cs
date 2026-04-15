@@ -1,6 +1,8 @@
-﻿using SisUvex.Usuarios;
-using System.Data.SqlClient;
+﻿using SisUvex.Catalogos.Metods;
+using SisUvex.Usuarios;
 using System.Data;
+using System.Data.SqlClient;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 
 namespace SisUvex.Usuarios.Role
 {
@@ -191,6 +193,20 @@ namespace SisUvex.Usuarios.Role
             {
                 sql.CloseConectionRead();
             }
+        }
+
+        public static void CboLoadActives(ComboBox cbo)
+        {
+            string qry = $"SELECT id_role AS [{ClsObject.Column.id}], v_roleName [{ClsObject.Column.name}], c_active AS [{ClsObject.Column.active}] FROM Conf_Role";
+
+            DataTable dt = ClsQuerysUsuarios.GetDataTable(qry);
+            if (dt.Rows.Count == 0)
+                return;
+
+            if (dt.Columns.Contains(ClsObject.Column.active))
+                dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+
+            ClsComboBoxes.LoadComboBoxDataSource(cbo, dt);
         }
     }
 }

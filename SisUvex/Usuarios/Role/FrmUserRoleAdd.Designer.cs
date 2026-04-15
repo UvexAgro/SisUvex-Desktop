@@ -363,7 +363,9 @@
             Controls.Add(lblActivo);
             Controls.Add(lblNombre);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "FrmUserRoleAdd";
+            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Añadir rol";
             Load += FrmUserRoleAdd_Load;
             ResumeLayout(false);

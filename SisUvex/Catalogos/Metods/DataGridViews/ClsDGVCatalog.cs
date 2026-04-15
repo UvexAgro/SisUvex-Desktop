@@ -83,18 +83,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         {
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
             if (rows.Length > 0)
-            {
                 rows[0][activeColumn] = activeValue;
-            }
             dtCatalog.AcceptChanges();
         }
         public void ChangeActiveCell(string id, string id2, string activeValue)
         { //SE OCUPA HABERLE DADO EL VALOR DE id2Column ANTERIORMENTE
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}' AND {id2Column} = '{id2}'");
             if (rows.Length > 0)
-            {
                 rows[0][activeColumn] = activeValue;
-            }
             dtCatalog.AcceptChanges();
         }
         public void AddMultipleNewRowsToDGV(DataTable newRows)
@@ -249,38 +245,41 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
-
-            dataGridView.CellFormatting += (sender, e) =>
-            {
-                if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName && e.Value != null)
-                {
-                    bool isChecked = (bool)e.Value;///e.Value.ToString() == "true";
-
-                    e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
-
-                    e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
-
-                }
-            };
-
-            ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
-
             //dataGridView.CellFormatting += (sender, e) =>
             //{
             //    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
             //    {
-            //        if (e.Value.ToString() == "0")
+            //        bool isChecked = false;
+
+            //        if (e.Value != null && e.Value != DBNull.Value)
             //        {
-            //            e.CellStyle.BackColor = System.Drawing.Color.Tomato;
-            //            e.CellStyle.ForeColor = System.Drawing.Color.Red;
+            //            string valueText = e.Value.ToString() ?? "0";
+            //            isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
             //        }
-            //        if (e.Value.ToString() == "1")
-            //        {
-            //            e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
-            //            e.CellStyle.ForeColor = System.Drawing.Color.Green;
-            //        }
+
+            //        e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
+            //        e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
             //    }
             //};
+
+            //ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
+
+            dataGridView.CellFormatting += (sender, e) =>
+            {
+                if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
+                {
+                    if (e.Value.ToString() == "0")
+                    {
+                        e.CellStyle.BackColor = System.Drawing.Color.Tomato;
+                        e.CellStyle.ForeColor = System.Drawing.Color.Red;
+                    }
+                    if (e.Value.ToString() == "1")
+                    {
+                        e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
+                        e.CellStyle.ForeColor = System.Drawing.Color.Green;
+                    }
+                }
+            };
         }
         public static void ConvertToCheckBoxColumn(DataGridView dgv, string columnName)
         {

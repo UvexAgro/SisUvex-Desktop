@@ -28,7 +28,7 @@ public static class User
         public static bool OwnFilter { get; set; } = false;
     }
 
-    public static void SetUserInfo(string user)
+    public static void SetUserInfo(string userName)
     {
         SQLControl sql = new SQLControl();
 
@@ -36,9 +36,9 @@ public static class User
         {
             sql.OpenConectionRead();
 
-            SqlCommand cmd = new SqlCommand(@"SELECT * FROM Usuarios WHERE c_codigo_usu = @user", sql.cnn);
+            SqlCommand cmd = new SqlCommand(@"SELECT * FROM Usuario usu LEFT JOIN Conf_Role rol ON rol.id_role = usu.id_role WHERE v_nombre_usu = @user", sql.cnn);
 
-            cmd.Parameters.AddWithValue("@user", user);
+            cmd.Parameters.AddWithValue("@user", userName);
 
             SqlDataReader dr = cmd.ExecuteReader();
 
@@ -56,14 +56,14 @@ public static class User
                 active = dr["c_active"].ToString();
 
                 // 🔹 Permisos
-                Permission.PrintLabels = ToBool(dr["PrintLabels"]);
-                Permission.ViewCatalogs = ToBool(dr["ViewCatalogs"]);
-                Permission.EditCatalogs = ToBool(dr["EditCatalogs"]);
-                Permission.CreateRecords = ToBool(dr["CreateRecords"]);
-                Permission.ProductionReports = ToBool(dr["ProductionReports"]);
-                Permission.CostReports = ToBool(dr["CostReports"]);
-                Permission.Audit = ToBool(dr["Audit"]);
-                Permission.OwnFilter = ToBool(dr["OwnFilter"]);
+                Permission.PrintLabels = ToBool(dr["c_printLabels"]);
+                Permission.ViewCatalogs = ToBool(dr["c_viewCatalogs"]);
+                Permission.EditCatalogs = ToBool(dr["c_editCatalogs"]);
+                Permission.CreateRecords = ToBool(dr["c_createRecords"]);
+                Permission.ProductionReports = ToBool(dr["c_productionReports"]);
+                Permission.CostReports = ToBool(dr["c_costReports"]);
+                Permission.Audit = ToBool(dr["c_audit"]);
+                Permission.OwnFilter = ToBool(dr["c_ownFilter"]);
             }
         }
         catch (Exception ex)
@@ -80,6 +80,35 @@ public static class User
     {
         return Permission.PrintLabels;
     }
+    public static bool HasViewCatalogsPermission()
+    {
+        return Permission.ViewCatalogs;
+    }
+    public static bool HasEditCatalogsPermission()
+    {
+        return Permission.EditCatalogs;
+    }
+    public static bool HasCreateRecordsPermission()
+    {
+        return Permission.CreateRecords;
+    }
+    public static bool HasProductionReportsPermission()
+    {
+        return Permission.ProductionReports;
+    }
+    public static bool HasCostReportsPermission()
+    {
+        return Permission.CostReports;
+    }
+    public static bool HasAuditPermission()
+    {
+        return Permission.Audit;
+    }
+    public static bool HasOwnFilterPermission()
+    {
+        return Permission.OwnFilter;
+    }
+
     private static bool ToBool(object value)
     {
         return value != null && value.ToString() == "1";
@@ -115,31 +144,6 @@ public static class User
         currentDate = date.Date;
     }
 
-    public static void SetProductDay()
-    {
-        SQLControl sql = new SQLControl();
-
-        try
-        {
-            sql.OpenConectionWrite();
-            SqlCommand cmd = new SqlCommand("SELECT d_productionDay 'Day' FROM Pack_ProductionDay", sql.cnn);
-            SqlDataReader dr;
-            dr = cmd.ExecuteReader();
-            if (dr.Read())
-            {
-                DateTime productionDay = Convert.ToDateTime(dr["Day"]);
-                SetDate(productionDay);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.ToString(), "Obtener día de producción");
-        }
-        finally
-        {
-            sql.CloseConectionRead();
-        }
-    }
     public static void SetLastUser(string usuario)
     {
 
