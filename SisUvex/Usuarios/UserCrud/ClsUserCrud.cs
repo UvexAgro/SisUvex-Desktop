@@ -20,7 +20,7 @@ internal class ClsUserCrud
     public FrmUserCat _frmCat = null!;
     public EUserCrud entity = null!;
     private string? _validateCodeSnapshot;
-
+    public static string columnUserName = "Usuario";
     private readonly string queryCatalog = $" SELECT cat.*, cat.[{Column.active}] AS [{Column.active}2] FROM vw_user_cat cat ";
 
     ClsDGVCatalog? dgv;
@@ -195,7 +195,7 @@ internal class ClsUserCrud
             return;
         }
 
-        string? code = _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.SelectedRows[0].Index].Cells[Column.id].Value?.ToString();
+        string? code = _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.SelectedRows[0].Index].Cells[ClsUserCrud.columnUserName].Value?.ToString();
         OpenFrmChangePassword(code ?? string.Empty);
     }
 
