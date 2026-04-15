@@ -54,7 +54,7 @@
             btnAccept.Location = new Point(126, 360);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 162;
+            btnAccept.TabIndex = 5;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -65,7 +65,7 @@
             btnCancel.Location = new Point(203, 360);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 163;
+            btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -79,7 +79,7 @@
             txbEmployeeName.MaxLength = 100;
             txbEmployeeName.Name = "txbEmployeeName";
             txbEmployeeName.Size = new Size(266, 29);
-            txbEmployeeName.TabIndex = 160;
+            txbEmployeeName.TabIndex = 4;
             // 
             // label18
             // 
@@ -101,7 +101,7 @@
             txbIdEmployee.MaxLength = 6;
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(89, 29);
-            txbIdEmployee.TabIndex = 158;
+            txbIdEmployee.TabIndex = 3;
             // 
             // label16
             // 
@@ -122,7 +122,7 @@
             txbPasswordConfirm.MaxLength = 20;
             txbPasswordConfirm.Name = "txbPasswordConfirm";
             txbPasswordConfirm.Size = new Size(161, 29);
-            txbPasswordConfirm.TabIndex = 155;
+            txbPasswordConfirm.TabIndex = 2;
             txbPasswordConfirm.TextAlign = HorizontalAlignment.Center;
             txbPasswordConfirm.UseSystemPasswordChar = true;
             // 
@@ -156,7 +156,7 @@
             txbPassword.MaxLength = 20;
             txbPassword.Name = "txbPassword";
             txbPassword.Size = new Size(161, 29);
-            txbPassword.TabIndex = 152;
+            txbPassword.TabIndex = 1;
             txbPassword.TextAlign = HorizontalAlignment.Center;
             txbPassword.UseSystemPasswordChar = true;
             // 
@@ -167,7 +167,7 @@
             txbId.Location = new Point(232, 265);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 147;
+            txbId.TabIndex = 7;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblId
@@ -189,7 +189,7 @@
             txbUserName.MaxLength = 12;
             txbUserName.Name = "txbUserName";
             txbUserName.Size = new Size(124, 29);
-            txbUserName.TabIndex = 148;
+            txbUserName.TabIndex = 0;
             txbUserName.TextAlign = HorizontalAlignment.Center;
             // 
             // lblNombre

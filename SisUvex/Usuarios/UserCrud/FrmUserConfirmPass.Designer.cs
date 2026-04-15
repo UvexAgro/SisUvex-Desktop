@@ -45,7 +45,7 @@
             btnAccept.Location = new Point(126, 180);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 1;
+            btnAccept.TabIndex = 2;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -56,7 +56,7 @@
             btnCancel.Location = new Point(203, 180);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 2;
+            btnCancel.TabIndex = 3;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -80,7 +80,7 @@
             txbPassword.MaxLength = 20;
             txbPassword.Name = "txbPassword";
             txbPassword.Size = new Size(161, 29);
-            txbPassword.TabIndex = 0;
+            txbPassword.TabIndex = 1;
             txbPassword.TextAlign = HorizontalAlignment.Center;
             txbPassword.UseSystemPasswordChar = true;
             txbPassword.KeyPress += txbPassword_KeyPress;
@@ -94,7 +94,7 @@
             txbUserName.MaxLength = 12;
             txbUserName.Name = "txbUserName";
             txbUserName.Size = new Size(124, 29);
-            txbUserName.TabIndex = 3;
+            txbUserName.TabIndex = 0;
             txbUserName.TextAlign = HorizontalAlignment.Center;
             // 
             // lblNombre

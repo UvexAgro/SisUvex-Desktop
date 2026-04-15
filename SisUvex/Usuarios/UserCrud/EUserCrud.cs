@@ -13,6 +13,8 @@ internal class EUserCrud
     public string? IdContractor { get; set; }
     public string? IdEmployee { get; set; }
     public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
     public string? IdRole { get; set; }
     public int Active { get; set; }
     public static string GetNextId()
@@ -39,9 +41,10 @@ internal class EUserCrud
         return dr.GetValue(o).ToString();
     }
 
-    public static bool UserExists(string userCode)
+    /// <summary>Consulta <c>sp_userExist</c> (<c>@usuario</c>) para validar que el nombre de usuario no se repita.</summary>
+    public static bool UserExists(string userName)
     {
-        if (string.IsNullOrWhiteSpace(userCode))
+        if (string.IsNullOrWhiteSpace(userName))
             return false;
 
         SQLControl sql = new();
@@ -52,7 +55,7 @@ internal class EUserCrud
             {
                 CommandType = CommandType.StoredProcedure
             };
-            cmd.Parameters.AddWithValue("@usuario", userCode.Trim());
+            cmd.Parameters.AddWithValue("@usuario", userName.Trim());
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
             {
@@ -72,17 +75,18 @@ internal class EUserCrud
         return false;
     }
 
-    public void GetUser(string? userName)
+    /// <param name="userCode"><c>c_codigo_usu</c> (coincide con la columna Código del catálogo).</param>
+    public void GetUser(string? userCode)
     {
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(userCode))
             return;
 
         SQLControl sql = new();
         try
         {
             sql.OpenConectionRead();
-            SqlCommand cmd = new("SELECT * FROM usuario WHERE v_nombre_usu = @user", sql.cnn);
-            cmd.Parameters.AddWithValue("@user", userName.Trim());
+            SqlCommand cmd = new("SELECT * FROM usuario WHERE c_codigo_usu = @c_codigo_usu", sql.cnn);
+            cmd.Parameters.AddWithValue("@c_codigo_usu", userCode.Trim());
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (!dr.Read())
@@ -95,6 +99,8 @@ internal class EUserCrud
             IdContractor = ReadField(dr, "id_contractor");
             IdEmployee = ReadField(dr, "id_employee");
             Name = ReadField(dr, "v_name");
+            Email = ReadField(dr, "v_email");
+            PhoneNumber = ReadField(dr, "v_phoneNumber");
             IdRole = ReadField(dr, "id_role");
             Active = CharFlagToInt(dr["c_active"]);
         }
@@ -127,6 +133,8 @@ internal class EUserCrud
             cmd.Parameters.AddWithValue("@id_contractor", string.IsNullOrWhiteSpace(IdContractor) ? (object)DBNull.Value : IdContractor.Trim());
             cmd.Parameters.AddWithValue("@id_employee", string.IsNullOrWhiteSpace(IdEmployee) ? (object)DBNull.Value : IdEmployee.Trim());
             cmd.Parameters.AddWithValue("@v_name", string.IsNullOrWhiteSpace(Name) ? (object)DBNull.Value : Name.Trim());
+            cmd.Parameters.AddWithValue("@v_email", string.IsNullOrWhiteSpace(Email) ? (object)DBNull.Value : Email.Trim());
+            cmd.Parameters.AddWithValue("@v_phoneNumber", string.IsNullOrWhiteSpace(PhoneNumber) ? (object)DBNull.Value : PhoneNumber.Trim());
             cmd.Parameters.AddWithValue("@id_role", string.IsNullOrWhiteSpace(IdRole) ? (object)DBNull.Value : IdRole.Trim());
             cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
@@ -170,6 +178,8 @@ internal class EUserCrud
             cmd.Parameters.AddWithValue("@id_contractor", string.IsNullOrWhiteSpace(IdContractor) ? (object)DBNull.Value : IdContractor.Trim());
             cmd.Parameters.AddWithValue("@id_employee", string.IsNullOrWhiteSpace(IdEmployee) ? (object)DBNull.Value : IdEmployee.Trim());
             cmd.Parameters.AddWithValue("@v_name", string.IsNullOrWhiteSpace(Name) ? (object)DBNull.Value : Name.Trim());
+            cmd.Parameters.AddWithValue("@v_email", string.IsNullOrWhiteSpace(Email) ? (object)DBNull.Value : Email.Trim());
+            cmd.Parameters.AddWithValue("@v_phoneNumber", string.IsNullOrWhiteSpace(PhoneNumber) ? (object)DBNull.Value : PhoneNumber.Trim());
             cmd.Parameters.AddWithValue("@id_role", string.IsNullOrWhiteSpace(IdRole) ? (object)DBNull.Value : IdRole.Trim());
             cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
             cmd.Parameters.AddWithValue("@user", User.GetUserName());

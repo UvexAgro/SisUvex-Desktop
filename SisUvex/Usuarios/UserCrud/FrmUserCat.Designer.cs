@@ -47,7 +47,7 @@
             chbRemoved.Location = new Point(174, 12);
             chbRemoved.Name = "chbRemoved";
             chbRemoved.Size = new Size(75, 23);
-            chbRemoved.TabIndex = 19;
+            chbRemoved.TabIndex = 2;
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
@@ -89,7 +89,7 @@
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 397);
-            dgvCatalog.TabIndex = 22;
+            dgvCatalog.TabIndex = 6;
             dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
@@ -97,7 +97,7 @@
             btnRemove.Location = new Point(255, 12);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
-            btnRemove.TabIndex = 20;
+            btnRemove.TabIndex = 3;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
             btnRemove.Click += btnRemove_Click;
@@ -107,7 +107,7 @@
             btnRecover.Location = new Point(336, 12);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
-            btnRecover.TabIndex = 21;
+            btnRecover.TabIndex = 4;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
             btnRecover.Click += btnRecover_Click;
@@ -117,7 +117,7 @@
             btnModify.Location = new Point(93, 12);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
-            btnModify.TabIndex = 18;
+            btnModify.TabIndex = 1;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
             btnModify.Click += btnModify_Click;
@@ -127,7 +127,7 @@
             btnAdd.Location = new Point(12, 12);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 17;
+            btnAdd.TabIndex = 0;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -137,7 +137,7 @@
             btnChangeUserPass.Location = new Point(417, 12);
             btnChangeUserPass.Name = "btnChangeUserPass";
             btnChangeUserPass.Size = new Size(130, 23);
-            btnChangeUserPass.TabIndex = 23;
+            btnChangeUserPass.TabIndex = 5;
             btnChangeUserPass.Text = "Cambiar contraseña";
             btnChangeUserPass.UseVisualStyleBackColor = true;
             btnChangeUserPass.Click += btnChangeUserPass_Click;
@@ -157,6 +157,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmUserCat";
             Text = "Catálogo de usuarios";
+            WindowState = FormWindowState.Maximized;
             Load += FrmUserCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);

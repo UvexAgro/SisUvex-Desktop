@@ -40,7 +40,7 @@ internal partial class FrmUserCat : Form
             return;
         }
 
-        cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsUserCrud.columnUserName].Value.ToString());
+        cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value?.ToString());
 
         if (cls.IsModifyUpdate)
             cls.ModifyRowByIdInDGVCatalog();

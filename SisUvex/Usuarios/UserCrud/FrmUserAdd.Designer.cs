@@ -65,6 +65,10 @@
             label12 = new Label();
             cboSeason = new ComboBox();
             label14 = new Label();
+            lblEmail = new Label();
+            txbEMail = new TextBox();
+            lblPhone = new Label();
+            txbPhoneNumber = new TextBox();
             ((System.ComponentModel.ISupportInitialize)nudAcces).BeginInit();
             SuspendLayout();
             // 
@@ -77,7 +81,7 @@
             cboActive.Location = new Point(401, 12);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
-            cboActive.TabIndex = 108;
+            cboActive.TabIndex = 16;
             // 
             // txbId
             // 
@@ -87,7 +91,7 @@
             txbId.MaxLength = 12;
             txbId.Name = "txbId";
             txbId.Size = new Size(45, 29);
-            txbId.TabIndex = 106;
+            txbId.TabIndex = 17;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -128,7 +132,7 @@
             txbUserName.MaxLength = 12;
             txbUserName.Name = "txbUserName";
             txbUserName.Size = new Size(124, 29);
-            txbUserName.TabIndex = 107;
+            txbUserName.TabIndex = 0;
             txbUserName.TextAlign = HorizontalAlignment.Center;
             // 
             // label1
@@ -179,7 +183,7 @@
             nudAcces.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             nudAcces.Name = "nudAcces";
             nudAcces.Size = new Size(44, 29);
-            nudAcces.TabIndex = 121;
+            nudAcces.TabIndex = 4;
             // 
             // txbPassword
             // 
@@ -189,7 +193,7 @@
             txbPassword.MaxLength = 20;
             txbPassword.Name = "txbPassword";
             txbPassword.Size = new Size(124, 29);
-            txbPassword.TabIndex = 116;
+            txbPassword.TabIndex = 1;
             txbPassword.TextAlign = HorizontalAlignment.Center;
             txbPassword.UseSystemPasswordChar = true;
             // 
@@ -223,7 +227,7 @@
             txbPasswordConfirm.MaxLength = 20;
             txbPasswordConfirm.Name = "txbPasswordConfirm";
             txbPasswordConfirm.Size = new Size(124, 29);
-            txbPasswordConfirm.TabIndex = 124;
+            txbPasswordConfirm.TabIndex = 2;
             txbPasswordConfirm.TextAlign = HorizontalAlignment.Center;
             txbPasswordConfirm.UseSystemPasswordChar = true;
             // 
@@ -255,7 +259,7 @@
             cboRole.Location = new Point(264, 73);
             cboRole.Name = "cboRole";
             cboRole.Size = new Size(266, 29);
-            cboRole.TabIndex = 127;
+            cboRole.TabIndex = 5;
             // 
             // label7
             // 
@@ -296,7 +300,7 @@
             label10.Location = new Point(169, 75);
             label10.Name = "label10";
             label10.Size = new Size(12, 15);
-            label10.TabIndex = 131;
+            label10.TabIndex = 3;
             label10.Text = "*";
             // 
             // label11
@@ -318,7 +322,7 @@
             cboContractor.Location = new Point(11, 312);
             cboContractor.Name = "cboContractor";
             cboContractor.Size = new Size(227, 29);
-            cboContractor.TabIndex = 132;
+            cboContractor.TabIndex = 10;
             // 
             // label13
             // 
@@ -339,7 +343,7 @@
             cboWorkGroup.Location = new Point(264, 259);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(265, 29);
-            cboWorkGroup.TabIndex = 135;
+            cboWorkGroup.TabIndex = 11;
             // 
             // txbIdEmployee
             // 
@@ -349,7 +353,7 @@
             txbIdEmployee.MaxLength = 6;
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.Size = new Size(72, 29);
-            txbIdEmployee.TabIndex = 138;
+            txbIdEmployee.TabIndex = 6;
             // 
             // label16
             // 
@@ -370,7 +374,7 @@
             txbEmployeeName.MaxLength = 100;
             txbEmployeeName.Name = "txbEmployeeName";
             txbEmployeeName.Size = new Size(266, 29);
-            txbEmployeeName.TabIndex = 141;
+            txbEmployeeName.TabIndex = 8;
             // 
             // label18
             // 
@@ -389,17 +393,17 @@
             btnSearchEmployee.Location = new Point(342, 125);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Size = new Size(31, 31);
-            btnSearchEmployee.TabIndex = 144;
+            btnSearchEmployee.TabIndex = 7;
             btnSearchEmployee.UseVisualStyleBackColor = true;
             btnSearchEmployee.Click += btnSearchEmployee_Click;
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAccept.Location = new Point(378, 314);
+            btnAccept.Location = new Point(378, 412);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 145;
+            btnAccept.TabIndex = 14;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -407,10 +411,10 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(455, 314);
+            btnCancel.Location = new Point(455, 412);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 146;
+            btnCancel.TabIndex = 15;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -434,7 +438,7 @@
             cboSeason.Location = new Point(12, 259);
             cboSeason.Name = "cboSeason";
             cboSeason.Size = new Size(227, 29);
-            cboSeason.TabIndex = 147;
+            cboSeason.TabIndex = 9;
             // 
             // label14
             // 
@@ -446,11 +450,57 @@
             label14.TabIndex = 149;
             label14.Text = "*";
             // 
+            // lblEmail
+            // 
+            lblEmail.AutoSize = true;
+            lblEmail.Font = new Font("Segoe UI", 12F);
+            lblEmail.Location = new Point(11, 348);
+            lblEmail.Margin = new Padding(3, 0, 0, 0);
+            lblEmail.Name = "lblEmail";
+            lblEmail.Size = new Size(58, 21);
+            lblEmail.TabIndex = 150;
+            lblEmail.Text = "Correo";
+            // 
+            // txbEMail
+            // 
+            txbEMail.Font = new Font("Segoe UI", 12F);
+            txbEMail.Location = new Point(11, 371);
+            txbEMail.Margin = new Padding(3, 0, 3, 3);
+            txbEMail.MaxLength = 50;
+            txbEMail.Name = "txbEMail";
+            txbEMail.Size = new Size(250, 29);
+            txbEMail.TabIndex = 12;
+            // 
+            // lblPhone
+            // 
+            lblPhone.AutoSize = true;
+            lblPhone.Font = new Font("Segoe UI", 12F);
+            lblPhone.Location = new Point(275, 348);
+            lblPhone.Margin = new Padding(3, 0, 0, 0);
+            lblPhone.Name = "lblPhone";
+            lblPhone.Size = new Size(68, 21);
+            lblPhone.TabIndex = 152;
+            lblPhone.Text = "Teléfono";
+            // 
+            // txbPhoneNumber
+            // 
+            txbPhoneNumber.Font = new Font("Segoe UI", 12F);
+            txbPhoneNumber.Location = new Point(275, 371);
+            txbPhoneNumber.Margin = new Padding(3, 0, 3, 3);
+            txbPhoneNumber.MaxLength = 20;
+            txbPhoneNumber.Name = "txbPhoneNumber";
+            txbPhoneNumber.Size = new Size(254, 29);
+            txbPhoneNumber.TabIndex = 13;
+            // 
             // FrmUserAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(543, 355);
+            ClientSize = new Size(543, 453);
+            Controls.Add(lblPhone);
+            Controls.Add(txbPhoneNumber);
+            Controls.Add(lblEmail);
+            Controls.Add(txbEMail);
             Controls.Add(label12);
             Controls.Add(cboSeason);
             Controls.Add(btnAccept);
@@ -539,5 +589,9 @@
         private Label label12;
         public ComboBox cboSeason;
         private Label label14;
+        private Label lblEmail;
+        public TextBox txbEMail;
+        private Label lblPhone;
+        public TextBox txbPhoneNumber;
     }
 }

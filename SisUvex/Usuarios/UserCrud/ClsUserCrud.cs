@@ -19,7 +19,6 @@ internal class ClsUserCrud
     public FrmUserAdd _frmAdd = null!;
     public FrmUserCat _frmCat = null!;
     public EUserCrud entity = null!;
-    private string? _validateCodeSnapshot;
     public static string columnUserName = "Usuario";
     private readonly string queryCatalog = $" SELECT cat.*, cat.[{Column.active}] AS [{Column.active}2] FROM vw_user_cat cat ";
 
@@ -51,6 +50,8 @@ internal class ClsUserCrud
         {
             _frmAdd.cboActive.SelectedIndex = 1;
             _frmAdd.txbId.Text = EUserCrud.GetNextId();
+            _frmAdd.txbEMail.Clear();
+            _frmAdd.txbPhoneNumber.Clear();
             //_frmAdd.txbUserName.Clear();
             //_frmAdd.txbPassword.Clear();
             //_frmAdd.txbPasswordConfirm.Clear();
@@ -116,6 +117,8 @@ internal class ClsUserCrud
         _frmAdd.nudAcces.Value = Math.Clamp(entity.Accesibilidad, (int)_frmAdd.nudAcces.Minimum, (int)_frmAdd.nudAcces.Maximum);
         _frmAdd.txbIdEmployee.Text = entity.IdEmployee ?? "";
         _frmAdd.txbEmployeeName.Text = entity.Name ?? "";
+        _frmAdd.txbEMail.Text = entity.Email ?? "";
+        _frmAdd.txbPhoneNumber.Text = entity.PhoneNumber ?? "";
         _frmAdd.cboActive.SelectedIndex = entity.Active;
 
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboRole, entity.IdRole);
@@ -133,6 +136,8 @@ internal class ClsUserCrud
         entity.IdWorkGroup = ComboValueOrNull(_frmAdd.cboWorkGroup);
         entity.IdEmployee = string.IsNullOrWhiteSpace(_frmAdd.txbIdEmployee.Text) ? null : _frmAdd.txbIdEmployee.Text.Trim();
         entity.Name = string.IsNullOrWhiteSpace(_frmAdd.txbEmployeeName.Text) ? null : _frmAdd.txbEmployeeName.Text.Trim();
+        entity.Email = string.IsNullOrWhiteSpace(_frmAdd.txbEMail.Text) ? null : _frmAdd.txbEMail.Text.Trim();
+        entity.PhoneNumber = string.IsNullOrWhiteSpace(_frmAdd.txbPhoneNumber.Text) ? null : _frmAdd.txbPhoneNumber.Text.Trim();
         entity.IdRole = ComboValueOrNull(_frmAdd.cboRole);
         entity.Active = _frmAdd.cboActive.SelectedIndex;
         if (includePasswordHash && passwordHashBcrypt != null)
@@ -143,7 +148,6 @@ internal class ClsUserCrud
 
     public void OpenFrmAdd()
     {
-        _validateCodeSnapshot = null;
         IsAddOrModify = true;
         IsAddUpdate = false;
         idAddModify = null;
@@ -195,7 +199,7 @@ internal class ClsUserCrud
             return;
         }
 
-        string? code = _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.SelectedRows[0].Index].Cells[ClsUserCrud.columnUserName].Value?.ToString();
+        string? code = _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.SelectedRows[0].Index].Cells[Column.id].Value?.ToString();
         OpenFrmChangePassword(code ?? string.Empty);
     }
 
@@ -226,10 +230,10 @@ internal class ClsUserCrud
             if (!ValidatePasswordsForAdd())
                 return;
 
-            string code = _frmAdd.txbUserName.Text.Trim().ToUpperInvariant();
-            if (EUserCrud.UserExists(code))
+            string userName = _frmAdd.txbUserName.Text.Trim().ToUpperInvariant();
+            if (EUserCrud.UserExists(userName))
             {
-                MessageBox.Show($"El usuario {code} ya existe. Use otro código.", "Añadir usuario", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"El usuario {userName} ya existe. Use otro nombre de usuario.", "Añadir usuario", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -241,7 +245,10 @@ internal class ClsUserCrud
 
             if (IsAddUpdate)
             {
-                MessageBox.Show($"Se ha agregado el usuario con código: {idAddModify}", "Añadir usuario");
+                string nombre = string.IsNullOrWhiteSpace(addEntity.UserDisplayName)
+                    ? idAddModify ?? ""
+                    : addEntity.UserDisplayName.Trim();
+                MessageBox.Show($"Se ha agregado el usuario {nombre} con código: {idAddModify}.", "Añadir usuario");
                 _frmAdd.Close();
             }
             else
@@ -259,7 +266,10 @@ internal class ClsUserCrud
 
             if (IsModifyUpdate)
             {
-                MessageBox.Show($"Se ha modificado el usuario con código: {idAddModify}", "Modificar usuario");
+                string nombre = string.IsNullOrWhiteSpace(modifyEntity.UserDisplayName)
+                    ? idAddModify ?? ""
+                    : modifyEntity.UserDisplayName.Trim();
+                MessageBox.Show($"Se ha modificado el usuario {nombre} con código: {idAddModify}.", "Modificar usuario");
                 _frmAdd.Close();
             }
             else
