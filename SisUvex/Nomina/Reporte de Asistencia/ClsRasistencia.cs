@@ -232,6 +232,8 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		}
 		public void ValidarRangoSemanas()
 		{
+			if (bloqueando) return;
+
 			if (frmR.cboSemanaInicial.SelectedItem == null || frmR.cboSemanaFinal.SelectedItem == null)
 				return;
 
@@ -239,20 +241,23 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			DataRowView rowFin = (DataRowView)frmR.cboSemanaFinal.SelectedItem;
 
 			if (rowInicio[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value ||
-				rowFin[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value)
+				rowFin[Payroll_AttendancePeriod.ColumnEndDate] == DBNull.Value)
 			{
 				return;
 			}
 
 			DateTime inicio = Convert.ToDateTime(rowInicio[Payroll_AttendancePeriod.ColumnStartDate]);
-			DateTime fin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnStartDate]);
+			DateTime fin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnEndDate]);
 
 			if (fin < inicio)
 			{
+				bloqueando = true; // 🔥 evitar rebote
+
 				frmR.cboSemanaFinal.SelectedIndex = frmR.cboSemanaInicial.SelectedIndex;
+
+				bloqueando = false;
 			}
 		}
-		
 		public void Empleado(string idEmpleado, DateTime? fechaInicio, DateTime? fechaFin)
 		{ 
 			if (fechaInicio == null || fechaFin == null)

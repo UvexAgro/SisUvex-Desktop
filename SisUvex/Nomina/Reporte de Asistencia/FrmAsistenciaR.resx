@@ -138,7 +138,7 @@
   <data name="btnExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAATbSURBVEhLnZVb
+        vwAADr8BOAVTJAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAATbSURBVEhLnZVb
         TFN3HMdPsr0ve9wcF7kXRBCVgYAyxCulV1qsIKIFFBCHMLE9PS2Hu5RCKQiKRpMlW9gSjY/uwfteZuaS
         Pe3yuOiDY3IptQgq+S6/32krNnMz+yUn4eGc7+fbz/n9D4LwH1Msy+9XX+7OMkycrt010uwrHjl+p2iw
         7q/o+95pyiYbP6z5Uio1T9lOaSZOf1U23vrzbt+JpWJPA/LPHsGnA7XY0ncIOT3ViH72rVN5RRqtuGS/
@@ -160,6 +160,14 @@
         qwqAt8fbqOjx1CHfbWU9BOD2vWvWs/O1niSJ2mux3qHl9nGOUHuxDOvs+zk8Rir3C0Ue62Ch23qjYLDu
         jwK3dTXPfRS5If/cvrcKG9f4Jz20OdH/Gd9pEs6UfrBVPrh9s1zVlCNbLmfLBx5ulCuD/PWUzUhzVTAg
         SdT9P8A/jsn0XoZoylZ16Kwpom4s2a67k3hGPRN929vmb/gtqVUfMmfwAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnEliminar.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DwAACw8BkvkDpQAAAHtJREFUOE/tj7sJgEAQRF9oGVZhG5qY2IVYjxZgVdZhogzswnJ+zkAzHwzccLNz
+        t/AhPTCbdM5SASuwZaSMsgcKoAHajGrLfoP2Tb+cSplLvGAw70PRPyrQrsILov8LHhZ05r0g+tuCyUKL
+        yQuiH9OhSGkBvXIm3SnzHjvaAVF7KNZ2/QAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

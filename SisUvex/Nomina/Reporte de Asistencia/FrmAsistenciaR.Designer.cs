@@ -39,8 +39,8 @@
 			lbl = new Label();
 			txbCodigo = new TextBox();
 			txbEmpleado = new TextBox();
-			btnAcceptarEmpleado = new Button();
 			label1 = new Label();
+			btnAcceptarEmpleado = new Button();
 			pllCuadrilla = new Panel();
 			cboCuadrilla = new ComboBox();
 			btnAceptarCuadrilla = new Button();
@@ -56,6 +56,7 @@
 			label2 = new Label();
 			label4 = new Label();
 			btnExcel = new Button();
+			btnEliminar = new Button();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -146,16 +147,6 @@
 			txbEmpleado.Size = new Size(278, 23);
 			txbEmpleado.TabIndex = 102;
 			// 
-			// btnAcceptarEmpleado
-			// 
-			btnAcceptarEmpleado.Location = new Point(158, 471);
-			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
-			btnAcceptarEmpleado.Size = new Size(126, 34);
-			btnAcceptarEmpleado.TabIndex = 101;
-			btnAcceptarEmpleado.Text = "Mostrar";
-			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
-			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
-			// 
 			// label1
 			// 
 			label1.AutoSize = true;
@@ -165,6 +156,16 @@
 			label1.Size = new Size(70, 19);
 			label1.TabIndex = 39;
 			label1.Text = "Empleado";
+			// 
+			// btnAcceptarEmpleado
+			// 
+			btnAcceptarEmpleado.Location = new Point(158, 471);
+			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
+			btnAcceptarEmpleado.Size = new Size(126, 34);
+			btnAcceptarEmpleado.TabIndex = 101;
+			btnAcceptarEmpleado.Text = "Mostrar";
+			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
+			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
 			// 
 			// pllCuadrilla
 			// 
@@ -356,11 +357,26 @@
 			btnExcel.UseVisualStyleBackColor = true;
 			btnExcel.Click += btnExcel_Click;
 			// 
+			// btnEliminar
+			// 
+			btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
+			btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnEliminar.Location = new Point(620, 471);
+			btnEliminar.Name = "btnEliminar";
+			btnEliminar.Padding = new Padding(10, 0, 10, 0);
+			btnEliminar.Size = new Size(126, 34);
+			btnEliminar.TabIndex = 117;
+			btnEliminar.Text = "Eliminar";
+			btnEliminar.TextAlign = ContentAlignment.MiddleRight;
+			btnEliminar.UseVisualStyleBackColor = true;
+			btnEliminar.Click += btnEliminar_Click;
+			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1047, 825);
+			Controls.Add(btnEliminar);
 			Controls.Add(btnExcel);
 			Controls.Add(label4);
 			Controls.Add(label2);
@@ -418,5 +434,6 @@
 		private Label label2;
 		private Label label4;
 		public Button btnExcel;
+		private Button btnEliminar;
 	}
 }
