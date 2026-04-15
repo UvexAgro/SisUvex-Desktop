@@ -72,6 +72,24 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			cargando = false;
 
 		}
+		//public void CargarCuadrillas()
+		//{
+		//	cargando = true;
+
+		//	ClsCatalogos cls = new ClsCatalogos();
+		//	DataTable dt = cls.CboCuadrilla("");
+
+		//	frmR.cboCuadrilla.DataSource = dt;
+		//	frmR.cboCuadrilla.DisplayMember = "Nombre";
+		//	frmR.cboCuadrilla.ValueMember = "Código";
+
+		//	if (dt.Rows.Count > 0)
+		//	{
+		//		frmR.cboCuadrilla.SelectedIndex = 0;
+		//	}
+
+		//	cargando = false;
+		//}
 		public void CargarCuadrillas()
 		{
 			cargando = true;
@@ -79,14 +97,19 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			ClsCatalogos cls = new ClsCatalogos();
 			DataTable dt = cls.CboCuadrilla("");
 
+			//  Crear fila "Seleccionar"
+			DataRow dr = dt.NewRow();
+			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dr["Código"] = DBNull.Value;
+
+			dt.Rows.InsertAt(dr, 0); // Insertar al inicio
+
 			frmR.cboCuadrilla.DataSource = dt;
 			frmR.cboCuadrilla.DisplayMember = "Nombre";
 			frmR.cboCuadrilla.ValueMember = "Código";
 
-			if (dt.Rows.Count > 0)
-			{
-				frmR.cboCuadrilla.SelectedIndex = 0;
-			}
+			//  Seleccionar el primero (que ahora es "Seleccionar...")
+			frmR.cboCuadrilla.SelectedIndex = 0;
 
 			cargando = false;
 		}
