@@ -20,6 +20,7 @@ namespace SisUvex.Usuarios.Role
         public int costReports { get; set; }
         public int audit { get; set; }
         public int ownFilter { get; set; }
+        public int sysAdmin { get; set; }
         public static string GetNextId()
         {
             string result = ClsQuerysUsuarios.GetData("SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST([id_role] AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM [Conf_Role]");
@@ -64,6 +65,7 @@ namespace SisUvex.Usuarios.Role
                     costReports = CharFlagToInt(dr["c_costReports"]);
                     audit = CharFlagToInt(dr["c_audit"]);
                     ownFilter = CharFlagToInt(dr["c_ownFilter"]);
+                    sysAdmin = CharFlagToInt(dr["c_sysAdmin"]);
                 }
             }
             catch (Exception ex)
@@ -99,6 +101,7 @@ namespace SisUvex.Usuarios.Role
                 cmd.Parameters.AddWithValue("@c_audit", audit == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
+                cmd.Parameters.AddWithValue("@c_sysAdmin", sysAdmin == 1 ? "1" : "0");
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
@@ -144,6 +147,7 @@ namespace SisUvex.Usuarios.Role
                 cmd.Parameters.AddWithValue("@c_audit", audit == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@c_ownFilter", ownFilter == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
+                cmd.Parameters.AddWithValue("@c_sysAdmin", sysAdmin == 1 ? "1" : "0");
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())

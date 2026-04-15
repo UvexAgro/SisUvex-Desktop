@@ -77,21 +77,7 @@ namespace SisUvex
         {
             if (User.GetAccessLevel() >= acs)
             {
-                bool va = false;
-
-                foreach (Form ven in MdiChildren)
-                {
-                    if (ven.Name.Equals(f.Name))
-                    {
-                        ven.Focus();
-                        va = true;
-                    }
-                }
-                if (!va)
-                {
-                    f.MdiParent = this;
-                    f.Show();
-                }
+                AbrirVentanaHijo(f);
             }
         }
         private void AbrirFormulario(Form f, int acs)
@@ -648,6 +634,33 @@ namespace SisUvex
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName());
+        }
+
+        private void rolesDeUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasSysAdminPermission())
+                return;
+
+            Usuarios.Role.FrmUserRoleCat cat = new();
+            AbrirVentanaHijo(cat);
+        }
+        public void AbrirVentanaHijo(Form f)
+        {
+            bool va = false;
+
+            foreach (Form ven in MdiChildren)
+            {
+                if (ven.Name.Equals(f.Name))
+                {
+                    ven.Focus();
+                    va = true;
+                }
+            }
+            if (!va)
+            {
+                f.MdiParent = this;
+                f.Show();
+            }
         }
     }
 }

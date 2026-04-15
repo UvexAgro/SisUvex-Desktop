@@ -13,6 +13,7 @@ namespace SisUvex.Usuarios.Role
         public ToggleButton tgbProductionReports = new();
         public ToggleButton tgbCostReports = new();
         public ToggleButton tgbAudit = new();
+        public ToggleButton tgbSysAdmin = new();
 
         public FrmUserRoleAdd()
         {
@@ -26,6 +27,7 @@ namespace SisUvex.Usuarios.Role
             AddToggleButtonToPanel(tgbProductionReports, pnlChbProductionReports);
             AddToggleButtonToPanel(tgbCostReports, pnlChbCostReports);
             AddToggleButtonToPanel(tgbAudit, pnlChbAudit);
+            AddToggleButtonToPanel(tgbSysAdmin, pnlChbSysAdmin);
         }
 
         private void AddToggleButtonToPanel(ToggleButton toggleButton, Panel panel)

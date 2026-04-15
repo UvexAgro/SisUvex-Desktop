@@ -26,6 +26,7 @@ public static class User
         public static bool CostReports { get; set; } = false;
         public static bool Audit { get; set; } = false;
         public static bool OwnFilter { get; set; } = false;
+        public static bool SysAdmin { get; set; } = false;
     }
 
     public static void SetUserInfo(string userName)
@@ -64,6 +65,7 @@ public static class User
                 Permission.CostReports = ToBool(dr["c_costReports"]);
                 Permission.Audit = ToBool(dr["c_audit"]);
                 Permission.OwnFilter = ToBool(dr["c_ownFilter"]);
+                Permission.SysAdmin = ToBool(dr["c_sysAdmin"]);
             }
         }
         catch (Exception ex)
@@ -107,6 +109,10 @@ public static class User
     public static bool HasOwnFilterPermission()
     {
         return Permission.OwnFilter;
+    }
+    public static bool HasSysAdminPermission()
+    {
+        return Permission.SysAdmin;
     }
 
     private static bool ToBool(object value)

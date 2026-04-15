@@ -58,6 +58,8 @@
             label10 = new Label();
             pnlTgbOwnFilter = new Panel();
             label11 = new Label();
+            pnlChbSysAdmin = new Panel();
+            label12 = new Label();
             SuspendLayout();
             // 
             // lblNombre
@@ -79,15 +81,15 @@
             cboActive.Location = new Point(281, 12);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 29);
-            cboActive.TabIndex = 96;
+            cboActive.TabIndex = 12;
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAccept.Location = new Point(259, 287);
+            btnAccept.Location = new Point(259, 316);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 94;
+            btnAccept.TabIndex = 10;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -95,10 +97,10 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(336, 287);
+            btnCancel.Location = new Point(336, 316);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 95;
+            btnCancel.TabIndex = 11;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -110,7 +112,7 @@
             txbId.Location = new Point(365, 12);
             txbId.Name = "txbId";
             txbId.Size = new Size(46, 29);
-            txbId.TabIndex = 84;
+            txbId.TabIndex = 13;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -150,7 +152,7 @@
             txbName.MaxLength = 50;
             txbName.Name = "txbName";
             txbName.Size = new Size(397, 29);
-            txbName.TabIndex = 89;
+            txbName.TabIndex = 0;
             // 
             // label1
             // 
@@ -257,49 +259,49 @@
             pnlChbPrintLabels.Location = new Point(14, 130);
             pnlChbPrintLabels.Name = "pnlChbPrintLabels";
             pnlChbPrintLabels.Size = new Size(36, 21);
-            pnlChbPrintLabels.TabIndex = 113;
+            pnlChbPrintLabels.TabIndex = 1;
             // 
             // pnlChbViewCatalogs
             // 
             pnlChbViewCatalogs.Location = new Point(14, 157);
             pnlChbViewCatalogs.Name = "pnlChbViewCatalogs";
             pnlChbViewCatalogs.Size = new Size(36, 21);
-            pnlChbViewCatalogs.TabIndex = 114;
+            pnlChbViewCatalogs.TabIndex = 2;
             // 
             // pnlChbEditCatalogs
             // 
             pnlChbEditCatalogs.Location = new Point(14, 184);
             pnlChbEditCatalogs.Name = "pnlChbEditCatalogs";
             pnlChbEditCatalogs.Size = new Size(36, 21);
-            pnlChbEditCatalogs.TabIndex = 114;
+            pnlChbEditCatalogs.TabIndex = 3;
             // 
             // pnlChbCreateRecords
             // 
             pnlChbCreateRecords.Location = new Point(14, 211);
             pnlChbCreateRecords.Name = "pnlChbCreateRecords";
             pnlChbCreateRecords.Size = new Size(36, 21);
-            pnlChbCreateRecords.TabIndex = 114;
+            pnlChbCreateRecords.TabIndex = 4;
             // 
             // pnlChbProductionReports
             // 
             pnlChbProductionReports.Location = new Point(14, 238);
             pnlChbProductionReports.Name = "pnlChbProductionReports";
             pnlChbProductionReports.Size = new Size(36, 21);
-            pnlChbProductionReports.TabIndex = 114;
+            pnlChbProductionReports.TabIndex = 5;
             // 
             // pnlChbCostReports
             // 
             pnlChbCostReports.Location = new Point(14, 265);
             pnlChbCostReports.Name = "pnlChbCostReports";
             pnlChbCostReports.Size = new Size(36, 21);
-            pnlChbCostReports.TabIndex = 114;
+            pnlChbCostReports.TabIndex = 6;
             // 
             // pnlChbAudit
             // 
             pnlChbAudit.Location = new Point(14, 292);
             pnlChbAudit.Name = "pnlChbAudit";
             pnlChbAudit.Size = new Size(36, 21);
-            pnlChbAudit.TabIndex = 114;
+            pnlChbAudit.TabIndex = 7;
             // 
             // label10
             // 
@@ -316,7 +318,7 @@
             pnlTgbOwnFilter.Location = new Point(259, 130);
             pnlTgbOwnFilter.Name = "pnlTgbOwnFilter";
             pnlTgbOwnFilter.Size = new Size(36, 21);
-            pnlTgbOwnFilter.TabIndex = 117;
+            pnlTgbOwnFilter.TabIndex = 9;
             // 
             // label11
             // 
@@ -328,12 +330,31 @@
             label11.TabIndex = 116;
             label11.Text = "Filtros propios";
             // 
+            // pnlChbSysAdmin
+            // 
+            pnlChbSysAdmin.Location = new Point(14, 319);
+            pnlChbSysAdmin.Name = "pnlChbSysAdmin";
+            pnlChbSysAdmin.Size = new Size(36, 21);
+            pnlChbSysAdmin.TabIndex = 8;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 12F);
+            label12.Location = new Point(56, 319);
+            label12.Name = "label12";
+            label12.Size = new Size(188, 21);
+            label12.TabIndex = 115;
+            label12.Text = "Administrador de sistema";
+            // 
             // FrmUserRoleAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(423, 332);
+            ClientSize = new Size(423, 361);
+            Controls.Add(pnlChbSysAdmin);
             Controls.Add(pnlTgbOwnFilter);
+            Controls.Add(label12);
             Controls.Add(label11);
             Controls.Add(label10);
             Controls.Add(pnlChbAudit);
@@ -362,8 +383,10 @@
             Controls.Add(label2);
             Controls.Add(lblActivo);
             Controls.Add(lblNombre);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmUserRoleAdd";
             SizeGripStyle = SizeGripStyle.Hide;
             Text = "Añadir rol";
@@ -404,5 +427,7 @@
         private Panel pnlTgbOwnFilter;
         private Label label11;
         private CheckBox checkBox1;
+        private Panel pnlChbSysAdmin;
+        private Label label12;
     }
 }

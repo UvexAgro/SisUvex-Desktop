@@ -112,6 +112,7 @@ namespace SisUvex.Usuarios.Role
             SetToggleFromFlag(_frmAdd.tgbCostReports, entity.costReports);
             SetToggleFromFlag(_frmAdd.tgbAudit, entity.audit);
             SetToggleFromFlag(_frmAdd.tgbOwnFilter, entity.ownFilter);
+            SetToggleFromFlag(_frmAdd.tgbSysAdmin, entity.sysAdmin);
         }
 
         private EUserRole SetEntity()
@@ -128,6 +129,7 @@ namespace SisUvex.Usuarios.Role
             entity.costReports = _frmAdd.tgbCostReports.Checked ? 1 : 0;
             entity.audit = _frmAdd.tgbAudit.Checked ? 1 : 0;
             entity.ownFilter = _frmAdd.tgbOwnFilter.Checked ? 1 : 0;
+            entity.sysAdmin = _frmAdd.tgbSysAdmin.Checked ? 1 : 0;
 
             return entity;
         }

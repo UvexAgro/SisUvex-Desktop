@@ -150,6 +150,7 @@
             statusStrip1 = new StatusStrip();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+            rolesDeUsuarioToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -195,7 +196,7 @@
             // 
             // usuarioToolStripMenuItem
             // 
-            usuarioToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { usToolStripMenuItem, cambiarContraseñaToolStripMenuItem });
+            usuarioToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { usToolStripMenuItem, cambiarContraseñaToolStripMenuItem, rolesDeUsuarioToolStripMenuItem });
             usuarioToolStripMenuItem.Name = "usuarioToolStripMenuItem";
             usuarioToolStripMenuItem.Size = new Size(180, 22);
             usuarioToolStripMenuItem.Text = "Usuario";
@@ -985,6 +986,13 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
+            // rolesDeUsuarioToolStripMenuItem
+            // 
+            rolesDeUsuarioToolStripMenuItem.Name = "rolesDeUsuarioToolStripMenuItem";
+            rolesDeUsuarioToolStripMenuItem.Size = new Size(180, 22);
+            rolesDeUsuarioToolStripMenuItem.Text = "Roles de usuario";
+            rolesDeUsuarioToolStripMenuItem.Click += rolesDeUsuarioToolStripMenuItem_Click;
+            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1136,5 +1144,6 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem usToolStripMenuItem;
         private ToolStripMenuItem cambiarContraseñaToolStripMenuItem;
+        private ToolStripMenuItem rolesDeUsuarioToolStripMenuItem;
     }
 }
