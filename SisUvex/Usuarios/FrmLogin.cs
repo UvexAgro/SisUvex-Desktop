@@ -35,7 +35,8 @@ namespace SisUvex
         {
             string userLogin = txbUser.Text.ToUpper();
 
-            if (sql.Login(userLogin, txbPassword.Text))
+            //if (sql.Login(userLogin, txbPassword.Text))
+            if (User.ValidateUserPassword(userLogin, txbPassword.Text))
             {
                 User.SetLastUser(userLogin);
                 User.SetUserInfo(userLogin);
@@ -50,7 +51,7 @@ namespace SisUvex
             }
             else
             {
-                MessageBox.Show("Usuario o contraseña incorrecta.", "[Login]");
+                MessageBox.Show("Usuario o contraseña incorrecta.", "Iniciar sesión");
             }
         }
 

@@ -166,4 +166,35 @@ public static class User
     {
         return ClsConfig.lastLogin;
     }
+    public static bool ValidateUserPassword(string user, string password)
+    {
+        SQLControl sql = new SQLControl();
+        bool isValid = false;
+        try
+        {
+            sql.OpenConectionRead();
+            SqlCommand cmd = new SqlCommand("sp_loginCrypt", sql.cnn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@usuario", user);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.Read())
+            {
+                string dbUser = dr.GetString(0);
+                string dbPass = dr.GetString(1);
+                if (dbUser == user && BCrypt.Net.BCrypt.Verify(password, dbPass))
+                {
+                    isValid = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Comparar usuario y contraseña");
+        }
+        finally
+        {
+            sql.CloseConectionRead();
+        }
+        return isValid;
+    }
 }

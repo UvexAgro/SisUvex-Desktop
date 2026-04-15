@@ -627,13 +627,19 @@ namespace SisUvex
 
         private void usToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!User.HasSysAdminPermission())
+                return;
+
             Usuarios.UserCrud.FrmUserCat cat = new();
-            AbrirVentanaHijo(cat, 4);
+            AbrirVentanaHijo(cat);
         }
 
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName());
+            if (!Usuarios.UserCrud.FrmUserConfirmPass.OpenValidateUserPassword()) //VALIDA QUE EL USUARIO INGRESE SU CONTRASEÑA ANTES DE ABRIR EL FORMULARIO DE CAMBIO DE CONTRASEÑA
+                return;
+
+            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
         }
 
         private void rolesDeUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
