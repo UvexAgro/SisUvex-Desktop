@@ -12,7 +12,7 @@ namespace SisUvex.Nomina.Nom_Descuento_de_personal
 {
 	public partial class FrmDescuento : Form
 	{
-		public ClsAddDesc cls;
+		
 		public FrmDescuento()
 		{
 			InitializeComponent();
@@ -26,8 +26,6 @@ namespace SisUvex.Nomina.Nom_Descuento_de_personal
 		private void FrmDescuento_Load(object sender, EventArgs e)
 		{
 
-			cls ??= new();
-			cls.frm ??= this;
 		}
 	}
 }
