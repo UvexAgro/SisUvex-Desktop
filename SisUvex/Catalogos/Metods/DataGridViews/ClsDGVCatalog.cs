@@ -78,6 +78,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 dtCatalog.AcceptChanges();
             }
         }
+        public void ChangeActiveCell(DataGridView? dgv, string activeValue)
+        {
+            //Este método evita que se recorran las filas en el dgv, ya que moviendole desde el dtCatalog si pasa eso
+            if (dgv == null || dgv.Rows.Count == 0 || !dgv.Columns.Contains(activeColumn))
+                return;
+
+            dgv.SelectedRows[0].Cells[activeColumn].Value = activeValue;
+        }
 
         public void ChangeActiveCell(string id, string activeValue)
         {
@@ -242,44 +250,47 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             //Se cambió a este método para que use la función estática de Metods, ya que es un proceso más complejo y así se puede reutilizar en otros lugares sin necesidad de crear una instancia de ClsDGVCatalog
             Metods.ModifyIdRowInDGV_With2Ids(modifyRows, dtCatalog, idColumn, id2Column, activeColumnHide);
         }
-
+        public static void DgvApplyCellFormattingEvent(DataGridView dataGridView)
+        {
+            DgvApplyCellFormattingEvent(dataGridView, ClsObject.Column.active);
+        }
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
-            //dataGridView.CellFormatting += (sender, e) =>
-            //{
-            //    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
-            //    {
-            //        bool isChecked = false;
-
-            //        if (e.Value != null && e.Value != DBNull.Value)
-            //        {
-            //            string valueText = e.Value.ToString() ?? "0";
-            //            isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
-            //        }
-
-            //        e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
-            //        e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
-            //    }
-            //};
-
-            //ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
-
             dataGridView.CellFormatting += (sender, e) =>
             {
                 if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
                 {
-                    if (e.Value.ToString() == "0")
+                    bool isChecked = false;
+
+                    if (e.Value != null && e.Value != DBNull.Value)
                     {
-                        e.CellStyle.BackColor = System.Drawing.Color.Tomato;
-                        e.CellStyle.ForeColor = System.Drawing.Color.Red;
+                        string valueText = e.Value.ToString() ?? "0";
+                        isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
                     }
-                    if (e.Value.ToString() == "1")
-                    {
-                        e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
-                        e.CellStyle.ForeColor = System.Drawing.Color.Green;
-                    }
+
+                    e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
+                    e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
                 }
             };
+
+            ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
+
+            //dataGridView.CellFormatting += (sender, e) =>
+            //{
+            //    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
+            //    {
+            //        if (e.Value.ToString() == "0")
+            //        {
+            //            e.CellStyle.BackColor = System.Drawing.Color.Tomato;
+            //            e.CellStyle.ForeColor = System.Drawing.Color.Red;
+            //        }
+            //        if (e.Value.ToString() == "1")
+            //        {
+            //            e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
+            //            e.CellStyle.ForeColor = System.Drawing.Color.Green;
+            //        }
+            //    }
+            //};
         }
         public static void ConvertToCheckBoxColumn(DataGridView dgv, string columnName)
         {

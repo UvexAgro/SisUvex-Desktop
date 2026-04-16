@@ -208,7 +208,7 @@ namespace SisUvex.Catalogos.FreightContainer
             bool result = EFreightContainer.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

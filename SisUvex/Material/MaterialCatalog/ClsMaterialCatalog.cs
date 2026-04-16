@@ -249,7 +249,7 @@ namespace SisUvex.Material.MaterialCatalog
             bool result = EMaterialCatalog.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

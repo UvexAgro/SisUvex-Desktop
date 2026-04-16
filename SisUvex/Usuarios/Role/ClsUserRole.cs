@@ -194,7 +194,7 @@ namespace SisUvex.Usuarios.Role
             bool result = EUserRole.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv!.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

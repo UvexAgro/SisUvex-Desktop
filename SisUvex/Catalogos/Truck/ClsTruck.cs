@@ -202,7 +202,7 @@ namespace SisUvex.Catalogos.Truck
             bool result = ETruck.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

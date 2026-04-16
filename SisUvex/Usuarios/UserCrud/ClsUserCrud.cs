@@ -284,7 +284,7 @@ internal class ClsUserCrud
     {
         bool ok = EUserCrud.ActiveProcedure(id, activeValue);
         if (ok)
-            dgv!.ChangeActiveCell(id, activeValue);
+            dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
     }
 
     public void AddNewRowByIdInDGVCatalog()
