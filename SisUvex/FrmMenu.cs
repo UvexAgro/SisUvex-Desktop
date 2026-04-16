@@ -73,11 +73,29 @@ namespace SisUvex
             InitializeComponent();
             FrmMenuInstance = this;
         }
-        public void AbrirVentanaHijo(Form f, int acs)
+        public void AbrirVentanaHijo(Form f, int acs) //PARA CUANDO ES CON EL NIVEL DE ACCESO
         {
             if (User.GetAccessLevel() >= acs)
             {
                 AbrirVentanaHijo(f);
+            }
+        }
+        public void AbrirVentanaHijo(Form f) //PARA CUANDO NO ES CON EL NIVEL DE ACCESO, SINO POR LOS PERMISOS
+        {
+            bool va = false;
+
+            foreach (Form ven in MdiChildren)
+            {
+                if (ven.Name.Equals(f.Name))
+                {
+                    ven.Focus();
+                    va = true;
+                }
+            }
+            if (!va)
+            {
+                f.MdiParent = this;
+                f.Show();
             }
         }
         private void AbrirFormulario(Form f, int acs)
@@ -402,11 +420,11 @@ namespace SisUvex
             AbrirFormulario(cls.frm, 2);
         }
 
-		private void preciosPorGTINToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			SisUvex.Nomina.Prices.PricesGtin.FrmPricesGtinCat cat = new();
-			AbrirVentanaHijo(cat, 1);
-		}
+        private void preciosPorGTINToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SisUvex.Nomina.Prices.PricesGtin.FrmPricesGtinCat cat = new();
+            AbrirVentanaHijo(cat, 1);
+        }
 
         private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -451,12 +469,12 @@ namespace SisUvex
 
         }
 
-		private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			Nomina.Registro_de_Asistencia.FrmRegistroA cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Nomina.Registro_de_Asistencia.FrmRegistroA cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
         private void altaDeEmpleadosSinRegistroToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -585,10 +603,10 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 3);
         }
 
-		private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+        private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-		}
+        }
 
         private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -618,65 +636,91 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 3);
         }
 
-		private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
-			AbrirFormularioDialog(cat, 3);
-		}
+        private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Poda.Reporte_lineas.FrmPayrollPruningReport cat = new();
+            AbrirFormularioDialog(cat, 3);
+        }
 
-		private void reporteDeEmpacadorToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Nomina.Reporte_de_Empacador.FrmPackersReport cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void reporteDeEmpacadorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Reporte_de_Empacador.FrmPackersReport cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void factorToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Operacion_Factor.FrmFactor cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void factorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Operacion_Factor.FrmFactor cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void reporteDeHorariosToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Nomina.Reporte_de_horas.FrmPackingHours cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void reporteDeHorariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Reporte_de_horas.FrmPackingHours cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void reporteToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			Nomina.Nom_Reporte_de_sueldos_diarios.FrmNomsemana cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void reporteToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Nomina.Nom_Reporte_de_sueldos_diarios.FrmNomsemana cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void fechasFestivasToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Catalogos.FechasFestivas.FrmCatFestivo cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void fechasFestivasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Catalogos.FechasFestivas.FrmCatFestivo cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void cajasPorEmpleadoYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ClsWorkTime cls = new ClsWorkTime();
-			AbrirVentanaHijo(cls._frmCat, 1);
-		}
+        private void cajasPorEmpleadoYHorariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClsWorkTime cls = new ClsWorkTime();
+            AbrirVentanaHijo(cls._frmCat, 1);
+        }
 
-		private void reporteDeHorariosToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			Nomina.Reporte_de_horas.FrmPackingHours cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
+        private void reporteDeHorariosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Nomina.Reporte_de_horas.FrmPackingHours cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
 
-		private void reporteDeAsistenciaToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			Nomina.Reporte_de_Asistencia.FrmAsistenciaR cat = new();
-			cat.WindowState = FormWindowState.Maximized;
-			AbrirVentanaHijo(cat, 3);
-		}
-	}
+        private void reporteDeAsistenciaToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Nomina.Reporte_de_Asistencia.FrmAsistenciaR cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
+        }
+
+        private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasSysAdminPermission())
+                return;
+
+            Usuarios.UserCrud.FrmUserCat cat = new();
+            AbrirVentanaHijo(cat);
+        }
+
+        private void rolesDeUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasSysAdminPermission())
+                return;
+
+            Usuarios.Role.FrmUserRoleCat cat = new();
+            AbrirVentanaHijo(cat);
+        }
+
+        private void cambiarTuContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Usuarios.UserCrud.FrmUserConfirmPass.OpenValidateUserPassword()) //VALIDA QUE EL USUARIO INGRESE SU CONTRASEÑA ANTES DE ABRIR EL FORMULARIO DE CAMBIO DE CONTRASEÑA
+                return;
+
+            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
+        }
+    }
 }
