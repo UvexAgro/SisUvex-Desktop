@@ -232,7 +232,7 @@ FROM dbo.fn_PackHorasEmpaque(
 				if (frmPacki.dgvHoras.Columns.Contains("HorasExtras"))
 					frmPacki.dgvHoras.Columns["HorasExtras"].HeaderText = "Horas Extra";
 
-				// 🟡 DESCANSO
+				//  DESCANSO
 				if (frmPacki.dgvHoras.Columns.Contains("InicioDescanso"))
 				{
 					System.Drawing.Color descanso = System.Drawing.Color.AliceBlue;
@@ -242,7 +242,7 @@ FROM dbo.fn_PackHorasEmpaque(
 					frmPacki.dgvHoras.Columns["HorasDescanso"].DefaultCellStyle.BackColor = descanso;
 				}
 
-				// 🔵 COMIDA
+				//  COMIDA
 				if (frmPacki.dgvHoras.Columns.Contains("InicioComida"))
 				{
 					System.Drawing.Color comida = System.Drawing.Color.LightBlue;
@@ -252,7 +252,7 @@ FROM dbo.fn_PackHorasEmpaque(
 					frmPacki.dgvHoras.Columns["HorasComida"].DefaultCellStyle.BackColor = comida;
 				}
 
-				// 🔴 CENA
+				//  CENA
 				if (frmPacki.dgvHoras.Columns.Contains("InicioCena"))
 				{
 					System.Drawing.Color cena = System.Drawing.Color.LightBlue;
