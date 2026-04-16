@@ -35,8 +35,23 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			cls.CargarTemporada();
 			clsA.CargarHorasInicial();
 
+			// 🔷 ESTILO HEADER
+			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+			dgvHoras.ColumnHeadersHeight = 50;
+			dgvHoras.EnableHeadersVisualStyles = false;
+
+			// 🔷 CENTRAR TEXTO
+			dgvHoras.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvHoras.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+			// 🔷 EVENTO
+			dgvHoras.CellPainting += dgvHoras_CellPainting;
+
+			// 🔷 AJUSTAR NOMBRES
+			clsA.AjustarEncabezados();
+
 			isLoaded = true;
-			
+
 		}
 
 		private void cboFinal_SelectedIndexChanged(object sender, EventArgs e)
@@ -82,6 +97,11 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		private void btnEliminar_Click(object sender, EventArgs e)
 		{
 			clsA.DeleteProcedure();
+		}
+
+		private void dgvHoras_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			clsA.PintarEncabezadosAgrupados((DataGridView)sender, e);
 		}
 	}
 }

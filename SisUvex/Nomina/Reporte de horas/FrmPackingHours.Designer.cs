@@ -51,7 +51,7 @@
 			// 
 			dgvHoras.AllowUserToAddRows = false;
 			dgvHoras.AllowUserToDeleteRows = false;
-			dgvHoras.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			dgvHoras.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			dgvHoras.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvHoras.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvHoras.BackgroundColor = SystemColors.ControlLightLight;
@@ -86,6 +86,7 @@
 			dgvHoras.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvHoras.Size = new Size(1053, 615);
 			dgvHoras.TabIndex = 19;
+			dgvHoras.CellPainting += dgvHoras_CellPainting;
 			// 
 			// lbencabezado
 			// 
