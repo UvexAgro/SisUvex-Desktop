@@ -49,7 +49,7 @@ namespace SisUvex.Catalogos.WorkGroup
 
             _frmCat.dgvCatalog.DataSource = dgv.GetDataTableCatalogActives();
 
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
 
         private void AddControlsToList()

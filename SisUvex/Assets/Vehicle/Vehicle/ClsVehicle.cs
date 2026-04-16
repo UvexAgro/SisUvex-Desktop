@@ -211,7 +211,7 @@ namespace SisUvex.Assets.Vehicle.Vehicle
         {
             bool result = EVehicle.ActiveProcedure(id, activeValue);
             if (result)
-                dgv?.ChangeActiveCell(id, activeValue);
+                dgv?.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

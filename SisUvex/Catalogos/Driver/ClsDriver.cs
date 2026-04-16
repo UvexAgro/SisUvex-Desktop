@@ -209,7 +209,7 @@ namespace SisUvex.Catalogos.Driver
             bool result = EDriver.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

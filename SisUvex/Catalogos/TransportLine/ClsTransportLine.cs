@@ -188,7 +188,7 @@ namespace SisUvex.Catalogos.TransportLine
             bool result = ETransportLine.ActiveProcedure(id, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(id, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
 
         public void AddNewRowByIdInDGVCatalog()

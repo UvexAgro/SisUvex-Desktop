@@ -720,7 +720,7 @@ namespace SisUvex
             if (!Usuarios.UserCrud.FrmUserConfirmPass.OpenValidateUserPassword()) //VALIDA QUE EL USUARIO INGRESE SU CONTRASEÑA ANTES DE ABRIR EL FORMULARIO DE CAMBIO DE CONTRASEÑA
                 return;
 
-            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
+            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserId()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
         }
     }
 }

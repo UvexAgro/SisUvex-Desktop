@@ -38,7 +38,7 @@ namespace SisUvex.Catalogos.Lot
             _frmCat.dgvCatalog.Columns[_columnActive2].Visible = false;
             _frmCat.dgvCatalog.Columns[_columnVariety].Visible = false;
 
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, ClsObject.Variety.Cbo);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboVariety, _frmCat.chbRemovedVariety);

@@ -118,7 +118,6 @@ namespace SisUvex.Catalogos.AgenciaAduanal
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogo.Size = new Size(783, 404);
             dgvCatalogo.TabIndex = 4;
-            dgvCatalogo.CellFormatting += dgvCatalogo_CellFormatting;
             dgvCatalogo.MouseDoubleClick += dgvCatalogo_MouseDoubleClick;
             // 
             // btnEliminados

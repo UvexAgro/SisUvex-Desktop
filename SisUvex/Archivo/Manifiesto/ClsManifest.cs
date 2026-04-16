@@ -40,8 +40,7 @@ namespace SisUvex.Archivo.Manifiesto
             dgv.btnRemoved = _frmCat.btnRemoved;
 
             SetDgvCatalog();
-
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(dgv.dgvCatalog, dgv.activeColumn, dgv.idColumn);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, ClsObject.Grower.Cbo);

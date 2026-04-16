@@ -141,6 +141,7 @@
             Controls.Add(lblNombre);
             Controls.Add(lblTitle);
             Controls.Add(label5);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;

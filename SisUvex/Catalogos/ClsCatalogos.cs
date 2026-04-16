@@ -246,23 +246,6 @@ namespace SisUvex.Catalogos
 
 #region DATAGRIDVIEW ------------------------------------------------------s
 
-        public void DataGridViewFormatoColumaActivo(DataGridView dataGridView, DataGridViewCellFormattingEventArgs e)
-        {
-            if (dataGridView.Columns[e.ColumnIndex].Name == "Activo")
-            {
-                if (e.Value.ToString() == "0")
-                {
-                    e.CellStyle.BackColor = Color.Tomato;
-                    e.CellStyle.ForeColor = Color.Red;
-                }
-                if (e.Value.ToString() == "1")
-                {
-                    e.CellStyle.BackColor = Color.LightGreen;
-                    e.CellStyle.ForeColor = Color.Green;
-                }
-            }
-        }
-
         public DataTable ConvertirDataGridViewADataTable(DataGridView dataGridView)
         {
             DataTable dataTable = new DataTable();

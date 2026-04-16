@@ -46,7 +46,7 @@ namespace SisUvex.Nomina.Comedores.DiningHall
 
             _frmCat.dgvCatalog.DataSource = dgv.GetDataTableCatalogActives();
 
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
 
         public void RemoveProcedure()
