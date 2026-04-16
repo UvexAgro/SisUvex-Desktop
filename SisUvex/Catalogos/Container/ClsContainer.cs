@@ -58,6 +58,8 @@ namespace SisUvex.Catalogos.Container
             dgv.LoadDataTableCatalog();
 
             _frmCat.dgvCatalog.DataSource = dgv.GetDataTableCatalogActives();
+
+            Metods.DataGridViews.ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
 
         private void AddControlsToList()

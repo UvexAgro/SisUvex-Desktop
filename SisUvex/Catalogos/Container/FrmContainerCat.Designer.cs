@@ -87,7 +87,6 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(783, 404);
             dgvCatalog.TabIndex = 22;
-            dgvCatalog.CellFormatting += dgvCatalog_CellFormatting;
             // 
             // btnRemove
             // 

@@ -20,6 +20,9 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         public DataTable dtCatalog;
         //public Button btnRemoved;
 
+
+        ///===== LAS COLUMNAS ACTIVE Y ACTIVE2, la 1 es el que muestra y jala el valor para cambiar el color a rojo y verde, el active2 es para mantener el valor y para seguir mostrando la fila por ejemplo: si está mostrando solo "activos" pero la fila seleccionada se hizo "inactivo" sin esta columna se desapareceria de las filas mostradas, con esta columna lo sigue mostrando, para efectos prácticos y el usuario siga viendo esa fila y reconozca cual fue la modificada. ===///
+
         public ClsDGVCatalog(DataGridView dgvCatalog, DataTable dtCatalog)
         {
             this.dtCatalog = dtCatalog;
@@ -39,7 +42,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
             SetFilterActivesOnly();
 
-            DgvApplyCellFormattingEvent(dgvCatalog, activeColumn);
+            DgvApplyCellFormattingEvent(dgvCatalog, activeColumn, idColumn);
         }
 
         private void HideActiveColumn2()
@@ -252,45 +255,62 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         }
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView)
         {
-            DgvApplyCellFormattingEvent(dataGridView, ClsObject.Column.active);
+            DgvApplyCellFormattingEvent(dataGridView, ClsObject.Column.active, ClsObject.Column.id);
         }
-        public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
+        public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName, string idColumnName)
         {
-            dataGridView.CellFormatting += (sender, e) =>
+            if (!dataGridView.Columns.Contains(activeColumnName))
+                return;
+
+            if (dataGridView.Columns.Contains(idColumnName)) // SI CONTIENE LA COLUMNA ID ("Código")
             {
-                if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
+                dataGridView.Columns[idColumnName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; //centrado
+
+                dataGridView.Columns[activeColumnName].Visible = false; // Ocultar columna activos
+
+                dataGridView.CellFormatting += (sender, e) =>
                 {
-                    bool isChecked = false;
-
-                    if (e.Value != null && e.Value != DBNull.Value)
+                    if (dataGridView.Columns[e.ColumnIndex].Name == idColumnName)
                     {
-                        string valueText = e.Value.ToString() ?? "0";
-                        isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        DataGridViewRow row = dataGridView.Rows[e.RowIndex];
+                        if (row.Cells[activeColumnName].Value != null && row.Cells[activeColumnName].Value != DBNull.Value)
+                        {
+
+                            string activeValue = row.Cells[activeColumnName].Value.ToString() ?? "0";
+                            bool isActive = activeValue == "1" || activeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+                            e.CellStyle.BackColor = isActive ? Color.LightGreen : Color.Tomato;
+                            e.CellStyle.ForeColor = isActive ? Color.DarkGreen : Color.DarkRed;
+                            //e.CellStyle.SelectionBackColor = isActive ? Color.LightGreen : Color.Tomato;
+                            //e.CellStyle.SelectionForeColor = isActive ? Color.DarkGreen : Color.DarkRed;
+
+                            e.CellStyle.Font = new Font(dataGridView.Font, FontStyle.Bold); //Negritas/Bold
+                        }
                     }
+                };
+            }
+            else // SINO, MANTIENE LA COLUMNA ACTIVO DE COLORES
+            {
+                dataGridView.CellFormatting += (sender, e) =>
+                {
+                    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
+                    {
+                        bool isChecked = false;
 
-                    e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
-                    e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
-                }
-            };
+                        if (e.Value != null && e.Value != DBNull.Value)
+                        {
+                            string valueText = e.Value.ToString() ?? "0";
+                            isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        }
 
-            ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
+                        e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
+                        e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
+                    }
+                };
 
-            //dataGridView.CellFormatting += (sender, e) =>
-            //{
-            //    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
-            //    {
-            //        if (e.Value.ToString() == "0")
-            //        {
-            //            e.CellStyle.BackColor = System.Drawing.Color.Tomato;
-            //            e.CellStyle.ForeColor = System.Drawing.Color.Red;
-            //        }
-            //        if (e.Value.ToString() == "1")
-            //        {
-            //            e.CellStyle.BackColor = System.Drawing.Color.LightGreen;
-            //            e.CellStyle.ForeColor = System.Drawing.Color.Green;
-            //        }
-            //    }
-            //};
+                // ==== COLUMNA ACTIVO CON CHECKBOX
+                ConvertToCheckBoxColumn(dataGridView, activeColumnName);
+            }
         }
         public static void ConvertToCheckBoxColumn(DataGridView dgv, string columnName)
         {

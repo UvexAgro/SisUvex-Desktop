@@ -112,6 +112,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvCatalogPrices.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogPrices.Size = new Size(448, 570);
             dgvCatalogPrices.TabIndex = 2;
+            dgvCatalogPrices.CellMouseDoubleClick += dgvCatalogPrices_CellMouseDoubleClick;
             // 
             // btnModifyGtin
             // 
@@ -128,6 +129,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             dgvCatalogGtin.AllowUserToAddRows = false;
             dgvCatalogGtin.AllowUserToDeleteRows = false;
             dgvCatalogGtin.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvCatalogGtin.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
             dgvCatalogGtin.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvCatalogGtin.BackgroundColor = SystemColors.ControlLightLight;
             dgvCatalogGtin.BorderStyle = BorderStyle.Fixed3D;

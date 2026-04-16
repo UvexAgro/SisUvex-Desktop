@@ -20,12 +20,14 @@ namespace SisUvex.Catalogos.Categoría
             InitializeComponent();
 
             cls = new ClsCategoria(this);
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(dgvCatalogo);
         }
 
         private void FrmCategoriaCat_Load(object sender, EventArgs e)
         {
             dgvCatalogo.DataSource = cls.ObtenerCatalogoActivosCategoriaDataGridView();
+
+            Metods.DataGridViews.ClsDGVCatalog.DgvApplyCellFormattingEvent(dgvCatalogo);
+
         }
 
         private void btnAñadir_Click(object sender, EventArgs e)

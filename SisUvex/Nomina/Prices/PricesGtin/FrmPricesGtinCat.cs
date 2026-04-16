@@ -62,5 +62,10 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             if (cls.isModifyUpdate)
                 cls.ModifyDgvGtinAndSizeCatalog();
         }
+
+        private void dgvCatalogPrices_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            cls.SelectPriceFrmCat();
+        }
     }
 }
