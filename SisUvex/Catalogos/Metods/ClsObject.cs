@@ -1,6 +1,8 @@
 
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
+using SisUvex.Catalogos.Metods.Querys;
+using System.Data;
 using System.Diagnostics.Metrics;
 using System.Web;
 
@@ -621,6 +623,22 @@ namespace SisUvex.Catalogos.Metods
                                             d_endDate_per AS [{ColumnEndDate}], 
                                             id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
             public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+        }
+
+        public static class Employee
+        {
+            public const string TableName = "Nom_Employee";
+            public const string ColumnId = "idEmployee";
+            public const string ColumnName = "Nombre empleado";
+            public static DataTable? GetDtFullName(string idEmployee)
+            {
+                string qry = $"SELECT id_employee AS [{ColumnId}], CONCAT_WS(' ', v_lastNamePat, v_lastNameMat, v_name) AS [{ColumnName}] FROM Nom_Employees WHERE id_employee = @idEmployee";
+
+                Dictionary<string, object> parameters = new();
+                parameters.Add("@idEmployee", idEmployee);
+
+                return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            }
         }
     }
 }

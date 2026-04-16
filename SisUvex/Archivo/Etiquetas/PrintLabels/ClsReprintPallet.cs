@@ -40,7 +40,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 ETagInfo eTagInfo = new ETagInfo();
                 eTagInfo.SetTagInfo(workPlan);
 
-                eTagInfo.showDate = !showDate; //MOSTRAR U OCULTAR FECHA DEL PALLET
+                eTagInfo.showDate = showDate; //MOSTRAR U OCULTAR FECHA DEL PALLET (AQUI QUE MEJOR SE TOME LE DE EL VALOR DESDE DONDE SE USA ESTE METODO PARA EVITAER ENREDOS :D )
 
                 ClsPrintPtiTag print = new();
                 print.SendToPrintPalletTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, true);

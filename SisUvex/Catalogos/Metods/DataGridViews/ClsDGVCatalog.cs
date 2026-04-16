@@ -83,18 +83,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         {
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}'");
             if (rows.Length > 0)
-            {
                 rows[0][activeColumn] = activeValue;
-            }
             dtCatalog.AcceptChanges();
         }
         public void ChangeActiveCell(string id, string id2, string activeValue)
         { //SE OCUPA HABERLE DADO EL VALOR DE id2Column ANTERIORMENTE
             DataRow[] rows = dtCatalog.Select($"{idColumn} = '{id}' AND {id2Column} = '{id2}'");
             if (rows.Length > 0)
-            {
                 rows[0][activeColumn] = activeValue;
-            }
             dtCatalog.AcceptChanges();
         }
         public void AddMultipleNewRowsToDGV(DataTable newRows)
@@ -249,6 +245,25 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
 
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView, string activeColumnName)
         {
+            //dataGridView.CellFormatting += (sender, e) =>
+            //{
+            //    if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
+            //    {
+            //        bool isChecked = false;
+
+            //        if (e.Value != null && e.Value != DBNull.Value)
+            //        {
+            //            string valueText = e.Value.ToString() ?? "0";
+            //            isChecked = valueText == "1" || valueText.Equals("true", StringComparison.OrdinalIgnoreCase);
+            //        }
+
+            //        e.CellStyle.BackColor = isChecked ? Color.LightGreen : Color.Tomato;
+            //        e.CellStyle.ForeColor = isChecked ? Color.Green : Color.Red;
+            //    }
+            //};
+
+            //ConvertToCheckBoxColumn(dataGridView, activeColumnName);//Llama a este método para convertir la columna activeColumn en una columna de checkboxes
+
             dataGridView.CellFormatting += (sender, e) =>
             {
                 if (dataGridView.Columns[e.ColumnIndex].Name == activeColumnName)
@@ -265,6 +280,24 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                     }
                 }
             };
+        }
+        public static void ConvertToCheckBoxColumn(DataGridView dgv, string columnName)
+        {
+            var oldCol = dgv.Columns[columnName];
+
+            DataGridViewCheckBoxColumn checkCol = new DataGridViewCheckBoxColumn
+            {
+                Name = oldCol.Name,
+                HeaderText = oldCol.HeaderText,
+                DataPropertyName = oldCol.DataPropertyName,
+                TrueValue = "1",
+                FalseValue = "0",
+                Width = oldCol.Width
+            };
+
+            int index = oldCol.Index;
+            dgv.Columns.RemoveAt(index);
+            dgv.Columns.Insert(index, checkCol);
         }
 
         private void SafeSelectRowInDGV(DataRow dataRow)

@@ -337,14 +337,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     query += " IN ('Pack_MaterialCatalog', 'Pack_MaterialType', 'Pack_Distributor', 'Pack_Color', 'Pack_Unit', 'Pack_Category') ";
                     break;
                 case ClsObject.MaterialType.Cbo:
-                    query += " IN ('Ast_MaterialType', 'Ast_MaterialCatalog') ";
+                    query += " IN ('Pack_MaterialType', 'Pack_MaterialCatalog') ";
                     break;
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
                     query += $" = '{tableName}'";
                     break;
             }
-
+            //if (catalogName == ClsObject.MaterialType.Cbo)
+            //Clipboard.SetText(rutaConsultaCbo);
             return ClsQuerysDB.GetData(query).ToString();
         }
 
