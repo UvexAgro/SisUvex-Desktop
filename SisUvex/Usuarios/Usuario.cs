@@ -11,6 +11,7 @@ public static class User
     private static int accessLevel = 4;
     private static DateTime currentDate = DateTime.Now.Date;
     private static ClsConfig conf = new ClsConfig();
+    private static string? idUser;
     private static string? idWorkGroup;
     private static string? idContractor;
     private static string? idEmployee;
@@ -46,7 +47,7 @@ public static class User
             if (dr.Read())
             {
                 // 🔹 Datos básicos
-                username = dr["c_codigo_usu"].ToString();
+                idUser = dr["c_codigo_usu"].ToString();
                 SetUserName(dr["v_nombre_usu"].ToString());
                 SetAccessLevel(Convert.ToInt32(dr["c_accesibilidad_usu"]));
                 currentDate = DateTime.Now.Date;
@@ -113,6 +114,10 @@ public static class User
     public static bool HasSysAdminPermission()
     {
         return Permission.SysAdmin;
+    }
+    public static string? GetUserId()
+    {
+        return idUser;
     }
 
     private static bool ToBool(object value)

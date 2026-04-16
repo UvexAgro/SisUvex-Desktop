@@ -178,7 +178,7 @@ internal class ClsUserCrud
     }
 
     /// <summary>Abre el formulario de cambio de contraseña cargando datos por código de usuario (<c>c_codigo_usu</c>).</summary>
-    public static void OpenFrmChangePassword(string userCode)
+    public static void OpenFrmChangePassword(string? userCode)
     {
         if (string.IsNullOrWhiteSpace(userCode))
         {
