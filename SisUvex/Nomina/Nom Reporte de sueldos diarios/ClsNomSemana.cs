@@ -161,18 +161,6 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			frmNom.txbCodigo.Clear();
 		}
 
-		public DataTable BuscarEmpleadoPorNombre(string nombre)
-		{
-			string query = $@"
-			SELECT 
-			id_employee AS Codigo,
-			CONCAT(v_lastNamePat,' ',v_lastNameMat,' ',v_name) AS Nombre
-			FROM Nom_Employees
-			WHERE CONCAT(v_lastNamePat,' ',v_lastNameMat,' ',v_name) 
-			LIKE '%{nombre}%'";
-
-			return ClsQuerysDB.GetDataTable(query);
-		}
 		public DataTable ObtenerSueldosSemana()
 		{
 			DataRowView row = (DataRowView)frmNom.cboSemana.SelectedItem;
@@ -552,7 +540,84 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 			}
 		}
+		public void EstilizarDGV(DataGridView dgv)
+		{
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
 
+			dgv.EnableHeadersVisualStyles = false;
+			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+			dgv.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(30, 40, 55);
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+			dgv.ColumnHeadersHeight = 35;
+
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 8);
+			dgv.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 120, 215);
+
+			dgv.RowTemplate.Height = 28;
+
+			dgv.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
+
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.MultiSelect = false;
+
+			dgv.RowHeadersVisible = false;
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToResizeRows = false;
+			dgv.AllowUserToResizeColumns = false;
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				dgv.ColumnHeadersDefaultCellStyle.BackColor;
+		}
+		public void ConfigurarColumnas(DataGridView dgv)
+		{
+			if (dgv.Columns["Codigo"] != null)
+			{
+				dgv.Columns["Codigo"].Width = 90;
+				dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
+
+			if (dgv.Columns["Nombre"] != null)
+			{
+				dgv.Columns["Nombre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+				dgv.Columns["Nombre"].DefaultCellStyle.Font =
+					new Font("Segoe UI", 10, FontStyle.Bold);
+			}
+		}
+		public void EstilizarDGVEmployee(DataGridView dgv)
+		{
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+
+			dgv.EnableHeadersVisualStyles = false;
+			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+			dgv.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(30, 40, 55);
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+			dgv.ColumnHeadersHeight = 35;
+
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+			dgv.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 120, 215);
+
+			dgv.RowTemplate.Height = 28;
+
+			dgv.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
+
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.MultiSelect = false;
+
+			dgv.RowHeadersVisible = false;
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToResizeRows = false;
+			dgv.AllowUserToResizeColumns = false;
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				dgv.ColumnHeadersDefaultCellStyle.BackColor;
+		}
 	}
 }
 

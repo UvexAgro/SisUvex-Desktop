@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClosedXML.Excel;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -29,12 +30,19 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 		private void FrmNomsemana_Load(object sender, EventArgs e)
 		{
-			dgvListaEmpleado.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			
 
 			cls ??= new();
 			cls.frmNom ??= this;
+			cls.EstilizarDGV(dgvListaEmpleado);
+			cls.EstilizarDGVEmployee(dgvEmployee);
+			dgvListaEmpleado.DataBindingComplete += (s, e) =>
+			{
+				cls.ConfigurarColumnas(dgvListaEmpleado);
+			};
 
 			cls.CargarPeriodos();
+		
 
 		}
 
@@ -74,10 +82,22 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 		private void btnEmployee_Click(object sender, EventArgs e)
 		{
+			ClsSelectionForm sel = new ClsSelectionForm();
+			sel.OpenSelectionForm("EmployeeBasic", "Código");
 
-			DataTable dt = cls.BuscarEmpleadoPorNombre(txbNombre.Text);
+			if (string.IsNullOrEmpty(sel.SelectedValue) ||
+				sel.dtQuery == null ||
+				sel.dtQuery.Rows.Count == 0)
+				return;
 
-			dgvEmployee.DataSource = dt;
+			var row = sel.dtQuery.Rows[0];
+
+			txbCodigo.Text = sel.SelectedValue;
+			txbNombre.Text =
+			row["A. paterno"].ToString() + " " +
+			row["A. materno"].ToString() + " " +
+			row["Nombre"].ToString();
+
 		}
 
 		private void btncargar_Click(object sender, EventArgs e)
@@ -152,5 +172,6 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			// eliminar del grid
 			dgvListaEmpleado.Rows.RemoveAt(dgvListaEmpleado.CurrentRow.Index);
 		}
+		
 	}
 }
