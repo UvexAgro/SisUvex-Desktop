@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaR));
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			lblReporte = new Label();
 			lblEmpleado = new Label();
 			pllEmpleado = new Panel();
@@ -39,8 +39,8 @@
 			lbl = new Label();
 			txbCodigo = new TextBox();
 			txbEmpleado = new TextBox();
-			btnAcceptarEmpleado = new Button();
 			label1 = new Label();
+			btnAcceptarEmpleado = new Button();
 			pllCuadrilla = new Panel();
 			cboCuadrilla = new ComboBox();
 			btnAceptarCuadrilla = new Button();
@@ -56,6 +56,7 @@
 			label2 = new Label();
 			label4 = new Label();
 			btnExcel = new Button();
+			btnEliminar = new Button();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -91,7 +92,6 @@
 			pllEmpleado.Controls.Add(lbl);
 			pllEmpleado.Controls.Add(txbCodigo);
 			pllEmpleado.Controls.Add(txbEmpleado);
-			pllEmpleado.Controls.Add(btnAcceptarEmpleado);
 			pllEmpleado.Controls.Add(label1);
 			pllEmpleado.Location = new Point(68, 142);
 			pllEmpleado.Name = "pllEmpleado";
@@ -147,16 +147,6 @@
 			txbEmpleado.Size = new Size(278, 23);
 			txbEmpleado.TabIndex = 102;
 			// 
-			// btnAcceptarEmpleado
-			// 
-			btnAcceptarEmpleado.Location = new Point(308, 53);
-			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
-			btnAcceptarEmpleado.Size = new Size(63, 24);
-			btnAcceptarEmpleado.TabIndex = 101;
-			btnAcceptarEmpleado.Text = "Aceptar";
-			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
-			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
-			// 
 			// label1
 			// 
 			label1.AutoSize = true;
@@ -166,6 +156,16 @@
 			label1.Size = new Size(70, 19);
 			label1.TabIndex = 39;
 			label1.Text = "Empleado";
+			// 
+			// btnAcceptarEmpleado
+			// 
+			btnAcceptarEmpleado.Location = new Point(158, 471);
+			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
+			btnAcceptarEmpleado.Size = new Size(126, 34);
+			btnAcceptarEmpleado.TabIndex = 101;
+			btnAcceptarEmpleado.Text = "Mostrar";
+			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
+			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
 			// 
 			// pllCuadrilla
 			// 
@@ -242,14 +242,14 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvAsistencia.ColumnHeadersHeight = 58;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
@@ -257,14 +257,14 @@
 			dgvAsistencia.Location = new Point(12, 508);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -357,16 +357,32 @@
 			btnExcel.UseVisualStyleBackColor = true;
 			btnExcel.Click += btnExcel_Click;
 			// 
+			// btnEliminar
+			// 
+			btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
+			btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnEliminar.Location = new Point(620, 471);
+			btnEliminar.Name = "btnEliminar";
+			btnEliminar.Padding = new Padding(10, 0, 10, 0);
+			btnEliminar.Size = new Size(126, 34);
+			btnEliminar.TabIndex = 117;
+			btnEliminar.Text = "Eliminar";
+			btnEliminar.TextAlign = ContentAlignment.MiddleRight;
+			btnEliminar.UseVisualStyleBackColor = true;
+			btnEliminar.Click += btnEliminar_Click;
+			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1047, 825);
+			Controls.Add(btnEliminar);
 			Controls.Add(btnExcel);
 			Controls.Add(label4);
 			Controls.Add(label2);
 			Controls.Add(lblEmpleado);
 			Controls.Add(pllEmpleado);
+			Controls.Add(btnAcceptarEmpleado);
 			Controls.Add(pllCuadrilla);
 			Controls.Add(btnImprimir);
 			Controls.Add(lblCuadrilla);
@@ -418,5 +434,6 @@
 		private Label label2;
 		private Label label4;
 		public Button btnExcel;
+		private Button btnEliminar;
 	}
 }

@@ -14,6 +14,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using PdfiumViewer;
+using SisUvex.Catalogos.WorkGroup;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using DrawingColor = System.Drawing.Color;
 using ITextPdf = iText.Kernel.Pdf.PdfDocument;
@@ -70,6 +71,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 				string query = @"
 					SELECT 
+					a.id_AttendanceChecker, 
 					a.id_employee AS Codigo,
 					e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name AS NombreCompleto,
 					a.d_Date AS Fecha,
@@ -79,7 +81,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				INNER JOIN dbo.Nom_Employees e ON e.id_employee = a.id_employee
 				WHERE a.d_Date BETWEEN @inicio AND @fin
 				  AND e.id_workGroup = @grupo
-				ORDER BY a.d_Date, NombreCompleto";
+				ORDER BY a.d_Date, NombreCompleto " ;
 
 				SqlCommand cmd = new SqlCommand(query, sql.cnn);
 				cmd.Parameters.AddWithValue("@inicio", fechaInicial);
@@ -109,6 +111,10 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				fechaFinal,
 				idWorkGroup);
 
+			if (frmR.dgvAsistencia.Columns.Contains("id_AttendanceChecker"))
+			{
+				frmR.dgvAsistencia.Columns["id_AttendanceChecker"].Visible = false;
+			}
 
 			AjustarColumnas(frmR.dgvAsistencia);
 			frmR.dgvAsistencia.ClearSelection();
@@ -281,8 +287,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			// Encabezados
 			dgv.EnableHeadersVisualStyles = false;
-			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
+			
 			dgv.ColumnHeadersDefaultCellStyle.BackColor = DrawingColor.FromArgb(220, 230, 241);
 			dgv.ColumnHeadersDefaultCellStyle.ForeColor = DrawingColor.Black;
 			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -295,17 +300,16 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgv.DefaultCellStyle.ForeColor = DrawingColor.Black;
 
 			//  IMPORTANTE: mantener sin selección visual
-			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.White;
+			// Selección visible (bonita)
+			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.Black;
 
-			dgv.RowsDefaultCellStyle.SelectionBackColor = DrawingColor.White;
+			dgv.RowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.RowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
 
 			// Filas alternadas
-			dgv.AlternatingRowsDefaultCellStyle.BackColor = DrawingColor.FromArgb(245, 245, 245);
-			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(245, 245, 245);
+			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.AlternatingRowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
-
 			// Ajuste automático
 			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
@@ -314,10 +318,12 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			// Altura uniforme (como en tu imagen)
 			dgv.RowTemplate.Height = 28;
+			dgv.AllowUserToResizeRows = false;
 
 			// Selección tipo celda (sin highlight)
-			dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
 
 			// Solo lectura
 			dgv.ReadOnly = true;
@@ -326,8 +332,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgv.DefaultCellStyle.Padding = new Padding(3);
 			dgv.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
 
-			// Quitar selección inicial
-			dgv.ClearSelection();
+	
 		}
 		public DataTable ObtenerAsistenciaDesdeGrid(DateTime fechaInicial, DateTime fechaFinal)
 		{
@@ -526,6 +531,51 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 						});
 					}
 				}
+			}
+		}
+		public void btnEliminar()
+		{
+			if (frmR.dgvAsistencia.SelectedCells.Count == 0)
+			{
+				MessageBox.Show("Selecciona un registro");
+				return;
+			}
+
+			int fila = frmR.dgvAsistencia.SelectedCells[0].RowIndex;
+
+			int id = Convert.ToInt32(
+				frmR.dgvAsistencia.Rows[fila].Cells["id_AttendanceChecker"].Value
+			);
+
+			DialogResult r = MessageBox.Show(
+				"¿Deseas eliminar este registro?",
+				"Confirmar",
+				MessageBoxButtons.YesNo
+			);
+
+			if (r == DialogResult.No)
+				return;
+
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = "DELETE FROM PackingAttendanceChecker WHERE id_AttendanceChecker = @id";
+
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
+				cmd.Parameters.AddWithValue("@id", id);
+				cmd.ExecuteNonQuery();
+
+				// 🔥 Quitar fila del DGV (sin recargar todo)
+				frmR.dgvAsistencia.Rows.RemoveAt(fila);
+
+				MessageBox.Show("Registro eliminado");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
 			}
 		}
 	}

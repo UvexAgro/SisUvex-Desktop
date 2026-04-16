@@ -12,9 +12,20 @@ namespace SisUvex.Nomina.Nom_Descuento_de_personal
 {
 	public partial class FrmDescuento : Form
 	{
+		
 		public FrmDescuento()
 		{
 			InitializeComponent();
+		}
+
+		private void btnAdd_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void FrmDescuento_Load(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

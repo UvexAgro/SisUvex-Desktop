@@ -31,6 +31,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		string lastNameMat;
 		string name;
 		bool cuadrilla_Empleado = false; //false es empleados y true es cuadrilla 
+		bool isLoaded = false;
 
 
 
@@ -59,19 +60,35 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgvEmployee.DataSource = dtEmpleados;
 			cargando = false;
 
+			isLoaded = true;
+
 		}
 
 
 		private void cboSemanaFinal_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			cls.ValidarRangoSemanas();
+			//cls.ValidarRangoSemanas();
+			if (!isLoaded) return;
+
+			if (cboSemanaFinal.SelectedIndex < cboSemanaInicial.SelectedIndex)
+			{
+				cboSemanaFinal.SelectedIndex = cboSemanaInicial.SelectedIndex;
+			}
 
 
 		}
 
 		private void cboSemanaInicial_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			cls.ValidarRangoSemanas();
+			//cls.ValidarRangoSemanas();
+			if (!isLoaded) return;
+
+			if (cboSemanaInicial.SelectedIndex == -1)
+				return;
+
+			// 🔥 aquí controlas TODO
+			cboSemanaFinal.SelectedIndex = cboSemanaInicial.SelectedIndex;
+
 		}
 
 		private void btnAceptarCuadrilla_Click(object sender, EventArgs e)
@@ -187,6 +204,11 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		private void btnExcel_Click(object sender, EventArgs e)
 		{
 			clsDgv.ExportarDGVaExcel(dgvAsistencia);
+		}
+
+		private void btnEliminar_Click(object sender, EventArgs e)
+		{
+			clsDgv.btnEliminar();
 		}
 	}
 }

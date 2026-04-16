@@ -36,6 +36,20 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			dtpEndExtra.Format = DateTimePickerFormat.Custom;
 			dtpEndExtra.CustomFormat = "dd/MM/yyyy HH:mm:ss";
 			clsA.CargarCuadrillasCheckList();
+
+			if (IsAddModify)
+			{
+				DateTime cero = DateTime.Today;
+
+				dtpComidaInicial.Value = cero;
+				dtpComidaFinal.Value = cero;
+
+				dtpCenaInicial.Value = cero;
+				dtpCenaFinal.Value = cero;
+
+				dtpDescansoInicial.Value = cero;
+				dtpDescansoFinal.Value = cero;
+			}
 		}
 
 		private void btnAcept_Click(object sender, EventArgs e)
@@ -54,6 +68,22 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				if (res == DialogResult.No)
 				{
 					return; 
+				}
+			}
+
+			if (!IsAddModify)
+			{
+				if (dtpEndExtra.Value.TimeOfDay == TimeSpan.Zero)
+				{
+					MessageBox.Show(
+						"Debes capturar la hora final del tiempo extra.",
+						"Validación",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+
+					dtpEndExtra.Focus();
+					return;
 				}
 			}
 
