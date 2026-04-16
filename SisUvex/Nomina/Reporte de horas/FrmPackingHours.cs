@@ -15,6 +15,10 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		ClSPackingHours cls;
 		ClsAñadir clsA;
 		bool isLoaded = false;
+		public Color colorComida = Color.FromArgb(200, 225, 255);
+		public Color colorCena = Color.FromArgb(220, 235, 255);
+		public Color colorDescanso = Color.FromArgb(240, 245, 255);
+
 
 		public FrmPackingHours()
 		{
@@ -35,19 +39,19 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			cls.CargarTemporada();
 			clsA.CargarHorasInicial();
 
-			// 🔷 ESTILO HEADER
+			//  ESTILO HEADER
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
 			dgvHoras.ColumnHeadersHeight = 50;
 			dgvHoras.EnableHeadersVisualStyles = false;
 
-			// 🔷 CENTRAR TEXTO
+			//  CENTRAR TEXTO
 			dgvHoras.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 			dgvHoras.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			// 🔷 EVENTO
+			//  EVENTO
 			dgvHoras.CellPainting += dgvHoras_CellPainting;
 
-			// 🔷 AJUSTAR NOMBRES
+			//  AJUSTAR NOMBRES
 			clsA.AjustarEncabezados();
 
 			isLoaded = true;

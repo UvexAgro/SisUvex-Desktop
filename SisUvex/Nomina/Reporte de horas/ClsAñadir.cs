@@ -7,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Vml.Office;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
@@ -36,6 +37,22 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			frmA.IsAddModify = true;
 
 			frmA.ShowDialog();
+		}
+		private DateTime HoraOCero(object valor)
+		{
+			if (valor == null || valor == DBNull.Value)
+				return DateTime.Today; // 00:00
+
+			if (valor is TimeSpan ts)
+				return DateTime.Today.Add(ts);
+
+			if (valor is DateTime dt)
+				return DateTime.Today.Add(dt.TimeOfDay);
+
+			if (TimeSpan.TryParse(valor.ToString(), out TimeSpan t))
+				return DateTime.Today.Add(t);
+
+			return DateTime.Today;
 		}
 		public void OpenFrmModify()
 		{
@@ -88,34 +105,28 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				frmA.nudOvertime.Value = horas;
 				//  DESCANSO
-				if (row.Cells["InicioDescanso"].Value != DBNull.Value)
-					frmA.dtpDescansoInicial.Value = DateTime.Today.Add((TimeSpan)row.Cells["InicioDescanso"].Value);
+				frmA.dtpDescansoInicial.Value = HoraOCero(row.Cells["InicioDescanso"].Value);
+				frmA.dtpDescansoFinal.Value = HoraOCero(row.Cells["FinDescanso"].Value);
 
-				if (row.Cells["FinDescanso"].Value != DBNull.Value)
-					frmA.dtpDescansoFinal.Value = DateTime.Today.Add((TimeSpan)row.Cells["FinDescanso"].Value);
-
-				if (row.Cells["HorasDescanso"].Value != DBNull.Value)
-					frmA.nudHorasDescanso.Value = Convert.ToDecimal(row.Cells["HorasDescanso"].Value);
+				frmA.nudHorasDescanso.Value = row.Cells["HorasDescanso"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasDescanso"].Value)
+					: 0;
 
 				//  COMIDA
-				if (row.Cells["InicioComida"].Value != DBNull.Value)
-					frmA.dtpComidaInicial.Value = DateTime.Today.Add((TimeSpan)row.Cells["InicioComida"].Value);
+				frmA.dtpComidaInicial.Value = HoraOCero(row.Cells["InicioComida"].Value);
+				frmA.dtpComidaFinal.Value = HoraOCero(row.Cells["FinComida"].Value);
 
-				if (row.Cells["FinComida"].Value != DBNull.Value)
-					frmA.dtpComidaFinal.Value = DateTime.Today.Add((TimeSpan)row.Cells["FinComida"].Value);
-
-				if (row.Cells["HorasComida"].Value != DBNull.Value)
-					frmA.nudComidaHora.Value = Convert.ToDecimal(row.Cells["HorasComida"].Value);
+				frmA.nudComidaHora.Value = row.Cells["HorasComida"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasComida"].Value)
+					: 0;
 
 				//  CENA
-				if (row.Cells["InicioCena"].Value != DBNull.Value)
-					frmA.dtpCenaInicial.Value = DateTime.Today.Add((TimeSpan)row.Cells["InicioCena"].Value);
+				frmA.dtpCenaInicial.Value = HoraOCero(row.Cells["InicioCena"].Value);
+				frmA.dtpCenaFinal.Value = HoraOCero(row.Cells["FinCena"].Value);
 
-				if (row.Cells["FinCena"].Value != DBNull.Value)
-					frmA.dtpCenaFinal.Value = DateTime.Today.Add((TimeSpan)row.Cells["FinCena"].Value);
-
-				if (row.Cells["HorasCena"].Value != DBNull.Value)
-					frmA.nudCenaHora.Value = Convert.ToDecimal(row.Cells["HorasCena"].Value);
+				frmA.nudCenaHora.Value = row.Cells["HorasCena"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasCena"].Value)
+					: 0;
 
 				// LIMPIAR CHECKLIST
 				for (int i = 0; i < frmA.clbCuadrilla.Items.Count; i++)
@@ -144,6 +155,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				SystemSounds.Exclamation.Play();
 			}
 		}
+		
 		public void CargarHorasInicial()
 		{
 			try
@@ -167,13 +179,13 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				sql.OpenConectionWrite();
 
 				SqlCommand cmd = new SqlCommand(@"
-SELECT * 
-FROM dbo.fn_PackHorasEmpaque(
-    @Temporada, 
-    @Periodo, 
-    @SemanaInicio, 
-    @SemanaFin
-)", sql.cnn);
+				SELECT * 
+				FROM dbo.fn_PackHorasEmpaque(
+					@Temporada, 
+					@Periodo, 
+					@SemanaInicio, 
+					@SemanaFin
+				)", sql.cnn);
 
 				cmd.Parameters.AddWithValue("@Temporada", temporada);
 				cmd.Parameters.AddWithValue("@Periodo", periodo);
@@ -183,10 +195,9 @@ FROM dbo.fn_PackHorasEmpaque(
 				SqlDataAdapter da = new SqlDataAdapter(cmd);
 				da.Fill(dt);
 
-				// 🔥 SOLO ESTO
 				frmPacki.dgvHoras.DataSource = dt;
 
-				// 🔥 OCULTAR COLUMNAS
+
 				string[] columnasOcultar =
 				{
 			"id_workTime",
@@ -232,35 +243,20 @@ FROM dbo.fn_PackHorasEmpaque(
 				if (frmPacki.dgvHoras.Columns.Contains("HorasExtras"))
 					frmPacki.dgvHoras.Columns["HorasExtras"].HeaderText = "Horas Extra";
 
-				//  DESCANSO
-				if (frmPacki.dgvHoras.Columns.Contains("InicioDescanso"))
-				{
-					System.Drawing.Color descanso = System.Drawing.Color.AliceBlue;
+				// COMIDA
+				frmPacki.dgvHoras.Columns["InicioComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
+				frmPacki.dgvHoras.Columns["FinComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
+				frmPacki.dgvHoras.Columns["HorasComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
 
-					frmPacki.dgvHoras.Columns["InicioDescanso"].DefaultCellStyle.BackColor = descanso;
-					frmPacki.dgvHoras.Columns["FinDescanso"].DefaultCellStyle.BackColor = descanso;
-					frmPacki.dgvHoras.Columns["HorasDescanso"].DefaultCellStyle.BackColor = descanso;
-				}
+				// CENA
+				frmPacki.dgvHoras.Columns["InicioCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
+				frmPacki.dgvHoras.Columns["FinCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
+				frmPacki.dgvHoras.Columns["HorasCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
 
-				//  COMIDA
-				if (frmPacki.dgvHoras.Columns.Contains("InicioComida"))
-				{
-					System.Drawing.Color comida = System.Drawing.Color.LightBlue;
-
-					frmPacki.dgvHoras.Columns["InicioComida"].DefaultCellStyle.BackColor = comida;
-					frmPacki.dgvHoras.Columns["FinComida"].DefaultCellStyle.BackColor = comida;
-					frmPacki.dgvHoras.Columns["HorasComida"].DefaultCellStyle.BackColor = comida;
-				}
-
-				//  CENA
-				if (frmPacki.dgvHoras.Columns.Contains("InicioCena"))
-				{
-					System.Drawing.Color cena = System.Drawing.Color.LightBlue;
-
-					frmPacki.dgvHoras.Columns["InicioCena"].DefaultCellStyle.BackColor = cena;
-					frmPacki.dgvHoras.Columns["FinCena"].DefaultCellStyle.BackColor = cena;
-					frmPacki.dgvHoras.Columns["HorasCena"].DefaultCellStyle.BackColor = cena;
-				}
+				// DESCANSO
+				frmPacki.dgvHoras.Columns["InicioDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
+				frmPacki.dgvHoras.Columns["FinDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
+				frmPacki.dgvHoras.Columns["HorasDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
 
 				sql.CloseConectionWrite();
 			}
@@ -277,10 +273,10 @@ FROM dbo.fn_PackHorasEmpaque(
 
 			var grupos = new[]
 			{
-		new { Nombre = "Comida", Inicio = "InicioComida", Fin = "FinComida", Horas = "HorasComida", Color = System.Drawing.Color.FromArgb(200,230,255) },
-		new { Nombre = "Cena", Inicio = "InicioCena", Fin = "FinCena", Horas = "HorasCena", Color = System.Drawing.Color.FromArgb(255,200,210) },
-		new { Nombre = "Descanso", Inicio = "InicioDescanso", Fin = "FinDescanso", Horas = "HorasDescanso", Color = System.Drawing.Color.FromArgb(255,255,200) }
-	};
+				new { Nombre = "Comida", Inicio = "InicioComida", Fin = "FinComida", Horas = "HorasComida", Color = frmPacki.colorComida },
+				new { Nombre = "Cena", Inicio = "InicioCena", Fin = "FinCena", Horas = "HorasCena", Color = frmPacki.colorCena },
+				new { Nombre = "Descanso", Inicio = "InicioDescanso", Fin = "FinDescanso", Horas = "HorasDescanso", Color = frmPacki.colorDescanso }
+			};
 
 			foreach (var g in grupos)
 			{
@@ -293,7 +289,7 @@ FROM dbo.fn_PackHorasEmpaque(
 				int colFin = dgv.Columns[g.Fin].Index;
 				int colHoras = dgv.Columns[g.Horas].Index;
 
-				// 🔷 DIBUJAR ENCABEZADO GRANDE SOLO UNA VEZ
+				//  DIBUJAR ENCABEZADO GRANDE SOLO UNA VEZ
 				if (e.ColumnIndex == colInicio)
 				{
 					Rectangle rectTotal = new Rectangle(
@@ -340,7 +336,7 @@ FROM dbo.fn_PackHorasEmpaque(
 					e.Handled = true;
 				}
 
-				// 🔷 SUBENCABEZADOS
+				//  SUBENCABEZADOS
 				if (e.ColumnIndex == colInicio ||
 					e.ColumnIndex == colFin ||
 					e.ColumnIndex == colHoras)
@@ -352,8 +348,7 @@ FROM dbo.fn_PackHorasEmpaque(
 						e.CellBounds.Height / 2
 					);
 
-					//using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
-					//	e.Graphics.FillRectangle(brush, rectBottom);
+				
 					using (SolidBrush brush = new SolidBrush(g.Color))
 						e.Graphics.FillRectangle(brush, rectBottom);
 
@@ -432,19 +427,19 @@ FROM dbo.fn_PackHorasEmpaque(
 
 						cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
 
-						// 🔥 BREAK
-						cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = frmA.dtpDescansoInicial.Value.SinMs();
-						cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = frmA.dtpDescansoFinal.Value.SinMs();
+						//  BREAK
+						cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
+						cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
 						cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
 
-						// 🔥 LUNCH
-						cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = frmA.dtpComidaInicial.Value.SinMs();
-						cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = frmA.dtpComidaFinal.Value.SinMs();
+						//  LUNCH
+						cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
+						cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
 						cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
 
-						// 🔥 DINNER
-						cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = frmA.dtpCenaInicial.Value.SinMs();
-						cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = frmA.dtpCenaFinal.Value.SinMs();
+						//  DINNER
+						cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
+						cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
 						cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;
 
 						cmd.Parameters.Add("@UserCreate", SqlDbType.VarChar).Value = User.GetUserName();
@@ -509,19 +504,19 @@ FROM dbo.fn_PackHorasEmpaque(
 
 					cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
 
-					// 🔥 BREAK
-					cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = frmA.dtpDescansoInicial.Value.SinMs();
-					cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = frmA.dtpDescansoFinal.Value.SinMs();
+					//  BREAK
+					cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
+					cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
 					cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
 
-					// 🔥 LUNCH
-					cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = frmA.dtpComidaInicial.Value.SinMs();
-					cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = frmA.dtpComidaFinal.Value.SinMs();
+					//  LUNCH
+					cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
+					cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
 					cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
 
-					// 🔥 DINNER
-					cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = frmA.dtpCenaInicial.Value.SinMs();
-					cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = frmA.dtpCenaFinal.Value.SinMs();
+					//  DINNER
+					cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
+					cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
 					cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;
 
 					cmd.Parameters.Add("@UserUpdate", SqlDbType.VarChar).Value = User.GetUserName();
@@ -738,12 +733,15 @@ FROM dbo.fn_PackHorasEmpaque(
 				sql.CloseConectionWrite();
 			}
 		}
+		private TimeSpan SHMS(DateTime dt)
+		{
+			return new TimeSpan(dt.Hour, dt.Minute, 0);
+		}
 	}
 
 }
 public static class DateTimeExtensions
 {
-	// 🔹
 	// Quita milisegundos
 	public static DateTime SinMs(this DateTime fecha)
 	{
@@ -755,26 +753,5 @@ public static class DateTimeExtensions
 			fecha.Minute,
 			fecha.Second
 		);
-	}
-
-	// 🔥
-	// Quita minutos y segundos (lo que necesitas)
-	public static DateTime SinMin(this DateTime fecha)
-	{
-		return new DateTime(
-			fecha.Year,
-			fecha.Month,
-			fecha.Day,
-			fecha.Hour,
-			0,
-			0
-		);
-	}
-
-	// 🔥
-	// Para TIME (TimeSpan)
-	public static TimeSpan SinMin(this TimeSpan hora)
-	{
-		return new TimeSpan(hora.Hours, 0, 0);
 	}
 }
