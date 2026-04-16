@@ -357,10 +357,14 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Temporada";
             public const string ColumnId = "id_Season";
             public const string ColumnActive = "ActiveSeason";
-            public const string Cbo = "CboSeason";
+			public const string ColumnStartDate = "StartDate";
+			public const string ColumnEndDate = "EndDate";
+			public const string CboWithDates = "CboWithDates";
+			public const string Cbo = "CboSeason";
             public const string DgvCatalog = "DgvCatalogSeason";
             public const string QueryCbo = $" SELECT id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}] FROM Pack_Season ORDER BY [{Column.name}] ";
-        }
+			public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
+		}
 
         public static class City
         {

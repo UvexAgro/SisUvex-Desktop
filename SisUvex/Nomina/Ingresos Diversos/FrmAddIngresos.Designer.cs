@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAddIngresos));
 			lblAdd = new Label();
 			cboConceptos = new ComboBox();
 			lblConceptos = new Label();
@@ -166,8 +167,9 @@
 			Controls.Add(lblConceptos);
 			Controls.Add(cboConceptos);
 			Controls.Add(lblAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAddIngresos";
-			Text = "FrmAddIngresos";
+			Text = "Ingresos";
 			Load += FrmAddIngresos_Load;
 			ResumeLayout(false);
 			PerformLayout();

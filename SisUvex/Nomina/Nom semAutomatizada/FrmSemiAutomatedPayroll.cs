@@ -17,6 +17,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 	public partial class FrmSemiAutomatedPayroll : Form
 	{
 		ClsSemiAutomatedPayroll cls;
+		ClsFestivo clsF;
+		public string TipoFestivoSeleccionado = "";
 
 		public FrmSemiAutomatedPayroll()
 		{
@@ -27,7 +29,10 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			cls ??= new();
 			cls.frm ??= this;
+			clsF ??= new ClsFestivo();
+			clsF.frm = this;
 			cls.BeginForm();
+			rbtEsparrago.Checked = true;
 		}
 
 		private void btnCVS_Click(object sender, EventArgs e)
@@ -64,7 +69,25 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			cls.EjecutarCalculoProduccion();
 		}
 
-		
+		private void btnFestivos_Click(object sender, EventArgs e)
+		{
+			DateTime fecha = dtpFecha.Value;
+
+			if (!clsF.EsFestivo(fecha))
+			{
+				MessageBox.Show("No es un día festivo.");
+				return;
+			}
+			FrmFestivo frmFestivo = new FrmFestivo();
+
+			if (frmFestivo.ShowDialog() == DialogResult.OK)
+			{
+				TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
+
+			}
+
+			clsF.BtnCargarDatos();
+		}
 	}
 }
 

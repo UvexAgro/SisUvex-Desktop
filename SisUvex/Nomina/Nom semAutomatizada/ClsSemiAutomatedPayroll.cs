@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion.Parameters;
 using ZXing;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using System.Drawing;
 namespace SisUvex.Nomina.Nom_semAutomatizada
 
 {
@@ -25,7 +27,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public FrmSemiAutomatedPayroll frm;
 		ClsControls controlList;
 		DataTable dtNomina;
-
+		public string TipoNomina = "E";
 		public void BeginForm()
 		{
 			SetTxbReferencia();
@@ -61,23 +63,30 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			string referencias = frm.txbReferencia.Text;
 			string idLot = frm.cboLote.GetColumnValue(Column.id).ToString();
 			string horasTrabajadas = EParameters.GetValue("016", "01");//Parametro Duracion de la jornada laboral
-			string cajas = "0"; // Cajas Destajos (valor fijo)
 
+			DataTable dtNomina = (DataTable)frm.dgvEmployee.DataSource;
+
+
+			if (dtNomina == null || dtNomina.Rows.Count == 0)
+			{
+				MessageBox.Show("No hay datos para generar.");
+				return null;
+			}
 
 			DataTable dtCsv = new();
 			dtCsv.Columns.Add("Fecha", typeof(string));   //0
 			dtCsv.Columns.Add("Referencia", typeof(string));
-			dtCsv.Columns.Add("IdEmploye", typeof(string));     //1
+			dtCsv.Columns.Add("Codigo", typeof(string));     //1
 			dtCsv.Columns.Add("Sueldo", typeof(string));    //6
 			dtCsv.Columns.Add("Lote", typeof(string));
 			dtCsv.Columns.Add("Actividad", typeof(string));    //3
-			dtCsv.Columns.Add("Destajo", typeof(string));
+			dtCsv.Columns.Add("TotalCajas", typeof(string));
 			dtCsv.Columns.Add("HorasTrabajadas", typeof(string));
 
 			foreach (DataRow dr in dtNomina.Rows)
 			{
 				string fechaFormateada = Convert.ToDateTime(dr[0]).ToString("yyyy/MM/dd");
-				string sueldo = ClsValues.FormatZeros(dr[6].ToString(), "0000.00");
+				string sueldo = ClsValues.FormatZeros(dr[7].ToString(), "0000.00");
 				//string empleado = ClsValues.FormatZeros(dr[1].ToString(), "000000")
 				dtCsv.Rows.Add(
 					fechaFormateada,
@@ -86,7 +95,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					sueldo,
 					idLot,
 					dr[3],
-					cajas,
+					dr[6],
 					horasTrabajadas
 				);
 			}
@@ -198,7 +207,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (sfd.FileName == null)
 				return;
 
-			
+
 			if (!File.Exists(sfd.FileName))
 			{
 				MessageBox.Show($"El Archivo no se pudo Guardar {sfd.FileName}");
@@ -225,44 +234,64 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 
 
+		//private string GetQueryNom()
+		//{
+		//	string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
+		//	string query = $@"EXEC sp_ReporteNomina '{fecha}'";
+
+		//	return query;
+		//}
 		private string GetQueryNom()
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
-			string query = $@"SELECT
-			r.Fecha,
-			r.IdEmpleado,
-			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreCompleto,
-			r.CodigoActividad,
-			t.v_descripcion_tab AS NombreActividad,
-			r.LineaProduccion,
-			r.SueldoTotal
-			FROM (
-			SELECT DISTINCT
-			al.d_attendence      AS Fecha,
-			al.id_employee       AS IdEmpleado,
-			al.c_codigo_tab      AS CodigoActividad,
-			al.id_productionLine AS LineaProduccion
-			FROM dbo.Nom_AttendenceList al
-			WHERE al.d_attendence = '{fecha}'
-			) x
-			CROSS APPLY dbo.fn_salary_tab(
-			x.Fecha,
-			CAST(x.CodigoActividad AS VARCHAR(20)),
-			x.LineaProduccion,
-			x.IdEmpleado,
-			'2'
-			) r
-			LEFT JOIN dbo.Nom_Tabulador t
-			ON CAST(t.c_codigo_tab AS VARCHAR(20)) = r.CodigoActividad
-			LEFT JOIN dbo.Nom_Employees e
-			ON e.id_employee = r.IdEmpleado
-			ORDER BY 
-			CAST(r.CodigoActividad AS INT) ASC ;";
-			return query;
+
+			//  Validar selección
+			if (!frm.rbtEsparrago.Checked && !frm.rbtUva.Checked)
+			{
+				MessageBox.Show("Seleccione un tipo de nómina.");
+				return "";
+			}
+
+			//  ESPÁRRAGO
+			if (frm.rbtEsparrago.Checked)
+			{
+				TipoNomina = "E"; //  guardar tipo
+				return $"EXEC dbo.sp_ReporteNomina '{fecha}'";
+			}
+
+			//  UVA
+			if (frm.rbtUva.Checked)
+			{
+				TipoNomina = "U"; //  guardar tipo
+				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}'";
+			}
+
+			return "";
 		}
+		//public void BtnCargarDatos()
+		//{
+		//	dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
+
+		//	if (dtNomina.Rows.Count == 0)
+		//	{
+		//		MessageBox.Show("No existen registros para la fecha seleccionada.",
+		//						"Sistema",
+		//						MessageBoxButtons.OK,
+		//						MessageBoxIcon.Information);
+		//		return;
+		//	}
+
+		//	frm.dgvEmployee.DataSource = dtNomina;
+		//}
+
 		public void BtnCargarDatos()
 		{
-			dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
+			string query = GetQueryNom();
+
+			if (string.IsNullOrEmpty(query))
+				return;
+
+			dtNomina = ClsQuerysDB.GetDataTable(query);
 
 			if (dtNomina.Rows.Count == 0)
 			{
@@ -274,14 +303,25 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
-		}
+			if (TipoNomina == "E") // esparrago
+			{
+				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
+			}
+			else // uva
+			{
+				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
+			}
 
+			//  aplicar estilo al grid
+			ActivarEstiloGrid(frm.dgvEmployee);
+		}
 
 		public void EjecutarCalculoProduccion()
 		{
 			try
 			{
 				string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
+
 
 				if (!ValidarHorarioDeEmpaque(fecha))
 				{
@@ -304,6 +344,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					}
 
 				}
+				ValidarCajasSinAsistencia(fecha);
 
 				if (!ValidarTabladeWorkTimeAndProductionTotal(fecha))
 					return;
@@ -441,7 +482,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		private void dgvFiltrarBanda()
 		{
 			if (dtNomina == null || dtNomina.Rows.Count < 1 || !dtNomina.Columns.Contains("LineaProduccion"))
-				{ return; }
+			{ return; }
 
 			string idBanda;
 			if (frm.cboLineas.SelectedIndex < 1)
@@ -473,10 +514,185 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return false;
 		}
+		private bool ValidarCajasSinAsistencia(string fecha)
+		{
+			string query = $@"
+			SELECT DISTINCT
+			p.id_employee,
+			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreEmpleado
+			FROM vw_PackedUniqueBoxUnionBackUp p
+			LEFT JOIN Nom_AttendenceList a
+			ON a.id_employee = p.id_employee
+			AND CAST(a.d_attendence AS DATE) = CAST(p.d_scan AS DATE)
+			LEFT JOIN Nom_Employees e
+			ON e.id_employee = p.id_employee
+			WHERE 
+			a.id_employee IS NULL
+			and p.id_employee is not null
+			AND CAST(p.d_scan AS DATE) = '{fecha}'";
 
+			DataTable dt = ClsQuerysDB.GetDataTable(query);
+
+			if (dt.Rows.Count == 0)
+				return true;
+
+			StringBuilder empleados = new StringBuilder();
+
+			foreach (DataRow row in dt.Rows)
+			{
+				empleados.AppendLine($"{row["id_employee"]} - {row["NombreEmpleado"]}");
+			}
+
+			string listaEmpleados = empleados.ToString();
+
+			DialogResult result = MessageBox.Show(
+			"Los siguientes empleados tienen cajas pero no asistencia:\n\n" +
+			listaEmpleados +
+			"\n¿Deseas abrir la lista en Bloc de notas?",
+			"Validación de asistencia",
+			MessageBoxButtons.YesNo,
+			MessageBoxIcon.Warning
+			);
+
+			if (result == DialogResult.Yes)
+			{
+				string rutaArchivo = Path.Combine(Path.GetTempPath(), "EmpleadosSinAsistencia.txt");
+
+				File.WriteAllText(rutaArchivo, listaEmpleados);
+
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = "notepad.exe",
+					Arguments = $"\"{rutaArchivo}\"",
+					UseShellExecute = true
+				});
+			}
+
+			return false;
+		}
+		private void PintarCeldaGrid(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			var dgv = sender as DataGridView;
+			if (dgv == null) return;
+
+			//  COLORES SEGÚN TIPO
+			System.Drawing.Color colorHeader = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(34, 139, 34)     //  verde fuerte
+				: System.Drawing.Color.FromArgb(102, 0, 153);    //  morado fuerte
+
+			System.Drawing.Color fondoBase = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(240, 255, 240)   // verde suave
+				: System.Drawing.Color.FromArgb(245, 240, 255);  // morado suave
+
+			System.Drawing.Color colorLinea = TipoNomina == "E"
+				? System.Drawing.Color.FromArgb(180, 220, 180)
+				: System.Drawing.Color.FromArgb(210, 180, 230);
+
+			// 🔵 HEADER
+			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
+			{
+				using (SolidBrush brush = new SolidBrush(colorHeader))
+				{
+					e.Graphics.FillRectangle(brush, e.CellBounds);
+				}
+
+				TextRenderer.DrawText(
+					e.Graphics,
+					e.FormattedValue?.ToString() ?? "",
+					new Font("Segoe UI", 10, FontStyle.Bold),
+					e.CellBounds,
+					System.Drawing.Color.White,
+					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+				);
+
+				// línea header
+				using (Pen pen = new Pen(colorLinea))
+				{
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Top,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Bottom
+					);
+				}
+
+				e.Handled = true;
+				return;
+			}
+
+			// 🔹 CELDAS
+			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+			{
+				// 🔥 alternado con color base
+				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
+					? fondoBase
+					: System.Drawing.Color.White;
+
+				// 🔥 SIN SELECCIÓN
+				using (SolidBrush brush = new SolidBrush(fondo))
+				{
+					e.Graphics.FillRectangle(brush, e.CellBounds);
+				}
+
+				TextRenderer.DrawText(
+					e.Graphics,
+					e.FormattedValue?.ToString() ?? "",
+					new Font("Segoe UI", 10),
+					e.CellBounds,
+					System.Drawing.Color.Black,
+					TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+				);
+
+				// 🔥 líneas
+				using (Pen pen = new Pen(colorLinea))
+				{
+					// vertical
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Top,
+						e.CellBounds.Right - 1,
+						e.CellBounds.Bottom
+					);
+
+					// horizontal
+					e.Graphics.DrawLine(
+						pen,
+						e.CellBounds.Left,
+						e.CellBounds.Bottom - 1,
+						e.CellBounds.Right,
+						e.CellBounds.Bottom - 1
+					);
+				}
+
+				e.Handled = true;
+			}
+		}
+		public void ActivarEstiloGrid(DataGridView dgv)
+		{
+			if (dgv == null) return;
+
+			dgv.EnableHeadersVisualStyles = false;
+			dgv.RowHeadersVisible = false;
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.BackgroundColor = System.Drawing.Color.White;
+			dgv.ColumnHeadersHeight = 40;
+
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+
+			dgv.DefaultCellStyle.SelectionBackColor = dgv.DefaultCellStyle.BackColor;
+			dgv.DefaultCellStyle.SelectionForeColor = dgv.DefaultCellStyle.ForeColor;
+
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.None;
+
+			dgv.CellPainting -= PintarCeldaGrid;
+			dgv.CellPainting += PintarCeldaGrid;
+
+			dgv.SelectionChanged += (s, e) => dgv.ClearSelection();
+		}
 	}
-
-
 }
+
 
 

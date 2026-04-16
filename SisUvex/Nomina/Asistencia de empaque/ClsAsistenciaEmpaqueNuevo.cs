@@ -1,7 +1,8 @@
-﻿using Excel = Microsoft.Office.Interop.Excel;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using SisUvex.Catalogos;
+using ClosedXML.Excel;
+using SisUvex.Catalogos.Metods.Values;
 
 namespace SisUvex.Nomina.Asistencia_de_empaque
 {
@@ -15,156 +16,137 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
         { 
             this.frm = frmAsistenciaEmpaqueNuevo;
         }
-        public void BuscarExcel()
-        {
-            frm.ofdExcel.Filter = "Archivos de Excel|*.xls;*.xlsx";
+		public void BuscarExcel()
+		{
+			frm.ofdExcel.Filter = "Archivos de Excel|*.xls;*.xlsx";
 
-            if (frm.ofdExcel.ShowDialog() == DialogResult.OK)
-            {
-                string selectedFilePath = frm.ofdExcel.FileName;
-                string fileExtension = Path.GetExtension(selectedFilePath);
+			if (frm.ofdExcel.ShowDialog() == DialogResult.OK)
+			{
+				string selectedFilePath = frm.ofdExcel.FileName;
+				string fileExtension = Path.GetExtension(selectedFilePath).ToLower();
 
-                if (fileExtension != ".xls" && fileExtension != ".xlsx")
-                {
-                    MessageBox.Show("Seleccione un archivo de Excel válido.", titulo, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
+				if (fileExtension != ".xls" && fileExtension != ".xlsx")
+				{
+					MessageBox.Show("Seleccione un archivo de Excel válido.", titulo, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					return;
+				}
 
-                frm.btnExaminar.Enabled = false;
-                frm.btnAceptar.Enabled = false;
-                frm.btnMostrar.Enabled = false;
-                frm.cboHoja.Enabled = false;
+				frm.btnExaminar.Enabled = false;
+				frm.btnAceptar.Enabled = false;
+				frm.btnMostrar.Enabled = false;
+				frm.cboHoja.Enabled = false;
 
-                frm.txbExaminar.Text = frm.ofdExcel.FileName;
+				frm.txbExaminar.Text = selectedFilePath;
 
-                // Cargar el ComboBox con los nombres de las hojas del archivo de Excel
-                Excel.Application excelApp = new Excel.Application();
-                Excel.Workbook workbook = excelApp.Workbooks.Open(frm.ofdExcel.FileName);
+				try
+				{
+					frm.cboHoja.Items.Clear();
 
-                try
-                {
-                    // Limpiar el ComboBox antes de cargar los nombres de las hojas
-                    frm.cboHoja.Items.Clear();
+					
+					using (var workbook = new XLWorkbook(selectedFilePath))
+					{
+						foreach (var worksheet in workbook.Worksheets)
+						{
+							frm.cboHoja.Items.Add(worksheet.Name);
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Error al cargar los nombres de las hojas del archivo de Excel: " + ex.Message);
+				}
 
-                    // Recorrer todas las hojas del archivo de Excel y agregar sus nombres al ComboBox
-                    foreach (Excel.Worksheet worksheet in workbook.Worksheets)
-                    {
-                        frm.cboHoja.Items.Add(worksheet.Name);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Manejar cualquier excepción que pueda ocurrir al cargar los nombres de las hojas
-                    MessageBox.Show("Error al cargar los nombres de las hojas del archivo de Excel: " + ex.Message);
-                }
-                finally
-                {
-                    // Cerrar y liberar los recursos de Excel
-                    workbook.Close();
-                    excelApp.Quit();
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
-                }
+				frm.btnExaminar.Enabled = true;
+				frm.btnAceptar.Enabled = true;
+				frm.btnMostrar.Enabled = true;
+				frm.cboHoja.Enabled = true;
 
-                frm.btnExaminar.Enabled = true;
-                frm.btnAceptar.Enabled = true;
-                frm.btnMostrar.Enabled = true;
-                frm.cboHoja.Enabled = true;
+				if (frm.cboHoja.Items.Count > 0)
+				{
+					frm.cboHoja.SelectedIndex = 0;
+				}
+			}
+		}
 
-                if (frm.cboHoja.Items.Count > 0)
-                {
-                    frm.cboHoja.SelectedIndex = 0;
-                }
-            }
-        }
+		public void CargarHojaExcelEnDatagridView()
+		{
+			if (frm.cboHoja.SelectedItem != null)
+			{
+				string selectedSheet = frm.cboHoja.SelectedItem?.ToString();
+				string excelFilePath = frm.txbExaminar.Text;
 
-        public void CargarHojaExcelEnDatagridView()
-        {
-            if (frm.cboHoja.SelectedItem != null)
-            {
-                string selectedSheet = frm.cboHoja.SelectedItem?.ToString();
-                string excelFilePath = frm.txbExaminar.Text;
+				if (!string.IsNullOrEmpty(selectedSheet) && !string.IsNullOrEmpty(excelFilePath))
+				{
+					try
+					{
+						using (var workbook = new XLWorkbook(excelFilePath))
+						{
+							var worksheet = workbook.Worksheet(selectedSheet);
 
-                // Verificar que se haya seleccionado una hoja y se haya cargado un archivo de Excel
-                if (!string.IsNullOrEmpty(selectedSheet) && !string.IsNullOrEmpty(excelFilePath))
-                {
-                    // Crear una instancia de la aplicación de Excel
-                    Excel.Application excelApp = new Excel.Application();
-                    Excel.Workbook workbook = excelApp.Workbooks.Open(excelFilePath);
+							var range = worksheet.RangeUsed();
 
-                    try
-                    {
-                        // Obtener la hoja seleccionada del archivo de Excel
-                        Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[selectedSheet];
+							if (range != null)
+							{
+								int rows = range.RowCount();
+								int columns = range.ColumnCount();
 
-                        // Obtener los datos de la hoja seleccionada y cargarlos en el DataGridView
-                        Excel.Range range = worksheet.UsedRange;
-                        object[,] data = (object[,])range.Value;
-                        if (data != null)
-                        {
-                            int rows = data.GetLength(0);
-                            int columns = data.GetLength(1);
+								frm.dgvLista.Rows.Clear();
+								frm.dgvLista.Columns.Clear();
 
-                            // Limpiar el DataGridView antes de cargar los datos
-                            frm.dgvLista.Rows.Clear();
-                            frm.dgvLista.Columns.Clear();
+								// Crear columnas (primera fila como encabezado)
+								for (int c = 1; c <= columns; c++)
+								{
+									string header = range.Cell(1, c).GetValue<string>();
+									if (string.IsNullOrWhiteSpace(header))
+										header = "Column" + c;
 
-                            // Agregar las columnas al DataGridView
-                            for (int c = 1; c <= columns; c++)
-                            {
-                                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-                                column.HeaderText = data[1, c]?.ToString() ?? "Column" + c;
-                                column.Name = column.HeaderText;
-                                frm.dgvLista.Columns.Add(column);
-                            }
+									DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+									column.HeaderText = header;
+									column.Name = header;
 
-                            // Agregar las filas al DataGridView
-                            for (int r = 2; r <= rows; r++)
-                            {
-                                DataGridViewRow row = new DataGridViewRow();
+									frm.dgvLista.Columns.Add(column);
+								}
 
-                                for (int c = 1; c <= columns; c++)
-                                {
-                                    DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
-                                    cell.Value = data[r, c];
-                                    row.Cells.Add(cell);
-                                }
+								// Agregar filas (desde la fila 2)
+								for (int r = 2; r <= rows; r++)
+								{
+									DataGridViewRow row = new DataGridViewRow();
 
-                                frm.dgvLista.Rows.Add(row);
-                            }
-                            return;
-                        }
-                        else
-                        {
-                            MessageBox.Show("No hay datos en la hoja seleccionada.", "Error en hoja seleccionada.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Manejar cualquier excepción que pueda ocurrir al cargar los datos en el DataGridView
-                        MessageBox.Show("Error al cargar los datos.\n\nEl documento no cumple con el formato esperado." + ex.Message);
-                    }
-                    finally
-                    {
-                        // Cerrar y liberar los recursos de Excel
-                        workbook.Close();
-                        excelApp.Quit();
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
-                    }
+									for (int c = 1; c <= columns; c++)
+									{
+										DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
+										cell.Value = range.Cell(r, c).Value;
+										row.Cells.Add(cell);
+									}
 
-                    frm.dgvLista.DataSource = null;
-                    frm.dgvLista.Rows.Clear();
-                    frm.dgvLista.Columns.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Debe seleccionar una hoja y cargar un archivo de Excel primero.");
-                }
-            }
-        }
+									frm.dgvLista.Rows.Add(row);
+								}
 
-        public void BotonAceptar()
+								return;
+							}
+							else
+							{
+								MessageBox.Show("No hay datos en la hoja seleccionada.", "Error en hoja seleccionada.");
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Error al cargar los datos.\n\nEl documento no cumple con el formato esperado.\n\n" + ex.Message);
+					}
+
+					frm.dgvLista.DataSource = null;
+					frm.dgvLista.Rows.Clear();
+					frm.dgvLista.Columns.Clear();
+				}
+				else
+				{
+					MessageBox.Show("Debe seleccionar una hoja y cargar un archivo de Excel primero.");
+				}
+			}
+		}
+
+		public void BotonAceptar()
         {
             if (!frm.dgvLista.Columns.Contains(frm.idEmpleado) || !frm.dgvLista.Columns.Contains(frm.idActividad) || !frm.dgvLista.Columns.Contains(frm.idBanda))
             {
@@ -173,7 +155,7 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
             else
             {//GUARDAR REGISTROS
 
-                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaBanda(frm.dgvLista))
+                if (ValidarColumnaCodigo(frm.dgvLista) && ValidarColumnaActividad(frm.dgvLista) && ValidarColumnaBanda(frm.dgvLista) && ValidarEmpleadoRepetido(frm.dgvLista)) 
                 {
                     ConfirmarAccionAceptar();
                 }
@@ -229,6 +211,10 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 				if (string.IsNullOrEmpty(codigo))
 					continue;
 
+				if (string.IsNullOrEmpty(cellValue.ToString()))
+					return true;
+
+
 				int codigoInt;
 
 				// Validar que sea entero y esté entre 1 y 999
@@ -244,31 +230,60 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
 			return true;
 		}
+		private bool ValidarEmpleadoRepetido(DataGridView dgv)
+		{
+			HashSet<string> empleados = new HashSet<string>();
+
+			foreach (DataGridViewRow row in dgv.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				string idEmpleado = row.Cells[frm.idEmpleado].Value?.ToString();
+
+				if (string.IsNullOrEmpty(idEmpleado))
+					continue;
+
+				if (!empleados.Add(idEmpleado))
+				{
+					MessageBox.Show(
+						$"El empleado {idEmpleado} está repetido en el Excel.",
+						"Validación",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 
 
 		//private bool ValidarColumnaHorasExtras(DataGridView dataGridView)
-  //      {
-  //          foreach (DataGridViewRow row in dataGridView.Rows)
-  //          {
-  //              string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
+		//      {
+		//          foreach (DataGridViewRow row in dataGridView.Rows)
+		//          {
+		//              string _horasExtras = row.Cells[frm.horasExtras].Value?.ToString() ?? "";
 
-  //              if (!string.IsNullOrEmpty(_horasExtras))
-  //              {
-  //                  decimal horasExtrasDecimal;
+		//              if (!string.IsNullOrEmpty(_horasExtras))
+		//              {
+		//                  decimal horasExtrasDecimal;
 
-  //                  if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
-  //                  {
-  //                      MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
-  //                      return false;
-  //                  }
-  //              }
-  //          }
+		//                  if (!decimal.TryParse(_horasExtras, out horasExtrasDecimal) || horasExtrasDecimal < 0)
+		//                  {
+		//                      MessageBox.Show($"El valor: '{_horasExtras}'\nNo cumple con el formato esperado para la columna {frm.horasExtras}.", "Columna " + frm.horasExtras);
+		//                      return false;
+		//                  }
+		//              }
+		//          }
 
-  //          return true;
-  //      }
+		//          return true;
+		//      }
 
-        public void ConfirmarAccionAceptar()
+		public void ConfirmarAccionAceptar()
         {
             DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos del Excel?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -280,47 +295,68 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                 if (registros == 0)
                 {
 
-                    //try
-                    //{
-                    //    sql.BeginTransaction(); //aquí abre la conexion
+                    try
+                    {
+                        sql.BeginTransaction(); //aquí abre la conexion
 
-                    //    InsertarRegistrosDeAsistencia();
+                        InsertarRegistrosDeAsistencia();
 
-                    //    sql.CommitTransaction(); //aquí cierra la conexion
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    sql.RollbackTransaction(); //aquí cierra la conexion
-                    //    MessageBox.Show(ex.ToString(), titulo);  
-                    //}
+                        sql.CommitTransaction(); //aquí cierra la conexion
+                    }
+                    catch (Exception ex)
+                    {
+                        sql.RollbackTransaction(); //aquí cierra la conexion
+                        MessageBox.Show(ex.ToString(), titulo);
+                    }
 
-                    MessageBox.Show("Procedimiento base de datos");
                 }
                 else
                 {
                     DialogResult overwriteResult = MessageBox.Show($"Ya existen {registros} registros para la fecha {fecha}. \n¿Desea sobreescribirlos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 
-                    //if (overwriteResult == DialogResult.Yes)
-                    //{
-                    //    try
-                    //    {
-                    //        sql.BeginTransaction(); //aquí abre la conexion
+                    if (overwriteResult == DialogResult.Yes)
+                    {
+                        try
+                        {
+							sql.BeginTransaction();
 
-                    //        EliminarRegistrosPorFecha(fecha);
+							if (ExisteMiscellaneousPorFecha(fecha))
+							{
+								DialogResult resp = MessageBox.Show(
+									"Existen ingresos/deducciones relacionados a esta fecha.\n\n¿Desea eliminarlos también?",
+									titulo,
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Warning
+								);
 
-                    //        InsertarRegistrosDeAsistencia();
-                    //        sql.CommitTransaction();
-                    //    }
-                    //    catch (Exception ex) 
-                    //    {
-                    //        sql.RollbackTransaction();
-                    //        MessageBox.Show(ex.ToString(), titulo);
-                    //    }
-                        
-                    }
-                }
-            }
-        
+								if (resp == DialogResult.Yes)
+								{
+									EliminarMiscellaneousPorFecha(fecha);
+								}
+								else
+								{
+									sql.RollbackTransaction();
+									return;
+								}
+							}
+
+							//  BORRA ASISTENCIA
+							EliminarRegistrosPorFecha(fecha);
+
+							//  INSERTA NUEVO
+							InsertarRegistrosDeAsistencia();
+
+							sql.CommitTransaction();
+						}
+						catch (Exception ex)
+						{
+							sql.RollbackTransaction();
+							MessageBox.Show(ex.ToString(), titulo);
+						}
+					}
+				}
+			}
+        }
 
         public void InsertarRegistrosDeAsistencia()
         { //USAR SOLO SI YA SE ABRIO LA CONEXION
@@ -343,7 +379,7 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
                     cmd.Parameters.AddWithValue("@dAttendence", fecha);
                     cmd.Parameters.AddWithValue("@codigoTab", FormatoCeros(actividad, "0000"));
                     cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-                    cmd.Parameters.AddWithValue("@banda", banda);
+                    cmd.Parameters.AddWithValue("@banda", ClsValues.IfEmptyToDBNull(banda));
 
                     try
                     {
@@ -412,6 +448,51 @@ namespace SisUvex.Nomina.Asistencia_de_empaque
 
             return registros;
         }
-    }
+		private bool ExisteMiscellaneousPorFecha(string fecha)
+		{
+			int count = 0;
+
+			try
+			{
+				SqlCommand cmd = new SqlCommand(@"
+				SELECT COUNT(*)
+				FROM dbo.Nom_MiscellaneousIncome mi
+				INNER JOIN dbo.Nom_AttendenceList a
+				ON mi.id_attendence = a.id_attendence
+				WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
+
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+
+				count = (int)cmd.ExecuteScalar();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), titulo);
+			}
+
+			return count > 0;
+		}
+		private void EliminarMiscellaneousPorFecha(string fecha)
+		{
+			try
+			{
+				SqlCommand cmd = new SqlCommand(@"
+        DELETE mi
+        FROM dbo.Nom_MiscellaneousIncome mi
+        INNER JOIN dbo.Nom_AttendenceList a
+            ON mi.id_attendence = a.id_attendence
+        WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
+
+				cmd.Parameters.AddWithValue("@Fecha", fecha);
+				cmd.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), titulo);
+				throw;
+			}
+		}
+
+	}
 }
 

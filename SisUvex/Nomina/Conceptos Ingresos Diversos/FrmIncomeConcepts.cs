@@ -28,6 +28,7 @@ namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
 			cls ??= new();
 			cls.frm = this;
 			cls.BeginFormCat();
+			cls.EstiloGrid();
 		}
 
 		private void btnRemove_Click(object sender, EventArgs e)

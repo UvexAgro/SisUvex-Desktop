@@ -212,5 +212,42 @@ namespace SisUvex.Nomina.Conceptos_Ingresos_Diversos
             DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [id_concept] = '{idAddModify}'");
             dgv.ModifyIdRowInDGV(newIdRow);
         }
+		public void EstiloGrid()
+		{
+			var dgv = frm.dgvCatalog;
+
+			//  Líneas
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+			dgv.GridColor = System.Drawing.Color.LightGray;
+
+			dgv.EnableHeadersVisualStyles = false;
+
+			//  Encabezado
+			dgv.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(210, 230, 250);
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+			dgv.ColumnHeadersHeight = 35;
+
+			//  EVITA QUE SE PINTE AL SELECCIONAR
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgv.ColumnHeadersDefaultCellStyle.BackColor;
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgv.ColumnHeadersDefaultCellStyle.ForeColor;
+
+			//  Filas
+			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+			dgv.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 120, 215);
+			dgv.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+			//  Alternar filas
+			dgv.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+
+			//  Ajustes
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			dgv.RowTemplate.Height = 30;
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
+			dgv.AllowUserToAddRows = false;
+		}
 	}
 }

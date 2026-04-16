@@ -30,6 +30,7 @@
 		{
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmListaAsitencia));
 			dtpDia = new DateTimePicker();
 			dgvLista = new DataGridView();
 			btnBuscar = new Button();
@@ -241,8 +242,9 @@
 			Controls.Add(btnBuscar);
 			Controls.Add(dgvLista);
 			Controls.Add(dtpDia);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmListaAsitencia";
-			Text = "ListaAsitencia";
+			Text = "Ajuste de Nomina ";
 			WindowState = FormWindowState.Maximized;
 			Load += FrmListaAsitencia_Load;
 			((System.ComponentModel.ISupportInitialize)dgvLista).EndInit();
