@@ -11,6 +11,114 @@ public static class User
     private static int accessLevel = 4;
     private static DateTime currentDate = DateTime.Now.Date;
     private static ClsConfig conf = new ClsConfig();
+    private static string? idWorkGroup;
+    private static string? idContractor;
+    private static string? idEmployee;
+    private static string? idRole;
+    private static string? active;
+    private static class Permission
+    {
+        public static bool PrintLabels { get; set; } = false;
+        public static bool ViewCatalogs { get; set; } = false;
+        public static bool EditCatalogs { get; set; } = false;
+        public static bool CreateRecords { get; set; } = false;
+        public static bool ProductionReports { get; set; } = false;
+        public static bool CostReports { get; set; } = false;
+        public static bool Audit { get; set; } = false;
+        public static bool OwnFilter { get; set; } = false;
+        public static bool SysAdmin { get; set; } = false;
+    }
+
+    public static void SetUserInfo(string userName)
+    {
+        SQLControl sql = new SQLControl();
+
+        try
+        {
+            sql.OpenConectionRead();
+
+            SqlCommand cmd = new SqlCommand(@"SELECT * FROM Usuario usu LEFT JOIN Conf_Role rol ON rol.id_role = usu.id_role WHERE v_nombre_usu = @user", sql.cnn);
+
+            cmd.Parameters.AddWithValue("@user", userName);
+
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            if (dr.Read())
+            {
+                // 🔹 Datos básicos
+                username = dr["c_codigo_usu"].ToString();
+                SetUserName(dr["v_nombre_usu"].ToString());
+                SetAccessLevel(Convert.ToInt32(dr["c_accesibilidad_usu"]));
+                currentDate = DateTime.Now.Date;
+                idWorkGroup = dr["id_workGroup"].ToString();
+                idContractor = dr["id_contractor"].ToString();
+                idEmployee = dr["id_employee"].ToString();
+                idRole = dr["id_role"].ToString();
+                active = dr["c_active"].ToString();
+
+                // 🔹 Permisos
+                Permission.PrintLabels = ToBool(dr["c_printLabels"]);
+                Permission.ViewCatalogs = ToBool(dr["c_viewCatalogs"]);
+                Permission.EditCatalogs = ToBool(dr["c_editCatalogs"]);
+                Permission.CreateRecords = ToBool(dr["c_createRecords"]);
+                Permission.ProductionReports = ToBool(dr["c_productionReports"]);
+                Permission.CostReports = ToBool(dr["c_costReports"]);
+                Permission.Audit = ToBool(dr["c_audit"]);
+                Permission.OwnFilter = ToBool(dr["c_ownFilter"]);
+                Permission.SysAdmin = ToBool(dr["c_sysAdmin"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Obtener información de usuario");
+        }
+        finally
+        {
+            sql.CloseConectionRead();
+        }
+    }
+
+    public static bool HasPrintLabelsPermission()
+    {
+        return Permission.PrintLabels;
+    }
+    public static bool HasViewCatalogsPermission()
+    {
+        return Permission.ViewCatalogs;
+    }
+    public static bool HasEditCatalogsPermission()
+    {
+        return Permission.EditCatalogs;
+    }
+    public static bool HasCreateRecordsPermission()
+    {
+        return Permission.CreateRecords;
+    }
+    public static bool HasProductionReportsPermission()
+    {
+        return Permission.ProductionReports;
+    }
+    public static bool HasCostReportsPermission()
+    {
+        return Permission.CostReports;
+    }
+    public static bool HasAuditPermission()
+    {
+        return Permission.Audit;
+    }
+    public static bool HasOwnFilterPermission()
+    {
+        return Permission.OwnFilter;
+    }
+    public static bool HasSysAdminPermission()
+    {
+        return Permission.SysAdmin;
+    }
+
+    private static bool ToBool(object value)
+    {
+        return value != null && value.ToString() == "1";
+    }
 
     public static string GetUserName()
     {
@@ -42,31 +150,6 @@ public static class User
         currentDate = date.Date;
     }
 
-    public static void SetProductDay()
-    {
-        SQLControl sql = new SQLControl();
-
-        try
-        {
-            sql.OpenConectionWrite();
-            SqlCommand cmd = new SqlCommand("SELECT d_productionDay 'Day' FROM Pack_ProductionDay", sql.cnn);
-            SqlDataReader dr;
-            dr = cmd.ExecuteReader();
-            if (dr.Read())
-            {
-                DateTime productionDay = Convert.ToDateTime(dr["Day"]);
-                SetDate(productionDay);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.ToString(), "Obtener día de producción");
-        }
-        finally
-        {
-            sql.CloseConectionRead();
-        }
-    }
     public static void SetLastUser(string usuario)
     {
 
@@ -82,5 +165,36 @@ public static class User
     public static string GetLastUser()
     {
         return ClsConfig.lastLogin;
+    }
+    public static bool ValidateUserPassword(string user, string password)
+    {
+        SQLControl sql = new SQLControl();
+        bool isValid = false;
+        try
+        {
+            sql.OpenConectionRead();
+            SqlCommand cmd = new SqlCommand("sp_loginCrypt", sql.cnn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@usuario", user);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.Read())
+            {
+                string dbUser = dr.GetString(0);
+                string dbPass = dr.GetString(1);
+                if (dbUser == user && BCrypt.Net.BCrypt.Verify(password, dbPass))
+                {
+                    isValid = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Comparar usuario y contraseña");
+        }
+        finally
+        {
+            sql.CloseConectionRead();
+        }
+        return isValid;
     }
 }
