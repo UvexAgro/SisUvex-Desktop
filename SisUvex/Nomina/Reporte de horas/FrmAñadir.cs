@@ -54,39 +54,51 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 		private void btnAcept_Click(object sender, EventArgs e)
 		{
-		
-			//  Validar si cruza de día
-			if (dtpEndExtra.Value.Date > dtpBeginNormal.Value.Date)
+			//  NORMAL
+			DateTime inicioNormal = dtpBeginNormal.Value;
+			DateTime finNormal = dtpEndNormal.Value;
+
+			//  SI CRUZA DE DÍA
+			if (finNormal <= inicioNormal)
 			{
 				DialogResult res = MessageBox.Show(
-					"El horario de fin extra pasa al siguiente día.\n\n¿Desea continuar?",
+					"El turno normal pasa al siguiente día.\n\n¿Desea continuar?",
 					"Turno nocturno",
 					MessageBoxButtons.YesNo,
 					MessageBoxIcon.Question
 				);
 
 				if (res == DialogResult.No)
-				{
-					return; 
-				}
+					return;
 			}
 
-			if (!IsAddModify)
+			//  EXTRA
+			DateTime inicioExtra = finNormal;
+			DateTime finExtra = dtpEndExtra.Value;
+
+			bool tieneExtra = nudOvertime.Value > 0;
+
+			// VALIDAR SOLO SI HAY EXTRA
+			if (tieneExtra)
 			{
-				if (dtpEndExtra.Value.TimeOfDay == TimeSpan.Zero)
+				if (finExtra <= inicioExtra)
 				{
-					MessageBox.Show(
-						"Debes capturar la hora final del tiempo extra.",
-						"Validación",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+					DialogResult res = MessageBox.Show(
+						"La hora extra pasa al siguiente día.\n\n¿Desea continuar?",
+						"Turno nocturno",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
 					);
 
-					dtpEndExtra.Focus();
-					return;
+					if (res == DialogResult.No)
+						return;
 				}
 			}
 
+			// YA NO VALIDES 00:00:00 ❌
+			// (esa línea se elimina completamente)
+
+			// EJECUCIÓN
 			if (IsAddModify)
 			{
 				clsA.AddProcedure();

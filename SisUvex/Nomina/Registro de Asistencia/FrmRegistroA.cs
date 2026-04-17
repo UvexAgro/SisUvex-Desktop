@@ -43,6 +43,8 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			clsM.EstiloDgv();
 			clsM.CargarComboActividades();
 			cls.CargarAsistenciasPorFecha();
+			cls.CargarCuadrillas(cboCuadrilla);
+			cls.CargarCuadrillas(cboCuadrillaM);
 
 		}
 

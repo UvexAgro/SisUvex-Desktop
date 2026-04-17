@@ -56,6 +56,7 @@
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Modificar";
 			btnModify.UseVisualStyleBackColor = true;
+			btnModify.Click += btnModify_Click;
 			// 
 			// btnRemove
 			// 
@@ -65,12 +66,13 @@
 			btnRemove.TabIndex = 5;
 			btnRemove.Text = "Eliminar";
 			btnRemove.UseVisualStyleBackColor = true;
+			btnRemove.Click += btnRemove_Click;
 			// 
 			// dgvCatalog
 			// 
 			dgvCatalog.AllowUserToAddRows = false;
 			dgvCatalog.AllowUserToDeleteRows = false;
-			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			dgvCatalog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvCatalog.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
