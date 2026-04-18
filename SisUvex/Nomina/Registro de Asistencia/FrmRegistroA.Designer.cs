@@ -32,6 +32,8 @@
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroA));
 			pllManual = new Panel();
+			cboCuadrillaM = new ComboBox();
+			lblCuadrillaM = new Label();
 			btnMostrarEmpleado = new Button();
 			btnAgregarListado = new Button();
 			btnSearch = new Button();
@@ -39,14 +41,16 @@
 			lblCodigo = new Label();
 			cboLinea = new ComboBox();
 			cboActividad = new ComboBox();
-			lblActividad = new Label();
 			lblBanda = new Label();
+			lblActividad = new Label();
 			txbEmpleado = new TextBox();
 			btnAcceptarEmpleado = new Button();
 			lblEmpleado = new Label();
 			dtpDay = new DateTimePicker();
 			lblManual = new Label();
 			pllExcel = new Panel();
+			cboCuadrilla = new ComboBox();
+			lblCuadrilla = new Label();
 			btnCancelar = new Button();
 			cboHoja = new ComboBox();
 			btnInstrucciones = new Button();
@@ -69,6 +73,8 @@
 			// 
 			pllManual.BackColor = SystemColors.ActiveCaption;
 			pllManual.BorderStyle = BorderStyle.FixedSingle;
+			pllManual.Controls.Add(cboCuadrillaM);
+			pllManual.Controls.Add(lblCuadrillaM);
 			pllManual.Controls.Add(btnMostrarEmpleado);
 			pllManual.Controls.Add(btnAgregarListado);
 			pllManual.Controls.Add(btnSearch);
@@ -76,19 +82,38 @@
 			pllManual.Controls.Add(lblCodigo);
 			pllManual.Controls.Add(cboLinea);
 			pllManual.Controls.Add(cboActividad);
-			pllManual.Controls.Add(lblActividad);
 			pllManual.Controls.Add(lblBanda);
+			pllManual.Controls.Add(lblActividad);
 			pllManual.Controls.Add(txbEmpleado);
 			pllManual.Controls.Add(btnAcceptarEmpleado);
 			pllManual.Controls.Add(lblEmpleado);
-			pllManual.Location = new Point(32, 147);
+			pllManual.Location = new Point(41, 151);
 			pllManual.Name = "pllManual";
-			pllManual.Size = new Size(456, 204);
+			pllManual.Size = new Size(456, 232);
 			pllManual.TabIndex = 108;
+			// 
+			// cboCuadrillaM
+			// 
+			cboCuadrillaM.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboCuadrillaM.FormattingEnabled = true;
+			cboCuadrillaM.Location = new Point(87, 144);
+			cboCuadrillaM.Name = "cboCuadrillaM";
+			cboCuadrillaM.Size = new Size(298, 23);
+			cboCuadrillaM.TabIndex = 114;
+			// 
+			// lblCuadrillaM
+			// 
+			lblCuadrillaM.AutoSize = true;
+			lblCuadrillaM.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblCuadrillaM.Location = new Point(13, 144);
+			lblCuadrillaM.Name = "lblCuadrillaM";
+			lblCuadrillaM.Size = new Size(68, 19);
+			lblCuadrillaM.TabIndex = 115;
+			lblCuadrillaM.Text = "Cuadrilla:";
 			// 
 			// btnMostrarEmpleado
 			// 
-			btnMostrarEmpleado.Location = new Point(299, 166);
+			btnMostrarEmpleado.Location = new Point(306, 188);
 			btnMostrarEmpleado.Name = "btnMostrarEmpleado";
 			btnMostrarEmpleado.Size = new Size(63, 24);
 			btnMostrarEmpleado.TabIndex = 113;
@@ -140,7 +165,7 @@
 			// cboLinea
 			// 
 			cboLinea.FormattingEnabled = true;
-			cboLinea.Location = new Point(90, 143);
+			cboLinea.Location = new Point(87, 182);
 			cboLinea.Name = "cboLinea";
 			cboLinea.Size = new Size(121, 23);
 			cboLinea.TabIndex = 108;
@@ -148,10 +173,20 @@
 			// cboActividad
 			// 
 			cboActividad.FormattingEnabled = true;
-			cboActividad.Location = new Point(90, 105);
+			cboActividad.Location = new Point(87, 106);
 			cboActividad.Name = "cboActividad";
 			cboActividad.Size = new Size(298, 23);
 			cboActividad.TabIndex = 107;
+			// 
+			// lblBanda
+			// 
+			lblBanda.AutoSize = true;
+			lblBanda.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblBanda.Location = new Point(20, 182);
+			lblBanda.Name = "lblBanda";
+			lblBanda.Size = new Size(50, 19);
+			lblBanda.TabIndex = 104;
+			lblBanda.Text = "Banda:";
 			// 
 			// lblActividad
 			// 
@@ -163,26 +198,16 @@
 			lblActividad.TabIndex = 105;
 			lblActividad.Text = "Actividad:";
 			// 
-			// lblBanda
-			// 
-			lblBanda.AutoSize = true;
-			lblBanda.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblBanda.Location = new Point(13, 147);
-			lblBanda.Name = "lblBanda";
-			lblBanda.Size = new Size(50, 19);
-			lblBanda.TabIndex = 104;
-			lblBanda.Text = "Banda:";
-			// 
 			// txbEmpleado
 			// 
 			txbEmpleado.Location = new Point(90, 20);
 			txbEmpleado.Name = "txbEmpleado";
-			txbEmpleado.Size = new Size(298, 23);
+			txbEmpleado.Size = new Size(295, 23);
 			txbEmpleado.TabIndex = 102;
 			// 
 			// btnAcceptarEmpleado
 			// 
-			btnAcceptarEmpleado.Location = new Point(378, 166);
+			btnAcceptarEmpleado.Location = new Point(388, 188);
 			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
 			btnAcceptarEmpleado.Size = new Size(63, 24);
 			btnAcceptarEmpleado.TabIndex = 101;
@@ -212,7 +237,7 @@
 			// 
 			lblManual.AutoSize = true;
 			lblManual.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-			lblManual.Location = new Point(50, 119);
+			lblManual.Location = new Point(55, 123);
 			lblManual.Name = "lblManual";
 			lblManual.Size = new Size(77, 25);
 			lblManual.TabIndex = 152;
@@ -222,6 +247,8 @@
 			// 
 			pllExcel.BackColor = SystemColors.ActiveCaption;
 			pllExcel.BorderStyle = BorderStyle.FixedSingle;
+			pllExcel.Controls.Add(cboCuadrilla);
+			pllExcel.Controls.Add(lblCuadrilla);
 			pllExcel.Controls.Add(btnCancelar);
 			pllExcel.Controls.Add(cboHoja);
 			pllExcel.Controls.Add(btnInstrucciones);
@@ -231,14 +258,33 @@
 			pllExcel.Controls.Add(txbRuta);
 			pllExcel.Controls.Add(btnExcelAceptar);
 			pllExcel.Controls.Add(lblRuta);
-			pllExcel.Location = new Point(569, 147);
+			pllExcel.Location = new Point(578, 151);
 			pllExcel.Name = "pllExcel";
-			pllExcel.Size = new Size(443, 204);
+			pllExcel.Size = new Size(443, 232);
 			pllExcel.TabIndex = 153;
+			// 
+			// cboCuadrilla
+			// 
+			cboCuadrilla.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboCuadrilla.FormattingEnabled = true;
+			cboCuadrilla.Location = new Point(87, 130);
+			cboCuadrilla.Name = "cboCuadrilla";
+			cboCuadrilla.Size = new Size(321, 23);
+			cboCuadrilla.TabIndex = 111;
+			// 
+			// lblCuadrilla
+			// 
+			lblCuadrilla.AutoSize = true;
+			lblCuadrilla.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblCuadrilla.Location = new Point(13, 134);
+			lblCuadrilla.Name = "lblCuadrilla";
+			lblCuadrilla.Size = new Size(68, 19);
+			lblCuadrilla.TabIndex = 111;
+			lblCuadrilla.Text = "Cuadrilla:";
 			// 
 			// btnCancelar
 			// 
-			btnCancelar.Location = new Point(366, 166);
+			btnCancelar.Location = new Point(366, 182);
 			btnCancelar.Name = "btnCancelar";
 			btnCancelar.Size = new Size(63, 25);
 			btnCancelar.TabIndex = 110;
@@ -250,14 +296,14 @@
 			// 
 			cboHoja.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboHoja.FormattingEnabled = true;
-			cboHoja.Location = new Point(60, 85);
+			cboHoja.Location = new Point(60, 77);
 			cboHoja.Name = "cboHoja";
 			cboHoja.Size = new Size(270, 23);
 			cboHoja.TabIndex = 109;
 			// 
 			// btnInstrucciones
 			// 
-			btnInstrucciones.Location = new Point(13, 166);
+			btnInstrucciones.Location = new Point(13, 182);
 			btnInstrucciones.Name = "btnInstrucciones";
 			btnInstrucciones.Size = new Size(129, 24);
 			btnInstrucciones.TabIndex = 108;
@@ -267,7 +313,7 @@
 			// 
 			// btnMostrar
 			// 
-			btnMostrar.Location = new Point(356, 86);
+			btnMostrar.Location = new Point(356, 74);
 			btnMostrar.Name = "btnMostrar";
 			btnMostrar.Size = new Size(63, 24);
 			btnMostrar.TabIndex = 107;
@@ -289,7 +335,7 @@
 			// 
 			lblHoja.AutoSize = true;
 			lblHoja.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblHoja.Location = new Point(13, 89);
+			lblHoja.Location = new Point(13, 81);
 			lblHoja.Name = "lblHoja";
 			lblHoja.Size = new Size(41, 19);
 			lblHoja.TabIndex = 104;
@@ -304,7 +350,7 @@
 			// 
 			// btnExcelAceptar
 			// 
-			btnExcelAceptar.Location = new Point(287, 167);
+			btnExcelAceptar.Location = new Point(287, 183);
 			btnExcelAceptar.Name = "btnExcelAceptar";
 			btnExcelAceptar.Size = new Size(63, 24);
 			btnExcelAceptar.TabIndex = 101;
@@ -326,7 +372,7 @@
 			// 
 			lblExcel.AutoSize = true;
 			lblExcel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-			lblExcel.Location = new Point(569, 119);
+			lblExcel.Location = new Point(577, 123);
 			lblExcel.Name = "lblExcel";
 			lblExcel.Size = new Size(56, 25);
 			lblExcel.TabIndex = 154;
@@ -364,7 +410,7 @@
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
 			dgvAsistencia.ImeMode = ImeMode.NoControl;
-			dgvAsistencia.Location = new Point(32, 420);
+			dgvAsistencia.Location = new Point(20, 445);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -378,7 +424,7 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(1001, 379);
+			dgvAsistencia.Size = new Size(1001, 333);
 			dgvAsistencia.TabIndex = 113;
 			dgvAsistencia.CellFormatting += dgvAsistencia_CellFormatting;
 			// 
@@ -450,5 +496,9 @@
 		private Button btnAgregarListado;
 		public Button btnMostrarEmpleado;
 		public Button btnEliminar;
+		public ComboBox cboCuadrilla;
+		private Label lblCuadrilla;
+		public ComboBox cboCuadrillaM;
+		private Label lblCuadrillaM;
 	}
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Asistencia_de_empaque;
-
 namespace SisUvex.Nomina.Registro_de_Asistencia
 {
 	public class ClsRegistroA
@@ -14,6 +15,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		public FrmRegistroA frm;
 		string titulo = "Asistencia de empaque";
 		SQLControl sql = new SQLControl();
+		bool cargando = false;
 
 		public void BuscarExcel()
 		{
@@ -143,7 +145,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				}
 			}
 		}
-		
+
 		public void BotonAceptar()
 		{
 			if (!frm.dgvAsistencia.Columns.Contains(frm.idEmpleado) || !frm.dgvAsistencia.Columns.Contains(frm.idActividad) || !frm.dgvAsistencia.Columns.Contains(frm.idBanda))
@@ -227,35 +229,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return true;
 		}
-		//private bool ValidarEmpleadoRepetido(DataGridView dgv)
-		//{
-		//	HashSet<string> empleados = new HashSet<string>();
-
-		//	foreach (DataGridViewRow row in dgv.Rows)
-		//	{
-		//		if (row.IsNewRow)
-		//			continue;
-
-		//		string idEmpleado = row.Cells[frm.idEmpleado].Value?.ToString().Split('-')[0].Trim();
-
-		//		if (string.IsNullOrEmpty(idEmpleado))
-		//			continue;
-
-		//		if (!empleados.Add(idEmpleado))
-		//		{
-		//			MessageBox.Show(
-		//				$"El empleado {idEmpleado} está repetido en el Excel.",
-		//				"Validación",
-		//				MessageBoxButtons.OK,
-		//				MessageBoxIcon.Warning
-		//			);
-
-		//			return false;
-		//		}
-		//	}
-
-		//	return true;
-		//}
+		
 		private bool ValidarEmpleadoRepetido(DataGridView dgv)
 		{
 			Dictionary<string, DataGridViewRow> empleados = new Dictionary<string, DataGridViewRow>();
@@ -270,7 +244,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				if (string.IsNullOrEmpty(idEmpleado))
 					continue;
 
-				// 🔥 SI YA EXISTE
+				//  SI YA EXISTE
 				if (empleados.ContainsKey(idEmpleado))
 				{
 					var filaOriginal = empleados[idEmpleado];
@@ -284,16 +258,16 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 					if (resp == DialogResult.Yes)
 					{
-						// 🔥 ACTUALIZA LA FILA ORIGINAL
+						//  ACTUALIZA LA FILA ORIGINAL
 						filaOriginal.Cells["ACTIVIDAD"].Value = row.Cells["ACTIVIDAD"].Value;
 						filaOriginal.Cells["BANDA"].Value = row.Cells["BANDA"].Value;
 
-						// 🔥 ACTUALIZA TAGS (IMPORTANTE)
+						// ACTUALIZA TAGS (IMPORTANTE)
 						filaOriginal.Cells["ACTIVIDAD"].Tag = row.Cells["ACTIVIDAD"].Tag;
 						filaOriginal.Cells["BANDA"].Tag = row.Cells["BANDA"].Tag;
 					}
 
-					// 🔥 ELIMINA LA FILA DUPLICADA
+					//  ELIMINA LA FILA DUPLICADA
 					dgv.Rows.Remove(row);
 					continue;
 				}
@@ -410,6 +384,14 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				int conteo = 0;
 				string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
 
+				if (frm.cboCuadrilla.SelectedValue == null || frm.cboCuadrilla.SelectedValue == DBNull.Value)
+				{
+					MessageBox.Show("Debe seleccionar una cuadrilla válida");
+					return;
+				}
+
+				string idCuadrilla = frm.cboCuadrilla.SelectedValue.ToString().PadLeft(2, '0');
+
 				foreach (DataGridViewRow row in frm.dgvAsistencia.Rows)
 				{
 					string codigo = row.Cells[frm.idEmpleado].Value?.ToString().Split('-')[0].Trim() ?? "";
@@ -422,6 +404,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 					cmd.Parameters.AddWithValue("@codigoTab", ClsValues.FormatZeros(actividad, "0000"));
 					cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 					cmd.Parameters.AddWithValue("@banda", ClsValues.IfEmptyToDBNull(banda));
+					cmd.Parameters.AddWithValue("@idWorkGroup", idCuadrilla);
 
 					try
 					{
@@ -567,7 +550,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		{
 			try
 			{
-				sql.OpenConectionWrite(); 
+				sql.OpenConectionWrite();
 
 				SqlCommand cmd = new SqlCommand(
 					"DELETE FROM Nom_AttendenceList WHERE CAST(d_attendence AS DATE) = @Fecha",
@@ -584,8 +567,57 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			}
 			finally
 			{
-				sql.CloseConectionWrite(); 
+				sql.CloseConectionWrite();
 			}
+		}
+		public void CargarCuadrillas(ComboBox combo)
+		{
+			cargando = true;
+
+			DataTable dt = CboCuadrilla();
+
+			DataRow dr = dt.NewRow();
+			dr["Código"] = DBNull.Value;
+			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dt.Rows.InsertAt(dr, 0);
+
+			combo.DataSource = dt.Copy();
+			combo.DisplayMember = "Nombre";
+			combo.ValueMember = "Código";
+			combo.SelectedIndex = 0;
+
+			cargando = false;
+		}
+		public DataTable CboCuadrilla()
+		{
+			DataTable dt = new DataTable();
+
+			sql.OpenConectionWrite();
+
+			string query = @" SELECT 
+				g.id_workGroup AS Código,
+				g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
+			FROM Pack_WorkGroup g
+			INNER JOIN Pack_Contractor c 
+				ON g.id_contractor = c.id_contractor
+			WHERE g.id_season = (
+				SELECT TOP 1 id_season
+				FROM Pack_Season
+				WHERE CAST(GETDATE() AS DATE) 
+					  BETWEEN CAST(d_seasonBegins AS DATE) 
+					  AND CAST(d_seasonEnds AS DATE)
+				ORDER BY d_seasonBegins DESC
+			)
+			AND g.c_active = 1
+			ORDER BY g.v_nameWorkGroup";
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			da.Fill(dt);
+
+			sql.CloseConectionWrite();
+
+			return dt;
 		}
 	}
 }

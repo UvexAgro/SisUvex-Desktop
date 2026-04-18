@@ -568,7 +568,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				cmd.Parameters.AddWithValue("@id", id);
 				cmd.ExecuteNonQuery();
 
-				// 🔥 Quitar fila del DGV (sin recargar todo)
+				// Quitar fila del DGV (sin recargar todo)
 				frmR.dgvAsistencia.Rows.RemoveAt(fila);
 
 				MessageBox.Show("Registro eliminado");

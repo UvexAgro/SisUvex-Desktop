@@ -102,15 +102,16 @@
 			lblFechaFinal.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
 			lblFechaFinal.Location = new Point(6, 232);
 			lblFechaFinal.Name = "lblFechaFinal";
-			lblFechaFinal.Size = new Size(87, 19);
+			lblFechaFinal.Size = new Size(82, 19);
 			lblFechaFinal.TabIndex = 163;
-			lblFechaFinal.Text = "Fecha Inicio:";
+			lblFechaFinal.Text = "Fecha Final:";
 			// 
 			// dtpFinal
 			// 
 			dtpFinal.Format = DateTimePickerFormat.Custom;
 			dtpFinal.Location = new Point(6, 256);
 			dtpFinal.Name = "dtpFinal";
+			dtpFinal.ShowCheckBox = true;
 			dtpFinal.Size = new Size(273, 23);
 			dtpFinal.TabIndex = 164;
 			// 
@@ -180,6 +181,7 @@
 			btnAcept.TabIndex = 171;
 			btnAcept.Text = "Aceptar";
 			btnAcept.UseVisualStyleBackColor = true;
+			btnAcept.Click += btnAcept_Click;
 			// 
 			// btnCancel
 			// 
@@ -189,6 +191,7 @@
 			btnCancel.TabIndex = 172;
 			btnCancel.Text = "Cancelar";
 			btnCancel.UseVisualStyleBackColor = true;
+			btnCancel.Click += btnCancel_Click;
 			// 
 			// gpbNormal
 			// 

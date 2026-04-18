@@ -215,17 +215,19 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 
 				//  FORMATOS
-				if (frmPacki.dgvHoras.Columns.Contains("InicioNormal"))
-					frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				var cultura = new System.Globalization.CultureInfo("en-US");
 
-				if (frmPacki.dgvHoras.Columns.Contains("FinNormal"))
-					frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.FormatProvider = cultura;
 
-				if (frmPacki.dgvHoras.Columns.Contains("InicioExtra"))
-					frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.FormatProvider = cultura;
 
-				if (frmPacki.dgvHoras.Columns.Contains("FinExtra"))
-					frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.FormatProvider = cultura;
+
+				frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.FormatProvider = cultura;
 
 				// HEADERS
 				if (frmPacki.dgvHoras.Columns.Contains("Cuadrilla"))
@@ -400,16 +402,30 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				DateTime fecha = frmA.dtpDay.Value.Date;
 
-				DateTime inicioNormal = (frmA.dtpBeginNormal.Value.SinMs()); 
-				DateTime finNormal = (frmA.dtpEndNormal.Value.SinMs()); 
-				DateTime inicioExtra = (frmA.dtpEndNormal.Value.SinMs()); 
-				DateTime finExtra = (frmA.dtpEndExtra.Value.SinMs());
+				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
+				DateTime finNormal = frmA.dtpEndNormal.Value.SinMs();
+
+				//  SI CRUZA DE DÍA (NOCTURNO)
+				if (finNormal <= inicioNormal)
+					finNormal = finNormal.AddDays(1);
+
+				//  EXTRA
+				DateTime inicioExtra = finNormal;
+				DateTime finExtra = frmA.dtpEndExtra.Value.SinMs();
+
+				bool tieneExtra = frmA.nudOvertime.Value > 0;
+
+				if (tieneExtra)
+				{
+					if (finExtra <= inicioExtra)
+						finExtra = finExtra.AddDays(1);
+				}
 
 				sql.OpenConectionWrite();
 
 				foreach (ItemCuadrilla item in frmA.clbCuadrilla.CheckedItems)
 				{
-					if (ExisteHorario(item.Id, fecha.Date, 0))
+					if (ExisteHorario(item.Id, fecha, 0))
 					{
 						MessageBox.Show($"Ya existe un horario para la cuadrilla {item.Id} en esa fecha");
 						continue;
@@ -422,22 +438,26 @@ namespace SisUvex.Nomina.Reporte_de_horas
 						cmd.Parameters.Add("@WorkDate", SqlDbType.DateTime).Value = fecha;
 						cmd.Parameters.Add("@HourBeginNormal", SqlDbType.DateTime).Value = inicioNormal;
 						cmd.Parameters.Add("@HourEndNormal", SqlDbType.DateTime).Value = finNormal;
-						cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime).Value = inicioExtra;
-						cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime).Value = finExtra;
+
+						cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime)
+							.Value = tieneExtra ? inicioExtra : (object)DBNull.Value;
+
+						cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime)
+							.Value = tieneExtra ? finExtra : (object)DBNull.Value;
 
 						cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
 
-						//  BREAK
+						// BREAK
 						cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
 						cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
 						cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
 
-						//  LUNCH
+						// LUNCH
 						cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
 						cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
 						cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
 
-						//  DINNER
+						// DINNER
 						cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
 						cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
 						cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;
@@ -477,14 +497,28 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				DateTime fecha = frmA.dtpDay.Value.Date;
 
-				DateTime inicioNormal = (frmA.dtpBeginNormal.Value.SinMs());
-				DateTime finNormal = (frmA.dtpEndNormal.Value.SinMs());
-				DateTime inicioExtra = (frmA.dtpEndNormal.Value.SinMs());
-				DateTime finExtra = (frmA.dtpEndExtra.Value.SinMs());
+				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
+				DateTime finNormal = frmA.dtpEndNormal.Value.SinMs();
+
+				// 🔥 NOCTURNO
+				if (finNormal <= inicioNormal)
+					finNormal = finNormal.AddDays(1);
+
+				// 🔥 EXTRA
+				DateTime inicioExtra = finNormal;
+				DateTime finExtra = frmA.dtpEndExtra.Value.SinMs();
+
+				bool tieneExtra = frmA.nudOvertime.Value > 0;
+
+				if (tieneExtra)
+				{
+					if (finExtra <= inicioExtra)
+						finExtra = finExtra.AddDays(1);
+				}
 
 				sql.OpenConectionWrite();
 
-				if (ExisteHorario(item.Id, fecha.Date, idActual))
+				if (ExisteHorario(item.Id, fecha, idActual))
 				{
 					MessageBox.Show("Ya existe un horario para esta cuadrilla en esa fecha");
 					return;
@@ -499,22 +533,26 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					cmd.Parameters.Add("@WorkDate", SqlDbType.DateTime).Value = fecha;
 					cmd.Parameters.Add("@HourBeginNormal", SqlDbType.DateTime).Value = inicioNormal;
 					cmd.Parameters.Add("@HourEndNormal", SqlDbType.DateTime).Value = finNormal;
-					cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime).Value = inicioExtra;
-					cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime).Value = finExtra;
+
+					cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime)
+						.Value = tieneExtra ? inicioExtra : (object)DBNull.Value;
+
+					cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime)
+						.Value = tieneExtra ? finExtra : (object)DBNull.Value;
 
 					cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
 
-					//  BREAK
+					// BREAK
 					cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
 					cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
 					cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
 
-					//  LUNCH
+					// LUNCH
 					cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
 					cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
 					cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
 
-					//  DINNER
+					// DINNER
 					cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
 					cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
 					cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;

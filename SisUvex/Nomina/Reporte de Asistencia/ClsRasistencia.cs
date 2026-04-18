@@ -72,24 +72,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			cargando = false;
 
 		}
-		//public void CargarCuadrillas()
-		//{
-		//	cargando = true;
-
-		//	ClsCatalogos cls = new ClsCatalogos();
-		//	DataTable dt = cls.CboCuadrilla("");
-
-		//	frmR.cboCuadrilla.DataSource = dt;
-		//	frmR.cboCuadrilla.DisplayMember = "Nombre";
-		//	frmR.cboCuadrilla.ValueMember = "Código";
-
-		//	if (dt.Rows.Count > 0)
-		//	{
-		//		frmR.cboCuadrilla.SelectedIndex = 0;
-		//	}
-
-		//	cargando = false;
-		//}
+		
 		public void CargarCuadrillas()
 		{
 			cargando = true;
@@ -108,7 +91,6 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			frmR.cboCuadrilla.DisplayMember = "Nombre";
 			frmR.cboCuadrilla.ValueMember = "Código";
 
-			//  Seleccionar el primero (que ahora es "Seleccionar...")
 			frmR.cboCuadrilla.SelectedIndex = 0;
 
 			cargando = false;
@@ -251,7 +233,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			if (fin < inicio)
 			{
-				bloqueando = true; // 🔥 evitar rebote
+				bloqueando = true; //  evitar rebote
 
 				frmR.cboSemanaFinal.SelectedIndex = frmR.cboSemanaInicial.SelectedIndex;
 
