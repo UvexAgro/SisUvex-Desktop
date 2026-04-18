@@ -25,7 +25,7 @@ using SisUvex.Inicio;
 using SisUvex.Material.MaterialCatalog;
 using SisUvex.Material.MaterialProvider;
 using SisUvex.Material.MaterialRegister;
-using SisUvex.Material.MaterialRegister.Entry;git
+using SisUvex.Material.MaterialRegister.Entry;
 using SisUvex.Material.MaterialRegister.Exit;
 using SisUvex.Material.MaterialType;
 using SisUvex.Material.MaterialWarehouses;
