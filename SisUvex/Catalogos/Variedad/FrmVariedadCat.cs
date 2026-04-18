@@ -1,4 +1,6 @@
 ﻿
+using SisUvex.Catalogos.Metods;
+
 namespace SisUvex.Catalogos.Variedad
 {
     public partial class FrmVariedadCat : Form
@@ -57,22 +59,8 @@ namespace SisUvex.Catalogos.Variedad
         private void FrmVariedadCat_Load(object sender, EventArgs e)
         {
             dgvCatalogo.DataSource = cls.CatalogoActualizar(_dgvStatus);
-        }
-        private void dgvCatalogo_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (this.dgvCatalogo.Columns[e.ColumnIndex].Name == "Activo")
-            {
-                if (e.Value.ToString() == "0")
-                {
-                    e.CellStyle.BackColor = Color.Tomato;
-                    e.CellStyle.ForeColor = Color.Red;
-                }
-                if (e.Value.ToString() == "1")
-                {
-                    e.CellStyle.BackColor = Color.LightGreen;
-                    e.CellStyle.ForeColor = Color.Green;
-                }
-            }
+
+            Metods.DataGridViews.ClsDGVCatalog.DgvApplyCellFormattingEvent(dgvCatalogo);
         }
         private void dgvCatalogo_MouseDoubleClick(object sender, MouseEventArgs e)
         {

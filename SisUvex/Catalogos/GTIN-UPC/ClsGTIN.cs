@@ -42,7 +42,8 @@ namespace SisUvex.Catalogos.GTIN
 
             AjustarEncabezados(_frmCat.dgvCatalog);
 
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            //ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
 
         public void LoadDataGridViewCatalog()
@@ -56,7 +57,7 @@ namespace SisUvex.Catalogos.GTIN
 
             if (dtCatalog.Columns.Contains(Gtin.ColumnActive))
                 _frmCat.dgvCatalog.Columns[Gtin.ColumnActive].Visible = false;
-        }
+        }   
 
         public string  SetQueryString()
         {

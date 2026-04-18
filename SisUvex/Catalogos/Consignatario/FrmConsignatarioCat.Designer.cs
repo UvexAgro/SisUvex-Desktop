@@ -100,7 +100,6 @@ namespace SisUvex.Catalogos.Consignatario
             dgvCatalogo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalogo.Size = new Size(783, 404);
             dgvCatalogo.TabIndex = 5;
-            dgvCatalogo.CellFormatting += dgvCatalogo_CellFormatting;
             dgvCatalogo.MouseDoubleClick += dgvCatalogo_MouseDoubleClick;
             // 
             // btnEliminados

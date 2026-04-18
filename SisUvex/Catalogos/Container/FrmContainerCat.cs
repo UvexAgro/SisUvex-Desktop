@@ -47,10 +47,5 @@ namespace SisUvex.Catalogos.Container
         {
             cls.RecoverProcedure();
         }
-
-        private void dgvCatalog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            cls.DataGridViewFormatoColumaActivo(dgvCatalog, e);
-        }
     }
 }

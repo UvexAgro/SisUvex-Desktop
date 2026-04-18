@@ -54,6 +54,8 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             //Ocultar columnas ID
             HideIdColumnsGtin(_frmCat.dgvCatalogGtin);
             HideIdColumnsGtin(_frmCat.dgvCatalogSize);
+
+            Catalogos.Metods.DataGridViews.ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalogGtin);
         }
 
         public void BtnSearchFilter()

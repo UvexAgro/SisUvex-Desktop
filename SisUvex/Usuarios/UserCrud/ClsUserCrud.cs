@@ -178,7 +178,7 @@ internal class ClsUserCrud
     }
 
     /// <summary>Abre el formulario de cambio de contraseña cargando datos por código de usuario (<c>c_codigo_usu</c>).</summary>
-    public static void OpenFrmChangePassword(string userCode)
+    public static void OpenFrmChangePassword(string? userCode)
     {
         if (string.IsNullOrWhiteSpace(userCode))
         {
@@ -284,7 +284,7 @@ internal class ClsUserCrud
     {
         bool ok = EUserCrud.ActiveProcedure(id, activeValue);
         if (ok)
-            dgv!.ChangeActiveCell(id, activeValue);
+            dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
     }
 
     public void AddNewRowByIdInDGVCatalog()

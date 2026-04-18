@@ -184,7 +184,7 @@ namespace SisUvex.Material.MaterialWarehouses
             bool result = EMaterialWareHouse.ActiveProcedure(idWareHouse, activeValue);
 
             if (result)
-                dgv.ChangeActiveCell(idWareHouse, activeValue);
+                dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
         }
         public void AddNewRowByIdInDGVCatalog()
         {

@@ -41,7 +41,7 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmCat.cboLot, Lot.Cbo);
 
             LoadDataGridViewCatalog();
-            ClsDataGridViewCatalogs.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
         }
         public void RemoveProcedure()
         {
