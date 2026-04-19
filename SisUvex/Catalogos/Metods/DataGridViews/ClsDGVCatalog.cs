@@ -341,8 +341,14 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 if (dgvRow.Cells[idColumn].Value?.ToString() == dataRow[idColumn].ToString())
                 {
                     DataGridViewCell visibleCell = dgvRow.Cells.Cast<DataGridViewCell>().FirstOrDefault(c => c.Visible); // Buscar la primera celda visible de la fila
-                    dgvRow.Selected = true;
-                    dgvCatalog.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+
+                    if (visibleCell != null)
+                    {
+                        dgvCatalog.CurrentCell = visibleCell;
+                        dgvRow.Selected = true;
+                        dgvCatalog.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+                    }
+
                     break;
                 }
             }
