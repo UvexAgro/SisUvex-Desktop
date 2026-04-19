@@ -54,7 +54,6 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				string query = @"
 				SELECT c_codigo_tab, v_descripcion_tab 
 				FROM dbo.Nom_Tabulador
-				WHERE TRY_CAST(c_codigo_tab AS INT) BETWEEN 1501 AND 1524
 				ORDER BY c_codigo_tab";
 
 				SqlCommand cmd = new SqlCommand(query, sql.cnn);
@@ -65,6 +64,10 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
 			}
 
 			return dt;
@@ -170,7 +173,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			//  lo que se muestra
 			string empleadoTexto = codigoFmt + " - " + nombre;
-			string actividadMostrar = actividadTexto; // 👈 SIN duplicar código
+			string actividadMostrar = actividadTexto; 
 
 			int rowIndex = frm.dgvAsistencia.Rows.Add(
 				empleadoTexto,
