@@ -285,7 +285,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		{
 			// Quitar bordes
 			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
 			dgv.RowHeadersVisible = false;
 
 			// Colores generales

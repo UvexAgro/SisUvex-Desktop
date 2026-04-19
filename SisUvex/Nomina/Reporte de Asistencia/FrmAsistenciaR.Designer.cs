@@ -268,7 +268,7 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(998, 271);
+			dgvAsistencia.Size = new Size(1034, 271);
 			dgvAsistencia.TabIndex = 112;
 			// 
 			// dgvEmployee
