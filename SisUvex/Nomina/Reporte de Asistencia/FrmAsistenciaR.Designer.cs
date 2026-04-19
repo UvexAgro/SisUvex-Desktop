@@ -57,7 +57,6 @@
 			label4 = new Label();
 			btnExcel = new Button();
 			btnEliminar = new Button();
-			dtpDay = new DateTimePicker();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -213,7 +212,7 @@
 			// 
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(758, 500);
+			btnImprimir.Location = new Point(754, 500);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(10, 0, 10, 0);
 			btnImprimir.Size = new Size(126, 34);
@@ -348,7 +347,7 @@
 			// 
 			btnExcel.Image = (Image)resources.GetObject("btnExcel.Image");
 			btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-			btnExcel.Location = new Point(890, 500);
+			btnExcel.Location = new Point(886, 500);
 			btnExcel.Name = "btnExcel";
 			btnExcel.Padding = new Padding(10, 0, 10, 0);
 			btnExcel.Size = new Size(126, 34);
@@ -362,7 +361,7 @@
 			// 
 			btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
 			btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnEliminar.Location = new Point(626, 500);
+			btnEliminar.Location = new Point(622, 500);
 			btnEliminar.Name = "btnEliminar";
 			btnEliminar.Padding = new Padding(10, 0, 10, 0);
 			btnEliminar.Size = new Size(126, 34);
@@ -372,19 +371,11 @@
 			btnEliminar.UseVisualStyleBackColor = true;
 			btnEliminar.Click += btnEliminar_Click;
 			// 
-			// dtpDay
-			// 
-			dtpDay.Location = new Point(702, 18);
-			dtpDay.Name = "dtpDay";
-			dtpDay.Size = new Size(308, 23);
-			dtpDay.TabIndex = 151;
-			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1047, 825);
-			Controls.Add(dtpDay);
 			Controls.Add(btnEliminar);
 			Controls.Add(btnExcel);
 			Controls.Add(label4);
@@ -444,6 +435,5 @@
 		private Label label4;
 		public Button btnExcel;
 		private Button btnEliminar;
-		public DateTimePicker dtpDay;
 	}
 }
