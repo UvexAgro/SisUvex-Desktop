@@ -340,14 +340,23 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             {
                 if (dgvRow.Cells[idColumn].Value?.ToString() == dataRow[idColumn].ToString())
                 {
-                    dgvCatalog.CurrentCell = dgvRow.Cells[0];
-                    dgvRow.Selected = true;
-                    dgvCatalog.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+                    // Buscar la primera celda visible de la fila
+                    DataGridViewCell visibleCell = dgvRow.Cells
+                        .Cast<DataGridViewCell>()
+                        .FirstOrDefault(c => c.Visible);
+
+                    if (visibleCell != null)
+                    {
+                        dgvCatalog.CurrentCell = visibleCell;
+                        dgvRow.Selected = true;
+                        dgvCatalog.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+                    }
+
                     break;
                 }
             }
         }
-		public void DeleteRowInDGV(string id)
+        public void DeleteRowInDGV(string id)
 		{
 			if (!dtCatalog.Columns.Contains(idColumn))
 				return;
