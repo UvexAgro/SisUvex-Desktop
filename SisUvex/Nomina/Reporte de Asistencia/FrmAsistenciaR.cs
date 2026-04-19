@@ -30,7 +30,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		string lastNamePat;
 		string lastNameMat;
 		string name;
-		bool cuadrilla_Empleado = false; //false es empleados y true es cuadrilla 
+		bool cuadrilla_Empleado = false; 
 		bool isLoaded = false;
 
 
@@ -114,6 +114,10 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			);
 
 			dgvAsistencia.DataSource = dt;
+			if (dgvAsistencia.Columns.Contains("id_AttendanceChecker"))
+			{
+				dgvAsistencia.Columns["id_AttendanceChecker"].Visible = false;
+			}
 		}
 
 		private void btnImprimir_Click(object sender, EventArgs e)

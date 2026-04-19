@@ -277,103 +277,117 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return true;
 		}
+		//public void ConfirmarAccionAceptar()
+		//{
+		//	DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+		//	if (result == DialogResult.Yes)
+		//	{
+		//		string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
+		//		int registros = ContarRegistrosPorFecha(fecha);
+
+		//		if (registros == 0)
+		//		{
+
+		//			try
+		//			{
+		//				sql.BeginTransaction(); //aquí abre la conexion
+
+		//				InsertarRegistrosDeAsistencia();
+
+		//				sql.CommitTransaction(); //aquí cierra la conexion
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//				sql.RollbackTransaction(); //aquí cierra la conexion
+		//				MessageBox.Show(ex.ToString(), titulo);
+		//			}
+
+		//		}
+		//		else
+		//		{
+		//			DialogResult overwriteResult = MessageBox.Show($"Ya existen {registros} registros para la fecha {fecha}. \n¿Desea sobreescribirlos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
+		//			if (overwriteResult == DialogResult.Yes)
+		//			{
+		//				try
+		//				{
+		//					sql.BeginTransaction();
+
+		//					if (ExisteMiscellaneousPorFecha(fecha))
+		//					{
+		//						DialogResult resp = MessageBox.Show(
+		//							"Existen ingresos/deducciones relacionados a esta fecha.\n\n¿Desea eliminarlos también?",
+		//							titulo,
+		//							MessageBoxButtons.YesNo,
+		//							MessageBoxIcon.Warning
+		//						);
+
+		//						if (resp == DialogResult.Yes)
+		//						{
+		//							EliminarMiscellaneousPorFecha(fecha);
+		//						}
+		//						else
+		//						{
+		//							sql.RollbackTransaction();
+		//							return;
+		//						}
+		//					}
+
+		//					//  INSERTA NUEVO
+		//					InsertarRegistrosDeAsistencia();
+
+		//					sql.CommitTransaction();
+		//				}
+		//				catch (Exception ex)
+		//				{
+		//					sql.RollbackTransaction();
+		//					MessageBox.Show(ex.ToString(), titulo);
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 		public void ConfirmarAccionAceptar()
 		{
-			DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-			if (result == DialogResult.Yes)
+			if (frm.cboCuadrilla.SelectedValue == null || frm.cboCuadrilla.SelectedValue == DBNull.Value)
 			{
-				string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
-				int registros = ContarRegistrosPorFecha(fecha);
-
-				if (registros == 0)
-				{
-
-					try
-					{
-						sql.BeginTransaction(); //aquí abre la conexion
-
-						InsertarRegistrosDeAsistencia();
-
-						sql.CommitTransaction(); //aquí cierra la conexion
-					}
-					catch (Exception ex)
-					{
-						sql.RollbackTransaction(); //aquí cierra la conexion
-						MessageBox.Show(ex.ToString(), titulo);
-					}
-
-				}
-				else
-				{
-					DialogResult overwriteResult = MessageBox.Show($"Ya existen {registros} registros para la fecha {fecha}. \n¿Desea sobreescribirlos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-					if (overwriteResult == DialogResult.Yes)
-					{
-						try
-						{
-							sql.BeginTransaction();
-
-							if (ExisteMiscellaneousPorFecha(fecha))
-							{
-								DialogResult resp = MessageBox.Show(
-									"Existen ingresos/deducciones relacionados a esta fecha.\n\n¿Desea eliminarlos también?",
-									titulo,
-									MessageBoxButtons.YesNo,
-									MessageBoxIcon.Warning
-								);
-
-								if (resp == DialogResult.Yes)
-								{
-									EliminarMiscellaneousPorFecha(fecha);
-								}
-								else
-								{
-									sql.RollbackTransaction();
-									return;
-								}
-							}
-
-							//  BORRA ASISTENCIA
-							EliminarRegistrosPorFecha(fecha);
-
-							//  INSERTA NUEVO
-							InsertarRegistrosDeAsistencia();
-
-							sql.CommitTransaction();
-						}
-						catch (Exception ex)
-						{
-							sql.RollbackTransaction();
-							MessageBox.Show(ex.ToString(), titulo);
-						}
-					}
-				}
+				MessageBox.Show("Debe seleccionar una cuadrilla válida", titulo);
+				return;
 			}
-		}
-		private int ContarRegistrosPorFecha(string fecha)
-		{//USAR SOLO SI NO SE HA ABIERTO LA CONEXION
-			int registros = 0;
+
+			DialogResult result = MessageBox.Show(
+				"¿Está seguro de registrar los datos?",
+				titulo,
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			if (result != DialogResult.Yes)
+				return;
 
 			try
 			{
-				sql.OpenConectionWrite();
-				SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Nom_AttendenceList WHERE d_attendence = @Fecha", sql.cnn);
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
+				sql.BeginTransaction();
 
-				registros = (int)cmd.ExecuteScalar();
+				InsertarRegistrosDeAsistencia();
+
+				sql.CommitTransaction();
+
+				MessageBox.Show(
+					"Registros guardados correctamente.",
+					titulo,
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
 			}
 			catch (Exception ex)
 			{
+				sql.RollbackTransaction();
 				MessageBox.Show(ex.ToString(), titulo);
 			}
-			finally
-			{
-				sql.CloseConectionRead();
-			}
-
-			return registros;
 		}
+
 		public void InsertarRegistrosDeAsistencia()
 		{ //USAR SOLO SI YA SE ABRIO LA CONEXION
 			try
@@ -383,12 +397,6 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				int conteo = 0;
 				string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
-
-				if (frm.cboCuadrilla.SelectedValue == null || frm.cboCuadrilla.SelectedValue == DBNull.Value)
-				{
-					MessageBox.Show("Debe seleccionar una cuadrilla válida");
-					return;
-				}
 
 				string idCuadrilla = frm.cboCuadrilla.SelectedValue.ToString().PadLeft(2, '0');
 
@@ -434,43 +442,34 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				MessageBox.Show(ex.ToString(), titulo);
 			}
 		}
-		private bool ExisteMiscellaneousPorFecha(string fecha)
-		{
-			int count = 0;
+	
 
-			try
-			{
-				SqlCommand cmd = new SqlCommand(@"
-				SELECT COUNT(*)
-				FROM dbo.Nom_MiscellaneousIncome mi
-				INNER JOIN dbo.Nom_AttendenceList a
-				ON mi.id_attendence = a.id_attendence
-				WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
-
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
-
-				count = (int)cmd.ExecuteScalar();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString(), titulo);
-			}
-
-			return count > 0;
-		}
-		private void EliminarMiscellaneousPorFecha(string fecha)
+		public void EliminarPorFechaYCuadrilla(string fecha, string cuadrilla)
 		{
 			try
 			{
-				SqlCommand cmd = new SqlCommand(@"
-				DELETE mi
-				FROM dbo.Nom_MiscellaneousIncome mi
-				INNER JOIN dbo.Nom_AttendenceList a
-					ON mi.id_attendence = a.id_attendence
-				WHERE CAST(a.d_attendence AS DATE) = @Fecha", sql.cnn, sql.transaction);
+			
+				SqlCommand cmd1 = new SqlCommand(@"
+            DELETE mi
+            FROM Nom_MiscellaneousIncome mi
+            INNER JOIN Nom_AttendenceList a
+                ON mi.id_attendence = a.id_attendence
+            WHERE CAST(a.d_attendence AS DATE) = @Fecha
+            AND a.id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
 
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
-				cmd.ExecuteNonQuery();
+				cmd1.Parameters.AddWithValue("@Fecha", fecha);
+				cmd1.Parameters.AddWithValue("@Cuadrilla", cuadrilla);
+				cmd1.ExecuteNonQuery();
+
+			
+				SqlCommand cmd2 = new SqlCommand(@"
+            DELETE FROM Nom_AttendenceList
+            WHERE CAST(d_attendence AS DATE) = @Fecha
+            AND id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
+
+				cmd2.Parameters.AddWithValue("@Fecha", fecha);
+				cmd2.Parameters.AddWithValue("@Cuadrilla", cuadrilla);
+				cmd2.ExecuteNonQuery();
 			}
 			catch (Exception ex)
 			{
@@ -478,23 +477,14 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				throw;
 			}
 		}
-		public void EliminarRegistrosPorFecha(string fecha)
-		{//USAR SOLO SI YA SE ABRIO LA CONEXION
-			try
-			{
-				SqlCommand cmd = new SqlCommand("DELETE FROM Nom_AttendenceList WHERE d_attendence = @Fecha", sql.cnn, sql.transaction);
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
-
-				cmd.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString(), titulo);
-			}
-		}
 		public void CargarAsistenciasPorFecha()
 		{
 			DateTime fecha = frm.dtpDay.Value.Date;
+
+			if (frm.cboCuadrilla.SelectedValue == null)
+				return;
+
+			string cuadrilla = frm.cboCuadrilla.SelectedValue.ToString();
 
 			string query = @"
 			SELECT 
@@ -510,7 +500,10 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				ON a.id_employee = e.id_employee
 			LEFT JOIN Nom_Tabulador t 
 				ON a.c_codigo_tab = t.c_codigo_tab
+
 			WHERE CAST(a.d_attendence AS DATE) = @Fecha
+			AND a.id_workGroup = @Cuadrilla
+
 			ORDER BY a.id_employee
 			";
 
@@ -522,6 +515,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				SqlCommand cmd = new SqlCommand(query, sql.cnn);
 				cmd.Parameters.AddWithValue("@Fecha", fecha);
+				cmd.Parameters.AddWithValue("@Cuadrilla", cuadrilla);
 
 				SqlDataAdapter da = new SqlDataAdapter(cmd);
 				da.Fill(dt);
@@ -540,30 +534,6 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.ToString(), "Error");
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-		}
-		public void EliminarRegistrosPorFechaDgv(string fecha)
-		{
-			try
-			{
-				sql.OpenConectionWrite();
-
-				SqlCommand cmd = new SqlCommand(
-					"DELETE FROM Nom_AttendenceList WHERE CAST(d_attendence AS DATE) = @Fecha",
-					sql.cnn
-				);
-
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
-
-				cmd.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString(), titulo);
 			}
 			finally
 			{
@@ -600,15 +570,13 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			FROM Pack_WorkGroup g
 			INNER JOIN Pack_Contractor c 
 				ON g.id_contractor = c.id_contractor
-			WHERE g.id_season = (
-				SELECT TOP 1 id_season
-				FROM Pack_Season
-				WHERE CAST(GETDATE() AS DATE) 
-					  BETWEEN CAST(d_seasonBegins AS DATE) 
-					  AND CAST(d_seasonEnds AS DATE)
-				ORDER BY d_seasonBegins DESC
-			)
-			AND g.c_active = 1
+			INNER JOIN Pack_Season s
+				ON g.id_season = s.id_season
+			WHERE 
+				CAST(GETDATE() AS DATE) 
+				BETWEEN CAST(s.d_seasonBegins AS DATE) 
+				AND CAST(s.d_seasonEnds AS DATE)
+				AND g.c_active = 1
 			ORDER BY g.v_nameWorkGroup";
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
@@ -618,6 +586,51 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			sql.CloseConectionWrite();
 
 			return dt;
+		}
+		public void EliminarAsistenciaPorCuadrilla(DateTime fechaSeleccionada, object cuadrillaValue)
+		{
+			string fecha = fechaSeleccionada.ToString("yyyy-MM-dd");
+
+			//  Validar cuadrilla
+			if (cuadrillaValue == null || cuadrillaValue == DBNull.Value)
+			{
+				MessageBox.Show("Debe seleccionar una cuadrilla válida");
+				return;
+			}
+
+			string cuadrilla = cuadrillaValue.ToString();
+
+			DialogResult resp = MessageBox.Show(
+				$"¿Deseas eliminar los registros del día {fecha} de la cuadrilla {cuadrilla}?\n\nEsto también eliminará los ingresos relacionados.",
+				"Confirmar eliminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning
+			);
+
+			if (resp != DialogResult.Yes)
+				return;
+
+			try
+			{
+				sql.BeginTransaction();
+
+				//  elimina asistencia + misc
+				EliminarPorFechaYCuadrilla(fecha, cuadrilla);
+
+				sql.CommitTransaction();
+
+				MessageBox.Show(
+					"Los registros se eliminaron correctamente.",
+					"Éxito",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+			}
+			catch (Exception ex)
+			{
+				sql.RollbackTransaction();
+				MessageBox.Show(ex.ToString(), "Error");
+			}
 		}
 	}
 }
