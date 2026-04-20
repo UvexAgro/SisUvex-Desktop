@@ -58,14 +58,14 @@ internal class ClsWorkGroup
         _frmCat ??= new();
         _frmCat.cls ??= this;
 
+        ClsComboBoxes.CboLoadActives(_frmCat.cboContractor, Contractor.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboSeason, Season.Cbo);
+
         dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
         dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
         dgv.AddHideColumn(Season.ColumnId);
         dgv.AddHideColumn(Contractor.ColumnId);
         dgv.HideColumnsList();
-
-        ClsComboBoxes.CboLoadActives(_frmCat.cboContractor, Contractor.Cbo);
-        ClsComboBoxes.CboLoadActives(_frmCat.cboSeason, Season.Cbo);
 
         _frmCat.cboContractor.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
         _frmCat.cboSeason.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
