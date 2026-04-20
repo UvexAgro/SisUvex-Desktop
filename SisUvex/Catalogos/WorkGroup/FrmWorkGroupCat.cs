@@ -1,45 +1,82 @@
-﻿namespace SisUvex.Catalogos.WorkGroup
+﻿using System.Media;
+using SisUvex.Catalogos.Metods;
+
+namespace SisUvex.Catalogos.WorkGroup;
+
+internal partial class FrmWorkGroupCat : Form
 {
-    public partial class FrmWorkGroupCat : Form
+    public ClsWorkGroup cls = null!;
+
+    public FrmWorkGroupCat()
     {
-        ClsWorkGroup cls;
+        InitializeComponent();
+    }
 
-        public FrmWorkGroupCat()
+    private void FrmWorkGroupCat_Load(object sender, EventArgs e)
+    {
+        cls ??= new();
+        cls._frmCat ??= this;
+        cls.BeginFormCat();
+    }
+
+    private void btnAdd_Click(object sender, EventArgs e)
+    {
+        cls.OpenFrmAdd();
+
+        if (cls.IsAddUpdate)
+            cls.AddNewRowByIdInDGVCatalog();
+    }
+
+    private void btnModify_Click(object sender, EventArgs e)
+    {
+        OpenFrmModifyFromCat();
+    }
+
+    private void OpenFrmModifyFromCat()
+    {
+        if (dgvCatalog.SelectedRows.Count == 0)
         {
-            InitializeComponent();
-
-            cls ??= new ClsWorkGroup();
-            cls._frmCat ??= this;
+            SystemSounds.Exclamation.Play();
+            return;
         }
 
-        private void FrmWorkGroupCat_Load(object sender, EventArgs e)
-        {
-            cls.BeginFormCat();
-        }
+        cls.OpenFrmModify(dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value?.ToString());
 
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            cls.RemoveProcedure();
-        }
+        if (cls.IsModifyUpdate)
+            cls.ModifyRowByIdInDGVCatalog();
+    }
 
-        private void btnRecover_Click(object sender, EventArgs e)
-        {
-            cls.RecoverProcedure();
-        }
+    private void chbRemoved_CheckedChanged(object sender, EventArgs e)
+    {
+        cls.ChbRemovedFilter();
+    }
 
-        private void btnRemoved_Click(object sender, EventArgs e)
+    private void btnRemove_Click(object sender, EventArgs e)
+    {
+        if (dgvCatalog.SelectedRows.Count != 0)
         {
-            cls.dgv.UpdateCatalogButtonActivesDeletes();
+            cls.BtnActiveProcedure(
+                dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString()!,
+                "0");
         }
+        else
+            SystemSounds.Exclamation.Play();
+    }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+    private void btnRecover_Click(object sender, EventArgs e)
+    {
+        if (dgvCatalog.SelectedRows.Count != 0)
         {
-            cls.OpenFrmAdd();
+            cls.BtnActiveProcedure(
+                dgvCatalog.Rows[dgvCatalog.SelectedRows[0].Index].Cells[ClsObject.Column.id].Value.ToString()!,
+                "1");
         }
+        else
+            SystemSounds.Exclamation.Play();
+    }
 
-        private void btnModify_Click(object sender, EventArgs e)
-        {
-            cls.OpenFrmModify();
-        }
+    private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+    {
+        OpenFrmModifyFromCat();
     }
 }
