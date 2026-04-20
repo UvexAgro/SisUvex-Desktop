@@ -103,11 +103,9 @@ internal class ClsWorkGroup
     {
         ClsComboBoxes.CboLoadActives(_frmAdd.cboContractor, Contractor.Cbo);
         ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, Season.Cbo);
-        ClsComboBoxes.CboLoadActives(_frmAdd.cboPlacePayment, PlacePayment.Cbo);
 
         ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
         ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
-        ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboPlacePayment, _frmAdd.txbPlacePayment);
 
         ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboContractor, _frmAdd.chbActiveContractor);
     }
@@ -121,12 +119,10 @@ internal class ClsWorkGroup
         _frmAdd.txbName.Text = entity.NameWorkGroup ?? "";
         _frmAdd.txbIdContractor.Text = entity.IdContractor ?? "";
         _frmAdd.txbIdSeason.Text = entity.IdSeason ?? "";
-        _frmAdd.txbPlacePayment.Text = entity.IdPlacePayment ?? "";
         _frmAdd.cboActive.SelectedIndex = entity.Active;
 
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
-        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboPlacePayment, _frmAdd.txbPlacePayment);
     }
 
     private EWorkGroup SetEntity()
@@ -136,7 +132,6 @@ internal class ClsWorkGroup
         entity.NameWorkGroup = _frmAdd.txbName.Text.Trim();
         entity.IdContractor = _frmAdd.cboContractor.ComboValueOrNull();
         entity.IdSeason = _frmAdd.cboSeason.ComboValueOrNull();
-        entity.IdPlacePayment = _frmAdd.cboPlacePayment.ComboValueOrNull();
         entity.Active = _frmAdd.cboActive.SelectedIndex;
 
         return entity;
