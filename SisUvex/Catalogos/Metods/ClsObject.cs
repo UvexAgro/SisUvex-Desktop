@@ -355,7 +355,7 @@ namespace SisUvex.Catalogos.Metods
         {
             public const string TableName = "Pack_Season";
             public const string ColumnName = "Temporada";
-            public const string ColumnId = "id_Season";
+            public const string ColumnId = "idSeason";
             public const string ColumnActive = "ActiveSeason";
 			public const string ColumnStartDate = "StartDate";
 			public const string ColumnEndDate = "EndDate";

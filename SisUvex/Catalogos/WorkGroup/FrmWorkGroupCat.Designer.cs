@@ -31,24 +31,30 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkGroupCat));
-            btnRemoved = new Button();
+            chbRemoved = new CheckBox();
             dgvCatalog = new DataGridView();
             btnRemove = new Button();
             btnRecover = new Button();
             btnModify = new Button();
             btnAdd = new Button();
+            cboContractor = new ComboBox();
+            cboSeason = new ComboBox();
+            label1 = new Label();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
-            // btnRemoved
+            // chbRemoved
             // 
-            btnRemoved.Location = new Point(171, 9);
-            btnRemoved.Name = "btnRemoved";
-            btnRemoved.Size = new Size(75, 23);
-            btnRemoved.TabIndex = 2;
-            btnRemoved.Text = "Eliminados";
-            btnRemoved.UseVisualStyleBackColor = true;
-            btnRemoved.Click += btnRemoved_Click;
+            chbRemoved.Appearance = Appearance.Button;
+            chbRemoved.Location = new Point(171, 33);
+            chbRemoved.Name = "chbRemoved";
+            chbRemoved.Size = new Size(75, 23);
+            chbRemoved.TabIndex = 2;
+            chbRemoved.Text = "Eliminados";
+            chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
+            chbRemoved.UseVisualStyleBackColor = true;
+            chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
             // 
             // dgvCatalog
             // 
@@ -71,7 +77,7 @@
             dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCatalog.EnableHeadersVisualStyles = false;
             dgvCatalog.ImeMode = ImeMode.NoControl;
-            dgvCatalog.Location = new Point(9, 38);
+            dgvCatalog.Location = new Point(9, 62);
             dgvCatalog.Name = "dgvCatalog";
             dgvCatalog.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -85,12 +91,13 @@
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalog.Size = new Size(398, 395);
+            dgvCatalog.Size = new Size(520, 371);
             dgvCatalog.TabIndex = 5;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(252, 9);
+            btnRemove.Location = new Point(252, 33);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(75, 23);
             btnRemove.TabIndex = 3;
@@ -100,7 +107,7 @@
             // 
             // btnRecover
             // 
-            btnRecover.Location = new Point(333, 9);
+            btnRecover.Location = new Point(333, 33);
             btnRecover.Name = "btnRecover";
             btnRecover.Size = new Size(75, 23);
             btnRecover.TabIndex = 4;
@@ -110,7 +117,7 @@
             // 
             // btnModify
             // 
-            btnModify.Location = new Point(90, 9);
+            btnModify.Location = new Point(90, 33);
             btnModify.Name = "btnModify";
             btnModify.Size = new Size(75, 23);
             btnModify.TabIndex = 1;
@@ -120,7 +127,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(9, 9);
+            btnAdd.Location = new Point(9, 33);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
             btnAdd.TabIndex = 0;
@@ -128,17 +135,57 @@
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
+            // cboContractor
+            // 
+            cboContractor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboContractor.FormattingEnabled = true;
+            cboContractor.Location = new Point(323, 4);
+            cboContractor.Name = "cboContractor";
+            cboContractor.Size = new Size(176, 23);
+            cboContractor.TabIndex = 6;
+            // 
+            // cboSeason
+            // 
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Location = new Point(76, 4);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(176, 23);
+            cboSeason.TabIndex = 7;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(9, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(67, 15);
+            label1.TabIndex = 8;
+            label1.Text = "Temporada";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(258, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(65, 15);
+            label2.TabIndex = 9;
+            label2.Text = "Contratista";
+            // 
             // FrmWorkGroupCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(415, 441);
-            Controls.Add(btnRemoved);
+            ClientSize = new Size(537, 441);
+            Controls.Add(cboSeason);
+            Controls.Add(cboContractor);
+            Controls.Add(chbRemoved);
             Controls.Add(dgvCatalog);
             Controls.Add(btnRemove);
             Controls.Add(btnRecover);
             Controls.Add(btnModify);
             Controls.Add(btnAdd);
+            Controls.Add(label1);
+            Controls.Add(label2);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmWorkGroupCat";
             Text = "Catálogo de cuadrillas";
@@ -146,15 +193,21 @@
             Load += FrmWorkGroupCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        public Button btnRemoved;
+        public CheckBox chbRemoved;
         public DataGridView dgvCatalog;
         private Button btnRemove;
         private Button btnRecover;
         private Button btnModify;
         private Button btnAdd;
+        private Label label1;
+        private Label label2;
+        private Button btnSearch;
+        public ComboBox cboContractor;
+        public ComboBox cboSeason;
     }
 }

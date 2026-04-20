@@ -4,11 +4,25 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SisUvex.Catalogos.Metods.Extentions
 {
     public static class ComboBoxExtensions
-    {/// <summary>
+    {
+        /// <summary>
+        /// <see cref="ComboBox.SelectedValue"/> recortado, o null si no hay selección válida (índice ≤ 0: típicamente "---").
+        /// </summary>
+        public static string? ComboValueOrNull(this ComboBox? cbo)
+        {
+            if (cbo == null)
+                return null;
+            if (cbo.SelectedIndex <= 0)
+                return null;
+            return cbo.SelectedValue?.ToString()?.Trim();
+        }
+
+        /// <summary>
      /// Gets the value of a specific column from the ComboBox's DataSource
      /// for the currently selected item.
      /// </summary>

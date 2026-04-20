@@ -1,223 +1,271 @@
-﻿using SisUvex.Catalogos.Metods;
+﻿using System.Data;
+using System.Drawing;
+using System.Media;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
-using SisUvex.Catalogos.Metods.Querys;
-using System.Data.SqlClient;
-using System.Data;
-using System.Media;
-using SisUvex.Catalogos.Metods.CheckBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
-using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.Querys;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
-namespace SisUvex.Catalogos.WorkGroup
+namespace SisUvex.Catalogos.WorkGroup;
+
+internal class ClsWorkGroup
 {
-    internal class ClsWorkGroup
+    ClsControls controlList = null!;
+    public FrmWorkGroupAdd _frmAdd = null!;
+    public FrmWorkGroupCat _frmCat = null!;
+    public EWorkGroup entity = null!;
+
+    private readonly string queryCatalog = $" SELECT cat.* FROM vw_PackWorkGroupCat cat ";
+
+    ClsDGVCatalog? dgv;
+    DataTable dtCatalog = null!;
+
+    public bool IsAddOrModify = true;
+    public bool IsAddUpdate;
+    public bool IsModifyUpdate;
+    public string? idAddModify;
+    private void SetFilterCatalog()
     {
-        SQLControl sql = new SQLControl();
-        ClsControls controlList;
-        public FrmWorkGroupAdd _frmAdd;
-        public FrmWorkGroupCat _frmCat;
-        public EWorkGroup eWorkGroup;
-        public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
-        private string queryCatalogo = "SELECT * FROM vw_PackWorkGroupCat";
-        public DataTable dtCatalogo;
-        public DataTable dtCatalogoActivos;
-        public void BeginFormAdd()
+        string filter = string.Empty;
+
+        if (!_frmCat.chbRemoved.Checked)
+            filter += $"{Column.active} = 1";
+
+        if (_frmCat.cboContractor.SelectedIndex > 0)
         {
-            AddControlsToList();
+            if (filter != string.Empty)
+                filter += " AND ";
+            filter += $"{Contractor.ColumnId} = '{_frmCat.cboContractor.SelectedValue}' ";
+        }
 
-            CargarComboBoxes();
+        if (_frmCat.cboSeason.SelectedIndex > 0)
+        {
+            if (filter != string.Empty)
+                filter += " AND ";
+            filter += $"{Season.ColumnId} = '{_frmCat.cboSeason.SelectedValue}'";
+        }
 
-            if (_frmAdd.IsAddModify)
+        dtCatalog.DefaultView.RowFilter = filter;
+    }
+
+
+    public void BeginFormCat()
+    {
+        _frmCat ??= new();
+        _frmCat.cls ??= this;
+
+        ClsComboBoxes.CboLoadActives(_frmCat.cboContractor, Contractor.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboSeason, Season.Cbo);
+
+        dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
+        dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+        dgv.AddHideColumn(Season.ColumnId);
+        dgv.AddHideColumn(Contractor.ColumnId);
+        dgv.HideColumnsList();
+
+        _frmCat.cboContractor.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
+        _frmCat.cboSeason.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
+    }
+
+    public void BeginFormAdd()
+    {
+        AddControlsToList();
+        CargarComboBoxes();
+
+        if (IsAddOrModify)
+        {
+            _frmAdd.cboActive.SelectedIndex = 1;
+            _frmAdd.txbId.Text = EWorkGroup.GetNextId();
+        }
+        else
+        {
+            _frmAdd.txbName.Font = new Font(_frmAdd.txbName.Font, FontStyle.Bold);
+            LoadControlsModify();
+        }
+    }
+
+    private void AddControlsToList()
+    {
+        controlList = new ClsControls();
+
+        controlList.ChangeHeadMessage("Para dar de alta una cuadrilla debe:\n");
+        controlList.Add(_frmAdd.txbName, "Ingresar el nombre de la cuadrilla.");
+        controlList.Add(_frmAdd.txbIdContractor, "Seleccionar un contratista.");
+        controlList.Add(_frmAdd.txbIdSeason, "Seleccionar una temporada.");
+        controlList.Add(_frmAdd.cboActive, "Seleccionar si la cuadrilla está activa.");
+    }
+
+    private void CargarComboBoxes()
+    {
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboContractor, Contractor.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, Season.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboPlacePayment, PlacePayment.Cbo);
+
+        ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
+        ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+        ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboPlacePayment, _frmAdd.txbPlacePayment);
+
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboContractor, _frmAdd.chbActiveContractor);
+    }
+
+    private void LoadControlsModify()
+    {
+        entity = new();
+        entity.GetWorkGroup(idAddModify);
+
+        _frmAdd.txbId.Text = entity.IdWorkGroup ?? "";
+        _frmAdd.txbName.Text = entity.NameWorkGroup ?? "";
+        _frmAdd.txbIdContractor.Text = entity.IdContractor ?? "";
+        _frmAdd.txbIdSeason.Text = entity.IdSeason ?? "";
+        _frmAdd.txbPlacePayment.Text = entity.IdPlacePayment ?? "";
+        _frmAdd.cboActive.SelectedIndex = entity.Active;
+
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboPlacePayment, _frmAdd.txbPlacePayment);
+    }
+
+    private EWorkGroup SetEntity()
+    {
+        entity = new();
+        entity.IdWorkGroup = _frmAdd.txbId.Text.Trim();
+        entity.NameWorkGroup = _frmAdd.txbName.Text.Trim();
+        entity.IdContractor = _frmAdd.cboContractor.ComboValueOrNull();
+        entity.IdSeason = _frmAdd.cboSeason.ComboValueOrNull();
+        entity.IdPlacePayment = _frmAdd.cboPlacePayment.ComboValueOrNull();
+        entity.Active = _frmAdd.cboActive.SelectedIndex;
+
+        return entity;
+    }
+
+    public void OpenFrmAdd()
+    {
+        IsAddOrModify = true;
+        IsAddUpdate = false;
+        idAddModify = null;
+        _frmAdd = new();
+        _frmAdd.cls = this;
+        _frmAdd.Text = "Añadir cuadrilla";
+        _frmAdd.lblTitle.Text = "Añadir cuadrilla";
+        _frmAdd.ShowDialog();
+    }
+
+    public void OpenFrmModify(string? idModify)
+    {
+        IsAddOrModify = false;
+        IsModifyUpdate = false;
+        if (string.IsNullOrEmpty(idModify))
+        {
+            SystemSounds.Exclamation.Play();
+            MessageBox.Show("No se ha seleccionado una cuadrilla para modificar.", "Modificar cuadrilla");
+            return;
+        }
+
+        idAddModify = idModify;
+        _frmAdd = new();
+        _frmAdd.cls = this;
+        _frmAdd.Text = "Modificar cuadrilla";
+        _frmAdd.lblTitle.Text = "Modificar cuadrilla";
+        _frmAdd.ShowDialog();
+    }
+
+    public void BtnAccept()
+    {
+        if (!controlList.ValidateControls())
+            return;
+
+        if (IsAddOrModify)
+        {
+            EWorkGroup addEntity = SetEntity();
+            var result = addEntity.AddProcedure();
+            IsAddUpdate = result.success;
+            idAddModify = result.id;
+
+            if (IsAddUpdate)
             {
-                _frmAdd.chbActive.Checked = true;
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_workGroup), 0) +1, '00') FROM Pack_WorkGroup").ToString();
-            }
-            else
-            {
-                LoadControlsModify();
-            }
-        }
-        public void BeginFormCat()
-        {
-            dgv.queryCatalog = queryCatalogo;
-            dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.btnRemoved = _frmCat.btnRemoved;
-
-            dgv.LoadDataTableCatalog();
-
-            _frmCat.dgvCatalog.DataSource = dgv.GetDataTableCatalogActives();
-
-            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
-        }
-
-        private void AddControlsToList()
-        {
-            controlList = new ClsControls();
-
-            controlList.ChangeHeadMessage("Para dar de alta una cuadrilla debe:\n");
-            controlList.Add(_frmAdd.txbId, "Ingresar un número de cuadrilla.");
-            controlList.Add(_frmAdd.txbIdContractor, "Seleccionar un contratista.");
-            controlList.Add(_frmAdd.txbIdSeason, "Seleccionar una temporada.");
-        }
-        private void CargarComboBoxes()
-        {
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboContractor, ClsObject.Contractor.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, ClsObject.Season.Cbo); //FALTA AÑADIR LA TEMPORADA
-
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
-
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboContractor, _frmAdd.chbActiveContractor);
-        }
-
-        public void OpenFrmAdd()
-        {
-            _frmAdd = new FrmWorkGroupAdd();
-            _frmAdd.cls = this;
-            _frmAdd.Text = "Añadir cuadrilla";
-            _frmAdd.lblTitle.Text = "Añadir cuadrilla";
-            _frmAdd.IsAddModify = true;
-
-            _frmAdd.ShowDialog();
-
-            dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
-        }
-
-        public void OpenFrmModify()
-        {
-            if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
-            {
-                _frmAdd = new FrmWorkGroupAdd();
-                _frmAdd.Text = "Modificar cuadrilla";
-                _frmAdd.lblTitle.Text = "Modificar cuadrilla";
-                _frmAdd.IsAddModify = false;
-
-                _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
-
-                _frmAdd.ShowDialog();
-
-                dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+                string nombre = string.IsNullOrWhiteSpace(addEntity.NameWorkGroup)
+                    ? idAddModify ?? ""
+                    : addEntity.NameWorkGroup.Trim();
+                MessageBox.Show($"Se ha agregado la cuadrilla {nombre} con código: {idAddModify}.", "Añadir cuadrilla");
+                _frmAdd.Close();
             }
             else
             {
                 SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se pudo agregar la cuadrilla.", "Añadir cuadrilla");
             }
         }
-
-        private void LoadControlsModify()
+        else
         {
-            eWorkGroup = new EWorkGroup();
+            EWorkGroup modifyEntity = SetEntity();
+            var result = modifyEntity.ModifyProcedure();
+            IsModifyUpdate = result.success;
+            idAddModify = result.id;
 
-            eWorkGroup.SetWorkGroup(_frmAdd.idModify);
-
-            _frmAdd.txbId.Text = eWorkGroup.IdWorkGroup;
-            _frmAdd.txbName.Text = eWorkGroup.NameWorkGroup;
-            _frmAdd.txbIdContractor.Text = eWorkGroup.IdContractor;
-            _frmAdd.txbIdSeason.Text = eWorkGroup.IdSeason;
-            _frmAdd.chbActive.Checked = eWorkGroup.Active == 1;
-
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
-        }
-
-        public void AddProcedure()
-        {
-            try
+            if (IsModifyUpdate)
             {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkGroupAdd", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", _frmAdd.txbId.Text);
-                cmd.Parameters.AddWithValue("@active", ClsCheckBoxes.GetCheckedValue(_frmAdd.chbActive));
-                cmd.Parameters.AddWithValue("@name", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@idContractor", _frmAdd.txbIdContractor.Text);
-                cmd.Parameters.AddWithValue("@idSeason", _frmAdd.txbIdSeason.Text);
-                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                MessageBox.Show("Se agregó la cuadrilla: " + _frmAdd.txbId.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        public void ModifyProcedure()
-        {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkGroupModify", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", _frmAdd.txbId.Text);
-                cmd.Parameters.AddWithValue("@active", ClsCheckBoxes.GetCheckedValue(_frmAdd.chbActive));
-                cmd.Parameters.AddWithValue("@name", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@idContractor", _frmAdd.txbIdContractor.Text);
-                cmd.Parameters.AddWithValue("@idSeason", _frmAdd.txbIdSeason.Text);
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo modificar");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-        public void RemoveProcedure()
-        {
-            dgv.ProcedureRemove("sp_PackWorkGroupRemove");
-        }
-
-        public void RecoverProcedure()
-        {
-            dgv.ProcedureRecover("sp_PackWorkGroupRecover");
-        }
-
-        public void btnAcceptAddModify()
-        {
-            if (!controlList.ValidateControls())
-                return;
-
-            if (_frmAdd.IsAddModify)
-            {
-                AddProcedure();
+                string nombre = string.IsNullOrWhiteSpace(modifyEntity.NameWorkGroup)
+                    ? idAddModify ?? ""
+                    : modifyEntity.NameWorkGroup.Trim();
+                MessageBox.Show($"Se ha modificado la cuadrilla {nombre} con código: {idAddModify}.", "Modificar cuadrilla");
+                _frmAdd.Close();
             }
             else
             {
-                ModifyProcedure();
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se pudo modificar la cuadrilla.", "Modificar cuadrilla");
             }
-
-            _frmAdd.AddIsUpdate = true;
-
-            _frmAdd.Close();
         }
+    }
 
-        public void btnSearchContractor()
+    public void BtnActiveProcedure(string id, string activeValue)
+    {
+        bool ok = EWorkGroup.ActiveProcedure(id, activeValue);
+        if (ok)
+            dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
+    }
+
+    public void AddNewRowByIdInDGVCatalog()
+    {
+        string esc = idAddModify?.Replace("'", "''") ?? "";
+        DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{esc}'");
+        dgv!.AddNewRowToDGV(newIdRow);
+    }
+
+    public void ModifyRowByIdInDGVCatalog()
+    {
+        string esc = idAddModify?.Replace("'", "''") ?? "";
+        DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{esc}'");
+        dgv!.ModifyIdRowInDGV(newIdRow);
+    }
+
+    public void ChbRemovedFilter()
+    {
+        dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
+        dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+
+        if (_frmCat.chbRemoved.Checked)
+            dgv.SetFilterNull();
+        else
         {
-            ClsSelectionForm sel = new ClsSelectionForm();
+            dgv.CopyActiveValuesToHiddenColumn();
+            dgv.SetFilterActivesOnly();
+        }
+    }
 
-            sel.OpenSelectionForm("Contractor", "Código");
+    public void BtnSearchContractor()
+    {
+        ClsSelectionForm sel = new();
+        sel.OpenSelectionForm("Contractor", "Código");
 
-            if (!sel.SelectedValue.IsNullOrEmpty())
-            {
-                _frmAdd.txbIdContractor.Text = sel.SelectedValue;
-
-                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
-            }
+        if (!string.IsNullOrEmpty(sel.SelectedValue))
+        {
+            _frmAdd.txbIdContractor.Text = sel.SelectedValue;
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
         }
     }
 }

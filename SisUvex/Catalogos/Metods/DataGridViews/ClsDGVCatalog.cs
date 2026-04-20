@@ -15,6 +15,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         public string id2Column = "id2"; //PARA CUANDO TIENE 2 IDs COMPUESTAS
         public string activeColumn = ClsObject.Column.active;
         private string activeColumnHide = ClsObject.Column.active + "2";
+        List<string?> lsHideColumns = new();
         //public string queryCatalog;
         public DataGridView dgvCatalog;
         public DataTable dtCatalog;
@@ -43,6 +44,20 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             SetFilterActivesOnly();
 
             DgvApplyCellFormattingEvent(dgvCatalog, activeColumn, idColumn);
+        }
+
+        public void AddHideColumn(string? columnName)
+        {
+            lsHideColumns.Add(columnName);
+        }
+
+        public void HideColumnsList()
+        {
+            foreach (string? columnName in lsHideColumns)
+            {
+                if (dgvCatalog.Columns.Contains(columnName))
+                    dgvCatalog.Columns[columnName].Visible = false;
+            }
         }
 
         private void HideActiveColumn2()
@@ -353,7 +368,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 }
             }
         }
-		public void DeleteRowInDGV(string id)
+        public void DeleteRowInDGV(string id)
 		{
 			if (!dtCatalog.Columns.Contains(idColumn))
 				return;
