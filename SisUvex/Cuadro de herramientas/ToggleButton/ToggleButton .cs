@@ -26,6 +26,7 @@ namespace SisUvex.Cuadro_de_herramientas
         {
             MinimumSize = new Size(20, 10);
             Size = new Size(40, 20);
+            AutoSize = false; // CheckBox hereda AutoSize=true; sin esto no se puede redimensionar con los tiradores
             TabStop = true;
             Appearance = Appearance.Button;
 

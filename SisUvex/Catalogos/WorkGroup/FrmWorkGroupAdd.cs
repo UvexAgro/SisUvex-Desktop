@@ -1,40 +1,33 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+﻿namespace SisUvex.Catalogos.WorkGroup;
 
-namespace SisUvex.Catalogos.WorkGroup
+internal partial class FrmWorkGroupAdd : Form
 {
-    internal partial class FrmWorkGroupAdd : Form
+    public ClsWorkGroup cls = null!;
+
+    public FrmWorkGroupAdd()
     {
-        public ClsWorkGroup cls;
-        public bool IsAddModify = true, AddIsUpdate = false;
-        public string? idModify;
+        InitializeComponent();
+    }
 
-        public FrmWorkGroupAdd()
-        {
-            InitializeComponent();
+    private void FrmWorkGroupAdd_Load(object sender, EventArgs e)
+    {
+        cls ??= new();
+        cls._frmAdd ??= this;
+        cls.BeginFormAdd();
+    }
 
-            cls ??= new ClsWorkGroup();
-            cls._frmAdd ??= this;
-        }
+    private void btnAccept_Click(object sender, EventArgs e)
+    {
+        cls.BtnAccept();
+    }
 
-        private void FrmWorkGroupAdd_Load(object sender, EventArgs e)
-        {
-            cls.BeginFormAdd();
-        }
+    private void btnCancel_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            cls.btnAcceptAddModify();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnSearchContractor_Click(object sender, EventArgs e)
-        {
-            cls.btnSearchContractor();
-        }
+    private void btnSearchContractor_Click(object sender, EventArgs e)
+    {
+        cls.BtnSearchContractor();
     }
 }

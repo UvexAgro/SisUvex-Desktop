@@ -325,7 +325,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActivePlacePayment";
             public const string Cbo = "CboPlacePayment";
             public const string DgvCatalog = "DgvCatalogPlacePayment";
-            public const string QueryCbo = $" SELECT id_placePayment AS [{Column.id}], CONCAT(id_placePayment, ' | ', v_namePlace,  ' | (', c_activePlace, ')')  AS [{Column.name}], c_activePlace AS [{Column.active}], v_namePlace AS [{ColumnName}] FROM Nom_PlacePayment ORDER BY [{Column.id}] ";
+            public const string QueryCbo = $" SELECT id_placePayment AS [{Column.id}], CONCAT_WS(' ',id_placePayment, '|', v_namePlace, IIF(c_activePlace <> '1', '| (0)', ''))  AS [{Column.name}], c_activePlace AS [{Column.active}], v_namePlace AS [{ColumnName}] FROM Nom_PlacePayment ORDER BY i_orderList desc ,[{Column.id}]  ";
         }
 
         public static class DiningHall
@@ -355,7 +355,7 @@ namespace SisUvex.Catalogos.Metods
         {
             public const string TableName = "Pack_Season";
             public const string ColumnName = "Temporada";
-            public const string ColumnId = "id_Season";
+            public const string ColumnId = "idSeason";
             public const string ColumnActive = "ActiveSeason";
 			public const string ColumnStartDate = "StartDate";
 			public const string ColumnEndDate = "EndDate";

@@ -99,13 +99,6 @@ internal class ClsUserCrud
         controlList.Add(_frmAdd.cboActive, "Seleccionar si el usuario está activo.");
     }
 
-    private static string? ComboValueOrNull(ComboBox cbo)
-    {
-        if (cbo.SelectedIndex <= 0)
-            return null;
-        return cbo.SelectedValue?.ToString()?.Trim();
-    }
-
     private void LoadControlsModify()
     {
         entity = new();
@@ -132,13 +125,13 @@ internal class ClsUserCrud
         entity.IdUser = _frmAdd.txbId.Text.Trim().ToUpperInvariant();
         entity.UserDisplayName = _frmAdd.txbUserName.Text.Trim();
         entity.Accesibilidad = (int)_frmAdd.nudAcces.Value;
-        entity.IdContractor = ComboValueOrNull(_frmAdd.cboContractor);
-        entity.IdWorkGroup = ComboValueOrNull(_frmAdd.cboWorkGroup);
+        entity.IdContractor = _frmAdd.cboContractor.ComboValueOrNull();
+        entity.IdWorkGroup = _frmAdd.cboWorkGroup.ComboValueOrNull();
         entity.IdEmployee = string.IsNullOrWhiteSpace(_frmAdd.txbIdEmployee.Text) ? null : _frmAdd.txbIdEmployee.Text.Trim();
         entity.Name = string.IsNullOrWhiteSpace(_frmAdd.txbEmployeeName.Text) ? null : _frmAdd.txbEmployeeName.Text.Trim();
         entity.Email = string.IsNullOrWhiteSpace(_frmAdd.txbEMail.Text) ? null : _frmAdd.txbEMail.Text.Trim();
         entity.PhoneNumber = string.IsNullOrWhiteSpace(_frmAdd.txbPhoneNumber.Text) ? null : _frmAdd.txbPhoneNumber.Text.Trim();
-        entity.IdRole = ComboValueOrNull(_frmAdd.cboRole);
+        entity.IdRole = _frmAdd.cboRole.ComboValueOrNull();
         entity.Active = _frmAdd.cboActive.SelectedIndex;
         if (includePasswordHash && passwordHashBcrypt != null)
             entity.PasswordHash = passwordHashBcrypt;
