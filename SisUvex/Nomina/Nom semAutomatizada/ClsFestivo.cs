@@ -71,7 +71,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			string tipoFestivo = frm.TipoFestivoSeleccionado;
 
-			//  VALIDAR TIPO D
 			if (string.IsNullOrEmpty(tipoFestivo))
 			{
 				MessageBox.Show(
