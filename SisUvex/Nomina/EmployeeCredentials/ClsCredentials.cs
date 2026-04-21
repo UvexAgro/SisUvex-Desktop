@@ -14,6 +14,8 @@ using PdfiumViewer;
 using SisUvex.Catalogos.Metods.Querys;
 using System.Media;
 using SisUvex.Catalogos.Metods.Values;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods;
 
 namespace SisUvex.Nomina.EmployeeCredentials
 {
@@ -343,10 +345,12 @@ namespace SisUvex.Nomina.EmployeeCredentials
 
         public void cboPaymentPlaceList()
         {
-            DataTable dt = ClsQuerysDB.GetDataTable("SELECT id_placePayment 'Código', CONCAT(id_placePayment,' | ',v_namePlace) 'Nombre' FROM Nom_PlacePayment WHERE c_activePlace = '1'");
-            frm.cboLP.DataSource = dt;
-            frm.cboLP.DisplayMember = "Nombre";
-            frm.cboLP.ValueMember = "Código";
+            //DataTable dt = ClsQuerysDB.GetDataTable("SELECT id_placePayment 'Código', CONCAT(id_placePayment,' | ',v_namePlace) 'Nombre' FROM Nom_PlacePayment WHERE c_activePlace = '1'");
+            //frm.cboLP.DataSource = dt;
+            //frm.cboLP.DisplayMember = "Nombre";
+            //frm.cboLP.ValueMember = "Código";
+
+            ClsComboBoxes.CboLoadActives(frm.cboLP, ClsObject.PlacePayment.Cbo);
         }
 
         private void LoadDgvColumns()

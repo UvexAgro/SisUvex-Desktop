@@ -47,10 +47,6 @@
             label2 = new Label();
             label3 = new Label();
             chbActiveContractor = new CheckBox();
-            txbPlacePayment = new TextBox();
-            cboPlacePayment = new ComboBox();
-            label5 = new Label();
-            label6 = new Label();
             cboActive = new ComboBox();
             label4 = new Label();
             lblActivo = new Label();
@@ -110,7 +106,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAccept.Location = new Point(370, 228);
+            btnAccept.Location = new Point(370, 192);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 8;
@@ -121,7 +117,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(451, 228);
+            btnCancel.Location = new Point(451, 192);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 9;
@@ -244,47 +240,6 @@
             chbActiveContractor.Text = "     ";
             chbActiveContractor.UseVisualStyleBackColor = true;
             // 
-            // txbPlacePayment
-            // 
-            txbPlacePayment.Enabled = false;
-            txbPlacePayment.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbPlacePayment.Location = new Point(119, 186);
-            txbPlacePayment.Name = "txbPlacePayment";
-            txbPlacePayment.Size = new Size(46, 29);
-            txbPlacePayment.TabIndex = 59;
-            txbPlacePayment.TextAlign = HorizontalAlignment.Center;
-            // 
-            // cboPlacePayment
-            // 
-            cboPlacePayment.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboPlacePayment.Font = new Font("Segoe UI", 12F);
-            cboPlacePayment.FormattingEnabled = true;
-            cboPlacePayment.ItemHeight = 21;
-            cboPlacePayment.Location = new Point(171, 186);
-            cboPlacePayment.Name = "cboPlacePayment";
-            cboPlacePayment.Size = new Size(275, 29);
-            cboPlacePayment.TabIndex = 60;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.ForeColor = Color.Crimson;
-            label5.Location = new Point(111, 186);
-            label5.Name = "label5";
-            label5.Size = new Size(12, 15);
-            label5.TabIndex = 62;
-            label5.Text = "*";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 12F);
-            label6.Location = new Point(0, 189);
-            label6.Name = "label6";
-            label6.Size = new Size(113, 21);
-            label6.TabIndex = 61;
-            label6.Text = "Lugar de pago:";
-            // 
             // cboActive
             // 
             cboActive.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -320,14 +275,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(535, 269);
+            ClientSize = new Size(535, 233);
             Controls.Add(cboActive);
             Controls.Add(label4);
             Controls.Add(lblActivo);
-            Controls.Add(txbPlacePayment);
-            Controls.Add(cboPlacePayment);
-            Controls.Add(label5);
-            Controls.Add(label6);
             Controls.Add(chbActiveContractor);
             Controls.Add(txbIdSeason);
             Controls.Add(cboSeason);
@@ -377,10 +328,6 @@
         public CheckBox chbActiveContractor;
         public ComboBox cboContractor;
         public ComboBox cboSeason;
-        public TextBox txbPlacePayment;
-        public ComboBox cboPlacePayment;
-        private Label label5;
-        private Label label6;
         public ComboBox cboActive;
         private Label label4;
         private Label lblActivo;

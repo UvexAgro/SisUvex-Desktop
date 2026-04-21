@@ -12,7 +12,6 @@ internal class EWorkGroup
     public string? NameWorkGroup { get; set; }
     public string? IdContractor { get; set; }
     public string? IdSeason { get; set; }
-    public string? IdPlacePayment { get; set; }
 
     /// <summary>Siguiente <c>id_workGroup</c> sugerido (el alta real lo asigna <c>sp_PackWorkGroupExecute</c>).</summary>
     public static string GetNextId()
@@ -59,7 +58,6 @@ internal class EWorkGroup
             NameWorkGroup = ReadField(dr, "v_nameWorkGroup");
             IdContractor = ReadField(dr, "id_contractor");
             IdSeason = ReadField(dr, "id_season");
-            IdPlacePayment = ReadField(dr, "id_placePayment");
             Active = CharActiveToInt(dr["c_active"]);
         }
         catch (Exception ex)
@@ -88,7 +86,6 @@ internal class EWorkGroup
             cmd.Parameters.AddWithValue("@name", NameWorkGroup?.Trim() ?? string.Empty);
             cmd.Parameters.AddWithValue("@idContractor", IdContractor?.Trim() ?? string.Empty);
             cmd.Parameters.AddWithValue("@idSeason", IdSeason?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@id_placePayment", ClsValues.IfEmptyToDBNull(IdPlacePayment?.Trim()));
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();
@@ -127,7 +124,6 @@ internal class EWorkGroup
             cmd.Parameters.AddWithValue("@name", NameWorkGroup?.Trim() ?? string.Empty);
             cmd.Parameters.AddWithValue("@idContractor", IdContractor?.Trim() ?? string.Empty);
             cmd.Parameters.AddWithValue("@idSeason", IdSeason?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@id_placePayment", ClsValues.IfEmptyToDBNull(IdPlacePayment?.Trim()));
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();
