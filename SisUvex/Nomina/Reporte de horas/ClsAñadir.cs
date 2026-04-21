@@ -7,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Vml.Office;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
@@ -37,6 +38,22 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 			frmA.ShowDialog();
 		}
+		private DateTime HoraOCero(object valor)
+		{
+			if (valor == null || valor == DBNull.Value)
+				return DateTime.Today; // 00:00
+
+			if (valor is TimeSpan ts)
+				return DateTime.Today.Add(ts);
+
+			if (valor is DateTime dt)
+				return DateTime.Today.Add(dt.TimeOfDay);
+
+			if (TimeSpan.TryParse(valor.ToString(), out TimeSpan t))
+				return DateTime.Today.Add(t);
+
+			return DateTime.Today;
+		}
 		public void OpenFrmModify()
 		{
 			if (frmPacki.dgvHoras.SelectedRows.Count != 0)
@@ -55,22 +72,22 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				// FECHA
 				frmA.dtpDay.Value = Convert.ToDateTime(row.Cells["Fecha"].Value);
 
-				// HORARIO NORMAL (REAL DESDE BD)
+				// HORARIO NORMAL
 				frmA.dtpBeginNormal.Value = Convert.ToDateTime(row.Cells["InicioNormal"].Value);
 				frmA.dtpEndNormal.Value = Convert.ToDateTime(row.Cells["FinNormal"].Value);
-				// HORARIO EXTRA (REAL DESDE BD)
-				if (row.Cells["FinExtra"].Value != DBNull.Value)
-				{
-					frmA.dtpEndExtra.Value = Convert.ToDateTime(row.Cells["FinExtra"].Value);
-				}
 
-				//  HORAS EXTRA
+				// HORARIO EXTRA
+				if (row.Cells["InicioExtra"].Value != DBNull.Value)
+					frmA.dtpEndNormal.Value = Convert.ToDateTime(row.Cells["InicioExtra"].Value);
+
+				if (row.Cells["FinExtra"].Value != DBNull.Value)
+					frmA.dtpEndExtra.Value = Convert.ToDateTime(row.Cells["FinExtra"].Value);
+
+				// HORAS EXTRA
 				decimal horas = 0;
 
 				if (row.Cells["HorasExtras"].Value != DBNull.Value)
-				{
 					horas = Convert.ToDecimal(row.Cells["HorasExtras"].Value);
-				}
 
 				if (horas > frmA.nudOvertime.Maximum || horas < frmA.nudOvertime.Minimum)
 				{
@@ -82,21 +99,42 @@ namespace SisUvex.Nomina.Reporte_de_horas
 						MessageBoxIcon.Warning
 					);
 
-					// 🔒 Ajustar automáticamente al rango
 					horas = Math.Max(frmA.nudOvertime.Minimum, horas);
 					horas = Math.Min(frmA.nudOvertime.Maximum, horas);
 				}
 
-				// ✅ Ya no truena
 				frmA.nudOvertime.Value = horas;
+				//  DESCANSO
+				frmA.dtpDescansoInicial.Value = HoraOCero(row.Cells["InicioDescanso"].Value);
+				frmA.dtpDescansoFinal.Value = HoraOCero(row.Cells["FinDescanso"].Value);
 
-				//  LIMPIAR CHECKLIST
+				frmA.nudHorasDescanso.Value = row.Cells["HorasDescanso"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasDescanso"].Value)
+					: 0;
+
+				//  COMIDA
+				frmA.dtpComidaInicial.Value = HoraOCero(row.Cells["InicioComida"].Value);
+				frmA.dtpComidaFinal.Value = HoraOCero(row.Cells["FinComida"].Value);
+
+				frmA.nudComidaHora.Value = row.Cells["HorasComida"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasComida"].Value)
+					: 0;
+
+				//  CENA
+				frmA.dtpCenaInicial.Value = HoraOCero(row.Cells["InicioCena"].Value);
+				frmA.dtpCenaFinal.Value = HoraOCero(row.Cells["FinCena"].Value);
+
+				frmA.nudCenaHora.Value = row.Cells["HorasCena"].Value != DBNull.Value
+					? Convert.ToDecimal(row.Cells["HorasCena"].Value)
+					: 0;
+
+				// LIMPIAR CHECKLIST
 				for (int i = 0; i < frmA.clbCuadrilla.Items.Count; i++)
 				{
 					frmA.clbCuadrilla.SetItemChecked(i, false);
 				}
 
-				//  MARCAR CUADRILLA
+				// MARCAR CUADRILLA
 				string idCuadrilla = row.Cells["CodigoCuadrilla"].Value.ToString();
 
 				for (int i = 0; i < frmA.clbCuadrilla.Items.Count; i++)
@@ -117,6 +155,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				SystemSounds.Exclamation.Play();
 			}
 		}
+		
 		public void CargarHorasInicial()
 		{
 			try
@@ -158,40 +197,39 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				frmPacki.dgvHoras.DataSource = dt;
 
-				//  OCULTAR COLUMNAS TÉCNICAS
+
 				string[] columnasOcultar =
 				{
-					"id_workTime",
-					"CodigoCuadrilla",
-					"d_dateHourBeginNormal",
-					"d_dateHourEndNormal",
-					"d_dateHourBeginExtra",
-					"d_dateHourEndExtra"
+			"id_workTime",
+			"CodigoCuadrilla",
+			"d_dateHourBeginNormal",
+			"d_dateHourEndNormal",
+			"d_dateHourBeginExtra",
+			"d_dateHourEndExtra"
 		};
 
 				foreach (string col in columnasOcultar)
 				{
 					if (frmPacki.dgvHoras.Columns.Contains(col))
-					{
 						frmPacki.dgvHoras.Columns[col].Visible = false;
-					}
 				}
 
-			
-				string formato = "dd/MM/yyyy HH:mm";
+				//  FORMATOS
+				var cultura = new System.Globalization.CultureInfo("en-US");
 
-				if (frmPacki.dgvHoras.Columns.Contains("InicioNormal"))
-					frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioNormal"].DefaultCellStyle.FormatProvider = cultura;
 
-				if (frmPacki.dgvHoras.Columns.Contains("FinNormal"))
-					frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinNormal"].DefaultCellStyle.FormatProvider = cultura;
 
-				if (frmPacki.dgvHoras.Columns.Contains("InicioExtra"))
-					frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["InicioExtra"].DefaultCellStyle.FormatProvider = cultura;
 
-				if (frmPacki.dgvHoras.Columns.Contains("FinExtra"))
-					frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+				frmPacki.dgvHoras.Columns["FinExtra"].DefaultCellStyle.FormatProvider = cultura;
 
+				// HEADERS
 				if (frmPacki.dgvHoras.Columns.Contains("Cuadrilla"))
 					frmPacki.dgvHoras.Columns["Cuadrilla"].HeaderText = "Cuadrilla";
 
@@ -204,20 +242,23 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				if (frmPacki.dgvHoras.Columns.Contains("FinNormal"))
 					frmPacki.dgvHoras.Columns["FinNormal"].HeaderText = "Fin Normal";
 
-				if (frmPacki.dgvHoras.Columns.Contains("InicioExtra"))
-					frmPacki.dgvHoras.Columns["InicioExtra"].HeaderText = "Inicio Extra";
-
-				if (frmPacki.dgvHoras.Columns.Contains("FinExtra"))
-					frmPacki.dgvHoras.Columns["FinExtra"].HeaderText = "Fin Extra";
-
 				if (frmPacki.dgvHoras.Columns.Contains("HorasExtras"))
 					frmPacki.dgvHoras.Columns["HorasExtras"].HeaderText = "Horas Extra";
 
-				//  CUADRILLA PRIMERO
-				if (frmPacki.dgvHoras.Columns.Contains("Cuadrilla"))
-					frmPacki.dgvHoras.Columns["Cuadrilla"].DisplayIndex = 0;
+				// COMIDA
+				frmPacki.dgvHoras.Columns["InicioComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
+				frmPacki.dgvHoras.Columns["FinComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
+				frmPacki.dgvHoras.Columns["HorasComida"].DefaultCellStyle.BackColor = frmPacki.colorComida;
 
-				EstiloDGV(frmPacki.dgvHoras);
+				// CENA
+				frmPacki.dgvHoras.Columns["InicioCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
+				frmPacki.dgvHoras.Columns["FinCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
+				frmPacki.dgvHoras.Columns["HorasCena"].DefaultCellStyle.BackColor = frmPacki.colorCena;
+
+				// DESCANSO
+				frmPacki.dgvHoras.Columns["InicioDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
+				frmPacki.dgvHoras.Columns["FinDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
+				frmPacki.dgvHoras.Columns["HorasDescanso"].DefaultCellStyle.BackColor = frmPacki.colorDescanso;
 
 				sql.CloseConectionWrite();
 			}
@@ -226,6 +267,129 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				MessageBox.Show(ex.Message);
 			}
 		}
+		public void PintarEncabezadosAgrupados(DataGridView dgv, DataGridViewCellPaintingEventArgs e)
+		{
+			// SOLO encabezados
+			if (e.RowIndex != -1 || e.ColumnIndex < 0)
+				return;
+
+			var grupos = new[]
+			{
+				new { Nombre = "Comida", Inicio = "InicioComida", Fin = "FinComida", Horas = "HorasComida", Color = frmPacki.colorComida },
+				new { Nombre = "Cena", Inicio = "InicioCena", Fin = "FinCena", Horas = "HorasCena", Color = frmPacki.colorCena },
+				new { Nombre = "Descanso", Inicio = "InicioDescanso", Fin = "FinDescanso", Horas = "HorasDescanso", Color = frmPacki.colorDescanso }
+			};
+
+			foreach (var g in grupos)
+			{
+				if (!dgv.Columns.Contains(g.Inicio) ||
+					!dgv.Columns.Contains(g.Fin) ||
+					!dgv.Columns.Contains(g.Horas))
+					continue;
+
+				int colInicio = dgv.Columns[g.Inicio].Index;
+				int colFin = dgv.Columns[g.Fin].Index;
+				int colHoras = dgv.Columns[g.Horas].Index;
+
+				//  DIBUJAR ENCABEZADO GRANDE SOLO UNA VEZ
+				if (e.ColumnIndex == colInicio)
+				{
+					Rectangle rectTotal = new Rectangle(
+						e.CellBounds.Left,
+						e.CellBounds.Top,
+						dgv.Columns[g.Inicio].Width +
+						dgv.Columns[g.Fin].Width +
+						dgv.Columns[g.Horas].Width,
+						e.CellBounds.Height
+					);
+
+					// Fondo completo
+					using (SolidBrush brush = new SolidBrush(System.Drawing.Color.WhiteSmoke))
+						e.Graphics.FillRectangle(brush, rectTotal);
+
+					// Parte superior (grupo)
+					Rectangle rectTop = new Rectangle(
+						rectTotal.Left,
+						rectTotal.Top,
+						rectTotal.Width,
+						rectTotal.Height / 2
+					);
+
+					using (SolidBrush brush = new SolidBrush(g.Color))
+						e.Graphics.FillRectangle(brush, rectTop);
+
+					// Texto grupo
+					using (StringFormat sf = new StringFormat()
+					{
+						Alignment = StringAlignment.Center,
+						LineAlignment = StringAlignment.Center
+					})
+					{
+						e.Graphics.DrawString(g.Nombre,
+							dgv.ColumnHeadersDefaultCellStyle.Font,
+							Brushes.Black,
+							rectTop,
+							sf);
+					}
+
+					// Bordes
+					e.Graphics.DrawRectangle(Pens.Gray, rectTotal);
+
+					e.Handled = true;
+				}
+
+				//  SUBENCABEZADOS
+				if (e.ColumnIndex == colInicio ||
+					e.ColumnIndex == colFin ||
+					e.ColumnIndex == colHoras)
+				{
+					Rectangle rectBottom = new Rectangle(
+						e.CellBounds.Left,
+						e.CellBounds.Top + e.CellBounds.Height / 2,
+						e.CellBounds.Width,
+						e.CellBounds.Height / 2
+					);
+
+				
+					using (SolidBrush brush = new SolidBrush(g.Color))
+						e.Graphics.FillRectangle(brush, rectBottom);
+
+					string texto = dgv.Columns[e.ColumnIndex].HeaderText;
+
+					using (StringFormat sf = new StringFormat()
+					{
+						Alignment = StringAlignment.Center,
+						LineAlignment = StringAlignment.Center
+					})
+					{
+						e.Graphics.DrawString(texto,
+							dgv.ColumnHeadersDefaultCellStyle.Font,
+							Brushes.Black,
+							rectBottom,
+							sf);
+					}
+
+					e.Graphics.DrawRectangle(Pens.LightGray, rectBottom);
+
+					e.Handled = true;
+				}
+			}
+		}
+		public void AjustarEncabezados()
+		{
+			frmPacki.dgvHoras.Columns["InicioComida"].HeaderText = "Inicio";
+			frmPacki.dgvHoras.Columns["FinComida"].HeaderText = "Fin";
+			frmPacki.dgvHoras.Columns["HorasComida"].HeaderText = "Horas";
+
+			frmPacki.dgvHoras.Columns["InicioCena"].HeaderText = "Inicio";
+			frmPacki.dgvHoras.Columns["FinCena"].HeaderText = "Fin";
+			frmPacki.dgvHoras.Columns["HorasCena"].HeaderText = "Horas";
+
+			frmPacki.dgvHoras.Columns["InicioDescanso"].HeaderText = "Inicio";
+			frmPacki.dgvHoras.Columns["FinDescanso"].HeaderText = "Fin";
+			frmPacki.dgvHoras.Columns["HorasDescanso"].HeaderText = "Horas";
+		}
+
 		public void AddProcedure()
 		{
 			try
@@ -235,23 +399,36 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					MessageBox.Show("Selecciona al menos una cuadrilla");
 					return;
 				}
-				
+
 				DateTime fecha = frmA.dtpDay.Value.Date;
 
-				DateTime inicioNormal = (frmA.dtpBeginNormal.Value.SinMs());
-				DateTime finNormal = (frmA.dtpEndNormal.Value.SinMs());
-				DateTime inicioExtra = (frmA.dtpEndNormal.Value.SinMs());
-				DateTime finExtra = (frmA.dtpEndExtra.Value.SinMs());
+				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
+				DateTime finNormal = frmA.dtpEndNormal.Value.SinMs();
+
+				//  SI CRUZA DE DÍA (NOCTURNO)
+				if (finNormal <= inicioNormal)
+					finNormal = finNormal.AddDays(1);
+
+				//  EXTRA
+				DateTime inicioExtra = finNormal;
+				DateTime finExtra = frmA.dtpEndExtra.Value.SinMs();
+
+				bool tieneExtra = frmA.nudOvertime.Value > 0;
+
+				if (tieneExtra)
+				{
+					if (finExtra <= inicioExtra)
+						finExtra = finExtra.AddDays(1);
+				}
 
 				sql.OpenConectionWrite();
 
 				foreach (ItemCuadrilla item in frmA.clbCuadrilla.CheckedItems)
 				{
-					//  VALIDAR ANTES DE INSERTAR
-					if (ExisteHorario(item.Id, fecha.Date, 0))
+					if (ExisteHorario(item.Id, fecha, 0))
 					{
 						MessageBox.Show($"Ya existe un horario para la cuadrilla {item.Id} en esa fecha");
-						continue; // salta solo esa cuadrilla
+						continue;
 					}
 
 					using (SqlCommand cmd = new SqlCommand("sp_Add_WorkTimeConfig", sql.cnn))
@@ -261,9 +438,30 @@ namespace SisUvex.Nomina.Reporte_de_horas
 						cmd.Parameters.Add("@WorkDate", SqlDbType.DateTime).Value = fecha;
 						cmd.Parameters.Add("@HourBeginNormal", SqlDbType.DateTime).Value = inicioNormal;
 						cmd.Parameters.Add("@HourEndNormal", SqlDbType.DateTime).Value = finNormal;
-						cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime).Value = inicioExtra;
-						cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime).Value = finExtra;
-						cmd.Parameters.Add("@OverTime", SqlDbType.Int).Value = frmA.nudOvertime.Value;
+
+						cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime)
+							.Value = tieneExtra ? inicioExtra : (object)DBNull.Value;
+
+						cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime)
+							.Value = tieneExtra ? finExtra : (object)DBNull.Value;
+
+						cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
+
+						// BREAK
+						cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
+						cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
+						cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
+
+						// LUNCH
+						cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
+						cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
+						cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
+
+						// DINNER
+						cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
+						cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
+						cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;
+
 						cmd.Parameters.Add("@UserCreate", SqlDbType.VarChar).Value = User.GetUserName();
 						cmd.Parameters.Add("@id_workGroup", SqlDbType.VarChar).Value = item.Id;
 
@@ -295,12 +493,32 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 
 				ItemCuadrilla item = (ItemCuadrilla)frmA.clbCuadrilla.CheckedItems[0];
-				string idCuadrilla = item.Id;
-
 				int idActual = int.Parse(frmA.idModify);
 
-				sql.OpenConectionWrite(); 
-				if (ExisteHorario(idCuadrilla,frmA.dtpDay.Value, idActual))
+				DateTime fecha = frmA.dtpDay.Value.Date;
+
+				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
+				DateTime finNormal = frmA.dtpEndNormal.Value.SinMs();
+
+				// 🔥 NOCTURNO
+				if (finNormal <= inicioNormal)
+					finNormal = finNormal.AddDays(1);
+
+				// 🔥 EXTRA
+				DateTime inicioExtra = finNormal;
+				DateTime finExtra = frmA.dtpEndExtra.Value.SinMs();
+
+				bool tieneExtra = frmA.nudOvertime.Value > 0;
+
+				if (tieneExtra)
+				{
+					if (finExtra <= inicioExtra)
+						finExtra = finExtra.AddDays(1);
+				}
+
+				sql.OpenConectionWrite();
+
+				if (ExisteHorario(item.Id, fecha, idActual))
 				{
 					MessageBox.Show("Ya existe un horario para esta cuadrilla en esa fecha");
 					return;
@@ -311,14 +529,36 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					cmd.CommandType = CommandType.StoredProcedure;
 
 					cmd.Parameters.Add("@IdWorkTime", SqlDbType.Int).Value = idActual;
-					cmd.Parameters.Add("@WorkDate", SqlDbType.DateTime).Value = frmA.dtpDay.Value;
-					cmd.Parameters.Add("@HourBeginNormal", SqlDbType.DateTime).Value = frmA.dtpBeginNormal.Value;
-					cmd.Parameters.Add("@HourEndNormal", SqlDbType.DateTime).Value = frmA.dtpEndNormal.Value; ;
-					cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime).Value = frmA.dtpEndNormal.Value;
-					cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime).Value = frmA.dtpEndExtra.Value;
+
+					cmd.Parameters.Add("@WorkDate", SqlDbType.DateTime).Value = fecha;
+					cmd.Parameters.Add("@HourBeginNormal", SqlDbType.DateTime).Value = inicioNormal;
+					cmd.Parameters.Add("@HourEndNormal", SqlDbType.DateTime).Value = finNormal;
+
+					cmd.Parameters.Add("@HourBeginExtra", SqlDbType.DateTime)
+						.Value = tieneExtra ? inicioExtra : (object)DBNull.Value;
+
+					cmd.Parameters.Add("@HourEndExtra", SqlDbType.DateTime)
+						.Value = tieneExtra ? finExtra : (object)DBNull.Value;
+
 					cmd.Parameters.Add("@OverTime", SqlDbType.Decimal).Value = frmA.nudOvertime.Value;
+
+					// BREAK
+					cmd.Parameters.Add("@BreakStart", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoInicial.Value);
+					cmd.Parameters.Add("@BreakEnd", SqlDbType.Time).Value = SHMS(frmA.dtpDescansoFinal.Value);
+					cmd.Parameters.Add("@BreakHours", SqlDbType.Decimal).Value = frmA.nudHorasDescanso.Value;
+
+					// LUNCH
+					cmd.Parameters.Add("@LunchStart", SqlDbType.Time).Value = SHMS(frmA.dtpComidaInicial.Value);
+					cmd.Parameters.Add("@LunchEnd", SqlDbType.Time).Value = SHMS(frmA.dtpComidaFinal.Value);
+					cmd.Parameters.Add("@LunchHours", SqlDbType.Decimal).Value = frmA.nudComidaHora.Value;
+
+					// DINNER
+					cmd.Parameters.Add("@DinnerStart", SqlDbType.Time).Value = SHMS(frmA.dtpCenaInicial.Value);
+					cmd.Parameters.Add("@DinnerEnd", SqlDbType.Time).Value = SHMS(frmA.dtpCenaFinal.Value);
+					cmd.Parameters.Add("@DinnerHours", SqlDbType.Decimal).Value = frmA.nudCenaHora.Value;
+
 					cmd.Parameters.Add("@UserUpdate", SqlDbType.VarChar).Value = User.GetUserName();
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.VarChar).Value = idCuadrilla;
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.VarChar).Value = item.Id;
 
 					cmd.ExecuteNonQuery();
 				}
@@ -329,7 +569,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message, "modificar");
 			}
 			finally
 			{
@@ -531,11 +771,16 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				sql.CloseConectionWrite();
 			}
 		}
+		private TimeSpan SHMS(DateTime dt)
+		{
+			return new TimeSpan(dt.Hour, dt.Minute, 0);
+		}
 	}
 
 }
 public static class DateTimeExtensions
 {
+	// Quita milisegundos
 	public static DateTime SinMs(this DateTime fecha)
 	{
 		return new DateTime(

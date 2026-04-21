@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAddDesc));
 			lblAdd = new Label();
 			lblWorkGroup = new Label();
 			cboProductionLine = new ComboBox();
@@ -62,7 +63,7 @@
 			// 
 			lblWorkGroup.AutoSize = true;
 			lblWorkGroup.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblWorkGroup.Location = new Point(6, 10);
+			lblWorkGroup.Location = new Point(6, 19);
 			lblWorkGroup.Name = "lblWorkGroup";
 			lblWorkGroup.Size = new Size(50, 19);
 			lblWorkGroup.TabIndex = 159;
@@ -72,7 +73,7 @@
 			// 
 			cboProductionLine.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboProductionLine.FormattingEnabled = true;
-			cboProductionLine.Location = new Point(6, 34);
+			cboProductionLine.Location = new Point(6, 43);
 			cboProductionLine.Name = "cboProductionLine";
 			cboProductionLine.Size = new Size(189, 23);
 			cboProductionLine.TabIndex = 160;
@@ -80,7 +81,7 @@
 			// dtpInicio
 			// 
 			dtpInicio.Format = DateTimePickerFormat.Custom;
-			dtpInicio.Location = new Point(6, 109);
+			dtpInicio.Location = new Point(6, 182);
 			dtpInicio.Name = "dtpInicio";
 			dtpInicio.Size = new Size(273, 23);
 			dtpInicio.TabIndex = 161;
@@ -89,7 +90,7 @@
 			// 
 			lblFechaInicio.AutoSize = true;
 			lblFechaInicio.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblFechaInicio.Location = new Point(6, 85);
+			lblFechaInicio.Location = new Point(6, 158);
 			lblFechaInicio.Name = "lblFechaInicio";
 			lblFechaInicio.Size = new Size(87, 19);
 			lblFechaInicio.TabIndex = 162;
@@ -99,24 +100,25 @@
 			// 
 			lblFechaFinal.AutoSize = true;
 			lblFechaFinal.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblFechaFinal.Location = new Point(6, 159);
+			lblFechaFinal.Location = new Point(6, 232);
 			lblFechaFinal.Name = "lblFechaFinal";
-			lblFechaFinal.Size = new Size(87, 19);
+			lblFechaFinal.Size = new Size(82, 19);
 			lblFechaFinal.TabIndex = 163;
-			lblFechaFinal.Text = "Fecha Inicio:";
+			lblFechaFinal.Text = "Fecha Final:";
 			// 
 			// dtpFinal
 			// 
 			dtpFinal.Format = DateTimePickerFormat.Custom;
-			dtpFinal.Location = new Point(6, 183);
+			dtpFinal.Location = new Point(6, 256);
 			dtpFinal.Name = "dtpFinal";
+			dtpFinal.ShowCheckBox = true;
 			dtpFinal.Size = new Size(273, 23);
 			dtpFinal.TabIndex = 164;
 			// 
 			// nudOvertime
 			// 
 			nudOvertime.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-			nudOvertime.Location = new Point(9, 251);
+			nudOvertime.Location = new Point(9, 324);
 			nudOvertime.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
 			nudOvertime.Name = "nudOvertime";
 			nudOvertime.Size = new Size(44, 23);
@@ -126,7 +128,7 @@
 			// 
 			lblCantidad.AutoSize = true;
 			lblCantidad.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblCantidad.Location = new Point(6, 229);
+			lblCantidad.Location = new Point(6, 302);
 			lblCantidad.Name = "lblCantidad";
 			lblCantidad.Size = new Size(68, 19);
 			lblCantidad.TabIndex = 166;
@@ -136,7 +138,7 @@
 			// 
 			lblDescripcion.AutoSize = true;
 			lblDescripcion.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblDescripcion.Location = new Point(6, 297);
+			lblDescripcion.Location = new Point(7, 83);
 			lblDescripcion.Name = "lblDescripcion";
 			lblDescripcion.Size = new Size(86, 19);
 			lblDescripcion.TabIndex = 167;
@@ -145,7 +147,7 @@
 			// txbConcepto
 			// 
 			txbConcepto.Font = new Font("Segoe UI", 12F);
-			txbConcepto.Location = new Point(6, 321);
+			txbConcepto.Location = new Point(6, 105);
 			txbConcepto.MaxLength = 300;
 			txbConcepto.Name = "txbConcepto";
 			txbConcepto.Size = new Size(286, 29);
@@ -179,6 +181,7 @@
 			btnAcept.TabIndex = 171;
 			btnAcept.Text = "Aceptar";
 			btnAcept.UseVisualStyleBackColor = true;
+			btnAcept.Click += btnAcept_Click;
 			// 
 			// btnCancel
 			// 
@@ -188,6 +191,7 @@
 			btnCancel.TabIndex = 172;
 			btnCancel.Text = "Cancelar";
 			btnCancel.UseVisualStyleBackColor = true;
+			btnCancel.Click += btnCancel_Click;
 			// 
 			// gpbNormal
 			// 
@@ -198,8 +202,8 @@
 			gpbNormal.Controls.Add(lblFechaFinal);
 			gpbNormal.Controls.Add(txbConcepto);
 			gpbNormal.Controls.Add(dtpFinal);
-			gpbNormal.Controls.Add(lblDescripcion);
 			gpbNormal.Controls.Add(nudOvertime);
+			gpbNormal.Controls.Add(lblDescripcion);
 			gpbNormal.Controls.Add(lblCantidad);
 			gpbNormal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			gpbNormal.Location = new Point(16, 73);
@@ -219,6 +223,7 @@
 			Controls.Add(txbId);
 			Controls.Add(lblId);
 			Controls.Add(lblAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAddDesc";
 			Text = "Añadir";
 			Load += FrmAddDesc_Load;

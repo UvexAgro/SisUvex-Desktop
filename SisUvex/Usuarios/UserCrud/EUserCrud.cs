@@ -244,7 +244,7 @@ internal class EUserCrud
             {
                 CommandType = CommandType.StoredProcedure
             };
-            cmd.Parameters.AddWithValue("@action", "MODIFY");
+            cmd.Parameters.AddWithValue("@action", "PASSWORD");
             cmd.Parameters.AddWithValue("@c_codigo_usu", idUser.Trim());
             cmd.Parameters.AddWithValue("@v_passwo_usu", passwordHash);
             cmd.Parameters.AddWithValue("@user", User.GetUserName());

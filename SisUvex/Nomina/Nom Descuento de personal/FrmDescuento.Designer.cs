@@ -30,6 +30,7 @@
 		{
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDescuento));
 			btnAdd = new Button();
 			btnModify = new Button();
 			btnRemove = new Button();
@@ -45,6 +46,7 @@
 			btnAdd.TabIndex = 2;
 			btnAdd.Text = "Añadir";
 			btnAdd.UseVisualStyleBackColor = true;
+			btnAdd.Click += btnAdd_Click;
 			// 
 			// btnModify
 			// 
@@ -54,6 +56,7 @@
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Modificar";
 			btnModify.UseVisualStyleBackColor = true;
+			btnModify.Click += btnModify_Click;
 			// 
 			// btnRemove
 			// 
@@ -63,12 +66,13 @@
 			btnRemove.TabIndex = 5;
 			btnRemove.Text = "Eliminar";
 			btnRemove.UseVisualStyleBackColor = true;
+			btnRemove.Click += btnRemove_Click;
 			// 
 			// dgvCatalog
 			// 
 			dgvCatalog.AllowUserToAddRows = false;
 			dgvCatalog.AllowUserToDeleteRows = false;
-			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvCatalog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			dgvCatalog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvCatalog.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
@@ -111,8 +115,10 @@
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmDescuento";
 			Text = "Descuento de Personal por Linea ";
+			Load += FrmDescuento_Load;
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
 			ResumeLayout(false);
 		}

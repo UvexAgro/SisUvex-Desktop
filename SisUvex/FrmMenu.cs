@@ -1,4 +1,4 @@
-﻿using SisUvex.Usuarios;
+using SisUvex.Usuarios;
 using SisUvex.Catalogos.Variedad;
 using SisUvex.Catalogos.Tamaño;
 using SisUvex.Catalogos.Ciudad;
@@ -68,11 +68,13 @@ namespace SisUvex
     public partial class FrmMenu : Form
     {
         public static FrmMenu FrmMenuInstance;
+
         public FrmMenu()
         {
             InitializeComponent();
             FrmMenuInstance = this;
         }
+
         public void AbrirVentanaHijo(Form f, int acs) //PARA CUANDO ES CON EL NIVEL DE ACCESO
         {
             if (User.GetAccessLevel() >= acs)
@@ -80,6 +82,7 @@ namespace SisUvex
                 AbrirVentanaHijo(f);
             }
         }
+
         public void AbrirVentanaHijo(Form f) //PARA CUANDO NO ES CON EL NIVEL DE ACCESO, SINO POR LOS PERMISOS
         {
             bool va = false;
@@ -92,12 +95,14 @@ namespace SisUvex
                     va = true;
                 }
             }
+
             if (!va)
             {
                 f.MdiParent = this;
                 f.Show();
             }
         }
+
         private void AbrirFormulario(Form f, int acs)
         {
             if (User.GetAccessLevel() >= acs)
@@ -120,6 +125,30 @@ namespace SisUvex
                 }
             }
         }
+
+        public void AbrirFormularioDialog(Form f, int acs)
+        {
+            if (User.GetAccessLevel() >= acs)
+            {
+                bool va = false;
+
+                foreach (Form ven in Application.OpenForms)
+                {
+                    if (ven.Name.Equals(f.Name))
+                    {
+                        ven.Focus();
+                        va = true;
+                        break;
+                    }
+                }
+
+                if (!va)
+                {
+                    f.ShowDialog();
+                }
+            }
+        }
+
         private void nuevoUsuarioToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             CreacionUsuario cat = new CreacionUsuario();
@@ -128,7 +157,6 @@ namespace SisUvex
 
         private void FrmMenu_Load(object sender, EventArgs e)
         {
-
         }
 
         private void variedadesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -187,8 +215,6 @@ namespace SisUvex
 
         private void cuadrillaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //FrmCuadrillaCat cat = new FrmCuadrillaCat();
-            //AbrirVentanaHijo(cat, 1);
             FrmWorkGroupCat cat = new FrmWorkGroupCat();
             AbrirVentanaHijo(cat, 1);
         }
@@ -204,6 +230,7 @@ namespace SisUvex
             FrmDriverCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
+
         private void cajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmFreightContainerCat cat = new();
@@ -216,18 +243,15 @@ namespace SisUvex
             AbrirVentanaHijo(cat, 1);
         }
 
-
         private void etiquetaPreviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PrintPalletBox cat = new PrintPalletBox();
-
             AbrirVentanaHijo(cat, 1);
         }
 
         private void registroDeMaterialToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmRegistroMaterialCat cat = new FrmRegistroMaterialCat();
-
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -277,14 +301,12 @@ namespace SisUvex
             FrmDesestibar cat = new FrmDesestibar();
             AbrirFormulario(cat, 3);
         }
+
         private void reimprimirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmRePrintPallet cat = new FrmRePrintPallet();
-
             AbrirVentanaHijo(cat, 1);
         }
-
-
 
         private void nombreYCódigo2x1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -297,32 +319,11 @@ namespace SisUvex
             FrmActualizarEmpleados cat = new FrmActualizarEmpleados();
             AbrirFormularioDialog(cat, 0);
         }
+
         private void actualizarDatosDeEmpleadosPorExcelAgrosmartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmActualizarDatosEmpleados cat = new FrmActualizarDatosEmpleados();
             AbrirVentanaHijo(cat, 4);
-        }
-        public void AbrirFormularioDialog(Form f, int acs)
-        {
-            if (User.GetAccessLevel() >= acs)
-            {
-                bool va = false;
-
-                foreach (Form ven in Application.OpenForms)
-                {
-                    if (ven.Name.Equals(f.Name))
-                    {
-                        ven.Focus();
-                        va = true;
-                        break;
-                    }
-                }
-
-                if (!va)
-                {
-                    f.ShowDialog();
-                }
-            }
         }
 
         private void cajasAGranelToolStripMenuItem_Click(object sender, EventArgs e)
@@ -343,7 +344,6 @@ namespace SisUvex
             FrmConsignatarioCat cat = new FrmConsignatarioCat();
             AbrirVentanaHijo(cat, 1);
         }
-
 
         private void asistenciaEmpaqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -402,6 +402,7 @@ namespace SisUvex
             ClsPrices cls = new ClsPrices();
             AbrirVentanaHijo(cls._frmCat, 1);
         }
+
         private void totalDeCajasEmbarcadasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmManifestQuery cat = new FrmManifestQuery();
@@ -428,7 +429,6 @@ namespace SisUvex
 
         private void áreaComedorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
         }
 
         private void asignarComedorToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -439,9 +439,6 @@ namespace SisUvex
 
         private void reportesComedorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            //REPORTECOMEDOR cat = new REPORTECOMEDOR();
-            //AbrirVentanaHijo(cat, 2);
-
             FrmDiningReport frm = new FrmDiningReport();
             AbrirVentanaHijo(frm, 2);
         }
@@ -466,7 +463,6 @@ namespace SisUvex
 
         private void proveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
 
         private void asistenciaEmpaqueToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -593,7 +589,6 @@ namespace SisUvex
 
         private void nominaEmpaqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
 
         private void calculToolStripMenuItem_Click(object sender, EventArgs e)
@@ -605,7 +600,6 @@ namespace SisUvex
 
         private void conceptosSobreSueldoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
 
         private void salarioDiversosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -717,10 +711,10 @@ namespace SisUvex
 
         private void cambiarTuContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Usuarios.UserCrud.FrmUserConfirmPass.OpenValidateUserPassword()) //VALIDA QUE EL USUARIO INGRESE SU CONTRASEÑA ANTES DE ABRIR EL FORMULARIO DE CAMBIO DE CONTRASEÑA
+            if (!Usuarios.UserCrud.FrmUserConfirmPass.OpenValidateUserPassword())
                 return;
 
-            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserId()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
+            Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserName());
         }
 
         private void lugarDePagoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -731,6 +725,13 @@ namespace SisUvex
             Nomina.PlacePaymentLP.FrmPlacePaymentCat cat = new();
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
+        }
+
+        private void descuentoDePrsonalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Nomina.Nom_Descuento_de_personal.FrmDescuento cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat, 3);
         }
     }
 }

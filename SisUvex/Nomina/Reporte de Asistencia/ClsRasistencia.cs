@@ -72,6 +72,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			cargando = false;
 
 		}
+		
 		public void CargarCuadrillas()
 		{
 			cargando = true;
@@ -79,14 +80,18 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			ClsCatalogos cls = new ClsCatalogos();
 			DataTable dt = cls.CboCuadrilla("");
 
+			//  Crear fila "Seleccionar"
+			DataRow dr = dt.NewRow();
+			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dr["Código"] = DBNull.Value;
+
+			dt.Rows.InsertAt(dr, 0); // Insertar al inicio
+
 			frmR.cboCuadrilla.DataSource = dt;
 			frmR.cboCuadrilla.DisplayMember = "Nombre";
 			frmR.cboCuadrilla.ValueMember = "Código";
 
-			if (dt.Rows.Count > 0)
-			{
-				frmR.cboCuadrilla.SelectedIndex = 0;
-			}
+			frmR.cboCuadrilla.SelectedIndex = 0;
 
 			cargando = false;
 		}
@@ -209,6 +214,8 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		}
 		public void ValidarRangoSemanas()
 		{
+			if (bloqueando) return;
+
 			if (frmR.cboSemanaInicial.SelectedItem == null || frmR.cboSemanaFinal.SelectedItem == null)
 				return;
 
@@ -216,20 +223,23 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			DataRowView rowFin = (DataRowView)frmR.cboSemanaFinal.SelectedItem;
 
 			if (rowInicio[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value ||
-				rowFin[Payroll_AttendancePeriod.ColumnStartDate] == DBNull.Value)
+				rowFin[Payroll_AttendancePeriod.ColumnEndDate] == DBNull.Value)
 			{
 				return;
 			}
 
 			DateTime inicio = Convert.ToDateTime(rowInicio[Payroll_AttendancePeriod.ColumnStartDate]);
-			DateTime fin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnStartDate]);
+			DateTime fin = Convert.ToDateTime(rowFin[Payroll_AttendancePeriod.ColumnEndDate]);
 
 			if (fin < inicio)
 			{
+				bloqueando = true; //  evitar rebote
+
 				frmR.cboSemanaFinal.SelectedIndex = frmR.cboSemanaInicial.SelectedIndex;
+
+				bloqueando = false;
 			}
 		}
-		
 		public void Empleado(string idEmpleado, DateTime? fechaInicio, DateTime? fechaFin)
 		{ 
 			if (fechaInicio == null || fechaFin == null)

@@ -66,7 +66,7 @@
 			// 
 			btnExcel.BackgroundImage = Properties.Resources.excelIcon;
 			btnExcel.BackgroundImageLayout = ImageLayout.Stretch;
-			btnExcel.Location = new Point(245, 63);
+			btnExcel.Location = new Point(254, 134);
 			btnExcel.Name = "btnExcel";
 			btnExcel.Size = new Size(23, 23);
 			btnExcel.TabIndex = 51;
@@ -96,7 +96,7 @@
 			// 
 			// txbNombre
 			// 
-			txbNombre.Location = new Point(105, 138);
+			txbNombre.Location = new Point(101, 63);
 			txbNombre.Name = "txbNombre";
 			txbNombre.Size = new Size(258, 23);
 			txbNombre.TabIndex = 49;
@@ -105,7 +105,7 @@
 			// 
 			lblEmpleado.AutoSize = true;
 			lblEmpleado.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblEmpleado.Location = new Point(17, 136);
+			lblEmpleado.Location = new Point(13, 61);
 			lblEmpleado.Name = "lblEmpleado";
 			lblEmpleado.Size = new Size(82, 21);
 			lblEmpleado.TabIndex = 48;
@@ -115,7 +115,7 @@
 			// 
 			btnEmpleado.BackgroundImage = Properties.Resources.BuscarLupa1;
 			btnEmpleado.BackgroundImageLayout = ImageLayout.Stretch;
-			btnEmpleado.Location = new Point(216, 63);
+			btnEmpleado.Location = new Point(225, 134);
 			btnEmpleado.Name = "btnEmpleado";
 			btnEmpleado.Size = new Size(23, 23);
 			btnEmpleado.TabIndex = 47;
@@ -125,7 +125,7 @@
 			// txbCodigo
 			// 
 			txbCodigo.Cursor = Cursors.SizeAll;
-			txbCodigo.Location = new Point(92, 63);
+			txbCodigo.Location = new Point(101, 134);
 			txbCodigo.MaxLength = 6;
 			txbCodigo.Name = "txbCodigo";
 			txbCodigo.Size = new Size(89, 23);
@@ -135,7 +135,7 @@
 			// 
 			lblcodigo.AutoSize = true;
 			lblcodigo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblcodigo.Location = new Point(13, 61);
+			lblcodigo.Location = new Point(13, 134);
 			lblcodigo.Name = "lblcodigo";
 			lblcodigo.Size = new Size(63, 21);
 			lblcodigo.TabIndex = 45;
@@ -230,7 +230,7 @@
 			// 
 			btnEmployee.BackgroundImage = Properties.Resources.BuscarLupa1;
 			btnEmployee.BackgroundImageLayout = ImageLayout.Stretch;
-			btnEmployee.Location = new Point(369, 138);
+			btnEmployee.Location = new Point(365, 63);
 			btnEmployee.Name = "btnEmployee";
 			btnEmployee.Size = new Size(23, 23);
 			btnEmployee.TabIndex = 55;
@@ -241,7 +241,7 @@
 			// 
 			btnAñadir.BackgroundImage = (Image)resources.GetObject("btnAñadir.BackgroundImage");
 			btnAñadir.BackgroundImageLayout = ImageLayout.Stretch;
-			btnAñadir.Location = new Point(187, 63);
+			btnAñadir.Location = new Point(196, 134);
 			btnAñadir.Name = "btnAñadir";
 			btnAñadir.Size = new Size(23, 23);
 			btnAñadir.TabIndex = 56;

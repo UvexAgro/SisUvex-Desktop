@@ -11,6 +11,8 @@ using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Nomina.Asistencia_de_empaque;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using SisUvex.Configuracion;
+using System.Data.SqlClient;
 
 namespace SisUvex.Nomina.Registro_de_Asistencia
 {
@@ -43,6 +45,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			clsM.EstiloDgv();
 			clsM.CargarComboActividades();
 			cls.CargarAsistenciasPorFecha();
+			cls.CargarCuadrillas(cboCuadrilla);
 
 		}
 
@@ -55,6 +58,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		private void btnExcelAceptar_Click(object sender, EventArgs e)
 		{
 			cls.BotonAceptar();
+			cls.CargarAsistenciasPorFecha();
 		}
 
 		private void btnInstrucciones_Click(object sender, EventArgs e)
@@ -131,36 +135,13 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 		private void btnEliminar_Click(object sender, EventArgs e)
 		{
-			string fecha = dtpDay.Value.ToString("yyyy-MM-dd");
+			cls.EliminarAsistenciaPorCuadrilla(dtpDay.Value, cboCuadrilla.SelectedValue);
+			cls.CargarAsistenciasPorFecha();
+		}
 
-			DialogResult resp = MessageBox.Show(
-				$"¿Deseas eliminar los registros del día {fecha}?",
-				"Confirmar eliminación",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Warning
-			);
-
-			if (resp == DialogResult.Yes)
-			{
-				try
-				{
-					cls.EliminarRegistrosPorFechaDgv(fecha);
-
-					MessageBox.Show(
-						"Los registros se eliminaron correctamente.",
-						"Éxito",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information
-					);
-
-
-					cls.CargarAsistenciasPorFecha();
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.ToString(), "Error");
-				}
-			}
+		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			cls.CargarAsistenciasPorFecha();
 		}
 	}
 }

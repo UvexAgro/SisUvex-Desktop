@@ -14,6 +14,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using PdfiumViewer;
+using SisUvex.Catalogos.WorkGroup;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using DrawingColor = System.Drawing.Color;
 using ITextPdf = iText.Kernel.Pdf.PdfDocument;
@@ -69,16 +70,24 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 
 				string query = @"
-					SELECT 
+				SELECT 
+					a.id_AttendanceChecker, 
 					a.id_employee AS Codigo,
 					e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name AS NombreCompleto,
+
 					a.d_Date AS Fecha,
-					a.t_CheckInTime AS HoraEntrada,
-					a.t_CheckOutTime AS HoraSalida
+
+         
+					CONVERT(VARCHAR(19), a.d_CheckInDateTime, 120) AS HoraEntrada,
+					CONVERT(VARCHAR(19), a.d_CheckOutDateTime, 120) AS HoraSalida
+
 				FROM dbo.PackingAttendanceChecker a
-				INNER JOIN dbo.Nom_Employees e ON e.id_employee = a.id_employee
+				INNER JOIN dbo.Nom_Employees e 
+					ON e.id_employee = a.id_employee
+
 				WHERE a.d_Date BETWEEN @inicio AND @fin
-				  AND e.id_workGroup = @grupo
+				  AND a.id_workGroup = @grupo   
+
 				ORDER BY a.d_Date, NombreCompleto";
 
 				SqlCommand cmd = new SqlCommand(query, sql.cnn);
@@ -109,6 +118,10 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 				fechaFinal,
 				idWorkGroup);
 
+			if (frmR.dgvAsistencia.Columns.Contains("id_AttendanceChecker"))
+			{
+				frmR.dgvAsistencia.Columns["id_AttendanceChecker"].Visible = false;
+			}
 
 			AjustarColumnas(frmR.dgvAsistencia);
 			frmR.dgvAsistencia.ClearSelection();
@@ -272,7 +285,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		{
 			// Quitar bordes
 			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
 			dgv.RowHeadersVisible = false;
 
 			// Colores generales
@@ -281,8 +294,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			// Encabezados
 			dgv.EnableHeadersVisualStyles = false;
-			dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
+			
 			dgv.ColumnHeadersDefaultCellStyle.BackColor = DrawingColor.FromArgb(220, 230, 241);
 			dgv.ColumnHeadersDefaultCellStyle.ForeColor = DrawingColor.Black;
 			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -295,17 +307,16 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgv.DefaultCellStyle.ForeColor = DrawingColor.Black;
 
 			//  IMPORTANTE: mantener sin selección visual
-			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.White;
+			// Selección visible (bonita)
+			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.Black;
 
-			dgv.RowsDefaultCellStyle.SelectionBackColor = DrawingColor.White;
+			dgv.RowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.RowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
 
 			// Filas alternadas
-			dgv.AlternatingRowsDefaultCellStyle.BackColor = DrawingColor.FromArgb(245, 245, 245);
-			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(245, 245, 245);
+			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(180, 200, 230);
 			dgv.AlternatingRowsDefaultCellStyle.SelectionForeColor = DrawingColor.Black;
-
 			// Ajuste automático
 			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
@@ -314,10 +325,12 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			// Altura uniforme (como en tu imagen)
 			dgv.RowTemplate.Height = 28;
+			dgv.AllowUserToResizeRows = false;
 
 			// Selección tipo celda (sin highlight)
-			dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
 
 			// Solo lectura
 			dgv.ReadOnly = true;
@@ -326,8 +339,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			dgv.DefaultCellStyle.Padding = new Padding(3);
 			dgv.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
 
-			// Quitar selección inicial
-			dgv.ClearSelection();
+	
 		}
 		public DataTable ObtenerAsistenciaDesdeGrid(DateTime fechaInicial, DateTime fechaFinal)
 		{
@@ -379,11 +391,16 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 				string query = $@"
 				SELECT 
+					a.id_AttendanceChecker, 
 					a.id_employee AS Codigo,
 					e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name AS NombreCompleto,
+
 					a.d_Date AS Fecha,
-					a.t_CheckInTime AS HoraEntrada,
-					a.t_CheckOutTime AS HoraSalida
+
+   
+					CONVERT(VARCHAR(19), a.d_CheckInDateTime, 120) AS HoraEntrada,
+					CONVERT(VARCHAR(19), a.d_CheckOutDateTime, 120) AS HoraSalida
+
 				FROM dbo.PackingAttendanceChecker a
 				INNER JOIN dbo.Nom_Employees e ON e.id_employee = a.id_employee
 				WHERE a.d_Date BETWEEN @inicio AND @fin
@@ -408,10 +425,6 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 			return dt;
 		}
-
-
-
-
 		public void ExportarDGVaExcel(DataGridView dgv)
 		{
 			if (dgv.Rows.Count == 0)
@@ -435,16 +448,21 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 						int filaExcel = 1;
 
-						//  TÍTULO GENERAL
+					
+						var columnas = dgv.Columns
+							.Cast<DataGridViewColumn>()
+							.Where(c => c.Name != "id_AttendanceChecker")
+							.ToList();
+
 						ws.Cell(filaExcel, 1).Value = "REPORTE DE ASISTENCIA";
-						ws.Range(filaExcel, 1, filaExcel, dgv.Columns.Count).Merge();
+						ws.Range(filaExcel, 1, filaExcel, columnas.Count).Merge();
 						ws.Cell(filaExcel, 1).Style.Font.Bold = true;
 						ws.Cell(filaExcel, 1).Style.Font.FontSize = 16;
 						ws.Cell(filaExcel, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
 						filaExcel += 2;
 
-						//  AGRUPAR POR FECHA
+						// AGRUPAR POR FECHA
 						var grupos = dgv.Rows
 							.Cast<DataGridViewRow>()
 							.Where(r => !r.IsNewRow && r.Cells["Fecha"].Value != null)
@@ -453,7 +471,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 						foreach (var grupo in grupos)
 						{
-							// TÍTULO POR FECHA
+							//  TÍTULO POR FECHA
 							ws.Cell(filaExcel, 1).Value = $"Fecha: {grupo.Key:dd/MM/yyyy}";
 							ws.Cell(filaExcel, 1).Style.Font.Bold = true;
 							ws.Cell(filaExcel, 1).Style.Font.FontSize = 12;
@@ -461,10 +479,12 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 							filaExcel++;
 
 							//  ENCABEZADOS
-							for (int i = 0; i < dgv.Columns.Count; i++)
+							for (int i = 0; i < columnas.Count; i++)
 							{
+								var col = columnas[i];
+
 								var cell = ws.Cell(filaExcel, i + 1);
-								cell.Value = dgv.Columns[i].HeaderText;
+								cell.Value = col.HeaderText;
 
 								cell.Style.Font.Bold = true;
 								cell.Style.Font.FontColor = XLColor.Black;
@@ -474,15 +494,17 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 
 							filaExcel++;
 
-							//  DATOS DEL GRUPO
+							//  DATOS
 							foreach (var row in grupo)
 							{
-								for (int j = 0; j < dgv.Columns.Count; j++)
+								for (int j = 0; j < columnas.Count; j++)
 								{
-									var valor = row.Cells[j].Value;
+									var col = columnas[j];
+									var valor = row.Cells[col.Name].Value;
+
 									var cell = ws.Cell(filaExcel, j + 1);
 
-									if (dgv.Columns[j].Name == "Fecha" && valor != null)
+									if (col.Name == "Fecha" && valor != null)
 									{
 										DateTime fecha = Convert.ToDateTime(valor);
 										cell.Value = fecha;
@@ -499,17 +521,17 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 								filaExcel++;
 							}
 
-							//  ESPACIO ENTRE GRUPOS
+							// 🔹 ESPACIO ENTRE GRUPOS
 							filaExcel += 2;
 						}
 
-						//  AJUSTAR COLUMNAS
+						// 🔹 AJUSTAR COLUMNAS
 						ws.Columns().AdjustToContents();
 
 						wb.SaveAs(ruta);
 					}
 
-					//  PREGUNTAR SI ABRIR
+					// 🔹 PREGUNTAR SI ABRIR
 					DialogResult result = MessageBox.Show(
 						"Excel generado correctamente.\n¿Deseas abrirlo?",
 						"Abrir archivo",
@@ -526,6 +548,55 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 						});
 					}
 				}
+			}
+		}
+
+
+
+		
+		public void btnEliminar()
+		{
+			if (frmR.dgvAsistencia.SelectedCells.Count == 0)
+			{
+				MessageBox.Show("Selecciona un registro");
+				return;
+			}
+
+			int fila = frmR.dgvAsistencia.SelectedCells[0].RowIndex;
+
+			int id = Convert.ToInt32(
+				frmR.dgvAsistencia.Rows[fila].Cells["id_AttendanceChecker"].Value
+			);
+
+			DialogResult r = MessageBox.Show(
+				"¿Deseas eliminar este registro?",
+				"Confirmar",
+				MessageBoxButtons.YesNo
+			);
+
+			if (r == DialogResult.No)
+				return;
+
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = "DELETE FROM PackingAttendanceChecker WHERE id_AttendanceChecker = @id";
+
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
+				cmd.Parameters.AddWithValue("@id", id);
+				cmd.ExecuteNonQuery();
+
+				// Quitar fila del DGV (sin recargar todo)
+				frmR.dgvAsistencia.Rows.RemoveAt(fila);
+
+				MessageBox.Show("Registro eliminado");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
 			}
 		}
 	}

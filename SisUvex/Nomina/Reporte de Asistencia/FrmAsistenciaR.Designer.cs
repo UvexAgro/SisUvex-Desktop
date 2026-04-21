@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaR));
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			lblReporte = new Label();
 			lblEmpleado = new Label();
 			pllEmpleado = new Panel();
@@ -39,8 +39,8 @@
 			lbl = new Label();
 			txbCodigo = new TextBox();
 			txbEmpleado = new TextBox();
-			btnAcceptarEmpleado = new Button();
 			label1 = new Label();
+			btnAcceptarEmpleado = new Button();
 			pllCuadrilla = new Panel();
 			cboCuadrilla = new ComboBox();
 			btnAceptarCuadrilla = new Button();
@@ -56,6 +56,7 @@
 			label2 = new Label();
 			label4 = new Label();
 			btnExcel = new Button();
+			btnEliminar = new Button();
 			pllEmpleado.SuspendLayout();
 			pllCuadrilla.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
@@ -66,7 +67,7 @@
 			// 
 			lblReporte.AutoSize = true;
 			lblReporte.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblReporte.Location = new Point(72, 19);
+			lblReporte.Location = new Point(72, 9);
 			lblReporte.Name = "lblReporte";
 			lblReporte.Size = new Size(250, 32);
 			lblReporte.TabIndex = 1;
@@ -76,7 +77,7 @@
 			// 
 			lblEmpleado.AutoSize = true;
 			lblEmpleado.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEmpleado.Location = new Point(68, 118);
+			lblEmpleado.Location = new Point(75, 170);
 			lblEmpleado.Name = "lblEmpleado";
 			lblEmpleado.Size = new Size(83, 21);
 			lblEmpleado.TabIndex = 108;
@@ -91,9 +92,8 @@
 			pllEmpleado.Controls.Add(lbl);
 			pllEmpleado.Controls.Add(txbCodigo);
 			pllEmpleado.Controls.Add(txbEmpleado);
-			pllEmpleado.Controls.Add(btnAcceptarEmpleado);
 			pllEmpleado.Controls.Add(label1);
-			pllEmpleado.Location = new Point(68, 142);
+			pllEmpleado.Location = new Point(75, 194);
 			pllEmpleado.Name = "pllEmpleado";
 			pllEmpleado.Size = new Size(418, 92);
 			pllEmpleado.TabIndex = 107;
@@ -147,16 +147,6 @@
 			txbEmpleado.Size = new Size(278, 23);
 			txbEmpleado.TabIndex = 102;
 			// 
-			// btnAcceptarEmpleado
-			// 
-			btnAcceptarEmpleado.Location = new Point(308, 53);
-			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
-			btnAcceptarEmpleado.Size = new Size(63, 24);
-			btnAcceptarEmpleado.TabIndex = 101;
-			btnAcceptarEmpleado.Text = "Aceptar";
-			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
-			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
-			// 
 			// label1
 			// 
 			label1.AutoSize = true;
@@ -167,6 +157,16 @@
 			label1.TabIndex = 39;
 			label1.Text = "Empleado";
 			// 
+			// btnAcceptarEmpleado
+			// 
+			btnAcceptarEmpleado.Location = new Point(164, 500);
+			btnAcceptarEmpleado.Name = "btnAcceptarEmpleado";
+			btnAcceptarEmpleado.Size = new Size(126, 34);
+			btnAcceptarEmpleado.TabIndex = 101;
+			btnAcceptarEmpleado.Text = "Mostrar";
+			btnAcceptarEmpleado.UseVisualStyleBackColor = true;
+			btnAcceptarEmpleado.Click += btnAcceptarEmpleado_Click;
+			// 
 			// pllCuadrilla
 			// 
 			pllCuadrilla.BackColor = SystemColors.ActiveCaption;
@@ -174,7 +174,7 @@
 			pllCuadrilla.Controls.Add(cboCuadrilla);
 			pllCuadrilla.Controls.Add(btnAceptarCuadrilla);
 			pllCuadrilla.Controls.Add(label3);
-			pllCuadrilla.Location = new Point(579, 142);
+			pllCuadrilla.Location = new Point(586, 194);
 			pllCuadrilla.Name = "pllCuadrilla";
 			pllCuadrilla.Size = new Size(373, 92);
 			pllCuadrilla.TabIndex = 109;
@@ -212,7 +212,7 @@
 			// 
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(752, 471);
+			btnImprimir.Location = new Point(754, 500);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(10, 0, 10, 0);
 			btnImprimir.Size = new Size(126, 34);
@@ -226,7 +226,7 @@
 			// 
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCuadrilla.Location = new Point(579, 118);
+			lblCuadrilla.Location = new Point(586, 170);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(73, 21);
 			lblCuadrilla.TabIndex = 110;
@@ -242,33 +242,33 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvAsistencia.ColumnHeadersHeight = 58;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
 			dgvAsistencia.ImeMode = ImeMode.NoControl;
-			dgvAsistencia.Location = new Point(12, 508);
+			dgvAsistencia.Location = new Point(14, 540);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(998, 303);
+			dgvAsistencia.Size = new Size(1034, 271);
 			dgvAsistencia.TabIndex = 112;
 			// 
 			// dgvEmployee
@@ -278,18 +278,18 @@
 			dgvEmployee.BackgroundColor = Color.White;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvEmployee.Location = new Point(51, 289);
+			dgvEmployee.Location = new Point(56, 328);
 			dgvEmployee.Name = "dgvEmployee";
-			dgvEmployee.Size = new Size(922, 173);
+			dgvEmployee.Size = new Size(922, 153);
 			dgvEmployee.TabIndex = 111;
 			// 
 			// lblSemanaFinal
 			// 
 			lblSemanaFinal.AutoSize = true;
-			lblSemanaFinal.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblSemanaFinal.Location = new Point(583, 68);
+			lblSemanaFinal.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblSemanaFinal.Location = new Point(606, 106);
 			lblSemanaFinal.Name = "lblSemanaFinal";
-			lblSemanaFinal.Size = new Size(108, 21);
+			lblSemanaFinal.Size = new Size(95, 19);
 			lblSemanaFinal.TabIndex = 106;
 			lblSemanaFinal.Text = "Semana Final:";
 			// 
@@ -297,7 +297,7 @@
 			// 
 			cboSemanaFinal.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaFinal.FormattingEnabled = true;
-			cboSemanaFinal.Location = new Point(697, 70);
+			cboSemanaFinal.Location = new Point(604, 128);
 			cboSemanaFinal.Name = "cboSemanaFinal";
 			cboSemanaFinal.Size = new Size(235, 23);
 			cboSemanaFinal.TabIndex = 105;
@@ -307,7 +307,7 @@
 			// 
 			cboSemanaInicial.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemanaInicial.FormattingEnabled = true;
-			cboSemanaInicial.Location = new Point(195, 70);
+			cboSemanaInicial.Location = new Point(91, 126);
 			cboSemanaInicial.Name = "cboSemanaInicial";
 			cboSemanaInicial.Size = new Size(235, 23);
 			cboSemanaInicial.TabIndex = 104;
@@ -316,10 +316,10 @@
 			// lblsub
 			// 
 			lblsub.AutoSize = true;
-			lblsub.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblsub.Location = new Point(72, 72);
+			lblsub.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+			lblsub.Location = new Point(93, 104);
 			lblsub.Name = "lblsub";
-			lblsub.Size = new Size(117, 21);
+			lblsub.Size = new Size(103, 19);
 			lblsub.TabIndex = 103;
 			lblsub.Text = "Semana Inicial:";
 			// 
@@ -327,7 +327,7 @@
 			// 
 			label2.AutoSize = true;
 			label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			label2.Location = new Point(51, 267);
+			label2.Location = new Point(56, 306);
 			label2.Name = "label2";
 			label2.Size = new Size(119, 19);
 			label2.TabIndex = 114;
@@ -337,7 +337,7 @@
 			// 
 			label4.AutoSize = true;
 			label4.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			label4.Location = new Point(12, 486);
+			label4.Location = new Point(18, 515);
 			label4.Name = "label4";
 			label4.Size = new Size(140, 19);
 			label4.TabIndex = 115;
@@ -347,7 +347,7 @@
 			// 
 			btnExcel.Image = (Image)resources.GetObject("btnExcel.Image");
 			btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-			btnExcel.Location = new Point(884, 471);
+			btnExcel.Location = new Point(886, 500);
 			btnExcel.Name = "btnExcel";
 			btnExcel.Padding = new Padding(10, 0, 10, 0);
 			btnExcel.Size = new Size(126, 34);
@@ -357,16 +357,32 @@
 			btnExcel.UseVisualStyleBackColor = true;
 			btnExcel.Click += btnExcel_Click;
 			// 
+			// btnEliminar
+			// 
+			btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
+			btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnEliminar.Location = new Point(622, 500);
+			btnEliminar.Name = "btnEliminar";
+			btnEliminar.Padding = new Padding(10, 0, 10, 0);
+			btnEliminar.Size = new Size(126, 34);
+			btnEliminar.TabIndex = 117;
+			btnEliminar.Text = "Eliminar";
+			btnEliminar.TextAlign = ContentAlignment.MiddleRight;
+			btnEliminar.UseVisualStyleBackColor = true;
+			btnEliminar.Click += btnEliminar_Click;
+			// 
 			// FrmAsistenciaR
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1047, 825);
+			Controls.Add(btnEliminar);
 			Controls.Add(btnExcel);
 			Controls.Add(label4);
 			Controls.Add(label2);
 			Controls.Add(lblEmpleado);
 			Controls.Add(pllEmpleado);
+			Controls.Add(btnAcceptarEmpleado);
 			Controls.Add(pllCuadrilla);
 			Controls.Add(btnImprimir);
 			Controls.Add(lblCuadrilla);
@@ -418,5 +434,6 @@
 		private Label label2;
 		private Label label4;
 		public Button btnExcel;
+		private Button btnEliminar;
 	}
 }
