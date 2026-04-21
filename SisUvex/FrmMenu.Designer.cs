@@ -36,6 +36,9 @@
             menuStrip1 = new MenuStrip();
             administrarToolStripMenuItem1 = new ToolStripMenuItem();
             usuarioToolStripMenuItem = new ToolStripMenuItem();
+            usuariosToolStripMenuItem = new ToolStripMenuItem();
+            rolesDeUsuarioToolStripMenuItem = new ToolStripMenuItem();
+            cambiarTuContraseñaToolStripMenuItem = new ToolStripMenuItem();
             planDeTrabajoToolStripMenuItem = new ToolStripMenuItem();
             etiquetaCajaToolStripMenuItem = new ToolStripMenuItem();
             cajaPalletToolStripMenuItem = new ToolStripMenuItem();
@@ -154,9 +157,7 @@
             statusStrip1 = new StatusStrip();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            usuariosToolStripMenuItem = new ToolStripMenuItem();
-            rolesDeUsuarioToolStripMenuItem = new ToolStripMenuItem();
-            cambiarTuContraseñaToolStripMenuItem = new ToolStripMenuItem();
+            lugarDePagoToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -204,13 +205,34 @@
             // 
             usuarioToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, rolesDeUsuarioToolStripMenuItem, cambiarTuContraseñaToolStripMenuItem });
             usuarioToolStripMenuItem.Name = "usuarioToolStripMenuItem";
-            usuarioToolStripMenuItem.Size = new Size(180, 22);
+            usuarioToolStripMenuItem.Size = new Size(179, 22);
             usuarioToolStripMenuItem.Text = "Usuario";
+            // 
+            // usuariosToolStripMenuItem
+            // 
+            usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
+            usuariosToolStripMenuItem.Size = new Size(194, 22);
+            usuariosToolStripMenuItem.Text = "Usuarios";
+            usuariosToolStripMenuItem.Click += usuariosToolStripMenuItem_Click;
+            // 
+            // rolesDeUsuarioToolStripMenuItem
+            // 
+            rolesDeUsuarioToolStripMenuItem.Name = "rolesDeUsuarioToolStripMenuItem";
+            rolesDeUsuarioToolStripMenuItem.Size = new Size(194, 22);
+            rolesDeUsuarioToolStripMenuItem.Text = "Roles de usuario";
+            rolesDeUsuarioToolStripMenuItem.Click += rolesDeUsuarioToolStripMenuItem_Click;
+            // 
+            // cambiarTuContraseñaToolStripMenuItem
+            // 
+            cambiarTuContraseñaToolStripMenuItem.Name = "cambiarTuContraseñaToolStripMenuItem";
+            cambiarTuContraseñaToolStripMenuItem.Size = new Size(194, 22);
+            cambiarTuContraseñaToolStripMenuItem.Text = "Cambiar tu contraseña";
+            cambiarTuContraseñaToolStripMenuItem.Click += cambiarTuContraseñaToolStripMenuItem_Click;
             // 
             // planDeTrabajoToolStripMenuItem
             // 
             planDeTrabajoToolStripMenuItem.Name = "planDeTrabajoToolStripMenuItem";
-            planDeTrabajoToolStripMenuItem.Size = new Size(180, 22);
+            planDeTrabajoToolStripMenuItem.Size = new Size(179, 22);
             planDeTrabajoToolStripMenuItem.Text = "Plan de trabajo";
             planDeTrabajoToolStripMenuItem.Click += planDeTrabajoToolStripMenuItem_Click;
             // 
@@ -218,7 +240,7 @@
             // 
             etiquetaCajaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajaPalletToolStripMenuItem });
             etiquetaCajaToolStripMenuItem.Name = "etiquetaCajaToolStripMenuItem";
-            etiquetaCajaToolStripMenuItem.Size = new Size(180, 22);
+            etiquetaCajaToolStripMenuItem.Size = new Size(179, 22);
             etiquetaCajaToolStripMenuItem.Text = "Etiquetas";
             // 
             // cajaPalletToolStripMenuItem
@@ -232,7 +254,7 @@
             // 
             códigoEmpleadoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { códigoParaCajaÚnicaEspárragoToolStripMenuItem, uvaNombreYCódigoDeEmpleadoToolStripMenuItem });
             códigoEmpleadoToolStripMenuItem.Name = "códigoEmpleadoToolStripMenuItem";
-            códigoEmpleadoToolStripMenuItem.Size = new Size(180, 22);
+            códigoEmpleadoToolStripMenuItem.Size = new Size(179, 22);
             códigoEmpleadoToolStripMenuItem.Text = "Código empleado";
             // 
             // códigoParaCajaÚnicaEspárragoToolStripMenuItem
@@ -252,21 +274,21 @@
             // etiquetaPreviewToolStripMenuItem
             // 
             etiquetaPreviewToolStripMenuItem.Name = "etiquetaPreviewToolStripMenuItem";
-            etiquetaPreviewToolStripMenuItem.Size = new Size(180, 22);
+            etiquetaPreviewToolStripMenuItem.Size = new Size(179, 22);
             etiquetaPreviewToolStripMenuItem.Text = "Etiqueta Preview";
             etiquetaPreviewToolStripMenuItem.Click += etiquetaPreviewToolStripMenuItem_Click;
             // 
             // manifiestoToolStripMenuItem
             // 
             manifiestoToolStripMenuItem.Name = "manifiestoToolStripMenuItem";
-            manifiestoToolStripMenuItem.Size = new Size(180, 22);
+            manifiestoToolStripMenuItem.Size = new Size(179, 22);
             manifiestoToolStripMenuItem.Text = "Manifiesto";
             manifiestoToolStripMenuItem.Click += manifiestoToolStripMenuItem_Click;
             // 
             // registroDeMaterialToolStripMenuItem
             // 
             registroDeMaterialToolStripMenuItem.Name = "registroDeMaterialToolStripMenuItem";
-            registroDeMaterialToolStripMenuItem.Size = new Size(180, 22);
+            registroDeMaterialToolStripMenuItem.Size = new Size(179, 22);
             registroDeMaterialToolStripMenuItem.Text = "Registro de material";
             registroDeMaterialToolStripMenuItem.Click += registroDeMaterialToolStripMenuItem_Click;
             // 
@@ -274,7 +296,7 @@
             // 
             palletsToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { mixtearPalletsToolStripMenuItem, reestibarPalletsToolStripMenuItem, desestibarPalletsToolStripMenuItem, reimprimirToolStripMenuItem, convertirPalletToolStripMenuItem });
             palletsToolStripMenuItem1.Name = "palletsToolStripMenuItem1";
-            palletsToolStripMenuItem1.Size = new Size(180, 22);
+            palletsToolStripMenuItem1.Size = new Size(179, 22);
             palletsToolStripMenuItem1.Text = "Pallets";
             // 
             // mixtearPalletsToolStripMenuItem
@@ -595,7 +617,7 @@
             // 
             // nóminaToolStripMenuItem
             // 
-            nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { modificacionesToolStripMenuItem, desertGhostToolStripMenuItem, empaqueToolStripMenuItem, credencialesToolStripMenuItem, comedorToolStripMenuItem, contratoToolStripMenuItem });
+            nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { modificacionesToolStripMenuItem, desertGhostToolStripMenuItem, empaqueToolStripMenuItem, credencialesToolStripMenuItem, comedorToolStripMenuItem, contratoToolStripMenuItem, lugarDePagoToolStripMenuItem });
             nóminaToolStripMenuItem.Name = "nóminaToolStripMenuItem";
             nóminaToolStripMenuItem.Size = new Size(62, 19);
             nóminaToolStripMenuItem.Text = "Nómina";
@@ -1020,26 +1042,12 @@
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // usuariosToolStripMenuItem
+            // lugarDePagoToolStripMenuItem
             // 
-            usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
-            usuariosToolStripMenuItem.Size = new Size(194, 22);
-            usuariosToolStripMenuItem.Text = "Usuarios";
-            usuariosToolStripMenuItem.Click += usuariosToolStripMenuItem_Click;
-            // 
-            // rolesDeUsuarioToolStripMenuItem
-            // 
-            rolesDeUsuarioToolStripMenuItem.Name = "rolesDeUsuarioToolStripMenuItem";
-            rolesDeUsuarioToolStripMenuItem.Size = new Size(194, 22);
-            rolesDeUsuarioToolStripMenuItem.Text = "Roles de usuario";
-            rolesDeUsuarioToolStripMenuItem.Click += rolesDeUsuarioToolStripMenuItem_Click;
-            // 
-            // cambiarTuContraseñaToolStripMenuItem
-            // 
-            cambiarTuContraseñaToolStripMenuItem.Name = "cambiarTuContraseñaToolStripMenuItem";
-            cambiarTuContraseñaToolStripMenuItem.Size = new Size(194, 22);
-            cambiarTuContraseñaToolStripMenuItem.Text = "Cambiar tu contraseña";
-            cambiarTuContraseñaToolStripMenuItem.Click += cambiarTuContraseñaToolStripMenuItem_Click;
+            lugarDePagoToolStripMenuItem.Name = "lugarDePagoToolStripMenuItem";
+            lugarDePagoToolStripMenuItem.Size = new Size(189, 22);
+            lugarDePagoToolStripMenuItem.Text = "Lugar de pago";
+            lugarDePagoToolStripMenuItem.Click += lugarDePagoToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
@@ -1196,5 +1204,6 @@
         private ToolStripMenuItem usuariosToolStripMenuItem;
         private ToolStripMenuItem rolesDeUsuarioToolStripMenuItem;
         private ToolStripMenuItem cambiarTuContraseñaToolStripMenuItem;
+        private ToolStripMenuItem lugarDePagoToolStripMenuItem;
     }
 }

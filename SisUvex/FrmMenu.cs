@@ -722,5 +722,15 @@ namespace SisUvex
 
             Usuarios.UserCrud.ClsUserCrud.OpenFrmChangePassword(User.GetUserId()); //ABRE EL FORMULARIO DE CAMBIO DE CONTRASEÑA PASANDO EL NOMBRE DEL USUARIO LOGUEADO
         }
+
+        private void lugarDePagoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Nomina.PlacePaymentLP.FrmPlacePaymentCat cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat);
+        }
     }
 }

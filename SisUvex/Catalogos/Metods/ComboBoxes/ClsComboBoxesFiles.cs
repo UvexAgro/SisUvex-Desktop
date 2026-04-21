@@ -312,7 +312,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 					query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
                     break;
                 case ClsObject.PlacePayment.Cbo:
-                    query += " IN ('Pack_PlacePayment', 'Pack_Grower') ";
+                    query += " IN ('Nom_PlacePayment', 'Pack_Grower', 'Pack_Contractor', 'Pack_WorkGroup') ";
                     break;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
                     query += " IN ('Payroll_AttendancePeriod', 'Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
