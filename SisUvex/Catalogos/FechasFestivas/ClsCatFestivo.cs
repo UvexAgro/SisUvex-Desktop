@@ -11,7 +11,6 @@ using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
-using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using System.Globalization;
 
