@@ -40,7 +40,7 @@
 			// 
 			// btnModify
 			// 
-			btnModify.Location = new Point(12, 12);
+			btnModify.Location = new Point(300, 12);
 			btnModify.Name = "btnModify";
 			btnModify.Size = new Size(75, 23);
 			btnModify.TabIndex = 3;
@@ -90,7 +90,7 @@
 			// 
 			cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSeason.FormattingEnabled = true;
-			cboSeason.Location = new Point(199, 13);
+			cboSeason.Location = new Point(84, 12);
 			cboSeason.Name = "cboSeason";
 			cboSeason.Size = new Size(200, 23);
 			cboSeason.TabIndex = 22;
@@ -99,7 +99,7 @@
 			// lblSeason
 			// 
 			lblSeason.AutoSize = true;
-			lblSeason.Location = new Point(131, 16);
+			lblSeason.Location = new Point(16, 15);
 			lblSeason.Name = "lblSeason";
 			lblSeason.Size = new Size(67, 15);
 			lblSeason.TabIndex = 23;

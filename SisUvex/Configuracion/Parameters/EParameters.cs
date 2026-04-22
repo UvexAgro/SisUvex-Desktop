@@ -32,7 +32,7 @@ namespace SisUvex.Configuracion.Parameters
         public string? typeParameter { get; set; }      // (solo lectura/mostrar)
         public string? nameParameters { get; set; }     // VARCHAR(30)
         public string? detailParameter { get; set; }    // VARCHAR(50)
-        public string? valueParameters { get; set; }    // VARCHAR(70)
+        public string? valueParameters { get; set; }    // VARCHAR(300)
         public int? active { get; set; }             // CHAR(1) -> '1'/'0'
         public string? dataTypeParameters { get; set; } // TIPO DE DATO DEL PARAMETRO (Text, Int, Decimal, Date, Time, DateTime, Bool)
 
