@@ -743,5 +743,15 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat);
 		}
+
+		private void dedudccionesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (!User.HasViewCatalogsPermission())
+				return;
+
+			Catalogos.Nom_Deducciones.FrmDeduccion cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat);
+		}
 	}
 }
