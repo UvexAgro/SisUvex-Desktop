@@ -43,13 +43,16 @@
             btnRecover = new Button();
             btnModify = new Button();
             btnAdd = new Button();
+            btnSearchFreightContainer = new Button();
+            txbSearchFreightContainer = new TextBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
             // chbFreightContainerTransportLineRemoved
             // 
             chbFreightContainerTransportLineRemoved.Appearance = Appearance.Button;
-            chbFreightContainerTransportLineRemoved.Location = new Point(12, 40);
+            chbFreightContainerTransportLineRemoved.Location = new Point(232, 41);
             chbFreightContainerTransportLineRemoved.Name = "chbFreightContainerTransportLineRemoved";
             chbFreightContainerTransportLineRemoved.Size = new Size(111, 23);
             chbFreightContainerTransportLineRemoved.TabIndex = 5;
@@ -62,7 +65,7 @@
             // 
             btnTransportLineFilter.BackgroundImage = Properties.Resources.filterIcon16;
             btnTransportLineFilter.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTransportLineFilter.Location = new Point(586, 39);
+            btnTransportLineFilter.Location = new Point(678, 40);
             btnTransportLineFilter.Name = "btnTransportLineFilter";
             btnTransportLineFilter.Size = new Size(25, 25);
             btnTransportLineFilter.TabIndex = 9;
@@ -73,7 +76,7 @@
             // 
             btnTransportLineSearch.BackgroundImage = Properties.Resources.BuscarLupa1;
             btnTransportLineSearch.BackgroundImageLayout = ImageLayout.Stretch;
-            btnTransportLineSearch.Location = new Point(562, 39);
+            btnTransportLineSearch.Location = new Point(654, 40);
             btnTransportLineSearch.Name = "btnTransportLineSearch";
             btnTransportLineSearch.Size = new Size(25, 25);
             btnTransportLineSearch.TabIndex = 8;
@@ -84,7 +87,7 @@
             // 
             chbTransportLineRemoved.Appearance = Appearance.Button;
             chbTransportLineRemoved.Image = Properties.Resources.removedList16;
-            chbTransportLineRemoved.Location = new Point(539, 39);
+            chbTransportLineRemoved.Location = new Point(631, 40);
             chbTransportLineRemoved.Margin = new Padding(0);
             chbTransportLineRemoved.Name = "chbTransportLineRemoved";
             chbTransportLineRemoved.Padding = new Padding(0, 1, 0, 0);
@@ -97,7 +100,7 @@
             // 
             cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTransportLine.FormattingEnabled = true;
-            cboTransportLine.Location = new Point(336, 40);
+            cboTransportLine.Location = new Point(428, 41);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(203, 23);
             cboTransportLine.TabIndex = 6;
@@ -106,7 +109,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 6.75F);
-            label8.Location = new Point(253, 46);
+            label8.Location = new Point(345, 47);
             label8.Name = "label8";
             label8.Size = new Size(81, 12);
             label8.TabIndex = 443;
@@ -161,6 +164,7 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(776, 363);
             dgvCatalog.TabIndex = 10;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
             // 
@@ -202,11 +206,42 @@
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
+            // btnSearchFreightContainer
+            // 
+            btnSearchFreightContainer.BackgroundImage = Properties.Resources.BuscarLupa1;
+            btnSearchFreightContainer.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSearchFreightContainer.Location = new Point(144, 40);
+            btnSearchFreightContainer.Name = "btnSearchFreightContainer";
+            btnSearchFreightContainer.Size = new Size(25, 25);
+            btnSearchFreightContainer.TabIndex = 445;
+            btnSearchFreightContainer.UseVisualStyleBackColor = true;
+            btnSearchFreightContainer.Click += btnSearchFreightContainer_Click;
+            // 
+            // txbSearchFreightContainer
+            // 
+            txbSearchFreightContainer.Location = new Point(42, 41);
+            txbSearchFreightContainer.Name = "txbSearchFreightContainer";
+            txbSearchFreightContainer.Size = new Size(100, 23);
+            txbSearchFreightContainer.TabIndex = 446;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9F);
+            label1.Location = new Point(12, 45);
+            label1.Name = "label1";
+            label1.Size = new Size(30, 15);
+            label1.TabIndex = 447;
+            label1.Text = "Caja";
+            // 
             // FrmFreightContainerCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
+            Controls.Add(txbSearchFreightContainer);
+            Controls.Add(btnSearchFreightContainer);
             Controls.Add(chbFreightContainerTransportLineRemoved);
             Controls.Add(btnTransportLineFilter);
             Controls.Add(btnTransportLineSearch);
@@ -243,5 +278,8 @@
         private Button btnRecover;
         private Button btnModify;
         private Button btnAdd;
+        private Button btnSearchFreightContainer;
+        public TextBox txbSearchFreightContainer;
+        private Label label1;
     }
 }

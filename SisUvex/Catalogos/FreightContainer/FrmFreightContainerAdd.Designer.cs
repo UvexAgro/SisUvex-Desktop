@@ -39,6 +39,8 @@
             lblPies = new Label();
             lblTamaño = new Label();
             txbSize = new TextBox();
+            lblThermometer = new Label();
+            txbThermometer = new TextBox();
             lblModelo = new Label();
             txbYear = new TextBox();
             lblMarca = new Label();
@@ -124,7 +126,7 @@
             // 
             lblTipo.AutoSize = true;
             lblTipo.Font = new Font("Segoe UI", 12F);
-            lblTipo.Location = new Point(10, 91);
+            lblTipo.Location = new Point(14, 91);
             lblTipo.Name = "lblTipo";
             lblTipo.Size = new Size(147, 21);
             lblTipo.TabIndex = 118;
@@ -144,7 +146,7 @@
             lblPies.AutoSize = true;
             lblPies.Font = new Font("Segoe UI", 12F);
             lblPies.ForeColor = SystemColors.AppWorkspace;
-            lblPies.Location = new Point(182, 301);
+            lblPies.Location = new Point(416, 266);
             lblPies.Name = "lblPies";
             lblPies.Size = new Size(38, 21);
             lblPies.TabIndex = 117;
@@ -154,7 +156,7 @@
             // 
             lblTamaño.AutoSize = true;
             lblTamaño.Font = new Font("Segoe UI", 12F);
-            lblTamaño.Location = new Point(29, 301);
+            lblTamaño.Location = new Point(263, 266);
             lblTamaño.Name = "lblTamaño";
             lblTamaño.Size = new Size(67, 21);
             lblTamaño.TabIndex = 116;
@@ -163,17 +165,36 @@
             // txbSize
             // 
             txbSize.Font = new Font("Segoe UI", 12F);
-            txbSize.Location = new Point(101, 298);
+            txbSize.Location = new Point(335, 263);
             txbSize.MaxLength = 3;
             txbSize.Name = "txbSize";
             txbSize.Size = new Size(80, 29);
             txbSize.TabIndex = 11;
             // 
+            // lblThermometer
+            // 
+            lblThermometer.AutoSize = true;
+            lblThermometer.Font = new Font("Segoe UI", 12F);
+            lblThermometer.Location = new Point(2, 301);
+            lblThermometer.Name = "lblThermometer";
+            lblThermometer.Size = new Size(98, 21);
+            lblThermometer.TabIndex = 120;
+            lblThermometer.Text = "Termómetro:";
+            // 
+            // txbThermometer
+            // 
+            txbThermometer.Font = new Font("Segoe UI", 12F);
+            txbThermometer.Location = new Point(101, 298);
+            txbThermometer.MaxLength = 50;
+            txbThermometer.Name = "txbThermometer";
+            txbThermometer.Size = new Size(392, 29);
+            txbThermometer.TabIndex = 12;
+            // 
             // lblModelo
             // 
             lblModelo.AutoSize = true;
             lblModelo.Font = new Font("Segoe UI", 12F);
-            lblModelo.Location = new Point(29, 266);
+            lblModelo.Location = new Point(34, 266);
             lblModelo.Name = "lblModelo";
             lblModelo.Size = new Size(66, 21);
             lblModelo.TabIndex = 115;
@@ -192,7 +213,7 @@
             // 
             lblMarca.AutoSize = true;
             lblMarca.Font = new Font("Segoe UI", 12F);
-            lblMarca.Location = new Point(39, 231);
+            lblMarca.Location = new Point(44, 231);
             lblMarca.Name = "lblMarca";
             lblMarca.Size = new Size(56, 21);
             lblMarca.TabIndex = 114;
@@ -204,14 +225,14 @@
             txbBrand.Location = new Point(101, 228);
             txbBrand.MaxLength = 30;
             txbBrand.Name = "txbBrand";
-            txbBrand.Size = new Size(392, 29);
+            txbBrand.Size = new Size(314, 29);
             txbBrand.TabIndex = 9;
             // 
             // lblPlacasMX
             // 
             lblPlacasMX.AutoSize = true;
             lblPlacasMX.Font = new Font("Segoe UI", 12F);
-            lblPlacasMX.Location = new Point(12, 196);
+            lblPlacasMX.Location = new Point(17, 196);
             lblPlacasMX.Name = "lblPlacasMX";
             lblPlacasMX.Size = new Size(83, 21);
             lblPlacasMX.TabIndex = 113;
@@ -230,7 +251,7 @@
             // 
             lblPlacasUS.AutoSize = true;
             lblPlacasUS.Font = new Font("Segoe UI", 12F);
-            lblPlacasUS.Location = new Point(15, 161);
+            lblPlacasUS.Location = new Point(20, 161);
             lblPlacasUS.Name = "lblPlacasUS";
             lblPlacasUS.Size = new Size(80, 21);
             lblPlacasUS.TabIndex = 112;
@@ -249,7 +270,7 @@
             // 
             lblNumEco.AutoSize = true;
             lblNumEco.Font = new Font("Segoe UI", 12F);
-            lblNumEco.Location = new Point(6, 126);
+            lblNumEco.Location = new Point(10, 126);
             lblNumEco.Name = "lblNumEco";
             lblNumEco.Size = new Size(151, 21);
             lblNumEco.TabIndex = 110;
@@ -270,7 +291,7 @@
             // 
             lblObliLinea.AutoSize = true;
             lblObliLinea.ForeColor = Color.Crimson;
-            lblObliLinea.Location = new Point(154, 53);
+            lblObliLinea.Location = new Point(155, 53);
             lblObliLinea.Name = "lblObliLinea";
             lblObliLinea.Size = new Size(12, 15);
             lblObliLinea.TabIndex = 107;
@@ -278,20 +299,20 @@
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(413, 332);
+            btnAccept.Location = new Point(416, 333);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
-            btnAccept.TabIndex = 12;
+            btnAccept.TabIndex = 13;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(494, 332);
+            btnCancel.Location = new Point(497, 333);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
-            btnCancel.TabIndex = 13;
+            btnCancel.TabIndex = 14;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -379,7 +400,7 @@
             // 
             lblLinea.AutoSize = true;
             lblLinea.Font = new Font("Segoe UI", 12F);
-            lblLinea.Location = new Point(10, 56);
+            lblLinea.Location = new Point(14, 56);
             lblLinea.Name = "lblLinea";
             lblLinea.Size = new Size(147, 21);
             lblLinea.TabIndex = 93;
@@ -389,26 +410,21 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(583, 377);
+            ClientSize = new Size(583, 375);
             Controls.Add(chbTransportLineRemoved);
             Controls.Add(btnTransportLineSearch);
             Controls.Add(txbIdTransportLine);
             Controls.Add(cboTransportLine);
             Controls.Add(lblAño);
-            Controls.Add(lblTipo);
             Controls.Add(cboTypeContainer);
             Controls.Add(lblPies);
             Controls.Add(lblTamaño);
             Controls.Add(txbSize);
-            Controls.Add(lblModelo);
+            Controls.Add(txbThermometer);
             Controls.Add(txbYear);
-            Controls.Add(lblMarca);
             Controls.Add(txbBrand);
-            Controls.Add(lblPlacasMX);
             Controls.Add(txbPlateMX);
-            Controls.Add(lblPlacasUS);
             Controls.Add(txbPlateUS);
-            Controls.Add(lblNumEco);
             Controls.Add(cboActive);
             Controls.Add(lblObliLinea);
             Controls.Add(btnAccept);
@@ -421,6 +437,13 @@
             Controls.Add(lblObliNumEco);
             Controls.Add(label2);
             Controls.Add(lblActivo);
+            Controls.Add(lblModelo);
+            Controls.Add(lblMarca);
+            Controls.Add(lblPlacasMX);
+            Controls.Add(lblPlacasUS);
+            Controls.Add(lblThermometer);
+            Controls.Add(lblTipo);
+            Controls.Add(lblNumEco);
             Controls.Add(lblLinea);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -445,6 +468,8 @@
         private Label lblPies;
         private Label lblTamaño;
         public TextBox txbSize;
+        private Label lblThermometer;
+        public TextBox txbThermometer;
         private Label lblModelo;
         public TextBox txbYear;
         private Label lblMarca;
