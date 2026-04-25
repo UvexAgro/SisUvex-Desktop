@@ -1,7 +1,9 @@
-﻿using System.Media;
+﻿using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
-using SisUvex.Catalogos.Metods;
+using SisUvex.Nomina.PlacePaymentLP;
+using System.Media;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Catalogos.FreightContainer
 {
@@ -18,6 +20,21 @@ namespace SisUvex.Catalogos.FreightContainer
             cls ??= new();
             cls._frmCat ??= this;
             cls.BeginFormCat();
+
+            HasEditCatalogsPermission();
+        }
+
+        private void HasEditCatalogsPermission()
+        {
+            if (User.HasEditCatalogsPermission())
+                return;
+
+            btnAdd.Enabled = false;
+            btnModify.Enabled = false;
+            btnRemove.Enabled = false;
+            btnRecover.Enabled = false;
+
+            dgvCatalog.CellMouseDoubleClick -= dgvCatalog_CellMouseDoubleClick;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -77,10 +94,6 @@ namespace SisUvex.Catalogos.FreightContainer
                 SystemSounds.Exclamation.Play();
         }
 
-        private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            OpenFrmModifyFromCat();
-        }
 
         private void btnTransportLineSearch_Click(object sender, EventArgs e)
         {
@@ -89,14 +102,22 @@ namespace SisUvex.Catalogos.FreightContainer
             sel.OpenSelectionForm("TransportLine", "Código");
 
             if (!string.IsNullOrEmpty(sel.SelectedValue))
-            {
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboTransportLine, sel.SelectedValue);
-            }
         }
 
         private void btnTransportLineFilter_Click(object sender, EventArgs e)
         {
             cls.BtnTransportLineFilter();
+        }
+
+        private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            OpenFrmModifyFromCat();
+        }
+
+        private void btnSearchFreightContainer_Click(object sender, EventArgs e)
+        {
+            cls.BtnSearchFreightContainer();
         }
     }
 }
