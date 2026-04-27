@@ -144,7 +144,9 @@
             Controls.Add(btnAdd);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmFaciIityPackagingTrackingCat";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Catálogo relación de empaque para trazabilidad";
+            WindowState = FormWindowState.Maximized;
             Load += FrmFaciIityPackagingTrackingCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
