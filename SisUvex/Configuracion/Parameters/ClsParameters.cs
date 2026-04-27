@@ -422,7 +422,7 @@ namespace SisUvex.Configuracion.Parameters
                 default:
                     var txt = new TextBox();
                     txt.Size = _sizeText;
-                    txt.MaxLength = 70;
+                    txt.MaxLength = 300;
                     newControl = txt;
                     break;
             }

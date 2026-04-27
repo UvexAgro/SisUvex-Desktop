@@ -200,13 +200,13 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				string[] columnasOcultar =
 				{
-			"id_workTime",
-			"CodigoCuadrilla",
-			"d_dateHourBeginNormal",
-			"d_dateHourEndNormal",
-			"d_dateHourBeginExtra",
-			"d_dateHourEndExtra"
-		};
+					"id_workTime",
+					"CodigoCuadrilla",
+					"d_dateHourBeginNormal",
+					"d_dateHourEndNormal",
+					"d_dateHourBeginExtra",
+					"d_dateHourEndExtra"
+				};
 
 				foreach (string col in columnasOcultar)
 				{
@@ -500,11 +500,11 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
 				DateTime finNormal = frmA.dtpEndNormal.Value.SinMs();
 
-				// 🔥 NOCTURNO
+				//  NOCTURNO
 				if (finNormal <= inicioNormal)
 					finNormal = finNormal.AddDays(1);
 
-				// 🔥 EXTRA
+				//  EXTRA
 				DateTime inicioExtra = finNormal;
 				DateTime finExtra = frmA.dtpEndExtra.Value.SinMs();
 
@@ -614,56 +614,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				fin.Value = fin.Value.AddDays(1);
 			}
 		}
-		private void EstiloDGV(DataGridView dgv)
-		{
-			dgv.BorderStyle = BorderStyle.None;
-
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-			dgv.GridColor = DrawingColor.FromArgb(220, 220, 220);
-
-			dgv.RowHeadersVisible = false;
-
-			dgv.BackgroundColor = DrawingColor.FromArgb(250, 250, 250);
-
-			//  ENCABEZADO
-			dgv.EnableHeadersVisualStyles = false;
-
-			dgv.ColumnHeadersDefaultCellStyle.BackColor = DrawingColor.FromArgb(45, 62, 80); 
-			dgv.ColumnHeadersDefaultCellStyle.ForeColor = DrawingColor.White;
-			dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-			//  NO selección en encabezado
-			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgv.ColumnHeadersDefaultCellStyle.BackColor;
-			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgv.ColumnHeadersDefaultCellStyle.ForeColor;
-
-			//  CELDAS
-			dgv.DefaultCellStyle.BackColor = DrawingColor.White;
-			dgv.DefaultCellStyle.ForeColor = DrawingColor.FromArgb(40, 40, 40);
-			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-
-			//  SELECCIÓN (solo filas)
-			dgv.DefaultCellStyle.SelectionBackColor = DrawingColor.FromArgb(0, 120, 215);
-			dgv.DefaultCellStyle.SelectionForeColor = DrawingColor.White;
-
-			//  FILAS ALTERNAS
-			dgv.AlternatingRowsDefaultCellStyle.BackColor = DrawingColor.FromArgb(245, 247, 250);
-
-			//  CONFIGURACIÓN
-			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv.MultiSelect = false;
-			dgv.ReadOnly = true;
-			dgv.AllowUserToAddRows = false;
-
-			//  QUITAR selección inicial
-			dgv.ClearSelection();
-
-			//  EVITAR que el header se quede seleccionado
-			dgv.ColumnHeaderMouseClick += (s, e) =>
-			{
-				dgv.ClearSelection();
-			};
-		}
+		
 		public class ItemCuadrilla
 		{
 			public string Id { get; set; }

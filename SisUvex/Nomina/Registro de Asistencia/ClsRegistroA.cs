@@ -277,77 +277,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return true;
 		}
-		//public void ConfirmarAccionAceptar()
-		//{
-		//	DialogResult result = MessageBox.Show("¿Está seguro de registrar los datos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-		//	if (result == DialogResult.Yes)
-		//	{
-		//		string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
-		//		int registros = ContarRegistrosPorFecha(fecha);
-
-		//		if (registros == 0)
-		//		{
-
-		//			try
-		//			{
-		//				sql.BeginTransaction(); //aquí abre la conexion
-
-		//				InsertarRegistrosDeAsistencia();
-
-		//				sql.CommitTransaction(); //aquí cierra la conexion
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//				sql.RollbackTransaction(); //aquí cierra la conexion
-		//				MessageBox.Show(ex.ToString(), titulo);
-		//			}
-
-		//		}
-		//		else
-		//		{
-		//			DialogResult overwriteResult = MessageBox.Show($"Ya existen {registros} registros para la fecha {fecha}. \n¿Desea sobreescribirlos?", titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-		//			if (overwriteResult == DialogResult.Yes)
-		//			{
-		//				try
-		//				{
-		//					sql.BeginTransaction();
-
-		//					if (ExisteMiscellaneousPorFecha(fecha))
-		//					{
-		//						DialogResult resp = MessageBox.Show(
-		//							"Existen ingresos/deducciones relacionados a esta fecha.\n\n¿Desea eliminarlos también?",
-		//							titulo,
-		//							MessageBoxButtons.YesNo,
-		//							MessageBoxIcon.Warning
-		//						);
-
-		//						if (resp == DialogResult.Yes)
-		//						{
-		//							EliminarMiscellaneousPorFecha(fecha);
-		//						}
-		//						else
-		//						{
-		//							sql.RollbackTransaction();
-		//							return;
-		//						}
-		//					}
-
-		//					//  INSERTA NUEVO
-		//					InsertarRegistrosDeAsistencia();
-
-		//					sql.CommitTransaction();
-		//				}
-		//				catch (Exception ex)
-		//				{
-		//					sql.RollbackTransaction();
-		//					MessageBox.Show(ex.ToString(), titulo);
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
+		
 		public void ConfirmarAccionAceptar()
 		{
 			if (frm.cboCuadrilla.SelectedValue == null || frm.cboCuadrilla.SelectedValue == DBNull.Value)
