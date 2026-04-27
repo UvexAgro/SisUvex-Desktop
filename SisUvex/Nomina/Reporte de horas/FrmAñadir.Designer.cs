@@ -46,37 +46,47 @@
 			clbCuadrilla = new CheckedListBox();
 			lblCuadrilla = new Label();
 			pllDescanso = new Panel();
+			lblDescansoHora = new Label();
+			lblDescansoFinal = new Label();
+			lblDescansoInicial = new Label();
+			nudHorasDescanso = new NumericUpDown();
+			dtpDescansoFinal = new DateTimePicker();
 			dtpDescansoInicial = new DateTimePicker();
 			pllComida = new Panel();
-			pllCena = new Panel();
-			dtpDescansoFinal = new DateTimePicker();
-			nudHorasDescanso = new NumericUpDown();
-			lblDescansoInicial = new Label();
-			lblDescansoFinal = new Label();
-			lblDescansoHora = new Label();
-			lblDescanso = new Label();
-			lblComida = new Label();
 			lblComidaHora = new Label();
 			lblComidaFinal = new Label();
 			lblComicaInicial = new Label();
 			nudComidaHora = new NumericUpDown();
 			dtpComidaFinal = new DateTimePicker();
 			dtpComidaInicial = new DateTimePicker();
+			pllCena = new Panel();
 			lblCenaHora = new Label();
 			lblCenaFinal = new Label();
 			lblCenaInicial = new Label();
 			nudCenaHora = new NumericUpDown();
 			dtpCenaFinal = new DateTimePicker();
 			dtpCenaInicial = new DateTimePicker();
+			lblDescanso = new Label();
+			lblComida = new Label();
 			lblCena = new Label();
+			label1 = new Label();
+			panel1 = new Panel();
+			label2 = new Label();
+			label3 = new Label();
+			label4 = new Label();
+			nudD2 = new NumericUpDown();
+			dtpDf2 = new DateTimePicker();
+			dtpD2 = new DateTimePicker();
 			gpbNormal.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)nudOvertime).BeginInit();
 			pllDescanso.SuspendLayout();
-			pllComida.SuspendLayout();
-			pllCena.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)nudHorasDescanso).BeginInit();
+			pllComida.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)nudComidaHora).BeginInit();
+			pllCena.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)nudCenaHora).BeginInit();
+			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)nudD2).BeginInit();
 			SuspendLayout();
 			// 
 			// lblTitle
@@ -118,9 +128,9 @@
 			gpbNormal.Controls.Add(dtpBeginNormal);
 			gpbNormal.Controls.Add(lblBeginNormal);
 			gpbNormal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			gpbNormal.Location = new Point(12, 101);
+			gpbNormal.Location = new Point(15, 176);
 			gpbNormal.Name = "gpbNormal";
-			gpbNormal.Size = new Size(419, 156);
+			gpbNormal.Size = new Size(382, 134);
 			gpbNormal.TabIndex = 151;
 			gpbNormal.TabStop = false;
 			// 
@@ -128,7 +138,7 @@
 			// 
 			nudOvertime.DecimalPlaces = 2;
 			nudOvertime.Increment = new decimal(new int[] { 50, 0, 0, 131072 });
-			nudOvertime.Location = new Point(244, 117);
+			nudOvertime.Location = new Point(210, 97);
 			nudOvertime.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
 			nudOvertime.Name = "nudOvertime";
 			nudOvertime.Size = new Size(44, 23);
@@ -138,7 +148,7 @@
 			// 
 			lblHorasExtras.AutoSize = true;
 			lblHorasExtras.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblHorasExtras.Location = new Point(244, 99);
+			lblHorasExtras.Location = new Point(210, 79);
 			lblHorasExtras.Name = "lblHorasExtras";
 			lblHorasExtras.Size = new Size(79, 15);
 			lblHorasExtras.TabIndex = 162;
@@ -148,7 +158,7 @@
 			// 
 			dtpEndExtra.CustomFormat = "dd/MM/yyyy HH:mm:ss";
 			dtpEndExtra.Format = DateTimePickerFormat.Custom;
-			dtpEndExtra.Location = new Point(10, 117);
+			dtpEndExtra.Location = new Point(10, 97);
 			dtpEndExtra.Name = "dtpEndExtra";
 			dtpEndExtra.ShowUpDown = true;
 			dtpEndExtra.Size = new Size(154, 23);
@@ -158,7 +168,7 @@
 			// 
 			lblEndExtra.AutoSize = true;
 			lblEndExtra.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEndExtra.Location = new Point(10, 99);
+			lblEndExtra.Location = new Point(10, 79);
 			lblEndExtra.Name = "lblEndExtra";
 			lblEndExtra.Size = new Size(111, 15);
 			lblEndExtra.TabIndex = 161;
@@ -168,7 +178,7 @@
 			// 
 			dtpEndNormal.CustomFormat = "dd/MM/yyyy HH:mm:ss";
 			dtpEndNormal.Format = DateTimePickerFormat.Custom;
-			dtpEndNormal.Location = new Point(244, 37);
+			dtpEndNormal.Location = new Point(210, 37);
 			dtpEndNormal.Name = "dtpEndNormal";
 			dtpEndNormal.ShowUpDown = true;
 			dtpEndNormal.Size = new Size(154, 23);
@@ -179,7 +189,7 @@
 			// 
 			lblEndNormal.AutoSize = true;
 			lblEndNormal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEndNormal.Location = new Point(244, 19);
+			lblEndNormal.Location = new Point(210, 19);
 			lblEndNormal.Name = "lblEndNormal";
 			lblEndNormal.Size = new Size(120, 15);
 			lblEndNormal.TabIndex = 153;
@@ -208,7 +218,7 @@
 			// 
 			// btnAcept
 			// 
-			btnAcept.Location = new Point(278, 781);
+			btnAcept.Location = new Point(242, 730);
 			btnAcept.Name = "btnAcept";
 			btnAcept.Size = new Size(75, 23);
 			btnAcept.TabIndex = 152;
@@ -218,7 +228,7 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new Point(359, 781);
+			btnCancel.Location = new Point(323, 730);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new Size(75, 23);
 			btnCancel.TabIndex = 153;
@@ -229,16 +239,16 @@
 			// clbCuadrilla
 			// 
 			clbCuadrilla.FormattingEnabled = true;
-			clbCuadrilla.Location = new Point(12, 639);
+			clbCuadrilla.Location = new Point(15, 103);
 			clbCuadrilla.Name = "clbCuadrilla";
-			clbCuadrilla.Size = new Size(295, 130);
+			clbCuadrilla.Size = new Size(277, 76);
 			clbCuadrilla.TabIndex = 154;
 			// 
 			// lblCuadrilla
 			// 
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCuadrilla.Location = new Point(12, 617);
+			lblCuadrilla.Location = new Point(15, 81);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(66, 17);
 			lblCuadrilla.TabIndex = 155;
@@ -254,90 +264,10 @@
 			pllDescanso.Controls.Add(nudHorasDescanso);
 			pllDescanso.Controls.Add(dtpDescansoFinal);
 			pllDescanso.Controls.Add(dtpDescansoInicial);
-			pllDescanso.Location = new Point(12, 292);
+			pllDescanso.Location = new Point(13, 543);
 			pllDescanso.Name = "pllDescanso";
-			pllDescanso.Size = new Size(419, 77);
+			pllDescanso.Size = new Size(384, 77);
 			pllDescanso.TabIndex = 156;
-			// 
-			// dtpDescansoInicial
-			// 
-			dtpDescansoInicial.CustomFormat = "HH:mm:ss";
-			dtpDescansoInicial.Format = DateTimePickerFormat.Custom;
-			dtpDescansoInicial.Location = new Point(9, 34);
-			dtpDescansoInicial.Name = "dtpDescansoInicial";
-			dtpDescansoInicial.ShowUpDown = true;
-			dtpDescansoInicial.Size = new Size(79, 23);
-			dtpDescansoInicial.TabIndex = 5;
-			// 
-			// pllComida
-			// 
-			pllComida.BackColor = SystemColors.ActiveCaption;
-			pllComida.BorderStyle = BorderStyle.FixedSingle;
-			pllComida.Controls.Add(lblComidaHora);
-			pllComida.Controls.Add(lblComidaFinal);
-			pllComida.Controls.Add(lblComicaInicial);
-			pllComida.Controls.Add(nudComidaHora);
-			pllComida.Controls.Add(dtpComidaFinal);
-			pllComida.Controls.Add(dtpComidaInicial);
-			pllComida.Location = new Point(12, 404);
-			pllComida.Name = "pllComida";
-			pllComida.Size = new Size(419, 77);
-			pllComida.TabIndex = 157;
-			// 
-			// pllCena
-			// 
-			pllCena.BackColor = SystemColors.ActiveCaption;
-			pllCena.BorderStyle = BorderStyle.FixedSingle;
-			pllCena.Controls.Add(lblCenaHora);
-			pllCena.Controls.Add(lblCenaFinal);
-			pllCena.Controls.Add(lblCenaInicial);
-			pllCena.Controls.Add(nudCenaHora);
-			pllCena.Controls.Add(dtpCenaFinal);
-			pllCena.Controls.Add(dtpCenaInicial);
-			pllCena.Location = new Point(12, 514);
-			pllCena.Name = "pllCena";
-			pllCena.Size = new Size(419, 77);
-			pllCena.TabIndex = 158;
-			// 
-			// dtpDescansoFinal
-			// 
-			dtpDescansoFinal.CustomFormat = "HH:mm:ss";
-			dtpDescansoFinal.Format = DateTimePickerFormat.Custom;
-			dtpDescansoFinal.Location = new Point(155, 34);
-			dtpDescansoFinal.Name = "dtpDescansoFinal";
-			dtpDescansoFinal.ShowUpDown = true;
-			dtpDescansoFinal.Size = new Size(79, 23);
-			dtpDescansoFinal.TabIndex = 6;
-			// 
-			// nudHorasDescanso
-			// 
-			nudHorasDescanso.DecimalPlaces = 2;
-			nudHorasDescanso.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-			nudHorasDescanso.Location = new Point(319, 34);
-			nudHorasDescanso.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
-			nudHorasDescanso.Name = "nudHorasDescanso";
-			nudHorasDescanso.Size = new Size(44, 23);
-			nudHorasDescanso.TabIndex = 164;
-			// 
-			// lblDescansoInicial
-			// 
-			lblDescansoInicial.AutoSize = true;
-			lblDescansoInicial.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblDescansoInicial.Location = new Point(9, 16);
-			lblDescansoInicial.Name = "lblDescansoInicial";
-			lblDescansoInicial.Size = new Size(72, 15);
-			lblDescansoInicial.TabIndex = 165;
-			lblDescansoInicial.Text = "Hora Inicial:";
-			// 
-			// lblDescansoFinal
-			// 
-			lblDescansoFinal.AutoSize = true;
-			lblDescansoFinal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblDescansoFinal.Location = new Point(155, 16);
-			lblDescansoFinal.Name = "lblDescansoFinal";
-			lblDescansoFinal.Size = new Size(65, 15);
-			lblDescansoFinal.TabIndex = 166;
-			lblDescansoFinal.Text = "Hora Final:";
 			// 
 			// lblDescansoHora
 			// 
@@ -349,25 +279,74 @@
 			lblDescansoHora.TabIndex = 167;
 			lblDescansoHora.Text = "Hora:";
 			// 
-			// lblDescanso
+			// lblDescansoFinal
 			// 
-			lblDescanso.AutoSize = true;
-			lblDescanso.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblDescanso.Location = new Point(168, 268);
-			lblDescanso.Name = "lblDescanso";
-			lblDescanso.Size = new Size(79, 21);
-			lblDescanso.TabIndex = 159;
-			lblDescanso.Text = "Descanso";
+			lblDescansoFinal.AutoSize = true;
+			lblDescansoFinal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblDescansoFinal.Location = new Point(155, 16);
+			lblDescansoFinal.Name = "lblDescansoFinal";
+			lblDescansoFinal.Size = new Size(65, 15);
+			lblDescansoFinal.TabIndex = 166;
+			lblDescansoFinal.Text = "Hora Final:";
 			// 
-			// lblComida
+			// lblDescansoInicial
 			// 
-			lblComida.AutoSize = true;
-			lblComida.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblComida.Location = new Point(168, 380);
-			lblComida.Name = "lblComida";
-			lblComida.Size = new Size(66, 21);
-			lblComida.TabIndex = 160;
-			lblComida.Text = "Comida";
+			lblDescansoInicial.AutoSize = true;
+			lblDescansoInicial.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblDescansoInicial.Location = new Point(9, 16);
+			lblDescansoInicial.Name = "lblDescansoInicial";
+			lblDescansoInicial.Size = new Size(72, 15);
+			lblDescansoInicial.TabIndex = 165;
+			lblDescansoInicial.Text = "Hora Inicial:";
+			// 
+			// nudHorasDescanso
+			// 
+			nudHorasDescanso.DecimalPlaces = 2;
+			nudHorasDescanso.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+			nudHorasDescanso.Location = new Point(319, 34);
+			nudHorasDescanso.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+			nudHorasDescanso.Name = "nudHorasDescanso";
+			nudHorasDescanso.Size = new Size(44, 23);
+			nudHorasDescanso.TabIndex = 164;
+			// 
+			// dtpDescansoFinal
+			// 
+			dtpDescansoFinal.CustomFormat = "HH:mm:ss";
+			dtpDescansoFinal.Format = DateTimePickerFormat.Custom;
+			dtpDescansoFinal.Location = new Point(155, 34);
+			dtpDescansoFinal.Name = "dtpDescansoFinal";
+			dtpDescansoFinal.ShowCheckBox = true;
+			dtpDescansoFinal.ShowUpDown = true;
+			dtpDescansoFinal.Size = new Size(93, 23);
+			dtpDescansoFinal.TabIndex = 6;
+			dtpDescansoFinal.ValueChanged += dtpDescansoFinal_ValueChanged;
+			// 
+			// dtpDescansoInicial
+			// 
+			dtpDescansoInicial.CustomFormat = "HH:mm:ss";
+			dtpDescansoInicial.Format = DateTimePickerFormat.Custom;
+			dtpDescansoInicial.Location = new Point(9, 34);
+			dtpDescansoInicial.Name = "dtpDescansoInicial";
+			dtpDescansoInicial.ShowCheckBox = true;
+			dtpDescansoInicial.ShowUpDown = true;
+			dtpDescansoInicial.Size = new Size(91, 23);
+			dtpDescansoInicial.TabIndex = 5;
+			dtpDescansoInicial.ValueChanged += dtpDescansoInicial_ValueChanged;
+			// 
+			// pllComida
+			// 
+			pllComida.BackColor = SystemColors.ActiveCaption;
+			pllComida.BorderStyle = BorderStyle.FixedSingle;
+			pllComida.Controls.Add(lblComidaHora);
+			pllComida.Controls.Add(lblComidaFinal);
+			pllComida.Controls.Add(lblComicaInicial);
+			pllComida.Controls.Add(nudComidaHora);
+			pllComida.Controls.Add(dtpComidaFinal);
+			pllComida.Controls.Add(dtpComidaInicial);
+			pllComida.Location = new Point(13, 337);
+			pllComida.Name = "pllComida";
+			pllComida.Size = new Size(384, 77);
+			pllComida.TabIndex = 157;
 			// 
 			// lblComidaHora
 			// 
@@ -415,9 +394,11 @@
 			dtpComidaFinal.Format = DateTimePickerFormat.Custom;
 			dtpComidaFinal.Location = new Point(155, 35);
 			dtpComidaFinal.Name = "dtpComidaFinal";
+			dtpComidaFinal.ShowCheckBox = true;
 			dtpComidaFinal.ShowUpDown = true;
-			dtpComidaFinal.Size = new Size(79, 23);
+			dtpComidaFinal.Size = new Size(93, 23);
 			dtpComidaFinal.TabIndex = 169;
+			dtpComidaFinal.ValueChanged += dtpComidaFinal_ValueChanged;
 			// 
 			// dtpComidaInicial
 			// 
@@ -425,9 +406,26 @@
 			dtpComidaInicial.Format = DateTimePickerFormat.Custom;
 			dtpComidaInicial.Location = new Point(9, 35);
 			dtpComidaInicial.Name = "dtpComidaInicial";
+			dtpComidaInicial.ShowCheckBox = true;
 			dtpComidaInicial.ShowUpDown = true;
-			dtpComidaInicial.Size = new Size(79, 23);
+			dtpComidaInicial.Size = new Size(91, 23);
 			dtpComidaInicial.TabIndex = 168;
+			dtpComidaInicial.ValueChanged += dtpDinicial2_ValueChanged;
+			// 
+			// pllCena
+			// 
+			pllCena.BackColor = SystemColors.ActiveCaption;
+			pllCena.BorderStyle = BorderStyle.FixedSingle;
+			pllCena.Controls.Add(lblCenaHora);
+			pllCena.Controls.Add(lblCenaFinal);
+			pllCena.Controls.Add(lblCenaInicial);
+			pllCena.Controls.Add(nudCenaHora);
+			pllCena.Controls.Add(dtpCenaFinal);
+			pllCena.Controls.Add(dtpCenaInicial);
+			pllCena.Location = new Point(10, 441);
+			pllCena.Name = "pllCena";
+			pllCena.Size = new Size(387, 77);
+			pllCena.TabIndex = 158;
 			// 
 			// lblCenaHora
 			// 
@@ -475,9 +473,11 @@
 			dtpCenaFinal.Format = DateTimePickerFormat.Custom;
 			dtpCenaFinal.Location = new Point(155, 38);
 			dtpCenaFinal.Name = "dtpCenaFinal";
+			dtpCenaFinal.ShowCheckBox = true;
 			dtpCenaFinal.ShowUpDown = true;
-			dtpCenaFinal.Size = new Size(79, 23);
+			dtpCenaFinal.Size = new Size(96, 23);
 			dtpCenaFinal.TabIndex = 175;
+			dtpCenaFinal.ValueChanged += dtpCenaFinal_ValueChanged;
 			// 
 			// dtpCenaInicial
 			// 
@@ -485,25 +485,138 @@
 			dtpCenaInicial.Format = DateTimePickerFormat.Custom;
 			dtpCenaInicial.Location = new Point(9, 38);
 			dtpCenaInicial.Name = "dtpCenaInicial";
+			dtpCenaInicial.ShowCheckBox = true;
 			dtpCenaInicial.ShowUpDown = true;
-			dtpCenaInicial.Size = new Size(79, 23);
+			dtpCenaInicial.Size = new Size(94, 23);
 			dtpCenaInicial.TabIndex = 174;
+			dtpCenaInicial.ValueChanged += dtpCenaInicial_ValueChanged;
+			// 
+			// lblDescanso
+			// 
+			lblDescanso.AutoSize = true;
+			lblDescanso.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblDescanso.Location = new Point(169, 519);
+			lblDescanso.Name = "lblDescanso";
+			lblDescanso.Size = new Size(79, 21);
+			lblDescanso.TabIndex = 159;
+			lblDescanso.Text = "Descanso";
+			// 
+			// lblComida
+			// 
+			lblComida.AutoSize = true;
+			lblComida.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblComida.Location = new Point(165, 313);
+			lblComida.Name = "lblComida";
+			lblComida.Size = new Size(66, 21);
+			lblComida.TabIndex = 160;
+			lblComida.Text = "Comida";
 			// 
 			// lblCena
 			// 
 			lblCena.AutoSize = true;
 			lblCena.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCena.Location = new Point(168, 490);
+			lblCena.Location = new Point(165, 417);
 			lblCena.Name = "lblCena";
 			lblCena.Size = new Size(46, 21);
 			lblCena.TabIndex = 161;
 			lblCena.Text = "Cena";
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.Location = new Point(169, 623);
+			label1.Name = "label1";
+			label1.Size = new Size(92, 21);
+			label1.TabIndex = 163;
+			label1.Text = "Descanso 2";
+			// 
+			// panel1
+			// 
+			panel1.BackColor = SystemColors.ActiveCaption;
+			panel1.BorderStyle = BorderStyle.FixedSingle;
+			panel1.Controls.Add(label2);
+			panel1.Controls.Add(label3);
+			panel1.Controls.Add(label4);
+			panel1.Controls.Add(nudD2);
+			panel1.Controls.Add(dtpDf2);
+			panel1.Controls.Add(dtpD2);
+			panel1.Location = new Point(13, 647);
+			panel1.Name = "panel1";
+			panel1.Size = new Size(384, 77);
+			panel1.TabIndex = 162;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label2.Location = new Point(319, 16);
+			label2.Name = "label2";
+			label2.Size = new Size(37, 15);
+			label2.TabIndex = 167;
+			label2.Text = "Hora:";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label3.Location = new Point(155, 16);
+			label3.Name = "label3";
+			label3.Size = new Size(65, 15);
+			label3.TabIndex = 166;
+			label3.Text = "Hora Final:";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label4.Location = new Point(9, 16);
+			label4.Name = "label4";
+			label4.Size = new Size(72, 15);
+			label4.TabIndex = 165;
+			label4.Text = "Hora Inicial:";
+			// 
+			// nudD2
+			// 
+			nudD2.DecimalPlaces = 2;
+			nudD2.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+			nudD2.Location = new Point(319, 34);
+			nudD2.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+			nudD2.Name = "nudD2";
+			nudD2.Size = new Size(44, 23);
+			nudD2.TabIndex = 164;
+			// 
+			// dtpDf2
+			// 
+			dtpDf2.CustomFormat = "HH:mm:ss";
+			dtpDf2.Format = DateTimePickerFormat.Custom;
+			dtpDf2.Location = new Point(155, 34);
+			dtpDf2.Name = "dtpDf2";
+			dtpDf2.ShowCheckBox = true;
+			dtpDf2.ShowUpDown = true;
+			dtpDf2.Size = new Size(92, 23);
+			dtpDf2.TabIndex = 6;
+			dtpDf2.ValueChanged += dtpDf2_ValueChanged;
+			// 
+			// dtpD2
+			// 
+			dtpD2.CustomFormat = "HH:mm:ss";
+			dtpD2.Format = DateTimePickerFormat.Custom;
+			dtpD2.Location = new Point(9, 34);
+			dtpD2.Name = "dtpD2";
+			dtpD2.ShowCheckBox = true;
+			dtpD2.ShowUpDown = true;
+			dtpD2.Size = new Size(91, 23);
+			dtpD2.TabIndex = 5;
+			dtpD2.ValueChanged += dtpD2_ValueChanged;
+			// 
 			// FrmAñadir
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(436, 816);
+			ClientSize = new Size(411, 759);
+			Controls.Add(label1);
+			Controls.Add(panel1);
 			Controls.Add(lblCena);
 			Controls.Add(lblComida);
 			Controls.Add(lblDescanso);
@@ -527,13 +640,16 @@
 			((System.ComponentModel.ISupportInitialize)nudOvertime).EndInit();
 			pllDescanso.ResumeLayout(false);
 			pllDescanso.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)nudHorasDescanso).EndInit();
 			pllComida.ResumeLayout(false);
 			pllComida.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)nudComidaHora).EndInit();
 			pllCena.ResumeLayout(false);
 			pllCena.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)nudHorasDescanso).EndInit();
-			((System.ComponentModel.ISupportInitialize)nudComidaHora).EndInit();
 			((System.ComponentModel.ISupportInitialize)nudCenaHora).EndInit();
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)nudD2).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -580,5 +696,13 @@
 		public NumericUpDown nudCenaHora;
 		public DateTimePicker dtpCenaFinal;
 		public DateTimePicker dtpCenaInicial;
+		private Label label1;
+		private Panel panel1;
+		private Label label2;
+		private Label label3;
+		private Label label4;
+		public NumericUpDown nudD2;
+		public DateTimePicker dtpDf2;
+		public DateTimePicker dtpD2;
 	}
 }
