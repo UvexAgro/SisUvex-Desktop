@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace SisUvex.Facility.FaciIityPackagingTracking.Catalog
             cls ??= new();
             cls._frmCat ??= this;
             cls.BeginFormCat();
+            
+            HasEditCatalogsPermission();
+        }
+
+        private void HasEditCatalogsPermission()
+        {
+            if (User.HasEditCatalogsPermission())
+                return;
+
+            btnAdd.Enabled = false;
+            btnModify.Enabled = false;
+            btnRemove.Enabled = false;
+            btnRecover.Enabled = false;
+            
+            dgvCatalog.CellMouseDoubleClick -= dgvCatalog_CellMouseDoubleClick;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
