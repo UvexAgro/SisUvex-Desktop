@@ -151,6 +151,9 @@
             txbIdMarket = new TextBox();
             chbPrintManifestPerField = new CheckBox();
             chbExcelLayout = new CheckBox();
+            label22 = new Label();
+            txbThermometerContainer = new TextBox();
+            btnEditTherFco = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -161,7 +164,7 @@
             btnPrintManifest.Location = new Point(638, 569);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
-            btnPrintManifest.TabIndex = 350;
+            btnPrintManifest.TabIndex = 86;
             btnPrintManifest.UseVisualStyleBackColor = true;
             btnPrintManifest.Click += btnPrintManifest_Click;
             // 
@@ -171,7 +174,7 @@
             btnAccept.Location = new Point(446, 569);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
-            btnAccept.TabIndex = 254;
+            btnAccept.TabIndex = 84;
             btnAccept.Text = "Aceptar";
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
@@ -182,7 +185,7 @@
             btnCancel.Location = new Point(512, 569);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
-            btnCancel.TabIndex = 253;
+            btnCancel.TabIndex = 85;
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -205,7 +208,7 @@
             txbPhytosanitary.MaxLength = 30;
             txbPhytosanitary.Name = "txbPhytosanitary";
             txbPhytosanitary.Size = new Size(211, 21);
-            txbPhytosanitary.TabIndex = 356;
+            txbPhytosanitary.TabIndex = 40;
             // 
             // txbDieselLiters
             // 
@@ -214,7 +217,7 @@
             txbDieselLiters.MaxLength = 15;
             txbDieselLiters.Name = "txbDieselLiters";
             txbDieselLiters.Size = new Size(102, 21);
-            txbDieselLiters.TabIndex = 353;
+            txbDieselLiters.TabIndex = 72;
             txbDieselLiters.TextAlign = HorizontalAlignment.Center;
             txbDieselLiters.KeyPress += txbDieselLiters_KeyPress;
             // 
@@ -236,7 +239,7 @@
             txbDieselInvoice.MaxLength = 15;
             txbDieselInvoice.Name = "txbDieselInvoice";
             txbDieselInvoice.Size = new Size(102, 21);
-            txbDieselInvoice.TabIndex = 351;
+            txbDieselInvoice.TabIndex = 71;
             txbDieselInvoice.TextAlign = HorizontalAlignment.Center;
             // 
             // txbPalletPosition
@@ -246,7 +249,7 @@
             txbPalletPosition.MaxLength = 2;
             txbPalletPosition.Name = "txbPalletPosition";
             txbPalletPosition.Size = new Size(26, 21);
-            txbPalletPosition.TabIndex = 349;
+            txbPalletPosition.TabIndex = 76;
             txbPalletPosition.KeyPress += txbPalletPosition_KeyPress;
             // 
             // lblPosicionPal
@@ -296,7 +299,7 @@
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPalletList.Size = new Size(347, 508);
-            dgvPalletList.TabIndex = 347;
+            dgvPalletList.TabIndex = 83;
             // 
             // chbRejected
             // 
@@ -305,7 +308,7 @@
             chbRejected.Location = new Point(706, 30);
             chbRejected.Name = "chbRejected";
             chbRejected.Size = new Size(89, 19);
-            chbRejected.TabIndex = 346;
+            chbRejected.TabIndex = 81;
             chbRejected.Text = "Rechazado";
             chbRejected.UseVisualStyleBackColor = true;
             // 
@@ -316,7 +319,7 @@
             txbNameOperator.MaxLength = 20;
             txbNameOperator.Name = "txbNameOperator";
             txbNameOperator.Size = new Size(102, 21);
-            txbNameOperator.TabIndex = 344;
+            txbNameOperator.TabIndex = 74;
             txbNameOperator.TextAlign = HorizontalAlignment.Center;
             // 
             // label7
@@ -336,7 +339,7 @@
             txbNameShipper.MaxLength = 20;
             txbNameShipper.Name = "txbNameShipper";
             txbNameShipper.Size = new Size(102, 21);
-            txbNameShipper.TabIndex = 342;
+            txbNameShipper.TabIndex = 73;
             txbNameShipper.TextAlign = HorizontalAlignment.Center;
             // 
             // Mercado
@@ -358,7 +361,7 @@
             dtpDate.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             dtpDate.Name = "dtpDate";
             dtpDate.Size = new Size(84, 21);
-            dtpDate.TabIndex = 340;
+            dtpDate.TabIndex = 2;
             // 
             // lblObservaciones
             // 
@@ -379,7 +382,7 @@
             txbObservations.MaxLength = 200;
             txbObservations.Name = "txbObservations";
             txbObservations.Size = new Size(314, 48);
-            txbObservations.TabIndex = 338;
+            txbObservations.TabIndex = 70;
             txbObservations.Text = "";
             // 
             // btnRemovePallet
@@ -390,7 +393,7 @@
             btnRemovePallet.Location = new Point(600, 28);
             btnRemovePallet.Name = "btnRemovePallet";
             btnRemovePallet.Size = new Size(23, 23);
-            btnRemovePallet.TabIndex = 337;
+            btnRemovePallet.TabIndex = 80;
             btnRemovePallet.TextAlign = ContentAlignment.TopCenter;
             btnRemovePallet.UseVisualStyleBackColor = true;
             btnRemovePallet.Click += btnRemovePallet_Click;
@@ -403,7 +406,7 @@
             btnAddPallet.Location = new Point(523, 28);
             btnAddPallet.Name = "btnAddPallet";
             btnAddPallet.Size = new Size(23, 23);
-            btnAddPallet.TabIndex = 336;
+            btnAddPallet.TabIndex = 77;
             btnAddPallet.TextAlign = ContentAlignment.TopRight;
             btnAddPallet.UseVisualStyleBackColor = true;
             btnAddPallet.Click += btnAddPallet_Click;
@@ -415,7 +418,7 @@
             txbIdPallet.MaxLength = 5;
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(47, 21);
-            txbIdPallet.TabIndex = 334;
+            txbIdPallet.TabIndex = 75;
             txbIdPallet.KeyPress += txbIdPallet_KeyPress;
             // 
             // txbSeal3
@@ -425,7 +428,7 @@
             txbSeal3.MaxLength = 10;
             txbSeal3.Name = "txbSeal3";
             txbSeal3.Size = new Size(102, 21);
-            txbSeal3.TabIndex = 333;
+            txbSeal3.TabIndex = 69;
             txbSeal3.TextAlign = HorizontalAlignment.Center;
             // 
             // txbSeal2
@@ -435,7 +438,7 @@
             txbSeal2.MaxLength = 10;
             txbSeal2.Name = "txbSeal2";
             txbSeal2.Size = new Size(102, 21);
-            txbSeal2.TabIndex = 332;
+            txbSeal2.TabIndex = 68;
             txbSeal2.TextAlign = HorizontalAlignment.Center;
             // 
             // label14
@@ -456,7 +459,7 @@
             txbSeal1.MaxLength = 10;
             txbSeal1.Name = "txbSeal1";
             txbSeal1.Size = new Size(102, 21);
-            txbSeal1.TabIndex = 330;
+            txbSeal1.TabIndex = 67;
             txbSeal1.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTemperatureUnit
@@ -465,26 +468,26 @@
             cboTemperatureUnit.Font = new Font("Microsoft Sans Serif", 9F);
             cboTemperatureUnit.FormattingEnabled = true;
             cboTemperatureUnit.Items.AddRange(new object[] { "F", "C", "K" });
-            cboTemperatureUnit.Location = new Point(391, 469);
+            cboTemperatureUnit.Location = new Point(396, 469);
             cboTemperatureUnit.Name = "cboTemperatureUnit";
             cboTemperatureUnit.Size = new Size(33, 23);
-            cboTemperatureUnit.TabIndex = 329;
+            cboTemperatureUnit.TabIndex = 66;
             // 
             // txbTemperature
             // 
             txbTemperature.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTemperature.Location = new Point(358, 470);
+            txbTemperature.Location = new Point(365, 470);
             txbTemperature.MaxLength = 3;
             txbTemperature.Name = "txbTemperature";
             txbTemperature.Size = new Size(28, 21);
-            txbTemperature.TabIndex = 327;
+            txbTemperature.TabIndex = 65;
             txbTemperature.TextAlign = HorizontalAlignment.Center;
             // 
             // label12
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Microsoft Sans Serif", 9F);
-            label12.Location = new Point(220, 473);
+            label12.Location = new Point(376, 432);
             label12.Name = "label12";
             label12.Size = new Size(57, 15);
             label12.TabIndex = 326;
@@ -494,7 +497,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Microsoft Sans Serif", 9F);
-            label11.Location = new Point(38, 473);
+            label11.Location = new Point(283, 431);
             label11.Name = "label11";
             label11.Size = new Size(80, 15);
             label11.TabIndex = 324;
@@ -504,18 +507,18 @@
             // txbTermograph
             // 
             txbTermograph.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTermograph.Location = new Point(115, 470);
+            txbTermograph.Location = new Point(283, 447);
             txbTermograph.MaxLength = 20;
             txbTermograph.Name = "txbTermograph";
-            txbTermograph.Size = new Size(102, 21);
-            txbTermograph.TabIndex = 323;
+            txbTermograph.Size = new Size(111, 21);
+            txbTermograph.TabIndex = 63;
             txbTermograph.TextAlign = HorizontalAlignment.Center;
             // 
             // label10
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Microsoft Sans Serif", 9F);
-            label10.Location = new Point(20, 450);
+            label10.Location = new Point(20, 472);
             label10.Name = "label10";
             label10.Size = new Size(98, 15);
             label10.TabIndex = 322;
@@ -527,16 +530,16 @@
             cboTransportType.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportType.FormattingEnabled = true;
             cboTransportType.Items.AddRange(new object[] { "", "TRAILER", "CAJA REFRIGERADA", "CONTENEDOR", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboTransportType.Location = new Point(115, 448);
+            cboTransportType.Location = new Point(115, 470);
             cboTransportType.Name = "cboTransportType";
-            cboTransportType.Size = new Size(211, 21);
-            cboTransportType.TabIndex = 321;
+            cboTransportType.Size = new Size(162, 21);
+            cboTransportType.TabIndex = 61;
             // 
             // label9
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Microsoft Sans Serif", 9F);
-            label9.Location = new Point(-2, 428);
+            label9.Location = new Point(-2, 450);
             label9.Name = "label9";
             label9.Size = new Size(120, 15);
             label9.TabIndex = 320;
@@ -548,10 +551,10 @@
             cboTransportVehicle.Font = new Font("Microsoft Sans Serif", 8.25F);
             cboTransportVehicle.FormattingEnabled = true;
             cboTransportVehicle.Items.AddRange(new object[] { "", "TRAILER", "CONTENEDOR", "CAJA REFRIGERADA", "TRACTO CAMION", "CAMIONETA", "BARCO", "AVION", "TERRESTRE AEREO", "MARITIMO AEREO", "TERRESTRE MARITIMO" });
-            cboTransportVehicle.Location = new Point(115, 426);
+            cboTransportVehicle.Location = new Point(115, 448);
             cboTransportVehicle.Name = "cboTransportVehicle";
-            cboTransportVehicle.Size = new Size(211, 21);
-            cboTransportVehicle.TabIndex = 319;
+            cboTransportVehicle.Size = new Size(162, 21);
+            cboTransportVehicle.TabIndex = 60;
             // 
             // btnSearchFreightContainer
             // 
@@ -561,7 +564,7 @@
             btnSearchFreightContainer.Location = new Point(388, 403);
             btnSearchFreightContainer.Name = "btnSearchFreightContainer";
             btnSearchFreightContainer.Size = new Size(23, 23);
-            btnSearchFreightContainer.TabIndex = 311;
+            btnSearchFreightContainer.TabIndex = 55;
             btnSearchFreightContainer.UseVisualStyleBackColor = true;
             btnSearchFreightContainer.Click += btnSearchFreightContainer_Click;
             // 
@@ -573,7 +576,7 @@
             btnSearchTruck.Location = new Point(388, 381);
             btnSearchTruck.Name = "btnSearchTruck";
             btnSearchTruck.Size = new Size(23, 23);
-            btnSearchTruck.TabIndex = 309;
+            btnSearchTruck.TabIndex = 51;
             btnSearchTruck.UseVisualStyleBackColor = true;
             btnSearchTruck.Click += btnSearchTruck_Click;
             // 
@@ -585,7 +588,7 @@
             btnSearchDriver.Location = new Point(388, 359);
             btnSearchDriver.Name = "btnSearchDriver";
             btnSearchDriver.Size = new Size(23, 23);
-            btnSearchDriver.TabIndex = 307;
+            btnSearchDriver.TabIndex = 47;
             btnSearchDriver.UseVisualStyleBackColor = true;
             btnSearchDriver.Click += btnSearchDriver_Click;
             // 
@@ -596,7 +599,7 @@
             txbIdFreightContainer.Location = new Point(115, 404);
             txbIdFreightContainer.Name = "txbIdFreightContainer";
             txbIdFreightContainer.Size = new Size(37, 21);
-            txbIdFreightContainer.TabIndex = 318;
+            txbIdFreightContainer.TabIndex = 53;
             txbIdFreightContainer.TextAlign = HorizontalAlignment.Center;
             // 
             // cboFreightContainer
@@ -608,7 +611,7 @@
             cboFreightContainer.Location = new Point(153, 404);
             cboFreightContainer.Name = "cboFreightContainer";
             cboFreightContainer.Size = new Size(235, 21);
-            cboFreightContainer.TabIndex = 306;
+            cboFreightContainer.TabIndex = 54;
             // 
             // label5
             // 
@@ -627,7 +630,7 @@
             txbIdTruck.Location = new Point(115, 382);
             txbIdTruck.Name = "txbIdTruck";
             txbIdTruck.Size = new Size(37, 21);
-            txbIdTruck.TabIndex = 316;
+            txbIdTruck.TabIndex = 49;
             txbIdTruck.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTruck
@@ -639,7 +642,7 @@
             cboTruck.Location = new Point(153, 382);
             cboTruck.Name = "cboTruck";
             cboTruck.Size = new Size(235, 21);
-            cboTruck.TabIndex = 305;
+            cboTruck.TabIndex = 50;
             // 
             // label6
             // 
@@ -659,7 +662,7 @@
             txbIdDriver.Location = new Point(115, 360);
             txbIdDriver.Name = "txbIdDriver";
             txbIdDriver.Size = new Size(37, 21);
-            txbIdDriver.TabIndex = 314;
+            txbIdDriver.TabIndex = 45;
             txbIdDriver.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDriver
@@ -671,7 +674,7 @@
             cboDriver.Location = new Point(153, 360);
             cboDriver.Name = "cboDriver";
             cboDriver.Size = new Size(235, 21);
-            cboDriver.TabIndex = 304;
+            cboDriver.TabIndex = 46;
             // 
             // label8
             // 
@@ -702,7 +705,7 @@
             txbPurchaseOrder.MaxLength = 30;
             txbPurchaseOrder.Name = "txbPurchaseOrder";
             txbPurchaseOrder.Size = new Size(211, 21);
-            txbPurchaseOrder.TabIndex = 302;
+            txbPurchaseOrder.TabIndex = 39;
             // 
             // lblVisa
             // 
@@ -722,7 +725,7 @@
             txbBooking.MaxLength = 30;
             txbBooking.Name = "txbBooking";
             txbBooking.Size = new Size(211, 21);
-            txbBooking.TabIndex = 300;
+            txbBooking.TabIndex = 38;
             // 
             // spnHour
             // 
@@ -731,7 +734,7 @@
             spnHour.Mask = "00:00";
             spnHour.Name = "spnHour";
             spnHour.Size = new Size(38, 21);
-            spnHour.TabIndex = 299;
+            spnHour.TabIndex = 5;
             spnHour.ValidatingType = typeof(DateTime);
             // 
             // btnSearchDistributor
@@ -743,7 +746,7 @@
             btnSearchDistributor.Location = new Point(388, 117);
             btnSearchDistributor.Name = "btnSearchDistributor";
             btnSearchDistributor.Size = new Size(23, 23);
-            btnSearchDistributor.TabIndex = 295;
+            btnSearchDistributor.TabIndex = 12;
             btnSearchDistributor.UseVisualStyleBackColor = true;
             // 
             // txbIdDistributor
@@ -753,7 +756,7 @@
             txbIdDistributor.Location = new Point(115, 118);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(37, 21);
-            txbIdDistributor.TabIndex = 298;
+            txbIdDistributor.TabIndex = 10;
             txbIdDistributor.TextAlign = HorizontalAlignment.Center;
             // 
             // cboDistributor
@@ -765,7 +768,7 @@
             cboDistributor.Location = new Point(153, 118);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(235, 21);
-            cboDistributor.TabIndex = 294;
+            cboDistributor.TabIndex = 11;
             // 
             // label3
             // 
@@ -787,7 +790,7 @@
             btnSearchConsignee.Location = new Point(388, 139);
             btnSearchConsignee.Name = "btnSearchConsignee";
             btnSearchConsignee.Size = new Size(23, 23);
-            btnSearchConsignee.TabIndex = 290;
+            btnSearchConsignee.TabIndex = 16;
             btnSearchConsignee.UseVisualStyleBackColor = true;
             // 
             // txbIdConsignee
@@ -797,7 +800,7 @@
             txbIdConsignee.Location = new Point(115, 140);
             txbIdConsignee.Name = "txbIdConsignee";
             txbIdConsignee.Size = new Size(37, 21);
-            txbIdConsignee.TabIndex = 293;
+            txbIdConsignee.TabIndex = 14;
             txbIdConsignee.TextAlign = HorizontalAlignment.Center;
             // 
             // cboConsignee
@@ -809,7 +812,7 @@
             cboConsignee.Location = new Point(153, 140);
             cboConsignee.Name = "cboConsignee";
             cboConsignee.Size = new Size(235, 21);
-            cboConsignee.TabIndex = 289;
+            cboConsignee.TabIndex = 15;
             // 
             // label16
             // 
@@ -831,7 +834,7 @@
             btnSearchCityDestination.Location = new Point(388, 249);
             btnSearchCityDestination.Name = "btnSearchCityDestination";
             btnSearchCityDestination.Size = new Size(23, 23);
-            btnSearchCityDestination.TabIndex = 277;
+            btnSearchCityDestination.TabIndex = 36;
             btnSearchCityDestination.UseVisualStyleBackColor = true;
             // 
             // btnSearchCityCrossPoint
@@ -843,7 +846,7 @@
             btnSearchCityCrossPoint.Location = new Point(388, 227);
             btnSearchCityCrossPoint.Name = "btnSearchCityCrossPoint";
             btnSearchCityCrossPoint.Size = new Size(23, 23);
-            btnSearchCityCrossPoint.TabIndex = 275;
+            btnSearchCityCrossPoint.TabIndex = 32;
             btnSearchCityCrossPoint.UseVisualStyleBackColor = true;
             // 
             // btnSearchGrower
@@ -855,7 +858,7 @@
             btnSearchGrower.Location = new Point(388, 161);
             btnSearchGrower.Name = "btnSearchGrower";
             btnSearchGrower.Size = new Size(23, 23);
-            btnSearchGrower.TabIndex = 273;
+            btnSearchGrower.TabIndex = 20;
             btnSearchGrower.UseVisualStyleBackColor = true;
             // 
             // btnSearchAgencyMX
@@ -867,7 +870,7 @@
             btnSearchAgencyMX.Location = new Point(388, 205);
             btnSearchAgencyMX.Name = "btnSearchAgencyMX";
             btnSearchAgencyMX.Size = new Size(23, 23);
-            btnSearchAgencyMX.TabIndex = 270;
+            btnSearchAgencyMX.TabIndex = 28;
             btnSearchAgencyMX.UseVisualStyleBackColor = true;
             // 
             // btnSearchAgencyUS
@@ -879,7 +882,7 @@
             btnSearchAgencyUS.Location = new Point(388, 183);
             btnSearchAgencyUS.Name = "btnSearchAgencyUS";
             btnSearchAgencyUS.Size = new Size(23, 23);
-            btnSearchAgencyUS.TabIndex = 269;
+            btnSearchAgencyUS.TabIndex = 24;
             btnSearchAgencyUS.UseVisualStyleBackColor = true;
             // 
             // txbIdCityDestination
@@ -889,7 +892,7 @@
             txbIdCityDestination.Location = new Point(115, 250);
             txbIdCityDestination.Name = "txbIdCityDestination";
             txbIdCityDestination.Size = new Size(37, 21);
-            txbIdCityDestination.TabIndex = 288;
+            txbIdCityDestination.TabIndex = 34;
             txbIdCityDestination.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCityDestination
@@ -901,7 +904,7 @@
             cboCityDestination.Location = new Point(153, 250);
             cboCityDestination.Name = "cboCityDestination";
             cboCityDestination.Size = new Size(235, 21);
-            cboCityDestination.TabIndex = 268;
+            cboCityDestination.TabIndex = 35;
             // 
             // lblCiudadDestino
             // 
@@ -921,7 +924,7 @@
             txbIdCityCrossPoint.Location = new Point(115, 228);
             txbIdCityCrossPoint.Name = "txbIdCityCrossPoint";
             txbIdCityCrossPoint.Size = new Size(37, 21);
-            txbIdCityCrossPoint.TabIndex = 286;
+            txbIdCityCrossPoint.TabIndex = 30;
             txbIdCityCrossPoint.TextAlign = HorizontalAlignment.Center;
             // 
             // cboCityCrossPoint
@@ -933,7 +936,7 @@
             cboCityCrossPoint.Location = new Point(153, 228);
             cboCityCrossPoint.Name = "cboCityCrossPoint";
             cboCityCrossPoint.Size = new Size(235, 21);
-            cboCityCrossPoint.TabIndex = 267;
+            cboCityCrossPoint.TabIndex = 31;
             // 
             // lblCiudadCruce
             // 
@@ -953,7 +956,7 @@
             txbIdGrower.Location = new Point(115, 162);
             txbIdGrower.Name = "txbIdGrower";
             txbIdGrower.Size = new Size(37, 21);
-            txbIdGrower.TabIndex = 284;
+            txbIdGrower.TabIndex = 18;
             txbIdGrower.TextAlign = HorizontalAlignment.Center;
             // 
             // cboGrower
@@ -965,7 +968,7 @@
             cboGrower.Location = new Point(153, 162);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(235, 21);
-            cboGrower.TabIndex = 266;
+            cboGrower.TabIndex = 19;
             // 
             // lblProductor
             // 
@@ -985,7 +988,7 @@
             txbIdAgencyUS.Location = new Point(115, 184);
             txbIdAgencyUS.Name = "txbIdAgencyUS";
             txbIdAgencyUS.Size = new Size(37, 21);
-            txbIdAgencyUS.TabIndex = 282;
+            txbIdAgencyUS.TabIndex = 22;
             txbIdAgencyUS.TextAlign = HorizontalAlignment.Center;
             // 
             // cboAgencyUS
@@ -997,7 +1000,7 @@
             cboAgencyUS.Location = new Point(153, 184);
             cboAgencyUS.Name = "cboAgencyUS";
             cboAgencyUS.Size = new Size(235, 21);
-            cboAgencyUS.TabIndex = 264;
+            cboAgencyUS.TabIndex = 23;
             // 
             // lblAgenciaUS
             // 
@@ -1017,7 +1020,7 @@
             txbIdAgencyMX.Location = new Point(115, 206);
             txbIdAgencyMX.Name = "txbIdAgencyMX";
             txbIdAgencyMX.Size = new Size(37, 21);
-            txbIdAgencyMX.TabIndex = 280;
+            txbIdAgencyMX.TabIndex = 26;
             txbIdAgencyMX.TextAlign = HorizontalAlignment.Center;
             // 
             // cboAgencyMX
@@ -1029,7 +1032,7 @@
             cboAgencyMX.Location = new Point(153, 206);
             cboAgencyMX.Name = "cboAgencyMX";
             cboAgencyMX.Size = new Size(235, 21);
-            cboAgencyMX.TabIndex = 265;
+            cboAgencyMX.TabIndex = 27;
             // 
             // lblAcenciaMX
             // 
@@ -1070,7 +1073,7 @@
             cboMarket.Location = new Point(153, 52);
             cboMarket.Name = "cboMarket";
             cboMarket.Size = new Size(137, 21);
-            cboMarket.TabIndex = 261;
+            cboMarket.TabIndex = 4;
             // 
             // cboActive
             // 
@@ -1081,7 +1084,7 @@
             cboActive.Location = new Point(216, 30);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(37, 21);
-            cboActive.TabIndex = 260;
+            cboActive.TabIndex = 1;
             // 
             // lblLinea
             // 
@@ -1102,7 +1105,7 @@
             btnSearchTransportLine.Location = new Point(388, 337);
             btnSearchTransportLine.Name = "btnSearchTransportLine";
             btnSearchTransportLine.Size = new Size(23, 23);
-            btnSearchTransportLine.TabIndex = 257;
+            btnSearchTransportLine.TabIndex = 43;
             btnSearchTransportLine.UseVisualStyleBackColor = true;
             btnSearchTransportLine.Click += btnSearchTransportLine_Click;
             // 
@@ -1113,7 +1116,7 @@
             txbIdTransportLine.Location = new Point(115, 338);
             txbIdTransportLine.Name = "txbIdTransportLine";
             txbIdTransportLine.Size = new Size(37, 21);
-            txbIdTransportLine.TabIndex = 259;
+            txbIdTransportLine.TabIndex = 41;
             txbIdTransportLine.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTransportLine
@@ -1125,7 +1128,7 @@
             cboTransportLine.Location = new Point(153, 338);
             cboTransportLine.Name = "cboTransportLine";
             cboTransportLine.Size = new Size(235, 21);
-            cboTransportLine.TabIndex = 256;
+            cboTransportLine.TabIndex = 42;
             // 
             // txbId
             // 
@@ -1135,7 +1138,7 @@
             txbId.Location = new Point(115, 30);
             txbId.Name = "txbId";
             txbId.Size = new Size(50, 21);
-            txbId.TabIndex = 251;
+            txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
             // 
             // lblTitle
@@ -1193,7 +1196,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Microsoft Sans Serif", 9F);
-            label13.Location = new Point(309, 473);
+            label13.Location = new Point(316, 473);
             label13.Name = "label13";
             label13.Size = new Size(50, 15);
             label13.TabIndex = 328;
@@ -1208,7 +1211,7 @@
             btnConfManifest.Location = new Point(771, 2);
             btnConfManifest.Name = "btnConfManifest";
             btnConfManifest.Size = new Size(24, 24);
-            btnConfManifest.TabIndex = 358;
+            btnConfManifest.TabIndex = 82;
             btnConfManifest.TextAlign = ContentAlignment.TopRight;
             btnConfManifest.UseVisualStyleBackColor = true;
             btnConfManifest.Click += btnConfManifest_Click;
@@ -1222,7 +1225,7 @@
             cboSeason.Location = new Point(153, 74);
             cboSeason.Name = "cboSeason";
             cboSeason.Size = new Size(193, 21);
-            cboSeason.TabIndex = 359;
+            cboSeason.TabIndex = 7;
             // 
             // label2
             // 
@@ -1255,7 +1258,7 @@
             chbRemovedConsignee.Location = new Point(410, 139);
             chbRemovedConsignee.Name = "chbRemovedConsignee";
             chbRemovedConsignee.Size = new Size(23, 23);
-            chbRemovedConsignee.TabIndex = 363;
+            chbRemovedConsignee.TabIndex = 17;
             chbRemovedConsignee.Text = "  ";
             chbRemovedConsignee.UseVisualStyleBackColor = true;
             // 
@@ -1269,7 +1272,7 @@
             chbRemovedAgencyUS.Location = new Point(410, 183);
             chbRemovedAgencyUS.Name = "chbRemovedAgencyUS";
             chbRemovedAgencyUS.Size = new Size(23, 23);
-            chbRemovedAgencyUS.TabIndex = 365;
+            chbRemovedAgencyUS.TabIndex = 25;
             chbRemovedAgencyUS.Text = "  ";
             chbRemovedAgencyUS.UseVisualStyleBackColor = true;
             // 
@@ -1283,7 +1286,7 @@
             chbRemovedGrower.Location = new Point(410, 161);
             chbRemovedGrower.Name = "chbRemovedGrower";
             chbRemovedGrower.Size = new Size(23, 23);
-            chbRemovedGrower.TabIndex = 364;
+            chbRemovedGrower.TabIndex = 21;
             chbRemovedGrower.Text = "  ";
             chbRemovedGrower.UseVisualStyleBackColor = true;
             // 
@@ -1297,7 +1300,7 @@
             chbRemovedCityCrossPoint.Location = new Point(410, 227);
             chbRemovedCityCrossPoint.Name = "chbRemovedCityCrossPoint";
             chbRemovedCityCrossPoint.Size = new Size(23, 23);
-            chbRemovedCityCrossPoint.TabIndex = 367;
+            chbRemovedCityCrossPoint.TabIndex = 33;
             chbRemovedCityCrossPoint.Text = "  ";
             chbRemovedCityCrossPoint.UseVisualStyleBackColor = true;
             // 
@@ -1311,7 +1314,7 @@
             chbRemovedAgencyMX.Location = new Point(410, 205);
             chbRemovedAgencyMX.Name = "chbRemovedAgencyMX";
             chbRemovedAgencyMX.Size = new Size(23, 23);
-            chbRemovedAgencyMX.TabIndex = 366;
+            chbRemovedAgencyMX.TabIndex = 29;
             chbRemovedAgencyMX.Text = "  ";
             chbRemovedAgencyMX.UseVisualStyleBackColor = true;
             // 
@@ -1325,7 +1328,7 @@
             chbRemovedCityDestination.Location = new Point(410, 249);
             chbRemovedCityDestination.Name = "chbRemovedCityDestination";
             chbRemovedCityDestination.Size = new Size(23, 23);
-            chbRemovedCityDestination.TabIndex = 372;
+            chbRemovedCityDestination.TabIndex = 37;
             chbRemovedCityDestination.Text = "  ";
             chbRemovedCityDestination.UseVisualStyleBackColor = true;
             // 
@@ -1339,7 +1342,7 @@
             chbRemovedFreightContainer.Location = new Point(410, 403);
             chbRemovedFreightContainer.Name = "chbRemovedFreightContainer";
             chbRemovedFreightContainer.Size = new Size(23, 23);
-            chbRemovedFreightContainer.TabIndex = 371;
+            chbRemovedFreightContainer.TabIndex = 56;
             chbRemovedFreightContainer.Text = "  ";
             chbRemovedFreightContainer.UseVisualStyleBackColor = true;
             // 
@@ -1353,7 +1356,7 @@
             chbRemovedTruck.Location = new Point(410, 381);
             chbRemovedTruck.Name = "chbRemovedTruck";
             chbRemovedTruck.Size = new Size(23, 23);
-            chbRemovedTruck.TabIndex = 370;
+            chbRemovedTruck.TabIndex = 52;
             chbRemovedTruck.Text = "  ";
             chbRemovedTruck.UseVisualStyleBackColor = true;
             // 
@@ -1367,7 +1370,7 @@
             chbRemovedDriver.Location = new Point(410, 359);
             chbRemovedDriver.Name = "chbRemovedDriver";
             chbRemovedDriver.Size = new Size(23, 23);
-            chbRemovedDriver.TabIndex = 369;
+            chbRemovedDriver.TabIndex = 48;
             chbRemovedDriver.Text = "  ";
             chbRemovedDriver.UseVisualStyleBackColor = true;
             // 
@@ -1381,7 +1384,7 @@
             chbRemovedTransportLine.Location = new Point(410, 337);
             chbRemovedTransportLine.Name = "chbRemovedTransportLine";
             chbRemovedTransportLine.Size = new Size(23, 23);
-            chbRemovedTransportLine.TabIndex = 368;
+            chbRemovedTransportLine.TabIndex = 44;
             chbRemovedTransportLine.Text = "  ";
             chbRemovedTransportLine.UseVisualStyleBackColor = true;
             // 
@@ -1395,18 +1398,18 @@
             chbRemovedDistributor.Location = new Point(410, 117);
             chbRemovedDistributor.Name = "chbRemovedDistributor";
             chbRemovedDistributor.Size = new Size(23, 23);
-            chbRemovedDistributor.TabIndex = 373;
+            chbRemovedDistributor.TabIndex = 13;
             chbRemovedDistributor.Text = "  ";
             chbRemovedDistributor.UseVisualStyleBackColor = true;
             // 
             // txbTermoPosition
             // 
             txbTermoPosition.Font = new Font("Microsoft Sans Serif", 9F);
-            txbTermoPosition.Location = new Point(275, 470);
+            txbTermoPosition.Location = new Point(397, 447);
             txbTermoPosition.MaxLength = 2;
             txbTermoPosition.Name = "txbTermoPosition";
             txbTermoPosition.Size = new Size(32, 21);
-            txbTermoPosition.TabIndex = 325;
+            txbTermoPosition.TabIndex = 64;
             txbTermoPosition.TextAlign = HorizontalAlignment.Center;
             // 
             // btnMovePalletDown
@@ -1417,7 +1420,7 @@
             btnMovePalletDown.Location = new Point(577, 28);
             btnMovePalletDown.Name = "btnMovePalletDown";
             btnMovePalletDown.Size = new Size(23, 23);
-            btnMovePalletDown.TabIndex = 375;
+            btnMovePalletDown.TabIndex = 79;
             btnMovePalletDown.TextAlign = ContentAlignment.TopRight;
             btnMovePalletDown.UseVisualStyleBackColor = true;
             btnMovePalletDown.Click += btnMovePalletDown_Click;
@@ -1430,7 +1433,7 @@
             btnMovePalletUp.Location = new Point(555, 28);
             btnMovePalletUp.Name = "btnMovePalletUp";
             btnMovePalletUp.Size = new Size(23, 23);
-            btnMovePalletUp.TabIndex = 376;
+            btnMovePalletUp.TabIndex = 78;
             btnMovePalletUp.TextAlign = ContentAlignment.TopRight;
             btnMovePalletUp.UseVisualStyleBackColor = true;
             btnMovePalletUp.Click += btnMovePalletUp_Click;
@@ -1442,7 +1445,7 @@
             txbIdSeason.Location = new Point(115, 74);
             txbIdSeason.Name = "txbIdSeason";
             txbIdSeason.Size = new Size(37, 21);
-            txbIdSeason.TabIndex = 377;
+            txbIdSeason.TabIndex = 6;
             txbIdSeason.TextAlign = HorizontalAlignment.Center;
             // 
             // cboTemplate
@@ -1454,7 +1457,7 @@
             cboTemplate.Location = new Point(153, 96);
             cboTemplate.Name = "cboTemplate";
             cboTemplate.Size = new Size(235, 21);
-            cboTemplate.TabIndex = 378;
+            cboTemplate.TabIndex = 9;
             // 
             // txbIdTemplate
             // 
@@ -1463,7 +1466,7 @@
             txbIdTemplate.Location = new Point(115, 96);
             txbIdTemplate.Name = "txbIdTemplate";
             txbIdTemplate.Size = new Size(37, 21);
-            txbIdTemplate.TabIndex = 379;
+            txbIdTemplate.TabIndex = 8;
             txbIdTemplate.TextAlign = HorizontalAlignment.Center;
             // 
             // label21
@@ -1484,7 +1487,7 @@
             txbIdMarket.Location = new Point(115, 52);
             txbIdMarket.Name = "txbIdMarket";
             txbIdMarket.Size = new Size(37, 21);
-            txbIdMarket.TabIndex = 381;
+            txbIdMarket.TabIndex = 3;
             txbIdMarket.TextAlign = HorizontalAlignment.Center;
             txbIdMarket.TextChanged += txbIdMarket_TextChanged;
             // 
@@ -1496,20 +1499,52 @@
             chbPrintManifestPerField.Location = new Point(670, 587);
             chbPrintManifestPerField.Name = "chbPrintManifestPerField";
             chbPrintManifestPerField.Size = new Size(116, 19);
-            chbPrintManifestPerField.TabIndex = 382;
+            chbPrintManifestPerField.TabIndex = 88;
             chbPrintManifestPerField.Text = "Man. por campo";
             chbPrintManifestPerField.UseVisualStyleBackColor = true;
             // 
             // chbExcelLayout
             // 
+            chbExcelLayout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chbExcelLayout.AutoSize = true;
             chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
             chbExcelLayout.Location = new Point(670, 568);
             chbExcelLayout.Name = "chbExcelLayout";
             chbExcelLayout.Size = new Size(91, 19);
-            chbExcelLayout.TabIndex = 386;
+            chbExcelLayout.TabIndex = 87;
             chbExcelLayout.Text = "Excel layout";
             chbExcelLayout.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Font = new Font("Microsoft Sans Serif", 9F);
+            label22.Location = new Point(-2, 430);
+            label22.Name = "label22";
+            label22.Size = new Size(121, 15);
+            label22.TabIndex = 387;
+            label22.Text = "Termómetro de caja:";
+            // 
+            // txbThermometerContainer
+            // 
+            txbThermometerContainer.Font = new Font("Microsoft Sans Serif", 9F);
+            txbThermometerContainer.Location = new Point(115, 426);
+            txbThermometerContainer.MaxLength = 30;
+            txbThermometerContainer.Name = "txbThermometerContainer";
+            txbThermometerContainer.Size = new Size(138, 21);
+            txbThermometerContainer.TabIndex = 62;
+            // 
+            // btnEditTherFco
+            // 
+            btnEditTherFco.BackgroundImageLayout = ImageLayout.Stretch;
+            btnEditTherFco.Font = new Font("Microsoft Sans Serif", 9F);
+            btnEditTherFco.Image = Properties.Resources.editPencilIcon16;
+            btnEditTherFco.Location = new Point(253, 425);
+            btnEditTherFco.Name = "btnEditTherFco";
+            btnEditTherFco.Size = new Size(23, 23);
+            btnEditTherFco.TabIndex = 388;
+            btnEditTherFco.UseVisualStyleBackColor = true;
+            btnEditTherFco.Click += btnEditTherFco_Click;
             // 
             // FrmManifestAdd
             // 
@@ -1517,6 +1552,9 @@
             AutoScroll = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(797, 613);
+            Controls.Add(btnEditTherFco);
+            Controls.Add(txbThermometerContainer);
+            Controls.Add(label22);
             Controls.Add(chbExcelLayout);
             Controls.Add(chbPrintManifestPerField);
             Controls.Add(txbIdMarket);
@@ -1767,5 +1805,9 @@
         public TextBox txbIdMarket;
         public CheckBox chbPrintManifestPerField;
         public CheckBox chbExcelLayout;
+        private Label label22;
+        public TextBox txbThermometerContainer;
+        public Button button1;
+        public Button btnEditTherFco;
     }
 }
