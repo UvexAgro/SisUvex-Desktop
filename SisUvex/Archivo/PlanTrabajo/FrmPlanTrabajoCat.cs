@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using SisUvex.Catalogos.Distribuidor;
 using System.Windows.Forms;
 
 namespace SisUvex.Catalogos.PlanTrabajo

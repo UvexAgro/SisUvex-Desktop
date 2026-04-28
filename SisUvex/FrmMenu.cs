@@ -11,7 +11,6 @@ using SisUvex.Archivo.WorkPlan.ConvertPallet;
 using SisUvex.Assets.Vehicle.Vehicle;
 using SisUvex.Assets.Vehicle.VehicleType;
 using SisUvex.Catalogos.Consignatario;
-using SisUvex.Catalogos.Distribuidor;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Catalogos.RegistroMaterial;
 using SisUvex.Configuracion;
@@ -138,7 +137,7 @@ namespace SisUvex
 
         private void distribuidorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmDistribuidorCat cat = new FrmDistribuidorCat();
+            Catalogos.Distributor.FrmDistributorCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 

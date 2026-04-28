@@ -196,6 +196,39 @@ namespace SisUvex.Catalogos.Metods.TextBoxes
                 }
             };
         }
+        public static void TxbApplyKeyPressEventAlphaNumeric(TextBox textBox)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                // Permitir controles (backspace, delete, etc.)
+                if (char.IsControl(e.KeyChar))
+                    return;
+
+                // Permitir solo letras y números
+                if (!char.IsLetterOrDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                string cleanedText = new string(textBox.Text
+                    .Where(char.IsLetterOrDigit)
+                    .ToArray());
+
+                if (cleanedText != textBox.Text)
+                {
+                    int cursorPos = textBox.SelectionStart;
+                    textBox.Text = cleanedText;
+                    textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                }
+            };
+        }
 
     }
 }
