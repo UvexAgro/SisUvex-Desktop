@@ -1,8 +1,6 @@
 ﻿
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Extensiones;
-using SisUvex.Catalogos.Distribuidor;
-
 namespace SisUvex.Catalogos.Variedad
 {
     public partial class FrmVariedadAñadir : Form

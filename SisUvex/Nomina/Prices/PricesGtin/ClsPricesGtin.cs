@@ -38,7 +38,7 @@ namespace SisUvex.Nomina.Prices.PricesGtin
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboContainer, Container.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboPresentation, Presentation.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboSize, SizeInfo.Cbo);
             //Controles+Eventos
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmCat.cboVariety, null /*no lleva chb*/, new List<(ComboBox Cbo, string IdColumnFilter)> { (_frmCat.cboCrop, Crop.ColumnId) });

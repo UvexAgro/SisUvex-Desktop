@@ -17,12 +17,21 @@ namespace SisUvex.Catalogos.FreightContainer
         public string? year { get; set; }
         public string? brand { get; set; }
         public string? typeContainer { get; set; }
-        public int size { get; set; }
+        public int? size { get; set; }
+        public string? thermometer { get; set; }
         public int active { get; set; }
 
         public static string GetNextId()
         {
             return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX([id_freightContainer]), 0) +1, '000') FROM [Pack_FreightContainer]").ToString();
+        }
+
+        private static int CharActiveToInt(object? value)
+        {
+            if (value == null || value == DBNull.Value)
+                return 0;
+            string? s = value.ToString();
+            return s == "1" ? 1 : 0;
         }
 
         public void GetFreightContainer(string? idFreightContainer)
@@ -36,7 +45,7 @@ namespace SisUvex.Catalogos.FreightContainer
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand($"SELECT * FROM Pack_FreightContainer WHERE id_freightContainer = @idFreightContainer", sql.cnn);
                 cmd.Parameters.AddWithValue("@idFreightContainer", idFreightContainer);
-                SqlDataReader dr = cmd.ExecuteReader();
+                using SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
                     this.idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
@@ -47,8 +56,19 @@ namespace SisUvex.Catalogos.FreightContainer
                     year = dr.GetValue(dr.GetOrdinal("c_year")).ToString();
                     brand = dr.GetValue(dr.GetOrdinal("v_brand")).ToString();
                     typeContainer = dr.GetValue(dr.GetOrdinal("v_typeContainer")).ToString();
-                    size = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("i_size")));
-                    active = Convert.ToInt32(dr.GetValue(dr.GetOrdinal("c_active")));
+                    int ordSize = dr.GetOrdinal("i_size");
+                    size = dr.IsDBNull(ordSize) ? null : Convert.ToInt32(dr.GetValue(ordSize));
+                    active = CharActiveToInt(dr["c_active"]);
+                    thermometer = null;
+                    try
+                    {
+                        int lo = dr.GetOrdinal("v_thermometer");
+                        if (!dr.IsDBNull(lo))
+                            thermometer = dr.GetValue(lo).ToString();
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                    }
                 }
             }
             catch (Exception ex)
@@ -78,25 +98,28 @@ namespace SisUvex.Catalogos.FreightContainer
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerAdd", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@active", active);
+                cmd.Parameters.AddWithValue("@action", "ADD");
+                cmd.Parameters.AddWithValue("@id", DBNull.Value);
+                cmd.Parameters.AddWithValue("@active", active == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(idTransportLine));
                 cmd.Parameters.AddWithValue("@ecoNumber", ecoNumber);
                 cmd.Parameters.AddWithValue("@plateUS", ClsValues.IfEmptyToDBNull(plateUS));
                 cmd.Parameters.AddWithValue("@plateMX", ClsValues.IfEmptyToDBNull(plateMX));
                 cmd.Parameters.AddWithValue("@year", ClsValues.IfEmptyToDBNull(year));
-                cmd.Parameters.AddWithValue("@brand", brand);
+                cmd.Parameters.AddWithValue("@brand", ClsValues.IfEmptyToDBNull(brand));
                 cmd.Parameters.AddWithValue("@typeContainer", ClsValues.IfEmptyToDBNull(typeContainer));
-                cmd.Parameters.AddWithValue("@size", size);
+                cmd.Parameters.AddWithValue("@size", ClsValues.IfEmptyToDBNull(size.ToString()));
+                cmd.Parameters.AddWithValue("@thermometer", ClsValues.IfEmptyToDBNull(thermometer));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
-                SqlDataReader dr = cmd.ExecuteReader();
+                using SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    string? idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
-                    return (true, idFreightContainer);
+                    string? idFc = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
+                    return (true, idFc);
                 }
                 return (false, null);
             }
@@ -117,26 +140,28 @@ namespace SisUvex.Catalogos.FreightContainer
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerModify", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
+                cmd.Parameters.AddWithValue("@action", "MODIFY");
                 cmd.Parameters.AddWithValue("@id", idFreightContainer);
-                cmd.Parameters.AddWithValue("@active", active);
+                cmd.Parameters.AddWithValue("@active", active == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(idTransportLine));
                 cmd.Parameters.AddWithValue("@ecoNumber", ecoNumber);
                 cmd.Parameters.AddWithValue("@plateUS", ClsValues.IfEmptyToDBNull(plateUS));
                 cmd.Parameters.AddWithValue("@plateMX", ClsValues.IfEmptyToDBNull(plateMX));
                 cmd.Parameters.AddWithValue("@year", ClsValues.IfEmptyToDBNull(year));
-                cmd.Parameters.AddWithValue("@brand", brand);
+                cmd.Parameters.AddWithValue("@brand", ClsValues.IfEmptyToDBNull(brand));
                 cmd.Parameters.AddWithValue("@typeContainer", ClsValues.IfEmptyToDBNull(typeContainer));
-                cmd.Parameters.AddWithValue("@size", size);
+                cmd.Parameters.AddWithValue("@size", ClsValues.IfEmptyToDBNull(size.ToString()));
+                cmd.Parameters.AddWithValue("@thermometer", ClsValues.IfEmptyToDBNull(thermometer));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
-                SqlDataReader dr = cmd.ExecuteReader();
+                using SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    string? idFreightContainer = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
-                    return (true, idFreightContainer);
+                    string? idFc = dr.GetValue(dr.GetOrdinal("id_freightContainer")).ToString();
+                    return (true, idFc);
                 }
                 return (false, null);
             }
@@ -157,8 +182,9 @@ namespace SisUvex.Catalogos.FreightContainer
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerActive", sql.cnn);
+                SqlCommand cmd = new SqlCommand("sp_PackFreightContainerExecute", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "STATUS");
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@active", activeValue);
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());

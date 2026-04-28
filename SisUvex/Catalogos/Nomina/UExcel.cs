@@ -31,7 +31,7 @@ namespace SisUvex.Nomina
             InitializeComponent();
             txbIDEmpleado.Leave += TxtIDEmpleado_Leave;
 
-            ClsTextBoxes.TxbApplyKeyPressEventInt(txbIDEmpleado);
+            ClsTextBoxes.TxbApplyKeyPressEventAlphaNumeric(txbIDEmpleado);
         }
 
         public void UpdateProgress(int value)

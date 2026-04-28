@@ -420,7 +420,7 @@ namespace SisUvex.Catalogos.Metods
         public static class TransportLine
         {
             public const string TableName = "Pack_TransportLine";
-            public const string ColumnName = "Linea de transporte";
+            public const string ColumnName = "Línea de transporte";
             public const string ColumnId = "idTransportLine";
             public const string ColumnActive = "ActiveTransportLine";
             public const string Cbo = "CboTransportLine";

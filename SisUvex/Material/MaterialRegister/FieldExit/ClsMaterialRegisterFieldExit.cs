@@ -154,7 +154,7 @@ namespace SisUvex.Material.MaterialRegister.FieldExit
         {
             LoadSearchByCbo();
 
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboWareHouse, MaterialWarehouse.Cbo);
             ClsComboBoxes.CboLoadAll(_frmCat.cboMaterialType, ClsObject.MaterialType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, Variety.Cbo);
@@ -277,7 +277,7 @@ namespace SisUvex.Material.MaterialRegister.FieldExit
             ClsComboBoxes.CboLoadActives(_frmAdd.cboLot, Lot.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboVehicleType, VehicleType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVehicle, Vehicle.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboEmployee, _frmAdd.txbIdEmployee);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboOutputType, _frmAdd.txbIdOutputType);

@@ -90,44 +90,47 @@ namespace SisUvex.Catalogos.Metods.TextBoxes
         {
             textBox.KeyPress += (sender, e) =>
             {
-                // Permitir solo dígitos, punto decimal y teclas de control (Backspace, etc.)
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+                // Permitir Backspace, Delete, Ctrl+A, etc.
+                if (char.IsControl(e.KeyChar))
+                {
+                    e.Handled = false;
+                    return;
+                }
+
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.')
                 {
                     e.Handled = true;
                     return;
                 }
 
-                // Evitar múltiples puntos decimales
                 if (e.KeyChar == '.' && textBox.Text.Contains('.'))
                 {
                     e.Handled = true;
                     return;
                 }
 
-                // Obtener el texto actual y la posición del cursor
                 string currentText = textBox.Text;
                 int selectionStart = textBox.SelectionStart;
 
-                // Simular el nuevo texto que se generaría
                 string newText = currentText.Substring(0, selectionStart)
                                + e.KeyChar
                                + currentText.Substring(selectionStart + textBox.SelectionLength);
 
-                // Validar estructura del número
                 string[] parts = newText.Split('.');
 
-                // Validar parte entera
                 if (parts[0].Length > maxIntDigits)
                 {
                     e.Handled = true;
                     return;
                 }
 
-                // Validar parte decimal si existe
                 if (parts.Length > 1 && parts[1].Length > maxDecimalDigits)
                 {
                     e.Handled = true;
+                    return;
                 }
+
+                e.Handled = false;
             };
 
             // Validación al pegar texto
@@ -190,6 +193,39 @@ namespace SisUvex.Catalogos.Metods.TextBoxes
                 if (!string.IsNullOrEmpty(textBox.Text) && !decimal.TryParse(textBox.Text, out _))
                 {
                     textBox.Text = "";
+                }
+            };
+        }
+        public static void TxbApplyKeyPressEventAlphaNumeric(TextBox textBox)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                // Permitir controles (backspace, delete, etc.)
+                if (char.IsControl(e.KeyChar))
+                    return;
+
+                // Permitir solo letras y números
+                if (!char.IsLetterOrDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                string cleanedText = new string(textBox.Text
+                    .Where(char.IsLetterOrDigit)
+                    .ToArray());
+
+                if (cleanedText != textBox.Text)
+                {
+                    int cursorPos = textBox.SelectionStart;
+                    textBox.Text = cleanedText;
+                    textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
                 }
             };
         }
