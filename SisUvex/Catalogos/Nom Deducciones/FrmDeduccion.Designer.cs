@@ -31,42 +31,10 @@
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDeduccion));
-			btnRemove = new Button();
-			btnModify = new Button();
-			btnAdd = new Button();
 			dgvCatalog = new DataGridView();
+			label1 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
 			SuspendLayout();
-			// 
-			// btnRemove
-			// 
-			btnRemove.Location = new Point(177, 12);
-			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new Size(75, 23);
-			btnRemove.TabIndex = 8;
-			btnRemove.Text = "Eliminar";
-			btnRemove.UseVisualStyleBackColor = true;
-			btnRemove.Click += btnRemove_Click;
-			// 
-			// btnModify
-			// 
-			btnModify.Location = new Point(96, 12);
-			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(75, 23);
-			btnModify.TabIndex = 7;
-			btnModify.Text = "Modificar";
-			btnModify.UseVisualStyleBackColor = true;
-			btnModify.Click += btnModify_Click;
-			// 
-			// btnAdd
-			// 
-			btnAdd.Location = new Point(15, 12);
-			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(75, 23);
-			btnAdd.TabIndex = 6;
-			btnAdd.Text = "Añadir";
-			btnAdd.UseVisualStyleBackColor = true;
-			btnAdd.Click += btnAdd_Click;
 			// 
 			// dgvCatalog
 			// 
@@ -106,28 +74,34 @@
 			dgvCatalog.Size = new Size(773, 397);
 			dgvCatalog.TabIndex = 14;
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.Location = new Point(15, 9);
+			label1.Name = "label1";
+			label1.Size = new Size(228, 25);
+			label1.TabIndex = 15;
+			label1.Text = "Catalago de Deducciones";
+			// 
 			// FrmDeduccion
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(800, 450);
+			Controls.Add(label1);
 			Controls.Add(dgvCatalog);
-			Controls.Add(btnRemove);
-			Controls.Add(btnModify);
-			Controls.Add(btnAdd);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmDeduccion";
 			Text = "Catalago de Deducciones";
 			Load += FrmDeduccion_Load;
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
 			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
-
-		private Button btnRemove;
-		private Button btnModify;
-		private Button btnAdd;
 		public DataGridView dgvCatalog;
+		private Label label1;
 	}
 }
