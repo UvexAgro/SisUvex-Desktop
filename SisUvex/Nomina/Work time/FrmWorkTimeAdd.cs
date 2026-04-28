@@ -127,12 +127,50 @@ namespace SisUvex.Nomina.Work_time
 
 		private void dtpDinicial2_ValueChanged(object sender, EventArgs e)
 		{
-			cls.CalcularHoras(dtpDinicial2, dtpFinalD2,nudHorasD2);
+			cls.CalcularHoras(dtpDinicial2, dtpFinalD2, nudHorasD2);
 		}
 
 		private void dtpFinalD2_ValueChanged(object sender, EventArgs e)
 		{
 			cls.CalcularHoras(dtpDinicial2, dtpFinalD2, nudHorasD2);
+		}
+
+		private void FrmWorkTimeAdd_Shown(object sender, EventArgs e)
+		{
+			if (IsAddModify)
+			{
+				DateTime cero = DateTime.Today;
+
+				// COMIDA
+				dtpComidaInicial.Value = cero;
+				dtpComidaFinal.Value = cero;
+				dtpComidaInicial.Checked = false;
+				dtpComidaFinal.Checked = false;
+
+				// CENA
+				dtpCenaInicial.Value = cero;
+				dtpCenaFinal.Value = cero;
+				dtpCenaInicial.Checked = false;
+				dtpCenaFinal.Checked = false;
+
+				// DESCANSO
+				dtpDescansoInicial.Value = cero;
+				dtpDescansoFinal.Value = cero;
+				dtpDescansoInicial.Checked = false;
+				dtpDescansoFinal.Checked = false;
+
+				// DESCANSO 2
+				dtpDinicial2.Value = cero;
+				dtpFinalD2.Value = cero;
+				dtpDinicial2.Checked = false;
+				dtpFinalD2.Checked = false;
+
+				// HORAS
+				nudComidaHora.Value = 0;
+				nudCenaHora.Value = 0;
+				nudHorasDescanso.Value = 0;
+				nudHorasD2.Value = 0;
+			}
 		}
 	}
 }

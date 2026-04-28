@@ -693,6 +693,7 @@
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Añadir horario de empaque";
 			Load += FrmWorkTimeAdd_Load;
+			Shown += FrmWorkTimeAdd_Shown;
 			gpbNormal.ResumeLayout(false);
 			gpbNormal.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)nudOvertime).EndInit();
