@@ -50,6 +50,7 @@
             chbRemoved.Text = "Eliminados";
             chbRemoved.TextAlign = ContentAlignment.MiddleCenter;
             chbRemoved.UseVisualStyleBackColor = true;
+            chbRemoved.CheckedChanged += chbRemoved_CheckedChanged;
             // 
             // dgvCatalog
             // 
@@ -88,6 +89,7 @@
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCatalog.Size = new Size(573, 397);
             dgvCatalog.TabIndex = 11;
+            dgvCatalog.CellMouseDoubleClick += dgvCatalog_CellMouseDoubleClick;
             // 
             // btnRemove
             // 
@@ -97,6 +99,7 @@
             btnRemove.TabIndex = 9;
             btnRemove.Text = "Eliminar";
             btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // btnRecover
             // 
@@ -106,6 +109,7 @@
             btnRecover.TabIndex = 10;
             btnRecover.Text = "Recuperar";
             btnRecover.UseVisualStyleBackColor = true;
+            btnRecover.Click += btnRecover_Click;
             // 
             // btnModify
             // 
@@ -115,6 +119,7 @@
             btnModify.TabIndex = 7;
             btnModify.Text = "Modificar";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnAdd
             // 
@@ -124,6 +129,7 @@
             btnAdd.TabIndex = 6;
             btnAdd.Text = "Añadir";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // FrmDistributorCat
             // 
@@ -139,8 +145,9 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmDistributorCat";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "FrmDistributorCat";
+            Text = "Catálogo de distribuidores";
             WindowState = FormWindowState.Maximized;
+            Load += FrmDistributorCat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
             ResumeLayout(false);
         }

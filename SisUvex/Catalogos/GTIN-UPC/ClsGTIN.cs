@@ -33,7 +33,7 @@ namespace SisUvex.Catalogos.GTIN
         }
         public void BeginFormCat()
         {
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboPresentation, Presentation.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboContainer, ClsObject.Container.Cbo);

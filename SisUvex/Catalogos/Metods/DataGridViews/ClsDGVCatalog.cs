@@ -63,6 +63,18 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             }
         }
 
+        public void SetColumnWidth(string columnName, int width)
+        {
+            SetColumnWidth(dgvCatalog, columnName, width);
+        }
+        public static void SetColumnWidth(DataGridView dgv, string columnName, int width)
+        {
+            if (dgv == null || !dgv.Columns.Contains(columnName))
+                return;
+            dgv.Columns[columnName].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+            dgv.Columns[columnName].Width = width;
+        }
         private void HideActiveColumn2()
         {
             if (dgvCatalog.Columns.Contains(activeColumnHide))

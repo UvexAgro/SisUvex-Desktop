@@ -33,7 +33,7 @@ namespace SisUvex.Archivo.WorkPlan
             _frmCat.dtpDate2.Value = DateTime.Now;
             _frmCat.WindowState = FormWindowState.Maximized;
 
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDistribuidor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistribuidor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboPresentacion, Presentation.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboContainer, Container.Cbo);
@@ -90,7 +90,7 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmAdd.cboLot, Lot.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSize, ClsObject.Size.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, Variety.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboTypeBox, TypeBox.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);

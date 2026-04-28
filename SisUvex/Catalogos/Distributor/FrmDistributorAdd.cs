@@ -1,20 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿namespace SisUvex.Catalogos.Distributor;
 
-namespace SisUvex.Catalogos.Distributor
+internal partial class FrmDistributorAdd : Form
 {
-    public partial class FrmDistributorAdd : Form
+    public ClsDistributor cls = null!;
+
+    public FrmDistributorAdd()
     {
-        public FrmDistributorAdd()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+    private void FrmDistributorAdd_Load(object sender, EventArgs e)
+    {
+        cls ??= new();
+        cls._frmAdd ??= this;
+        cls.BeginFormAdd();
+    }
+
+    private void btnAceptar_Click(object sender, EventArgs e)
+    {
+        cls.BtnAccept();
+    }
+
+    private void btnCancelar_Click(object sender, EventArgs e)
+    {
+        Close();
     }
 }

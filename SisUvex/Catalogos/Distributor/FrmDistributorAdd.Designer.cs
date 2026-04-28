@@ -1,4 +1,4 @@
-﻿namespace SisUvex.Catalogos.Distributor
+namespace SisUvex.Catalogos.Distributor
 {
     partial class FrmDistributorAdd
     {
@@ -122,6 +122,7 @@
             // 
             // cboCityDestination
             // 
+            cboCityDestination.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCityDestination.Font = new Font("Segoe UI", 12F);
             cboCityDestination.FormattingEnabled = true;
             cboCityDestination.ItemHeight = 21;
@@ -142,6 +143,7 @@
             // 
             // cboCityCross
             // 
+            cboCityCross.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCityCross.Font = new Font("Segoe UI", 12F);
             cboCityCross.FormattingEnabled = true;
             cboCityCross.ItemHeight = 21;
@@ -162,6 +164,7 @@
             // 
             // cboGrower
             // 
+            cboGrower.DropDownStyle = ComboBoxStyle.DropDownList;
             cboGrower.Font = new Font("Segoe UI", 12F);
             cboGrower.FormattingEnabled = true;
             cboGrower.ItemHeight = 21;
@@ -182,6 +185,7 @@
             // 
             // cboAgencyUS
             // 
+            cboAgencyUS.DropDownStyle = ComboBoxStyle.DropDownList;
             cboAgencyUS.Font = new Font("Segoe UI", 12F);
             cboAgencyUS.FormattingEnabled = true;
             cboAgencyUS.ItemHeight = 21;
@@ -202,6 +206,7 @@
             // 
             // cboAgencyMX
             // 
+            cboAgencyMX.DropDownStyle = ComboBoxStyle.DropDownList;
             cboAgencyMX.Font = new Font("Segoe UI", 12F);
             cboAgencyMX.FormattingEnabled = true;
             cboAgencyMX.ItemHeight = 21;
@@ -304,6 +309,7 @@
             btnAceptar.TabIndex = 85;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
+            btnAceptar.Click += btnAceptar_Click;
             // 
             // btnCancelar
             // 
@@ -313,6 +319,7 @@
             btnCancelar.TabIndex = 86;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // txbId
             // 
@@ -549,8 +556,13 @@
             Controls.Add(lblMercado);
             Controls.Add(label1);
             Controls.Add(label2);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmDistributorAdd";
-            Text = "FrmDistributorAdd";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Distribuidor";
+            Load += FrmDistributorAdd_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -562,11 +574,11 @@
         public TextBox txbCountry;
         private Label lblPais;
         private Label label3;
-        private ComboBox cboCityDestination;
+        public ComboBox cboCityDestination;
         private Label lblCiudadDestino;
-        private ComboBox cboCityCross;
+        public ComboBox cboCityCross;
         private Label lblCiudadCruce;
-        private ComboBox cboGrower;
+        public ComboBox cboGrower;
         private Label lblProductor;
         public ComboBox cboAgencyUS;
         private Label lblAgenciaUS;

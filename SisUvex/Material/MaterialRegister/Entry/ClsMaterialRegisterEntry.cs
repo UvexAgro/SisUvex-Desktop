@@ -140,7 +140,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
         {
             LoadSearchByCbo();
 
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboWareHouse, MaterialWarehouse.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboTransportLine, TransportLine.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboFreightContainer, FreightContainer.Cbo);
@@ -258,7 +258,7 @@ namespace SisUvex.Material.MaterialRegister.Entry
             ClsComboBoxes.LoadComboBoxDataSource(_frmAdd.cboEmployee, dtEmployees);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboWarehouse, MaterialWarehouse.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboProvider, ClsObject.MaterialProvider.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboMaterialType, ClsObject.MaterialType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, TransportLine.Cbo);

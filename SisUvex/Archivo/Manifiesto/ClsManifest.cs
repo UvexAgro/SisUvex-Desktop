@@ -9,7 +9,6 @@ using System.Media;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
-using SisUvex.Catalogos.Distribuidor;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Catalogos.Metods.Extentions;
 using System.Web;
