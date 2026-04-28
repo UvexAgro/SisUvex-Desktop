@@ -35,7 +35,6 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			frmA.Text = "Añadir horario de empaque";
 			frmA.lblTitle.Text = "Añadir horario de empaque";
 			frmA.IsAddModify = true;
-
 			frmA.ShowDialog();
 		}
 		private DateTime HoraOCero(object valor)
@@ -109,6 +108,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					horas = Math.Max(frmA.nudOvertime.Minimum, horas);
 					horas = Math.Min(frmA.nudOvertime.Maximum, horas);
 				}
+				CargarBloques(frmA, row);
 
 				frmA.nudOvertime.Value = horas;
 				//  DESCANSO
@@ -170,7 +170,109 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				SystemSounds.Exclamation.Play();
 			}
 		}
-		
+		private void CargarBloques(FrmAñadir frmA, DataGridViewRow row)
+		{
+			// DESCANSO
+			SetDtpFromDb(frmA.dtpDescansoInicial, row.Cells["InicioDescanso"].Value);
+			SetDtpFromDb(frmA.dtpDescansoFinal, row.Cells["FinDescanso"].Value);
+			SetNudFromDb(
+				frmA.nudHorasDescanso,
+				row.Cells["HorasDescanso"].Value,
+				frmA.dtpDescansoInicial,
+				frmA.dtpDescansoFinal
+			);
+
+			// DESCANSO 2
+			SetDtpFromDb(frmA.dtpD2, row.Cells["InicioDescanso2"].Value);
+			SetDtpFromDb(frmA.dtpDf2, row.Cells["FinDescanso2"].Value);
+			SetNudFromDb(
+				frmA.nudD2,
+				row.Cells["HorasDescanso2"].Value,
+				frmA.dtpD2,
+				frmA.dtpDf2
+			);
+
+			// COMIDA
+			SetDtpFromDb(frmA.dtpComidaInicial, row.Cells["InicioComida"].Value);
+			SetDtpFromDb(frmA.dtpComidaFinal, row.Cells["FinComida"].Value);
+			SetNudFromDb(
+				frmA.nudComidaHora,
+				row.Cells["HorasComida"].Value,
+				frmA.dtpComidaInicial,
+				frmA.dtpComidaFinal
+			);
+
+			// CENA
+			SetDtpFromDb(frmA.dtpCenaInicial, row.Cells["InicioCena"].Value);
+			SetDtpFromDb(frmA.dtpCenaFinal, row.Cells["FinCena"].Value);
+			SetNudFromDb(
+				frmA.nudCenaHora,
+				row.Cells["HorasCena"].Value,
+				frmA.dtpCenaInicial,
+				frmA.dtpCenaFinal
+			);
+
+			// 🔥 ACTUALIZA UI
+			ActualizarControles();
+		}
+		public void ActualizarControles()
+		{
+			// TODO SIEMPRE HABILITADO
+			frmA.dtpComidaFinal.Enabled = true;
+			frmA.nudComidaHora.Enabled = true;
+
+			frmA.dtpCenaFinal.Enabled = true;
+			frmA.nudCenaHora.Enabled = true;
+
+			frmA.dtpDescansoFinal.Enabled = true;
+			frmA.nudHorasDescanso.Enabled = true;
+
+			frmA.dtpDf2.Enabled = true;
+			frmA.nudD2.Enabled = true;
+		}
+	
+		private void SetDtpFromDb(DateTimePicker dtp, object value)
+		{
+			if (value != DBNull.Value && value != null &&
+				DateTime.TryParse(value.ToString(), out DateTime dt))
+			{
+				dtp.Value = dt;
+			}
+			else
+			{
+				dtp.Value = DateTime.Now;
+			}
+		}
+
+		private void SetNudFromDb(NumericUpDown nud, object value, DateTimePicker dtpInicial, DateTimePicker dtpFinal)
+		{
+			if (value == DBNull.Value || value == null)
+			{
+				nud.Value = 0;
+				dtpInicial.Checked = false;
+				dtpFinal.Checked = false;
+				return;
+			}
+
+			decimal horas = Convert.ToDecimal(value);
+
+			if (horas > 0)
+			{
+				nud.Value = horas;
+
+				
+				dtpInicial.Checked = true;
+				dtpFinal.Checked = true;
+			}
+			else
+			{
+				nud.Value = 0;
+
+				dtpInicial.Checked = false;
+				dtpFinal.Checked = false;
+			}
+		}
+
 		public void CargarHorasInicial()
 		{
 			try
@@ -627,10 +729,10 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		}
 		private object GetTimeOrNull(DateTimePicker dtp)
 		{
-			if (!dtp.Checked)
-				return DBNull.Value;
 
-			return new TimeSpan(dtp.Value.Hour, dtp.Value.Minute, 0);
+			return dtp.Checked
+				? dtp.Value.TimeOfDay   
+				: (object)DBNull.Value;
 		}
 		public void FormatearColumnasHora(DataGridView dgv)
 		{

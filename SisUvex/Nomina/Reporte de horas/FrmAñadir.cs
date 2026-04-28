@@ -136,7 +136,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			dtpEndExtra.Value = dtpEndNormal.Value;
 		}
 
-		private void dtpDinicial2_ValueChanged(object sender, EventArgs e)
+		private void dtpComidaInicial_ValueChanged(object sender, EventArgs e)
 		{
 			clsA.CalcularHoras(dtpComidaInicial, dtpComidaFinal, nudComidaHora);
 		}
@@ -174,6 +174,44 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		private void dtpDf2_ValueChanged(object sender, EventArgs e)
 		{
 			clsA.CalcularHoras(dtpD2, dtpDf2, nudD2);
+		}
+
+		private void FrmAñadir_Shown(object sender, EventArgs e)
+		{
+			if (IsAddModify) 
+			{
+				DateTime cero = DateTime.Today;
+
+				// COMIDA
+				dtpComidaInicial.Value = cero;
+				dtpComidaFinal.Value = cero;
+				dtpComidaInicial.Checked = false;
+				dtpComidaFinal.Checked = false;
+
+				// CENA
+				dtpCenaInicial.Value = cero;
+				dtpCenaFinal.Value = cero;
+				dtpCenaInicial.Checked = false;
+				dtpCenaFinal.Checked = false;
+
+				// DESCANSO
+				dtpDescansoInicial.Value = cero;
+				dtpDescansoFinal.Value = cero;
+				dtpDescansoInicial.Checked = false;
+				dtpDescansoFinal.Checked = false;
+
+				// DESCANSO 2
+				dtpD2.Value = cero;
+				dtpDf2.Value = cero;
+				dtpD2.Checked = false;
+				dtpDf2.Checked = false;
+
+				// HORAS
+				nudComidaHora.Value = 0;
+				nudCenaHora.Value = 0;
+				nudHorasDescanso.Value = 0;
+				nudD2.Value = 0;
+			}
 		}
 	}
 

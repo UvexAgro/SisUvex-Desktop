@@ -410,7 +410,7 @@
 			dtpComidaInicial.ShowUpDown = true;
 			dtpComidaInicial.Size = new Size(91, 23);
 			dtpComidaInicial.TabIndex = 168;
-			dtpComidaInicial.ValueChanged += dtpDinicial2_ValueChanged;
+			dtpComidaInicial.ValueChanged += dtpComidaInicial_ValueChanged;
 			// 
 			// pllCena
 			// 
@@ -635,6 +635,7 @@
 			Name = "FrmAñadir";
 			Text = "Añadir Horario";
 			Load += FrmAñadir_Load;
+			Shown += FrmAñadir_Shown;
 			gpbNormal.ResumeLayout(false);
 			gpbNormal.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)nudOvertime).EndInit();
