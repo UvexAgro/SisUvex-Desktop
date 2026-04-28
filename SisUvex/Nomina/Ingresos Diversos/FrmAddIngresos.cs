@@ -17,6 +17,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		public string IdConcepto = null;
 		public decimal? MontoActual = null;
 		public bool EsEdicion = false;
+		public List<string> IdsAttendence;
 
 		ClsIngresosDiversos cls;
 		bool cargando = true;
@@ -36,6 +37,18 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			cls.CboConceptos();
 
+		}
+		public FrmAddIngresos(List<string> ids)
+		{
+			InitializeComponent();
+
+			IdsAttendence = ids;
+			EsEdicion = false;
+
+			cls = new ClsIngresosDiversos();
+			cls.frmAdd = this;
+
+			cls.CboConceptos();
 		}
 		public FrmAddIngresos(string idAttendence)
 		{

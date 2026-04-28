@@ -41,7 +41,15 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		{
 			cls ??= new ClsIngresosDiversos();
 			cls.frmDia ??= this;
+
+			cls.CargarComboActividades();
 			cls.ObtenerAsistenciaEmpaqueDia();
+
+			dgvLista.CurrentCellDirtyStateChanged += (s, ev) =>
+			{
+				if (dgvLista.IsCurrentCellDirty)
+					dgvLista.CommitEdit(DataGridViewDataErrorContexts.Commit);
+			};
 		}
 
 		private void btnBuscar_Click(object sender, EventArgs e)
@@ -51,20 +59,33 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			if (dgvLista.CurrentRow == null)
+			List<string> ids = new List<string>();
+
+			foreach (DataGridViewRow row in dgvLista.Rows)
 			{
-				MessageBox.Show("Seleccione una asistencia");
+				bool marcado = row.Cells["Seleccionar"].Value != null &&
+							   Convert.ToBoolean(row.Cells["Seleccionar"].Value);
+
+				if (marcado)
+				{
+					ids.Add(row.Cells["id_attendence"].Value.ToString());
+				}
+			}
+
+			if (ids.Count == 0)
+			{
+				MessageBox.Show("Seleccione al menos una asistencia");
 				return;
 			}
 
-			string idAttendence = dgvLista.CurrentRow.Cells["id_attendence"].Value.ToString();
-
-			FrmAddIngresos frm = new FrmAddIngresos(idAttendence);
+			FrmAddIngresos frm = new FrmAddIngresos(ids);
 
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
 				cls.ObtenerAsistenciaEmpaqueDia();
 			}
+
+
 		}
 
 		private void btnModify_Click(object sender, EventArgs e)
@@ -168,6 +189,12 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			txbEmpleado.Focus();
 
 			txbEmpleado.SelectAll();
+		}
+
+		private void cboActividad_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			cls.ObtenerAsistenciaEmpaqueDia();
+
 		}
 	}
 
