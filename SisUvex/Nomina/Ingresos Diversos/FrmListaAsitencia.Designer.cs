@@ -46,6 +46,8 @@
 			txbEmpleado = new TextBox();
 			btnEmpleado = new Button();
 			btnFrmSearchEmployeeId = new Button();
+			cboActividad = new ComboBox();
+			lblActividad = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -79,9 +81,8 @@
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
-			dgvLista.Location = new Point(12, 103);
+			dgvLista.Location = new Point(12, 105);
 			dgvLista.Name = "dgvLista";
-			dgvLista.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = SystemColors.Control;
 			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
@@ -93,7 +94,7 @@
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvLista.Size = new Size(1045, 368);
+			dgvLista.Size = new Size(1045, 581);
 			dgvLista.TabIndex = 3;
 			// 
 			// btnBuscar
@@ -228,11 +229,32 @@
 			btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
 			btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
 			// 
+			// cboActividad
+			// 
+			cboActividad.FormattingEnabled = true;
+			cboActividad.Location = new Point(442, 75);
+			cboActividad.Name = "cboActividad";
+			cboActividad.Size = new Size(234, 23);
+			cboActividad.TabIndex = 108;
+			cboActividad.SelectedIndexChanged += cboActividad_SelectedIndexChanged;
+			// 
+			// lblActividad
+			// 
+			lblActividad.AutoSize = true;
+			lblActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			lblActividad.Location = new Point(376, 78);
+			lblActividad.Name = "lblActividad";
+			lblActividad.Size = new Size(60, 15);
+			lblActividad.TabIndex = 109;
+			lblActividad.Text = "Actividad:";
+			// 
 			// FrmListaAsitencia
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1069, 483);
+			ClientSize = new Size(1069, 698);
+			Controls.Add(lblActividad);
+			Controls.Add(cboActividad);
 			Controls.Add(btnFrmSearchEmployeeId);
 			Controls.Add(btnEmpleado);
 			Controls.Add(txbEmpleado);
@@ -271,5 +293,7 @@
 		public TextBox txbEmpleado;
 		private Button btnEmpleado;
 		private Button btnFrmSearchEmployeeId;
+		public ComboBox cboActividad;
+		private Label lblActividad;
 	}
 }

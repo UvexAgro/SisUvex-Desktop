@@ -127,32 +127,34 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					//  COLORES (los mismos del grid)
 					var colorComida = XLColor.FromArgb(200, 225, 255);
 					var colorCena = XLColor.FromArgb(220, 235, 255);
-					var colorDescanso = XLColor.FromArgb(240, 245, 255);
+					var colorDescanso = XLColor.FromArgb(225, 240, 255);
+					var colorDescanso2 = XLColor.FromArgb(240, 245, 255); 
 
-					//  ENCABEZADOS AGRUPADOS
-					int col = 4;
+					// ENCABEZADOS AGRUPADOS DINÁMICOS
 
 
-					ws.Range(fila, col, fila, col + 3).Merge();
+					int colComida = columnas.FindIndex(c => c.Name == "InicioComida") + 1;
+					int colCena = columnas.FindIndex(c => c.Name == "InicioCena") + 1;
+					int colDescanso = columnas.FindIndex(c => c.Name == "InicioDescanso") + 1;
+					int colDescanso2 = columnas.FindIndex(c => c.Name == "InicioDescanso2") + 1;
 
 					// COMIDA
-					ws.Range(fila, col, fila, col + 2).Merge().Value = "COMIDA";
-					ws.Range(fila, col, fila, col + 2).Style.Fill.BackgroundColor = colorComida;
-					col += 3;
+					ws.Range(fila, colComida, fila, colComida + 2).Merge().Value = "COMIDA";
+					ws.Range(fila, colComida, fila, colComida + 2).Style.Fill.BackgroundColor = colorComida;
 
 					// CENA
-					ws.Range(fila, col, fila, col + 2).Merge().Value = "CENA";
-					ws.Range(fila, col, fila, col + 2).Style.Fill.BackgroundColor = colorCena;
-					col += 3;
+					ws.Range(fila, colCena, fila, colCena + 2).Merge().Value = "CENA";
+					ws.Range(fila, colCena, fila, colCena + 2).Style.Fill.BackgroundColor = colorCena;
 
 					// DESCANSO
-					ws.Range(fila, col, fila, col + 2).Merge().Value = "DESCANSO";
-					ws.Range(fila, col, fila, col + 2).Style.Fill.BackgroundColor = colorDescanso;
-					col += 3;
+					ws.Range(fila, colDescanso, fila, colDescanso + 2).Merge().Value = "DESCANSO";
+					ws.Range(fila, colDescanso, fila, colDescanso + 2).Style.Fill.BackgroundColor = colorDescanso;
 
-			
-					ws.Range(fila, col, fila, col + 3).Merge();
+					// DESCANSO 2
+					ws.Range(fila, colDescanso2, fila, colDescanso2 + 2).Merge().Value = "DESCANSO 2";
+					ws.Range(fila, colDescanso2, fila, colDescanso2 + 2).Style.Fill.BackgroundColor = colorDescanso2;
 
+					// ESTILO GENERAL
 					ws.Range(fila, 1, fila, columnas.Count).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 					ws.Range(fila, 1, fila, columnas.Count).Style.Font.Bold = true;
 
@@ -171,8 +173,11 @@ namespace SisUvex.Nomina.Reporte_de_horas
 							cell.Style.Fill.BackgroundColor = colorComida;
 						else if (colName.Contains("Cena"))
 							cell.Style.Fill.BackgroundColor = colorCena;
+						else if (colName.Contains("Descanso2"))
+							cell.Style.Fill.BackgroundColor = colorDescanso2;
 						else if (colName.Contains("Descanso"))
 							cell.Style.Fill.BackgroundColor = colorDescanso;
+					
 					}
 
 					fila++;
@@ -188,12 +193,50 @@ namespace SisUvex.Nomina.Reporte_de_horas
 							var valor = dgv.Rows[i].Cells[colGrid.Name].Value;
 							var cell = ws.Cell(fila, j + 1);
 
-							// FECHA FORMATO
+							// FECHA
 							if (colGrid.Name == "Fecha" && valor != null)
 							{
 								cell.Value = Convert.ToDateTime(valor);
 								cell.Style.DateFormat.Format = "dd/MM/yyyy";
 							}
+							// COLUMNAS QUE QUIERES CON FECHA + HORA
+							else if (
+								colGrid.Name == "InicioNormal" ||
+								colGrid.Name == "FinNormal" ||
+								colGrid.Name == "InicioExtra" ||
+								colGrid.Name == "FinExtra"
+							)
+							{
+								if (valor != null && DateTime.TryParse(valor.ToString(), out DateTime fechaHora))
+								{
+									cell.Value = fechaHora;
+									cell.Style.DateFormat.Format = "dd/MM/yyyy HH:mm:ss"; 
+								}
+								else
+								{
+									cell.Value = "";
+								}
+							}
+
+
+							// INICIO / FIN → SOLO HORA
+							else if (
+								colGrid.Name.Contains("Inicio") ||
+								colGrid.Name.Contains("Fin")
+							)
+							{
+								if (valor != null && DateTime.TryParse(valor.ToString(), out DateTime hora))
+								{
+									cell.Value = hora; // sigue siendo DateTime
+									cell.Style.DateFormat.Format = "HH:mm:ss"; // SOLO HORA
+								}
+								else
+								{
+									cell.Value = "";
+								}
+							}
+
+							// LO DEMÁS (incluye Horas = 1.00)
 							else
 							{
 								cell.Value = valor?.ToString();
@@ -206,6 +249,8 @@ namespace SisUvex.Nomina.Reporte_de_horas
 								cell.Style.Fill.BackgroundColor = colorComida;
 							else if (colGrid.Name.Contains("Cena"))
 								cell.Style.Fill.BackgroundColor = colorCena;
+							else if (colGrid.Name.Contains("Descanso2"))
+								cell.Style.Fill.BackgroundColor = colorDescanso2;
 							else if (colGrid.Name.Contains("Descanso"))
 								cell.Style.Fill.BackgroundColor = colorDescanso;
 						}
@@ -218,21 +263,28 @@ namespace SisUvex.Nomina.Reporte_de_horas
 					rango.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 					rango.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-					//  AJUSTE
-					ws.Column(1).Width = 35; // Cuadrilla
-					ws.Column(2).Width = 12; // Fecha
-					ws.Column(3).Width = 22; // Inicio Normal
+					for (int i = 0; i < columnas.Count; i++)
+					{
+						var col = columnas[i];
 
-					for (int i = 4; i <= 12; i++)
-						ws.Column(i).Width = 10;
+						if (
+							col.Name == "InicioNormal" ||
+							col.Name == "FinNormal" ||
+							col.Name == "InicioExtra" ||
+							col.Name == "FinExtra"
+						)
+						{
+							ws.Column(i + 1).Width = 22;
+						}
+						else if (i >= 3)
+						{
+							ws.Column(i + 1).Width = 10;
+						}
+					}
 
-					ws.Column(13).Width = 20;
-					ws.Column(14).Width = 20;
-					ws.Column(15).Width = 20;
-					ws.Column(16).Width = 12;
-					ws.Column(13).AdjustToContents();
-					ws.Column(14).AdjustToContents();
-					ws.Column(15).AdjustToContents();
+					// FIJAS
+					ws.Column(1).Width = 35;
+					ws.Column(2).Width = 12;
 
 					int colInicio = columnas.Count + 2; 
 					int filaInicio = 6;
@@ -312,14 +364,14 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			//  TITULO
 			ws.Cell(filaInicio - 2, colInicio).Value = "COMPROBACION";
-			ws.Range(filaInicio - 2, colInicio, filaInicio - 2, colInicio + 4).Merge();
+			ws.Range(filaInicio - 2, colInicio, filaInicio - 2, colInicio + 5).Merge();
 			ws.Cell(filaInicio - 2, colInicio).Style.Font.Bold = true;
 			ws.Cell(filaInicio - 2, colInicio).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 			ws.Cell(filaInicio - 2, colInicio).Style.Fill.BackgroundColor = XLColor.MidnightBlue;
 			ws.Cell(filaInicio - 2, colInicio).Style.Font.FontColor = XLColor.White;
 
 			//  ENCABEZADOS
-			string[] headers = { "TOTAL", "COMIDA", "CENA", "DESCANSO", "JORNADA REAL" };
+			string[] headers = { "TOTAL", "COMIDA", "CENA", "DESCANSO", "DESCANSO 2", "JORNADA REAL" };
 
 			for (int i = 0; i < headers.Length; i++)
 			{
@@ -337,61 +389,52 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			{
 				if (row.IsNewRow) continue;
 
-				//  NORMAL
+				// NORMAL
 				TimeSpan normal = CalcularHoras(
 					row.Cells["InicioNormal"].Value,
 					row.Cells["FinNormal"].Value
 				);
 
-				//  EXTRA
+				// EXTRA
 				TimeSpan extra = CalcularHoras(
 					row.Cells["InicioExtra"].Value,
 					row.Cells["FinExtra"].Value
 				);
 
-				//  TOTAL
+				// TOTAL
 				TimeSpan total = normal + extra;
 
-				//  COMIDA / CENA / DESCANSO
+				// COMIDA / CENA / DESCANSO
 				TimeSpan comida = ObtenerHoras(row.Cells["HorasComida"].Value);
 				TimeSpan cena = ObtenerHoras(row.Cells["HorasCena"].Value);
 				TimeSpan descanso = ObtenerHoras(row.Cells["HorasDescanso"].Value);
 
-				//  JORNADA REAL
-				TimeSpan jornada = total - comida - cena - descanso;
+				
+				TimeSpan descanso2 = ObtenerHoras(row.Cells["HorasDescanso2"].Value);
 
-				//  VALIDACIÓN
+				// JORNADA REAL
+				TimeSpan jornada = total - comida - cena - descanso - descanso2;
+
 				if (jornada < TimeSpan.Zero)
 					jornada = TimeSpan.Zero;
 
-				//  INSERTAR EN EXCEL (FORMA CORRECTA)
+				// INSERTAR EN EXCEL
 				ws.Cell(filaExcel, colInicio).Value = total.TotalDays;
 				ws.Cell(filaExcel, colInicio + 1).Value = comida.TotalDays;
 				ws.Cell(filaExcel, colInicio + 2).Value = cena.TotalDays;
 				ws.Cell(filaExcel, colInicio + 3).Value = descanso.TotalDays;
-				ws.Cell(filaExcel, colInicio + 4).Value = jornada.TotalDays;
+				ws.Cell(filaExcel, colInicio + 4).Value = descanso2.TotalDays; 
+				ws.Cell(filaExcel, colInicio + 5).Value = jornada.TotalDays;
 
-				//  FORMATO
-				for (int i = 0; i < 5; i++)
+				// FORMATO
+				for (int i = 0; i < 6; i++)
 				{
 					var cell = ws.Cell(filaExcel, colInicio + i);
-					cell.Style.NumberFormat.Format = "[hh]:mm"; // 🔥 clave
+					cell.Style.NumberFormat.Format = "[hh]:mm";
 					cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 				}
 
 				filaExcel++;
-			}
-
-			//  BORDES
-			var rango = ws.Range(filaInicio - 1, colInicio, filaExcel - 1, colInicio + 4);
-			rango.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-			rango.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-			//  ANCHO (evita ####)
-			for (int i = 0; i < 5; i++)
-			{
-				ws.Column(colInicio + i).Width = 12;
-				ws.Column(colInicio + 4).AdjustToContents();
 			}
 		}
 	}

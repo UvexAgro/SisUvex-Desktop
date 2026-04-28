@@ -27,12 +27,11 @@ namespace SisUvex.Catalogos.Nom_Deducciones
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
 		{
+			
 			if (User.HasEditCatalogsPermission())
 				return;
 
-			btnModify.Enabled = false;
-			btnAdd.Enabled = false;
-			btnRemove.Enabled = false;
+			
 		}
 
 		private void btnAdd_Click(object sender, EventArgs e)
