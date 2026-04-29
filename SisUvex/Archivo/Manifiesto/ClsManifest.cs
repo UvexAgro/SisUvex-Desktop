@@ -229,10 +229,18 @@ namespace SisUvex.Archivo.Manifiesto
             //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTransportLine, _frmAdd.txbIdTransportLine);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDriver, _frmAdd.txbIdDriver);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTruck, _frmAdd.txbIdTruck);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
+            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTemplate, _frmAdd.txbIdTemplate);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboMarket, _frmAdd.txbIdMarket);
+
+
+            _frmAdd.cboFreightContainer.SelectedValueChanged += (sender, e) =>
+            {   _frmAdd.txbIdFreightContainer.Text = _frmAdd.cboFreightContainer.SelectedValue?.ToString();
+
+                if (_frmAdd.txbThermometerContainer.ReadOnly)
+                _frmAdd.txbThermometerContainer.Text = _frmAdd.cboFreightContainer.GetColumnValue(ClsObject.FreightContainer.ColumnThermometer).ToString();
+            };
 
             // Diccionario para asignar columnas del DataTable del cmbPrincipal a cada ComboBox secundario
             Dictionary<ComboBox, string> columnasRelacionadas = new Dictionary<ComboBox, string>
@@ -312,6 +320,7 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.txbNameOperator.Text = eManifest.nameOperator;
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
             _frmAdd.txbObservations.Text = eManifest.observations;
+            _frmAdd.txbThermometerContainer.Text = eManifest.thermometerContainer; //<-- No se cambia con el Cbo por el ReadOnly del FCat
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
@@ -500,6 +509,7 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
             cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
+            cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
 
             cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
@@ -557,7 +567,9 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
             cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
-            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
+            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text)); 
+            cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
+
 
             cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
