@@ -21,15 +21,6 @@ namespace SisUvex.Material.MaterialCatalog
         public string? idUnit { get; set; }
         public string? idMaterialType { get; set; }
         public int active { get; set; }
-        public string? prefix { get; set; }
-
-        public static string GetNextId(string prefix)
-        {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@prefix", prefix);
-
-            return ClsQuerysDB.GetStringExecuteParameterizedQuery("SELECT CONCAT(@prefix, FORMAT(COALESCE(MAX(RIGHT(id_matCatalog,4)), 0) +1, '0000')) FROM Pack_MaterialCatalog WHERE LEFT(id_matCatalog,2) = @prefix", parameters);
-        }
 
         private void ValidateMaterialCatalog()
         {
@@ -77,7 +68,6 @@ namespace SisUvex.Material.MaterialCatalog
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand("sp_PackMaterialCatalogAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@prefix", prefix);
                 cmd.Parameters.AddWithValue("@idMaterialType", ClsValues.IfEmptyToDBNull(idMaterialType));
                 cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(idDistributor));
                 cmd.Parameters.AddWithValue("@nameMaterial", nameMaterialCatalog);
