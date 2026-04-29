@@ -61,8 +61,7 @@ namespace SisUvex.Material.MaterialCatalog
             if (IsAddOrModify)
             {
                 _frmAdd.cboActive.SelectedIndex = 1;
-                _frmAdd.txbId.Text = string.Empty; //SE CAMBIA AL SELECCIONAR UN TIPO DE MATERIAL
-                TxbPrefixApplyEvents();
+                _frmAdd.txbId.Text = string.Empty;
                 InicializateImagesManagers();
             }
             else
@@ -78,8 +77,6 @@ namespace SisUvex.Material.MaterialCatalog
             controlList = new();
 
             controlList.ChangeHeadMessage("Para dar de alta un material debe:\n");
-            controlList.Add(_frmAdd.txbPrefix, "Ingresar un prefijo para él código de material.");
-            controlList.Add(_frmAdd.txbId, "Ingresar el código del material.");
             controlList.Add(_frmAdd.txbIdMaterialType, "Seleccionar un tipo de material.");
             controlList.Add(_frmAdd.txbName, "Ingresar un concepto para el material.");
             controlList.Add(_frmAdd.txbIdUnit, "Seleccionar una unidad.");
@@ -144,8 +141,6 @@ namespace SisUvex.Material.MaterialCatalog
             entity = new();
             entity.GetMaterialCatalog(idAddModify ?? "0");
 
-            _frmAdd.cboMaterialType.Enabled = false;
-            _frmAdd.txbPrefix.Text = entity.idMaterialCatalog?.Substring(0, 2);
             _frmAdd.txbId.Text = entity.idMaterialCatalog;
             _frmAdd.txbName.Text = entity.nameMaterialCatalog;
             _frmAdd.txbQuant.Text = entity.quantity.ToString();
@@ -161,7 +156,6 @@ namespace SisUvex.Material.MaterialCatalog
         private EMaterialCatalog SetMaterialCatalogEntity()
         {
             entity = new();
-            entity.prefix = _frmAdd.txbPrefix.Text;
             entity.idMaterialCatalog = _frmAdd.txbId.Text;
             entity.nameMaterialCatalog = _frmAdd.txbName.Text;
             entity.idMaterialType = _frmAdd.txbIdMaterialType.Text;
@@ -477,80 +471,6 @@ namespace SisUvex.Material.MaterialCatalog
             }
 
             return true;
-        }
-        ////pfefijo
-
-        private void TxbPrefixApplyEvents()
-        {
-            _frmAdd.txbPrefix.KeyPress += txbPrefix_KeyPress;
-            _frmAdd.txbPrefix.TextChanged += txbPrefix_TextChanged;
-            _frmAdd.txbPrefix.KeyDown += txbPrefix_KeyDown;
-        }
-
-        private void txbPrefix_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Permitir solo letras y números
-            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true;
-                return;
-            }
-
-            // Convertir a mayúsculas automáticamente
-            if (char.IsLetter(e.KeyChar))
-            {
-                e.KeyChar = char.ToUpper(e.KeyChar);
-            }
-
-            // Limitar a 2 caracteres
-            if (_frmAdd.txbPrefix.Text.Length >= 2 && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txbPrefix_TextChanged(object sender, EventArgs e)
-        {
-            // Limpiar el ID si el prefijo no tiene exactamente 2 caracteres
-            if (_frmAdd.txbPrefix.Text.Length != 2)
-            {
-                _frmAdd.txbId.Text = string.Empty;
-                return;
-            }
-
-            // Validar y buscar el siguiente ID solo cuando tenga exactamente 2 caracteres válidos
-            if (IsValidPrefix(_frmAdd.txbPrefix.Text))
-            {
-                _frmAdd.txbId.Text = EMaterialCatalog.GetNextId(_frmAdd.txbPrefix.Text);
-            }
-            else
-            {
-                _frmAdd.txbId.Text = string.Empty;
-            }
-        }
-
-        private bool IsValidPrefix(string prefix)
-        {
-            // Validación adicional si necesitas asegurar que cumple con ciertas reglas
-            return prefix.Length == 2 && prefix.All(c => char.IsLetterOrDigit(c));
-        }
-
-        // Para prevenir el pegado de texto no deseado
-        private void txbPrefix_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.V)
-            {
-                e.SuppressKeyPress = true;
-
-                // Pegar solo si el texto es válido
-                var clipboardText = Clipboard.GetText();
-                if (clipboardText.Length >= 2 && clipboardText.All(c => char.IsLetterOrDigit(c)))
-                {
-                    var validText = new string(clipboardText.Where(c => char.IsLetterOrDigit(c)).Take(2).ToArray());
-                    _frmAdd.txbPrefix.Text = validText.ToUpper();
-                    _frmAdd.txbPrefix.SelectionStart = _frmAdd.txbPrefix.Text.Length;
-                }
-            }
         }
     }
 }
