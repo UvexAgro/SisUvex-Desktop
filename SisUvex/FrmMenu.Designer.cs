@@ -125,6 +125,7 @@ namespace SisUvex
 			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
 			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
 			reporteDeAsistenciaToolStripMenuItem1 = new ToolStripMenuItem();
+			reporteDeHorariosYCajasUvaToolStripMenuItem = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
 			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -166,8 +167,6 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorarioToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorariosYCajasUvaToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -767,7 +766,7 @@ namespace SisUvex
 			// 
 			// nominaEmpaqueToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, descuentoDePrsonalToolStripMenuItem, calculToolStripMenuItem, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteDeAsistenciaToolStripMenuItem1, reporteDeHorarioToolStripMenuItem, reporteDeHorariosYCajasUvaToolStripMenuItem });
+			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, descuentoDePrsonalToolStripMenuItem, calculToolStripMenuItem, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteDeAsistenciaToolStripMenuItem1, reporteDeHorariosYCajasUvaToolStripMenuItem });
 			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
 			nominaEmpaqueToolStripMenuItem.Size = new Size(257, 22);
 			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
@@ -828,6 +827,13 @@ namespace SisUvex
 			reporteDeAsistenciaToolStripMenuItem1.Size = new Size(244, 22);
 			reporteDeAsistenciaToolStripMenuItem1.Text = "Reporte de Asistencia";
 			reporteDeAsistenciaToolStripMenuItem1.Click += reporteDeAsistenciaToolStripMenuItem1_Click;
+			// 
+			// reporteDeHorariosYCajasUvaToolStripMenuItem
+			// 
+			reporteDeHorariosYCajasUvaToolStripMenuItem.Name = "reporteDeHorariosYCajasUvaToolStripMenuItem";
+			reporteDeHorariosYCajasUvaToolStripMenuItem.Size = new Size(244, 22);
+			reporteDeHorariosYCajasUvaToolStripMenuItem.Text = "Reporte Empaque Central Uva";
+			reporteDeHorariosYCajasUvaToolStripMenuItem.Click += reporteDeHorariosYCajasUvaToolStripMenuItem_Click;
 			// 
 			// credencialesToolStripMenuItem
 			// 
@@ -1115,19 +1121,6 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// reporteDeHorarioToolStripMenuItem
-			// 
-			reporteDeHorarioToolStripMenuItem.Name = "reporteDeHorarioToolStripMenuItem";
-			reporteDeHorarioToolStripMenuItem.Size = new Size(244, 22);
-			reporteDeHorarioToolStripMenuItem.Text = "Reporte de Horario";
-			// 
-			// reporteDeHorariosYCajasUvaToolStripMenuItem
-			// 
-			reporteDeHorariosYCajasUvaToolStripMenuItem.Name = "reporteDeHorariosYCajasUvaToolStripMenuItem";
-			reporteDeHorariosYCajasUvaToolStripMenuItem.Size = new Size(244, 22);
-			reporteDeHorariosYCajasUvaToolStripMenuItem.Text = "Reporte Empaque Central Uva";
-			reporteDeHorariosYCajasUvaToolStripMenuItem.Click += reporteDeHorariosYCajasUvaToolStripMenuItem_Click;
-			// 
 			// FrmMenu
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1293,7 +1286,6 @@ namespace SisUvex
         private ToolStripMenuItem contratistaToolStripMenuItem1;
         private ToolStripMenuItem cuadrillaToolStripMenuItem1;
         private ToolStripMenuItem relaciónDeEmpaquePorColorToolStripMenuItem;
-		private ToolStripMenuItem reporteDeHorarioToolStripMenuItem;
 		private ToolStripMenuItem reporteDeHorariosYCajasUvaToolStripMenuItem;
 	}
 }
