@@ -27,6 +27,14 @@ namespace SisUvex.Nomina.Reporte_de_Emp_UVA
 			cls ??= new();
 			cls.frm ??= this;
 		}
+		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
+		{
+			if (User.HasEditCatalogsPermission())
+				return;
+
+			btnCargar.Enabled = false;
+			btnExcel.Enabled = false;
+		}
 
 		private void btnCargar_Click(object sender, EventArgs e)
 		{
