@@ -193,7 +193,7 @@
             txbId.Enabled = false;
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbId.Location = new Point(112, 121);
-            txbId.MaxLength = 6;
+            txbId.MaxLength = 10;
             txbId.Name = "txbId";
             txbId.Size = new Size(84, 29);
             txbId.TabIndex = 1;
@@ -555,6 +555,7 @@
             txbPrefix.Size = new Size(43, 29);
             txbPrefix.TabIndex = 0;
             txbPrefix.TextAlign = HorizontalAlignment.Center;
+            txbPrefix.Visible = false;
             // 
             // label8
             // 
@@ -566,6 +567,7 @@
             label8.Size = new Size(12, 15);
             label8.TabIndex = 0;
             label8.Text = "*";
+            label8.Visible = false;
             // 
             // label11
             // 
@@ -577,6 +579,7 @@
             label11.TabIndex = 474;
             label11.Text = "Prefijo:";
             label11.TextAlign = ContentAlignment.TopRight;
+            label11.Visible = false;
             // 
             // FrmMaterialAdd
             // 

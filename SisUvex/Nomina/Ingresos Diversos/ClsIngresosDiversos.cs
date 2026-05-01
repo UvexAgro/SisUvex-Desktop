@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		public FrmListaAsitencia frmDia;
 		public FrmAddIngresos frmAdd;
 		public FrmDeducciones frmDeu;
-
+		public List<string> IdsAttendence { get; set; }
 		string query = @"SELECT  
 						lst.id_attendence,      
 						CONVERT(DATE, lst.d_attendence) AS Fecha,
@@ -59,7 +60,25 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		{
 			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
 
-			string queryFinal = $"{query} WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}' {queryOrder}";
+			// 🔹 OBTENER ACTIVIDAD DEL COMBO
+			string actividad = "";
+
+			if (frmDia.cboActividad.SelectedValue != null
+				&& frmDia.cboActividad.SelectedValue is string)
+			{
+				actividad = frmDia.cboActividad.SelectedValue.ToString();
+			}
+
+			// 🔹 CREAR FILTRO
+			string filtroActividad = "";
+
+			if (!string.IsNullOrEmpty(actividad))
+			{
+				filtroActividad = $" AND lst.c_codigo_tab = '{actividad}'";
+			}
+
+			// 🔹 QUERY FINAL
+			string queryFinal = $@" {query} WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}'{filtroActividad} {queryOrder}";
 
 			frmDia.dgvLista.DataSource = ClsQuerysDB.GetDataTable(queryFinal);
 
@@ -71,6 +90,16 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
 				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
+
+			if (!frmDia.dgvLista.Columns.Contains("Seleccionar"))
+			{
+				DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
+				chk.Name = "Seleccionar";
+				chk.HeaderText = "✔";
+				chk.Width = 40;
+
+				frmDia.dgvLista.Columns.Insert(0, chk);
+			}
 		}
 		public void ObtenerAsistenciaEmpaquePorEmpleadoYFecha()
 		{
@@ -106,7 +135,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 														"FROM Nom_concept");
 			ClsComboBoxes.LoadComboBoxDataSource(frmAdd.cboConceptos, dtcbo);
 		}
-		
 		public void InsertarIngreso()
 		{
 			object val = frmAdd.cboConceptos.SelectedValue;
@@ -118,13 +146,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 
 			string idConcepto = val.ToString();
-
-
-			if (ExisteConceptoEnAsistencia(frmAdd.IdAttendence))
-			{
-				MessageBox.Show("Este concepto ya fue agregado a esta asistencia");
-				return;
-			}
 
 			decimal monto;
 
@@ -145,14 +166,35 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				}
 			}
 
-			string query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Insert
-			'{frmAdd.IdAttendence}',
-			'{idConcepto}',
-			{monto},
-			'SYSTEM'";
+		
+			var lista = frmAdd.IdsAttendence ?? new List<string> { frmAdd.IdAttendence };
 
-			ClsQuerysDB.ExecuteQuery(query);
+			int insertados = 0;
+			int omitidos = 0;
+
+			foreach (var idAttendence in lista)
+			{
+				if (string.IsNullOrEmpty(idAttendence))
+					continue;
+
+				if (ExisteConceptoEnAsistencia(idAttendence))
+				{
+					omitidos++;
+					continue;
+				}
+
+				string query = $@"
+				EXEC sp_Nom_MiscellaneousIncome_Insert
+				'{idAttendence}',
+				'{idConcepto}',
+				{monto},
+				'SYSTEM'";
+
+				ClsQuerysDB.ExecuteQuery(query);
+				insertados++;
+			}
+
+			MessageBox.Show($"Insertados: {insertados}\nOmitidos (ya existían): {omitidos}");
 		}
 
 		public void ActualizarIngreso()
@@ -258,6 +300,57 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			object result = ClsQuerysDB.GetData(query);
 
 			return Convert.ToInt32(result) > 0;
+		}
+		public void CargarComboActividades()
+		{
+			DataTable dtActividades = ObtenerActividades();
+
+			dtActividades.Columns.Add("ActividadCompleta");
+
+			foreach (DataRow row in dtActividades.Rows)
+			{
+				row["ActividadCompleta"] = row["c_codigo_tab"] + " - " + row["v_descripcion_tab"];
+			}
+
+			frmDia.cboActividad.DataSource = dtActividades;
+			frmDia.cboActividad.DisplayMember = "ActividadCompleta";
+			frmDia.cboActividad.ValueMember = "c_codigo_tab";
+
+			frmDia.cboActividad.DropDownStyle = ComboBoxStyle.DropDown;
+			frmDia.cboActividad.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			frmDia.cboActividad.AutoCompleteSource = AutoCompleteSource.ListItems;
+
+			frmDia.cboActividad.SelectedIndex = -1;
+			frmDia.cboActividad.Text = "";
+		}
+		public DataTable ObtenerActividades()
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+				SELECT c_codigo_tab, v_descripcion_tab 
+				FROM dbo.Nom_Tabulador
+				ORDER BY c_codigo_tab";
+
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				da.Fill(dt);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
 		}
 	}
 }

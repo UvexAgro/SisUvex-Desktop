@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NPOI.SS.Formula.Functions;
 
 namespace SisUvex.Nomina.Reporte_de_horas
 {
@@ -49,6 +50,9 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 				dtpDescansoInicial.Value = cero;
 				dtpDescansoFinal.Value = cero;
+
+				dtpD2.Value = cero;
+				dtpDf2.Value = cero;
 			}
 		}
 
@@ -130,6 +134,84 @@ namespace SisUvex.Nomina.Reporte_de_horas
 			dtpBeginNormal.Value = dtpDay.Value;
 			dtpEndNormal.Value = dtpBeginNormal.Value;
 			dtpEndExtra.Value = dtpEndNormal.Value;
+		}
+
+		private void dtpComidaInicial_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpComidaInicial, dtpComidaFinal, nudComidaHora);
+		}
+
+		private void dtpComidaFinal_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpComidaInicial, dtpComidaFinal, nudComidaHora);
+		}
+
+		private void dtpCenaInicial_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpCenaInicial, dtpCenaFinal, nudCenaHora);
+		}
+
+		private void dtpCenaFinal_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpCenaInicial, dtpCenaFinal, nudCenaHora);
+		}
+
+		private void dtpDescansoInicial_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpDescansoInicial, dtpDescansoFinal, nudHorasDescanso);
+		}
+
+		private void dtpDescansoFinal_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpDescansoInicial, dtpDescansoFinal, nudHorasDescanso);
+		}
+
+		private void dtpD2_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpD2, dtpDf2, nudD2);
+		}
+
+		private void dtpDf2_ValueChanged(object sender, EventArgs e)
+		{
+			clsA.CalcularHoras(dtpD2, dtpDf2, nudD2);
+		}
+
+		private void FrmAñadir_Shown(object sender, EventArgs e)
+		{
+			if (IsAddModify) 
+			{
+				DateTime cero = DateTime.Today;
+
+				// COMIDA
+				dtpComidaInicial.Value = cero;
+				dtpComidaFinal.Value = cero;
+				dtpComidaInicial.Checked = false;
+				dtpComidaFinal.Checked = false;
+
+				// CENA
+				dtpCenaInicial.Value = cero;
+				dtpCenaFinal.Value = cero;
+				dtpCenaInicial.Checked = false;
+				dtpCenaFinal.Checked = false;
+
+				// DESCANSO
+				dtpDescansoInicial.Value = cero;
+				dtpDescansoFinal.Value = cero;
+				dtpDescansoInicial.Checked = false;
+				dtpDescansoFinal.Checked = false;
+
+				// DESCANSO 2
+				dtpD2.Value = cero;
+				dtpDf2.Value = cero;
+				dtpD2.Checked = false;
+				dtpDf2.Checked = false;
+
+				// HORAS
+				nudComidaHora.Value = 0;
+				nudCenaHora.Value = 0;
+				nudHorasDescanso.Value = 0;
+				nudD2.Value = 0;
+			}
 		}
 	}
 

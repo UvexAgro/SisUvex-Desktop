@@ -17,7 +17,8 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		bool isLoaded = false;
 		public Color colorComida = Color.FromArgb(200, 225, 255);
 		public Color colorCena = Color.FromArgb(220, 235, 255);
-		public Color colorDescanso = Color.FromArgb(240, 245, 255);
+		public Color colorDescanso = Color.FromArgb(225, 240, 255);
+		public Color colorDescanso2 = Color.FromArgb(240, 245, 255); 
 
 
 		public FrmPackingHours()
@@ -38,6 +39,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 			cls.CargarTemporada();
 			clsA.CargarHorasInicial();
+			clsA.FormatearColumnasHora(dgvHoras);
 
 			//  ESTILO HEADER
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
