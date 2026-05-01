@@ -41,6 +41,7 @@ namespace SisUvex.Catalogos.Metods
                                                         , wpl.id_workPlan AS [{Column.id}]
                                                         , FORMAT(wpl.d_workDay, 'yyyy-MM-dd') AS [{ColumnDate}]
                                                         , wpl.id_workGroup AS [{WorkGroup.ColumnId}]
+                                                        , wgp.v_nameWorkGroup AS [{WorkGroup.ColumnName}]
                                                         , wpl.id_lot AS [{Lot.ColumnId}]
                                                         , lot.v_nameLot AS [{Lot.ColumnName}]
                                                         , gtn.id_variety AS [{Variety.ColumnId}]
@@ -456,9 +457,10 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Caja";
             public const string ColumnId = "idFreightContainer";
             public const string ColumnActive = "ActiveFreightContainer";
+            public const string ColumnThermometer = "ThermometerFrCon";
             public const string Cbo = "CboFreightContainer";
             public const string DgvCatalog = "DgvCatalogFreightContainer";
-            public const string QueryCbo = $" SELECT id_freightContainer AS [{Column.id}], CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_freightContainer + ')', '(' + c_active + ')' ) AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}]  FROM Pack_FreightContainer ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT id_freightContainer AS [{Column.id}], CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_freightContainer + ')', '(' + c_active + ')' ) AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}], v_thermometer AS [{ColumnThermometer}]  FROM Pack_FreightContainer ORDER BY [{Column.name}] ";
             public const string CboTypeContainer = "CboTypeContainer";
             public const string QueryCboTypeContainer = $"  SELECT DISTINCT '1' AS [{Column.id}], v_typeContainer AS [{Column.name}] FROM Pack_FreightContainer frc WHERE v_typeContainer IS NOT NULL ";
 

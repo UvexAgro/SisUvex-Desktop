@@ -103,11 +103,6 @@ namespace SisUvex.Configuracion.Parameters
             };
             int count = int.Parse(ClsQuerysDB.GetStringExecuteParameterizedQuery("SELECT COUNT(*) FROM Conf_Parameters WHERE id_parameter = @idParameter AND id_typeParameter = @idTypeParameter OR id_parameter = @idOriginalParameter AND id_typeParameter = @idOriginalTypeParameter", parameters));
 
-            MessageBox.Show($"IDpar: {idParameter}\n" +
-                            $"IdTyp: {idTypeParameter}\n" +
-                            $"IdOriPar: {idOriginalParameter}\n" +
-                            $"IdOriTyp: {idOriginalTypeParameter}\n" +
-                            $"Count:" + count.ToString());
             return count > 1;
         }
 

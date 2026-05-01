@@ -12,10 +12,11 @@ using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using System.Windows.Forms;
+using SisUvex.Configuracion.Parameters;
 
 namespace SisUvex.Catalogos.GTIN
 {
-    internal class ClsGTIN : ClsCatalogos
+    internal class ClsGTIN
     {
         SQLControl sql = new SQLControl();
         ClsControls controlList;
@@ -186,9 +187,14 @@ namespace SisUvex.Catalogos.GTIN
             {
                 _frmAdd.chbActive.Checked = true;
                 _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_GTIN), 0) + 1, '00000') FROM Pack_GTIN").ToString();
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboPtiTag, GetIdPtiDefaultLabelPtiParameter());
             }
             else
                 LoadControlsModify();
+        }
+        private string? GetIdPtiDefaultLabelPtiParameter()
+        {
+            return EParameters.GetValue("019", "02");
         }
         public void OpenFrmModify()
         {

@@ -20,6 +20,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idWorkPlan { get; set; }
         public DateTime? dateWorkPlan { get; set; }
         public string? idWorkGroup { get; set; }
+        public string? workGroupName { get; set; }
         public string? idLot { get; set; }
         public string? nameLot { get; set; }
         public string? idVariety { get; set; }
@@ -69,6 +70,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             idWorkPlan = null;
             dateWorkPlan = null;
             idWorkGroup = null;
+            workGroupName = null;
             idLot = null;
             nameLot = null;
             idVariety = null;
@@ -128,6 +130,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 this.active = rows[0][Column.active].ToString();
                 this.idWorkPlan = rows[0][Column.id].ToString();
                 this.idWorkGroup = rows[0][WorkGroup.ColumnId].ToString();
+                this.workGroupName = rows[0][WorkGroup.ColumnName].ToString();
                 this.idLot = rows[0][Lot.ColumnId].ToString();
                 this.nameLot = rows[0][Lot.ColumnName].ToString();
                 this.idVariety = rows[0][Variety.ColumnId].ToString();

@@ -93,14 +93,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chbFechaOmitidaPti = new CheckBox();
             chbReversePtiTag = new CheckBox();
             gpbLastPallets = new GroupBox();
-            btnReprintPallet = new Button();
             dgvLastUserPallet = new DataGridView();
             chbReverseReprintPallet = new CheckBox();
+            chbFechaOmitidaReimprimirPallet = new CheckBox();
+            btnReprintPallet = new Button();
             groupBox1 = new GroupBox();
             chbFechaOmitidaPallet = new CheckBox();
             chbRevesePalletTag = new CheckBox();
             label2 = new Label();
-            chbFechaOmitidaReimprimirPallet = new CheckBox();
+            btnZplPtiCopy = new Button();
+            btnZplPalletCopy = new Button();
+            txbIdPtiChange = new TextBox();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -530,12 +533,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // cboWorkGroup
             // 
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboWorkGroup.DropDownWidth = 400;
             cboWorkGroup.Font = new Font("Segoe UI", 12F);
             cboWorkGroup.FormattingEnabled = true;
             cboWorkGroup.Location = new Point(192, 43);
             cboWorkGroup.Margin = new Padding(1);
             cboWorkGroup.Name = "cboWorkGroup";
-            cboWorkGroup.Size = new Size(183, 29);
+            cboWorkGroup.Size = new Size(252, 29);
             cboWorkGroup.TabIndex = 0;
             // 
             // lblTagWorkGroup
@@ -829,18 +833,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             gpbLastPallets.TabStop = false;
             gpbLastPallets.Text = "ÚLTIMOS PALLETS";
             // 
-            // btnReprintPallet
-            // 
-            btnReprintPallet.BackgroundImage = Properties.Resources.PrintIcon;
-            btnReprintPallet.BackgroundImageLayout = ImageLayout.Stretch;
-            btnReprintPallet.Location = new Point(34, 24);
-            btnReprintPallet.Margin = new Padding(1);
-            btnReprintPallet.Name = "btnReprintPallet";
-            btnReprintPallet.Size = new Size(29, 29);
-            btnReprintPallet.TabIndex = 12;
-            btnReprintPallet.UseVisualStyleBackColor = true;
-            btnReprintPallet.Click += button1_Click;
-            // 
             // dgvLastUserPallet
             // 
             dgvLastUserPallet.AllowUserToAddRows = false;
@@ -898,6 +890,29 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chbReverseReprintPallet.Text = "Invertir etiqueta";
             chbReverseReprintPallet.UseVisualStyleBackColor = true;
             // 
+            // chbFechaOmitidaReimprimirPallet
+            // 
+            chbFechaOmitidaReimprimirPallet.AutoSize = true;
+            chbFechaOmitidaReimprimirPallet.Font = new Font("Segoe UI", 9F);
+            chbFechaOmitidaReimprimirPallet.Location = new Point(67, 24);
+            chbFechaOmitidaReimprimirPallet.Name = "chbFechaOmitidaReimprimirPallet";
+            chbFechaOmitidaReimprimirPallet.Size = new Size(92, 19);
+            chbFechaOmitidaReimprimirPallet.TabIndex = 77;
+            chbFechaOmitidaReimprimirPallet.Text = "Omitir fecha";
+            chbFechaOmitidaReimprimirPallet.UseVisualStyleBackColor = true;
+            // 
+            // btnReprintPallet
+            // 
+            btnReprintPallet.BackgroundImage = Properties.Resources.PrintIcon;
+            btnReprintPallet.BackgroundImageLayout = ImageLayout.Stretch;
+            btnReprintPallet.Location = new Point(34, 24);
+            btnReprintPallet.Margin = new Padding(1);
+            btnReprintPallet.Name = "btnReprintPallet";
+            btnReprintPallet.Size = new Size(29, 29);
+            btnReprintPallet.TabIndex = 12;
+            btnReprintPallet.UseVisualStyleBackColor = true;
+            btnReprintPallet.Click += button1_Click;
+            // 
             // groupBox1
             // 
             groupBox1.Controls.Add(chbFechaOmitidaPallet);
@@ -950,22 +965,51 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label2.TabIndex = 68;
             label2.Text = "Cantidad:";
             // 
-            // chbFechaOmitidaReimprimirPallet
+            // btnZplPtiCopy
             // 
-            chbFechaOmitidaReimprimirPallet.AutoSize = true;
-            chbFechaOmitidaReimprimirPallet.Font = new Font("Segoe UI", 9F);
-            chbFechaOmitidaReimprimirPallet.Location = new Point(67, 24);
-            chbFechaOmitidaReimprimirPallet.Name = "chbFechaOmitidaReimprimirPallet";
-            chbFechaOmitidaReimprimirPallet.Size = new Size(92, 19);
-            chbFechaOmitidaReimprimirPallet.TabIndex = 77;
-            chbFechaOmitidaReimprimirPallet.Text = "Omitir fecha";
-            chbFechaOmitidaReimprimirPallet.UseVisualStyleBackColor = true;
+            btnZplPtiCopy.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnZplPtiCopy.BackgroundImageLayout = ImageLayout.Stretch;
+            btnZplPtiCopy.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btnZplPtiCopy.Location = new Point(167, 703);
+            btnZplPtiCopy.Margin = new Padding(0);
+            btnZplPtiCopy.Name = "btnZplPtiCopy";
+            btnZplPtiCopy.Size = new Size(105, 21);
+            btnZplPtiCopy.TabIndex = 65;
+            btnZplPtiCopy.Text = "COPIAR PTI ZPL";
+            btnZplPtiCopy.UseVisualStyleBackColor = true;
+            btnZplPtiCopy.Click += btnZplPtiCopy_Click;
+            // 
+            // btnZplPalletCopy
+            // 
+            btnZplPalletCopy.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnZplPalletCopy.BackgroundImageLayout = ImageLayout.Stretch;
+            btnZplPalletCopy.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btnZplPalletCopy.Location = new Point(38, 703);
+            btnZplPalletCopy.Margin = new Padding(0);
+            btnZplPalletCopy.Name = "btnZplPalletCopy";
+            btnZplPalletCopy.Size = new Size(129, 21);
+            btnZplPalletCopy.TabIndex = 83;
+            btnZplPalletCopy.Text = "COPIAR PALLET ZPL";
+            btnZplPalletCopy.UseVisualStyleBackColor = true;
+            btnZplPalletCopy.Click += btnZplPalletCopy_Click;
+            // 
+            // txbIdPtiChange
+            // 
+            txbIdPtiChange.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            txbIdPtiChange.Location = new Point(10, 703);
+            txbIdPtiChange.MaxLength = 2;
+            txbIdPtiChange.Name = "txbIdPtiChange";
+            txbIdPtiChange.Size = new Size(25, 23);
+            txbIdPtiChange.TabIndex = 84;
             // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(822, 730);
+            Controls.Add(txbIdPtiChange);
+            Controls.Add(btnZplPalletCopy);
+            Controls.Add(btnZplPtiCopy);
             Controls.Add(groupBox1);
             Controls.Add(grbPrint);
             Controls.Add(lblWorkDay);
@@ -1079,5 +1123,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public CheckBox chbFechaOmitidaPti;
         public CheckBox chbFechaOmitidaPallet;
         public CheckBox chbFechaOmitidaReimprimirPallet;
+        private Button btnZplPtiCopy;
+        private Button btnZplPalletCopy;
+        private TextBox txbIdPtiChange;
     }
 }

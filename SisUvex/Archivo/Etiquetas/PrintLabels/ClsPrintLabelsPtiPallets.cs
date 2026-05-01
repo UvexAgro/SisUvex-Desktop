@@ -127,6 +127,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.active                 = rows[0][Column.active].ToString();
                 eTag.idWorkPlan             = rows[0][Column.id].ToString();
                 eTag.idWorkGroup            = rows[0][WorkGroup.ColumnId].ToString();
+                eTag.workGroupName          = rows[0][WorkGroup.ColumnName].ToString();
                 eTag.idLot                  = rows[0][Lot.ColumnId].ToString();
                 eTag.nameLot                = rows[0][Lot.ColumnName].ToString();
                 eTag.idVariety              = rows[0][Variety.ColumnId].ToString();
@@ -238,7 +239,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             }
         }
-        private bool IsInformationNeededToUpdate()
+        public bool IsInformationNeededToUpdate()
         {
             if (ClsComboBoxFiles.IsInfoNeededToUpdate(ClsObject.WorkPlan.CboPresentation))
             {

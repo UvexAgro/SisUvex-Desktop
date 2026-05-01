@@ -29,15 +29,11 @@ namespace SisUvex.Archivo.Manifiesto
             cls._frmAdd ??= this;
         }
 
-        private void btnAceptar_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void FrmManifestAdd_Load(object sender, EventArgs e)
         {
-            cls.BeginFormAdd();
+            txbThermometerContainer.ReadOnly = IsAddModify;
 
+            cls.BeginFormAdd();
         }
 
         private void chbRemovedDistributor_CheckedChanged(object sender, EventArgs e)
@@ -169,6 +165,11 @@ namespace SisUvex.Archivo.Manifiesto
         private void txbIdMarket_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnEditTherFco_Click(object sender, EventArgs e)
+        {
+            txbThermometerContainer.ReadOnly = !txbThermometerContainer.ReadOnly;
         }
     }
 }

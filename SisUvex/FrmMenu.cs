@@ -709,9 +709,20 @@ namespace SisUvex
 			AbrirVentanaHijo(cat);
 		}
 
-		private void reporteDeHorariosYCajasUvaToolStripMenuItem_Click(object sender, EventArgs e)
+		private void zPLPreviewToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			Cuadro_de_herramientas.ZPL.FrmZPLPreview cat = new();
+			//cat.Show();
+			AbrirVentanaHijo(cat, 0);
+		}
 
+		private void FrmMenu_Load(object sender, EventArgs e)
+		{
+			zPLPreviewToolStripMenuItem.Visible = User.HasSysAdminPermission();
+		}
+
+		private void reporteDeEmpaqueCentralUvaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
 			if (!User.HasViewCatalogsPermission())
 				return;
 

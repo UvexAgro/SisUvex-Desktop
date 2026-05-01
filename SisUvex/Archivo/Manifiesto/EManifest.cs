@@ -40,6 +40,7 @@ namespace SisUvex.Archivo.Manifiesto
         public string? phytosanitary { get; set; }
         public string? idSeason { get; set; }
         public string? idMarket { get; set; }
+        public string? thermometerContainer { get; set; }
 
         public void SetManifest(string idManifest)
         {
@@ -89,6 +90,7 @@ namespace SisUvex.Archivo.Manifiesto
                     this.phytosanitary = dr.GetValue(dr.GetOrdinal("v_phytosanitary")).ToString();
                     this.idSeason = dr.GetValue(dr.GetOrdinal("id_season")).ToString();
                     this.idMarket = dr.GetValue(dr.GetOrdinal("id_market")).ToString();
+                    this.thermometerContainer = dr.GetValue(dr.GetOrdinal("v_thermometerContainer")).ToString();
                 }
             }
             catch (Exception ex)

@@ -2,7 +2,9 @@
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.ReportingServices.ReportProcessing.OnDemandReportObjectModel;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
+using SisUvex.Configuracion.Parameters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,14 +41,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             reverseLabelOrientationZPL = ReverseLabelOrientation(reverseOrientation);
             eTag = eTagInfo;
-            switch (eTag.idPti)
+
+            string? idPti = string.IsNullOrEmpty(eTag.idPti) ? GetIdPtiDefaultLabelPtiParameter() : eTag.idPti;
+            string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
+            string? fullPresentation = CONCAT_WS(" ", eTag.preLabel, eTag.namePresentation, eTag.postLabel);
+            string? left2WGroup = eTag.workGroupName?.Substring(0,2);
+
+            switch (idPti)
             {
                 case
                     "01":
-                    //ESTANDAR
-                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
-                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
-                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    //ESTANDAR (2026)                  -->se cambió en 28-abril-2026 la de dayka-walmart como standar para todas las demás, el standar viejo ahora es la "09" standar 2025
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL("Grown/Packed by:", "Uvex Agro Internacional", "Distributed by:", eTag.nameDistributor); //PRESENTACION STANDAR
                     break;
                 case
                     "02":
@@ -64,15 +71,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     "04":
                     //AUSTRALIA
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
-                    string kg = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
-                    SetStringPresentationZPL(" "+kg + " Kg", eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION KILOS
+                    SetStringPresentationZPL(" " + kgs + " Kg", eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION KILOS
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 case
                     "05":
                     //FOUR STARS
                     SetStringCropVarietyZPL(eTag.nameCrop, eTag.nameVariety); //VARIEDAD  STANDAR
-                    SetStringPresentationZPL(eTag.Lbs+" LB Bags", string.Empty, string.Empty, string.Empty, string.Empty);//PRESENTACION FOUR STARS
+                    SetStringPresentationZPL(eTag.Lbs + " LB Bags", string.Empty, string.Empty, string.Empty, string.Empty);//PRESENTACION FOUR STARS
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 case
@@ -85,7 +91,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "07":
                     //QR CANADA
-                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, eTag.idWorkGroup);
+                    SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, left2WGroup);
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     return SetStringCanadaPtiLabel(copies);
                 case
@@ -93,29 +99,32 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     //NOMBRE CIENTIFICO (ESTANDAR PARA VARIEDADES CON NOMBRE CIENTIFICO)
                     string scientificName = string.IsNullOrEmpty(eTag.scientisVarierty) ? eTag.nameVariety : eTag.scientisVarierty; //En caso de que no tenga científico que use el nombre normal (comercial)
 
-                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.scientisVarierty, eTag.nameSize); //VARIEDAD CON NOMBRE CIENTIFICO
-                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
-                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    //SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.scientisVarierty, eTag.nameSize); //VARIEDAD CON NOMBRE CIENTIFICO
+                    //SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    //SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", scientificName, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL("Grown/Packed by:", "Uvex Agro Internacional", "Distributed by:", eTag.nameDistributor); //PRESENTACION STANDAR
+                    
                     break;
-                case 
+                case
                     "09":
-                    //DAYKA - WALMART (2026)
-                    string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
-                    SetStringWalmartBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE");
-                    SetStringWalmartPackedByDistributedByNameAndProductOfMexicoZPL("Uvex Agro Internacional", eTag.nameDistributor);
+                    //STANDAR 2025
+                    SetStringCropVarietySizeZPL2025(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
+                    SetStringPresentationZPL2025(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringDistributorZPL2025(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
-                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); ; //DISTRIBUIDOR STANDAR
-                    SetStringPresentationZPL(eTag.Lbs, string.Empty, string.Empty, string.Empty, string.Empty); //PRESENTACION STANDAR; //PRESENTACION STANDAR
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    SetStringPresentationZPL(eTag.Lbs, string.Empty, string.Empty, string.Empty, string.Empty); //PRESENTACION STANDAR
                     break;
             }
 
-            SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, eTag.idWorkGroup);
+            SetStringGtinZPL(eTag.valueGTIN, eTag.dateWorkPlan, eTag.showDate, eTag.idLot, left2WGroup);
             SetStringUpcZPL(eTag.upcGTIN);
             SetStringVoicePicKCodeAndPackDateZPL(eTag.voicePickCode, eTag.dateWorkPlan, eTag.showDate);
 
-            if (eTag.idPti == "06") //QR ESPARRAGO
+            if (idPti == "06") //QR ESPARRAGO
                 return SuperPrintPtiTagWithQrUniqueBox(copies);
             else
                 return SuperPrintPtiTag(copies);
@@ -155,7 +164,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string SetStringAlbertonsPtiLabel(int copies)
         {
 
-            string zplAlbertons =   $"\n^CF0,30,30" +
+            string zplAlbertons = $"\n^CF0,30,30" +
                                     $"\n^FT32,47^A@N,25,25^FD8/2 lb Clams^FS" +
                                     $"\n^FT573,47^A@N,25,25^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
                                     $"\n^FT178,98^A@N,25,25^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
@@ -185,7 +194,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string DateMonth = eTag.dateWorkPlan?.ToString("MMM") ?? DateTime.Now.ToString("MMM");
             string DateDay = eTag.dateWorkPlan?.ToString("dd") ?? DateTime.Now.ToString("dd");
 
-            string zplAlbertons =   $"\n^CFF,10,0 ^FO10,130^FD {eTag.nameColorCanEn}/{eTag.nameColorCanFr} ^FS" +
+            string zplAlbertons = $"\n^CFF,10,0 ^FO10,130^FD {eTag.nameColorCanEn}/{eTag.nameColorCanFr} ^FS" +
                                     $"\n^CFF,10,0 ^FO25,160^FD{eTag.nameVariety} ({eTag.nameSize})^FS" +
                                     $"\n^CFF,10,0 ^FO25,210^FD{stringPresentation}^FS" +
                                     $"\n^CFF,10,0 ^FO25,240^FDNet Weight / Poids Net: {eTag.Lbs} lb^FS" +
@@ -246,6 +255,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         private void SetStringCropVarietySizeZPL(string Crop, string Variety, string Size)
+        {//2026
+            varietyZPL = "^FX CROP, SIZE AND VARIETY\n" +
+                        $"^CFF,60,10 ^FO25,130^FD{Crop} ({Size}) {Variety}^FS\n";
+        }
+        private void SetStringCropVarietySizeZPL2025(string Crop, string Variety, string Size)
         {
             varietyZPL = "^FX CROP, SIZE AND VARIETY\n" +
                         $"^CFF,60,10 ^FO25,130^FD{Crop} ({Size}) {Variety}^FS\n";
@@ -263,6 +277,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         private void SetStringPresentationZPL(string Weight, string Presentation, string container, string preLabel, string postLabel)
+        {//2026
+            string stringPresentation = container + Weight;
+            if (!string.IsNullOrEmpty(preLabel)) stringPresentation += " " + preLabel;
+            stringPresentation += " " + Presentation;
+            if (!string.IsNullOrEmpty(postLabel)) stringPresentation += " " + postLabel;
+
+            presentationZPL = "^FX PRESENTATION\n" +
+                        $"^CFF,60,10 ^FO25,190^FD" + stringPresentation + "^FS\n" +
+                         "^CFF,30,10 ^FO25,255^FDProduce of Mexico^FS\n";
+        }
+        private void SetStringPresentationZPL2025(string Weight, string Presentation, string container, string preLabel, string postLabel)
         {
             string stringPresentation = container + Weight;
             if (!string.IsNullOrEmpty(preLabel)) stringPresentation += " " + preLabel;
@@ -275,6 +300,17 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
+        {
+            distributorZPL = "^FX DISTRIBUTOR\n" +
+                        "^CFF,30,10\n" +
+                        "^FO25,300^FD" + Distributor + "^FS\n" +
+                        "^CFF,30,10\n" +
+                        "^FO23,335^FD" + AddresDistributor1 + "^FS\n" +
+                        "^FO23,365^FD" + AddresDistributor2 + "^FS\n";
+
+            return distributorZPL;
+        }
+        private string SetStringDistributorZPL2025(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
             distributorZPL = "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
@@ -365,38 +401,37 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         "^FO650,255^FD" + DateMonth + "^FS\n" +
                         "^FO745,255^FD" + DateDay + "^FS\n" +
                         "^FO640,235^GB160,70,3^FS"; //RECTANGULO BLANCO CON BORDES NEGROS
-                        //"^FO640,235^FR^GB160,70,50^FS\n"; //RECTANGULO NEGRO
+                                                    //"^FO640,235^FR^GB160,70,50^FS\n"; //RECTANGULO NEGRO
             }
             else
             {// de momento solo no muestra la fecha y su cuadro negro
             }
         }
         /// <summary>
-        /// (2026-DAYKA WALMART) EJ: BLACK SEEDLESS GRAPE, /n MIDNIGHT BEAUTY, /n 18Lb / 8.2Kg CASE, /n Product of Mexico
+        /// (2026-STANDAR) EJ: BLACK SEEDLESS GRAPE, /n MIDNIGHT BEAUTY, /n 18Lb / 8.2Kg CASE, /n Product of Mexico
         /// </summary>
         /// <param name="Crop"></param>
         /// <param name="Variety"></param>
-        private void SetStringWalmartBoldColorVarietyLbsZPL(string ColorLine1, string VarietyLine2, string WeightLine3)
+        private void SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(string? ColorLine1, string? VarietyLine2, string? WeightLine3)
         {
             //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             varietyZPL = "^FX COLOR\n" +
                         $"^CF0,30,35 ^FO25,110^FD{ColorLine1}^FS\n"
-                        +"^FX VARIETY\n" +
+                        + "^FX VARIETY\n" +
                         $"^CF0,30,35 ^FO25,145^FD{VarietyLine2}^FS\n"
-                        +"^FX WEIGHT\n" +
+                        + "^FX WEIGHT\n" +
                         $"^CF0,30,40 ^FO23,180^FD{WeightLine3}^FS\n";
         }
-        private void SetStringWalmartPackedByDistributedByNameAndProductOfMexicoZPL(string GrowerLine1, string DistributorLine2)
+        private void SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL(string? GrownBy1, string? GrowerLine2, string? DistributedBy3, string? DistributorLine4)
         {
-            //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             distributorZPL = "^FX  PRODUCTO DE\n" +
                         $"^CF0,30,50^FO22,220^FDProduct of Mexico^FS\n"
                         + "^FX GROWER\n" +
-                        $"^CFF,30,10^FO23,260^FDGrown/Packed by:^FS\n" + 
-                        $"^FO25,290^FD{GrowerLine1}^FS\n"
-                        + "^FX DISTRIBUIDOR\n" + 
-                        $"^CFF,30,10^FO25,330^FDDistributed by:^FS\n" +
-                        $"^FO25,360^FD{DistributorLine2}^FS\n";
+                        $"^CFF,30,10^FO23,260^FD{GrownBy1}^FS\n" +
+                        $"^FO25,290^FD{GrowerLine2}^FS\n"
+                        + "^FX DISTRIBUIDOR\n" +
+                        $"^CFF,30,10^FO25,330^FD{DistributedBy3}^FS\n" +
+                        $"^FO25,360^FD{DistributorLine4}^FS\n";
         }
 
         private void ChangeFontSize(string inputText)
@@ -436,6 +471,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return string.Empty;
             else
                 return date.Value.DayOfYear.ToString("D3");
+        }
+
+        private string? GetIdPtiDefaultLabelPtiParameter()
+        {
+            return EParameters.GetValue("019", "02");
+        }
+
+        private string? CONCAT_WS(string separator, params string[] values)
+        {
+            return string.Join(separator, values.Where(v => !string.IsNullOrEmpty(v)));
         }
     }
 }
