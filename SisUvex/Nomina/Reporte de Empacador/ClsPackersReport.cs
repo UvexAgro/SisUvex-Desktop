@@ -39,6 +39,12 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 			ClsComboBoxes.CboLoadActives(frmPack.cboLineas, ClsObject.ProductionLine.Cbo);
 
 		}
+		private string ObtenerTipo()
+		{
+			if (frmPack.rbtUva.Checked) return "U";
+			if (frmPack.rbtEsparrago.Checked) return "E";
+			return null;
+		}
 		public void ObtenerPackersReport()
 		{
 			try
@@ -65,19 +71,27 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 					return;
 				}
 
+				string tipo = ObtenerTipo();
+
+				if (tipo == null)
+				{
+					MessageBox.Show("Seleccione tipo de nómina");
+					return;
+				}
+
 				DataRowView row = (DataRowView)frmPack.cboSemana.SelectedItem;
 
 				DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
 				DateTime fechaFin = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnEndDate]);
 
+				
 				string query = $@"
-				SELECT *
-				FROM dbo.fn_PackersReport(
+				EXEC dbo.sp_PackersReport
 				'{fechaInicio:yyyy-MM-dd}',
 				'{fechaFin:yyyy-MM-dd}',
 				'{linea}',
-				'{idEmpleado}')
-				ORDER BY CodigoEmpleado, Fecha";
+				'{idEmpleado}',
+				'{tipo}'";
 
 				DataTable dt = ClsQuerysDB.GetDataTable(query);
 
@@ -128,6 +142,14 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 		{
 			try
 			{
+				string tipo = ObtenerTipo();
+
+				if (tipo == null)
+				{
+					MessageBox.Show("Seleccione tipo de nómina");
+					return;
+				}
+
 				// Obtener datos del reporte desde el DataGridView
 				DataTable dt = frmPack.dgvEmployee.DataSource as DataTable;
 
@@ -171,7 +193,8 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 					PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 					PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
-					int totalColumnas = dias.Count + 4;
+					int columnasBase = (tipo == "U") ? 3 : 4;
+					int totalColumnas = dias.Count + columnasBase;
 
 					float[] columnWidths = new float[totalColumnas];
 					for (int i = 0; i < totalColumnas; i++)
@@ -196,8 +219,16 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 					);
 
 					// ===== ENCABEZADOS =====
-					table.AddCell(new Paragraph("Tamaño").SetFont(fontBold));
-					table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+					// ===== ENCABEZADOS =====
+					string nombreColumna = (tipo == "U") ? "Categoría" : "Tamaño";
+
+					table.AddCell(new Paragraph(nombreColumna).SetFont(fontBold));
+
+					if (tipo != "U")
+					{
+						table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+					}
+
 					table.AddCell(new Paragraph("Tipo").SetFont(fontBold));
 
 					foreach (var dia in dias)
@@ -219,17 +250,26 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 
 					// ===== AGRUPAR DATOS =====
 					var datosAgrupados = dt.AsEnumerable()
-						.GroupBy(r => new
-						{
-							Tamaño = r["Tamaño"].ToString(),
-							Presentacion = r["Presentacion"].ToString()
-						})
-						.ToList();
+					.GroupBy(r => new
+					{
+						Grupo = (tipo == "U")
+							? r["CategoriaPrecio"].ToString()
+							: r["Tamaño"].ToString(),
+
+						Presentacion = (tipo != "U")
+							? r["Presentacion"].ToString()
+							: ""
+					})
+					.ToList();
 
 					foreach (var grupo in datosAgrupados)
 					{
-						table.AddCell(new Paragraph(grupo.Key.Tamaño).SetFont(font));
-						table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+						table.AddCell(new Paragraph(grupo.Key.Grupo).SetFont(font));
+
+						if (tipo != "U")
+						{
+							table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+						}
 						table.AddCell(new Paragraph("Normal").SetFont(font));
 
 						int totalNormal = 0;
@@ -257,8 +297,16 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 
 						if (totalExtraGrupo > 0)
 						{
-							table.AddCell("");
-							table.AddCell("");
+							if (tipo == "U")
+							{
+								table.AddCell(""); // Categoría
+							}
+							else
+							{
+								table.AddCell(""); // Tamaño
+								table.AddCell(""); // Presentación
+							}
+
 							table.AddCell(new Paragraph("Extra").SetFont(font));
 
 							int totalExtra = 0;
@@ -306,6 +354,14 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 		}
 		public void ExportarPdfPorLinea()
 		{
+			string tipo = ObtenerTipo();
+
+			if (tipo == null)
+			{
+				MessageBox.Show("Seleccione tipo de nómina");
+				return;
+			}
+
 			string linea = frmPack.cboLineas.SelectedValue?.ToString();
 
 			string lineaSql = "NULL";
@@ -315,18 +371,16 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 				lineaSql = $"'{linea}'";
 			}
 
-			// Obtener semana y fechas desde el ComboBox
 			DateTime fechaInicio = Convert.ToDateTime(frmPack.cboSemana.GetColumnValue(Payroll_AttendancePeriod.ColumnStartDate));
 			DateTime fechaFin = Convert.ToDateTime(frmPack.cboSemana.GetColumnValue(Payroll_AttendancePeriod.ColumnEndDate));
 
 			string query = $@"
-			SELECT *
-			FROM dbo.fn_PackersReport(
+			EXEC dbo.sp_PackersReport
 			'{fechaInicio:yyyy-MM-dd}',
 			'{fechaFin:yyyy-MM-dd}',
 			{lineaSql},
-			NULL)
-			ORDER BY CodigoEmpleado, Fecha";
+			NULL,
+			'{tipo}'";
 
 			DataTable dt = ClsQuerysDB.GetDataTable(query);
 
@@ -373,7 +427,8 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 							.OrderBy(d => d)
 							.ToList();
 
-							int totalColumnas = dias.Count + 4;
+							int columnasBase = (tipo == "U") ? 3 : 4;
+							int totalColumnas = dias.Count + columnasBase;
 
 							float[] columnas = new float[totalColumnas];
 							for (int c = 0; c < totalColumnas; c++)
@@ -398,8 +453,15 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 							.SetTextAlignment(TextAlignment.CENTER));
 
 							// ===== ENCABEZADOS =====
-							table.AddCell(new Paragraph("Tamaño").SetFont(fontBold));
-							table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+							string nombreColumna = (tipo == "U") ? "Categoría" : "Tamaño";
+
+							table.AddCell(new Paragraph(nombreColumna).SetFont(fontBold));
+
+							if (tipo != "U")
+							{
+								table.AddCell(new Paragraph("Presentación").SetFont(fontBold));
+							}
+
 							table.AddCell(new Paragraph("Tipo").SetFont(fontBold));
 
 							foreach (var dia in dias)
@@ -423,15 +485,24 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 							var datosAgrupados = emp
 							.GroupBy(r => new
 							{
-								Tamaño = r["Tamaño"].ToString(),
-								Presentacion = r["Presentacion"].ToString()
+								Grupo = (tipo == "U")
+									? r["CategoriaPrecio"].ToString()
+									: r["Tamaño"].ToString(),
+
+								Presentacion = (tipo != "U")
+									? r["Presentacion"].ToString()
+									: ""
 							})
 							.ToList();
 
 							foreach (var grupo in datosAgrupados)
 							{
-								table.AddCell(new Paragraph(grupo.Key.Tamaño).SetFont(font));
-								table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+								table.AddCell(new Paragraph(grupo.Key.Grupo).SetFont(font));
+
+								if (tipo != "U")
+								{
+									table.AddCell(new Paragraph(grupo.Key.Presentacion).SetFont(font));
+								}
 								table.AddCell(new Paragraph("Normal").SetFont(font));
 
 								int totalNormal = 0;
@@ -459,8 +530,16 @@ namespace SisUvex.Nomina.Reporte_de_Empacador
 
 								if (totalExtraGrupo > 0)
 								{
-									table.AddCell("");
-									table.AddCell("");
+									if (tipo == "U")
+									{
+										table.AddCell(""); // Categoría
+									}
+									else
+									{
+										table.AddCell(""); // Tamaño
+										table.AddCell(""); // Presentación
+									}
+
 									table.AddCell(new Paragraph("Extra").SetFont(font));
 
 									int totalExtra = 0;
