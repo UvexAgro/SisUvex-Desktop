@@ -13,6 +13,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmZPLPreview));
             splitMain = new SplitContainer();
             rtbZpl = new RichTextBox();
             pnlPreview = new Panel();
@@ -239,8 +240,8 @@
             flpOpciones.Controls.Add(txbApiKey);
             flpOpciones.Controls.Add(lblImpresora);
             flpOpciones.Controls.Add(cboImpresora);
-            flpOpciones.Controls.Add(btnImprimirZpl);
             flpOpciones.Controls.Add(btnActualizarPreview);
+            flpOpciones.Controls.Add(btnImprimirZpl);
             flpOpciones.Dock = DockStyle.Fill;
             flpOpciones.Location = new Point(0, 0);
             flpOpciones.Margin = new Padding(3, 2, 3, 2);
@@ -458,7 +459,7 @@
             // btnImprimirZpl
             // 
             btnImprimirZpl.AutoSize = true;
-            btnImprimirZpl.Location = new Point(321, 63);
+            btnImprimirZpl.Location = new Point(489, 63);
             btnImprimirZpl.Margin = new Padding(3, 2, 7, 3);
             btnImprimirZpl.Name = "btnImprimirZpl";
             btnImprimirZpl.Size = new Size(105, 25);
@@ -469,7 +470,7 @@
             // btnActualizarPreview
             // 
             btnActualizarPreview.AutoSize = true;
-            btnActualizarPreview.Location = new Point(436, 63);
+            btnActualizarPreview.Location = new Point(321, 63);
             btnActualizarPreview.Margin = new Padding(3, 2, 7, 3);
             btnActualizarPreview.Name = "btnActualizarPreview";
             btnActualizarPreview.Size = new Size(158, 25);
@@ -496,6 +497,7 @@
             ClientSize = new Size(892, 669);
             Controls.Add(splitMain);
             Controls.Add(pnlTop);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
             MinimumSize = new Size(702, 385);
             Name = "FrmZPLPreview";

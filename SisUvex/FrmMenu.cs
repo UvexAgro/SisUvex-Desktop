@@ -708,5 +708,17 @@ namespace SisUvex
             Facility.FaciIityPackagingTracking.Catalog.FrmFaciIityPackagingTrackingCat cat = new();
             AbrirVentanaHijo(cat);
         }
+
+        private void zPLPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cuadro_de_herramientas.ZPL.FrmZPLPreview cat = new();
+            //cat.Show();
+            AbrirVentanaHijo(cat, 0);
+        }
+
+        private void FrmMenu_Load(object sender, EventArgs e)
+        {
+            zPLPreviewToolStripMenuItem.Visible = User.HasSysAdminPermission();
+        }
     }
 }
