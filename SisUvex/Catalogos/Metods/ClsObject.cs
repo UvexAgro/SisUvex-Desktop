@@ -41,6 +41,7 @@ namespace SisUvex.Catalogos.Metods
                                                         , wpl.id_workPlan AS [{Column.id}]
                                                         , FORMAT(wpl.d_workDay, 'yyyy-MM-dd') AS [{ColumnDate}]
                                                         , wpl.id_workGroup AS [{WorkGroup.ColumnId}]
+                                                        , wgp.v_nameWorkGroup AS [{WorkGroup.ColumnName}]
                                                         , wpl.id_lot AS [{Lot.ColumnId}]
                                                         , lot.v_nameLot AS [{Lot.ColumnName}]
                                                         , gtn.id_variety AS [{Variety.ColumnId}]
