@@ -47,6 +47,8 @@ internal class EUserCrud
         if (string.IsNullOrWhiteSpace(userName))
             return false;
 
+        userName = userName.ToUpper().Trim(); // Normalizar para evitar problemas de mayúsculas/minúsculas y espacios.
+
         SQLControl sql = new();
         try
         {
@@ -55,7 +57,7 @@ internal class EUserCrud
             {
                 CommandType = CommandType.StoredProcedure
             };
-            cmd.Parameters.AddWithValue("@usuario", userName.Trim());
+            cmd.Parameters.AddWithValue("@usuario", userName);
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
             {
@@ -93,7 +95,7 @@ internal class EUserCrud
                 return;
 
             IdUser = ReadField(dr, "c_codigo_usu");
-            UserDisplayName = ReadField(dr, "v_nombre_usu");
+            UserDisplayName = ReadField(dr, "v_nombre_usu")?.Trim().ToUpper();
             Accesibilidad = int.TryParse(ReadField(dr, "c_accesibilidad_usu"), out int acc) ? acc : 0;
             IdWorkGroup = ReadField(dr, "id_workGroup");
             IdContractor = ReadField(dr, "id_contractor");
@@ -125,8 +127,8 @@ internal class EUserCrud
                 CommandType = CommandType.StoredProcedure
             };
             cmd.Parameters.AddWithValue("@action", "ADD");
-            cmd.Parameters.AddWithValue("@c_codigo_usu", (object)(IdUser?.Trim().ToUpper() ?? string.Empty));
-            cmd.Parameters.AddWithValue("@v_nombre_usu", (object)(UserDisplayName?.Trim() ?? string.Empty));
+            cmd.Parameters.AddWithValue("@c_codigo_usu", (object)(IdUser?.Trim() ?? string.Empty));
+            cmd.Parameters.AddWithValue("@v_nombre_usu", (object)(UserDisplayName?.Trim().ToUpper() ?? string.Empty));
             cmd.Parameters.AddWithValue("@v_passwo_usu", (object)(PasswordHash ?? string.Empty));
             cmd.Parameters.AddWithValue("@c_accesibilidad_usu", Accesibilidad.ToString());
             cmd.Parameters.AddWithValue("@id_workGroup", string.IsNullOrWhiteSpace(IdWorkGroup) ? (object)DBNull.Value : IdWorkGroup.Trim());
@@ -171,7 +173,7 @@ internal class EUserCrud
             };
             cmd.Parameters.AddWithValue("@action", "MODIFY");
             cmd.Parameters.AddWithValue("@c_codigo_usu", (object)(IdUser?.Trim() ?? string.Empty));
-            cmd.Parameters.AddWithValue("@v_nombre_usu", (object)(UserDisplayName?.Trim() ?? string.Empty));
+            cmd.Parameters.AddWithValue("@v_nombre_usu", (object)(UserDisplayName?.Trim().ToUpper() ?? string.Empty));
             cmd.Parameters.AddWithValue("@v_passwo_usu", DBNull.Value);
             cmd.Parameters.AddWithValue("@c_accesibilidad_usu", Accesibilidad.ToString());
             cmd.Parameters.AddWithValue("@id_workGroup", string.IsNullOrWhiteSpace(IdWorkGroup) ? (object)DBNull.Value : IdWorkGroup.Trim());

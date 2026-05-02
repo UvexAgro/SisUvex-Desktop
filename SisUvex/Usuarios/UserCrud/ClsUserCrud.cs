@@ -122,8 +122,8 @@ internal class ClsUserCrud
     private EUserCrud SetEntity(bool includePasswordHash, string? passwordHashBcrypt)
     {
         entity = new();
-        entity.IdUser = _frmAdd.txbId.Text.Trim().ToUpperInvariant();
-        entity.UserDisplayName = _frmAdd.txbUserName.Text.Trim();
+        entity.IdUser = _frmAdd.txbId.Text.Trim();
+        entity.UserDisplayName = _frmAdd.txbUserName.Text.Trim().ToUpper();
         entity.Accesibilidad = (int)_frmAdd.nudAcces.Value;
         entity.IdContractor = _frmAdd.cboContractor.ComboValueOrNull();
         entity.IdWorkGroup = _frmAdd.cboWorkGroup.ComboValueOrNull();
@@ -212,9 +212,22 @@ internal class ClsUserCrud
 
         return true;
     }
+    public static bool ValidateUserName(string usuario)
+    {
+        // Solo letras y números, sin espacios
+        return System.Text.RegularExpressions.Regex.IsMatch(usuario, @"^[a-zA-Z0-9]+$");
+    }
 
     public void BtnAccept()
     {
+        if (!ValidateUserName(_frmAdd.txbUserName.Text))
+        {
+            MessageBox.Show("El nombre de usuario solo puede contener letras y números, sin espacios.", "Añadir usuario", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        _frmAdd.txbUserName.Text = _frmAdd.txbUserName.Text.Trim().ToUpper(); //mostrar el nombre en mayusculas y sin espacios
+
         if (!controlList.ValidateControls())
             return;
 
@@ -223,7 +236,7 @@ internal class ClsUserCrud
             if (!ValidatePasswordsForAdd())
                 return;
 
-            string userName = _frmAdd.txbUserName.Text.Trim().ToUpperInvariant();
+            string userName = _frmAdd.txbUserName.Text.Trim().ToUpper();
             if (EUserCrud.UserExists(userName))
             {
                 MessageBox.Show($"El usuario {userName} ya existe. Use otro nombre de usuario.", "Añadir usuario", MessageBoxButtons.OK, MessageBoxIcon.Warning);
