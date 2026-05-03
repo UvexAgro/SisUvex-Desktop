@@ -248,7 +248,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (frm.rbtEsparrago.Checked)
 			{
 				TipoNomina = "E"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina '{fecha}'";
+				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}'";
 			}
 
 			//  UVA
