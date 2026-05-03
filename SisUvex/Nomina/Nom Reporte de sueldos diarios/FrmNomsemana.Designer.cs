@@ -56,10 +56,17 @@
 			lblbuscar = new Label();
 			lblFiltro = new Label();
 			label1 = new Label();
+			pictureBox1 = new PictureBox();
+			pictureBox2 = new PictureBox();
+			rbtUva = new RadioButton();
+			lblTipodeNomina = new Label();
+			rbtEsparrago = new RadioButton();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvListaEmpleado).BeginInit();
 			panel1.SuspendLayout();
 			panellbl.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
 			SuspendLayout();
 			// 
 			// btnExcel
@@ -145,7 +152,7 @@
 			// 
 			lblSemana.AutoSize = true;
 			lblSemana.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblSemana.Location = new Point(31, 121);
+			lblSemana.Location = new Point(563, 121);
 			lblSemana.Name = "lblSemana";
 			lblSemana.Size = new Size(69, 21);
 			lblSemana.TabIndex = 42;
@@ -155,7 +162,7 @@
 			// 
 			cboSemana.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(106, 123);
+			cboSemana.Location = new Point(638, 123);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(235, 23);
 			cboSemana.TabIndex = 41;
@@ -203,7 +210,7 @@
 			// 
 			lblReporteEmpacadores.AutoSize = true;
 			lblReporteEmpacadores.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblReporteEmpacadores.Location = new Point(264, 30);
+			lblReporteEmpacadores.Location = new Point(257, 9);
 			lblReporteEmpacadores.Name = "lblReporteEmpacadores";
 			lblReporteEmpacadores.Size = new Size(350, 29);
 			lblReporteEmpacadores.TabIndex = 53;
@@ -346,7 +353,7 @@
 			lblFiltro.AutoSize = true;
 			lblFiltro.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblFiltro.ForeColor = Color.Black;
-			lblFiltro.Location = new Point(29, 100);
+			lblFiltro.Location = new Point(561, 100);
 			lblFiltro.Name = "lblFiltro";
 			lblFiltro.Size = new Size(102, 20);
 			lblFiltro.TabIndex = 58;
@@ -363,11 +370,68 @@
 			label1.TabIndex = 60;
 			label1.Text = "Nomina General de la Semana";
 			// 
+			// pictureBox1
+			// 
+			pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+			pictureBox1.Location = new Point(38, 108);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(33, 32);
+			pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+			pictureBox1.TabIndex = 64;
+			pictureBox1.TabStop = false;
+			// 
+			// pictureBox2
+			// 
+			pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+			pictureBox2.Location = new Point(38, 62);
+			pictureBox2.Name = "pictureBox2";
+			pictureBox2.Size = new Size(33, 27);
+			pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
+			pictureBox2.TabIndex = 65;
+			pictureBox2.TabStop = false;
+			// 
+			// rbtUva
+			// 
+			rbtUva.AutoSize = true;
+			rbtUva.Location = new Point(77, 112);
+			rbtUva.Name = "rbtUva";
+			rbtUva.Size = new Size(45, 19);
+			rbtUva.TabIndex = 63;
+			rbtUva.TabStop = true;
+			rbtUva.Text = "Uva";
+			rbtUva.UseVisualStyleBackColor = true;
+			// 
+			// lblTipodeNomina
+			// 
+			lblTipodeNomina.AutoSize = true;
+			lblTipodeNomina.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblTipodeNomina.Location = new Point(29, 30);
+			lblTipodeNomina.Name = "lblTipodeNomina";
+			lblTipodeNomina.Size = new Size(131, 21);
+			lblTipodeNomina.TabIndex = 61;
+			lblTipodeNomina.Text = "Tipo de Nomina:";
+			// 
+			// rbtEsparrago
+			// 
+			rbtEsparrago.AutoSize = true;
+			rbtEsparrago.Location = new Point(77, 70);
+			rbtEsparrago.Name = "rbtEsparrago";
+			rbtEsparrago.Size = new Size(77, 19);
+			rbtEsparrago.TabIndex = 62;
+			rbtEsparrago.TabStop = true;
+			rbtEsparrago.Text = "Esparrago";
+			rbtEsparrago.UseVisualStyleBackColor = true;
+			// 
 			// FrmNomsemana
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(900, 787);
+			Controls.Add(pictureBox1);
+			Controls.Add(pictureBox2);
+			Controls.Add(rbtUva);
+			Controls.Add(lblTipodeNomina);
+			Controls.Add(rbtEsparrago);
 			Controls.Add(label1);
 			Controls.Add(btnExcelBandas);
 			Controls.Add(cboSemana);
@@ -387,6 +451,8 @@
 			panel1.PerformLayout();
 			panellbl.ResumeLayout(false);
 			panellbl.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -415,5 +481,10 @@
 		private Panel panellbl;
 		private Label lblempleados;
 		private Label label1;
+		private PictureBox pictureBox1;
+		private PictureBox pictureBox2;
+		public RadioButton rbtUva;
+		private Label lblTipodeNomina;
+		public RadioButton rbtEsparrago;
 	}
 }

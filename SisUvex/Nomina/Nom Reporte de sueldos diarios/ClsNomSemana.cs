@@ -28,6 +28,18 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 		public FrmNomsemana frmNom;
 		public List<string> empleadosSeleccionados = new List<string>();
 
+		private string ObtenerTabla()
+		{
+			if (frmNom.rbtEsparrago.Checked)
+				return "HistNom_ReporteSemanalEsparrago";
+
+			if (frmNom.rbtUva.Checked)
+				return "HistNom_ReporteSemanalUva";
+
+			MessageBox.Show("Selecciona tipo de nómina");
+			return null;
+		}
+
 		public void CargarPeriodos()
 		{
 			ClsComboBoxes.CboLoadActives(frmNom.cboSemana, Payroll_AttendancePeriod.Cbo);
@@ -56,6 +68,9 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 		}
 		public DataTable ObtenerSueldosSemanaVarios()
 		{
+			string tabla = ObtenerTabla();
+			if (tabla == null) return null;
+
 			DataRowView row = (DataRowView)frmNom.cboSemana.SelectedItem;
 
 			DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
@@ -69,8 +84,8 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 			string filtro = string.Join(",", empleadosSeleccionados.Select(e => $"'{e}'"));
 
+			// columnas dinámicas (fechas)
 			List<string> columnas = new();
-
 			for (DateTime d = fechaInicio; d <= fechaFin; d = d.AddDays(1))
 			{
 				columnas.Add($"[{d:yyyy-MM-dd}]");
@@ -82,39 +97,44 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			SELECT *
 			FROM
 			(
-			SELECT 
-			e.id_employee AS Codigo,
-			CONCAT(e.v_lastNamePat,' ',e.v_lastNameMat,' ',e.v_name) AS NombreCompleto,
-			CONVERT(date, al.d_attendence) AS Fecha,
-			r.SueldoTotal
-			FROM Nom_Employees e
+				SELECT 
+					h.IdEmpleado as Codigo,
+					h.NombreCompleto,
+					v.Fecha,
+					v.SueldoTotal
+				FROM {tabla} h
 
-			LEFT JOIN Nom_AttendenceList al 
-			ON e.id_employee = al.id_employee
-			AND al.d_attendence >= '{fechaInicio:yyyy-MM-dd}'
-			AND al.d_attendence < DATEADD(DAY,1,'{fechaFin:yyyy-MM-dd}')
+				CROSS APPLY
+				(
+					VALUES
+					(DATEADD(DAY,0,h.FechaInicioSemana),h.Vie),
+					(DATEADD(DAY,1,h.FechaInicioSemana),h.Sab),
+					(DATEADD(DAY,2,h.FechaInicioSemana),h.Dom),
+					(DATEADD(DAY,3,h.FechaInicioSemana),h.Lun),
+					(DATEADD(DAY,4,h.FechaInicioSemana),h.Mar),
+					(DATEADD(DAY,5,h.FechaInicioSemana),h.Mie),
+					(DATEADD(DAY,6,h.FechaInicioSemana),h.Jue)
+				) v(Fecha,SueldoTotal)
 
-			OUTER APPLY dbo.fn_salary_tab(
-			al.d_attendence,
-			CAST(al.c_codigo_tab AS VARCHAR(20)),
-			al.id_productionLine,
-			e.id_employee,
-			'2'
-			) r
-
-			WHERE e.id_employee IN ({filtro})
+				WHERE h.FechaInicioSemana = '{fechaInicio:yyyy-MM-dd}'
+				AND h.IdEmpleado IN ({filtro})
 			) src
+
 			PIVOT
 			(
-			SUM(SueldoTotal)
-			FOR Fecha IN ({columnasPivot})
+				SUM(SueldoTotal)
+				FOR Fecha IN ({columnasPivot})
 			) p
-			ORDER BY NombreCompleto ";
+
+			ORDER BY NombreCompleto";
 
 			return ClsQuerysDB.GetDataTable(query);
 		}
 		public void AgregarEmpleado()
 		{
+			string tabla = ObtenerTabla();
+			if (tabla == null) return;
+
 			string codigo = frmNom.txbCodigo.Text.Trim();
 
 			if (codigo == "")
@@ -127,14 +147,14 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			SELECT 
 			IdEmpleado as Codigo,
 			NombreCompleto 
-			FROM dbo.HistNom_ReporteSemanal
+			FROM {tabla}
 			WHERE IdEmpleado = '{codigo}'";
 
 			DataTable dt = ClsQuerysDB.GetDataTable(query);
 
 			if (dt.Rows.Count == 0)
 			{
-				MessageBox.Show("Empleado no encontrado.");
+				MessageBox.Show("El empleado no existe en la nómina seleccionada.");
 				return;
 			}
 
@@ -148,14 +168,12 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 			empleadosSeleccionados.Add(codigo);
 
-			// crear columnas si no existen
 			if (frmNom.dgvListaEmpleado.Columns.Count == 0)
 			{
 				frmNom.dgvListaEmpleado.Columns.Add("IdEmpleado", "Codigo");
 				frmNom.dgvListaEmpleado.Columns.Add("Nombre", "Nombre");
 			}
 
-			
 			frmNom.dgvListaEmpleado.Rows.Add(codigo, nombre);
 
 			frmNom.txbCodigo.Clear();
@@ -163,6 +181,9 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 		public DataTable ObtenerSueldosSemana()
 		{
+			string tabla = ObtenerTabla();
+			if (tabla == null) return null;
+
 			DataRowView row = (DataRowView)frmNom.cboSemana.SelectedItem;
 
 			DateTime fechaInicio = Convert.ToDateTime(row[Payroll_AttendancePeriod.ColumnStartDate]);
@@ -189,7 +210,7 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
             h.NombreCompleto,
             v.Fecha,
             v.SueldoTotal
-			FROM HistNom_ReporteSemanal h
+			FROM {tabla} h
 
 			CROSS APPLY
 			(

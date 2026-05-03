@@ -233,14 +233,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 		}
 
-
-		//private string GetQueryNom()
-		//{
-		//	string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
-		//	string query = $@"EXEC sp_ReporteNomina '{fecha}'";
-
-		//	return query;
-		//}
 		private string GetQueryNom()
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
@@ -256,7 +248,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (frm.rbtEsparrago.Checked)
 			{
 				TipoNomina = "E"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina '{fecha}'";
+				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}'";
 			}
 
 			//  UVA
@@ -268,21 +260,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return "";
 		}
-		//public void BtnCargarDatos()
-		//{
-		//	dtNomina = ClsQuerysDB.GetDataTable(GetQueryNom());
-
-		//	if (dtNomina.Rows.Count == 0)
-		//	{
-		//		MessageBox.Show("No existen registros para la fecha seleccionada.",
-		//						"Sistema",
-		//						MessageBoxButtons.OK,
-		//						MessageBoxIcon.Information);
-		//		return;
-		//	}
-
-		//	frm.dgvEmployee.DataSource = dtNomina;
-		//}
 
 		public void BtnCargarDatos()
 		{
@@ -303,6 +280,10 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
+			if (frm.dgvEmployee.Columns.Contains("Nw"))
+			{
+				frm.dgvEmployee.Columns["Nw"].Visible = false;
+			}
 			if (TipoNomina == "E") // esparrago
 			{
 				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
