@@ -102,6 +102,11 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 		private void btncargar_Click(object sender, EventArgs e)
 		{
+			if (!rbtEsparrago.Checked && !rbtUva.Checked)
+			{
+				MessageBox.Show("Selecciona tipo de nómina");
+				return;
+			}
 			dgvEmployee.DataSource = cls.ObtenerSueldosSemana();
 			datosCargados = true;
 		}

@@ -32,7 +32,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			clsF ??= new ClsFestivo();
 			clsF.frm = this;
 			cls.BeginForm();
-			rbtEsparrago.Checked = true;
+			//rbtEsparrago.Checked = true;
 		}
 
 		private void btnCVS_Click(object sender, EventArgs e)
