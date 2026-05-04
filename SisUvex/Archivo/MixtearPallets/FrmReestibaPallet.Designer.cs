@@ -29,10 +29,10 @@ namespace SisUvex.Archivo.MixtearPallets
             numCajas = new NumericUpDown();
             lblSobrantesTxt = new Label();
             txbCajasSobrantes = new TextBox();
-            lblSobrantesInfo = new Label();
             lblTipoTxt = new Label();
             cboTipo = new ComboBox();
             lblDescripcion = new Label();
+            lblSobrantesInfo = new Label();
             btnConfirmar = new Button();
             btnCancelar = new Button();
             grpInfoPallet.SuspendLayout();
@@ -42,14 +42,14 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             // grpInfoPallet
             // 
-            grpInfoPallet.Controls.Add(lblPalletTxt);
             grpInfoPallet.Controls.Add(lblPalletVal);
-            grpInfoPallet.Controls.Add(lblCajasTxt);
             grpInfoPallet.Controls.Add(lblCajasActVal);
-            grpInfoPallet.Controls.Add(lblProgramaTxt);
             grpInfoPallet.Controls.Add(lblProgramaVal);
-            grpInfoPallet.Controls.Add(lblEstibaTxt);
             grpInfoPallet.Controls.Add(lblEstibaVal);
+            grpInfoPallet.Controls.Add(lblPalletTxt);
+            grpInfoPallet.Controls.Add(lblCajasTxt);
+            grpInfoPallet.Controls.Add(lblProgramaTxt);
+            grpInfoPallet.Controls.Add(lblEstibaTxt);
             grpInfoPallet.Location = new Point(12, 10);
             grpInfoPallet.Name = "grpInfoPallet";
             grpInfoPallet.Size = new Size(370, 130);
@@ -70,7 +70,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // lblPalletVal
             // 
             lblPalletVal.AutoSize = true;
-            lblPalletVal.Location = new Point(110, 28);
+            lblPalletVal.Location = new Point(116, 28);
             lblPalletVal.Name = "lblPalletVal";
             lblPalletVal.Size = new Size(19, 15);
             lblPalletVal.TabIndex = 1;
@@ -91,7 +91,7 @@ namespace SisUvex.Archivo.MixtearPallets
             lblCajasActVal.AutoSize = true;
             lblCajasActVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblCajasActVal.ForeColor = Color.DarkBlue;
-            lblCajasActVal.Location = new Point(110, 56);
+            lblCajasActVal.Location = new Point(116, 56);
             lblCajasActVal.Name = "lblCajasActVal";
             lblCajasActVal.Size = new Size(19, 15);
             lblCajasActVal.TabIndex = 3;
@@ -110,7 +110,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // lblProgramaVal
             // 
             lblProgramaVal.AutoSize = true;
-            lblProgramaVal.Location = new Point(110, 84);
+            lblProgramaVal.Location = new Point(116, 84);
             lblProgramaVal.Name = "lblProgramaVal";
             lblProgramaVal.Size = new Size(19, 15);
             lblProgramaVal.TabIndex = 5;
@@ -129,7 +129,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // lblEstibaVal
             // 
             lblEstibaVal.AutoSize = true;
-            lblEstibaVal.Location = new Point(110, 110);
+            lblEstibaVal.Location = new Point(116, 110);
             lblEstibaVal.Name = "lblEstibaVal";
             lblEstibaVal.Size = new Size(19, 15);
             lblEstibaVal.TabIndex = 7;
@@ -196,17 +196,6 @@ namespace SisUvex.Archivo.MixtearPallets
             txbCajasSobrantes.TabIndex = 1;
             txbCajasSobrantes.TextAlign = HorizontalAlignment.Right;
             // 
-            // lblSobrantesInfo
-            // 
-            lblSobrantesInfo.AutoSize = true;
-            lblSobrantesInfo.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
-            lblSobrantesInfo.ForeColor = Color.Gray;
-            lblSobrantesInfo.Location = new Point(202, 66);
-            lblSobrantesInfo.Name = "lblSobrantesInfo";
-            lblSobrantesInfo.Size = new Size(92, 13);
-            lblSobrantesInfo.TabIndex = 2;
-            lblSobrantesInfo.Text = "           (calculado)";
-            // 
             // lblTipoTxt
             // 
             lblTipoTxt.AutoSize = true;
@@ -234,6 +223,17 @@ namespace SisUvex.Archivo.MixtearPallets
             lblDescripcion.Name = "lblDescripcion";
             lblDescripcion.Size = new Size(340, 32);
             lblDescripcion.TabIndex = 4;
+            // 
+            // lblSobrantesInfo
+            // 
+            lblSobrantesInfo.AutoSize = true;
+            lblSobrantesInfo.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            lblSobrantesInfo.ForeColor = Color.Gray;
+            lblSobrantesInfo.Location = new Point(202, 66);
+            lblSobrantesInfo.Name = "lblSobrantesInfo";
+            lblSobrantesInfo.Size = new Size(92, 13);
+            lblSobrantesInfo.TabIndex = 2;
+            lblSobrantesInfo.Text = "           (calculado)";
             // 
             // btnConfirmar
             // 
