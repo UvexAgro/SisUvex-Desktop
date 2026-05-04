@@ -237,6 +237,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
 
+			if (!ValidarHorasSemana(fecha))
+				return "";
+
 			//  Validar selección
 			if (!frm.rbtEsparrago.Checked && !frm.rbtUva.Checked)
 			{
@@ -352,6 +355,41 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				MessageBox.Show(ex.Message);
 			}
+		}
+		private bool ValidarHorasSemana(string fecha)
+		{
+			string query = $@"
+			SELECT MAX(Horas)
+			FROM (
+				SELECT wt.id_ProductionLine, SUM(wt.d_overtime) AS Horas
+				FROM Nom_WorkTime wt
+				INNER JOIN Payroll_AttendancePeriod sp
+					ON '{fecha}' BETWEEN sp.d_startDate_per AND sp.d_endDate_per
+				WHERE wt.d_workTime BETWEEN sp.d_startDate_per AND sp.d_endDate_per
+				GROUP BY wt.id_ProductionLine
+			) t";
+
+			string result = ClsQuerysDB.GetData(query);
+
+			decimal horas = 0;
+			decimal.TryParse(result, out horas);
+
+			if (horas > 13)
+			{
+				DialogResult r = MessageBox.Show(
+					$"Una línea de producción tiene {horas} horas extra acumuladas.\n\n" +
+					"Esto supera las 13 horas permitidas.\n\n" +
+					"¿Deseas continuar con el cálculo?",
+					"Advertencia de horas",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning
+				);
+
+				if (r == DialogResult.No)
+					return false;
+			}
+
+			return true;
 		}
 		private bool YaHayRegistrosdeProduccion(string fecha)
 		{
@@ -602,15 +640,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 			}
 
-			// 🔹 CELDAS
+			//  CELDAS
 			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
 			{
-				// 🔥 alternado con color base
+				//  alternado con color base
 				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
 					? fondoBase
 					: System.Drawing.Color.White;
 
-				// 🔥 SIN SELECCIÓN
+				//  SIN SELECCIÓN
 				using (SolidBrush brush = new SolidBrush(fondo))
 				{
 					e.Graphics.FillRectangle(brush, e.CellBounds);
@@ -625,7 +663,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					TextFormatFlags.Left | TextFormatFlags.VerticalCenter
 				);
 
-				// 🔥 líneas
+				//  líneas
 				using (Pen pen = new Pen(colorLinea))
 				{
 					// vertical
