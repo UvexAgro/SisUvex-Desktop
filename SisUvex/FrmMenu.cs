@@ -3,7 +3,6 @@ using SisUvex.Archivo.Etiquetas.CajaEmpleado;
 using SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1;
 using SisUvex.Archivo.Etiquetas.PrintLabels;
 using SisUvex.Archivo.Manifiesto;
-using SisUvex.Archivo.Mixteada;
 using SisUvex.Archivo.Reestibado;
 using SisUvex.Archivo.Reimprimir;
 using SisUvex.Archivo.WorkPlan;
@@ -190,8 +189,11 @@ namespace SisUvex
 
 		private void mixtearPalletsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			FrmMixteado cat = new FrmMixteado();
-			AbrirFormulario(cat, 3);
+			if (!User.HasCreateRecordsPermission())
+				return;
+
+            SisUvex.Archivo.MixtearPallets.FrmMixtearPallets cat = new();
+			AbrirVentanaHijo(cat);
 		}
 
 		private void desestibarPalletsToolStripMenuItem_Click(object sender, EventArgs e)
