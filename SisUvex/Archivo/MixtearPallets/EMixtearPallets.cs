@@ -153,6 +153,77 @@ namespace SisUvex.Archivo.MixtearPallets
     }
 
     /// <summary>
+    /// Almacena una reestiba PENDIENTE de ejecutarse en la base de datos.
+    ///
+    /// En el contexto del formulario de mixteo (FrmMixtearPallets), las reestibas
+    /// NO se ejecutan inmediatamente; se guardan aquí hasta que el usuario confirme
+    /// el mixteo (Guardar) o las revierta (Reconfigurar).
+    ///
+    /// FLUJO:
+    ///   1. Usuario hace clic en "Reestibar" sobre un pallet en dgvPallets.
+    ///   2. Se muestra FrmReestibaPallet; el usuario configura la reestiba.
+    ///   3. Se crea un ReestibaDeferred y se agrega a _reesibasDeferred en el form.
+    ///   4a. Al "Guardar/Mixtear" → EjecutarReesibasDeferred ejecuta todos en orden
+    ///       antes de crear la estiba.
+    ///   4b. Al "Reconfigurar" → se revierten en orden inverso (sin tocar la DB).
+    ///
+    /// ESCALABILIDAD:
+    ///   - Para reestibas anidadas (deferred de deferred), usar el mismo mecanismo:
+    ///     IdPalletOriginalRef puede ser "Res_XXXXX" y OriginalEsReal = false.
+    ///   - EjecutarReesibasDeferred resuelve las referencias encadenadas en orden.
+    /// </summary>
+    internal class ReestibaDeferred
+    {
+        /// <summary>
+        /// Orden de creación, usado para ejecutar en la secuencia correcta
+        /// (importante cuando un deferred depende de otro).
+        /// </summary>
+        public int Orden { get; set; }
+
+        /// <summary>
+        /// ID del pallet que se va a reestibar.
+        /// Puede ser un ID real de DB ("00123") o un ID temporal ("Res_00123")
+        /// si el pallet fue a su vez producto de otro deferred.
+        /// </summary>
+        public string IdPalletOriginalRef { get; set; } = "";
+
+        /// <summary>true si IdPalletOriginalRef es un ID real de la DB.</summary>
+        public bool OriginalEsReal { get; set; }
+
+        /// <summary>
+        /// Cajas que tenía el pallet ANTES de aplicar esta reestiba (para revertir en UI).
+        /// </summary>
+        public int CajasAntes { get; set; }
+
+        /// <summary>
+        /// Cajas que quedará el pallet original tras ejecutar la reestiba.
+        /// (= NuevasCajas del diálogo FrmReestibaPallet)
+        /// </summary>
+        public int NuevasCajasOriginal { get; set; }
+
+        /// <summary>
+        /// ID temporal visual del nuevo pallet creado por la reestiba.
+        /// Formato: "Res_" + IdPalletOriginalRef  (vacío si EsCompleta = true).
+        /// Al ejecutar, se reemplaza con el ID real asignado por la DB.
+        /// </summary>
+        public string IdPalletTemporal { get; set; } = "";
+
+        /// <summary>
+        /// Cajas del nuevo pallet temporal = CajasAntes - NuevasCajasOriginal.
+        /// </summary>
+        public int CajasNuevoPallet { get; set; }
+
+        /// <summary>Tipo/motivo de reestiba a aplicar al ejecutar.</summary>
+        public TipoReestiba Tipo { get; set; } = new();
+
+        /// <summary>
+        /// true = reestiba completa (no se crea pallet nuevo; solo se asigna motivo
+        /// al original). En este caso IdPalletTemporal y CajasNuevoPallet son irrelevantes.
+        /// </summary>
+        public bool EsCompleta { get; set; }
+    }
+
+    /// <summary>
     /// Resultado devuelto por ClsMixtearPallets.EjecutarReestiba().
     /// Contiene los IDs y cajas de ambos pallets: el original (modificado)
     /// y el nuevo (creado con las cajas sobrantes).

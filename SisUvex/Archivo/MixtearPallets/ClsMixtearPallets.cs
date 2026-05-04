@@ -600,6 +600,77 @@ namespace SisUvex.Archivo.MixtearPallets
             return valores.Count > 0 ? valores.Min() : 0;
         }
 
+        // ============================================================================
+        // DEFERRED REESTIBA — Soporte para reestibas diferidas en el form de mixteo
+        // ============================================================================
+
+        /// <summary>
+        /// Indica si un ID de pallet es temporal (deferred).
+        /// Los IDs temporales se generan con prefijo "Res_" y nunca existen en la DB.
+        /// </summary>
+        public static bool EsIdDeferred(string id)
+            => id.StartsWith("Res_", StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Reemplaza todas las ocurrencias de idAntiguo en la columna "Pallet" de un grid
+        /// con idNuevo. Usado para sustituir IDs temporales (Res_XXX) con IDs reales de DB
+        /// después de ejecutar las reestibas diferidas.
+        /// </summary>
+        public static void ActualizarIdEnGrid(DataGridView dgv, string idAntiguo, string idNuevo)
+        {
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.Cells["Pallet"].Value?.ToString() == idAntiguo)
+                {
+                    row.Cells["Pallet"].Value = idNuevo;
+                    // Quitar el fondo de color temporal (cyan) que diferencia los pallets deferred
+                    row.DefaultCellStyle.BackColor = Color.Empty;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ejecuta una lista de reestibas diferidas en orden, resolviendo referencias
+        /// encadenadas (un deferred puede depender del resultado de otro anterior).
+        ///
+        /// Retorna un diccionario  idTemporal → idRealDB  para actualizar las grillas
+        /// en el form después de la ejecución.
+        ///
+        /// ESCALABILIDAD:
+        ///   Los deferred se ordenan por Orden, por lo que basta con agregar entradas
+        ///   a la lista con el campo Orden correcto para que se ejecuten en secuencia.
+        /// </summary>
+        public Dictionary<string, string> EjecutarReesibasDeferred(List<ReestibaDeferred> reestibas)
+        {
+            // mapping: idTemporal → idRealDB (se va llenando según se ejecutan)
+            var mapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var def in reestibas.OrderBy(r => r.Orden))
+            {
+                // Resolver el ID real del original (puede ser un temp ya mapeado)
+                string realOrigId = def.IdPalletOriginalRef;
+                if (EsIdDeferred(realOrigId)
+                    && mapping.TryGetValue(realOrigId, out string? resuelto))
+                    realOrigId = resuelto;
+
+                if (def.EsCompleta)
+                {
+                    EjecutarReestibaCompleta(realOrigId, def.Tipo);
+                    // No hay pallet nuevo → nada que mapear
+                }
+                else
+                {
+                    ResultadoReestiba res = EjecutarReestiba(
+                        realOrigId, def.NuevasCajasOriginal, def.Tipo);
+
+                    if (res.Exito && !string.IsNullOrEmpty(res.IdPalletNuevo))
+                        mapping[def.IdPalletTemporal] = res.IdPalletNuevo;
+                }
+            }
+
+            return mapping;
+        }
+
         /// <summary>
         /// Elimina de dgvPallets la fila cuyo Pallet == idPallet.
         /// Usado tras una reestiba completa para quitar el pallet procesado.
