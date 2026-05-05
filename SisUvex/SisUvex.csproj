@@ -86,10 +86,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TotalesManifiesto.xsd</DependentUpon>
     </Compile>
-    <Compile Update="Archivo\PlanTrabajo\FrmPlanTrabajoAñadir.cs" />
-    <Compile Update="Archivo\PlanTrabajo\FrmPlanTrabajoCat.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />

@@ -72,7 +72,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return;
 
             if (cboWorkPlan.SelectedIndex == 0)
-            {   SystemSounds.Exclamation.Play();
+            {
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
@@ -89,7 +90,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return;
 
             if (cboWorkPlan.SelectedIndex == 0)
-            {   SystemSounds.Exclamation.Play();
+            {
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
@@ -98,6 +100,24 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cls.eTagInfo.showDate = !chbFechaOmitidaPti.Checked;
             string ZplPtiTag = GenPti.GenerateSuperStringTag(cls.eTagInfo, 1, chbReversePtiTag.Checked);
             Clipboard.SetText(ZplPtiTag);
+        }
+
+        private void btnOpenMixPallets_Click(object sender, EventArgs e)
+        {
+            if (FrmMenu.FrmMenuInstance == null)
+                return;
+
+            SisUvex.Archivo.MixtearPallets.FrmMixtearPallets frm = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
+        }
+
+        private void btnbtnOpenWorkPlan_Click(object sender, EventArgs e)
+        {
+            if (FrmMenu.FrmMenuInstance == null)
+                return;
+
+            SisUvex.Archivo.WorkPlan.FrmWorkPlanCat frm = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
         }
     }
 }

@@ -104,6 +104,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnZplPtiCopy = new Button();
             btnZplPalletCopy = new Button();
             txbIdPtiChange = new TextBox();
+            btnOpenMixPallets = new Button();
+            btnbtnOpenWorkPlan = new Button();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -198,7 +200,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chBx.AutoSize = true;
             chBx.Enabled = false;
             chBx.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            chBx.Location = new Point(666, 10);
+            chBx.Location = new Point(672, 14);
             chBx.Margin = new Padding(1);
             chBx.Name = "chBx";
             chBx.Size = new Size(142, 23);
@@ -1002,11 +1004,39 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             txbIdPtiChange.Size = new Size(25, 23);
             txbIdPtiChange.TabIndex = 84;
             // 
+            // btnOpenMixPallets
+            // 
+            btnOpenMixPallets.BackgroundImageLayout = ImageLayout.Stretch;
+            btnOpenMixPallets.Font = new Font("Segoe UI", 12F);
+            btnOpenMixPallets.Location = new Point(402, 9);
+            btnOpenMixPallets.Margin = new Padding(0);
+            btnOpenMixPallets.Name = "btnOpenMixPallets";
+            btnOpenMixPallets.Size = new Size(123, 31);
+            btnOpenMixPallets.TabIndex = 85;
+            btnOpenMixPallets.Text = "Mixtear pallets";
+            btnOpenMixPallets.UseVisualStyleBackColor = true;
+            btnOpenMixPallets.Click += btnOpenMixPallets_Click;
+            // 
+            // btnbtnOpenWorkPlan
+            // 
+            btnbtnOpenWorkPlan.BackgroundImageLayout = ImageLayout.Stretch;
+            btnbtnOpenWorkPlan.Font = new Font("Segoe UI", 12F);
+            btnbtnOpenWorkPlan.Location = new Point(525, 9);
+            btnbtnOpenWorkPlan.Margin = new Padding(0);
+            btnbtnOpenWorkPlan.Name = "btnbtnOpenWorkPlan";
+            btnbtnOpenWorkPlan.Size = new Size(123, 31);
+            btnbtnOpenWorkPlan.TabIndex = 86;
+            btnbtnOpenWorkPlan.Text = "Plan de trabajo";
+            btnbtnOpenWorkPlan.UseVisualStyleBackColor = true;
+            btnbtnOpenWorkPlan.Click += btnbtnOpenWorkPlan_Click;
+            // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(822, 730);
+            Controls.Add(btnbtnOpenWorkPlan);
+            Controls.Add(btnOpenMixPallets);
             Controls.Add(txbIdPtiChange);
             Controls.Add(btnZplPalletCopy);
             Controls.Add(btnZplPtiCopy);
@@ -1126,5 +1156,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private Button btnZplPtiCopy;
         private Button btnZplPalletCopy;
         private TextBox txbIdPtiChange;
+        private Button btnOpenMixPallets;
+        private Button btnbtnOpenWorkPlan;
     }
 }

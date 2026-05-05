@@ -36,8 +36,9 @@ namespace SisUvex.Archivo.MixtearPallets
     internal partial class FrmReestibaPallet : Form
     {
         // ── Datos de entrada ────────────────────────────────────────────────────────
-        private readonly PalletInfo         _pallet;   // Pallet seleccionado
-        private readonly List<TipoReestiba> _tipos;    // Tipos activos de Pack_PalletUnstowType
+        private readonly PalletInfo         _pallet;           // Pallet seleccionado
+        private readonly List<TipoReestiba> _tipos;            // Tipos activos de Pack_PalletUnstowType
+        private readonly int?               _cajasIniciales;   // Pre-selección para modo asistido
 
         // ── Resultado accesible por el formulario padre ─────────────────────────────
 
@@ -60,11 +61,17 @@ namespace SisUvex.Archivo.MixtearPallets
 
         /// <param name="pallet">PalletInfo del pallet a dividir</param>
         /// <param name="tipos">Lista de tipos activos de Pack_PalletUnstowType</param>
-        public FrmReestibaPallet(PalletInfo pallet, List<TipoReestiba> tipos)
+        /// <param name="cajasIniciales">
+        /// Si se provee, pre-selecciona numCajas con este valor (cajas que quedan en el original).
+        /// Usado por "Ajuste asistido" para recomendar la división óptima.
+        /// Si es null, se usa el valor por defecto (pallet.Cajas - 1).
+        /// </param>
+        public FrmReestibaPallet(PalletInfo pallet, List<TipoReestiba> tipos, int? cajasIniciales = null)
         {
             InitializeComponent();
-            _pallet = pallet;
-            _tipos  = tipos;
+            _pallet         = pallet;
+            _tipos          = tipos;
+            _cajasIniciales = cajasIniciales;
         }
 
         // ============================================================================
@@ -83,7 +90,10 @@ namespace SisUvex.Archivo.MixtearPallets
             // Mínimo: 1 caja.  Máximo: TODAS las cajas (permite reestiba completa).
             numCajas.Minimum = 1;
             numCajas.Maximum = Math.Max(1, _pallet.Cajas);
-            numCajas.Value   = Math.Max(1, _pallet.Cajas - 1); // Por defecto: conserva casi todo
+            // Si se recibió una recomendación, usarla; si no, el default es conservar casi todo
+            numCajas.Value = _cajasIniciales.HasValue
+                ? Math.Max(1, Math.Min(_pallet.Cajas, _cajasIniciales.Value))
+                : Math.Max(1, _pallet.Cajas - 1);
 
             // ── Tipos de reestiba ─────────────────────────────────────────────────
             cboTipo.DataSource    = _tipos;
