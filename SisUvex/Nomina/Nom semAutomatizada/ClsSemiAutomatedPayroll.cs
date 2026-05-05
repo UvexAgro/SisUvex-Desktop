@@ -86,7 +86,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			foreach (DataRow dr in dtNomina.Rows)
 			{
 				string fechaFormateada = Convert.ToDateTime(dr[0]).ToString("yyyy/MM/dd");
-				string sueldo = ClsValues.FormatZeros(dr[7].ToString(), "0000.00");
+				string sueldo = ClsValues.FormatZeros(dr["SueldoTotal"].ToString(), "0000.00");
 				//string empleado = ClsValues.FormatZeros(dr[1].ToString(), "000000")
 				dtCsv.Rows.Add(
 					fechaFormateada,
