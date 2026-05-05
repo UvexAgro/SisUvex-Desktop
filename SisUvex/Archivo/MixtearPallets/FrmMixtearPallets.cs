@@ -5,30 +5,34 @@
  *
  * FUNCIONALIDADES:
  *   ── SECCIÓN SUPERIOR (dgvPallets) ─────────────────────────────────────────────
- *   • Agregar pallets por ID con validaciones previas (cajas GTIN, diferencias).
+ *   • Agregar pallets por ID con validaciones previas (manifiesto, cajas GTIN, diffs).
  *   • Mover el pallet seleccionado al listado inferior (↓ Mover a desestibar).
  *   • Quitar un pallet del formulario (✕ Quitar) — elimina de ambas grillas.
- *   • Reestibar (DEFERRED): la reestiba se almacena en _reesibasDeferred y no
- *     se ejecuta en DB hasta que se confirme el mixteo (Guardar) o se revierta
- *     (Reconfigurar). El pallet sobrante aparece con ID "Res_XXXXX" en dgvDestibar.
- *   • Mixtear: ejecuta primero las reestibas pendientes y luego crea la estiba.
- *   • Reconfigurar: revierte las reestibas pendientes sin tocar la DB.
+ *   • Reestibar (DEFERRED): la reestiba se almacena y no se ejecuta en DB hasta
+ *     confirmar el mixteo (Guardar) o revertir (Reconfigurar).
+ *     Comportamiento actual: el sobrante (pallet nuevo) QUEDA en dgvPallets,
+ *     el original (con cajas reducidas) VA a dgvDestibar.
+ *   • Ajuste asistido (⚙): calcula automáticamente qué pallets mantener/mover/dividir
+ *     para que la suma coincida con el máximo de cajas GTIN. Se activa solo cuando
+ *     el total supera el máximo.
+ *   • Mixtear: ejecuta reestibas pendientes y luego crea la estiba en DB.
+ *   • Reconfigurar: revierte reestibas pendientes sin tocar la DB.
  *
  *   ── SECCIÓN INFERIOR (dgvDestibar) ────────────────────────────────────────────
- *   • Recibe pallets vía "↓ Mover" o como sobrantes de reestibas diferidas.
+ *   • Recibe pallets vía "↓ Mover" o como originales de reestibas diferidas.
  *   • Regresar al listado superior (↑ Regresar a mixtear).
- *   • Desestiba SOLO los pallets del listado (no por ID de estiba).
- *     — Si hay pallets deferred (Res_) en dgvDestibar, bloquea a menos que
- *       sus originales también estén en dgvDestibar (ejecuta deferreds + desestiba).
+ *   • Desestiba SOLO los pallets del listado.
+ *     — Con pallets deferred (Res_): bloquea a menos que sus originales también
+ *       estén en dgvDestibar (ejecuta deferreds + desestiba).
  *
  * RELACIONES:
  *   - ClsMixtearPallets → lógica de negocio y acceso a datos.
- *   - FrmReestibaPallet → diálogo modal que SOLO recopila datos (no ejecuta en DB).
+ *   - FrmReestibaPallet → diálogo que recopila datos (no ejecuta en DB).
  *   - EMixtearPallets   → modelos de datos incl. ReestibaDeferred.
  *
  * ESCALABILIDAD:
  *   → PermitirSobrepasoMaxGtin: cambiar a true para relajar restricción de cajas.
- *   → Para encadenar más grids al flujo deferred, extender RevertirTodosLosDeferreds.
+ *   → Para cambiar el destino del sobrante/original: modificar EjecutarReestibaDeferredEnFila.
  * ====================================================================================
  */
 
@@ -36,23 +40,21 @@ namespace SisUvex.Archivo.MixtearPallets
 {
     public partial class FrmMixtearPallets : Form
     {
-        /// <summary>Instancia de la clase de negocio.</summary>
         private readonly ClsMixtearPallets cls = new();
 
         // ── Estado de reestibas diferidas ───────────────────────────────────────────
 
         /// <summary>
-        /// Lista de reestibas pendientes de ejecutarse en DB.
+        /// Reestibas pendientes de ejecutarse en DB.
         /// Se llenan en btnReestibar_Click y se consumen en btnGuardar_Click.
-        /// Al Reconfigurar se revierten en orden inverso sin tocar la DB.
+        /// Al reconfigurar, se revierten en orden inverso.
         /// </summary>
         private readonly List<ReestibaDeferred> _reesibasDeferred = new();
 
-        /// <summary>Contador global de orden para los deferred (garantiza secuencia).</summary>
         private int _nextDeferredOrd = 1;
 
         /// <summary>
-        /// false → guarda bloqueado si cajas > máximo GTIN (recomendado).
+        /// false → guardado bloqueado si cajas > máximo GTIN.
         /// true  → solo advierte. Cambiar si se decide permitirlo en el futuro.
         /// </summary>
         private const bool PermitirSobrepasoMaxGtin = false;
@@ -71,13 +73,15 @@ namespace SisUvex.Archivo.MixtearPallets
             cls.InicializarColumnas(dgvPallets);
             cls.InicializarColumnas(dgvDestibar);
             ActualizarTotales();
+
+            // Estilo de selección personalizado: fondo transparente + texto negrita azul marino
+            dgvPallets.CellPainting  += DgvSeleccion_CellPainting;
+            dgvDestibar.CellPainting += DgvSeleccion_CellPainting;
         }
 
         // ============================================================================
         // SECCIÓN SUPERIOR: PALLETS A MIXTEAR
         // ============================================================================
-
-        // ── Agregar pallet ──────────────────────────────────────────────────────────
 
         private void btnAddPallet_Click(object sender, EventArgs e)
             => AgregarPalletPorTexto(txbIdPallet.Text.Trim());
@@ -93,21 +97,19 @@ namespace SisUvex.Archivo.MixtearPallets
             => cls.TxbTeclasEnteros(e);
 
         /// <summary>
-        /// Flujo completo para agregar un pallet al grid de mixteo con validaciones previas:
-        ///   1. Verificar duplicado en dgvPallets y dgvDestibar.
-        ///   2. Consultar pallet en DB.
-        ///   3. Si tiene estiba → ofrecer agregar estiba completa.
-        ///   4. Validar cajas vs. máximo GTIN.
-        ///   5. Validar diferencias de producto.
-        ///   6. Agregar al grid.
-        /// En cualquier rechazo: mantiene el texto del TextBox (focus + SelectAll).
-        /// Solo se limpia al agregar exitosamente.
+        /// Flujo para agregar un pallet al grid de mixteo con validaciones:
+        ///   1. Duplicado en dgvPallets / en dgvDestibar (regresa directamente).
+        ///   2. Pallet en manifiesto → bloquear.
+        ///   3. Pallet con estiba → ofrecer toda la estiba.
+        ///   4. Cajas vs. máximo GTIN.
+        ///   5. Diferencias de producto.
+        /// En rechazo: mantiene texto del TextBox (focus + SelectAll).
         /// </summary>
         private void AgregarPalletPorTexto(string textoId)
         {
             if (string.IsNullOrEmpty(textoId))
             {
-                System.Media.SystemSounds.Beep.Play();
+                MostrarAviso("Ingrese el número de pallet.", "Agregar Pallet");
                 return;
             }
 
@@ -120,7 +122,6 @@ namespace SisUvex.Archivo.MixtearPallets
                 return;
             }
 
-            // Si está en dgvDestibar lo regresamos directamente (sin validaciones extra)
             if (cls.ExistePalletEnGrid(dgvDestibar, idPallet))
             {
                 RegresarPalletDesdeDestibar(idPallet);
@@ -136,7 +137,19 @@ namespace SisUvex.Archivo.MixtearPallets
                 return;
             }
 
-            // Pallet con estiba → ofrecer agregar toda la estiba
+            // ── Validación 0: pallet en manifiesto → bloquear ─────────────────────
+            if (!string.IsNullOrEmpty(pallet.Manifiesto))
+            {
+                MostrarAviso(
+                    $"El pallet {idPallet} no se puede agregar al mix porque ya está " +
+                    $"incluido en un manifiesto.\n\n" +
+                    $"  Manifiesto: {pallet.Manifiesto}",
+                    "Pallet en manifiesto");
+                FocarYSeleccionar(txbIdPallet);
+                return;
+            }
+
+            // ── Validación 1: pallet con estiba → ofrecer toda la estiba ──────────
             if (!string.IsNullOrEmpty(pallet.Estiba))
             {
                 var resp = MessageBox.Show(
@@ -150,14 +163,11 @@ namespace SisUvex.Archivo.MixtearPallets
                     AgregarEstibaCompletaAlMix(pallet.Estiba);
                     LimpiarYFocar(txbIdPallet);
                 }
-                else
-                {
-                    FocarYSeleccionar(txbIdPallet);
-                }
+                else FocarYSeleccionar(txbIdPallet);
                 return;
             }
 
-            // ── Validación 1: cajas vs. máximo GTIN ─────────────────────────────────
+            // ── Validación 2: cajas vs. máximo GTIN ─────────────────────────────
             if (dgvPallets.Rows.Count > 0)
             {
                 int maxGtin    = cls.ObtenerCajasPorPalletMinimo(dgvPallets);
@@ -172,15 +182,11 @@ namespace SisUvex.Archivo.MixtearPallets
                         "Exceso de cajas",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                    if (resp != DialogResult.Yes)
-                    {
-                        FocarYSeleccionar(txbIdPallet);
-                        return;
-                    }
+                    if (resp != DialogResult.Yes) { FocarYSeleccionar(txbIdPallet); return; }
                 }
             }
 
-            // ── Validación 2: diferencias de producto ─────────────────────────────────
+            // ── Validación 3: diferencias de producto ─────────────────────────────
             List<string> diferencias = cls.ObtenerDiferenciasPallet(dgvPallets, pallet);
             if (diferencias.Count > 0)
             {
@@ -190,17 +196,13 @@ namespace SisUvex.Archivo.MixtearPallets
                     .ToList();
 
                 var resp = MessageBox.Show(
-                    $"El pallet {idPallet} difiere del resto en la lista en:\n" +
+                    $"El pallet {idPallet} difiere del resto en:\n" +
                     $"\n  •  {string.Join("\n  •  ", encabezados)}\n\n" +
                     "¿Desea agregarlo de todas formas?",
                     "Pallet con diferencias de producto",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                if (resp != DialogResult.Yes)
-                {
-                    FocarYSeleccionar(txbIdPallet);
-                    return;
-                }
+                if (resp != DialogResult.Yes) { FocarYSeleccionar(txbIdPallet); return; }
             }
 
             cls.AgregarPalletAlGrid(dgvPallets, pallet);
@@ -223,29 +225,19 @@ namespace SisUvex.Archivo.MixtearPallets
                     "Estiba completa");
         }
 
-        // ── Mover pallet al listado inferior ────────────────────────────────────────
+        // ── Mover / Quitar ───────────────────────────────────────────────────────────
 
         private void btnQuitPallet_Click(object sender, EventArgs e)
         {
-            if (dgvPallets.SelectedRows.Count == 0)
-            {
-                System.Media.SystemSounds.Beep.Play();
-                return;
-            }
+            if (dgvPallets.SelectedRows.Count == 0) { System.Media.SystemSounds.Beep.Play(); return; }
             cls.MoverPalletSeleccionadoAGrid(dgvPallets, dgvDestibar);
             ActualizarTotales();
             cls.AplicarColorAdvertencias(dgvPallets);
         }
 
-        // ── Quitar pallet del formulario (ingresado por error) ───────────────────────
-
         private void btnQuitarMix_Click(object sender, EventArgs e)
         {
-            if (dgvPallets.SelectedRows.Count == 0)
-            {
-                System.Media.SystemSounds.Beep.Play();
-                return;
-            }
+            if (dgvPallets.SelectedRows.Count == 0) { System.Media.SystemSounds.Beep.Play(); return; }
             cls.QuitarPalletDeAmbosGrids(dgvPallets, dgvDestibar, dgvPallets.SelectedRows[0]);
             ActualizarTotales();
             cls.AplicarColorAdvertencias(dgvPallets);
@@ -253,16 +245,11 @@ namespace SisUvex.Archivo.MixtearPallets
 
         private void btnQuitarDes_Click(object sender, EventArgs e)
         {
-            if (dgvDestibar.SelectedRows.Count == 0)
-            {
-                System.Media.SystemSounds.Beep.Play();
-                return;
-            }
+            if (dgvDestibar.SelectedRows.Count == 0) { System.Media.SystemSounds.Beep.Play(); return; }
 
-            DataGridViewRow fila   = dgvDestibar.SelectedRows[0];
-            string          idSel  = fila.Cells["Pallet"].Value?.ToString() ?? "";
+            DataGridViewRow fila  = dgvDestibar.SelectedRows[0];
+            string          idSel = fila.Cells["Pallet"].Value?.ToString() ?? "";
 
-            // Si es un pallet deferred (Res_), revertir ese deferred específico
             if (ClsMixtearPallets.EsIdDeferred(idSel))
             {
                 RevertirDeferredPorTempId(idSel);
@@ -276,128 +263,45 @@ namespace SisUvex.Archivo.MixtearPallets
 
         // ── Reestibar pallet seleccionado (MODO DEFERRED) ───────────────────────────
 
-        /// <summary>
-        /// En el contexto del formulario de mixteo, la reestiba es SIEMPRE DIFERIDA:
-        /// no se ejecuta en DB inmediatamente. Se almacena en _reesibasDeferred y el
-        /// pallet sobrante aparece visualmente como "Res_XXXXX" en dgvDestibar.
-        ///
-        /// Los deferreds se ejecutan en orden cuando el usuario confirma el mixteo
-        /// (btnGuardar_Click), soportando encadenamiento de reestibas.
-        ///
-        /// El diálogo FrmReestibaPallet NO cambia: sigue recibiendo un PalletInfo y
-        /// retornando NuevasCajas + TipoSeleccionado. La lógica de ejecución diferida
-        /// vive aquí, en el form de mixteo.
-        /// </summary>
         private void btnReestibar_Click(object sender, EventArgs e)
         {
-            if (dgvPallets.SelectedRows.Count == 0)
-            {
-                System.Media.SystemSounds.Beep.Play();
-                return;
-            }
+            if (dgvPallets.SelectedRows.Count == 0) { System.Media.SystemSounds.Beep.Play(); return; }
 
-            DataGridViewRow filaOrig = dgvPallets.SelectedRows[0];
-            string idRef  = filaOrig.Cells["Pallet"].Value?.ToString() ?? "";
-            int    cajas  = int.TryParse(filaOrig.Cells["Cajas"].Value?.ToString(), out int c) ? c : 0;
+            DataGridViewRow fila  = dgvPallets.SelectedRows[0];
+            string          idRef = fila.Cells["Pallet"].Value?.ToString() ?? "";
+            int             cajas = GetCajasDeFilaGrid(fila);
 
             if (cajas <= 1)
             {
                 MostrarAviso(
                     $"El pallet {idRef} solo tiene {cajas} caja(s).\n" +
-                    "Se requiere más de 1 caja para poder reestibar.",
-                    "Reestibar");
+                    "Se requiere más de 1 caja para poder reestibar.", "Reestibar");
                 return;
             }
 
             List<TipoReestiba> tipos = cls.ObtenerTiposReestiba();
             if (tipos.Count == 0)
             {
-                MostrarAviso("No se encontraron tipos de reestiba activos en la base de datos.",
-                    "Reestibar – Sin tipos");
+                MostrarAviso("No se encontraron tipos de reestiba activos.", "Reestibar – Sin tipos");
                 return;
             }
 
-            // Construir PalletInfo desde la fila (válido tanto para real como para Res_)
-            PalletInfo palletParaDlg = cls.ObtenerPalletSeleccionado(dgvPallets)
+            PalletInfo palletDlg = cls.ObtenerPalletSeleccionado(dgvPallets)
                 ?? new PalletInfo { IdPallet = idRef, Cajas = cajas };
 
-            using FrmReestibaPallet dlg = new(palletParaDlg, tipos);
+            using FrmReestibaPallet dlg = new(palletDlg, tipos);
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
 
-            bool esReal = !ClsMixtearPallets.EsIdDeferred(idRef);
+            EjecutarReestibaDeferredEnFila(fila, dlg.NuevasCajas, dlg.TipoSeleccionado, dlg.EsReestibaCompleta);
 
-            if (dlg.EsReestibaCompleta)
-            {
-                // ── Deferred COMPLETA: motivo al original, sin nuevo pallet ─────────
-                var def = new ReestibaDeferred
-                {
-                    Orden               = _nextDeferredOrd++,
-                    IdPalletOriginalRef = idRef,
-                    OriginalEsReal      = esReal,
-                    CajasAntes          = cajas,
-                    NuevasCajasOriginal = cajas,
-                    IdPalletTemporal    = string.Empty,
-                    CajasNuevoPallet    = 0,
-                    Tipo                = dlg.TipoSeleccionado,
-                    EsCompleta          = true,
-                };
-                _reesibasDeferred.Add(def);
-
-                // Quitar de la lista (será inactivado al guardar)
-                cls.QuitarPalletPorId(dgvPallets, idRef);
-                ActualizarTotales();
-                cls.AplicarColorAdvertencias(dgvPallets);
-
-                MessageBox.Show(
-                    $"Reestiba completa del pallet {idRef} registrada como pendiente.\n" +
-                    $"Tipo: {dlg.TipoSeleccionado.Nombre}.\n\n" +
-                    "Se aplicará al confirmar el mixteo (Guardar).",
-                    "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                // ── Deferred PARCIAL: divide el pallet ─────────────────────────────
-                int    nuevas  = dlg.NuevasCajas;
-                int    nCajas  = cajas - nuevas;
-                string idTemp  = GenerarIdDeferred(idRef);
-
-                var def = new ReestibaDeferred
-                {
-                    Orden               = _nextDeferredOrd++,
-                    IdPalletOriginalRef = idRef,
-                    OriginalEsReal      = esReal,
-                    CajasAntes          = cajas,
-                    NuevasCajasOriginal = nuevas,
-                    IdPalletTemporal    = idTemp,
-                    CajasNuevoPallet    = nCajas,
-                    Tipo                = dlg.TipoSeleccionado,
-                    EsCompleta          = false,
-                };
-                _reesibasDeferred.Add(def);
-
-                // Actualizar cajas del original en el grid (sin tocar DB)
-                filaOrig.Cells["Cajas"].Value = nuevas;
-
-                // Agregar pallet temporal a dgvDestibar (con fondo cyan = pendiente)
-                AgregarFilaDeferredADestibar(def, filaOrig);
-
-                ActualizarTotales();
-                cls.AplicarColorAdvertencias(dgvPallets);
-
-                MessageBox.Show(
-                    $"Reestiba del pallet {idRef} registrada como pendiente.\n" +
-                    $"  • Original: {nuevas} cjs.\n" +
-                    $"  • Sobrante temporal ({idTemp}): {nCajas} cjs. → listado de desestibar.\n\n" +
-                    "Se aplicará al confirmar el mixteo (Guardar).",
-                    "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            ActualizarTotales();
+            cls.AplicarColorAdvertencias(dgvPallets);
         }
 
         // ── Guardar / Mixtear ───────────────────────────────────────────────────────
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            // ── Caso especial: solo 1 pallet en la lista ───────────────────────────
             if (dgvPallets.Rows.Count == 1)
             {
                 string estiba   = dgvPallets.Rows[0].Cells["Estiba"].Value?.ToString() ?? "";
@@ -413,12 +317,10 @@ namespace SisUvex.Archivo.MixtearPallets
                     var conf = MessageBox.Show(
                         $"Solo hay 1 pallet en la lista y ya pertenece a la estiba {estiba}.\n" +
                         $"¿Desea remover el pallet {idPallet} de esa estiba?" + notaDeferred,
-                        "Desestibar Pallet",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        "Desestibar Pallet", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (conf != DialogResult.Yes) return;
 
-                    // Ejecutar deferreds pendientes antes de desestibar
                     EjecutarYAplicarDeferreds();
 
                     if (cls.EjecutarDesestibarPallet(idPallet))
@@ -431,55 +333,40 @@ namespace SisUvex.Archivo.MixtearPallets
                             "Desestibar Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
-                else
-                {
-                    System.Media.SystemSounds.Beep.Play();
-                }
+                else System.Media.SystemSounds.Beep.Play();
                 return;
             }
 
             int totalCajas = cls.SumarCajas(dgvPallets);
 
-            if (!cls.ValidarParaMixtear(dgvPallets, totalCajas,
-                    out string error, out string advertencia))
+            if (!cls.ValidarParaMixtear(dgvPallets, totalCajas, out string error, out string advertencia))
             {
-                MessageBox.Show(error, "Mixtear – No permitido",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error, "Mixtear – No permitido", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (!string.IsNullOrEmpty(advertencia))
             {
-                var confirmar = MessageBox.Show(
-                    advertencia + "\n\n¿Desea continuar con el mixteo de todas formas?",
-                    "Mixtear – Advertencias",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (confirmar != DialogResult.Yes) return;
+                var conf = MessageBox.Show(advertencia + "\n\n¿Desea continuar?",
+                    "Mixtear – Advertencias", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (conf != DialogResult.Yes) return;
             }
 
-            // ── Validación de límite GTIN ──────────────────────────────────────────
             int cajasMaxGtin = cls.ObtenerCajasPorPalletMinimo(dgvPallets);
             if (cajasMaxGtin > 0 && totalCajas > cajasMaxGtin && !PermitirSobrepasoMaxGtin)
             {
                 MessageBox.Show(
                     $"Las cajas totales ({totalCajas} cjs.) superan el máximo del GTIN " +
                     $"({cajasMaxGtin} cjs.).\n\nQuite pallets hasta ajustar el total.",
-                    "Cajas excedidas – Guardado bloqueado",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "Cajas excedidas – Guardado bloqueado", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // ── Ejecutar reestibas diferidas ANTES de crear la estiba ──────────────
             EjecutarYAplicarDeferreds();
 
             string nuevaEstiba = cls.EjecutarMixtear(dgvPallets);
-            if (string.IsNullOrEmpty(nuevaEstiba))
-            {
-                txbIdPallet.Focus();
-                return;
-            }
+            if (string.IsNullOrEmpty(nuevaEstiba)) { txbIdPallet.Focus(); return; }
 
-            // Actualizar columnas Estiba/Mix en el grid (no limpiar filas)
             for (int i = 0; i < dgvPallets.Rows.Count; i++)
             {
                 dgvPallets.Rows[i].Cells["Estiba"].Value = nuevaEstiba;
@@ -502,10 +389,8 @@ namespace SisUvex.Archivo.MixtearPallets
         {
             if (_reesibasDeferred.Count > 0)
             {
-                // Hay reestibas pendientes → revertirlas sin tocar DB
-                int n = _reesibasDeferred.Count;
                 var conf = MessageBox.Show(
-                    $"Hay {n} reestiba(s) pendiente(s) sin guardar.\n\n" +
+                    $"Hay {_reesibasDeferred.Count} reestiba(s) pendiente(s) sin guardar.\n\n" +
                     "Al reconfigurar:\n" +
                     "  • Los pallets temporales (Res_...) serán quitados de ambas listas.\n" +
                     "  • Los pallets originales volverán a sus cajas previas.\n\n" +
@@ -518,15 +403,12 @@ namespace SisUvex.Archivo.MixtearPallets
                 RevertirTodosLosDeferreds();
                 ActualizarTotales();
                 cls.AplicarColorAdvertencias(dgvPallets);
-                // No limpiar los grids: el usuario conserva los pallets originales
                 return;
             }
 
-            // Sin deferreds → limpiar grids (comportamiento original)
             if (dgvPallets.Rows.Count > 0 || dgvDestibar.Rows.Count > 0)
             {
-                var conf = MessageBox.Show(
-                    "¿Desea limpiar ambas listas de pallets?",
+                var conf = MessageBox.Show("¿Desea limpiar ambas listas de pallets?",
                     "Reconfigurar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (conf != DialogResult.Yes) return;
             }
@@ -542,6 +424,208 @@ namespace SisUvex.Archivo.MixtearPallets
             => cls.AplicarColorAdvertencias(dgvPallets);
 
         // ============================================================================
+        // AJUSTE ASISTIDO AL GTIN
+        // ============================================================================
+
+        /// <summary>
+        /// Calcula el plan óptimo para ajustar los pallets en dgvPallets al máximo
+        /// de cajas GTIN y lo propone al usuario, ejecutándolo si confirma.
+        ///
+        /// ALGORITMO:
+        ///   1. Agrupa pallets por estiba (pallets sin estiba = grupo individual).
+        ///   2. Ordena grupos por total de cajas, mayor primero.
+        ///   3. Llena greedy hasta el máximo; el grupo que desborda se parte:
+        ///      • Pallet/estiba que sobra completamente → MOVER a dgvDestibar.
+        ///      • Pallet que llega exactamente al límite → DIVIDIR (reestiba).
+        ///   4. Todos los grupos posteriores → MOVER a dgvDestibar.
+        /// </summary>
+        private void btnAsistido_Click(object sender, EventArgs e)
+        {
+            int totalCajas = cls.SumarCajas(dgvPallets);
+            int cajasMax   = cls.ObtenerCajasPorPalletMinimo(dgvPallets);
+
+            if (cajasMax <= 0 || totalCajas <= cajasMax) return; // Botón debería estar disabled
+
+            List<PalletPlan> plan = CalcularPlanAsistido(cajasMax);
+
+            var mantener = plan.Where(p => p.Accion == AccionAsistida.Mantener).ToList();
+            var dividir  = plan.Where(p => p.Accion == AccionAsistida.Dividir).ToList();
+            var mover    = plan.Where(p => p.Accion == AccionAsistida.Mover).ToList();
+
+            string GetId(PalletPlan p)   => p.Fila.Cells["Pallet"].Value?.ToString() ?? "?";
+            int    GetCajas(PalletPlan p) => GetCajasDeFilaGrid(p.Fila);
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"Plan de ajuste al máximo GTIN ({cajasMax} cjs.):");
+            sb.AppendLine();
+
+            if (mantener.Count > 0)
+            {
+                sb.AppendLine("Sin cambios (quedan en el mix):");
+                foreach (var p in mantener)
+                    sb.AppendLine($"  •  {GetId(p)}  ({GetCajas(p)} cjs.)");
+                sb.AppendLine();
+            }
+
+            if (dividir.Count > 0)
+            {
+                sb.AppendLine("Reestibar (dividir):");
+                foreach (var p in dividir)
+                {
+                    int tot = GetCajas(p);
+                    sb.AppendLine($"  •  {GetId(p)} ({tot} cjs.)  →  " +
+                        $"{p.CajasNuevasSobrante} cjs. quedan en mix | " +
+                        $"{tot - p.CajasNuevasSobrante} cjs. al desestibar");
+                }
+                sb.AppendLine();
+            }
+
+            if (mover.Count > 0)
+            {
+                sb.AppendLine("Mover al desestibar (completo):");
+                foreach (var p in mover)
+                    sb.AppendLine($"  •  {GetId(p)}  ({GetCajas(p)} cjs.)");
+                sb.AppendLine();
+            }
+
+            int resultante = mantener.Sum(p => GetCajas(p)) + dividir.Sum(p => p.CajasNuevasSobrante);
+            sb.AppendLine($"Total resultante en mix: {resultante} / {cajasMax} cjs.");
+
+            if (dividir.Count > 0)
+                sb.AppendLine("\nSe abrirá el diálogo de reestiba para cada pallet a dividir.");
+
+            sb.AppendLine("\n¿Desea aplicar este ajuste?");
+
+            var confirmar = MessageBox.Show(sb.ToString(), "⚙ Ajuste asistido",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmar != DialogResult.Yes) return;
+
+            List<TipoReestiba> tipos = cls.ObtenerTiposReestiba();
+            if (tipos.Count == 0)
+            {
+                MostrarAviso("No se encontraron tipos de reestiba activos.", "Ajuste asistido");
+                return;
+            }
+
+            // ── DIVIDIR: abrir diálogo pre-relleno para cada uno ────────────────────
+            foreach (var accion in dividir)
+            {
+                if (!dgvPallets.Rows.Contains(accion.Fila)) continue;
+
+                int    cajas      = GetCajas(accion);
+                string idRef      = GetId(accion);
+                int    cajasOrigRec = cajas - accion.CajasNuevasSobrante; // Lo que queda en el original
+
+                PalletInfo palletDlg = new PalletInfo
+                {
+                    IdPallet = idRef,
+                    Cajas    = cajas,
+                    Programa = dgvPallets.Columns.Contains("GTIN") ? accion.Fila.Cells["GTIN"].Value?.ToString() ?? "" : "",
+                    Estiba   = dgvPallets.Columns.Contains("Estiba")   ? accion.Fila.Cells["Estiba"].Value?.ToString()   ?? "" : "",
+                };
+
+                using FrmReestibaPallet dlg = new(palletDlg, tipos, cajasOrigRec);
+                if (dlg.ShowDialog(this) != DialogResult.OK) continue;
+
+                EjecutarReestibaDeferredEnFila(accion.Fila, dlg.NuevasCajas, dlg.TipoSeleccionado, dlg.EsReestibaCompleta);
+            }
+
+            // ── MOVER: copiar fila a dgvDestibar y quitar de dgvPallets ─────────────
+            foreach (var accion in mover)
+            {
+                if (!dgvPallets.Rows.Contains(accion.Fila)) continue;
+
+                object[] vals = new object[accion.Fila.Cells.Count];
+                for (int i = 0; i < accion.Fila.Cells.Count; i++)
+                    vals[i] = accion.Fila.Cells[i].Value!;
+
+                dgvDestibar.Rows.Add(vals);
+                dgvPallets.Rows.Remove(accion.Fila);
+            }
+
+            ActualizarTotales();
+            cls.AplicarColorAdvertencias(dgvPallets);
+        }
+
+        /// <summary>
+        /// Calcula el plan de ajuste asistido respetando las reglas:
+        ///   A) Sin estiba: pallets individuales ordenados por cajas desc.
+        ///   B) Con estiba: se considera la estiba completa como una unidad;
+        ///      si no cabe entera, se va pallet por pallet dentro de ella.
+        /// Retorna una lista con la acción asignada a cada fila de dgvPallets.
+        /// </summary>
+        private List<PalletPlan> CalcularPlanAsistido(int cajasMax)
+        {
+            var plan  = new List<PalletPlan>();
+            var filas = dgvPallets.Rows.Cast<DataGridViewRow>().ToList();
+
+            // Agrupar por estiba (sin estiba → clave única por índice de fila)
+            var grupos = filas
+                .GroupBy(r =>
+                {
+                    string est = r.Cells["Estiba"].Value?.ToString() ?? "";
+                    return string.IsNullOrEmpty(est) ? $"\0{r.Index}" : est;
+                })
+                .Select(g => new
+                {
+                    EsEstiba = !g.Key.StartsWith('\0'),
+                    Filas    = g.ToList(),
+                    Total    = g.Sum(r => GetCajasDeFilaGrid(r)),
+                })
+                .OrderByDescending(g => g.Total)
+                .ToList();
+
+            int remaining = cajasMax;
+
+            foreach (var grupo in grupos)
+            {
+                if (remaining <= 0)
+                {
+                    // Sin capacidad → mover todo el grupo
+                    foreach (var f in grupo.Filas) plan.Add(new PalletPlan(f, AccionAsistida.Mover));
+                    continue;
+                }
+
+                if (grupo.Total <= remaining)
+                {
+                    // Cabe completo → mantener
+                    foreach (var f in grupo.Filas) plan.Add(new PalletPlan(f, AccionAsistida.Mantener));
+                    remaining -= grupo.Total;
+                }
+                else
+                {
+                    // Desborda → procesar pallet por pallet (mayor a menor)
+                    var palletsOrden = grupo.Filas
+                        .OrderByDescending(r => GetCajasDeFilaGrid(r))
+                        .ToList();
+
+                    foreach (var f in palletsOrden)
+                    {
+                        int cajas = GetCajasDeFilaGrid(f);
+
+                        if (remaining <= 0)
+                        {
+                            plan.Add(new PalletPlan(f, AccionAsistida.Mover));
+                        }
+                        else if (cajas <= remaining)
+                        {
+                            plan.Add(new PalletPlan(f, AccionAsistida.Mantener));
+                            remaining -= cajas;
+                        }
+                        else
+                        {
+                            // Este pallet es el que se divide
+                            plan.Add(new PalletPlan(f, AccionAsistida.Dividir, remaining));
+                            remaining = 0;
+                        }
+                    }
+                }
+            }
+
+            return plan;
+        }
+
+        // ============================================================================
         // SECCIÓN INFERIOR: PALLETS A DESESTIBAR
         // ============================================================================
 
@@ -549,7 +633,10 @@ namespace SisUvex.Archivo.MixtearPallets
         {
             if (dgvDestibar.Rows.Count == 0)
             {
-                System.Media.SystemSounds.Beep.Play();
+                MostrarAviso(
+                    "No hay pallets en el listado de desestibar.\n" +
+                    "Use '↓ Mover a desestibar' para enviarlos desde la lista superior.",
+                    "Regresar");
                 return;
             }
 
@@ -557,9 +644,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 ? dgvDestibar.SelectedRows.Cast<DataGridViewRow>().ToList()
                 : dgvDestibar.Rows.Cast<DataGridViewRow>().ToList();
 
-            int regresados = 0;
-            var aRemover   = new List<DataGridViewRow>();
-
+            var aRemover = new List<DataGridViewRow>();
             foreach (DataGridViewRow row in filas)
             {
                 string idPallet = row.Cells["Pallet"].Value?.ToString() ?? "";
@@ -569,12 +654,9 @@ namespace SisUvex.Archivo.MixtearPallets
                 object[] vals = new object[row.Cells.Count];
                 for (int i = 0; i < row.Cells.Count; i++) vals[i] = row.Cells[i].Value!;
                 dgvPallets.Rows.Add(vals);
-
-                // Quitar color deferred al pasar al grid superior
+                // Quitar color deferred si lo tenía
                 dgvPallets.Rows[dgvPallets.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Empty;
-
                 aRemover.Add(row);
-                regresados++;
             }
 
             foreach (var r in aRemover) dgvDestibar.Rows.Remove(r);
@@ -586,19 +668,21 @@ namespace SisUvex.Archivo.MixtearPallets
 
         /// <summary>
         /// Desestiba los pallets del listado inferior.
-        /// Si hay pallets deferred (Res_) en dgvDestibar:
-        ///   - Sus originales deben estar también en dgvDestibar → ejecuta deferreds primero.
-        ///   - Si algún original NO está en dgvDestibar → bloquea con aviso.
+        /// Con pallets deferred (Res_): bloquea si su original no está también en el listado.
+        /// Excepción: si original + todos sus deferred están en dgvDestibar →
+        /// ejecuta los deferreds y desestiba todos.
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             if (dgvDestibar.Rows.Count == 0)
             {
-                System.Media.SystemSounds.Beep.Play();
+                MostrarAviso(
+                    "No hay pallets en el listado de desestibar.\n" +
+                    "Mueva los pallets usando '↓ Mover a desestibar'.",
+                    "Desestibar");
                 return;
             }
 
-            // Identificar pallets deferred en dgvDestibar
             var idsEnDestibar = dgvDestibar.Rows.Cast<DataGridViewRow>()
                 .Select(r => r.Cells["Pallet"].Value?.ToString() ?? "")
                 .Where(id => !string.IsNullOrEmpty(id))
@@ -610,7 +694,6 @@ namespace SisUvex.Archivo.MixtearPallets
 
             if (deferredsEnDestibar.Count > 0)
             {
-                // Verificar que los originales también estén en dgvDestibar
                 var originalesAusentes = deferredsEnDestibar
                     .Where(d => !idsEnDestibar.Contains(d.IdPalletOriginalRef))
                     .Select(d => $"  •  {d.IdPalletTemporal}  (original: {d.IdPalletOriginalRef})")
@@ -630,7 +713,7 @@ namespace SisUvex.Archivo.MixtearPallets
                     return;
                 }
 
-                // Todos los originales están → ejecutar esos deferreds y actualizar grids
+                // Todos los originales presentes → ejecutar esos deferreds
                 var mapping = cls.EjecutarReesibasDeferred(deferredsEnDestibar);
                 foreach (var (idTemp, idReal) in mapping)
                 {
@@ -640,26 +723,20 @@ namespace SisUvex.Archivo.MixtearPallets
                 foreach (var def in deferredsEnDestibar) _reesibasDeferred.Remove(def);
             }
 
-            // Desestibar solo los que tienen estiba asignada
             var conEstiba = dgvDestibar.Rows.Cast<DataGridViewRow>()
                 .Where(r => !string.IsNullOrEmpty(r.Cells["Estiba"].Value?.ToString()))
                 .ToList();
 
             if (conEstiba.Count == 0)
             {
-                MostrarAviso(
-                    "Los pallets en el listado no tienen estiba asignada.\nNo hay nada que desestibar.",
-                    "Desestibar");
+                MostrarAviso("Los pallets del listado no tienen estiba asignada. No hay nada que desestibar.", "Desestibar");
                 return;
             }
 
-            var confirmar = MessageBox.Show(
-                $"¿Confirma desestibar {conEstiba.Count} pallet(s) del listado?\n\n" +
-                "Se removerá la asignación de estiba de cada uno.",
-                "Confirmar Desestibar",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirmar != DialogResult.Yes) return;
+            var conf = MessageBox.Show(
+                $"¿Confirma desestibar {conEstiba.Count} pallet(s) del listado?",
+                "Confirmar Desestibar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (conf != DialogResult.Yes) return;
 
             int exitosos = 0;
             foreach (DataGridViewRow row in conEstiba)
@@ -696,31 +773,95 @@ namespace SisUvex.Archivo.MixtearPallets
         }
 
         /// <summary>
-        /// Agrega una fila virtual de pallet deferred al dgvDestibar.
-        /// Copia todas las celdas de la fila original y sobrescribe Pallet, Cajas,
-        /// Estiba y Mix. El fondo cyan indica que es un pallet pendiente (no en DB).
+        /// Registra una reestiba diferida para la fila dada y actualiza ambas grillas.
+        ///
+        /// COMPORTAMIENTO ACTUAL (configurable aquí):
+        ///   • Reestiba COMPLETA: quita el pallet de dgvPallets (se inactiva al guardar).
+        ///   • Reestiba PARCIAL:
+        ///       - El ORIGINAL (con cajas reducidas) → se mueve a dgvDestibar.
+        ///       - El SOBRANTE (pallet nuevo Res_XXXXX) → se agrega a dgvPallets.
+        ///
+        /// Muestra un MessageBox informativo al terminar.
         /// </summary>
-        private void AgregarFilaDeferredADestibar(ReestibaDeferred def, DataGridViewRow filaOriginal)
+        private void EjecutarReestibaDeferredEnFila(
+            DataGridViewRow filaOrig, int nuevasCajas, TipoReestiba tipo, bool esCompleta)
         {
-            object[] vals = new object[filaOriginal.Cells.Count];
-            for (int i = 0; i < filaOriginal.Cells.Count; i++)
-                vals[i] = filaOriginal.Cells[i].Value!;
+            string idRef  = filaOrig.Cells["Pallet"].Value?.ToString() ?? "";
+            int    cajas  = GetCajasDeFilaGrid(filaOrig);
+            bool   esReal = !ClsMixtearPallets.EsIdDeferred(idRef);
 
-            dgvDestibar.Rows.Add(vals);
+            if (esCompleta)
+            {
+                // ── Reestiba COMPLETA: solo asignar motivo al original ───────────────
+                var def = new ReestibaDeferred
+                {
+                    Orden               = _nextDeferredOrd++,
+                    IdPalletOriginalRef = idRef,
+                    OriginalEsReal      = esReal,
+                    CajasAntes          = cajas,
+                    NuevasCajasOriginal = cajas,
+                    Tipo                = tipo,
+                    EsCompleta          = true,
+                };
+                _reesibasDeferred.Add(def);
 
-            DataGridViewRow fila = dgvDestibar.Rows[dgvDestibar.Rows.Count - 1];
-            fila.Cells["Pallet"].Value = def.IdPalletTemporal;
-            fila.Cells["Cajas"].Value  = def.CajasNuevoPallet;
-            fila.Cells["Estiba"].Value = string.Empty;
-            fila.Cells["Mix"].Value    = string.Empty;
+                cls.QuitarPalletPorId(dgvPallets, idRef);
 
-            // Fondo cyan para distinguir pallets pendientes de los reales
-            fila.DefaultCellStyle.BackColor = Color.LightCyan;
+                MessageBox.Show(
+                    $"Reestiba completa del pallet {idRef} registrada como pendiente.\n" +
+                    $"Tipo: {tipo.Nombre}.\n\nSe aplicará al confirmar el mixteo (Guardar).",
+                    "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                // ── Reestiba PARCIAL: divide el pallet ──────────────────────────────
+                int    nCajas = cajas - nuevasCajas;
+                string idTemp = GenerarIdDeferred(idRef);
+
+                var def = new ReestibaDeferred
+                {
+                    Orden               = _nextDeferredOrd++,
+                    IdPalletOriginalRef = idRef,
+                    OriginalEsReal      = esReal,
+                    CajasAntes          = cajas,
+                    NuevasCajasOriginal = nuevasCajas,
+                    IdPalletTemporal    = idTemp,
+                    CajasNuevoPallet    = nCajas,
+                    Tipo                = tipo,
+                    EsCompleta          = false,
+                };
+                _reesibasDeferred.Add(def);
+
+                // Capturar valores base de la fila original (para el sobrante)
+                object[] valsBase = CopiarCeldas(filaOrig);
+
+                // Mover el original (cajas reducidas) → dgvDestibar
+                filaOrig.Cells["Cajas"].Value = nuevasCajas;
+                object[] valsOrigMod = CopiarCeldas(filaOrig);
+                dgvDestibar.Rows.Add(valsOrigMod);
+                dgvPallets.Rows.Remove(filaOrig);
+
+                // Agregar el sobrante (Res_) → dgvPallets con fondo cyan
+                dgvPallets.Rows.Add(valsBase);
+                DataGridViewRow filaRes = dgvPallets.Rows[dgvPallets.Rows.Count - 1];
+                filaRes.Cells["Pallet"].Value = idTemp;
+                filaRes.Cells["Cajas"].Value  = nCajas;
+                filaRes.Cells["Estiba"].Value = string.Empty;
+                filaRes.Cells["Mix"].Value    = string.Empty;
+                filaRes.DefaultCellStyle.BackColor = Color.LightCyan;
+
+                MessageBox.Show(
+                    $"Reestiba del pallet {idRef} registrada como pendiente.\n" +
+                    $"  • Original ({nuevasCajas} cjs.) → listado de desestibar.\n" +
+                    $"  • Sobrante temporal ({idTemp}, {nCajas} cjs.) → listado de mixtear.\n\n" +
+                    "Se aplicará al confirmar el mixteo (Guardar).",
+                    "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         /// <summary>
-        /// Ejecuta todos los deferreds pendientes y actualiza ambas grillas con los
-        /// IDs reales asignados por la DB. Limpia _reesibasDeferred al terminar.
+        /// Ejecuta todos los deferreds y actualiza ambas grillas con los IDs reales.
+        /// Llama antes de EjecutarMixtear o de cualquier operación que requiera DB.
         /// </summary>
         private void EjecutarYAplicarDeferreds()
         {
@@ -737,62 +878,101 @@ namespace SisUvex.Archivo.MixtearPallets
         }
 
         /// <summary>
-        /// Revierte TODOS los deferreds pendientes en orden inverso (del más reciente
-        /// al más antiguo), restaurando el estado visual sin tocar la DB.
+        /// Revierte TODOS los deferreds en orden inverso sin tocar la DB.
+        /// Para parciales: quita el Res_ de ambas grillas y devuelve el original
+        ///   desde dgvDestibar a dgvPallets con sus cajas originales.
+        /// Para completas: re-consulta el pallet de DB y lo vuelve a agregar.
         /// </summary>
         private void RevertirTodosLosDeferreds()
         {
             foreach (var def in _reesibasDeferred.OrderByDescending(r => r.Orden))
             {
-                // Quitar el pallet temporal de ambas grillas
-                if (!string.IsNullOrEmpty(def.IdPalletTemporal))
+                if (def.EsCompleta)
                 {
+                    if (def.OriginalEsReal)
+                    {
+                        PalletInfo? p = cls.ConsultarPallet(def.IdPalletOriginalRef);
+                        if (p is not null) cls.AgregarPalletAlGrid(dgvPallets, p);
+                    }
+                }
+                else
+                {
+                    // Quitar sobrante (Res_) de ambas grillas
                     cls.QuitarPalletPorId(dgvPallets, def.IdPalletTemporal);
                     cls.QuitarPalletPorId(dgvDestibar, def.IdPalletTemporal);
-                }
 
-                // Restaurar cajas del pallet original (en ambas grillas por si se movió)
-                cls.ActualizarCajasEnGrid(dgvPallets, def.IdPalletOriginalRef, def.CajasAntes);
-                cls.ActualizarCajasEnGrid(dgvDestibar, def.IdPalletOriginalRef, def.CajasAntes);
+                    // Devolver original a dgvPallets con cajas previas
+                    if (def.OriginalEsReal)
+                    {
+                        bool estaEnDes = GridContieneId(dgvDestibar, def.IdPalletOriginalRef);
+                        cls.QuitarPalletPorId(dgvDestibar, def.IdPalletOriginalRef);
+                        cls.QuitarPalletPorId(dgvPallets,  def.IdPalletOriginalRef);
 
-                // Si era reestiba completa el pallet fue quitado → re-consultar y re-agregar
-                if (def.EsCompleta && def.OriginalEsReal)
-                {
-                    PalletInfo? p = cls.ConsultarPallet(def.IdPalletOriginalRef);
-                    if (p is not null) cls.AgregarPalletAlGrid(dgvPallets, p);
+                        PalletInfo? p = cls.ConsultarPallet(def.IdPalletOriginalRef);
+                        if (p is not null)
+                            cls.AgregarPalletAlGrid(dgvPallets, p);
+                        else if (estaEnDes)
+                        {
+                            // Fallback: restaurar cajas manualmente si la DB no devuelve datos
+                            cls.ActualizarCajasEnGrid(dgvPallets, def.IdPalletOriginalRef, def.CajasAntes);
+                        }
+                    }
+                    else
+                    {
+                        // Original deferred (Res_): mover de dgvDestibar a dgvPallets con CajasAntes
+                        if (GridContieneId(dgvDestibar, def.IdPalletOriginalRef))
+                            MoverPalletConCajasEntrGrids(dgvDestibar, dgvPallets,
+                                def.IdPalletOriginalRef, def.CajasAntes);
+                        else
+                            cls.ActualizarCajasEnGrid(dgvPallets, def.IdPalletOriginalRef, def.CajasAntes);
+                    }
                 }
             }
+
             _reesibasDeferred.Clear();
             _nextDeferredOrd = 1;
         }
 
         /// <summary>
-        /// Revierte el deferred identificado por su idPalletTemporal, así como
-        /// todos los deferreds que dependan de él (anidados), en orden inverso.
+        /// Revierte solo el deferred identificado por su IdPalletTemporal,
+        /// más todos los descendientes (deferreds que dependen de él).
         /// </summary>
         private void RevertirDeferredPorTempId(string idTemp)
         {
             var aRevertir = new List<ReestibaDeferred>();
             RecolectarDependientes(idTemp, aRevertir);
-
             if (aRevertir.Count == 0) return;
 
             var conf = MessageBox.Show(
                 $"¿Quitar el pallet temporal {idTemp} y revertir " +
                 $"{aRevertir.Count} reestiba(s) pendiente(s) relacionada(s)?",
                 "Revertir reestiba", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
             if (conf != DialogResult.Yes) return;
 
             foreach (var def in aRevertir.OrderByDescending(r => r.Orden))
             {
-                if (!string.IsNullOrEmpty(def.IdPalletTemporal))
+                cls.QuitarPalletPorId(dgvPallets, def.IdPalletTemporal);
+                cls.QuitarPalletPorId(dgvDestibar, def.IdPalletTemporal);
+
+                if (!def.EsCompleta)
                 {
-                    cls.QuitarPalletPorId(dgvPallets, def.IdPalletTemporal);
-                    cls.QuitarPalletPorId(dgvDestibar, def.IdPalletTemporal);
+                    if (def.OriginalEsReal)
+                    {
+                        cls.QuitarPalletPorId(dgvDestibar, def.IdPalletOriginalRef);
+                        cls.QuitarPalletPorId(dgvPallets,  def.IdPalletOriginalRef);
+                        PalletInfo? p = cls.ConsultarPallet(def.IdPalletOriginalRef);
+                        if (p is not null) cls.AgregarPalletAlGrid(dgvPallets, p);
+                    }
+                    else
+                    {
+                        if (GridContieneId(dgvDestibar, def.IdPalletOriginalRef))
+                            MoverPalletConCajasEntrGrids(dgvDestibar, dgvPallets,
+                                def.IdPalletOriginalRef, def.CajasAntes);
+                        else
+                            cls.ActualizarCajasEnGrid(dgvPallets, def.IdPalletOriginalRef, def.CajasAntes);
+                    }
                 }
-                cls.ActualizarCajasEnGrid(dgvPallets, def.IdPalletOriginalRef, def.CajasAntes);
-                cls.ActualizarCajasEnGrid(dgvDestibar, def.IdPalletOriginalRef, def.CajasAntes);
+
                 _reesibasDeferred.Remove(def);
             }
 
@@ -800,18 +980,11 @@ namespace SisUvex.Archivo.MixtearPallets
             cls.AplicarColorAdvertencias(dgvPallets);
         }
 
-        /// <summary>
-        /// Recolecta de forma recursiva todos los deferreds que dependan de idTemp
-        /// (incluyendo el propio deferred con ese IdPalletTemporal).
-        /// </summary>
         private void RecolectarDependientes(string idTemp, List<ReestibaDeferred> resultado)
         {
             var def = _reesibasDeferred.FirstOrDefault(d => d.IdPalletTemporal == idTemp);
             if (def is null || resultado.Contains(def)) return;
-
             resultado.Add(def);
-
-            // Buscar deferreds que usan este temp como su original (hijos)
             foreach (var hijo in _reesibasDeferred.Where(d => d.IdPalletOriginalRef == idTemp))
                 RecolectarDependientes(hijo.IdPalletTemporal, resultado);
         }
@@ -821,24 +994,37 @@ namespace SisUvex.Archivo.MixtearPallets
         // ============================================================================
 
         /// <summary>
-        /// Mueve un pallet de dgvDestibar a dgvPallets copiando la fila directamente.
-        /// Solo se mueve ese pallet (aunque pertenezca a una estiba), sin consulta a DB
-        /// y sin pasar por validaciones.
+        /// Mueve el pallet identificado por idPallet de 'origen' a 'destino',
+        /// actualizando su columna Cajas con cajasOriginales y quitando el color deferred.
+        /// </summary>
+        private static void MoverPalletConCajasEntrGrids(
+            DataGridView origen, DataGridView destino, string idPallet, int cajasOriginales)
+        {
+            DataGridViewRow? fila = origen.Rows.Cast<DataGridViewRow>()
+                .FirstOrDefault(r => r.Cells["Pallet"].Value?.ToString() == idPallet);
+            if (fila is null) return;
+
+            object[] vals = CopiarCeldas(fila);
+            destino.Rows.Add(vals);
+            DataGridViewRow nueva = destino.Rows[destino.Rows.Count - 1];
+            nueva.Cells["Cajas"].Value = cajasOriginales;
+            nueva.DefaultCellStyle.BackColor = Color.Empty;
+
+            origen.Rows.Remove(fila);
+        }
+
+        /// <summary>
+        /// Mueve un pallet de dgvDestibar a dgvPallets copiando la fila directamente
+        /// (sin re-consultar la DB ni pasar por validaciones).
         /// </summary>
         private void RegresarPalletDesdeDestibar(string idPallet)
         {
             DataGridViewRow? fila = dgvDestibar.Rows.Cast<DataGridViewRow>()
                 .FirstOrDefault(r => r.Cells["Pallet"].Value?.ToString() == idPallet);
-
             if (fila is null) return;
 
-            object[] vals = new object[fila.Cells.Count];
-            for (int i = 0; i < fila.Cells.Count; i++) vals[i] = fila.Cells[i].Value!;
-
-            dgvPallets.Rows.Add(vals);
-            // Limpiar color deferred al pasar al grid de mixteo
+            dgvPallets.Rows.Add(CopiarCeldas(fila));
             dgvPallets.Rows[dgvPallets.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Empty;
-
             dgvDestibar.Rows.Remove(fila);
 
             cls.SeleccionarUltimaFila(dgvPallets);
@@ -853,25 +1039,116 @@ namespace SisUvex.Archivo.MixtearPallets
 
             txbBoxesStow.Text = totalCajas   > 0 ? totalCajas.ToString()   : string.Empty;
             txbBoxesMax.Text  = cajasMaxGtin > 0 ? cajasMaxGtin.ToString() : string.Empty;
+
+            // Habilitar "Ajuste asistido" solo cuando hay exceso de cajas
+            btnAsistido.Enabled = cajasMaxGtin > 0 && totalCajas > cajasMaxGtin;
         }
 
-        private static void LimpiarYFocar(TextBox txb)
+        private static object[] CopiarCeldas(DataGridViewRow fila)
         {
-            txb.Clear();
-            txb.Focus();
+            object[] vals = new object[fila.Cells.Count];
+            for (int i = 0; i < fila.Cells.Count; i++) vals[i] = fila.Cells[i].Value!;
+            return vals;
         }
+
+        private static int GetCajasDeFilaGrid(DataGridViewRow fila)
+            => int.TryParse(fila.Cells["Cajas"].Value?.ToString(), out int c) ? c : 0;
+
+        private static bool GridContieneId(DataGridView dgv, string id)
+            => dgv.Rows.Cast<DataGridViewRow>()
+               .Any(r => r.Cells["Pallet"].Value?.ToString() == id);
+
+        // ── Estilo de selección personalizado ───────────────────────────────────────
 
         /// <summary>
-        /// Enfoca el TextBox y selecciona todo el texto sin borrarlo.
-        /// Usado cuando se rechaza agregar un pallet para permitir corrección rápida.
+        /// Pinta las celdas seleccionadas manteniendo el color de fondo original de la celda
+        /// (amarillo, rojo, cyan, etc.) y aplicando texto en negrita azul marino al texto,
+        /// para que las diferencias de producto sigan siendo visibles aunque la fila esté seleccionada.
         /// </summary>
-        private static void FocarYSeleccionar(TextBox txb)
+        private static void DgvSeleccion_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
-            txb.Focus();
-            txb.SelectAll();
+            if (sender is not DataGridView dgv) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            DataGridViewRow row = dgv.Rows[e.RowIndex];
+            if (!row.Selected) return;
+
+            e.Handled = true; // Anular el pintado por defecto
+
+            // ── 1. Fondo: usar el color real de la celda, no el azul de selección ──
+            // Prioridad: estilo específico de celda > estilo de fila > estilo por defecto
+            Color bg = e.CellStyle.BackColor;
+            if (bg.IsEmpty || bg == Color.Empty)
+                bg = dgv.DefaultCellStyle.BackColor;
+            if (bg.IsEmpty || bg == Color.Empty)
+                bg = SystemColors.ControlLightLight;
+
+            e.Graphics.FillRectangle(new SolidBrush(bg), e.CellBounds);
+
+            // ── 2. Líneas de cuadrícula ────────────────────────────────────────────
+            using var penGrid = new Pen(dgv.GridColor);
+            // Línea inferior
+            e.Graphics.DrawLine(penGrid,
+                e.CellBounds.Left,              e.CellBounds.Bottom - 1,
+                e.CellBounds.Right - 1,         e.CellBounds.Bottom - 1);
+            // Línea derecha
+            e.Graphics.DrawLine(penGrid,
+                e.CellBounds.Right - 1,         e.CellBounds.Top,
+                e.CellBounds.Right - 1,         e.CellBounds.Bottom - 1);
+
+            // ── 3. Texto: negrita + azul marino (mismo tono que el fondo de selección) ──
+            string texto = e.FormattedValue?.ToString() ?? "";
+            if (texto.Length > 0)
+            {
+                // SystemColors.Highlight = azul del resaltado de Windows (igual al acento del sistema)
+                using Font boldFont    = new Font(e.CellStyle.Font ?? dgv.Font, FontStyle.Bold);
+                using var textBrush    = new SolidBrush(SystemColors.Highlight);
+
+                // Margen interior de la celda
+                int pad = 3;
+                var textRect = new RectangleF(
+                    e.CellBounds.Left   + pad,
+                    e.CellBounds.Top    + pad,
+                    e.CellBounds.Width  - pad * 2,
+                    e.CellBounds.Height - pad * 2);
+
+                // Alineación horizontal según el estilo configurado en la columna
+                StringAlignment hAlign = e.CellStyle.Alignment switch
+                {
+                    DataGridViewContentAlignment.MiddleRight  or
+                    DataGridViewContentAlignment.TopRight     or
+                    DataGridViewContentAlignment.BottomRight  => StringAlignment.Far,
+
+                    DataGridViewContentAlignment.MiddleCenter or
+                    DataGridViewContentAlignment.TopCenter    or
+                    DataGridViewContentAlignment.BottomCenter => StringAlignment.Center,
+
+                    _ => StringAlignment.Near,
+                };
+
+                using var sf = new StringFormat
+                {
+                    Alignment     = hAlign,
+                    LineAlignment = StringAlignment.Center,
+                    Trimming      = StringTrimming.EllipsisCharacter,
+                    FormatFlags   = StringFormatFlags.NoWrap,
+                };
+
+                e.Graphics.DrawString(texto, boldFont, textBrush, textRect, sf);
+            }
         }
+
+        private static void LimpiarYFocar(TextBox txb) { txb.Clear(); txb.Focus(); }
+
+        private static void FocarYSeleccionar(TextBox txb) { txb.Focus(); txb.SelectAll(); }
 
         private static void MostrarAviso(string mensaje, string titulo)
             => MessageBox.Show(mensaje, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        // ── Tipos locales para el plan de ajuste asistido ───────────────────────────
+
+        private enum AccionAsistida { Mantener, Mover, Dividir }
+
+        private record PalletPlan(DataGridViewRow Fila, AccionAsistida Accion, int CajasNuevasSobrante = 0);
     }
 }

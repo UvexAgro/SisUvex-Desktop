@@ -83,7 +83,7 @@ namespace SisUvex.Archivo.MixtearPallets
             new() { Nombre = "Pallet",        Encabezado = "Pallet",       AnchoMinimo = 60  },
             new() { Nombre = "Mix",           Encabezado = "Mix",          AnchoMinimo = 40  },
             new() { Nombre = "Estiba",        Encabezado = "Estiba",       AnchoMinimo = 55  },
-            new() { Nombre = "Programa",      Encabezado = "Programa",     AnchoMinimo = 75  },
+            new() { Nombre = "GTIN",      Encabezado = "GTIN",     AnchoMinimo = 75  },
             new() { Nombre = "Cajas",         Encabezado = "Cajas",        AnchoMinimo = 55  },
             new() { Nombre = "LibrasPallet",  Encabezado = "Lbs Pallet",   AnchoMinimo = 75  },
             new() { Nombre = "Tamaño",        Encabezado = "Tamaño",       AnchoMinimo = 60  },
@@ -104,7 +104,7 @@ namespace SisUvex.Archivo.MixtearPallets
         // Columnas que se evalúan para colorear advertencias en el grid.
         // ESCALABILIDAD: Agregar nombres de columna aquí para incluirlos en la evaluación visual.
         private static readonly string[] COLUMNAS_ADVERTENCIA =
-            { "Programa", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor" };
+            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor" };
 
         #endregion
 
@@ -122,7 +122,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 vpal.Pallet,
                 vpal.Mix,
                 vpal.Estiba,
-                vpal.Programa,
+                vpal.GTIN,
                 vpal.Cajas,
                 vpal.Libras,
                 vpal.[Libras pallet],
@@ -143,7 +143,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 vpal.Caja,
                 gtn.i_palletBoxes AS CajasPorPallet
             FROM vw_PackPalletCon vpal
-            LEFT JOIN gtn ON gtn.id_GTIN = vpal.Programa";
+            LEFT JOIN gtn ON gtn.id_GTIN = vpal.GTIN";
 
         /// <summary>
         /// Consulta un pallet por ID en la vista de pallets activos.
@@ -214,7 +214,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 IdPallet      = row["Pallet"].ToString() ?? "",
                 Mix           = row["Mix"].ToString() ?? "",
                 Estiba        = row["Estiba"].ToString() ?? "",
-                Programa      = row["Programa"].ToString() ?? "",
+                Programa      = row["GTIN"].ToString() ?? "",
                 Cajas         = int.TryParse(row["Cajas"].ToString(), out int cjs) ? cjs : 0,
                 LibrasPorCaja = decimal.TryParse(row["Libras"].ToString(), out decimal lbsCja) ? lbsCja : 0,
                 LibrasPallet  = decimal.TryParse(row["Libras pallet"].ToString(), out decimal lbsPal) ? lbsPal : 0,
@@ -571,7 +571,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 IdPallet       = row.Cells["Pallet"].Value?.ToString() ?? "",
                 Mix            = row.Cells["Mix"].Value?.ToString() ?? "",
                 Estiba         = row.Cells["Estiba"].Value?.ToString() ?? "",
-                Programa       = row.Cells["Programa"].Value?.ToString() ?? "",
+                Programa       = row.Cells["GTIN"].Value?.ToString() ?? "",
                 Cajas          = int.TryParse(row.Cells["Cajas"].Value?.ToString(), out int cjs) ? cjs : 0,
                 LibrasPallet   = decimal.TryParse(row.Cells["LibrasPallet"].Value?.ToString(), out decimal lbs) ? lbs : 0,
                 CajasPorPallet = int.TryParse(row.Cells["CajasPallet"].Value?.ToString(), out int cjsPal) ? cjsPal : 0,
@@ -800,7 +800,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // Mapa columna → valor del nuevo pallet
             var comparaciones = new Dictionary<string, string>
             {
-                { "Programa",    nuevoPallet.Programa    },
+                { "GTIN",    nuevoPallet.Programa    },
                 { "Tamaño",      nuevoPallet.Tamaño      },
                 { "Presentacion",nuevoPallet.Presentacion},
                 { "Variedad",    nuevoPallet.Variedad    },
@@ -861,7 +861,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // ── ADVERTENCIAS: diferencias en campos relevantes ──────────────────────────
             var diferencias = new List<string>();
 
-            if (HayValoresDiferentes(dgv, "Programa"))     diferencias.Add("PROGRAMA");
+            if (HayValoresDiferentes(dgv, "GTIN"))     diferencias.Add("GTIN");
             if (HayValoresDiferentes(dgv, "Tamaño"))       diferencias.Add("TAMAÑO");
             if (HayValoresDiferentes(dgv, "Presentacion")) diferencias.Add("PRESENTACIÓN");
             if (HayValoresDiferentes(dgv, "Variedad"))     diferencias.Add("VARIEDAD");

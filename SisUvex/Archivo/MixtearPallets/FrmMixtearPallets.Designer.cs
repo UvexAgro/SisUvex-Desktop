@@ -23,6 +23,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMixtearPallets));
             lblTitulo = new Label();
             label4 = new Label();
             lblIdPallet = new Label();
@@ -32,6 +33,7 @@
             btnReestibar = new Button();
             btnReconfigurar = new Button();
             btnQuitarMix = new Button();
+            btnAsistido = new Button();
             dgvPallets = new DataGridView();
             btnGuardar = new Button();
             txbBoxesStow = new TextBox();
@@ -117,18 +119,6 @@
             btnReestibar.UseVisualStyleBackColor = true;
             btnReestibar.Click += btnReestibar_Click;
             // 
-            // btnQuitarMix  — elimina el pallet (o su estiba completa) del formulario
-            // 
-            btnQuitarMix.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            btnQuitarMix.ForeColor = Color.DarkRed;
-            btnQuitarMix.Location = new Point(484, 65);
-            btnQuitarMix.Name = "btnQuitarMix";
-            btnQuitarMix.Size = new Size(90, 25);
-            btnQuitarMix.TabIndex = 7;
-            btnQuitarMix.Text = "✕ Quitar";
-            btnQuitarMix.UseVisualStyleBackColor = true;
-            btnQuitarMix.Click += btnQuitarMix_Click;
-            // 
             // btnReconfigurar
             // 
             btnReconfigurar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -139,6 +129,30 @@
             btnReconfigurar.Text = "Reconfigurar";
             btnReconfigurar.UseVisualStyleBackColor = true;
             btnReconfigurar.Click += btnReconfigurar_Click;
+            // 
+            // btnQuitarMix
+            // 
+            btnQuitarMix.ForeColor = Color.DarkRed;
+            btnQuitarMix.Location = new Point(484, 65);
+            btnQuitarMix.Name = "btnQuitarMix";
+            btnQuitarMix.Size = new Size(90, 25);
+            btnQuitarMix.TabIndex = 7;
+            btnQuitarMix.Text = "✕ Quitar";
+            btnQuitarMix.UseVisualStyleBackColor = true;
+            btnQuitarMix.Click += btnQuitarMix_Click;
+            // 
+            // btnAsistido
+            // 
+            btnAsistido.Enabled = false;
+            btnAsistido.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            btnAsistido.ForeColor = Color.DarkGreen;
+            btnAsistido.Location = new Point(582, 65);
+            btnAsistido.Name = "btnAsistido";
+            btnAsistido.Size = new Size(150, 25);
+            btnAsistido.TabIndex = 8;
+            btnAsistido.Text = "⚙ Ajuste asistido";
+            btnAsistido.UseVisualStyleBackColor = true;
+            btnAsistido.Click += btnAsistido_Click;
             // 
             // dgvPallets
             // 
@@ -172,7 +186,6 @@
             dgvPallets.Name = "dgvPallets";
             dgvPallets.ReadOnly = true;
             dgvPallets.RowHeadersVisible = false;
-            dgvPallets.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPallets.Size = new Size(988, 195);
             dgvPallets.TabIndex = 8;
@@ -271,7 +284,7 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // btnQuitarDes  — elimina el pallet (o su estiba completa) del formulario
+            // btnQuitarDes
             // 
             btnQuitarDes.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnQuitarDes.ForeColor = Color.DarkRed;
@@ -292,16 +305,13 @@
             dgvDestibar.BackgroundColor = SystemColors.ControlLightLight;
             dgvDestibar.BorderStyle = BorderStyle.Fixed3D;
             dgvDestibar.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            //dgvDestibar.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvDestibar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            //dgvDestibar.DefaultCellStyle = dataGridViewCellStyle2;
             dgvDestibar.EnableHeadersVisualStyles = false;
             dgvDestibar.ImeMode = ImeMode.NoControl;
             dgvDestibar.Location = new Point(12, 390);
             dgvDestibar.Name = "dgvDestibar";
             dgvDestibar.ReadOnly = true;
             dgvDestibar.RowHeadersVisible = false;
-            dgvDestibar.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvDestibar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDestibar.Size = new Size(988, 238);
             dgvDestibar.TabIndex = 17;
@@ -319,6 +329,7 @@
             Controls.Add(btnQuitPallet);
             Controls.Add(btnReestibar);
             Controls.Add(btnQuitarMix);
+            Controls.Add(btnAsistido);
             Controls.Add(btnReconfigurar);
             Controls.Add(dgvPallets);
             Controls.Add(btnGuardar);
@@ -331,6 +342,7 @@
             Controls.Add(button1);
             Controls.Add(btnQuitarDes);
             Controls.Add(dgvDestibar);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(900, 680);
             Name = "FrmMixtearPallets";
             StartPosition = FormStartPosition.CenterScreen;
@@ -361,6 +373,7 @@
         private Label        label2;
         private Label        label3;
         private Button       btnQuitarMix;
+        private Button       btnAsistido;
         private Button       btnAddToUp;
         private Button       button1;
         private Button       btnQuitarDes;
