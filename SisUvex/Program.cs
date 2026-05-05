@@ -14,7 +14,6 @@ using SisUvex.Catalogos.Categoría;
 using SisUvex.Catalogos.Consignatario;
 using SisUvex.Catalogos.GTIN;
 using SisUvex.Catalogos.Lot;
-using SisUvex.Catalogos.PlanTrabajo;
 using SisUvex.Catalogos.Presentacion;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Configuracion;

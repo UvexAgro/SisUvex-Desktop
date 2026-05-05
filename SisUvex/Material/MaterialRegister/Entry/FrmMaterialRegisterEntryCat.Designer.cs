@@ -106,7 +106,7 @@
             // txbSearchBy
             // 
             txbSearchBy.Location = new Point(385, 135);
-            txbSearchBy.MaxLength = 5;
+            txbSearchBy.MaxLength = 20;
             txbSearchBy.Name = "txbSearchBy";
             txbSearchBy.Size = new Size(203, 23);
             txbSearchBy.TabIndex = 4;
