@@ -34,7 +34,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             {
                 string SuperString = GenPallet.GenerateSuperStringTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, isReprint);
                 PrintZPL(SuperString, printerName);
-                //Clipboard.SetText(SuperString);
+                Clipboard.SetText(SuperString);
             }
             else
                 MessageBox.Show("Seleccione una impresora válida", "Impresora");

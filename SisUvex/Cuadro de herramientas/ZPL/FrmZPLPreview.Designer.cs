@@ -47,8 +47,8 @@
             txbApiKey = new TextBox();
             lblImpresora = new Label();
             cboImpresora = new ComboBox();
-            btnImprimirZpl = new Button();
             btnActualizarPreview = new Button();
+            btnImprimirZpl = new Button();
             lblEstado = new Label();
             ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
             splitMain.Panel1.SuspendLayout();
@@ -67,10 +67,9 @@
             // splitMain
             // 
             splitMain.Dock = DockStyle.Fill;
-            splitMain.Location = new Point(0, 150);
+            splitMain.Location = new Point(0, 146);
             splitMain.Margin = new Padding(3, 2, 3, 2);
             splitMain.Name = "splitMain";
-            splitMain.Orientation = Orientation.Horizontal;
             // 
             // splitMain.Panel1
             // 
@@ -80,8 +79,8 @@
             // 
             splitMain.Panel2.Controls.Add(pnlPreview);
             splitMain.Panel2.Controls.Add(pnlBarZoom);
-            splitMain.Size = new Size(892, 519);
-            splitMain.SplitterDistance = 221;
+            splitMain.Size = new Size(1015, 523);
+            splitMain.SplitterDistance = 400;
             splitMain.SplitterWidth = 3;
             splitMain.TabIndex = 0;
             // 
@@ -93,7 +92,7 @@
             rtbZpl.Location = new Point(0, 0);
             rtbZpl.Margin = new Padding(3, 2, 3, 2);
             rtbZpl.Name = "rtbZpl";
-            rtbZpl.Size = new Size(892, 221);
+            rtbZpl.Size = new Size(400, 523);
             rtbZpl.TabIndex = 0;
             rtbZpl.Text = "^XA\n^FX Prueba SisUvex\n^FO50,50^FDHola ZPL^FS\n^XZ";
             rtbZpl.WordWrap = false;
@@ -107,17 +106,17 @@
             pnlPreview.Location = new Point(0, 0);
             pnlPreview.Margin = new Padding(3, 2, 3, 2);
             pnlPreview.Name = "pnlPreview";
-            pnlPreview.Size = new Size(892, 262);
+            pnlPreview.Size = new Size(612, 490);
             pnlPreview.TabIndex = 0;
             // 
             // pnlBarZoom
             // 
             pnlBarZoom.Controls.Add(flpZoom);
             pnlBarZoom.Dock = DockStyle.Bottom;
-            pnlBarZoom.Location = new Point(0, 262);
+            pnlBarZoom.Location = new Point(0, 490);
             pnlBarZoom.Margin = new Padding(3, 2, 3, 2);
             pnlBarZoom.Name = "pnlBarZoom";
-            pnlBarZoom.Size = new Size(892, 33);
+            pnlBarZoom.Size = new Size(612, 33);
             pnlBarZoom.TabIndex = 1;
             // 
             // flpZoom
@@ -133,7 +132,7 @@
             flpZoom.Margin = new Padding(0);
             flpZoom.Name = "flpZoom";
             flpZoom.Padding = new Padding(7, 6, 7, 4);
-            flpZoom.Size = new Size(892, 33);
+            flpZoom.Size = new Size(612, 33);
             flpZoom.TabIndex = 0;
             flpZoom.WrapContents = false;
             // 
@@ -214,7 +213,7 @@
             pnlTop.Location = new Point(0, 0);
             pnlTop.Margin = new Padding(3, 2, 3, 2);
             pnlTop.Name = "pnlTop";
-            pnlTop.Size = new Size(892, 150);
+            pnlTop.Size = new Size(1015, 146);
             pnlTop.TabIndex = 1;
             // 
             // flpOpciones
@@ -247,7 +246,7 @@
             flpOpciones.Margin = new Padding(3, 2, 3, 2);
             flpOpciones.Name = "flpOpciones";
             flpOpciones.Padding = new Padding(7, 6, 7, 3);
-            flpOpciones.Size = new Size(892, 124);
+            flpOpciones.Size = new Size(1015, 127);
             flpOpciones.TabIndex = 0;
             // 
             // lblDensidad
@@ -360,7 +359,7 @@
             // lblEtiquetaNum
             // 
             lblEtiquetaNum.AutoSize = true;
-            lblEtiquetaNum.Location = new Point(10, 38);
+            lblEtiquetaNum.Location = new Point(825, 12);
             lblEtiquetaNum.Margin = new Padding(3, 6, 3, 6);
             lblEtiquetaNum.Name = "lblEtiquetaNum";
             lblEtiquetaNum.Size = new Size(97, 15);
@@ -369,7 +368,7 @@
             // 
             // nudEtiqueta
             // 
-            nudEtiqueta.Location = new Point(113, 35);
+            nudEtiqueta.Location = new Point(928, 9);
             nudEtiqueta.Margin = new Padding(3, 3, 4, 3);
             nudEtiqueta.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
             nudEtiqueta.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -381,7 +380,7 @@
             // lblDe
             // 
             lblDe.AutoSize = true;
-            lblDe.Location = new Point(172, 38);
+            lblDe.Location = new Point(10, 41);
             lblDe.Margin = new Padding(3, 6, 4, 6);
             lblDe.Name = "lblDe";
             lblDe.Size = new Size(20, 15);
@@ -391,7 +390,7 @@
             // lblTotalEtiquetas
             // 
             lblTotalEtiquetas.AutoSize = true;
-            lblTotalEtiquetas.Location = new Point(199, 38);
+            lblTotalEtiquetas.Location = new Point(37, 41);
             lblTotalEtiquetas.Margin = new Padding(3, 6, 14, 6);
             lblTotalEtiquetas.Name = "lblTotalEtiquetas";
             lblTotalEtiquetas.Size = new Size(12, 15);
@@ -401,7 +400,7 @@
             // lblHost
             // 
             lblHost.AutoSize = true;
-            lblHost.Location = new Point(228, 38);
+            lblHost.Location = new Point(66, 41);
             lblHost.Margin = new Padding(3, 6, 3, 6);
             lblHost.Name = "lblHost";
             lblHost.Size = new Size(56, 15);
@@ -410,7 +409,7 @@
             // 
             // txbApiHost
             // 
-            txbApiHost.Location = new Point(290, 35);
+            txbApiHost.Location = new Point(128, 38);
             txbApiHost.Margin = new Padding(3, 3, 10, 3);
             txbApiHost.Name = "txbApiHost";
             txbApiHost.PlaceholderText = "api.labelary.com (vacío = público)";
@@ -420,7 +419,7 @@
             // lblClaveApi
             // 
             lblClaveApi.AutoSize = true;
-            lblClaveApi.Location = new Point(549, 38);
+            lblClaveApi.Location = new Point(387, 41);
             lblClaveApi.Margin = new Padding(3, 6, 3, 6);
             lblClaveApi.Name = "lblClaveApi";
             lblClaveApi.Size = new Size(60, 15);
@@ -429,7 +428,7 @@
             // 
             // txbApiKey
             // 
-            txbApiKey.Location = new Point(615, 35);
+            txbApiKey.Location = new Point(453, 38);
             txbApiKey.Margin = new Padding(3, 3, 7, 3);
             txbApiKey.Name = "txbApiKey";
             txbApiKey.PasswordChar = '●';
@@ -440,7 +439,7 @@
             // lblImpresora
             // 
             lblImpresora.AutoSize = true;
-            lblImpresora.Location = new Point(801, 38);
+            lblImpresora.Location = new Point(639, 41);
             lblImpresora.Margin = new Padding(3, 6, 3, 6);
             lblImpresora.Name = "lblImpresora";
             lblImpresora.Size = new Size(63, 15);
@@ -450,27 +449,16 @@
             // cboImpresora
             // 
             cboImpresora.FormattingEnabled = true;
-            cboImpresora.Location = new Point(10, 64);
+            cboImpresora.Location = new Point(10, 67);
             cboImpresora.Margin = new Padding(3, 3, 10, 3);
             cboImpresora.Name = "cboImpresora";
             cboImpresora.Size = new Size(298, 23);
             cboImpresora.TabIndex = 19;
             // 
-            // btnImprimirZpl
-            // 
-            btnImprimirZpl.AutoSize = true;
-            btnImprimirZpl.Location = new Point(489, 63);
-            btnImprimirZpl.Margin = new Padding(3, 2, 7, 3);
-            btnImprimirZpl.Name = "btnImprimirZpl";
-            btnImprimirZpl.Size = new Size(105, 25);
-            btnImprimirZpl.TabIndex = 20;
-            btnImprimirZpl.Text = "Imprimir ZPL";
-            btnImprimirZpl.UseVisualStyleBackColor = true;
-            // 
             // btnActualizarPreview
             // 
             btnActualizarPreview.AutoSize = true;
-            btnActualizarPreview.Location = new Point(321, 63);
+            btnActualizarPreview.Location = new Point(321, 66);
             btnActualizarPreview.Margin = new Padding(3, 2, 7, 3);
             btnActualizarPreview.Name = "btnActualizarPreview";
             btnActualizarPreview.Size = new Size(158, 25);
@@ -478,14 +466,25 @@
             btnActualizarPreview.Text = "Actualizar vista previa";
             btnActualizarPreview.UseVisualStyleBackColor = true;
             // 
+            // btnImprimirZpl
+            // 
+            btnImprimirZpl.AutoSize = true;
+            btnImprimirZpl.Location = new Point(489, 66);
+            btnImprimirZpl.Margin = new Padding(3, 2, 7, 3);
+            btnImprimirZpl.Name = "btnImprimirZpl";
+            btnImprimirZpl.Size = new Size(105, 25);
+            btnImprimirZpl.TabIndex = 20;
+            btnImprimirZpl.Text = "Imprimir ZPL";
+            btnImprimirZpl.UseVisualStyleBackColor = true;
+            // 
             // lblEstado
             // 
             lblEstado.AutoEllipsis = true;
             lblEstado.Dock = DockStyle.Bottom;
-            lblEstado.Location = new Point(0, 124);
+            lblEstado.Location = new Point(0, 127);
             lblEstado.Name = "lblEstado";
             lblEstado.Padding = new Padding(7, 3, 7, 3);
-            lblEstado.Size = new Size(892, 26);
+            lblEstado.Size = new Size(1015, 19);
             lblEstado.TabIndex = 1;
             lblEstado.Text = " ";
             lblEstado.TextAlign = ContentAlignment.MiddleLeft;
@@ -494,7 +493,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(892, 669);
+            ClientSize = new Size(1015, 669);
             Controls.Add(splitMain);
             Controls.Add(pnlTop);
             Icon = (Icon)resources.GetObject("$this.Icon");

@@ -25,9 +25,8 @@
  *
  * NOTA SOBRE REESTIBA:
  *   El procedimiento sp_PackPalletReestiba usa códigos de 2 chars ('SO','SI','RE','CO').
- *   TipoReestiba.CodigoHeredado hace el mapeo desde Pack_PalletUnstowType.id_unstowType.
- *   Para migrar a un nuevo procedimiento que use id_unstowType directamente, ver el
- *   script SQL documentado en: /Docs/SQL/sp_PackPalletReestibaV2.sql (pendiente de crear).
+ *   TipoReestiba.CodigoHeredado retorna directamente TipoReestiba.Prefijo (v_prefix de DB).
+ *   Agregar tipos en Pack_PalletUnstowType no requiere cambios en el código.
  *
  * ESCALABILIDAD:
  *   → Para agregar columnas al grid: editar ObtenerDefinicionColumnas().
@@ -83,7 +82,7 @@ namespace SisUvex.Archivo.MixtearPallets
             new() { Nombre = "Pallet",        Encabezado = "Pallet",       AnchoMinimo = 60  },
             new() { Nombre = "Mix",           Encabezado = "Mix",          AnchoMinimo = 40  },
             new() { Nombre = "Estiba",        Encabezado = "Estiba",       AnchoMinimo = 55  },
-            new() { Nombre = "GTIN",      Encabezado = "GTIN",     AnchoMinimo = 75  },
+            new() { Nombre = "GTIN",          Encabezado = "GTIN",         AnchoMinimo = 75  },
             new() { Nombre = "Cajas",         Encabezado = "Cajas",        AnchoMinimo = 55  },
             new() { Nombre = "LibrasPallet",  Encabezado = "Lbs Pallet",   AnchoMinimo = 75  },
             new() { Nombre = "Tamaño",        Encabezado = "Tamaño",       AnchoMinimo = 60  },
@@ -99,12 +98,14 @@ namespace SisUvex.Archivo.MixtearPallets
             // ─── Campos de trazabilidad adicional (escalabilidad futura) ───────────
             // Para agregar Cuadrilla, Papeleta, Cultivo, etc., añadir aquí y en AgregarPalletAlGrid().
             new() { Nombre = "Cultivo",       Encabezado = "Cultivo",      AnchoMinimo = 70  },
+            new() { Nombre = "Pre",           Encabezado = "Pre",          AnchoMinimo = 45  },
+            new() { Nombre = "Pos",           Encabezado = "Pos",          AnchoMinimo = 45  },
         };
 
         // Columnas que se evalúan para colorear advertencias en el grid.
         // ESCALABILIDAD: Agregar nombres de columna aquí para incluirlos en la evaluación visual.
         private static readonly string[] COLUMNAS_ADVERTENCIA =
-            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor" };
+            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos" };
 
         #endregion
 
@@ -178,17 +179,20 @@ namespace SisUvex.Archivo.MixtearPallets
         public List<TipoReestiba> ObtenerTiposReestiba()
         {
             const string qry = @"
-                SELECT id_unstowType, v_unstowTypeName, v_description, c_active
+                SELECT id_unstowType, v_unstowTypeName, v_prefix, v_description,
+                       c_active, c_activeInPallet
                 FROM Pack_PalletUnstowType
                 WHERE c_active = '1'
                 ORDER BY id_unstowType";
             DataTable dt = ClsQuerysDB.GetDataTable(qry);
             return dt.Rows.Cast<DataRow>().Select(row => new TipoReestiba
             {
-                IdTipo      = row["id_unstowType"].ToString() ?? "",
-                Nombre      = row["v_unstowTypeName"].ToString() ?? "",
-                Descripcion = row["v_description"].ToString() ?? "",
-                Activo      = row["c_active"].ToString() == "1"
+                IdTipo          = row["id_unstowType"].ToString()    ?? "",
+                Nombre          = row["v_unstowTypeName"].ToString() ?? "",
+                Prefijo         = row["v_prefix"].ToString()         ?? "",
+                Descripcion     = row["v_description"].ToString()    ?? "",
+                Activo          = row["c_active"].ToString()         == "1",
+                NuevoPalletActivo = row["c_activeInPallet"].ToString() == "1"
             }).ToList();
         }
 
@@ -361,15 +365,14 @@ namespace SisUvex.Archivo.MixtearPallets
 
         /// <summary>
         /// Ejecuta la reestiba (división) de un pallet.
-        /// Llama a sp_PackPalletReestiba con el código heredado mapeado desde TipoReestiba.
+        /// Llama a sp_PackPalletReestiba usando el prefijo de Pack_PalletUnstowType (v_prefix).
         /// El pallet original queda con cajasNuevas; se crea un pallet nuevo con las sobrantes.
         ///
         /// NOTA: sp_PackPalletReestiba retorna 2 registros: pallet original y nuevo.
-        /// Para migrar al procedure con Pack_PalletUnstowType, crear sp_PackPalletReestibaV2.
         /// </summary>
         /// <param name="idPallet">ID del pallet a reestibar</param>
         /// <param name="cajasNuevas">Cajas que quedarán en el pallet ORIGINAL</param>
-        /// <param name="tipo">Tipo de reestiba (provee CodigoHeredado para el SP)</param>
+        /// <param name="tipo">Tipo de reestiba (provee Prefijo = v_prefix para c_restowing)</param>
         public ResultadoReestiba EjecutarReestiba(string idPallet, int cajasNuevas, TipoReestiba tipo)
         {
             ResultadoReestiba resultado = new();
@@ -504,7 +507,9 @@ namespace SisUvex.Archivo.MixtearPallets
                 pallet.Lote,
                 pallet.Contenedor,
                 pallet.CajasPorPallet,
-                pallet.Cultivo
+                pallet.Cultivo,
+                pallet.Pre,
+                pallet.Pos
             );
             return true;
         }
