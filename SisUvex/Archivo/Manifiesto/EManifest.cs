@@ -41,6 +41,8 @@ namespace SisUvex.Archivo.Manifiesto
         public string? idSeason { get; set; }
         public string? idMarket { get; set; }
         public string? thermometerContainer { get; set; }
+        public string? factura { get; set; }
+        public string? facturaUuid { get; set; }
 
         public void SetManifest(string idManifest)
         {
@@ -91,6 +93,8 @@ namespace SisUvex.Archivo.Manifiesto
                     this.idSeason = dr.GetValue(dr.GetOrdinal("id_season")).ToString();
                     this.idMarket = dr.GetValue(dr.GetOrdinal("id_market")).ToString();
                     this.thermometerContainer = dr.GetValue(dr.GetOrdinal("v_thermometerContainer")).ToString();
+                    this.factura = dr.GetValue(dr.GetOrdinal("v_factura")).ToString();
+                    this.facturaUuid = dr.GetValue(dr.GetOrdinal("v_facturaUuid")).ToString();
                 }
             }
             catch (Exception ex)
