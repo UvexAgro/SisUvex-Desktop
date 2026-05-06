@@ -98,7 +98,10 @@ namespace SisUvex.Archivo.WorkPlan
             lsWGDep.Add((_frmAdd.cboSeason, Season.ColumnId));
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmAdd.cboWorkGroup, _frmAdd.chbWorkGroupActives, lsWGDep);
 
-            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, "08"); //<-- preseleccionar la temporada uva 2026
+
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSize, _frmAdd.txbIdSize);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTypeBox, _frmAdd.txbIdTypeBox);
             CboApplyTextChangedEventInWorkPlanForLot(_frmAdd.cboLot, _frmAdd.txbIdLot);

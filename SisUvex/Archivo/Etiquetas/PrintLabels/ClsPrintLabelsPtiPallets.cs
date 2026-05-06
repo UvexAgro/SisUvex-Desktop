@@ -1,14 +1,15 @@
-﻿using System.Data;
-using System.Media;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Forms;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Actualizar_datos_empelado;
+using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
+using System.Data;
+using System.Media;
+using System.Reflection.Metadata.Ecma335;
+using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 
@@ -38,8 +39,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             frm.cboWorkPlan.TextChanged -= (sender, e) => { };
             frm.dtpWorkDay.ValueChanged -= (sender, e) => { };
 
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
-            
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((frm.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lsWGDep); //filtro de cuadrillas por temporada
+
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08"); //<-- preseleccionar la temporada uva 2026
+
             dtWorkPlan = ClsComboBoxFiles.GetCboCatalogDataTable(ClsObject.WorkPlan.CboPresentation);
             dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboWorkPlan, dtWorkPlan);
