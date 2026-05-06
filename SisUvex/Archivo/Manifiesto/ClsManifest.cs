@@ -26,7 +26,7 @@ namespace SisUvex.Archivo.Manifiesto
         public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
         ClsManifestPalletList clsPallets = new ClsManifestPalletList();
 
-        private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Hora, vw.Distribuidor, vw.Consignatario, vw.Productor, vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
+        private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Factura, vw.Hora, vw.Distribuidor, vw.Consignatario, vw.Productor, vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
         private string queryCatalogOrderBy = " ORDER BY Manifiesto Desc ";
         public DataTable dtCatalogo;
         public DataTable dtCatalogoActivos;
@@ -321,6 +321,8 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
             _frmAdd.txbObservations.Text = eManifest.observations;
             _frmAdd.txbThermometerContainer.Text = eManifest.thermometerContainer; //<-- No se cambia con el Cbo por el ReadOnly del FCat
+            _frmAdd.txbFactura.Text = eManifest.factura;
+            _frmAdd.txbFolioFiscalFactura.Text = eManifest.factura;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
@@ -510,6 +512,8 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
             cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
             cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
 
             cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
@@ -569,7 +573,8 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
             cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text)); 
             cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
-
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
 
             cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 

@@ -165,14 +165,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
 
             string zplAlbertons = $"\n^CF0,30,30" +
-                                    $"\n^FT32,47^A@N,25,25^FD8/2 lb Clams^FS" +
-                                    $"\n^FT573,47^A@N,25,25^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
-                                    $"\n^FT178,98^A@N,25,25^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
-                                    $"\n^FT321,132^A@N,25,25^FDPack Date: {Juliana(eTag.dateWorkPlan)}^FS" +
-                                    $"\n^FT292,162^A@N,25,25^FDProduce of Mexico^FS" +
-                                    $"\n^FT173,210^A@N,25,25^FDDistributed by Better Living Brands, LLC^FS" +
-                                    $"\n^FT166,246^A@N,25,25^FDP.O. Box 99, Pleasanton, CA 94566-0009^FS" +
-                                    $"\n^FO180,290^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
+                                    $"\n^FT32,47^FD8/2 lb Clams^FS" +
+                                    $"\n^FT565,47^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
+                                    $"\n^FT178,98^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
+                                    $"\n^FT321,132^FDPack Date: {Juliana(eTag.dateWorkPlan)}^FS" +
+                                    $"\n^FT292,162^FDProduce of Mexico^FS" +
+                                    $"\n^FT173,210^FDDistributed by Better Living Brands, LLC^FS" +
+                                    $"\n^FT166,246^FD P.O. Box 99, Pleasanton, CA 94566-0009^FS" +
+                                    $"\n^FO165,290^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
             labelsZPLString = zplBegin + zplAlbertons + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)

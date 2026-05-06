@@ -154,6 +154,10 @@
             label22 = new Label();
             txbThermometerContainer = new TextBox();
             btnEditTherFco = new Button();
+            txbFolioFiscalFactura = new TextBox();
+            txbFactura = new TextBox();
+            label23 = new Label();
+            label24 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
             SuspendLayout();
             // 
@@ -207,7 +211,7 @@
             txbPhytosanitary.Location = new Point(115, 316);
             txbPhytosanitary.MaxLength = 30;
             txbPhytosanitary.Name = "txbPhytosanitary";
-            txbPhytosanitary.Size = new Size(211, 21);
+            txbPhytosanitary.Size = new Size(138, 21);
             txbPhytosanitary.TabIndex = 40;
             // 
             // txbDieselLiters
@@ -704,7 +708,7 @@
             txbPurchaseOrder.Location = new Point(115, 294);
             txbPurchaseOrder.MaxLength = 30;
             txbPurchaseOrder.Name = "txbPurchaseOrder";
-            txbPurchaseOrder.Size = new Size(211, 21);
+            txbPurchaseOrder.Size = new Size(138, 21);
             txbPurchaseOrder.TabIndex = 39;
             // 
             // lblVisa
@@ -724,7 +728,7 @@
             txbBooking.Location = new Point(115, 272);
             txbBooking.MaxLength = 30;
             txbBooking.Name = "txbBooking";
-            txbBooking.Size = new Size(211, 21);
+            txbBooking.Size = new Size(138, 21);
             txbBooking.TabIndex = 38;
             // 
             // spnHour
@@ -1546,12 +1550,56 @@
             btnEditTherFco.UseVisualStyleBackColor = true;
             btnEditTherFco.Click += btnEditTherFco_Click;
             // 
+            // txbFolioFiscalFactura
+            // 
+            txbFolioFiscalFactura.Font = new Font("Microsoft Sans Serif", 9F);
+            txbFolioFiscalFactura.Location = new Point(259, 316);
+            txbFolioFiscalFactura.MaxLength = 40;
+            txbFolioFiscalFactura.Name = "txbFolioFiscalFactura";
+            txbFolioFiscalFactura.Size = new Size(174, 21);
+            txbFolioFiscalFactura.TabIndex = 390;
+            // 
+            // txbFactura
+            // 
+            txbFactura.Font = new Font("Microsoft Sans Serif", 9F);
+            txbFactura.Location = new Point(341, 272);
+            txbFactura.MaxLength = 20;
+            txbFactura.Name = "txbFactura";
+            txbFactura.Size = new Size(92, 21);
+            txbFactura.TabIndex = 389;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Font = new Font("Microsoft Sans Serif", 9F);
+            label23.Location = new Point(259, 297);
+            label23.Name = "label23";
+            label23.Size = new Size(125, 15);
+            label23.TabIndex = 392;
+            label23.Text = "Folio Fiscal Factura: ↓";
+            label23.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Font = new Font("Microsoft Sans Serif", 9F);
+            label24.Location = new Point(259, 275);
+            label24.Name = "label24";
+            label24.Size = new Size(81, 15);
+            label24.TabIndex = 391;
+            label24.Text = "Folio Factura:";
+            label24.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleMode = AutoScaleMode.None;
             AutoScroll = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(797, 613);
+            Controls.Add(txbFolioFiscalFactura);
+            Controls.Add(txbFactura);
+            Controls.Add(label23);
+            Controls.Add(label24);
             Controls.Add(btnEditTherFco);
             Controls.Add(txbThermometerContainer);
             Controls.Add(label22);
@@ -1809,5 +1857,9 @@
         public TextBox txbThermometerContainer;
         public Button button1;
         public Button btnEditTherFco;
+        public TextBox txbFolioFiscalFactura;
+        public TextBox txbFactura;
+        private Label label23;
+        private Label label24;
     }
 }
