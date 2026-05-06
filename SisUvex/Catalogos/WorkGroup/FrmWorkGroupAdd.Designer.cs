@@ -56,7 +56,7 @@
             // 
             txbName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txbName.Location = new Point(171, 81);
-            txbName.MaxLength = 15;
+            txbName.MaxLength = 30;
             txbName.Name = "txbName";
             txbName.Size = new Size(275, 29);
             txbName.TabIndex = 1;
