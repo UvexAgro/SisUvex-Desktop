@@ -73,7 +73,7 @@
             txbPassword.Location = new Point(14, 196);
             txbPassword.Name = "txbPassword";
             txbPassword.Size = new Size(208, 23);
-            txbPassword.TabIndex = 3;
+            txbPassword.TabIndex = 0;
             txbPassword.TextAlign = HorizontalAlignment.Center;
             txbPassword.UseSystemPasswordChar = true;
             txbPassword.KeyPress += txbPassword_KeyPress;
@@ -88,7 +88,7 @@
             btnLogin.Location = new Point(15, 241);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(208, 47);
-            btnLogin.TabIndex = 4;
+            btnLogin.TabIndex = 1;
             btnLogin.Text = "Iniciar sesión";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
