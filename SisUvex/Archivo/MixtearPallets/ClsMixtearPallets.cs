@@ -93,6 +93,7 @@ namespace SisUvex.Archivo.MixtearPallets
             new() { Nombre = "Cajas",         Encabezado = "Cajas",            AnchoMinimo = 36,  AnchoInicial = 36  },
             new() { Nombre = "PlanTrabajo",   Encabezado = "Plan de trabajo",  AnchoMinimo = 40,  AnchoInicial = 40 },
             new() { Nombre = "GTIN",          Encabezado = "GTIN",             AnchoMinimo = 47,  AnchoInicial = 47  },
+            new() { Nombre = "Tamaño",        Encabezado = "Tamaño",           AnchoMinimo = 45,  AnchoInicial = 55  },
             new() { Nombre = "Contenedor",    Encabezado = "Contenedor",       AnchoMinimo = 50,  AnchoInicial = 80  },
             new() { Nombre = "Libras",        Encabezado = "Libras",           AnchoMinimo = 30,  AnchoInicial = 40  },
             new() { Nombre = "Pre",           Encabezado = "Pre",              AnchoMinimo = 30,  AnchoInicial = 35  },
@@ -113,7 +114,7 @@ namespace SisUvex.Archivo.MixtearPallets
         // Columnas que se evalúan para colorear advertencias en el grid.
         // ESCALABILIDAD: Agregar nombres de columna aquí para incluirlos en la evaluación visual.
         private static readonly string[] COLUMNAS_ADVERTENCIA =
-            { "GTIN", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos", "Caja", "PlanTrabajo" };
+            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos", "Caja" };
 
         #endregion
 
@@ -510,6 +511,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 pallet.Cajas,          // Cajas
                 pallet.PlanTrabajo,    // PlanTrabajo
                 pallet.Programa,       // GTIN
+                pallet.Tamaño,         // Tamaño
                 pallet.Contenedor,     // Contenedor
                 pallet.LibrasPorCaja,  // Libras
                 pallet.Pre,            // Pre
@@ -820,12 +822,13 @@ namespace SisUvex.Archivo.MixtearPallets
             // Mapa columna → valor del nuevo pallet
             var comparaciones = new Dictionary<string, string>
             {
-                { "GTIN",    nuevoPallet.Programa    },
-                { "Tamaño",      nuevoPallet.Tamaño      },
-                { "Presentacion",nuevoPallet.Presentacion},
-                { "Variedad",    nuevoPallet.Variedad    },
-                { "Distribuidor",nuevoPallet.Distribuidor},
-                { "Contenedor",  nuevoPallet.Contenedor  },
+                { "GTIN",         nuevoPallet.Programa    },
+                { "Tamaño",       nuevoPallet.Tamaño      },
+                { "Presentacion", nuevoPallet.Presentacion},
+                { "Variedad",     nuevoPallet.Variedad    },
+                { "Distribuidor", nuevoPallet.Distribuidor},
+                { "Contenedor",   nuevoPallet.Contenedor  },
+                { "Caja",         nuevoPallet.TipoCaja    },
             };
 
             foreach (var (columna, valorNuevo) in comparaciones)
@@ -846,8 +849,8 @@ namespace SisUvex.Archivo.MixtearPallets
         ///
         /// REGLAS:
         ///   ERROR (bloquea): pallets de diferentes manifiestos.
-        ///   ADVERTENCIA (pide confirmación): diferencias en Programa, Tamaño,
-        ///     Presentación, Variedad, Distribuidor, Contenedor, CajasPorPallet,
+        ///   ADVERTENCIA (pide confirmación): diferencias en GTIN, Tamaño, Presentación,
+        ///     Variedad, Distribuidor, Contenedor, Caja, CajasPorPallet,
         ///     estibas diferentes o total de cajas que excede el máximo del GTIN.
         ///
         /// ESCALABILIDAD: Agregar nuevas validaciones aquí sin modificar los callers.
@@ -881,12 +884,13 @@ namespace SisUvex.Archivo.MixtearPallets
             // ── ADVERTENCIAS: diferencias en campos relevantes ──────────────────────────
             var diferencias = new List<string>();
 
-            if (HayValoresDiferentes(dgv, "GTIN"))     diferencias.Add("GTIN");
+            if (HayValoresDiferentes(dgv, "GTIN"))         diferencias.Add("GTIN");
             if (HayValoresDiferentes(dgv, "Tamaño"))       diferencias.Add("TAMAÑO");
             if (HayValoresDiferentes(dgv, "Presentacion")) diferencias.Add("PRESENTACIÓN");
             if (HayValoresDiferentes(dgv, "Variedad"))     diferencias.Add("VARIEDAD");
             if (HayValoresDiferentes(dgv, "Distribuidor")) diferencias.Add("DISTRIBUIDOR");
             if (HayValoresDiferentes(dgv, "Contenedor"))   diferencias.Add("CONTENEDOR");
+            if (HayValoresDiferentes(dgv, "Caja"))         diferencias.Add("CAJA");
             if (HayValoresDiferentes(dgv, "CajasPallet"))  diferencias.Add("CAJAS/PALLET (GTIN)");
 
             // Advertencia: estibas distintas
