@@ -85,35 +85,35 @@ namespace SisUvex.Archivo.MixtearPallets
         /// </summary>
         private static List<DefinicionColumna> ObtenerDefinicionColumnas() => new()
         {
-            // Columna               Encabezado          AnchoMin  AnchoInicial
-            new() { Nombre = "Pallet",        Encabezado = "Pallet",       AnchoMinimo = 55,  AnchoInicial = 65  },
-            new() { Nombre = "Mix",           Encabezado = "Mix",          AnchoMinimo = 40,  AnchoInicial = 55  },
-            new() { Nombre = "Estiba",        Encabezado = "Estiba",       AnchoMinimo = 50,  AnchoInicial = 65  },
-            new() { Nombre = "GTIN",          Encabezado = "GTIN",         AnchoMinimo = 70,  AnchoInicial = 80  },
-            new() { Nombre = "Cajas",         Encabezado = "Cajas",        AnchoMinimo = 50,  AnchoInicial = 60  },
-            new() { Nombre = "LibrasPallet",  Encabezado = "Lbs Pallet",   AnchoMinimo = 70,  AnchoInicial = 85  },
-            new() { Nombre = "Tamaño",        Encabezado = "Tamaño",       AnchoMinimo = 55,  AnchoInicial = 65  },
-            new() { Nombre = "Pre",           Encabezado = "Pre",          AnchoMinimo = 40,  AnchoInicial = 55  },
-            new() { Nombre = "Presentacion",  Encabezado = "Presentación", AnchoMinimo = 85,  AnchoInicial = 140 },
-            new() { Nombre = "Pos",           Encabezado = "Pos",          AnchoMinimo = 40,  AnchoInicial = 55  },
-            new() { Nombre = "Variedad",      Encabezado = "Variedad",     AnchoMinimo = 85,  AnchoInicial = 160 },
-            new() { Nombre = "Distribuidor",  Encabezado = "Distribuidor", AnchoMinimo = 85,  AnchoInicial = 120 },
-            new() { Nombre = "Manifiesto",    Encabezado = "Manifiesto",   AnchoMinimo = 70,  AnchoInicial = 85  },
-            new() { Nombre = "Rack",          Encabezado = "Rack",         AnchoMinimo = 50,  AnchoInicial = 65  },
-            new() { Nombre = "Fecha",         Encabezado = "Fecha",        AnchoMinimo = 75,  AnchoInicial = 90  },
-            new() { Nombre = "Lote",          Encabezado = "Lote",         AnchoMinimo = 75,  AnchoInicial = 110 },
-            new() { Nombre = "Contenedor",    Encabezado = "Contenedor",   AnchoMinimo = 75,  AnchoInicial = 100 },
-            new() { Nombre = "CajasPallet",   Encabezado = "Cjs/Pallet",   AnchoMinimo = 65,  AnchoInicial = 75  },
-            // ─── Campos de trazabilidad adicional ───────────────────────────────────
-            new() { Nombre = "Cultivo",       Encabezado = "Cultivo",      AnchoMinimo = 65,  AnchoInicial = 90  },
-            new() { Nombre = "Cuadrilla",     Encabezado = "Cuadrilla",    AnchoMinimo = 85,  AnchoInicial = 130 },
-            new() { Nombre = "Papeleta",      Encabezado = "Papeleta",     AnchoMinimo = 65,  AnchoInicial = 80  },
+            // Columna               Encabezado              AnchoMin  AnchoInicial
+            new() { Nombre = "Pallet",        Encabezado = "Pallet",           AnchoMinimo = 46,  AnchoInicial = 46  },
+            new() { Nombre = "Fecha",         Encabezado = "Fecha",            AnchoMinimo = 75,  AnchoInicial = 90  },
+            new() { Nombre = "Mix",           Encabezado = "Mix",              AnchoMinimo = 30,  AnchoInicial = 30  },
+            new() { Nombre = "Estiba",        Encabezado = "Estiba",           AnchoMinimo = 40,  AnchoInicial = 40  },
+            new() { Nombre = "Cajas",         Encabezado = "Cajas",            AnchoMinimo = 36,  AnchoInicial = 36  },
+            new() { Nombre = "PlanTrabajo",   Encabezado = "Plan de trabajo",  AnchoMinimo = 40,  AnchoInicial = 40 },
+            new() { Nombre = "GTIN",          Encabezado = "GTIN",             AnchoMinimo = 47,  AnchoInicial = 47  },
+            new() { Nombre = "Contenedor",    Encabezado = "Contenedor",       AnchoMinimo = 50,  AnchoInicial = 80  },
+            new() { Nombre = "Libras",        Encabezado = "Libras",           AnchoMinimo = 30,  AnchoInicial = 40  },
+            new() { Nombre = "Pre",           Encabezado = "Pre",              AnchoMinimo = 30,  AnchoInicial = 35  },
+            new() { Nombre = "Presentacion",  Encabezado = "Presentación",     AnchoMinimo = 85,  AnchoInicial = 200 },
+            new() { Nombre = "Pos",           Encabezado = "Pos",              AnchoMinimo = 40,  AnchoInicial = 55  },
+            new() { Nombre = "Variedad",      Encabezado = "Variedad",         AnchoMinimo = 85,  AnchoInicial = 160 },
+            new() { Nombre = "Caja",          Encabezado = "Caja",             AnchoMinimo = 30,  AnchoInicial = 35  },
+            new() { Nombre = "Distribuidor",  Encabezado = "Distribuidor",     AnchoMinimo = 70,  AnchoInicial = 70 },
+            new() { Nombre = "Manifiesto",    Encabezado = "Manifiesto",       AnchoMinimo = 70,  AnchoInicial = 85  },
+            new() { Nombre = "Rack",          Encabezado = "Rack",             AnchoMinimo = 50,  AnchoInicial = 65  },
+            new() { Nombre = "Lote",          Encabezado = "Lote",             AnchoMinimo = 75,  AnchoInicial = 110 },
+            new() { Nombre = "CajasPallet",   Encabezado = "Cjs/Pallet",       AnchoMinimo = 65,  AnchoInicial = 75  },
+            new() { Nombre = "Cuadrilla",     Encabezado = "Cuadrilla",        AnchoMinimo = 85,  AnchoInicial = 130 },
+            new() { Nombre = "Papeleta",      Encabezado = "Papeleta",         AnchoMinimo = 50,  AnchoInicial = 50  },
+            new() { Nombre = "Cultivo",       Encabezado = "Cultivo",          AnchoMinimo = 65,  AnchoInicial = 90  },
         };
 
         // Columnas que se evalúan para colorear advertencias en el grid.
         // ESCALABILIDAD: Agregar nombres de columna aquí para incluirlos en la evaluación visual.
         private static readonly string[] COLUMNAS_ADVERTENCIA =
-            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos" };
+            { "GTIN", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos", "Caja", "PlanTrabajo" };
 
         #endregion
 
@@ -136,6 +136,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 vpal.Libras,
                 vpal.[Libras pallet],
                 vpal.Tamaño,
+                vpal.[Plan de trabajo],
                 vpal.Presentación,
                 vpal.Variedad,
                 vpal.Distribuidor,
@@ -245,6 +246,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 Pre           = row["Pre"].ToString() ?? "",
                 Pos           = row["Pos"].ToString() ?? "",
                 TipoCaja      = row["Caja"].ToString() ?? "",
+                PlanTrabajo   = row["Plan de trabajo"].ToString() ?? "",
                 CajasPorPallet = int.TryParse(row["CajasPorPallet"].ToString(), out int cjsPal) ? cjsPal : 0,
             };
         }
@@ -502,26 +504,27 @@ namespace SisUvex.Archivo.MixtearPallets
 
             dgv.Rows.Add(
                 pallet.IdPallet,       // Pallet
+                pallet.Fecha,          // Fecha
                 pallet.Mix,            // Mix
                 pallet.Estiba,         // Estiba
-                pallet.Programa,       // GTIN
                 pallet.Cajas,          // Cajas
-                pallet.LibrasPallet,   // LibrasPallet
-                pallet.Tamaño,         // Tamaño
+                pallet.PlanTrabajo,    // PlanTrabajo
+                pallet.Programa,       // GTIN
+                pallet.Contenedor,     // Contenedor
+                pallet.LibrasPorCaja,  // Libras
                 pallet.Pre,            // Pre
                 pallet.Presentacion,   // Presentacion
                 pallet.Pos,            // Pos
                 pallet.Variedad,       // Variedad
+                pallet.TipoCaja,       // Caja
                 pallet.Distribuidor,   // Distribuidor
                 pallet.Manifiesto,     // Manifiesto
                 pallet.Rack,           // Rack
-                pallet.Fecha,          // Fecha
                 pallet.Lote,           // Lote
-                pallet.Contenedor,     // Contenedor
                 pallet.CajasPorPallet, // CajasPallet
-                pallet.Cultivo,        // Cultivo
                 pallet.Cuadrilla,      // Cuadrilla
-                pallet.Papeleta        // Papeleta
+                pallet.Papeleta,       // Papeleta
+                pallet.Cultivo         // Cultivo
             );
             return true;
         }

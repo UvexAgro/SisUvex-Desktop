@@ -371,10 +371,10 @@
         private Label        label2;
         private Label        label3;
         private Button       btnQuitarMix;
-        private Button       btnAsistido;
-        private Button       btnAddToUp;
-        private Button       button1;
-        private Button       btnQuitarDes;
-        public  DataGridView dgvDestibar;
+        private Button           btnAsistido;
+        private Button           btnAddToUp;
+        private Button           button1;
+        private Button           btnQuitarDes;
+        public  DataGridView     dgvDestibar;
     }
 }
