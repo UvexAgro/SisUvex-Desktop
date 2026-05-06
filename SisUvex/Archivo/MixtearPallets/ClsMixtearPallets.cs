@@ -67,8 +67,14 @@ namespace SisUvex.Archivo.MixtearPallets
             /// <summary>Texto visible en el encabezado de la columna</summary>
             public string Encabezado { get; set; } = string.Empty;
 
-            /// <summary>Ancho mínimo en píxeles de la columna</summary>
+            /// <summary>Ancho mínimo en píxeles: el usuario no podrá reducir por debajo de este valor</summary>
             public int AnchoMinimo { get; set; } = 60;
+
+            /// <summary>
+            /// Ancho inicial en píxeles al cargar el formulario.
+            /// Debe ser ≥ AnchoMinimo. Con AutoSizeMode = None el usuario puede ajustarlo libremente.
+            /// </summary>
+            public int AnchoInicial { get; set; } = 0; // 0 = usar AnchoMinimo como fallback
         }
 
         /// <summary>
@@ -79,33 +85,35 @@ namespace SisUvex.Archivo.MixtearPallets
         /// </summary>
         private static List<DefinicionColumna> ObtenerDefinicionColumnas() => new()
         {
-            new() { Nombre = "Pallet",        Encabezado = "Pallet",       AnchoMinimo = 60  },
-            new() { Nombre = "Mix",           Encabezado = "Mix",          AnchoMinimo = 40  },
-            new() { Nombre = "Estiba",        Encabezado = "Estiba",       AnchoMinimo = 55  },
-            new() { Nombre = "GTIN",          Encabezado = "GTIN",         AnchoMinimo = 75  },
-            new() { Nombre = "Cajas",         Encabezado = "Cajas",        AnchoMinimo = 55  },
-            new() { Nombre = "LibrasPallet",  Encabezado = "Lbs Pallet",   AnchoMinimo = 75  },
-            new() { Nombre = "Tamaño",        Encabezado = "Tamaño",       AnchoMinimo = 60  },
-            new() { Nombre = "Presentacion",  Encabezado = "Presentación", AnchoMinimo = 90  },
-            new() { Nombre = "Variedad",      Encabezado = "Variedad",     AnchoMinimo = 90  },
-            new() { Nombre = "Distribuidor",  Encabezado = "Distribuidor", AnchoMinimo = 90  },
-            new() { Nombre = "Manifiesto",    Encabezado = "Manifiesto",   AnchoMinimo = 75  },
-            new() { Nombre = "Rack",          Encabezado = "Rack",         AnchoMinimo = 55  },
-            new() { Nombre = "Fecha",         Encabezado = "Fecha",        AnchoMinimo = 80  },
-            new() { Nombre = "Lote",          Encabezado = "Lote",         AnchoMinimo = 80  },
-            new() { Nombre = "Contenedor",    Encabezado = "Contenedor",   AnchoMinimo = 80  },
-            new() { Nombre = "CajasPallet",   Encabezado = "Cjs/Pallet",   AnchoMinimo = 70  },
-            // ─── Campos de trazabilidad adicional (escalabilidad futura) ───────────
-            // Para agregar Cuadrilla, Papeleta, Cultivo, etc., añadir aquí y en AgregarPalletAlGrid().
-            new() { Nombre = "Cultivo",       Encabezado = "Cultivo",      AnchoMinimo = 70  },
-            new() { Nombre = "Pre",           Encabezado = "Pre",          AnchoMinimo = 45  },
-            new() { Nombre = "Pos",           Encabezado = "Pos",          AnchoMinimo = 45  },
+            // Columna               Encabezado              AnchoMin  AnchoInicial
+            new() { Nombre = "Pallet",        Encabezado = "Pallet",           AnchoMinimo = 46,  AnchoInicial = 46  },
+            new() { Nombre = "Fecha",         Encabezado = "Fecha",            AnchoMinimo = 75,  AnchoInicial = 90  },
+            new() { Nombre = "Mix",           Encabezado = "Mix",              AnchoMinimo = 30,  AnchoInicial = 30  },
+            new() { Nombre = "Estiba",        Encabezado = "Estiba",           AnchoMinimo = 40,  AnchoInicial = 40  },
+            new() { Nombre = "Cajas",         Encabezado = "Cajas",            AnchoMinimo = 36,  AnchoInicial = 36  },
+            new() { Nombre = "PlanTrabajo",   Encabezado = "Plan de trabajo",  AnchoMinimo = 40,  AnchoInicial = 40 },
+            new() { Nombre = "GTIN",          Encabezado = "GTIN",             AnchoMinimo = 47,  AnchoInicial = 47  },
+            new() { Nombre = "Contenedor",    Encabezado = "Contenedor",       AnchoMinimo = 50,  AnchoInicial = 80  },
+            new() { Nombre = "Libras",        Encabezado = "Libras",           AnchoMinimo = 30,  AnchoInicial = 40  },
+            new() { Nombre = "Pre",           Encabezado = "Pre",              AnchoMinimo = 30,  AnchoInicial = 35  },
+            new() { Nombre = "Presentacion",  Encabezado = "Presentación",     AnchoMinimo = 85,  AnchoInicial = 200 },
+            new() { Nombre = "Pos",           Encabezado = "Pos",              AnchoMinimo = 40,  AnchoInicial = 55  },
+            new() { Nombre = "Variedad",      Encabezado = "Variedad",         AnchoMinimo = 85,  AnchoInicial = 160 },
+            new() { Nombre = "Caja",          Encabezado = "Caja",             AnchoMinimo = 30,  AnchoInicial = 35  },
+            new() { Nombre = "Distribuidor",  Encabezado = "Distribuidor",     AnchoMinimo = 70,  AnchoInicial = 70 },
+            new() { Nombre = "Manifiesto",    Encabezado = "Manifiesto",       AnchoMinimo = 70,  AnchoInicial = 85  },
+            new() { Nombre = "Rack",          Encabezado = "Rack",             AnchoMinimo = 50,  AnchoInicial = 65  },
+            new() { Nombre = "Lote",          Encabezado = "Lote",             AnchoMinimo = 75,  AnchoInicial = 110 },
+            new() { Nombre = "CajasPallet",   Encabezado = "Cjs/Pallet",       AnchoMinimo = 65,  AnchoInicial = 75  },
+            new() { Nombre = "Cuadrilla",     Encabezado = "Cuadrilla",        AnchoMinimo = 85,  AnchoInicial = 130 },
+            new() { Nombre = "Papeleta",      Encabezado = "Papeleta",         AnchoMinimo = 50,  AnchoInicial = 50  },
+            new() { Nombre = "Cultivo",       Encabezado = "Cultivo",          AnchoMinimo = 65,  AnchoInicial = 90  },
         };
 
         // Columnas que se evalúan para colorear advertencias en el grid.
         // ESCALABILIDAD: Agregar nombres de columna aquí para incluirlos en la evaluación visual.
         private static readonly string[] COLUMNAS_ADVERTENCIA =
-            { "GTIN", "Tamaño", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos" };
+            { "GTIN", "Presentacion", "Variedad", "Distribuidor", "Contenedor", "Pre", "Pos", "Caja", "PlanTrabajo" };
 
         #endregion
 
@@ -128,6 +136,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 vpal.Libras,
                 vpal.[Libras pallet],
                 vpal.Tamaño,
+                vpal.[Plan de trabajo],
                 vpal.Presentación,
                 vpal.Variedad,
                 vpal.Distribuidor,
@@ -237,6 +246,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 Pre           = row["Pre"].ToString() ?? "",
                 Pos           = row["Pos"].ToString() ?? "",
                 TipoCaja      = row["Caja"].ToString() ?? "",
+                PlanTrabajo   = row["Plan de trabajo"].ToString() ?? "",
                 CajasPorPallet = int.TryParse(row["CajasPorPallet"].ToString(), out int cjsPal) ? cjsPal : 0,
             };
         }
@@ -468,14 +478,16 @@ namespace SisUvex.Archivo.MixtearPallets
                 if (nombresAgregados.Contains(def.Nombre)) continue;
                 nombresAgregados.Add(def.Nombre);
 
+                int anchoInicial = def.AnchoInicial > 0 ? def.AnchoInicial : def.AnchoMinimo;
                 dgv.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    Name             = def.Nombre,
-                    HeaderText       = def.Encabezado,
-                    MinimumWidth     = def.AnchoMinimo,
-                    AutoSizeMode     = DataGridViewAutoSizeColumnMode.AllCells,
-                    ReadOnly         = true,
-                    SortMode         = DataGridViewColumnSortMode.Automatic,
+                    Name         = def.Nombre,
+                    HeaderText   = def.Encabezado,
+                    MinimumWidth = def.AnchoMinimo,
+                    Width        = anchoInicial,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.None, // permite redimensionar a mano
+                    ReadOnly     = true,
+                    SortMode     = DataGridViewColumnSortMode.Automatic,
                 });
             }
         }
@@ -491,25 +503,28 @@ namespace SisUvex.Archivo.MixtearPallets
             if (ExistePalletEnGrid(dgv, pallet.IdPallet)) return false;
 
             dgv.Rows.Add(
-                pallet.IdPallet,
-                pallet.Mix,
-                pallet.Estiba,
-                pallet.Programa,
-                pallet.Cajas,
-                pallet.LibrasPallet,
-                pallet.Tamaño,
-                pallet.Presentacion,
-                pallet.Variedad,
-                pallet.Distribuidor,
-                pallet.Manifiesto,
-                pallet.Rack,
-                pallet.Fecha,
-                pallet.Lote,
-                pallet.Contenedor,
-                pallet.CajasPorPallet,
-                pallet.Cultivo,
-                pallet.Pre,
-                pallet.Pos
+                pallet.IdPallet,       // Pallet
+                pallet.Fecha,          // Fecha
+                pallet.Mix,            // Mix
+                pallet.Estiba,         // Estiba
+                pallet.Cajas,          // Cajas
+                pallet.PlanTrabajo,    // PlanTrabajo
+                pallet.Programa,       // GTIN
+                pallet.Contenedor,     // Contenedor
+                pallet.LibrasPorCaja,  // Libras
+                pallet.Pre,            // Pre
+                pallet.Presentacion,   // Presentacion
+                pallet.Pos,            // Pos
+                pallet.Variedad,       // Variedad
+                pallet.TipoCaja,       // Caja
+                pallet.Distribuidor,   // Distribuidor
+                pallet.Manifiesto,     // Manifiesto
+                pallet.Rack,           // Rack
+                pallet.Lote,           // Lote
+                pallet.CajasPorPallet, // CajasPallet
+                pallet.Cuadrilla,      // Cuadrilla
+                pallet.Papeleta,       // Papeleta
+                pallet.Cultivo         // Cultivo
             );
             return true;
         }

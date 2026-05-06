@@ -46,6 +46,9 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>Pack_WorkPlan.id_GTIN — identificador del programa de empaque</summary>
         public string Programa { get; set; } = string.Empty;
 
+        /// <summary>Nombre o descripción del plan de trabajo (vw_PackPalletCon.[Plan de trabajo])</summary>
+        public string PlanTrabajo { get; set; } = string.Empty;
+
         /// <summary>Pack_GTIN.n_lbs — libras por caja según el GTIN</summary>
         public decimal LibrasPorCaja { get; set; }
 

@@ -89,6 +89,88 @@ namespace SisUvex.Archivo.MixtearPallets
             // Estilo de selección personalizado: fondo transparente + texto negrita azul marino
             dgvPallets.CellPainting  += DgvSeleccion_CellPainting;
             dgvDestibar.CellPainting += DgvSeleccion_CellPainting;
+
+            // Para activar la herramienta de ajuste de columnas, descomentar la siguiente línea:
+            // DebugCargarColumnas();
+        }
+
+        // ============================================================================
+        // CONTROLES DE PRUEBA – ajuste de anchos de columna
+        // Para activar: descomentar la llamada a DebugCargarColumnas() en FrmMixtearPallets_Load.
+        // ============================================================================
+
+        /// <summary>
+        /// Crea los controles de prueba en tiempo de ejecución, los agrega al formulario y conecta sus eventos.
+        /// No existe ninguna traza de estos controles en el designer; todo vive aquí.
+        /// Llamar desde FrmMixtearPallets_Load para activar la herramienta de ajuste de columnas.
+        /// </summary>
+        private void DebugCargarColumnas()
+        {
+            var lbl = new Label
+            {
+                Text      = "Col:",
+                AutoSize  = true,
+                Font      = new Font("Segoe UI", 8F, FontStyle.Italic),
+                ForeColor = Color.Gray,
+                Location  = new Point(658, 13),
+                Anchor    = AnchorStyles.Top | AnchorStyles.Right,
+            };
+
+            var cbo = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font          = new Font("Segoe UI", 8F),
+                Location      = new Point(685, 9),
+                Size          = new Size(195, 23),
+                Anchor        = AnchorStyles.Top | AnchorStyles.Right,
+            };
+
+            var nud = new NumericUpDown
+            {
+                Minimum  = 30,
+                Maximum  = 600,
+                Font     = new Font("Segoe UI", 8F),
+                Location = new Point(885, 10),
+                Size     = new Size(65, 23),
+                Anchor   = AnchorStyles.Top | AnchorStyles.Right,
+            };
+
+            // Llenar combobox con los nombres de columna del dgvPallets
+            foreach (DataGridViewColumn col in dgvPallets.Columns)
+                cbo.Items.Add(col.Name);
+
+            // Al seleccionar columna → mostrar su ancho actual en nud
+            cbo.SelectedIndexChanged += (s, e) =>
+            {
+                if (cbo.SelectedItem is not string colName) return;
+                if (!dgvPallets.Columns.Contains(colName)) return;
+
+                nud.ValueChanged -= DebugNudAncho;
+                nud.Value = dgvPallets.Columns[colName].Width;
+                nud.ValueChanged += DebugNudAncho;
+
+                void DebugNudAncho(object? _, EventArgs __)
+                {
+                    int ancho = (int)nud.Value;
+                    if (dgvPallets.Columns.Contains(colName))
+                    {
+                        dgvPallets.Columns[colName].MinimumWidth = ancho;
+                        dgvPallets.Columns[colName].Width        = ancho;
+                    }
+                    if (dgvDestibar.Columns.Contains(colName))
+                    {
+                        dgvDestibar.Columns[colName].MinimumWidth = ancho;
+                        dgvDestibar.Columns[colName].Width        = ancho;
+                    }
+                }
+            };
+
+            Controls.Add(lbl);
+            Controls.Add(cbo);
+            Controls.Add(nud);
+
+            if (cbo.Items.Count > 0)
+                cbo.SelectedIndex = 0;
         }
 
         // ============================================================================
