@@ -1,23 +1,6 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.VariantTypes;
-using iText.Commons.Utils;
-using iText.Kernel.Pdf;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Office.Interop.Excel;
-using Org.BouncyCastle.Bcpg;
-using Org.BouncyCastle.Bcpg.OpenPgp;
-using SisUvex.Archivo.Etiquetas.LabelInterface;
-using SisUvex.Catalogos.Metods.Values;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SisUvex.Archivo.Etiquetas.LabelInterface;
+using SisUvex.Catalogos.Metods.Querys;
+using System.Data;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.Etiquetas.PrintLabels
@@ -36,7 +19,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string farmName = string.Empty; // Added for grow farm name
         private bool reverseLabelOrientation = false;
         private bool isReprint = false;
-
+        private bool stowage = false;
 
         private string labelsZPLString = string.Empty;
         public string GenerateSuperStringTag(string idPallet, ETagInfo eTagInfo, int copies, int boxes, bool reverseOrientation, bool isReprint)
@@ -60,14 +43,55 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             //**Que no jale el nombre corto (si no hay) hasta que se cambie el procedimiento almacenado en hermosillo
             distribuidorZPL = eTag.shortNameDistributor;
-            if (distribuidorZPL.IsNullOrEmpty()) distribuidorZPL = eTag.nameDistributor;
+            if (string.IsNullOrEmpty(distribuidorZPL)) distribuidorZPL = eTag.nameDistributor;
             //todo esto
             farmName = eTag.growFarmName;
 
 
             return SuperPrintPalletTag(copies);
         }
-        
+
+        private string StringStowageList(string idPallet)
+        {
+            string q = @"SELECT * FROM Pack_Pallet WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) );";
+            string idStow = string.Empty;
+            string zplStowage = string.Empty;
+            Dictionary<string, object> p = new();
+            p.Add("@idPallet", idPallet);
+            List<(string, string)>? stowageList = new();
+
+            DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(q, p);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                idStow = dt.Rows[0]["c_stowage"].ToString() ?? string.Empty;
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    string palletId = row["id_pallet"].ToString() ?? string.Empty;
+                    string palletBoxes = row["i_boxes"].ToString() ?? string.Empty;
+                    stowageList.Add((palletId, palletBoxes));
+                }
+            }
+
+            if (stowageList.Count > 0)
+            {
+                int yBegin = 20;
+                zplStowage += $"^FX STOW AND PALLETS\n"
+                           + $"^CF0,40^FO635,{yBegin}^FD*{idStow}*^FS\n";
+
+                foreach ((string palletId, string palletBoxes) in stowageList)
+                {
+                    yBegin += 40; // Incrementa la posición Y para cada pallet
+                    zplStowage += $"^CF0,30 ^FO635,{yBegin} ^FD{palletId}({palletBoxes})^FS\n";
+                }
+
+                return zplStowage;
+            }
+
+            return string.Empty;
+        }
+
         public string SuperPrintPalletTag(int copies)
         {
             labelsZPLString = PrintPalletString();
@@ -96,7 +120,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             int baseIndent = 400;
             int step = 20;
 
-            if(farmName.IsNullOrEmpty())
+            if(string.IsNullOrEmpty(farmName))
             {
                 farmName = " ";
             }
@@ -104,7 +128,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             string reprint = string.Empty;
             if (isReprint)
-                reprint = $"^CF0,80^FO472,115^FD*^FS";
+                reprint = $"^CF0,80^FO472,115^FD*^FS\n";
 
             string farmIndentation = farmIndentationValue.ToString();
 
@@ -114,6 +138,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                 + "^BY5,2,90\n"
                                 + $"^FO181,20^BC^FD{idPal}^FS\n"
                                 + reprint
+                                + StringStowageList(idPal)
                                 + "^FX BIG INFO SECTION.\n"
                                 + "^CF0,80\n"
                                 + $"^FO{farmIndentation},170^FD{farmName}^FS\n"

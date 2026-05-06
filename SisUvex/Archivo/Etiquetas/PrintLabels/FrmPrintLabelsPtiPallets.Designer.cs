@@ -71,7 +71,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             lblTagContractorDetail = new Label();
             cboWorkGroup = new ComboBox();
             lblTagWorkGroup = new Label();
-            lblTagHead = new Label();
             grbProduct = new GroupBox();
             lblTypeBox = new Label();
             label3 = new Label();
@@ -106,6 +105,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             txbIdPtiChange = new TextBox();
             btnOpenMixPallets = new Button();
             btnbtnOpenWorkPlan = new Button();
+            cboSeason = new ComboBox();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -161,7 +162,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cboWorkPlan.Location = new Point(192, 74);
             cboWorkPlan.Margin = new Padding(1);
             cboWorkPlan.Name = "cboWorkPlan";
-            cboWorkPlan.Size = new Size(614, 29);
+            cboWorkPlan.Size = new Size(621, 29);
             cboWorkPlan.TabIndex = 2;
             // 
             // dtpWorkDay
@@ -171,7 +172,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dtpWorkDay.Location = new Point(525, 43);
             dtpWorkDay.Margin = new Padding(1);
             dtpWorkDay.Name = "dtpWorkDay";
-            dtpWorkDay.Size = new Size(281, 29);
+            dtpWorkDay.Size = new Size(288, 29);
             dtpWorkDay.TabIndex = 1;
             // 
             // label10
@@ -200,7 +201,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chBx.AutoSize = true;
             chBx.Enabled = false;
             chBx.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            chBx.Location = new Point(672, 14);
+            chBx.Location = new Point(671, 18);
             chBx.Margin = new Padding(1);
             chBx.Name = "chBx";
             chBx.Size = new Size(142, 23);
@@ -555,17 +556,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             lblTagWorkGroup.TabIndex = 56;
             lblTagWorkGroup.Text = "CUADRILLA";
             // 
-            // lblTagHead
-            // 
-            lblTagHead.AutoSize = true;
-            lblTagHead.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTagHead.Location = new Point(10, 9);
-            lblTagHead.Margin = new Padding(1, 0, 1, 0);
-            lblTagHead.Name = "lblTagHead";
-            lblTagHead.Size = new Size(317, 32);
-            lblTagHead.TabIndex = 55;
-            lblTagHead.Text = "IMPRESIÓN DE ETIQUETAS";
-            // 
             // grbProduct
             // 
             grbProduct.Controls.Add(lblTypeBox);
@@ -759,7 +749,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             lblWorkDay.AutoSize = true;
             lblWorkDay.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblWorkDay.Location = new Point(446, 43);
+            lblWorkDay.Location = new Point(446, 46);
             lblWorkDay.Margin = new Padding(1, 0, 1, 0);
             lblWorkDay.Name = "lblWorkDay";
             lblWorkDay.Size = new Size(77, 25);
@@ -1008,7 +998,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             btnOpenMixPallets.BackgroundImageLayout = ImageLayout.Stretch;
             btnOpenMixPallets.Font = new Font("Segoe UI", 12F);
-            btnOpenMixPallets.Location = new Point(402, 9);
+            btnOpenMixPallets.Location = new Point(420, 11);
             btnOpenMixPallets.Margin = new Padding(0);
             btnOpenMixPallets.Name = "btnOpenMixPallets";
             btnOpenMixPallets.Size = new Size(123, 31);
@@ -1021,7 +1011,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             btnbtnOpenWorkPlan.BackgroundImageLayout = ImageLayout.Stretch;
             btnbtnOpenWorkPlan.Font = new Font("Segoe UI", 12F);
-            btnbtnOpenWorkPlan.Location = new Point(525, 9);
+            btnbtnOpenWorkPlan.Location = new Point(543, 11);
             btnbtnOpenWorkPlan.Margin = new Padding(0);
             btnbtnOpenWorkPlan.Name = "btnbtnOpenWorkPlan";
             btnbtnOpenWorkPlan.Size = new Size(123, 31);
@@ -1030,11 +1020,36 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnbtnOpenWorkPlan.UseVisualStyleBackColor = true;
             btnbtnOpenWorkPlan.Click += btnbtnOpenWorkPlan_Click;
             // 
+            // cboSeason
+            // 
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.DropDownWidth = 400;
+            cboSeason.Font = new Font("Segoe UI", 12F);
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Location = new Point(192, 12);
+            cboSeason.Margin = new Padding(1);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(227, 29);
+            cboSeason.TabIndex = 87;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label4.Location = new Point(61, 12);
+            label4.Margin = new Padding(1, 0, 1, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(129, 25);
+            label4.TabIndex = 88;
+            label4.Text = "TEMPORADA";
+            // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(822, 730);
+            Controls.Add(cboSeason);
+            Controls.Add(label4);
             Controls.Add(btnbtnOpenWorkPlan);
             Controls.Add(btnOpenMixPallets);
             Controls.Add(txbIdPtiChange);
@@ -1055,7 +1070,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Controls.Add(lblTagContractorDetail);
             Controls.Add(cboWorkGroup);
             Controls.Add(lblTagWorkGroup);
-            Controls.Add(lblTagHead);
             Controls.Add(gpbLastPallets);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrintLabelsPtiPallets";
@@ -1101,7 +1115,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private Label lblTagContractorDetail;
         private Label lblTagContratista;
         private Label lblTagWorkGroup;
-        private Label lblTagHead;
         public ComboBox cboWorkPlan;
         public ComboBox cboWorkGroup;
         public DateTimePicker dtpWorkDay;
@@ -1158,5 +1171,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private TextBox txbIdPtiChange;
         private Button btnOpenMixPallets;
         private Button btnbtnOpenWorkPlan;
+        public ComboBox cboSeason;
+        private Label label4;
     }
 }

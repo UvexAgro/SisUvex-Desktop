@@ -86,12 +86,20 @@ namespace SisUvex.Archivo.WorkPlan
         }
         private void SetControls()
         {
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, Season.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboWorkGroup, WorkGroup.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboLot, Lot.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSize, ClsObject.Size.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboTypeBox, TypeBox.Cbo);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((_frmAdd.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmAdd.cboWorkGroup, _frmAdd.chbWorkGroupActives, lsWGDep);
+
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, "08"); //<-- preseleccionar la temporada uva 2026
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSize, _frmAdd.txbIdSize);
