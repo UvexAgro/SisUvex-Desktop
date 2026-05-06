@@ -3,6 +3,7 @@ using System.Drawing.Printing;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 using SisUvex;
 
 namespace SisUvex.Cuadro_de_herramientas.ZPL
@@ -11,12 +12,30 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
     {
         private readonly int[] _dpmmValores = { 6, 8, 12, 24 };
         private bool _cambiandoUnidad;
+        private bool _resaltandoZpl;
+        private readonly Timer _timerResaltadoZpl;
         private readonly ClsZplPreview _zplPreview = new();
 
         public FrmZPLPreview()
         {
             InitializeComponent();
             InicializarControlesOpciones();
+
+            _timerResaltadoZpl = new Timer { Interval = 130 };
+            _timerResaltadoZpl.Tick += (_, _) =>
+            {
+                _timerResaltadoZpl.Stop();
+                AplicarResaltadoZpl();
+            };
+
+            rtbZpl.TextChanged += (_, _) =>
+            {
+                if (_resaltandoZpl)
+                    return;
+                _timerResaltadoZpl.Stop();
+                _timerResaltadoZpl.Start();
+            };
+            rtbZpl.DetectUrls = false;
 
             _zplPreview.AttachPreviewPanel(pnlPreview);
             _zplPreview.ZoomPercent = trackZoom.Value;
@@ -49,6 +68,7 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
             {
                 CargarImpresoras();
                 ActualizarLblTotalPrecheck();
+                BeginInvoke(AplicarResaltadoZpl);
             };
             Shown += async (_, _) => await ActualizarVistaAsync();
         }
@@ -58,6 +78,22 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
         private void ActualizarEtiquetaZoom()
         {
             lblZoomPct.Text = $"{trackZoom.Value} %";
+        }
+
+        private void AplicarResaltadoZpl()
+        {
+            if (rtbZpl.IsDisposed)
+                return;
+
+            _resaltandoZpl = true;
+            try
+            {
+                ClsZplRichHighlighter.Aplicar(rtbZpl);
+            }
+            finally
+            {
+                _resaltandoZpl = false;
+            }
         }
 
         private void InicializarControlesOpciones()
@@ -260,6 +296,8 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
+            _timerResaltadoZpl.Stop();
+            _timerResaltadoZpl.Dispose();
             _zplPreview.Dispose();
             base.OnFormClosed(e);
         }

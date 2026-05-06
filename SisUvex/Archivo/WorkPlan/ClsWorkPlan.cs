@@ -86,6 +86,7 @@ namespace SisUvex.Archivo.WorkPlan
         }
         private void SetControls()
         {
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, Season.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboWorkGroup, WorkGroup.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboLot, Lot.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboSize, ClsObject.Size.Cbo);
@@ -93,7 +94,11 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboTypeBox, TypeBox.Cbo);
 
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((_frmAdd.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmAdd.cboWorkGroup, _frmAdd.chbWorkGroupActives, lsWGDep);
+
+            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSize, _frmAdd.txbIdSize);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTypeBox, _frmAdd.txbIdTypeBox);
             CboApplyTextChangedEventInWorkPlanForLot(_frmAdd.cboLot, _frmAdd.txbIdLot);
