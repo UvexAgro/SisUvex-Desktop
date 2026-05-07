@@ -4,32 +4,26 @@ using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
 
-namespace SisUvex.Catalogos.Distributor;
+namespace SisUvex.Catalogos.Consignee;
 
-internal class EDistributor
+internal class EConsignee
 {
-    public string? IdDistributor { get; set; }
+    public string? IdConsignee { get; set; }
     /// <summary>Índice 0 = No, 1 = Sí (<c>c_active</c>).</summary>
     public int Active { get; set; }
-    public string? NameDistributor { get; set; }
-    public string? ShortName { get; set; }
-    public string? IdUSAgency { get; set; }
-    public string? IdMXAgency { get; set; }
-    public string? IdGrower { get; set; }
-    public string? MarketTarget { get; set; }
+    public string? NameConsignee { get; set; }
+    public string? IdDistributor { get; set; }
     public string? Address { get; set; }
     public string? City { get; set; }
-    public string? RFC { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? IdCityCrossPoint { get; set; }
-    public string? IdCityDestiny { get; set; }
     public string? Country { get; set; }
+    public string? RFC { get; set; }
     public string? taxId { get; set; }
+    public string? PhoneNumber { get; set; }
 
     public static string GetNextId()
     {
         string result = ClsQuerysDB.GetData(
-            "SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST(id_distributor AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM Pack_Distributor");
+            "SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST(id_consignee AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM Pack_Consignee");
 
         return string.IsNullOrEmpty(result) ? "01" : result;
     }
@@ -50,42 +44,36 @@ internal class EDistributor
         return s == "1" ? 1 : 0;
     }
 
-    public void GetDistributor(string? idDistributor)
+    public void GetConsignee(string? idConsignee)
     {
-        if (string.IsNullOrWhiteSpace(idDistributor))
+        if (string.IsNullOrWhiteSpace(idConsignee))
             return;
 
         SQLControl sql = new();
         try
         {
             sql.OpenConectionWrite();
-            SqlCommand cmd = new("SELECT * FROM Pack_Distributor WHERE id_distributor = @id", sql.cnn);
-            cmd.Parameters.AddWithValue("@id", idDistributor.Trim());
+            SqlCommand cmd = new("SELECT * FROM Pack_Consignee WHERE id_consignee = @id", sql.cnn);
+            cmd.Parameters.AddWithValue("@id", idConsignee.Trim());
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (!dr.Read())
                 return;
 
+            IdConsignee = ReadField(dr, "id_consignee");
+            NameConsignee = ReadField(dr, "v_nameConsignee");
             IdDistributor = ReadField(dr, "id_distributor");
-            NameDistributor = ReadField(dr, "v_nameDistributor");
-            IdUSAgency = ReadField(dr, "id_USAgencyTrade");
-            IdMXAgency = ReadField(dr, "id_MXAgencyTrade");
-            IdGrower = ReadField(dr, "id_grower");
-            MarketTarget = ReadField(dr, "c_marketTarget");
             Address = ReadField(dr, "v_address");
             City = ReadField(dr, "v_city");
+            Country = ReadField(dr, "v_country");
             RFC = ReadField(dr, "v_RFC");
-            PhoneNumber = ReadField(dr, "c_phoneNumber")?.Trim();
-            IdCityCrossPoint = ReadField(dr, "id_cityCrossPoint");
-            IdCityDestiny = ReadField(dr, "id_cityDestiny");
-            Country = ReadField(dr, "v_Country");
-            ShortName = ReadField(dr, "v_nameDistShort");
-            Active = CharActiveToInt(dr["c_active"]);
             taxId = ReadField(dr, "v_taxId");
+            PhoneNumber = ReadField(dr, "c_phoneNumer")?.Trim();
+            Active = CharActiveToInt(dr["c_active"]);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString(), "Obtener distribuidor");
+            MessageBox.Show(ex.ToString(), "Obtener consignatario");
         }
         finally
         {
@@ -99,33 +87,27 @@ internal class EDistributor
         try
         {
             sql.OpenConectionWrite();
-            SqlCommand cmd = new("sp_PackDistributorExecute", sql.cnn)
+            SqlCommand cmd = new("sp_PackConsigneeExecute", sql.cnn)
             {
                 CommandType = CommandType.StoredProcedure
             };
             cmd.Parameters.AddWithValue("@action", "ADD");
             cmd.Parameters.AddWithValue("@id", DBNull.Value);
             cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor);
-            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency));
-            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency));
-            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower));
-            cmd.Parameters.AddWithValue("@marketTarget", MarketTarget?.Trim().Length >= 1 ? MarketTarget.Trim()[..1] : DBNull.Value);
+            cmd.Parameters.AddWithValue("@nameConsignee", NameConsignee);
+            cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(IdDistributor));
             cmd.Parameters.AddWithValue("@address", Address);
             cmd.Parameters.AddWithValue("@city", City);
-            cmd.Parameters.AddWithValue("@RFC", RFC);
-            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
-            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
-            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
             cmd.Parameters.AddWithValue("@country", Country);
-            cmd.Parameters.AddWithValue("@shortName", ShortName);
-            cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@RFC", RFC);
             cmd.Parameters.AddWithValue("@taxId", taxId);
+            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                string? id = ReadField(dr, "id_distributor");
+                string? id = ReadField(dr, "id_consignee");
                 return (true, id);
             }
 
@@ -133,7 +115,7 @@ internal class EDistributor
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString(), "Añadir distribuidor");
+            MessageBox.Show(ex.ToString(), "Añadir consignatario");
             return (false, null);
         }
         finally
@@ -148,33 +130,27 @@ internal class EDistributor
         try
         {
             sql.OpenConectionWrite();
-            SqlCommand cmd = new("sp_PackDistributorExecute", sql.cnn)
+            SqlCommand cmd = new("sp_PackConsigneeExecute", sql.cnn)
             {
                 CommandType = CommandType.StoredProcedure
             };
             cmd.Parameters.AddWithValue("@action", "MODIFY");
-            cmd.Parameters.AddWithValue("@id", IdDistributor);
+            cmd.Parameters.AddWithValue("@id", IdConsignee);
             cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor);
-            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency));
-            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency));
-            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower));
-            cmd.Parameters.AddWithValue("@marketTarget", MarketTarget?.Trim().Length >= 1 ? MarketTarget.Trim()[..1] : DBNull.Value);
+            cmd.Parameters.AddWithValue("@nameConsignee", NameConsignee);
+            cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(IdDistributor));
             cmd.Parameters.AddWithValue("@address", Address);
             cmd.Parameters.AddWithValue("@city", City);
-            cmd.Parameters.AddWithValue("@RFC", RFC);
-            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
-            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
-            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
             cmd.Parameters.AddWithValue("@country", Country);
-            cmd.Parameters.AddWithValue("@shortName", ShortName);
-            cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@RFC", RFC);
             cmd.Parameters.AddWithValue("@taxId", taxId);
+            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                string? id = ReadField(dr, "id_distributor");
+                string? id = ReadField(dr, "id_consignee");
                 return (true, id);
             }
 
@@ -182,7 +158,7 @@ internal class EDistributor
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString(), "Modificar distribuidor");
+            MessageBox.Show(ex.ToString(), "Modificar consignatario");
             return (false, null);
         }
         finally
@@ -197,7 +173,7 @@ internal class EDistributor
         try
         {
             sql.OpenConectionWrite();
-            SqlCommand cmd = new("sp_PackDistributorExecute", sql.cnn)
+            SqlCommand cmd = new("sp_PackConsigneeExecute", sql.cnn)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -211,7 +187,7 @@ internal class EDistributor
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString(), "Activar/Desactivar distribuidor");
+            MessageBox.Show(ex.ToString(), "Activar/Desactivar consignatario");
             return false;
         }
         finally

@@ -57,16 +57,16 @@ namespace SisUvex.Consultas.Pallets
             string query = $" SELECT * FROM {viewName} WHERE Fecha BETWEEN '{f1}' AND '{f2}' ";
 
             if (frm.cboDistribuidor.SelectedIndex > 0)
-                query += $" AND '{frm.cboDistribuidor.SelectedValue}' IN (SELECT gtn.id_distributor FROM gtn WHERE gtn.id_GTIN = {viewName}.Programa) ";
+                query += $" AND '{frm.cboDistribuidor.SelectedValue}' IN (SELECT gtn.id_distributor FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
 
             if (frm.cboPresentacion.SelectedIndex > 0)
-                query += $" AND '{frm.cboPresentacion.SelectedValue}' IN (SELECT gtn.id_presentation FROM gtn WHERE gtn.id_GTIN = {viewName}.Programa) ";
+                query += $" AND '{frm.cboPresentacion.SelectedValue}' IN (SELECT gtn.id_presentation FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
 
             if (frm.cboVariety.SelectedIndex > 0)
-                query += $" AND '{frm.cboVariety.SelectedValue}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = {viewName}.Programa) ";
+                query += $" AND '{frm.cboVariety.SelectedValue}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
 
             if (frm.cboContainer.SelectedIndex > 0)
-                query += $" AND '{frm.cboContainer.SelectedValue}' IN (SELECT gtn.id_container FROM gtn WHERE gtn.id_GTIN = {viewName}.Programa) ";
+                query += $" AND '{frm.cboContainer.SelectedValue}' IN (SELECT gtn.id_container FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
 
             if (!frm.chbShipped.Checked)
                 query += " AND Manifiesto IS NULL ";

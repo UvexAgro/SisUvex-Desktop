@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using SisUvex.Archivo.Desestibar;
 using SisUvex.Archivo.Etiquetas.CajaEmpleado;
 using SisUvex.Archivo.Etiquetas.FrmNombreYCodigo2x1;
@@ -9,7 +10,6 @@ using SisUvex.Archivo.WorkPlan;
 using SisUvex.Archivo.WorkPlan.ConvertPallet;
 using SisUvex.Assets.Vehicle.Vehicle;
 using SisUvex.Assets.Vehicle.VehicleType;
-using SisUvex.Catalogos.Consignatario;
 using SisUvex.Catalogos.Productor;
 using SisUvex.Catalogos.RegistroMaterial;
 using SisUvex.Configuracion;
@@ -241,7 +241,7 @@ namespace SisUvex
 
         private void consigToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmConsignatarioCat cat = new FrmConsignatarioCat();
+            SisUvex.Catalogos.Consignee.FrmConsigneeCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
