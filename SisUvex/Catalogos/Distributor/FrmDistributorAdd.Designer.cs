@@ -28,6 +28,7 @@ namespace SisUvex.Catalogos.Distributor
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDistributorAdd));
             txbShortName = new TextBox();
             label4 = new Label();
             txbCountry = new TextBox();
@@ -70,6 +71,8 @@ namespace SisUvex.Catalogos.Distributor
             chbCityCrossRemoved = new CheckBox();
             chbGrowerRemoved = new CheckBox();
             chbCityDestinationRemoved = new CheckBox();
+            txbTaxId = new TextBox();
+            label5 = new Label();
             SuspendLayout();
             // 
             // txbShortName
@@ -78,7 +81,7 @@ namespace SisUvex.Catalogos.Distributor
             txbShortName.Location = new Point(132, 90);
             txbShortName.MaxLength = 10;
             txbShortName.Name = "txbShortName";
-            txbShortName.Size = new Size(229, 29);
+            txbShortName.Size = new Size(207, 29);
             txbShortName.TabIndex = 49;
             // 
             // label4
@@ -97,14 +100,14 @@ namespace SisUvex.Catalogos.Distributor
             txbCountry.Location = new Point(93, 160);
             txbCountry.MaxLength = 50;
             txbCountry.Name = "txbCountry";
-            txbCountry.Size = new Size(268, 29);
+            txbCountry.Size = new Size(246, 29);
             txbCountry.TabIndex = 51;
             // 
             // lblPais
             // 
             lblPais.AutoSize = true;
             lblPais.Font = new Font("Segoe UI", 12F);
-            lblPais.Location = new Point(16, 163);
+            lblPais.Location = new Point(54, 163);
             lblPais.Name = "lblPais";
             lblPais.Size = new Size(40, 21);
             lblPais.TabIndex = 95;
@@ -126,7 +129,7 @@ namespace SisUvex.Catalogos.Distributor
             cboCityDestination.Font = new Font("Segoe UI", 12F);
             cboCityDestination.FormattingEnabled = true;
             cboCityDestination.ItemHeight = 21;
-            cboCityDestination.Location = new Point(139, 440);
+            cboCityDestination.Location = new Point(144, 370);
             cboCityDestination.Name = "cboCityDestination";
             cboCityDestination.Size = new Size(388, 29);
             cboCityDestination.TabIndex = 80;
@@ -135,7 +138,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             lblCiudadDestino.AutoSize = true;
             lblCiudadDestino.Font = new Font("Segoe UI", 12F);
-            lblCiudadDestino.Location = new Point(24, 443);
+            lblCiudadDestino.Location = new Point(29, 373);
             lblCiudadDestino.Name = "lblCiudadDestino";
             lblCiudadDestino.Size = new Size(117, 21);
             lblCiudadDestino.TabIndex = 90;
@@ -147,7 +150,7 @@ namespace SisUvex.Catalogos.Distributor
             cboCityCross.Font = new Font("Segoe UI", 12F);
             cboCityCross.FormattingEnabled = true;
             cboCityCross.ItemHeight = 21;
-            cboCityCross.Location = new Point(139, 405);
+            cboCityCross.Location = new Point(144, 335);
             cboCityCross.Name = "cboCityCross";
             cboCityCross.Size = new Size(388, 29);
             cboCityCross.TabIndex = 75;
@@ -156,7 +159,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             lblCiudadCruce.AutoSize = true;
             lblCiudadCruce.Font = new Font("Segoe UI", 12F);
-            lblCiudadCruce.Location = new Point(38, 407);
+            lblCiudadCruce.Location = new Point(43, 337);
             lblCiudadCruce.Name = "lblCiudadCruce";
             lblCiudadCruce.Size = new Size(103, 21);
             lblCiudadCruce.TabIndex = 88;
@@ -168,7 +171,7 @@ namespace SisUvex.Catalogos.Distributor
             cboGrower.Font = new Font("Segoe UI", 12F);
             cboGrower.FormattingEnabled = true;
             cboGrower.ItemHeight = 21;
-            cboGrower.Location = new Point(139, 370);
+            cboGrower.Location = new Point(144, 300);
             cboGrower.Name = "cboGrower";
             cboGrower.Size = new Size(388, 29);
             cboGrower.TabIndex = 69;
@@ -177,7 +180,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             lblProductor.AutoSize = true;
             lblProductor.Font = new Font("Segoe UI", 12F);
-            lblProductor.Location = new Point(59, 374);
+            lblProductor.Location = new Point(64, 304);
             lblProductor.Name = "lblProductor";
             lblProductor.Size = new Size(82, 21);
             lblProductor.TabIndex = 84;
@@ -189,7 +192,7 @@ namespace SisUvex.Catalogos.Distributor
             cboAgencyUS.Font = new Font("Segoe UI", 12F);
             cboAgencyUS.FormattingEnabled = true;
             cboAgencyUS.ItemHeight = 21;
-            cboAgencyUS.Location = new Point(139, 300);
+            cboAgencyUS.Location = new Point(144, 230);
             cboAgencyUS.Name = "cboAgencyUS";
             cboAgencyUS.Size = new Size(388, 29);
             cboAgencyUS.TabIndex = 57;
@@ -198,7 +201,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             lblAgenciaUS.AutoSize = true;
             lblAgenciaUS.Font = new Font("Segoe UI", 12F);
-            lblAgenciaUS.Location = new Point(49, 304);
+            lblAgenciaUS.Location = new Point(54, 234);
             lblAgenciaUS.Name = "lblAgenciaUS";
             lblAgenciaUS.Size = new Size(92, 21);
             lblAgenciaUS.TabIndex = 81;
@@ -210,7 +213,7 @@ namespace SisUvex.Catalogos.Distributor
             cboAgencyMX.Font = new Font("Segoe UI", 12F);
             cboAgencyMX.FormattingEnabled = true;
             cboAgencyMX.ItemHeight = 21;
-            cboAgencyMX.Location = new Point(139, 335);
+            cboAgencyMX.Location = new Point(144, 265);
             cboAgencyMX.Name = "cboAgencyMX";
             cboAgencyMX.Size = new Size(388, 29);
             cboAgencyMX.TabIndex = 63;
@@ -219,7 +222,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             lblAcenciaMX.AutoSize = true;
             lblAcenciaMX.Font = new Font("Segoe UI", 12F);
-            lblAcenciaMX.Location = new Point(46, 338);
+            lblAcenciaMX.Location = new Point(51, 268);
             lblAcenciaMX.Name = "lblAcenciaMX";
             lblAcenciaMX.Size = new Size(95, 21);
             lblAcenciaMX.TabIndex = 76;
@@ -228,17 +231,17 @@ namespace SisUvex.Catalogos.Distributor
             // txbPhoneNumber
             // 
             txbPhoneNumber.Font = new Font("Segoe UI", 12F);
-            txbPhoneNumber.Location = new Point(93, 265);
+            txbPhoneNumber.Location = new Point(437, 160);
             txbPhoneNumber.MaxLength = 13;
             txbPhoneNumber.Name = "txbPhoneNumber";
-            txbPhoneNumber.Size = new Size(268, 29);
+            txbPhoneNumber.Size = new Size(246, 29);
             txbPhoneNumber.TabIndex = 55;
             // 
             // lblTelefono
             // 
             lblTelefono.AutoSize = true;
             lblTelefono.Font = new Font("Segoe UI", 12F);
-            lblTelefono.Location = new Point(16, 268);
+            lblTelefono.Location = new Point(368, 163);
             lblTelefono.Name = "lblTelefono";
             lblTelefono.Size = new Size(71, 21);
             lblTelefono.TabIndex = 70;
@@ -247,17 +250,17 @@ namespace SisUvex.Catalogos.Distributor
             // txbRFC
             // 
             txbRFC.Font = new Font("Segoe UI", 12F);
-            txbRFC.Location = new Point(93, 230);
+            txbRFC.Location = new Point(437, 90);
             txbRFC.MaxLength = 15;
             txbRFC.Name = "txbRFC";
-            txbRFC.Size = new Size(268, 29);
+            txbRFC.Size = new Size(246, 29);
             txbRFC.TabIndex = 54;
             // 
             // lblRFC
             // 
             lblRFC.AutoSize = true;
             lblRFC.Font = new Font("Segoe UI", 12F);
-            lblRFC.Location = new Point(16, 233);
+            lblRFC.Location = new Point(398, 93);
             lblRFC.Name = "lblRFC";
             lblRFC.Size = new Size(41, 21);
             lblRFC.TabIndex = 67;
@@ -269,14 +272,14 @@ namespace SisUvex.Catalogos.Distributor
             txbCityDistributor.Location = new Point(93, 195);
             txbCityDistributor.MaxLength = 50;
             txbCityDistributor.Name = "txbCityDistributor";
-            txbCityDistributor.Size = new Size(471, 29);
+            txbCityDistributor.Size = new Size(246, 29);
             txbCityDistributor.TabIndex = 52;
             // 
             // lblCiudad
             // 
             lblCiudad.AutoSize = true;
             lblCiudad.Font = new Font("Segoe UI", 12F);
-            lblCiudad.Location = new Point(16, 198);
+            lblCiudad.Location = new Point(32, 198);
             lblCiudad.Name = "lblCiudad";
             lblCiudad.Size = new Size(62, 21);
             lblCiudad.TabIndex = 64;
@@ -303,7 +306,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(530, 479);
+            btnAceptar.Location = new Point(532, 406);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
             btnAceptar.TabIndex = 85;
@@ -313,7 +316,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(611, 479);
+            btnCancelar.Location = new Point(613, 406);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
             btnCancelar.TabIndex = 86;
@@ -450,7 +453,7 @@ namespace SisUvex.Catalogos.Distributor
             chbAgencyUSRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbAgencyUSRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbAgencyUSRemoved.Font = new Font("Segoe UI", 10F);
-            chbAgencyUSRemoved.Location = new Point(533, 299);
+            chbAgencyUSRemoved.Location = new Point(538, 229);
             chbAgencyUSRemoved.Name = "chbAgencyUSRemoved";
             chbAgencyUSRemoved.Size = new Size(43, 31);
             chbAgencyUSRemoved.TabIndex = 97;
@@ -463,7 +466,7 @@ namespace SisUvex.Catalogos.Distributor
             chbAgencyMXRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbAgencyMXRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbAgencyMXRemoved.Font = new Font("Segoe UI", 10F);
-            chbAgencyMXRemoved.Location = new Point(533, 334);
+            chbAgencyMXRemoved.Location = new Point(538, 264);
             chbAgencyMXRemoved.Name = "chbAgencyMXRemoved";
             chbAgencyMXRemoved.Size = new Size(43, 31);
             chbAgencyMXRemoved.TabIndex = 98;
@@ -476,7 +479,7 @@ namespace SisUvex.Catalogos.Distributor
             chbCityCrossRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbCityCrossRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbCityCrossRemoved.Font = new Font("Segoe UI", 10F);
-            chbCityCrossRemoved.Location = new Point(533, 404);
+            chbCityCrossRemoved.Location = new Point(538, 334);
             chbCityCrossRemoved.Name = "chbCityCrossRemoved";
             chbCityCrossRemoved.Size = new Size(43, 31);
             chbCityCrossRemoved.TabIndex = 100;
@@ -489,7 +492,7 @@ namespace SisUvex.Catalogos.Distributor
             chbGrowerRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbGrowerRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbGrowerRemoved.Font = new Font("Segoe UI", 10F);
-            chbGrowerRemoved.Location = new Point(533, 369);
+            chbGrowerRemoved.Location = new Point(538, 299);
             chbGrowerRemoved.Name = "chbGrowerRemoved";
             chbGrowerRemoved.Size = new Size(43, 31);
             chbGrowerRemoved.TabIndex = 99;
@@ -502,18 +505,39 @@ namespace SisUvex.Catalogos.Distributor
             chbCityDestinationRemoved.BackgroundImage = Properties.Resources.Imagen6;
             chbCityDestinationRemoved.BackgroundImageLayout = ImageLayout.Stretch;
             chbCityDestinationRemoved.Font = new Font("Segoe UI", 10F);
-            chbCityDestinationRemoved.Location = new Point(533, 439);
+            chbCityDestinationRemoved.Location = new Point(538, 369);
             chbCityDestinationRemoved.Name = "chbCityDestinationRemoved";
             chbCityDestinationRemoved.Size = new Size(43, 31);
             chbCityDestinationRemoved.TabIndex = 101;
             chbCityDestinationRemoved.Text = "     ";
             chbCityDestinationRemoved.UseVisualStyleBackColor = true;
             // 
+            // txbTaxId
+            // 
+            txbTaxId.Font = new Font("Segoe UI", 12F);
+            txbTaxId.Location = new Point(437, 195);
+            txbTaxId.MaxLength = 13;
+            txbTaxId.Name = "txbTaxId";
+            txbTaxId.Size = new Size(246, 29);
+            txbTaxId.TabIndex = 102;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F);
+            label5.Location = new Point(388, 198);
+            label5.Name = "label5";
+            label5.Size = new Size(51, 21);
+            label5.TabIndex = 103;
+            label5.Text = "Tax Id:";
+            // 
             // FrmDistributorAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 522);
+            ClientSize = new Size(700, 445);
+            Controls.Add(txbTaxId);
+            Controls.Add(label5);
             Controls.Add(chbCityDestinationRemoved);
             Controls.Add(chbCityCrossRemoved);
             Controls.Add(chbGrowerRemoved);
@@ -557,6 +581,7 @@ namespace SisUvex.Catalogos.Distributor
             Controls.Add(label1);
             Controls.Add(label2);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmDistributorAdd";
@@ -611,5 +636,7 @@ namespace SisUvex.Catalogos.Distributor
         public CheckBox chbCityCrossRemoved;
         public CheckBox chbGrowerRemoved;
         public CheckBox chbCityDestinationRemoved;
+        public TextBox txbTaxId;
+        private Label label5;
     }
 }

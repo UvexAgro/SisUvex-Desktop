@@ -110,6 +110,7 @@ internal class ClsDistributor
         _frmAdd.txbPhoneNumber.Text = entity.PhoneNumber ?? "";
         _frmAdd.cboMarket.Text = entity.MarketTarget ?? "";
         _frmAdd.cboActive.SelectedIndex = entity.Active;
+        _frmAdd.txbTaxId.Text = entity.taxId ?? "";
 
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, entity.IdUSAgency);
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, entity.IdMXAgency);
@@ -121,15 +122,16 @@ internal class ClsDistributor
     private EDistributor SetEntity()
     {
         entity = new();
-        entity.IdDistributor = _frmAdd.txbId.Text.Trim();
-        entity.NameDistributor = _frmAdd.txbName.Text.Trim();
-        entity.ShortName = _frmAdd.txbShortName.Text.Trim();
-        entity.Address = _frmAdd.txbAddress.Text.Trim();
-        entity.City = _frmAdd.txbCityDistributor.Text.Trim();
-        entity.Country = _frmAdd.txbCountry.Text.Trim();
-        entity.RFC = _frmAdd.txbRFC.Text.Trim();
+        entity.IdDistributor = _frmAdd.txbId.Text;
+        entity.NameDistributor = _frmAdd.txbName.Text;
+        entity.ShortName = _frmAdd.txbShortName.Text;
+        entity.Address = _frmAdd.txbAddress.Text;
+        entity.City = _frmAdd.txbCityDistributor.Text;
+        entity.Country = _frmAdd.txbCountry.Text;
+        entity.RFC = _frmAdd.txbRFC.Text;
+        entity.taxId = _frmAdd.txbTaxId.Text;
 
-        string tel = _frmAdd.txbPhoneNumber.Text.Trim().Replace(" ", "");
+        string tel = _frmAdd.txbPhoneNumber.Text;
         if (tel.Length > 13)
             tel = tel[..13];
         entity.PhoneNumber = tel;
@@ -191,7 +193,7 @@ internal class ClsDistributor
 
             if (IsAddUpdate)
             {
-                string nombre = string.IsNullOrWhiteSpace(addEntity.NameDistributor) ? idAddModify ?? "" : addEntity.NameDistributor.Trim();
+                string nombre = string.IsNullOrWhiteSpace(addEntity.NameDistributor) ? idAddModify ?? "" : addEntity.NameDistributor;
                 MessageBox.Show($"Se ha agregado el distribuidor {nombre} con código: {idAddModify}.", "Añadir distribuidor");
                 _frmAdd.Close();
             }
@@ -210,7 +212,7 @@ internal class ClsDistributor
 
             if (IsModifyUpdate)
             {
-                string nombre = string.IsNullOrWhiteSpace(modifyEntity.NameDistributor) ? idAddModify ?? "" : modifyEntity.NameDistributor.Trim();
+                string nombre = string.IsNullOrWhiteSpace(modifyEntity.NameDistributor) ? idAddModify ?? "" : modifyEntity.NameDistributor;
                 MessageBox.Show($"Se ha modificado el distribuidor {nombre} con código: {idAddModify}.", "Modificar distribuidor");
                 _frmAdd.Close();
             }
