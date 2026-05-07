@@ -516,7 +516,7 @@ namespace SisUvex.Catalogos.Distributor
             // 
             txbTaxId.Font = new Font("Segoe UI", 12F);
             txbTaxId.Location = new Point(437, 195);
-            txbTaxId.MaxLength = 13;
+            txbTaxId.MaxLength = 20;
             txbTaxId.Name = "txbTaxId";
             txbTaxId.Size = new Size(246, 29);
             txbTaxId.TabIndex = 102;
