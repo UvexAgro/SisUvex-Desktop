@@ -595,7 +595,6 @@ namespace SisUvex.Archivo.MixtearPallets
                 Estiba         = row.Cells["Estiba"].Value?.ToString() ?? "",
                 Programa       = row.Cells["GTIN"].Value?.ToString() ?? "",
                 Cajas          = int.TryParse(row.Cells["Cajas"].Value?.ToString(), out int cjs) ? cjs : 0,
-                LibrasPallet   = decimal.TryParse(row.Cells["LibrasPallet"].Value?.ToString(), out decimal lbs) ? lbs : 0,
                 CajasPorPallet = int.TryParse(row.Cells["CajasPallet"].Value?.ToString(), out int cjsPal) ? cjsPal : 0,
             };
         }
