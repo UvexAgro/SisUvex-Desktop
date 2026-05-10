@@ -78,7 +78,7 @@ namespace SisUvex.Consultas.Pallets
                 query += " AND Rechazado IS NOT NULL ";
 
 
-            frm.dgvConsulta.DataSource = ClsQuerysDB.GetDataTable(query);
+            frm.dgvConsulta.DataSource = ClsQuerysDB.GetDataTable(query + "ORDER BY Pallet DESC");
 
             TamañoCeldasDgv();
         }
