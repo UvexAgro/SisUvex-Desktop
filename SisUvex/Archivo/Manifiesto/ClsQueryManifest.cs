@@ -30,6 +30,7 @@ namespace SisUvex.Archivo.Manifiesto
         public string? manifestTransportPlatformType { get; set; }
         public string? manifestStatus { get; set; }
         public string? manifestComments { get; set; }
+        public string? manifestThermometerFreightContainer { get; set; } //<<-- Nuevo 2026 termómetro de la caja refrigerada
 
 
         //Datos de Embarcador
@@ -158,6 +159,7 @@ namespace SisUvex.Archivo.Manifiesto
                     this.manifestTransportPlatformType = dr["Tipo de transporte"].ToString();
                     this.manifestStatus = dr["Rechazada"].ToString();
                     this.manifestComments = dr["Observaciones"].ToString();
+                    this.manifestThermometerFreightContainer = dr["Termometro caja"].ToString();
                     this.shipperId = dr["idGro"].ToString();
                     this.shipperName = dr["Productor"].ToString();
                     this.shipperAddress = dr["Gro Direccion"].ToString();
