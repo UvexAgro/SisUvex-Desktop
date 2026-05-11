@@ -390,14 +390,6 @@ namespace SisUvex.Archivo.MixtearPallets
             string          idRef = fila.Cells["Pallet"].Value?.ToString() ?? "";
             int             cajas = GetCajasDeFilaGrid(fila);
 
-            if (cajas <= 1)
-            {
-                MostrarAviso(
-                    $"El pallet {idRef} solo tiene {cajas} caja(s).\n" +
-                    "Se requiere más de 1 caja para poder reestibar.", "Reestibar");
-                return;
-            }
-
             List<TipoReestiba> tipos = cls.ObtenerTiposReestiba();
             if (tipos.Count == 0)
             {
