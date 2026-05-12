@@ -48,6 +48,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08"); //<-- preseleccionar la temporada uva 2026
 
+            frm.nudPalletsCopies.Value = Convert.ToInt32(Configuracion.Parameters.EParameters.GetValue("020", "02"));//<-- etiquetas por pallet
+
             dtWorkPlan = ClsComboBoxFiles.GetCboCatalogDataTable(ClsObject.WorkPlan.CboPresentation);
             dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboWorkPlan, dtWorkPlan);

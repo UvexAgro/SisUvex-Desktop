@@ -97,9 +97,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             chbFechaOmitidaReimprimirPallet = new CheckBox();
             btnReprintPallet = new Button();
             groupBox1 = new GroupBox();
+            nudPalletsCopies = new NumericUpDown();
+            label2 = new Label();
+            label5 = new Label();
             chbFechaOmitidaPallet = new CheckBox();
             chbRevesePalletTag = new CheckBox();
-            label2 = new Label();
             btnZplPtiCopy = new Button();
             btnZplPalletCopy = new Button();
             txbIdPtiChange = new TextBox();
@@ -117,6 +119,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             gpbLastPallets.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLastUserPallet).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPalletsCopies).BeginInit();
             SuspendLayout();
             // 
             // btnLastPallets
@@ -776,11 +779,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             grbPrint.Controls.Add(nudPtiTotal);
             grbPrint.Controls.Add(btnPrintPtiTag);
             grbPrint.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            grbPrint.Location = new Point(588, 283);
+            grbPrint.Location = new Point(588, 300);
             grbPrint.Margin = new Padding(1);
             grbPrint.Name = "grbPrint";
             grbPrint.Padding = new Padding(1);
-            grbPrint.Size = new Size(223, 137);
+            grbPrint.Size = new Size(223, 115);
             grbPrint.TabIndex = 62;
             grbPrint.TabStop = false;
             grbPrint.Text = "CAJA / PTI";
@@ -788,19 +791,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // chbFechaOmitidaPti
             // 
             chbFechaOmitidaPti.AutoSize = true;
-            chbFechaOmitidaPti.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chbFechaOmitidaPti.Location = new Point(78, 105);
+            chbFechaOmitidaPti.Font = new Font("Segoe UI", 9F);
+            chbFechaOmitidaPti.Location = new Point(12, 88);
             chbFechaOmitidaPti.Name = "chbFechaOmitidaPti";
-            chbFechaOmitidaPti.Size = new Size(139, 25);
+            chbFechaOmitidaPti.Size = new Size(92, 19);
             chbFechaOmitidaPti.TabIndex = 64;
-            chbFechaOmitidaPti.Text = "OMITIR FECHA";
+            chbFechaOmitidaPti.Text = "Omitir fecha";
             chbFechaOmitidaPti.UseVisualStyleBackColor = true;
             // 
             // chbReversePtiTag
             // 
             chbReversePtiTag.AutoSize = true;
             chbReversePtiTag.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            chbReversePtiTag.Location = new Point(12, 63);
+            chbReversePtiTag.Location = new Point(12, 73);
             chbReversePtiTag.Name = "chbReversePtiTag";
             chbReversePtiTag.Size = new Size(109, 19);
             chbReversePtiTag.TabIndex = 10;
@@ -907,44 +910,38 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(chbFechaOmitidaPallet);
-            groupBox1.Controls.Add(chbRevesePalletTag);
+            groupBox1.Controls.Add(nudPalletsCopies);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(nudPalletTotal);
             groupBox1.Controls.Add(txbInvoice);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnPrintPalletTag);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(chbFechaOmitidaPallet);
+            groupBox1.Controls.Add(chbRevesePalletTag);
             groupBox1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             groupBox1.Location = new Point(588, 105);
             groupBox1.Margin = new Padding(1);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(1);
-            groupBox1.Size = new Size(223, 176);
+            groupBox1.Size = new Size(223, 193);
             groupBox1.TabIndex = 68;
             groupBox1.TabStop = false;
             groupBox1.Text = "PALLET";
             // 
-            // chbFechaOmitidaPallet
+            // nudPalletsCopies
             // 
-            chbFechaOmitidaPallet.AutoSize = true;
-            chbFechaOmitidaPallet.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chbFechaOmitidaPallet.Location = new Point(78, 144);
-            chbFechaOmitidaPallet.Name = "chbFechaOmitidaPallet";
-            chbFechaOmitidaPallet.Size = new Size(139, 25);
-            chbFechaOmitidaPallet.TabIndex = 65;
-            chbFechaOmitidaPallet.Text = "OMITIR FECHA";
-            chbFechaOmitidaPallet.UseVisualStyleBackColor = true;
-            // 
-            // chbRevesePalletTag
-            // 
-            chbRevesePalletTag.AutoSize = true;
-            chbRevesePalletTag.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            chbRevesePalletTag.Location = new Point(10, 106);
-            chbRevesePalletTag.Name = "chbRevesePalletTag";
-            chbRevesePalletTag.Size = new Size(109, 19);
-            chbRevesePalletTag.TabIndex = 7;
-            chbRevesePalletTag.Text = "Invertir etiqueta";
-            chbRevesePalletTag.UseVisualStyleBackColor = true;
+            nudPalletsCopies.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            nudPalletsCopies.Location = new Point(10, 160);
+            nudPalletsCopies.Margin = new Padding(1);
+            nudPalletsCopies.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            nudPalletsCopies.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudPalletsCopies.Name = "nudPalletsCopies";
+            nudPalletsCopies.Size = new Size(30, 22);
+            nudPalletsCopies.TabIndex = 77;
+            nudPalletsCopies.TextAlign = HorizontalAlignment.Right;
+            nudPalletsCopies.UpDownAlign = LeftRightAlignment.Left;
+            nudPalletsCopies.Value = new decimal(new int[] { 4, 0, 0, 0 });
             // 
             // label2
             // 
@@ -956,6 +953,39 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label2.Size = new Size(97, 25);
             label2.TabIndex = 68;
             label2.Text = "Cantidad:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 9F);
+            label5.Location = new Point(40, 162);
+            label5.Margin = new Padding(1, 0, 1, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(75, 15);
+            label5.TabIndex = 78;
+            label5.Text = "Copias pallet";
+            // 
+            // chbFechaOmitidaPallet
+            // 
+            chbFechaOmitidaPallet.AutoSize = true;
+            chbFechaOmitidaPallet.Font = new Font("Segoe UI", 9F);
+            chbFechaOmitidaPallet.Location = new Point(10, 143);
+            chbFechaOmitidaPallet.Name = "chbFechaOmitidaPallet";
+            chbFechaOmitidaPallet.Size = new Size(92, 19);
+            chbFechaOmitidaPallet.TabIndex = 65;
+            chbFechaOmitidaPallet.Text = "Omitir fecha";
+            chbFechaOmitidaPallet.UseVisualStyleBackColor = true;
+            // 
+            // chbRevesePalletTag
+            // 
+            chbRevesePalletTag.AutoSize = true;
+            chbRevesePalletTag.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            chbRevesePalletTag.Location = new Point(10, 128);
+            chbRevesePalletTag.Name = "chbRevesePalletTag";
+            chbRevesePalletTag.Size = new Size(109, 19);
+            chbRevesePalletTag.TabIndex = 7;
+            chbRevesePalletTag.Text = "Invertir etiqueta";
+            chbRevesePalletTag.UseVisualStyleBackColor = true;
             // 
             // btnZplPtiCopy
             // 
@@ -1093,6 +1123,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             ((System.ComponentModel.ISupportInitialize)dgvLastUserPallet).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPalletsCopies).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1173,5 +1204,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private Button btnbtnOpenWorkPlan;
         public ComboBox cboSeason;
         private Label label4;
+        private Label label5;
+        public NumericUpDown nudPalletsCopies;
     }
 }
