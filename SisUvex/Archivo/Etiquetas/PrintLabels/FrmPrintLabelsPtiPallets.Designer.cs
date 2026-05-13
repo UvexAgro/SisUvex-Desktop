@@ -109,6 +109,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnbtnOpenWorkPlan = new Button();
             cboSeason = new ComboBox();
             label4 = new Label();
+            nudLastPalletsCopies = new NumericUpDown();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudPalletTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPtiTotal).BeginInit();
             grbTag.SuspendLayout();
@@ -120,6 +122,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             ((System.ComponentModel.ISupportInitialize)dgvLastUserPallet).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudPalletsCopies).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudLastPalletsCopies).BeginInit();
             SuspendLayout();
             // 
             // btnLastPallets
@@ -813,6 +816,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // gpbLastPallets
             // 
             gpbLastPallets.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gpbLastPallets.Controls.Add(nudLastPalletsCopies);
+            gpbLastPallets.Controls.Add(label6);
             gpbLastPallets.Controls.Add(dgvLastUserPallet);
             gpbLastPallets.Controls.Add(chbReverseReprintPallet);
             gpbLastPallets.Controls.Add(chbFechaOmitidaReimprimirPallet);
@@ -1073,6 +1078,31 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             label4.TabIndex = 88;
             label4.Text = "TEMPORADA";
             // 
+            // nudLastPalletsCopies
+            // 
+            nudLastPalletsCopies.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            nudLastPalletsCopies.Location = new Point(175, 32);
+            nudLastPalletsCopies.Margin = new Padding(1);
+            nudLastPalletsCopies.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            nudLastPalletsCopies.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudLastPalletsCopies.Name = "nudLastPalletsCopies";
+            nudLastPalletsCopies.Size = new Size(30, 22);
+            nudLastPalletsCopies.TabIndex = 79;
+            nudLastPalletsCopies.TextAlign = HorizontalAlignment.Right;
+            nudLastPalletsCopies.UpDownAlign = LeftRightAlignment.Left;
+            nudLastPalletsCopies.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 9F);
+            label6.Location = new Point(205, 34);
+            label6.Margin = new Padding(1, 0, 1, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(75, 15);
+            label6.TabIndex = 80;
+            label6.Text = "Copias pallet";
+            // 
             // FrmPrintLabelsPtiPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1124,6 +1154,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudPalletsCopies).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudLastPalletsCopies).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1206,5 +1237,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private Label label4;
         private Label label5;
         public NumericUpDown nudPalletsCopies;
+        public NumericUpDown nudLastPalletsCopies;
+        private Label label6;
     }
 }

@@ -77,10 +77,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return;
             }
 
-            int cantityPallets = (int)nudPalletTotal.Value;
-
             ClsGenerateStringZplPalletTag GenPallet = new();
-            string ZplPtiTag = GenPallet.GenerateSuperStringTag("X00001", cls.eTagInfo, 1, cantityPallets, chbRevesePalletTag.Checked, false);
+            string ZplPtiTag = GenPallet.GenerateSuperStringTag("X00001", cls.eTagInfo, 1, 1, chbRevesePalletTag.Checked, false);
             Clipboard.SetText(ZplPtiTag);
         }
 
