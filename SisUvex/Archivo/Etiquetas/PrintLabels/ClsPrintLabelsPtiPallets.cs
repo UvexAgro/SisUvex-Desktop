@@ -309,6 +309,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     for (int i = 0; i < cantityPallets; i++)
                     {
                         string idPallet = ClsPalletCreate.InsertPallet(palletBoxes, eTagInfo.idWorkPlan, date, invoice);
+
                         if (idPallet == string.Empty)
                         {
                             SystemSounds.Exclamation.Play();
@@ -377,7 +378,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 int selectedBoxes = int.Parse(frm.dgvLastUserPallet.SelectedRows[0].Cells["Cajas"].Value.ToString());
 
                 bool reverseOrientation = frm.chbReverseReprintPallet.Checked;
-                int labelsCopiesPerPallet = (int)frm.nudLastPalletsCopies.Value;
+                int labelsLastCopiesPerPallet = (int)frm.nudLastPalletsCopies.Value;
 
 
                 DataRow[] rows = dtWorkPlan.Select($"{Column.id} = '{selectedPlan}'");
@@ -390,7 +391,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
                     print = new ClsPrintPtiTag();
 
-                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, labelsCopiesPerPallet, selectedBoxes, reverseOrientation, true);
+                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, labelsLastCopiesPerPallet, selectedBoxes, reverseOrientation, true);
                 }
             }
         }
