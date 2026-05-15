@@ -1,56 +1,204 @@
-﻿using SisUvex.Catalogos.Lot;
-using SisUvex.Catalogos.Metods.Controls;
-using SisUvex.Catalogos.Metods;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods.DataGridViews;
+﻿using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Values;
 
-namespace SisUvex.Archivo.Manifiesto.ManifestTemplates
+namespace SisUvex.Archivo.Manifiesto.ManifestTemplates;
+
+internal class EManifestTemplate
 {
-    internal class EManifestTemplate
+    public string? IdTemplate { get; set; }
+    public int Active { get; set; }
+    public string? NameTemplate { get; set; }
+    public string? Description { get; set; }
+    public string? IdDistributor { get; set; }
+    public string? IdConsignee { get; set; }
+    public string? IdGrower { get; set; }
+    public string? IdUSAgencyTrade { get; set; }
+    public string? IdMXAgencyTrade { get; set; }
+    public string? IdCityCrossPoint { get; set; }
+    public string? IdCityDestiny { get; set; }
+    public string? IdCrop { get; set; }
+
+    public static string GetNextId()
     {
-        public string? idManifestTemplate { get; set; }
-        public string? nameManifestTemplate { get; set; }
-        public string? description { get; set; }
-        public string? idDistributor { get; set; }
-        public string? idConsignee { get; set; }
-        public string? idGrower { get; set; }
-        public string? idUSAgencyTrade { get; set; }
-        public string? idMXAgencyTrade { get; set; }
-        public string? idCityCrossPoint { get; set; }
-        public string? idCityDestiny { get; set; }
+        string result = ClsQuerysDB.GetData(
+            "SELECT RIGHT('00' + CAST(ISNULL(MAX(CAST(id_template AS INT)), 0) + 1 AS VARCHAR(2)), 2) FROM Pack_ManifestTemplates");
 
-        public void SetManifestTemplate(string idTemplate)
+        return string.IsNullOrEmpty(result) ? "01" : result;
+    }
+
+    private static string? ReadField(SqlDataReader dr, string column)
+    {
+        int o = dr.GetOrdinal(column);
+        if (dr.IsDBNull(o))
+            return null;
+        return dr.GetValue(o).ToString();
+    }
+
+    private static int CharActiveToInt(object? value)
+    {
+        if (value == null || value == DBNull.Value)
+            return 0;
+        string? s = value.ToString();
+        return s == "1" ? 1 : 0;
+    }
+
+    public void GetManifestTemplate(string? idTemplate)
+    {
+        if (string.IsNullOrWhiteSpace(idTemplate))
+            return;
+
+        SQLControl sql = new();
+        try
         {
-            string qry = "SELECT * FROM Pack_ManifestTemplates WHERE id_template = @idTemplate";
+            sql.OpenConectionWrite();
+            SqlCommand cmd = new("SELECT * FROM Pack_ManifestTemplates WHERE id_template = @id", sql.cnn);
+            cmd.Parameters.AddWithValue("@id", idTemplate.Trim());
 
-            Dictionary<string, object> parameters = new Dictionary<string, object>
+            using SqlDataReader dr = cmd.ExecuteReader();
+            if (!dr.Read())
+                return;
+
+            IdTemplate = ReadField(dr, "id_template");
+            NameTemplate = ReadField(dr, "v_nameTemplate");
+            Description = ReadField(dr, "v_description");
+            IdDistributor = ReadField(dr, "id_distributor");
+            IdConsignee = ReadField(dr, "id_consignee");
+            IdGrower = ReadField(dr, "id_grower");
+            IdUSAgencyTrade = ReadField(dr, "id_USAgencyTrade");
+            IdMXAgencyTrade = ReadField(dr, "id_MXAgencyTrade");
+            IdCityCrossPoint = ReadField(dr, "id_cityCrossPoint");
+            IdCityDestiny = ReadField(dr, "id_cityDestiny");
+            IdCrop = ReadField(dr, "id_crop");
+            Active = CharActiveToInt(dr["c_active"]);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Obtener plantilla de manifiesto");
+        }
+        finally
+        {
+            sql.CloseConectionWrite();
+        }
+    }
+
+    public (bool success, string? id) AddProcedure()
+    {
+        SQLControl sql = new();
+        try
+        {
+            sql.OpenConectionWrite();
+            SqlCommand cmd = new("sp_PackManifestTemplatesExecute", sql.cnn)
             {
-                { "@idTemplate", idTemplate }
+                CommandType = CommandType.StoredProcedure
             };
+            cmd.Parameters.AddWithValue("@action", "ADD");
+            cmd.Parameters.AddWithValue("@v_nameTemplate", NameTemplate);
+            cmd.Parameters.AddWithValue("@v_description", ClsValues.IfEmptyToDBNull(Description));
+            cmd.Parameters.AddWithValue("@id_distributor", ClsValues.IfEmptyToDBNull(IdDistributor));
+            cmd.Parameters.AddWithValue("@id_consignee", ClsValues.IfEmptyToDBNull(IdConsignee));
+            cmd.Parameters.AddWithValue("@id_grower", ClsValues.IfEmptyToDBNull(IdGrower));
+            cmd.Parameters.AddWithValue("@id_USAgencyTrade", ClsValues.IfEmptyToDBNull(IdUSAgencyTrade));
+            cmd.Parameters.AddWithValue("@id_MXAgencyTrade", ClsValues.IfEmptyToDBNull(IdMXAgencyTrade));
+            cmd.Parameters.AddWithValue("@id_cityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
+            cmd.Parameters.AddWithValue("@id_cityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
+            cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
+            cmd.Parameters.AddWithValue("@id_crop", ClsValues.IfEmptyToDBNull(IdCrop));
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
-            DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
-
-            if (dt.Rows.Count > 0 && !string.IsNullOrEmpty(dt.Rows[0][0].ToString()))
+            using SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.Read())
             {
-                DataRow dr = dt.Rows[0];
-                this.idManifestTemplate = dr["id_template"].ToString();
-                this.nameManifestTemplate = dr["v_nameTemplate"].ToString();
-                this.description = dr["v_description"].ToString();
-                this.idDistributor = dr["id_distributor"].ToString();
-                this.idConsignee = dr["id_consignee"].ToString();
-                this.idGrower = dr["id_grower"].ToString();
-                this.idUSAgencyTrade = dr["id_USAgencyTrade"].ToString();
-                this.idMXAgencyTrade = dr["id_MXAgencyTrade"].ToString();
-                this.idCityCrossPoint = dr["id_cityCrossPoint"].ToString();
-                this.idCityDestiny = dr["id_cityDestiny"].ToString();
+                string? id = ReadField(dr, "id_template");
+                return (true, id);
             }
+
+            return (false, null);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Añadir plantilla de manifiesto");
+            return (false, null);
+        }
+        finally
+        {
+            sql.CloseConectionWrite();
+        }
+    }
+
+    public (bool success, string? id) ModifyProcedure()
+    {
+        SQLControl sql = new();
+        try
+        {
+            sql.OpenConectionWrite();
+            SqlCommand cmd = new("sp_PackManifestTemplatesExecute", sql.cnn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.Parameters.AddWithValue("@action", "MODIFY");
+            cmd.Parameters.AddWithValue("@id_template", IdTemplate);
+            cmd.Parameters.AddWithValue("@v_nameTemplate", NameTemplate);
+            cmd.Parameters.AddWithValue("@v_description", ClsValues.IfEmptyToDBNull(Description));
+            cmd.Parameters.AddWithValue("@id_distributor", ClsValues.IfEmptyToDBNull(IdDistributor));
+            cmd.Parameters.AddWithValue("@id_consignee", ClsValues.IfEmptyToDBNull(IdConsignee));
+            cmd.Parameters.AddWithValue("@id_grower", ClsValues.IfEmptyToDBNull(IdGrower));
+            cmd.Parameters.AddWithValue("@id_USAgencyTrade", ClsValues.IfEmptyToDBNull(IdUSAgencyTrade));
+            cmd.Parameters.AddWithValue("@id_MXAgencyTrade", ClsValues.IfEmptyToDBNull(IdMXAgencyTrade));
+            cmd.Parameters.AddWithValue("@id_cityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
+            cmd.Parameters.AddWithValue("@id_cityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
+            cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
+            cmd.Parameters.AddWithValue("@id_crop", ClsValues.IfEmptyToDBNull(IdCrop));
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
+
+            using SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.Read())
+            {
+                string? id = ReadField(dr, "id_template");
+                return (true, id);
+            }
+
+            return (false, null);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Modificar plantilla de manifiesto");
+            return (false, null);
+        }
+        finally
+        {
+            sql.CloseConectionWrite();
+        }
+    }
+
+    public static bool ActiveProcedure(string id, string active)
+    {
+        SQLControl sql = new();
+        try
+        {
+            sql.OpenConectionWrite();
+            SqlCommand cmd = new("sp_PackManifestTemplatesExecute", sql.cnn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.Parameters.AddWithValue("@action", "STATUS");
+            cmd.Parameters.AddWithValue("@id_template", id);
+            cmd.Parameters.AddWithValue("@c_active", active);
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
+
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Activar/Desactivar plantilla de manifiesto");
+            return false;
+        }
+        finally
+        {
+            sql.CloseConectionWrite();
         }
     }
 }

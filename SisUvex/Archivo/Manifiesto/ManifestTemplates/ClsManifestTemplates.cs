@@ -1,319 +1,318 @@
-﻿using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.Metods.Controls;
-using SisUvex.Catalogos.Metods.Querys;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SisUvex.Catalogos.Lot;
-using SisUvex.Catalogos.Metods.Values;
+﻿using System.Data;
+using System.Drawing;
 using System.Media;
+using System.Windows.Forms;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Controls;
+using SisUvex.Catalogos.Metods.DataGridViews;
+using SisUvex.Catalogos.Metods.Extentions;
+using SisUvex.Catalogos.Metods.Querys;
+using static SisUvex.Catalogos.Metods.ClsObject;
+using static SisUvex.Catalogos.Metods.Extentions.ComboBoxExtensions;
 
-namespace SisUvex.Archivo.Manifiesto.ManifestTemplates
+namespace SisUvex.Archivo.Manifiesto.ManifestTemplates;
+
+internal class ClsManifestTemplates
 {
-    internal class ClsManifestTemplates
+    ClsControls controlList = null!;
+    public FrmManifestTemplatesAdd _frmAdd = null!;
+    public FrmManifestTemplatesCat _frmCat = null!;
+    public EManifestTemplate entity = null!;
+
+    private readonly string queryCatalog = " SELECT cat.* FROM vw_PackManifestTemplatesCat cat ";
+
+    ClsDGVCatalog? dgv;
+    DataTable dtCatalog = null!;
+
+    public bool IsAddOrModify = true;
+    public bool IsAddUpdate;
+    public bool IsModifyUpdate;
+    public string? idAddModify;
+
+    private void BindDgvCatalog(DataGridView dgvCatalog)
     {
-        SQLControl sql = new SQLControl();
-        ClsControls controlList;
-        public FrmManifestTemplatesAdd _frmAdd;
-        public FrmManifestTemplatesCat _frmCat;
-        public EManifestTemplate eManifestTemplate;
-        //public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
-        private string queryCatalogo = $" SELECT mtpl.id_template AS [{ClsObject.Column.id}], mtpl.v_nameTemplate AS [{ClsObject.Column.name}], gro.v_nameGrower AS [Productor], dis.v_nameDistributor AS [Distribuidor], cons.id_consignee AS [Consignatario], agUS.v_nameAgency AS [Ag. Aduanal US], agMX.v_nameAgency AS [Ag. Aduanal MX], CONCAT_WS(' ', ctyCr.v_nameCity, ctyCr.v_state, ctyCr.v_country)  AS [Ciudad de cruce], CONCAT_WS(' ', ctyDe.v_nameCity, ctyDe.v_state, ctyDe.v_country)  AS [Ciudad destino], mtpl.v_description  AS [Descripción] FROM Pack_ManifestTemplates mtpl LEFT JOIN Pack_Distributor dis ON dis.id_distributor = mtpl.id_distributor LEFT JOIN Pack_Grower gro ON gro.id_grower = mtpl.id_grower LEFT JOIN Pack_Consignee cons ON cons.id_consignee = mtpl.id_consignee LEFT JOIN Pack_AgencyTrade agUS ON agUS.id_agencyTrade = mtpl.id_USAgencyTrade LEFT JOIN Pack_AgencyTrade agMX ON agMX.id_agencyTrade = mtpl.id_MXAgencyTrade LEFT JOIN Pack_City ctyCr ON ctyCr.id_city = mtpl.id_cityCrossPoint LEFT JOIN Pack_City ctyDe ON ctyDe.id_city = mtpl.id_cityDestiny ";
-        public DataView _dvCatalog;
-        private CheckBox _IsACboSelected = new();
-        public void BeginFormCat()
-        {
-            _dvCatalog = new DataView(ClsQuerysDB.GetDataTable(queryCatalogo));
+        dgv = new ClsDGVCatalog(dgvCatalog, dtCatalog);
+        dgv.AddHideColumn(Crop.ColumnId);
+        dgv.AddHideColumn(Grower.ColumnId);
+        dgv.AddHideColumn(Distributor.ColumnId);
+        dgv.AddHideColumn(Consignee.ColumnId);
+        dgv.AddHideColumn(AgencyTradeUS.ColumnId);
+        dgv.AddHideColumn(AgencyTradeMX.ColumnId);
+        dgv.AddHideColumn(City.ColumnIdCrossPoint);
+        dgv.AddHideColumn(City.ColumnIdDestiny);
+        dgv.HideColumnsList();
+    }
 
-            _frmCat.dgvCatalog.DataSource = _dvCatalog;
+    private void WireCatalogFilterEvents()
+    {
+        void subscribe(ComboBox cbo) => cbo.SelectedIndexChanged += (_, _) => ApplyCatalogRowFilter();
+
+        subscribe(_frmCat.cboCrop);
+        subscribe(_frmCat.cboDistributor);
+        subscribe(_frmCat.cboConsignee);
+        subscribe(_frmCat.cboGrower);
+        subscribe(_frmCat.cboAgencyUS);
+        subscribe(_frmCat.cboAgencyMX);
+        subscribe(_frmCat.cboCityCross);
+        subscribe(_frmCat.cboCityDestiny);
+    }
+
+    public void BeginFormCat()
+    {
+        _frmCat ??= new();
+        _frmCat.cls ??= this;
+
+        ClsComboBoxes.CboLoadActives(_frmCat.cboCrop, Crop.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboConsignee, Consignee.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, Grower.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboAgencyUS, AgencyTradeUS.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboAgencyMX, AgencyTradeMX.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboCityCross, City.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmCat.cboCityDestiny, City.Cbo);
+
+        dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
+        BindDgvCatalog(_frmCat.dgvCatalog);
+
+        WireCatalogFilterEvents();
+    }
+
+    static string ActiveHideColumnName => $"{Column.active}2";
+
+    /// <summary>Filtros sobre <see cref="dtCatalog"/> (sin nueva consulta), combinados con activos/eliminados.</summary>
+    public void ApplyCatalogRowFilter()
+    {
+        if (dtCatalog == null)
+            return;
+
+        List<string> filters = new();
+
+        if (!_frmCat.chbRemoved.Checked && dtCatalog.Columns.Contains(ActiveHideColumnName))
+            filters.Add($"[{ActiveHideColumnName}] = '1'");
+
+        if (_frmCat.cboCrop.TryGetValue(out string cropValue))
+            filters.Add($"[{Crop.ColumnId}] = '{cropValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboDistributor.TryGetValue(out string distributorValue))
+            filters.Add($"[{Distributor.ColumnId}] = '{distributorValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboConsignee.TryGetValue(out string consigneeValue))
+            filters.Add($"[{Consignee.ColumnId}] = '{consigneeValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboGrower.TryGetValue(out string growerValue))
+            filters.Add($"[{Grower.ColumnId}] = '{growerValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboAgencyUS.TryGetValue(out string agencyUsValue))
+            filters.Add($"[{AgencyTradeUS.ColumnId}] = '{agencyUsValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboAgencyMX.TryGetValue(out string agencyMxValue))
+            filters.Add($"[{AgencyTradeMX.ColumnId}] = '{agencyMxValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboCityCross.TryGetValue(out string cityCrossValue))
+            filters.Add($"[{City.ColumnIdCrossPoint}] = '{cityCrossValue.Replace("'", "''")}'");
+
+        if (_frmCat.cboCityDestiny.TryGetValue(out string cityDestValue))
+            filters.Add($"[{City.ColumnIdDestiny}] = '{cityDestValue.Replace("'", "''")}'");
+
+        dtCatalog.DefaultView.RowFilter = filters.Count > 0 ? string.Join(" AND ", filters) : string.Empty;
+    }
+
+    public void ChbRemovedFilter()
+    {
+        if (!_frmCat.chbRemoved.Checked)
+            dgv!.CopyActiveValuesToHiddenColumn();
+
+        ApplyCatalogRowFilter();
+    }
+
+    public void BeginFormAdd()
+    {
+        AddControlsToList();
+        CargarComboBoxes();
+
+        if (IsAddOrModify)
+        {
+            _frmAdd.cboActive.SelectedIndex = 1;
+            _frmAdd.txbId.Text = EManifestTemplate.GetNextId();
+        }
+        else
+        {
+            _frmAdd.txbName.Font = new Font(_frmAdd.txbName.Font, FontStyle.Bold);
+            LoadControlsModify();
+        }
+    }
+
+    private void AddControlsToList()
+    {
+        controlList = new ClsControls();
+
+        controlList.ChangeHeadMessage("Para dar de alta una plantilla de manifiesto debe:\n");
+        controlList.Add(_frmAdd.txbName, "Ingresar el nombre de la plantilla.");
+        controlList.Add(_frmAdd.cboActive, "Seleccionar si la plantilla está activa.");
+        controlList.Add(_frmAdd.cboCrop, "Seleccionar un cultivo.");
+        controlList.Add(_frmAdd.cboDistributor, "Seleccionar un distribuidor.");
+    }
+
+    private void CargarComboBoxes()
+    {
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboCrop, Crop.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboConsignee, Consignee.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyMX, AgencyTradeMX.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyUS, AgencyTradeUS.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboCityCrossPoint, City.Cbo);
+        ClsComboBoxes.CboLoadActives(_frmAdd.cboCityDestination, City.Cbo);
+
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboGrower, _frmAdd.chbRemovedGrower);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyUS, _frmAdd.chbRemovedAgencyUS);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyMX, _frmAdd.chbRemovedAgencyMX);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityCrossPoint, _frmAdd.chbRemovedCityCrossPoint);
+        ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityDestination, _frmAdd.chbRemovedCityDestination);
+    }
+
+    private void LoadControlsModify()
+    {
+        entity = new();
+        entity.GetManifestTemplate(idAddModify);
+
+        _frmAdd.txbId.Text = entity.IdTemplate ?? "";
+        _frmAdd.txbName.Text = entity.NameTemplate ?? "";
+        _frmAdd.txbDescription.Text = entity.Description ?? "";
+        _frmAdd.cboActive.SelectedIndex = entity.Active;
+
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCrop, entity.IdCrop);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, entity.IdDistributor);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, entity.IdConsignee);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, entity.IdGrower);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, entity.IdUSAgencyTrade);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, entity.IdMXAgencyTrade);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, entity.IdCityCrossPoint);
+        ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, entity.IdCityDestiny);
+    }
+
+    private EManifestTemplate SetEntity()
+    {
+        entity = new();
+        entity.IdTemplate = _frmAdd.txbId.Text.Trim();
+        entity.NameTemplate = _frmAdd.txbName.Text.Trim();
+        entity.Description = _frmAdd.txbDescription.Text.Trim();
+        entity.Active = _frmAdd.cboActive.SelectedIndex;
+
+        entity.IdCrop = _frmAdd.cboCrop.ComboValueOrNull();
+        entity.IdDistributor = _frmAdd.cboDistributor.ComboValueOrNull();
+        entity.IdConsignee = _frmAdd.cboConsignee.ComboValueOrNull();
+        entity.IdGrower = _frmAdd.cboGrower.ComboValueOrNull();
+        entity.IdUSAgencyTrade = _frmAdd.cboAgencyUS.ComboValueOrNull();
+        entity.IdMXAgencyTrade = _frmAdd.cboAgencyMX.ComboValueOrNull();
+        entity.IdCityCrossPoint = _frmAdd.cboCityCrossPoint.ComboValueOrNull();
+        entity.IdCityDestiny = _frmAdd.cboCityDestination.ComboValueOrNull();
+
+        return entity;
+    }
+
+    public void OpenFrmAdd()
+    {
+        IsAddOrModify = true;
+        IsAddUpdate = false;
+        idAddModify = null;
+        _frmAdd = new();
+        _frmAdd.cls = this;
+        _frmAdd.Text = "Añadir plantilla de manifiesto";
+        _frmAdd.lblTitle.Text = "Añadir plantilla de manifiesto";
+        _frmAdd.ShowDialog();
+    }
+
+    public void OpenFrmModify(string? idModify)
+    {
+        IsAddOrModify = false;
+        IsModifyUpdate = false;
+        if (string.IsNullOrEmpty(idModify))
+        {
+            SystemSounds.Exclamation.Play();
+            MessageBox.Show("No se ha seleccionado una plantilla para modificar.", "Modificar plantilla");
+            return;
         }
 
-        public void BtnRemove()
+        idAddModify = idModify;
+        _frmAdd = new();
+        _frmAdd.cls = this;
+        _frmAdd.Text = "Modificar plantilla de manifiesto";
+        _frmAdd.lblTitle.Text = "Modificar plantilla de manifiesto";
+        _frmAdd.ShowDialog();
+    }
+
+    public void BtnAccept()
+    {
+        if (!controlList.ValidateControls())
+            return;
+
+        if (IsAddOrModify)
         {
-            if (_frmCat.dgvCatalog.SelectedRows.Count > 0)
+            EManifestTemplate addEntity = SetEntity();
+            var result = addEntity.AddProcedure();
+            IsAddUpdate = result.success;
+            idAddModify = result.id;
+
+            if (IsAddUpdate)
             {
-                string id = _frmCat.dgvCatalog.SelectedRows[0].Cells[0].Value.ToString();
-                string query = $"DELETE FROM Pack_ManifestTemplates WHERE id_template = {id}";
-
-                Dictionary<string, object> parameters = new();
-                parameters.Add("@id_template", id);
-
-                ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
-
-                _frmCat.dgvCatalog.Rows.Remove(_frmCat.dgvCatalog.SelectedRows[0]);
+                string nombre = string.IsNullOrWhiteSpace(addEntity.NameTemplate)
+                    ? idAddModify ?? ""
+                    : addEntity.NameTemplate.Trim();
+                MessageBox.Show($"Se ha agregado la plantilla {nombre} con código: {idAddModify}.", "Añadir plantilla");
+                _frmAdd.Close();
             }
             else
             {
                 SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se pudo agregar la plantilla.", "Añadir plantilla");
             }
         }
-        public void OpenFrmAdd()
+        else
         {
-            _frmAdd = new FrmManifestTemplatesAdd();
-            _frmAdd.cls = this;
-            _frmAdd.Text = "Añadir plantilla de manifiesto";
-            _frmAdd.lblTitle.Text = "Añadir plantilla de manifiesto";
-            _frmAdd.IsAddModify = true;
+            EManifestTemplate modifyEntity = SetEntity();
+            var result = modifyEntity.ModifyProcedure();
+            IsModifyUpdate = result.success;
+            idAddModify = result.id;
 
-            _frmAdd.ShowDialog();
-        }
-        public void OpenFrmModify()
-        {
-            if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
+            if (IsModifyUpdate)
             {
-                _frmAdd = new FrmManifestTemplatesAdd();
-                _frmAdd.cls = this;
-                _frmAdd.Text = "Modificar plantilla de manifiesto";
-                _frmAdd.lblTitle.Text = "Modificar plantilla de manifiesto";
-                _frmAdd.IsAddModify = false;
-
-                _frmAdd.idLotModify = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
-
-                _frmAdd.ShowDialog();
+                string nombre = string.IsNullOrWhiteSpace(modifyEntity.NameTemplate)
+                    ? idAddModify ?? ""
+                    : modifyEntity.NameTemplate.Trim();
+                MessageBox.Show($"Se ha modificado la plantilla {nombre} con código: {idAddModify}.", "Modificar plantilla");
+                _frmAdd.Close();
             }
             else
             {
                 SystemSounds.Exclamation.Play();
+                MessageBox.Show("No se pudo modificar la plantilla.", "Modificar plantilla");
             }
         }
-        public void BeginFormAdd()
-        {
-            AddControlsToList();
+    }
 
-            CargarComboBoxes();
+    public void BtnActiveProcedure(string id, string activeValue)
+    {
+        bool ok = EManifestTemplate.ActiveProcedure(id, activeValue);
+        if (ok)
+            dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
+    }
 
-            if (_frmAdd.IsAddModify)
-            {
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_template), 0) +1, '00') FROM Pack_ManifestTemplates").ToString();
-            }
-            else
-            {
-                LoadControlsModify();
-            }
-        }
-        private void AddControlsToList()
-        {
-            controlList = new ClsControls();
+    public void AddNewRowByIdInDGVCatalog()
+    {
+        string esc = idAddModify?.Replace("'", "''") ?? "";
+        DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{esc}'");
+        dgv!.AddNewRowToDGV(newIdRow);
+    }
 
-            controlList.ChangeHeadMessage("Para dar de alta una plantilla de manifiesto debe:\n");
-            controlList.Add(_frmAdd.txbName, "Ingresar el nombre de la plantilla.");
-            controlList.Add(_IsACboSelected, "Seleccionar al menos una opción.");
-        }
-
-        private void CargarComboBoxes()
-        {
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboConsignee, ClsObject.Consignee.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, ClsObject.Grower.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyMX, ClsObject.AgencyTradeMX.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyUS, ClsObject.AgencyTradeUS.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboCityCrossPoint, ClsObject.City.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmAdd.cboCityDestination, ClsObject.City.Cbo);
-
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboConsignee, _frmAdd.txbIdConsignee);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboGrower, _frmAdd.txbIdGrower);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboAgencyUS, _frmAdd.txbIdAgencyUS);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboAgencyMX, _frmAdd.txbIdAgencyMX);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityCrossPoint, _frmAdd.txbIdCityCrossPoint);
-            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityDestination, _frmAdd.txbIdCityDestination);
-
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboGrower, _frmAdd.chbRemovedGrower);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyUS, _frmAdd.chbRemovedAgencyUS);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyMX, _frmAdd.chbRemovedAgencyMX);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityCrossPoint, _frmAdd.chbRemovedCityCrossPoint);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityDestination, _frmAdd.chbRemovedCityDestination);
-        }
-
-        private void LoadControlsModify()
-        {
-            eManifestTemplate = new EManifestTemplate();
-            eManifestTemplate.SetManifestTemplate(_frmAdd.idLotModify);
-
-            _frmAdd.txbId.Text = eManifestTemplate.idManifestTemplate;
-            _frmAdd.txbName.Text = eManifestTemplate.nameManifestTemplate;
-            _frmAdd.txbDescription.Text = eManifestTemplate.description;
-            _frmAdd.txbIdDistributor.Text = eManifestTemplate.idDistributor;
-            _frmAdd.txbIdConsignee.Text = eManifestTemplate.idConsignee;
-            _frmAdd.txbIdGrower.Text = eManifestTemplate.idGrower;
-            _frmAdd.txbIdAgencyUS.Text = eManifestTemplate.idUSAgencyTrade;
-            _frmAdd.txbIdAgencyMX.Text = eManifestTemplate.idMXAgencyTrade;
-            _frmAdd.txbIdCityCrossPoint.Text = eManifestTemplate.idCityCrossPoint;
-            _frmAdd.txbIdCityDestination.Text = eManifestTemplate.idCityDestiny;
-
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, _frmAdd.txbIdConsignee);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, _frmAdd.txbIdGrower);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, _frmAdd.txbIdAgencyUS);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, _frmAdd.txbIdAgencyMX);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, _frmAdd.txbIdCityCrossPoint);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, _frmAdd.txbIdCityDestination);
-        }
-
-        private bool IsTxbIdCboEmpty()
-        {
-            if (string.IsNullOrEmpty(_frmAdd.txbIdDistributor.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdConsignee.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdGrower.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdAgencyUS.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdAgencyMX.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdCityCrossPoint.Text) &&
-                string.IsNullOrEmpty(_frmAdd.txbIdCityDestination.Text))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public void btnAcceptAddModify()
-        {
-            _IsACboSelected.Checked = !IsTxbIdCboEmpty();
-
-            if (!controlList.ValidateControls())
-                return;
-
-            if (_frmAdd.IsAddModify)
-                AddProcedure();
-            else
-                ModifyProcedure();
-
-            if (_frmAdd.AddIsUpdate)
-                InsertTemplateInDGV();
-
-            _frmAdd.Close();
-        }
-
-        public void AddProcedure()
-        {
-            try
-            {
-                string query = "INSERT INTO Pack_ManifestTemplates (id_template, v_nameTemplate, v_description, id_distributor, id_consignee, id_grower, id_USAgencyTrade, id_MXAgencyTrade, id_cityCrossPoint, id_cityDestiny, userCreate, d_create) VALUES ( (SELECT FORMAT(COALESCE(MAX(id_template), 0) +1, '00') FROM Pack_ManifestTemplates), @v_nameTemplate, @v_description, @id_distributor, @id_consignee, @id_grower, @id_USAgencyTrade, @id_MXAgencyTrade, @id_cityCrossPoint, @id_cityDestiny, @userCreate, CAST(GETDATE() AS DATE))";
-
-                sql.OpenConectionWrite();
-
-                SqlCommand cmd = new SqlCommand(query, sql.cnn);
-                cmd.Parameters.AddWithValue("@v_nameTemplate", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@v_description", ClsValues.IfEmptyToDBNull(_frmAdd.txbDescription.Text));
-                cmd.Parameters.AddWithValue("@id_distributor", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDistributor.Text));
-                cmd.Parameters.AddWithValue("@id_consignee", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdConsignee.Text));
-                cmd.Parameters.AddWithValue("@id_grower", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdGrower.Text));
-                cmd.Parameters.AddWithValue("@id_USAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyUS.Text));
-                cmd.Parameters.AddWithValue("@id_MXAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyMX.Text));
-                cmd.Parameters.AddWithValue("@id_cityCrossPoint", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityCrossPoint.Text));
-                cmd.Parameters.AddWithValue("@id_cityDestiny", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityDestination.Text));
-                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                _frmAdd.AddIsUpdate = true;
-
-                MessageBox.Show("Se añadió la plantilla de manifiesto: " + _frmAdd.txbId.Text + "\n con nombre: " + _frmAdd.txbName.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        public void ModifyProcedure()
-        {
-            try
-            {
-                string query = "UPDATE Pack_ManifestTemplates SET v_nameTemplate = @v_nameTemplate, v_description = @v_description, id_distributor = @id_distributor, id_consignee = @id_consignee, id_grower = @id_grower, id_USAgencyTrade = @id_USAgencyTrade, id_MXAgencyTrade = @id_MXAgencyTrade, id_cityCrossPoint = @id_cityCrossPoint, id_cityDestiny = @id_cityDestiny, userUpdate = @userUpdate, d_update = CAST(GETDATE() AS DATE) WHERE id_template = @id_template";
-
-                sql.OpenConectionWrite();
-
-                SqlCommand cmd = new SqlCommand(query, sql.cnn);
-                cmd.Parameters.AddWithValue("@id_template", _frmAdd.txbId.Text);
-                cmd.Parameters.AddWithValue("@v_nameTemplate", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@v_description", ClsValues.IfEmptyToDBNull(_frmAdd.txbDescription.Text));
-                cmd.Parameters.AddWithValue("@id_distributor", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDistributor.Text));
-                cmd.Parameters.AddWithValue("@id_consignee", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdConsignee.Text));
-                cmd.Parameters.AddWithValue("@id_grower", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdGrower.Text));
-                cmd.Parameters.AddWithValue("@id_USAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyUS.Text));
-                cmd.Parameters.AddWithValue("@id_MXAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyMX.Text));
-                cmd.Parameters.AddWithValue("@id_cityCrossPoint", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityCrossPoint.Text));
-                cmd.Parameters.AddWithValue("@id_cityDestiny", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityDestination.Text));
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                _frmAdd.AddIsUpdate = true;
-
-                MessageBox.Show("Se modificó la plantilla de manifiesto: " + _frmAdd.txbId.Text + "\n con nombre: " + _frmAdd.txbName.Text, "Catálogo modificar", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo modificar");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-
-        private void InsertTemplateInDGV()
-        {
-            string qry = $"{queryCatalogo} WHERE mtpl.id_template = @idTemplate";
-
-            Dictionary<string, object> parameters = new()
-            {
-                { "@idTemplate", _frmAdd.txbId.Text }
-            };
-
-            DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
-
-            if (dt.Rows.Count > 0)
-            {
-                DataRow dr = dt.Rows[0];
-                DataRowView drv = null;
-                bool found = false;
-
-                // Buscar si la fila ya existe en el DataView (_dvCatalog)
-                foreach (DataRowView rowView in _dvCatalog)
-                {
-                    if (rowView["Código"].ToString() == dr["Código"].ToString())
-                    {
-                        drv = rowView;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    // Si no se encuentra, agregar una nueva fila al DataView
-                    drv = _dvCatalog.AddNew();
-                }
-
-                if (drv != null)
-                {
-                    for (int i = 0; i < dr.ItemArray.Length; i++)
-                    {
-                        drv[i] = dr[i]; // Copiar valores de DataRow a DataRowView
-                    }
-
-                    drv.EndEdit();
-                }
-
-                // Seleccionar la última fila del DataGridView
-                _frmCat.dgvCatalog.ClearSelection();
-                _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.Rows.Count - 1].Selected = true;
-                _frmCat.dgvCatalog.FirstDisplayedScrollingRowIndex = _frmCat.dgvCatalog.Rows.Count - 1;
-            }
-        }
-
-
+    public void ModifyRowByIdInDGVCatalog()
+    {
+        string esc = idAddModify?.Replace("'", "''") ?? "";
+        DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE [{Column.id}] = '{esc}'");
+        dgv!.ModifyIdRowInDGV(newIdRow);
     }
 }
+
