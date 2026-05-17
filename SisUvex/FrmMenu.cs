@@ -650,7 +650,7 @@ namespace SisUvex
 
         private void variedadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalogos.Variedad.FrmVariedadCat cat = new();
+            Catalogos.Variety.FrmVarietyCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 

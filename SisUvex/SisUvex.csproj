@@ -95,6 +95,18 @@
     <Compile Update="Catalogos\Ciudad\FrmCiudadCat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.Designer.cs">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.Designer.cs">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
+    </Compile>
     <Compile Update="Catalogos\Contratista\FrmContratistaAñadir.cs" />
     <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
     <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Añadir.cs" />
@@ -139,6 +151,12 @@
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyAdd.resx">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyCat.resx">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 	<PropertyGroup>

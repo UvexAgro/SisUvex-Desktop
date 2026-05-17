@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Extensiones;
 using SisUvex.Catalogos.Nomina.LOAD;
 using SisUvex.Catalogos.RegistroMaterial;
-using SisUvex.Catalogos.Variedad;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 

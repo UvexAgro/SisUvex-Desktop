@@ -199,7 +199,9 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveVariety";
             public const string Cbo = "CboVariety";
             public const string DgvCatalog = "DgvCatalogVariety";
-            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (',c_active,') ',v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS 'Color.ColumnId', id_crop AS [{Crop.ColumnId}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}] FROM Pack_Variety ORDER BY [{Column.name}]  ";
+            /// <summary>Alias en <c>vw_PackVarietyCat</c> para <c>c_useFacility</c>.</summary>
+            public const string ColumnUseFacility = "Emp. Central";
+            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (', c_active, ') ', v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS [{Color.ColumnId}], id_crop AS [{Crop.ColumnId}], id_grower AS [{Grower.ColumnId}], c_useFacility AS [{ColumnUseFacility}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}], v_patentLegend AS [Leyenda patente], v_trademark AS [Marca registrada] FROM Pack_Variety ORDER BY [{Column.name}] ";
             public const string QueryDgvCatalog = "queryVariety";
         }
 
