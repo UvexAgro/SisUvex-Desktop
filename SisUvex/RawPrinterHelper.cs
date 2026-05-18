@@ -104,19 +104,38 @@ namespace SisUvex
             Marshal.FreeCoTaskMem(pUnmanagedBytes);
             return bSuccess;
         }
+
+        /// <summary>
+        /// Envía el texto usando la página de códigos del sistema (<see cref="Encoding.Default"/>).
+        /// Para ZPL con <c>^CI28</c> (UTF-8), usar <see cref="SendUtf8StringToPrinter"/> o la sobrecarga con <see cref="Encoding.UTF8"/>.
+        /// </summary>
         public static bool SendStringToPrinter(string szPrinterName, string szString)
         {
-            IntPtr pBytes;
-            Int32 dwCount;
-            // How many characters are in the string?
-            dwCount = szString.Length;
-            // Assume that the printer is expecting ANSI text, and then convert
-            // the string to ANSI text.
-            pBytes = Marshal.StringToCoTaskMemAnsi(szString);
-            // Send the converted ANSI string to the printer.
-            SendBytesToPrinter(szPrinterName, pBytes, dwCount);
-            Marshal.FreeCoTaskMem(pBytes);
-            return true;
+            ArgumentNullException.ThrowIfNull(szString);
+            return SendStringToPrinter(szPrinterName, szString, Encoding.Default);
         }
+
+        public static bool SendStringToPrinter(string szPrinterName, string szString, Encoding encoding)
+        {
+            ArgumentNullException.ThrowIfNull(encoding);
+            if (string.IsNullOrEmpty(szString))
+                return true;
+
+            byte[] bytes = encoding.GetBytes(szString);
+            IntPtr pBytes = Marshal.AllocCoTaskMem(bytes.Length);
+            try
+            {
+                Marshal.Copy(bytes, 0, pBytes, bytes.Length);
+                return SendBytesToPrinter(szPrinterName, pBytes, bytes.Length);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pBytes);
+            }
+        }
+
+        /// <summary>ZPL con <c>^CI27</c>/<c>^CI28</c> : enviar texto como UTF-8 (bytes).</summary>
+        public static bool SendUtf8StringToPrinter(string szPrinterName, string szString) =>
+            SendStringToPrinter(szPrinterName, szString, Encoding.UTF8);
     }
 }

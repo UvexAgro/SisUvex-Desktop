@@ -650,7 +650,7 @@ namespace SisUvex
 
         private void variedadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalogos.Variedad.FrmVariedadCat cat = new();
+            Catalogos.Variety.FrmVarietyCat cat = new();
             AbrirVentanaHijo(cat, 1);
         }
 
@@ -750,6 +750,16 @@ namespace SisUvex
         {
             Archivo.Desestibar.FrmDesestibar frm = new();
             AbrirVentanaHijo(frm, 0);
+        }
+
+        private void númerosEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Nomina.CONTRATO.Nom_employees_pairNumber.FrmNomEmployesPairNumber cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat);
         }
     }
 }
