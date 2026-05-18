@@ -170,6 +170,7 @@ namespace SisUvex
             statusStrip1 = new StatusStrip();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+            númerosEmpleadosToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -349,21 +350,21 @@ namespace SisUvex
             // mixtearToolStripMenuItem
             // 
             mixtearToolStripMenuItem.Name = "mixtearToolStripMenuItem";
-            mixtearToolStripMenuItem.Size = new Size(180, 22);
+            mixtearToolStripMenuItem.Size = new Size(128, 22);
             mixtearToolStripMenuItem.Text = "Mixtear";
             mixtearToolStripMenuItem.Click += mixtearToolStripMenuItem_Click;
             // 
             // reestibarToolStripMenuItem
             // 
             reestibarToolStripMenuItem.Name = "reestibarToolStripMenuItem";
-            reestibarToolStripMenuItem.Size = new Size(180, 22);
+            reestibarToolStripMenuItem.Size = new Size(128, 22);
             reestibarToolStripMenuItem.Text = "Reestibar";
             reestibarToolStripMenuItem.Click += reestibarToolStripMenuItem_Click;
             // 
             // desestibarToolStripMenuItem
             // 
             desestibarToolStripMenuItem.Name = "desestibarToolStripMenuItem";
-            desestibarToolStripMenuItem.Size = new Size(180, 22);
+            desestibarToolStripMenuItem.Size = new Size(128, 22);
             desestibarToolStripMenuItem.Text = "Desestibar";
             desestibarToolStripMenuItem.Click += desestibarToolStripMenuItem_Click;
             // 
@@ -930,7 +931,7 @@ namespace SisUvex
             // 
             // contratoToolStripMenuItem
             // 
-            contratoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { reporteDeAsistenciaToolStripMenuItem, reporteToolStripMenuItem });
+            contratoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { reporteDeAsistenciaToolStripMenuItem, reporteToolStripMenuItem, númerosEmpleadosToolStripMenuItem });
             contratoToolStripMenuItem.Name = "contratoToolStripMenuItem";
             contratoToolStripMenuItem.Size = new Size(189, 22);
             contratoToolStripMenuItem.Text = "Contrato";
@@ -938,14 +939,14 @@ namespace SisUvex
             // reporteDeAsistenciaToolStripMenuItem
             // 
             reporteDeAsistenciaToolStripMenuItem.Name = "reporteDeAsistenciaToolStripMenuItem";
-            reporteDeAsistenciaToolStripMenuItem.Size = new Size(181, 22);
+            reporteDeAsistenciaToolStripMenuItem.Size = new Size(184, 22);
             reporteDeAsistenciaToolStripMenuItem.Text = "Asistencia";
             reporteDeAsistenciaToolStripMenuItem.Click += reporteDeAsistenciaToolStripMenuItem_Click;
             // 
             // reporteToolStripMenuItem
             // 
             reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
-            reporteToolStripMenuItem.Size = new Size(181, 22);
+            reporteToolStripMenuItem.Size = new Size(184, 22);
             reporteToolStripMenuItem.Text = "Nómina de contrato";
             reporteToolStripMenuItem.Click += reporteToolStripMenuItem_Click;
             // 
@@ -966,14 +967,14 @@ namespace SisUvex
             // plantasToolStripMenuItem
             // 
             plantasToolStripMenuItem.Name = "plantasToolStripMenuItem";
-            plantasToolStripMenuItem.Size = new Size(135, 22);
+            plantasToolStripMenuItem.Size = new Size(180, 22);
             plantasToolStripMenuItem.Text = "Plantas";
             plantasToolStripMenuItem.Click += plantasToolStripMenuItem_Click;
             // 
             // palletsToolStripMenuItem
             // 
             palletsToolStripMenuItem.Name = "palletsToolStripMenuItem";
-            palletsToolStripMenuItem.Size = new Size(135, 22);
+            palletsToolStripMenuItem.Size = new Size(180, 22);
             palletsToolStripMenuItem.Text = "Pallets";
             palletsToolStripMenuItem.Click += palletsToolStripMenuItem_Click;
             // 
@@ -981,7 +982,7 @@ namespace SisUvex
             // 
             manifiestosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { totalesPorManifiestoToolStripMenuItem, totalDeCajasEmbarcadasToolStripMenuItem });
             manifiestosToolStripMenuItem.Name = "manifiestosToolStripMenuItem";
-            manifiestosToolStripMenuItem.Size = new Size(135, 22);
+            manifiestosToolStripMenuItem.Size = new Size(180, 22);
             manifiestosToolStripMenuItem.Text = "Manifiestos";
             // 
             // totalesPorManifiestoToolStripMenuItem
@@ -1008,14 +1009,14 @@ namespace SisUvex
             // cajasAGranelToolStripMenuItem
             // 
             cajasAGranelToolStripMenuItem.Name = "cajasAGranelToolStripMenuItem";
-            cajasAGranelToolStripMenuItem.Size = new Size(178, 22);
+            cajasAGranelToolStripMenuItem.Size = new Size(180, 22);
             cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
             cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
             // 
             // factorToolStripMenuItem
             // 
             factorToolStripMenuItem.Name = "factorToolStripMenuItem";
-            factorToolStripMenuItem.Size = new Size(178, 22);
+            factorToolStripMenuItem.Size = new Size(180, 22);
             factorToolStripMenuItem.Text = "Factor de Esparrago";
             factorToolStripMenuItem.Click += factorToolStripMenuItem_Click;
             // 
@@ -1023,7 +1024,7 @@ namespace SisUvex
             // 
             materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem1, registrosToolStripMenuItem });
             materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
-            materialesToolStripMenuItem.Size = new Size(178, 22);
+            materialesToolStripMenuItem.Size = new Size(180, 22);
             materialesToolStripMenuItem.Text = "Material";
             // 
             // catálogosToolStripMenuItem1
@@ -1100,7 +1101,7 @@ namespace SisUvex
             // 
             vehículosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tipoDeVehículosToolStripMenuItem, vehículosToolStripMenuItem1 });
             vehículosToolStripMenuItem.Name = "vehículosToolStripMenuItem";
-            vehículosToolStripMenuItem.Size = new Size(178, 22);
+            vehículosToolStripMenuItem.Size = new Size(180, 22);
             vehículosToolStripMenuItem.Text = "Vehículos";
             // 
             // tipoDeVehículosToolStripMenuItem
@@ -1144,6 +1145,13 @@ namespace SisUvex
             // 
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
+            // 
+            // númerosEmpleadosToolStripMenuItem
+            // 
+            númerosEmpleadosToolStripMenuItem.Name = "númerosEmpleadosToolStripMenuItem";
+            númerosEmpleadosToolStripMenuItem.Size = new Size(184, 22);
+            númerosEmpleadosToolStripMenuItem.Text = "Números empleados";
+            númerosEmpleadosToolStripMenuItem.Click += númerosEmpleadosToolStripMenuItem_Click;
             // 
             // FrmMenu
             // 
@@ -1315,5 +1323,6 @@ namespace SisUvex
         private ToolStripMenuItem mixtearToolStripMenuItem;
         private ToolStripMenuItem reestibarToolStripMenuItem;
         private ToolStripMenuItem desestibarToolStripMenuItem;
+        private ToolStripMenuItem númerosEmpleadosToolStripMenuItem;
     }
 }

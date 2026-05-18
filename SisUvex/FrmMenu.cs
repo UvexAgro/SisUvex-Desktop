@@ -751,5 +751,15 @@ namespace SisUvex
             Archivo.Desestibar.FrmDesestibar frm = new();
             AbrirVentanaHijo(frm, 0);
         }
+
+        private void númerosEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Nomina.CONTRATO.Nom_employees_pairNumber.FrmNomEmployesPairNumber cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat);
+        }
     }
 }
