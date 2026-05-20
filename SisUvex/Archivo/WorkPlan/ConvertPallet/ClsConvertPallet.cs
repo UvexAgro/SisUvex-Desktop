@@ -58,16 +58,16 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
             string estiba = dtPallet.Rows[0]["Estiba"].ToString();
 
-            if (!string.IsNullOrEmpty(estiba))
-            {
-                SystemSounds.Exclamation.Play();
+            //if (!string.IsNullOrEmpty(estiba))
+            //{
+            //    SystemSounds.Exclamation.Play();
 
-                MessageBox.Show($"El pallet pertenece a la estiba {estiba}. \n Se necesita desestibar ", "Convertir pallet", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    MessageBox.Show($"El pallet pertenece a la estiba {estiba}. \n Se necesita desestibar ", "Convertir pallet", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                return;
-            }
-            else
-            {
+            //    return;
+            //}
+            //else
+            //{
                 string plan = dtPallet.Rows[0]["Plan de Trabajo"].ToString();
 
                 if (idPlanTxb.IsNullOrEmpty())
@@ -99,7 +99,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
                     return;
                 }
-            }
+            //}
 
             frm.txbIdPallet.Focus();
             frm.txbIdPallet.SelectAll();
