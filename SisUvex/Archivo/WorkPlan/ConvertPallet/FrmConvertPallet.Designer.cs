@@ -43,6 +43,7 @@
             cboWorkPlan = new ComboBox();
             txbIdWorkPlan = new TextBox();
             btnAccept = new Button();
+            btnLimpiar = new Button();
             btnCancel = new Button();
             txbDay = new TextBox();
             label6 = new Label();
@@ -149,11 +150,13 @@
             // 
             // txbWorkPlan
             // 
+            txbWorkPlan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txbWorkPlan.Enabled = false;
-            txbWorkPlan.Location = new Point(223, 85);
+            txbWorkPlan.Location = new Point(210, 85);
+            txbWorkPlan.MaximumSize = new Size(900, 0);
             txbWorkPlan.MaxLength = 5;
             txbWorkPlan.Name = "txbWorkPlan";
-            txbWorkPlan.Size = new Size(558, 23);
+            txbWorkPlan.Size = new Size(578, 23);
             txbWorkPlan.TabIndex = 5;
             // 
             // label1
@@ -176,11 +179,13 @@
             // 
             // cboWorkPlan
             // 
+            cboWorkPlan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cboWorkPlan.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkPlan.Font = new Font("Segoe UI", 9F);
             cboWorkPlan.FormattingEnabled = true;
             cboWorkPlan.Location = new Point(134, 185);
             cboWorkPlan.Margin = new Padding(1);
+            cboWorkPlan.MaximumSize = new Size(900, 0);
             cboWorkPlan.Name = "cboWorkPlan";
             cboWorkPlan.Size = new Size(654, 23);
             cboWorkPlan.TabIndex = 6;
@@ -205,6 +210,17 @@
             btnAccept.UseVisualStyleBackColor = true;
             btnAccept.Click += btnAccept_Click;
             // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnLimpiar.Location = new Point(282, 499);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(127, 23);
+            btnLimpiar.TabIndex = 10;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
+            // 
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -222,14 +238,14 @@
             txbDay.Location = new Point(134, 85);
             txbDay.MaxLength = 5;
             txbDay.Name = "txbDay";
-            txbDay.Size = new Size(87, 23);
+            txbDay.Size = new Size(70, 23);
             txbDay.TabIndex = 4;
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(552, 111);
+            label6.Location = new Point(585, 111);
             label6.Name = "label6";
             label6.Size = new Size(40, 12);
             label6.TabIndex = 67;
@@ -240,7 +256,7 @@
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkGroup.DropDownWidth = 400;
             cboWorkGroup.FormattingEnabled = true;
-            cboWorkGroup.Location = new Point(552, 123);
+            cboWorkGroup.Location = new Point(585, 123);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(203, 23);
             cboWorkGroup.TabIndex = 60;
@@ -249,7 +265,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 6.75F);
-            label7.Location = new Point(552, 146);
+            label7.Location = new Point(585, 146);
             label7.Name = "label7";
             label7.Size = new Size(22, 12);
             label7.TabIndex = 66;
@@ -260,7 +276,7 @@
             cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLot.DropDownWidth = 400;
             cboLot.FormattingEnabled = true;
-            cboLot.Location = new Point(552, 158);
+            cboLot.Location = new Point(585, 158);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(203, 23);
             cboLot.TabIndex = 61;
@@ -302,7 +318,7 @@
             cboContainer.FormattingEnabled = true;
             cboContainer.Location = new Point(343, 123);
             cboContainer.Name = "cboContainer";
-            cboContainer.Size = new Size(203, 23);
+            cboContainer.Size = new Size(236, 23);
             cboContainer.TabIndex = 58;
             // 
             // cboDistribuidor
@@ -342,15 +358,16 @@
             cboPresentacion.FormattingEnabled = true;
             cboPresentacion.Location = new Point(343, 158);
             cboPresentacion.Name = "cboPresentacion";
-            cboPresentacion.Size = new Size(203, 23);
+            cboPresentacion.Size = new Size(236, 23);
             cboPresentacion.TabIndex = 59;
             // 
             // cboSeason
             // 
             cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
             cboSeason.DropDownWidth = 400;
+            cboSeason.Enabled = false;
             cboSeason.FormattingEnabled = true;
-            cboSeason.Location = new Point(578, 56);
+            cboSeason.Location = new Point(585, 56);
             cboSeason.Name = "cboSeason";
             cboSeason.Size = new Size(203, 23);
             cboSeason.TabIndex = 68;
@@ -359,7 +376,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 6.75F);
-            label8.Location = new Point(578, 41);
+            label8.Location = new Point(585, 41);
             label8.Name = "label8";
             label8.Size = new Size(50, 12);
             label8.TabIndex = 69;
@@ -385,6 +402,7 @@
             Controls.Add(label5);
             Controls.Add(cboPresentacion);
             Controls.Add(txbDay);
+            Controls.Add(btnLimpiar);
             Controls.Add(btnCancel);
             Controls.Add(btnAccept);
             Controls.Add(txbIdWorkPlan);
@@ -421,6 +439,7 @@
         public TextBox txbIdWorkPlan;
         public TextBox txbWorkPlan;
         private Button btnAccept;
+        private Button btnLimpiar;
         private Button btnCancel;
         public TextBox txbDay;
         private Label label6;
