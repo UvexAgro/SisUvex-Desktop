@@ -4,6 +4,7 @@ using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Archivo.Etiquetas.PrintLabels;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using System;
@@ -301,6 +302,31 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
             frm.txbIdPallet.Focus();
             frm.txbIdPallet.SelectAll();
+        }
+
+        /// <summary>Etiqueta de pallet con datos actuales en BD (<see cref="ClsReprintPallet.ReprintPalletTag"/>); no modifica cajas.</summary>
+        public void BtnImprimirPalletEtiquetaSeleccionado()
+        {
+            if (frm.dgvPallet.SelectedRows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            object? palletVal = frm.dgvPallet.SelectedRows[0].Cells["Pallet"].Value;
+            string raw = palletVal?.ToString() ?? "";
+            if (string.IsNullOrWhiteSpace(raw))
+                return;
+
+            string idPallet = ClsValues.FormatZeros(raw, "00000");
+
+            int copias = Convert.ToInt32(frm.nudCopiasEtiqueta.Value);
+            if (copias < 1)
+                copias = 1;
+
+            bool invertir = frm.chkInvertirEtiqueta.Checked;
+            // showDate=true: igual que en otros flujos de reimpresión; Cajas viene siempre de vw_PackPalletCon dentro de ReprintPalletTag (sin actualizar registros).
+            ClsReprintPallet.ReprintPalletTag(idPallet, copias, invertir, showDate: true);
         }
 
         public void BtnQuitPallet()

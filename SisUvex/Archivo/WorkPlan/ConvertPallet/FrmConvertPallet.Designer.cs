@@ -60,7 +60,12 @@
             cboPresentacion = new ComboBox();
             cboSeason = new ComboBox();
             label8 = new Label();
+            lblCopiasEtiqueta = new Label();
+            nudCopiasEtiqueta = new NumericUpDown();
+            chkInvertirEtiqueta = new CheckBox();
+            btnImprimir = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvPallet).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudCopiasEtiqueta).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
@@ -113,7 +118,7 @@
             dgvPallet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvPallet.EnableHeadersVisualStyles = false;
             dgvPallet.ImeMode = ImeMode.NoControl;
-            dgvPallet.Location = new Point(12, 212);
+            dgvPallet.Location = new Point(12, 265);
             dgvPallet.Name = "dgvPallet";
             dgvPallet.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -127,7 +132,7 @@
             dgvPallet.RowHeadersVisible = false;
             dgvPallet.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPallet.Size = new Size(776, 281);
+            dgvPallet.Size = new Size(776, 228);
             dgvPallet.TabIndex = 7;
             // 
             // lblIdPallet
@@ -171,11 +176,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(11, 188);
+            label2.Location = new Point(12, 185);
             label2.Name = "label2";
-            label2.Size = new Size(125, 15);
+            label2.Size = new Size(122, 15);
             label2.TabIndex = 23;
-            label2.Text = "Plan de trabajo nuevo:";
+            label2.Text = "Plan de trabajo nuevo";
             // 
             // cboWorkPlan
             // 
@@ -183,11 +188,11 @@
             cboWorkPlan.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkPlan.Font = new Font("Segoe UI", 9F);
             cboWorkPlan.FormattingEnabled = true;
-            cboWorkPlan.Location = new Point(134, 185);
+            cboWorkPlan.Location = new Point(12, 201);
             cboWorkPlan.Margin = new Padding(1);
             cboWorkPlan.MaximumSize = new Size(900, 0);
             cboWorkPlan.Name = "cboWorkPlan";
-            cboWorkPlan.Size = new Size(654, 23);
+            cboWorkPlan.Size = new Size(776, 23);
             cboWorkPlan.TabIndex = 6;
             // 
             // txbIdWorkPlan
@@ -382,13 +387,62 @@
             label8.TabIndex = 69;
             label8.Text = "Temporada";
             // 
+            // lblCopiasEtiqueta
+            // 
+            lblCopiasEtiqueta.AutoSize = true;
+            lblCopiasEtiqueta.Font = new Font("Segoe UI", 6.75F);
+            lblCopiasEtiqueta.Location = new Point(100, 225);
+            lblCopiasEtiqueta.Name = "lblCopiasEtiqueta";
+            lblCopiasEtiqueta.Size = new Size(32, 12);
+            lblCopiasEtiqueta.TabIndex = 70;
+            lblCopiasEtiqueta.Text = "Copias";
+            // 
+            // nudCopiasEtiqueta
+            // 
+            nudCopiasEtiqueta.Location = new Point(101, 238);
+            nudCopiasEtiqueta.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            nudCopiasEtiqueta.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudCopiasEtiqueta.Name = "nudCopiasEtiqueta";
+            nudCopiasEtiqueta.Size = new Size(27, 23);
+            nudCopiasEtiqueta.TabIndex = 71;
+            nudCopiasEtiqueta.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // chkInvertirEtiqueta
+            // 
+            chkInvertirEtiqueta.AutoSize = true;
+            chkInvertirEtiqueta.Location = new Point(131, 243);
+            chkInvertirEtiqueta.Margin = new Padding(0);
+            chkInvertirEtiqueta.Name = "chkInvertirEtiqueta";
+            chkInvertirEtiqueta.Size = new Size(63, 19);
+            chkInvertirEtiqueta.TabIndex = 72;
+            chkInvertirEtiqueta.Text = "Invertir";
+            chkInvertirEtiqueta.TextAlign = ContentAlignment.TopLeft;
+            chkInvertirEtiqueta.UseVisualStyleBackColor = true;
+            // 
+            // btnImprimir
+            // 
+            btnImprimir.Image = Properties.Resources.imprimirIcon16;
+            btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
+            btnImprimir.Location = new Point(16, 236);
+            btnImprimir.Name = "btnImprimir";
+            btnImprimir.Size = new Size(79, 26);
+            btnImprimir.TabIndex = 73;
+            btnImprimir.Text = "Imprimir";
+            btnImprimir.TextAlign = ContentAlignment.MiddleRight;
+            btnImprimir.UseVisualStyleBackColor = true;
+            btnImprimir.Click += btnImprimir_Click;
+            // 
             // FrmConvertPallet
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 534);
+            Controls.Add(nudCopiasEtiqueta);
+            Controls.Add(lblCopiasEtiqueta);
             Controls.Add(cboSeason);
             Controls.Add(label8);
+            Controls.Add(btnImprimir);
+            Controls.Add(chkInvertirEtiqueta);
             Controls.Add(label6);
             Controls.Add(cboWorkGroup);
             Controls.Add(label7);
@@ -421,6 +475,7 @@
             Text = "Convertir pallet";
             Load += FrmConvertPallet_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPallet).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudCopiasEtiqueta).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -456,5 +511,9 @@
         public ComboBox cboPresentacion;
         public ComboBox cboSeason;
         private Label label8;
+        private Label lblCopiasEtiqueta;
+        public NumericUpDown nudCopiasEtiqueta;
+        public CheckBox chkInvertirEtiqueta;
+        private Button btnImprimir;
     }
 }

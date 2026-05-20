@@ -33,6 +33,11 @@
             cls.BtnClear();
         }
 
+        private void btnImprimir_Click(object sender, EventArgs e)
+        {
+            cls.BtnImprimirPalletEtiquetaSeleccionado();
+        }
+
         private void FrmConvertPallet_Load(object sender, EventArgs e)
         {
             cls.BeginForm();
