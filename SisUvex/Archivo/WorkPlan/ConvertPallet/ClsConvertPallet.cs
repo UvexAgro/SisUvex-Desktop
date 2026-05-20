@@ -1,17 +1,20 @@
-﻿using System.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Catalogos.Metods.Values;
+using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
-using SisUvex.Catalogos.Metods.Values;
-using SisUvex.Catalogos.Metods.TextBoxes;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 {
@@ -21,7 +24,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
         public FrmConvertPallet frm;
         DataTable? dtCboWorkPlan = null;
         DataTable? dtPalletList = null;
-        string queryCboWorkPlan = " SELECT [Activo], [Código], CONCAT_WS(' ', Código, '|', 'Cuadrilla:',Cuadrilla, '|'+dis.v_nameDistShort, Lote, Variedad, Tamaño, CONCAT(Contenedor, CAST(Libras AS float)),[Pre etiqueta], Presentación, [Post etiqueta]) AS [Nombre], Fecha AS [Fecha] FROM vw_PackWorkPlanCat cat JOIN Pack_GTIN gtn ON gtn.id_GTIN = cat.GTIN join Pack_Distributor dis ON dis.id_distributor = gtn.id_distributor WHERE [Activo] = '1' ";
+        string queryCboWorkPlan = $" SELECT [Activo], [Código], CONCAT_WS(' ', Código, '|', 'Cuadrilla:',Cuadrilla, '|'+dis.v_nameDistShort, Lote, Variedad, Tamaño, CONCAT(Contenedor, CAST(Libras AS float)),[Pre etiqueta], Presentación, [Post etiqueta]) AS [Nombre], Fecha AS [Fecha], gtn.id_distributor AS [{ClsObject.Distributor.ColumnId}], wpl.id_lot AS [{ClsObject.Lot.ColumnId}],gtn.id_variety AS [{ClsObject.Variety.ColumnId}], gtn.id_presentation AS [{ClsObject.Presentation.ColumnId}], gtn.id_container  AS [{ClsObject.Container.ColumnId}] FROM vw_PackWorkPlanCat cat JOIN Pack_WorkPlan wpl ON wpl.id_workPlan = cat.Código  JOIN Pack_GTIN gtn ON gtn.id_GTIN = cat.GTIN join Pack_Distributor dis ON dis.id_distributor = gtn.id_distributor WHERE [Activo] = '1' ";
         string queryPallet = " SELECT * FROM vw_PackPalletCon ";
 
         public ClsConvertPallet()
@@ -31,12 +34,32 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
         }
         public void BeginForm()
         {
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboDistribuidor, ClsObject.Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboPresentacion, Presentation.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboVariety, Variety.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboContainer, Container.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboLot, Lot.Cbo);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((frm.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lsWGDep);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsLotDep = new();
+            lsLotDep.Add((frm.cboVariety, Variety.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboLot, null, lsLotDep);
+
             ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbIdPallet);
 
             dtCboWorkPlan = ClsQuerysDB.GetDataTable(queryCboWorkPlan);
 
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08"); //<-- Seleccionar temporada actual (luego filtrar plan de trabajo por fechas de temporada)
+
             ClsComboBoxes.LoadComboBoxDataSource(frm.cboWorkPlan, dtCboWorkPlan);
         }
+
+
         public void BtnAddPallet()
         {
             string idPallet = ClsValues.FormatZeros(frm.txbIdPallet.Text,"00000");
