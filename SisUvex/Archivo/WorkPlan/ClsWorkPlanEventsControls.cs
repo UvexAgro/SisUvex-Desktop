@@ -3,10 +3,10 @@ using System.Data;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using static SisUvex.Catalogos.Metods.Extentions.ComboBoxExtensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Data.SqlClient;
 using System.Media;
-using System.Windows.Forms;
 
 namespace SisUvex.Archivo.WorkPlan
 {
@@ -247,22 +247,31 @@ namespace SisUvex.Archivo.WorkPlan
             //en los filtros: GTIN Porque la tabla tiene como columna GTIN y Cuadrilla por el workGroup solo tiene el numero y no todo el nombre completo
 
             if (clsWP._frmCat.cboDistribuidor.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboDistribuidor.SelectedValue}' IN (SELECT gtn.id_distributor FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_distributor = '{clsWP._frmCat.cboDistribuidor.SelectedValue}' ";
 
             if (clsWP._frmCat.cboPresentacion.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboPresentacion.SelectedValue}' IN (SELECT gtn.id_presentation FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_presentation = '{clsWP._frmCat.cboPresentacion.SelectedValue}' ";
 
             if (clsWP._frmCat.cboVariety.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboVariety.SelectedValue}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_variety = '{clsWP._frmCat.cboVariety.SelectedValue}' ";
 
             if (clsWP._frmCat.cboContainer.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboContainer.SelectedValue}' IN (SELECT gtn.id_container FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_container = '{clsWP._frmCat.cboContainer.SelectedValue}' ";
 
             if (clsWP._frmCat.cboWorkGroup.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboWorkGroup.SelectedValue}' IN (SELECT wgp.id_workGroup FROM wgp WHERE wgp.id_workGroup = Cuadrilla) ";
+                query += $" AND w.id_workGroup = '{clsWP._frmCat.cboWorkGroup.SelectedValue}' ";
 
-            if (clsWP._frmCat.cboLot.SelectedIndex > 0 && clsWP._frmCat.cboLot.SelectedValue.ToString().Length == 7)
-                query += $" AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(0, 4)}' IN (SELECT lot.id_lot FROM lot WHERE lot.id_lot = w.id_lot) AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(7 - 2)}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+            if (clsWP._frmCat.cboFarm.SelectedIndex > 0)
+                query += $" AND lot.id_farm = '{clsWP._frmCat.cboFarm.SelectedValue}' ";
+
+            if (clsWP._frmCat.cboLot.SelectedIndex > 0)
+            {
+                query += $" AND w.id_lot = '{clsWP._frmCat.cboLot.GetColumnValue(Lot.ColumnId).ToString()}' ";
+                query += $" AND gtn.id_variety = '{clsWP._frmCat.cboLot.GetColumnValue(Variety.ColumnId).ToString()}' ";
+            }
+
+            //if (clsWP._frmCat.cboLot.SelectedIndex > 0 && clsWP._frmCat.cboLot.SelectedValue.ToString().Length == 7)
+            //    query += $" AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(0, 4)}' IN (SELECT lot.id_lot FROM lot WHERE lot.id_lot = w.id_lot) AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(7 - 2)}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
             
             //Clipboard.SetText(query); //Copiar la query en el portapapeles
 

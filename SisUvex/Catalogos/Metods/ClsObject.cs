@@ -34,7 +34,7 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboWorkPlan";
             public const string DgvCatalog = "DgvCatalogWorkPlan";
             public const string QueryCbo = "queryWorkPlan";
-            public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] ";
+            public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] LEFT JOIN Pack_GTIN gtn ON gtn.id_GTIN = w.id_GTIN LEFT JOIN Pack_Lot lot ON lot.id_lot = w.id_lot AND lot.id_variety = gtn.id_variety ";
             public const string CboPresentation = "CboWorkPlanPresentation";
             public const string QueryCboPresentation = $@"SELECT CONCAT_WS(' ', wpl.id_workPlan, '|', lot.v_nameLot, '|', dis.v_nameDistShort, '|', CONCAT(con.v_nameContainer, CAST(gtn.n_lbs AS FLOAT)), siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, box.v_shortNameTypeBox) AS [{Column.name}]
                                                         , wpl.c_active AS [{Column.active}]

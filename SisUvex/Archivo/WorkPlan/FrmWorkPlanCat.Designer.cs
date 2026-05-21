@@ -54,6 +54,10 @@
             cboWorkGroup = new ComboBox();
             label7 = new Label();
             cboLot = new ComboBox();
+            label10 = new Label();
+            cboSeason = new ComboBox();
+            label11 = new Label();
+            cboFarm = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -92,7 +96,7 @@
             dgvCatalog.RowHeadersVisible = false;
             dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCatalog.Size = new Size(783, 337);
+            dgvCatalog.Size = new Size(1067, 337);
             dgvCatalog.TabIndex = 14;
             dgvCatalog.MouseDoubleClick += dgvCatalog_MouseDoubleClick;
             // 
@@ -288,7 +292,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(557, 0);
+            label6.Location = new Point(557, 35);
             label6.Name = "label6";
             label6.Size = new Size(40, 12);
             label6.TabIndex = 43;
@@ -299,16 +303,16 @@
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkGroup.DropDownWidth = 400;
             cboWorkGroup.FormattingEnabled = true;
-            cboWorkGroup.Location = new Point(557, 12);
+            cboWorkGroup.Location = new Point(557, 47);
             cboWorkGroup.Name = "cboWorkGroup";
-            cboWorkGroup.Size = new Size(203, 23);
+            cboWorkGroup.Size = new Size(176, 23);
             cboWorkGroup.TabIndex = 6;
             // 
             // label7
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 6.75F);
-            label7.Location = new Point(557, 35);
+            label7.Location = new Point(739, 34);
             label7.Name = "label7";
             label7.Size = new Size(22, 12);
             label7.TabIndex = 41;
@@ -319,16 +323,58 @@
             cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLot.DropDownWidth = 400;
             cboLot.FormattingEnabled = true;
-            cboLot.Location = new Point(557, 47);
+            cboLot.Location = new Point(739, 46);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(203, 23);
             cboLot.TabIndex = 7;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 6.75F);
+            label10.Location = new Point(557, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(50, 12);
+            label10.TabIndex = 45;
+            label10.Text = "Temporada";
+            // 
+            // cboSeason
+            // 
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Location = new Point(557, 12);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(176, 23);
+            cboSeason.TabIndex = 44;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 6.75F);
+            label11.Location = new Point(739, -1);
+            label11.Name = "label11";
+            label11.Size = new Size(34, 12);
+            label11.TabIndex = 47;
+            label11.Text = "Campo";
+            // 
+            // cboFarm
+            // 
+            cboFarm.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFarm.FormattingEnabled = true;
+            cboFarm.Location = new Point(739, 11);
+            cboFarm.Name = "cboFarm";
+            cboFarm.Size = new Size(135, 23);
+            cboFarm.TabIndex = 46;
             // 
             // FrmWorkPlanCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1084, 450);
+            Controls.Add(label11);
+            Controls.Add(cboFarm);
+            Controls.Add(label10);
+            Controls.Add(cboSeason);
             Controls.Add(label6);
             Controls.Add(cboWorkGroup);
             Controls.Add(label7);
@@ -385,5 +431,9 @@
         public ComboBox cboWorkGroup;
         private Label label7;
         public ComboBox cboLot;
+        private Label label10;
+        public ComboBox cboSeason;
+        private Label label11;
+        public ComboBox cboFarm;
     }
 }
