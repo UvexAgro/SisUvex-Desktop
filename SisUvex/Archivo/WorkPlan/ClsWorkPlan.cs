@@ -1,13 +1,14 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.CheckBoxes;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
-using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.WorkGroup;
+using System.Data;
+using System.Data.SqlClient;
 using System.Media;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using SisUvex.Catalogos.Metods.CheckBoxes;
 
 namespace SisUvex.Archivo.WorkPlan
 {
@@ -37,8 +38,19 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmCat.cboPresentacion, Presentation.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboContainer, Container.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmCat.cboWorkGroup, WorkGroup.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboLot, Lot.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboSeason, Season.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboWorkGroup, WorkGroup.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboFarm, Farm.Cbo);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((_frmCat.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmCat.cboWorkGroup, null, lsWGDep);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmCat.cboSeason, "08"); //<-- temporada uva 2026
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsLotDep = new();
+            lsLotDep.Add((_frmCat.cboFarm, Farm.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmCat.cboLot, null, lsLotDep);
 
             LoadDataGridViewCatalog();
             ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
