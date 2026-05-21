@@ -119,6 +119,137 @@ namespace SisUvex.Archivo.MixtearPallets
         #endregion
 
         // ============================================================================
+        #region PANEL DE INFORMACIÓN DINÁMICA DEL PALLET
+        // ============================================================================
+        // Responsable de generar los controles Label del panel "Información del pallet"
+        // en FrmReestibaPallet y FrmEliminarPallet.
+        //
+        // ESCALABILIDAD:
+        //   → Para agregar/quitar/reordenar campos: editar CAMPOS_INFO_PALLET únicamente.
+        //   → Para cambiar el número de columnas o el tamaño de fuente: editar las
+        //     constantes INFO_* a continuación.
+        //   → PopularInfoPallet() no requiere ningún cambio al agregar nuevos campos.
+        // ============================================================================
+
+        /// <summary>Define un campo (etiqueta + getter) para el panel de info del pallet.</summary>
+        internal sealed class CampoInfoPallet
+        {
+            public string                  Etiqueta { get; }
+            public Func<PalletInfo, string> Obtener  { get; }
+            public CampoInfoPallet(string etiqueta, Func<PalletInfo, string> obtener)
+            { Etiqueta = etiqueta; Obtener = obtener; }
+        }
+
+        // ── Constantes de layout ─────────────────────────────────────────────────────
+        private const int INFO_COLS       = 3;   // Columnas en el panel
+        private const int INFO_COL_W      = 220; // Ancho de cada columna (etiqueta + valor)
+        private const int INFO_LBL_W      = 90;  // Ancho reservado para la etiqueta
+        private const int INFO_ROW_H      = 22;  // Altura de cada fila
+        private const int INFO_PAD_LEFT   = 8;   // Margen izquierdo interno
+        private const int INFO_PAD_TOP    = 22;  // Espacio bajo el título del GroupBox
+        private const int INFO_PAD_BOTTOM = 8;   // Margen inferior interno
+
+        /// <summary>
+        /// Ancho recomendado del GroupBox de información (lo usan los diseñadores y los formularios).
+        /// Calculado: padLeft + cols * colWidth + padLeft.
+        /// </summary>
+        public static int InfoPalletGroupBoxWidth =>
+            INFO_PAD_LEFT + INFO_COLS * INFO_COL_W + INFO_PAD_LEFT;   // 8 + 660 + 8 = 676
+
+        /// <summary>
+        /// Orden y contenido de los campos que se muestran en el panel de información.
+        /// ESCALABILIDAD: Agregar/quitar/reordenar entradas aquí. Los formularios se adaptan solos.
+        /// </summary>
+        internal static readonly IReadOnlyList<CampoInfoPallet> CAMPOS_INFO_PALLET = new CampoInfoPallet[]
+        {
+            // ── Identificadores ──────────────────────────────────────────────────────
+            new("Pallet",        p => p.IdPallet),
+            new("Mix",           p => p.Mix),
+            new("Estiba",        p => p.Estiba),
+            // ── Programa / GTIN ──────────────────────────────────────────────────────
+            new("GTIN",          p => p.Programa),
+            new("Plan trabajo",  p => p.PlanTrabajo),
+            new("Cajas",         p => p.Cajas.ToString()),
+            // ── Cantidades ───────────────────────────────────────────────────────────
+            new("Lbs/caja",      p => p.LibrasPorCaja  > 0 ? p.LibrasPorCaja.ToString("0.##")  : ""),
+            new("Lbs pallet",    p => p.LibrasPallet   > 0 ? p.LibrasPallet.ToString("0.##")   : ""),
+            new("Cjs/Pallet",    p => p.CajasPorPallet > 0 ? p.CajasPorPallet.ToString()       : ""),
+            // ── Características del producto ─────────────────────────────────────────
+            new("Variedad",      p => p.Variedad),
+            new("Tamaño",        p => p.Tamaño),
+            new("Presentación",  p => p.Presentacion),
+            new("Distribuidor",  p => p.Distribuidor),
+            new("Contenedor",    p => p.Contenedor),
+            new("Cultivo",       p => p.Cultivo),
+            // ── Etiqueta / caja ──────────────────────────────────────────────────────
+            new("Pre",           p => p.Pre),
+            new("Pos",           p => p.Pos),
+            new("Tipo caja",     p => p.TipoCaja),
+            // ── Trazabilidad ─────────────────────────────────────────────────────────
+            new("Fecha",         p => p.Fecha),
+            new("Rack",          p => p.Rack),
+            new("Lote",          p => p.Lote),
+            new("Manifiesto",    p => p.Manifiesto),
+            new("Papeleta",      p => p.Papeleta),
+            new("Cuadrilla",     p => p.Cuadrilla),
+        };
+
+        /// <summary>
+        /// Genera dinámicamente los controles Label del panel de información dentro de <paramref name="grp"/>.
+        /// Dispone los campos en <see cref="INFO_COLS"/> columnas y ajusta la altura del GroupBox.
+        /// ESCALABILIDAD: Solo modificar <see cref="CAMPOS_INFO_PALLET"/>; este método no cambia.
+        /// </summary>
+        /// <param name="grp">GroupBox contenedor (se limpian sus controles previos).</param>
+        /// <param name="pallet">Datos del pallet a mostrar.</param>
+        public static void PopularInfoPallet(GroupBox grp, PalletInfo pallet)
+        {
+            grp.Controls.Clear();
+
+            var campos   = CAMPOS_INFO_PALLET;
+            int filas    = (int)Math.Ceiling(campos.Count / (double)INFO_COLS);
+            int valWidth = INFO_COL_W - INFO_LBL_W - 4; // 4 px de separación entre etiqueta y valor
+
+            for (int i = 0; i < campos.Count; i++)
+            {
+                int col = i % INFO_COLS;
+                int row = i / INFO_COLS;
+                int x   = INFO_PAD_LEFT + col * INFO_COL_W;
+                int y   = INFO_PAD_TOP  + row * INFO_ROW_H;
+
+                // Etiqueta (negrita)
+                grp.Controls.Add(new Label
+                {
+                    AutoSize  = false,
+                    Font      = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+                    Text      = campos[i].Etiqueta + ":",
+                    Location  = new Point(x, y),
+                    Size      = new Size(INFO_LBL_W, INFO_ROW_H - 2),
+                    TextAlign = ContentAlignment.MiddleLeft,
+                });
+
+                // Valor (regular, gris si está vacío)
+                string raw    = campos[i].Obtener(pallet) ?? "";
+                bool   vacio  = string.IsNullOrWhiteSpace(raw);
+                grp.Controls.Add(new Label
+                {
+                    AutoSize     = false,
+                    Font         = new Font("Segoe UI", 8.5F, FontStyle.Regular),
+                    Text         = vacio ? "—" : raw,
+                    Location     = new Point(x + INFO_LBL_W, y),
+                    Size         = new Size(valWidth, INFO_ROW_H - 2),
+                    TextAlign    = ContentAlignment.MiddleLeft,
+                    ForeColor    = vacio ? Color.Silver : SystemColors.ControlText,
+                    AutoEllipsis = true,
+                });
+            }
+
+            // Ajustar la altura del GroupBox para contener exactamente todos los campos
+            grp.Height = INFO_PAD_TOP + filas * INFO_ROW_H + INFO_PAD_BOTTOM;
+        }
+
+        #endregion
+
+        // ============================================================================
         #region CONSULTAS A LA BASE DE DATOS
         // ============================================================================
 
@@ -184,24 +315,41 @@ namespace SisUvex.Archivo.MixtearPallets
 
         /// <summary>
         /// Obtiene los tipos de reestiba activos desde Pack_PalletUnstowType.
+        /// Incluye todos los tipos (SOBRANTE activo e inactivos como ERROR, SINIESTRADO, etc.).
         /// Usado por FrmReestibaPallet para cargar el ComboBox de tipos.
         /// </summary>
         public List<TipoReestiba> ObtenerTiposReestiba()
+            => ConsultarTiposReestiba(soloInactivos: false);
+
+        /// <summary>
+        /// Retorna únicamente los tipos de reestiba donde el pallet resultante queda INACTIVO
+        /// (c_activeInPallet = '0'): SINIESTRADO, ERROR, CORTESÍA, REEMPAQUE, etc.
+        /// Usado en FrmEliminarPallet, donde no se permite usar tipos que dejen al pallet activo.
+        /// </summary>
+        public List<TipoReestiba> ObtenerTiposReestibaInactivos()
+            => ConsultarTiposReestiba(soloInactivos: true);
+
+        /// <summary>
+        /// Consulta interna compartida para ObtenerTiposReestiba y ObtenerTiposReestibaInactivos.
+        /// Si soloInactivos = true, filtra c_activeInPallet = '0'.
+        /// </summary>
+        private List<TipoReestiba> ConsultarTiposReestiba(bool soloInactivos)
         {
-            const string qry = @"
+            string filtroActivo = soloInactivos ? "AND c_activeInPallet = '0'" : "";
+            string qry = $@"
                 SELECT id_unstowType, v_unstowTypeName, v_prefix, v_description,
                        c_active, c_activeInPallet
                 FROM Pack_PalletUnstowType
-                WHERE c_active = '1'
+                WHERE c_active = '1' {filtroActivo}
                 ORDER BY id_unstowType";
             DataTable dt = ClsQuerysDB.GetDataTable(qry);
             return dt.Rows.Cast<DataRow>().Select(row => new TipoReestiba
             {
-                IdTipo          = row["id_unstowType"].ToString()    ?? "",
-                Nombre          = row["v_unstowTypeName"].ToString() ?? "",
-                Prefijo         = row["v_prefix"].ToString()         ?? "",
-                Descripcion     = row["v_description"].ToString()    ?? "",
-                Activo          = row["c_active"].ToString()         == "1",
+                IdTipo            = row["id_unstowType"].ToString()    ?? "",
+                Nombre            = row["v_unstowTypeName"].ToString() ?? "",
+                Prefijo           = row["v_prefix"].ToString()         ?? "",
+                Descripcion       = row["v_description"].ToString()    ?? "",
+                Activo            = row["c_active"].ToString()         == "1",
                 NuevoPalletActivo = row["c_activeInPallet"].ToString() == "1"
             }).ToList();
         }
@@ -581,21 +729,54 @@ namespace SisUvex.Archivo.MixtearPallets
         }
 
         /// <summary>
-        /// Extrae el PalletInfo de la fila seleccionada del DataGridView.
+        /// Extrae el PalletInfo completo de la fila seleccionada del DataGridView.
+        /// Lee todas las columnas disponibles en el grid; las que no existan se dejan vacías.
         /// Retorna null si no hay fila seleccionada.
+        /// ESCALABILIDAD: Al agregar columnas al grid en ObtenerDefinicionColumnas(),
+        /// agregar aquí la lectura del nuevo campo si se necesita en FrmReestibaPallet.
         /// </summary>
         public PalletInfo? ObtenerPalletSeleccionado(DataGridView dgv)
         {
             if (dgv.SelectedRows.Count == 0) return null;
             DataGridViewRow row = dgv.SelectedRows[0];
+
+            // Helper local para leer una celda de forma segura
+            string Cell(string col) =>
+                dgv.Columns.Contains(col)
+                    ? row.Cells[col].Value?.ToString() ?? ""
+                    : "";
+            int CellInt(string col) =>
+                int.TryParse(Cell(col), out int v) ? v : 0;
+            decimal CellDec(string col) =>
+                decimal.TryParse(Cell(col), out decimal v) ? v : 0m;
+
             return new PalletInfo
             {
-                IdPallet       = row.Cells["Pallet"].Value?.ToString() ?? "",
-                Mix            = row.Cells["Mix"].Value?.ToString() ?? "",
-                Estiba         = row.Cells["Estiba"].Value?.ToString() ?? "",
-                Programa       = row.Cells["GTIN"].Value?.ToString() ?? "",
-                Cajas          = int.TryParse(row.Cells["Cajas"].Value?.ToString(), out int cjs) ? cjs : 0,
-                CajasPorPallet = int.TryParse(row.Cells["CajasPallet"].Value?.ToString(), out int cjsPal) ? cjsPal : 0,
+                IdPallet      = Cell("Pallet"),
+                Mix           = Cell("Mix"),
+                Estiba        = Cell("Estiba"),
+                Fecha         = Cell("Fecha"),
+                Programa      = Cell("GTIN"),
+                PlanTrabajo   = Cell("PlanTrabajo"),
+                Cajas         = CellInt("Cajas"),
+                LibrasPorCaja = CellDec("Libras"),
+                CajasPorPallet= CellInt("CajasPallet"),
+                Tamaño        = Cell("Tamaño"),
+                Presentacion  = Cell("Presentacion"),
+                Variedad      = Cell("Variedad"),
+                Distribuidor  = Cell("Distribuidor"),
+                Contenedor    = Cell("Contenedor"),
+                Cultivo       = Cell("Cultivo"),
+                Pre           = Cell("Pre"),
+                Pos           = Cell("Pos"),
+                TipoCaja      = Cell("Caja"),
+                Lote          = Cell("Lote"),
+                Manifiesto    = Cell("Manifiesto"),
+                Rack          = Cell("Rack"),
+                Papeleta      = Cell("Papeleta"),
+                Cuadrilla     = Cell("Cuadrilla"),
+                // LibrasPallet y CajasPorPallet no están en el grid como columnas separadas;
+                // se calculan desde la DB al cargar. Se dejan en 0 para no mostrar valor incorrecto.
             };
         }
 

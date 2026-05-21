@@ -16,124 +16,29 @@ namespace SisUvex.Archivo.MixtearPallets
         private void InitializeComponent()
         {
             grpInfoPallet = new GroupBox();
-            lblPalletTxt = new Label();
-            lblPalletVal = new Label();
-            lblCajasTxt = new Label();
-            lblCajasActVal = new Label();
-            lblProgramaTxt = new Label();
-            lblProgramaVal = new Label();
-            lblEstibaTxt = new Label();
-            lblEstibaVal = new Label();
             grpReestiba = new GroupBox();
             lblCajasNueva = new Label();
             numCajas = new NumericUpDown();
             lblSobrantesTxt = new Label();
             txbCajasSobrantes = new TextBox();
+            lblSobrantesInfo = new Label();
             lblTipoTxt = new Label();
             cboTipo = new ComboBox();
             lblDescripcion = new Label();
-            lblSobrantesInfo = new Label();
             btnConfirmar = new Button();
             btnCancelar = new Button();
-            grpInfoPallet.SuspendLayout();
             grpReestiba.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numCajas).BeginInit();
             SuspendLayout();
             // 
             // grpInfoPallet
             // 
-            grpInfoPallet.Controls.Add(lblPalletVal);
-            grpInfoPallet.Controls.Add(lblCajasActVal);
-            grpInfoPallet.Controls.Add(lblProgramaVal);
-            grpInfoPallet.Controls.Add(lblEstibaVal);
-            grpInfoPallet.Controls.Add(lblPalletTxt);
-            grpInfoPallet.Controls.Add(lblCajasTxt);
-            grpInfoPallet.Controls.Add(lblProgramaTxt);
-            grpInfoPallet.Controls.Add(lblEstibaTxt);
             grpInfoPallet.Location = new Point(12, 10);
             grpInfoPallet.Name = "grpInfoPallet";
-            grpInfoPallet.Size = new Size(370, 130);
+            grpInfoPallet.Size = new Size(676, 50);
             grpInfoPallet.TabIndex = 0;
             grpInfoPallet.TabStop = false;
             grpInfoPallet.Text = "Información del pallet";
-            // 
-            // lblPalletTxt
-            // 
-            lblPalletTxt.AutoSize = true;
-            lblPalletTxt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblPalletTxt.Location = new Point(12, 28);
-            lblPalletTxt.Name = "lblPalletTxt";
-            lblPalletTxt.Size = new Size(41, 15);
-            lblPalletTxt.TabIndex = 0;
-            lblPalletTxt.Text = "Pallet:";
-            // 
-            // lblPalletVal
-            // 
-            lblPalletVal.AutoSize = true;
-            lblPalletVal.Location = new Point(116, 28);
-            lblPalletVal.Name = "lblPalletVal";
-            lblPalletVal.Size = new Size(19, 15);
-            lblPalletVal.TabIndex = 1;
-            lblPalletVal.Text = "—";
-            // 
-            // lblCajasTxt
-            // 
-            lblCajasTxt.AutoSize = true;
-            lblCajasTxt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblCajasTxt.Location = new Point(12, 56);
-            lblCajasTxt.Name = "lblCajasTxt";
-            lblCajasTxt.Size = new Size(85, 15);
-            lblCajasTxt.TabIndex = 2;
-            lblCajasTxt.Text = "Cajas actuales:";
-            // 
-            // lblCajasActVal
-            // 
-            lblCajasActVal.AutoSize = true;
-            lblCajasActVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblCajasActVal.ForeColor = Color.DarkBlue;
-            lblCajasActVal.Location = new Point(116, 56);
-            lblCajasActVal.Name = "lblCajasActVal";
-            lblCajasActVal.Size = new Size(19, 15);
-            lblCajasActVal.TabIndex = 3;
-            lblCajasActVal.Text = "—";
-            // 
-            // lblProgramaTxt
-            // 
-            lblProgramaTxt.AutoSize = true;
-            lblProgramaTxt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblProgramaTxt.Location = new Point(12, 84);
-            lblProgramaTxt.Name = "lblProgramaTxt";
-            lblProgramaTxt.Size = new Size(104, 15);
-            lblProgramaTxt.TabIndex = 4;
-            lblProgramaTxt.Text = "Programa (GTIN):";
-            // 
-            // lblProgramaVal
-            // 
-            lblProgramaVal.AutoSize = true;
-            lblProgramaVal.Location = new Point(116, 84);
-            lblProgramaVal.Name = "lblProgramaVal";
-            lblProgramaVal.Size = new Size(19, 15);
-            lblProgramaVal.TabIndex = 5;
-            lblProgramaVal.Text = "—";
-            // 
-            // lblEstibaTxt
-            // 
-            lblEstibaTxt.AutoSize = true;
-            lblEstibaTxt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblEstibaTxt.Location = new Point(12, 110);
-            lblEstibaTxt.Name = "lblEstibaTxt";
-            lblEstibaTxt.Size = new Size(78, 15);
-            lblEstibaTxt.TabIndex = 6;
-            lblEstibaTxt.Text = "Estiba actual:";
-            // 
-            // lblEstibaVal
-            // 
-            lblEstibaVal.AutoSize = true;
-            lblEstibaVal.Location = new Point(116, 110);
-            lblEstibaVal.Name = "lblEstibaVal";
-            lblEstibaVal.Size = new Size(19, 15);
-            lblEstibaVal.TabIndex = 7;
-            lblEstibaVal.Text = "—";
             // 
             // grpReestiba
             // 
@@ -141,13 +46,13 @@ namespace SisUvex.Archivo.MixtearPallets
             grpReestiba.Controls.Add(numCajas);
             grpReestiba.Controls.Add(lblSobrantesTxt);
             grpReestiba.Controls.Add(txbCajasSobrantes);
+            grpReestiba.Controls.Add(lblSobrantesInfo);
             grpReestiba.Controls.Add(lblTipoTxt);
             grpReestiba.Controls.Add(cboTipo);
             grpReestiba.Controls.Add(lblDescripcion);
-            grpReestiba.Controls.Add(lblSobrantesInfo);
-            grpReestiba.Location = new Point(12, 150);
+            grpReestiba.Location = new Point(12, 68);
             grpReestiba.Name = "grpReestiba";
-            grpReestiba.Size = new Size(370, 185);
+            grpReestiba.Size = new Size(676, 185);
             grpReestiba.TabIndex = 1;
             grpReestiba.TabStop = false;
             grpReestiba.Text = "Configuración de la reestiba";
@@ -164,11 +69,11 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             // numCajas
             // 
-            numCajas.Location = new Point(189, 25);
-            numCajas.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
+            numCajas.Location = new Point(192, 25);
+            numCajas.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numCajas.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numCajas.Name = "numCajas";
-            numCajas.Size = new Size(43, 23);
+            numCajas.Size = new Size(39, 23);
             numCajas.TabIndex = 0;
             numCajas.TextAlign = HorizontalAlignment.Right;
             numCajas.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -190,11 +95,22 @@ namespace SisUvex.Archivo.MixtearPallets
             txbCajasSobrantes.Enabled = false;
             txbCajasSobrantes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             txbCajasSobrantes.ForeColor = Color.DarkGreen;
-            txbCajasSobrantes.Location = new Point(189, 59);
+            txbCajasSobrantes.Location = new Point(192, 59);
             txbCajasSobrantes.Name = "txbCajasSobrantes";
-            txbCajasSobrantes.Size = new Size(43, 23);
+            txbCajasSobrantes.Size = new Size(39, 23);
             txbCajasSobrantes.TabIndex = 1;
             txbCajasSobrantes.TextAlign = HorizontalAlignment.Right;
+            // 
+            // lblSobrantesInfo
+            // 
+            lblSobrantesInfo.AutoSize = true;
+            lblSobrantesInfo.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            lblSobrantesInfo.ForeColor = Color.Gray;
+            lblSobrantesInfo.Location = new Point(237, 64);
+            lblSobrantesInfo.Name = "lblSobrantesInfo";
+            lblSobrantesInfo.Size = new Size(59, 13);
+            lblSobrantesInfo.TabIndex = 2;
+            lblSobrantesInfo.Text = "(calculado)";
             // 
             // lblTipoTxt
             // 
@@ -211,7 +127,7 @@ namespace SisUvex.Archivo.MixtearPallets
             cboTipo.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipo.Location = new Point(12, 114);
             cboTipo.Name = "cboTipo";
-            cboTipo.Size = new Size(340, 23);
+            cboTipo.Size = new Size(174, 23);
             cboTipo.TabIndex = 2;
             cboTipo.SelectedIndexChanged += cboTipo_SelectedIndexChanged;
             // 
@@ -221,19 +137,8 @@ namespace SisUvex.Archivo.MixtearPallets
             lblDescripcion.ForeColor = Color.Gray;
             lblDescripcion.Location = new Point(12, 144);
             lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.Size = new Size(340, 32);
+            lblDescripcion.Size = new Size(658, 32);
             lblDescripcion.TabIndex = 4;
-            // 
-            // lblSobrantesInfo
-            // 
-            lblSobrantesInfo.AutoSize = true;
-            lblSobrantesInfo.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
-            lblSobrantesInfo.ForeColor = Color.Gray;
-            lblSobrantesInfo.Location = new Point(202, 66);
-            lblSobrantesInfo.Name = "lblSobrantesInfo";
-            lblSobrantesInfo.Size = new Size(92, 13);
-            lblSobrantesInfo.TabIndex = 2;
-            lblSobrantesInfo.Text = "           (calculado)";
             // 
             // btnConfirmar
             // 
@@ -242,7 +147,7 @@ namespace SisUvex.Archivo.MixtearPallets
             btnConfirmar.FlatStyle = FlatStyle.Flat;
             btnConfirmar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnConfirmar.ForeColor = Color.White;
-            btnConfirmar.Location = new Point(197, 348);
+            btnConfirmar.Location = new Point(12, 259);
             btnConfirmar.Name = "btnConfirmar";
             btnConfirmar.Size = new Size(90, 28);
             btnConfirmar.TabIndex = 3;
@@ -252,7 +157,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(295, 348);
+            btnCancelar.Location = new Point(108, 259);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(90, 28);
             btnCancelar.TabIndex = 4;
@@ -264,7 +169,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(394, 390);
+            ClientSize = new Size(701, 296);
             Controls.Add(grpInfoPallet);
             Controls.Add(grpReestiba);
             Controls.Add(btnConfirmar);
@@ -276,8 +181,6 @@ namespace SisUvex.Archivo.MixtearPallets
             StartPosition = FormStartPosition.CenterParent;
             Text = "Reestibar Pallet";
             Load += FrmReestibaPallet_Load;
-            grpInfoPallet.ResumeLayout(false);
-            grpInfoPallet.PerformLayout();
             grpReestiba.ResumeLayout(false);
             grpReestiba.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numCajas).EndInit();
@@ -286,25 +189,17 @@ namespace SisUvex.Archivo.MixtearPallets
 
         #endregion
 
-        private GroupBox        grpInfoPallet;
-        private Label           lblPalletTxt;
-        private Label           lblPalletVal;
-        private Label           lblCajasTxt;
-        private Label           lblCajasActVal;
-        private Label           lblProgramaTxt;
-        private Label           lblProgramaVal;
-        private Label           lblEstibaTxt;
-        private Label           lblEstibaVal;
-        private GroupBox        grpReestiba;
-        private Label           lblCajasNueva;
-        private NumericUpDown   numCajas;
-        private Label           lblSobrantesTxt;
-        private TextBox         txbCajasSobrantes;
-        private Label           lblSobrantesInfo;
-        private Label           lblTipoTxt;
-        private ComboBox        cboTipo;
-        private Label           lblDescripcion;
-        private Button          btnConfirmar;
-        private Button          btnCancelar;
+        private GroupBox      grpInfoPallet;
+        private GroupBox      grpReestiba;
+        private Label         lblCajasNueva;
+        private NumericUpDown numCajas;
+        private Label         lblSobrantesTxt;
+        private TextBox       txbCajasSobrantes;
+        private Label         lblSobrantesInfo;
+        private Label         lblTipoTxt;
+        private ComboBox      cboTipo;
+        private Label         lblDescripcion;
+        private Button        btnConfirmar;
+        private Button        btnCancelar;
     }
 }

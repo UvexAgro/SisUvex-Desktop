@@ -80,11 +80,14 @@ namespace SisUvex.Archivo.MixtearPallets
 
         private void FrmReestibaPallet_Load(object sender, EventArgs e)
         {
-            // ── Información del pallet ────────────────────────────────────────────
-            lblPalletVal.Text   = _pallet.IdPallet;
-            lblCajasActVal.Text = _pallet.Cajas.ToString();
-            lblProgramaVal.Text = string.IsNullOrEmpty(_pallet.Programa) ? "(sin programa)" : _pallet.Programa;
-            lblEstibaVal.Text   = string.IsNullOrEmpty(_pallet.Estiba)   ? "(sin estiba)"   : _pallet.Estiba;
+            // ── Panel de información (dinámico, 3 columnas) ───────────────────────
+            ClsMixtearPallets.PopularInfoPallet(grpInfoPallet, _pallet);
+
+            // Reposicionar grpReestiba y botones debajo del panel de info
+            grpReestiba.Top  = grpInfoPallet.Bottom + 8;
+            btnConfirmar.Top = grpReestiba.Bottom   + 10;
+            btnCancelar.Top  = grpReestiba.Bottom   + 10;
+            ClientSize       = new Size(ClientSize.Width, btnCancelar.Bottom + 12);
 
             // ── Rango del NumericUpDown ───────────────────────────────────────────
             // Mínimo: 1 caja.  Máximo: TODAS las cajas (permite reestiba completa).

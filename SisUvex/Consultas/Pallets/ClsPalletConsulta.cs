@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Presentation;
 using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using Font = System.Drawing.Font;
 
@@ -17,35 +18,11 @@ namespace SisUvex.Consultas.Pallets
 
         string viewPalletCon = " vw_PackPalletCon ";
         string viewPackPalletConWithShrinkage = " vw_PackPalletConWithShrinkage ";
+        string viewJoins = " CON LEFT JOIN Pack_Pallet PAL   ON PAL.id_pallet   = CON.Pallet LEFT JOIN Pack_WorkPlan WPL ON WPL.id_workPlan = PAL.id_workPlan LEFT JOIN Pack_GTIN GTN     ON GTN.id_GTIN     = WPL.id_GTIN LEFT JOIN Pack_Lot lot ON lot.id_lot = WPL.id_lot AND LOT.id_variety = gtn.id_variety ";
 
         public ClsPalletConsulta()
         {
             sql = new SQLControl();
-        }
-
-        public void Consulta()
-        {
-            string f1 = frm.dtpFecha1.Value.ToString("yyyy-MM-dd");
-            string f2 = frm.dtpFecha2.Value.ToString("yyyy-MM-dd");
-            string query = $"SELECT * FROM vw_PackPalletCon WHERE Fecha BETWEEN '{f1}' AND '{f2}'";
-
-            DataTable dt = new DataTable();
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlDataAdapter da = new SqlDataAdapter(query, sql.cnn);
-                da.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo activos");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-
-            TamañoCeldasDgv();
         }
 
         public void ConsultaDisPre()
@@ -54,19 +31,28 @@ namespace SisUvex.Consultas.Pallets
             string f1 = frm.dtpFecha1.Value.ToString("yyyy-MM-dd");
             string f2 = frm.dtpFecha2.Value.ToString("yyyy-MM-dd");
             string viewName = GetViewName();
-            string query = $" SELECT * FROM {viewName} WHERE Fecha BETWEEN '{f1}' AND '{f2}' ";
+            string query = $" SELECT CON.* FROM {viewName} {viewJoins} WHERE Fecha BETWEEN '{f1}' AND '{f2}' ";
 
             if (frm.cboDistribuidor.SelectedIndex > 0)
-                query += $" AND '{frm.cboDistribuidor.SelectedValue}' IN (SELECT gtn.id_distributor FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
+                query += $" AND GTN.id_distributor  = '{frm.cboDistribuidor.SelectedValue}' ";
 
             if (frm.cboPresentacion.SelectedIndex > 0)
-                query += $" AND '{frm.cboPresentacion.SelectedValue}' IN (SELECT gtn.id_presentation FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
+                query += $" AND GTN.id_presentation = '{frm.cboPresentacion.SelectedValue}' ";
 
             if (frm.cboVariety.SelectedIndex > 0)
-                query += $" AND '{frm.cboVariety.SelectedValue}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
+                query += $" AND GTN.id_variety      = '{frm.cboVariety.SelectedValue}' ";
 
             if (frm.cboContainer.SelectedIndex > 0)
-                query += $" AND '{frm.cboContainer.SelectedValue}' IN (SELECT gtn.id_container FROM gtn WHERE gtn.id_GTIN = {viewName}.GTIN) ";
+                query += $" AND GTN.id_container    = '{frm.cboContainer.SelectedValue}' ";
+
+            if (frm.cboPrice.SelectedIndex > 0)
+                query += $" AND GTN.id_price        = '{frm.cboPrice.SelectedValue}' ";
+
+            if (frm.cboWorkGroup.SelectedIndex > 0)
+                query += $" AND WPL.id_workGroup    = '{frm.cboWorkGroup.SelectedValue}' ";
+            
+            if (frm.cboFarm.SelectedIndex > 0)
+                query += $" AND LOT.id_farm         = '{frm.cboFarm.SelectedValue}' ";
 
             if (!frm.chbShipped.Checked)
                 query += " AND Manifiesto IS NULL ";
@@ -77,7 +63,7 @@ namespace SisUvex.Consultas.Pallets
             if (frm.chbRegected.Checked)
                 query += " AND Rechazado IS NOT NULL ";
 
-
+            Clipboard.SetText(query + "ORDER BY Pallet DESC");
             frm.dgvConsulta.DataSource = ClsQuerysDB.GetDataTable(query + "ORDER BY Pallet DESC");
 
             TamañoCeldasDgv();
@@ -92,7 +78,7 @@ namespace SisUvex.Consultas.Pallets
             {
                 string viewName = GetViewName();
 
-                string query = $" SELECT * FROM {viewName} WHERE Manifiesto  = @manifiesto ORDER BY Posicion, Mix ";
+                string query = $" SELECT CON.* FROM {viewName} {viewJoins} WHERE Manifiesto  = @manifiesto ORDER BY Posicion, Mix ";
     
                 try
                 {
@@ -127,7 +113,7 @@ namespace SisUvex.Consultas.Pallets
                 string viewName = GetViewName();
 
                 string id = FormatoCeros(pallet, "00000");
-                string query = $" SELECT* FROM {viewName} WHERE Estiba = (SELECT Estiba FROM {viewName} WHERE Pallet = '{id}') OR Pallet = '{id}' ";
+                string query = $" SELECT CON.* FROM {viewName} {viewJoins} WHERE Estiba = (SELECT Estiba FROM {viewName} WHERE Pallet = '{id}') OR Pallet = '{id}' ";
 
                 try
                 {
@@ -151,31 +137,6 @@ namespace SisUvex.Consultas.Pallets
 
             TamañoCeldasDgv();
         }
-        public void EliminarPallet(string id)
-        {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackPalletDelete", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                MessageBox.Show("Se eliminó el pallet: " + id, "Eliminar pallet");
-
-                Consulta();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo eliminar pallet");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
         public void ConsultaPapeleta(string papeleta)
         {
             DataTable dt = new DataTable();
@@ -184,13 +145,44 @@ namespace SisUvex.Consultas.Pallets
             {
                 string viewName = GetViewName();
 
-                string query = $" SELECT * FROM {viewName} WHERE Papeleta  = @pepeleta";
+                string query = $" SELECT CON.* FROM {viewName} {viewJoins} WHERE Papeleta  = @pepeleta";
 
                 try
                 {
                     sql.OpenConectionWrite();
                     SqlCommand cmd = new SqlCommand(query, sql.cnn);
                     cmd.Parameters.Add("@pepeleta", SqlDbType.Char, 5).Value = papeleta;
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                    da.Fill(dt);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Catálogo en papeleta");
+                }
+                finally
+                {
+                    sql.CloseConectionWrite();
+                }
+            }
+            frm.dgvConsulta.DataSource = dt;
+
+            TamañoCeldasDgv();
+        }
+        public void ConsultaWorkPlan(string workPlan)
+        {
+            DataTable dt = new DataTable();
+
+            if (workPlan.Length > 0)
+            {
+                string viewName = GetViewName();
+                workPlan = ClsValues.FormatZeros(workPlan, "0000");
+                string query = $" SELECT CON.* FROM {viewName} {viewJoins} WHERE PAL.id_workPlan  = @workPlan";
+                try
+                {
+                    sql.OpenConectionWrite();
+                    SqlCommand cmd = new SqlCommand(query, sql.cnn);
+                    cmd.Parameters.Add("@workPlan", SqlDbType.Char, 5).Value = workPlan;
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
 
                     da.Fill(dt);
@@ -319,7 +311,7 @@ namespace SisUvex.Consultas.Pallets
 			string ids = string.Join(",", palletsSeleccionados);
 
 			string query = $@"
-            UPDATE SisUvex.dbo.Pack_Pallet
+            UPDATE Pack_Pallet
             SET v_invoice = '{frmP.txbPapeleta.Text}'
             WHERE id_pallet IN ({ids})";
 
