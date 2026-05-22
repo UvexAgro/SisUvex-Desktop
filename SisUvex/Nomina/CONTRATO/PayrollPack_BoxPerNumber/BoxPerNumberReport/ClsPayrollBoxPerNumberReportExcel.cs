@@ -1,5 +1,7 @@
 ﻿using ClosedXML.Excel;
 using SisUvex.Catalogos.Metods.ExcelLoad;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -12,97 +14,126 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
     {
         private readonly XLColor colorHeader = XLColor.FromHtml("#538DD5");
         private readonly XLColor colorTableHeader = XLColor.FromHtml("#8DB4E2");
+        private readonly XLColor colorValueCell = XLColor.FromHtml("#c5dfb4");
+        private readonly XLColor colorEmptyRow = XLColor.FromHtml("#ff7c80");
+        private readonly XLColor colorGrandTotal = XLColor.FromHtml("#FFC000");
 
-        private static CultureInfo CultureEs =>
-            CultureInfo.GetCultureInfo("es-MX");
+        /// <summary>Fila inicial de las tablas en la hoja de reporte (1-based).</summary>
+        public int ReportSheetStartRow { get; set; } = 2;
+
+        /// <summary>Columna inicial de la primera tabla en la hoja de reporte (1-based).</summary>
+        public int ReportSheetStartCol { get; set; } = 2;
+
+        /// <summary>Columnas vacías entre tablas de cuadrilla en la misma hoja.</summary>
+        public int TablesGapColumns { get; set; } = 1;
+
+        /// <summary>Nombre de la hoja con datos crudos.</summary>
+        public string DataSheetName { get; set; } = "DATA";
+
+        /// <summary>Nombre de la hoja con tablas por cuadrilla.</summary>
+        public string ReportSheetName { get; set; } = "CAJAS";
+
+        private static CultureInfo CultureEs => CultureInfo.GetCultureInfo("es-MX");
+
+        public const string ColCuadrillaLabel = "Cuadrilla";
+        public const string ColFecha = "FECHA";
+        public const string ColTotal = "TOTAL";
 
         /// <summary>
-        /// Pivota los datos planos (una fila por fecha/empleado/categoría) a columnas por día del rango.
-        /// Las columnas fijas siguen la definición de <see cref="ClsPayrollBoxPerNumberReport.Columns"/>.
-        /// Nombre técnico de columnas día: yyyy-MM-dd; Caption: texto tipo "Viernes, 06".
+        /// Vista previa en rejilla: tablas por cuadrilla apiladas verticalmente (misma lógica que Excel, legible en DGV).
         /// </summary>
-        public DataTable BuildPivotDataTable(DataTable flat, DateTime rangeStart, DateTime rangeEnd)
+        public DataTable BuildPreviewDataTable(DataTable? data, DateTime rangeStart, DateTime rangeEnd)
         {
-            DataTable result = CreateEmptyPivotSchema(rangeStart, rangeEnd);
+            var preview = new DataTable();
+            preview.Columns.Add(ColCuadrillaLabel, typeof(string));
+            preview.Columns.Add(ColFecha, typeof(string));
 
-            if (flat == null || flat.Rows.Count == 0)
-                return result;
+            if (data == null || data.Rows.Count == 0)
+                return preview;
 
-            foreach (IGrouping<RowKeyBoxPerNumber, DataRow> g in SortedGroups(flat))
+            var cuadrillaTables = BuildCuadrillaTables(data, rangeStart, rangeEnd);
+            var priceColumns = new List<string>();
+
+            foreach (CuadrillaTableModel table in cuadrillaTables)
             {
-                DataRow outRow = result.NewRow();
-                outRow[ClsPayrollBoxPerNumberReport.Columns.Contratista] = g.Key.Contratista;
-                outRow[ClsPayrollBoxPerNumberReport.Columns.Cuadrilla] = g.Key.Cuadrilla;
-                outRow[ClsPayrollBoxPerNumberReport.Columns.Numero] = g.Key.Numero ?? (object)DBNull.Value;
-                outRow[ClsPayrollBoxPerNumberReport.Columns.IdEmpleado] = g.Key.IdEmpleado ?? (object)DBNull.Value;
-                outRow[ClsPayrollBoxPerNumberReport.Columns.NombreEmpleado] = g.Key.NombreEmpleado;
-                outRow[ClsPayrollBoxPerNumberReport.Columns.Categoria] = g.Key.Categoria;
-
-                foreach (DateTime d in EachDayInclusive(rangeStart, rangeEnd))
-                    outRow[DayColumnName(d)] = 0m;
-
-                foreach (DataRow row in g)
+                foreach (string precio in table.PrecioColumns)
                 {
-                    DateTime d = NormalizeWorkDay(row[ClsPayrollBoxPerNumberReport.Columns.Fecha]);
-                    string dateCol = DayColumnName(d);
-
-                    if (!result.Columns.Contains(dateCol))
-                        continue;
-
-                    decimal add = BoxesToDecimal(row[ClsPayrollBoxPerNumberReport.Columns.Cajas]);
-                    decimal prev = (decimal)outRow[dateCol];
-                    outRow[dateCol] = prev + add;
+                    if (!priceColumns.Contains(precio))
+                        priceColumns.Add(precio);
                 }
-
-                result.Rows.Add(outRow);
             }
 
-            return result;
-        }
+            foreach (string precio in priceColumns)
+                preview.Columns.Add(precio, typeof(string));
 
-        private static IEnumerable<DateTime> EachDayInclusive(DateTime rangeStart, DateTime rangeEnd)
-        {
-            DateTime a = rangeStart.Date;
-            DateTime b = rangeEnd.Date;
+            preview.Columns.Add(ColTotal, typeof(string));
 
-            if (a > b)
-                yield break;
+            foreach (CuadrillaTableModel table in cuadrillaTables)
+            {
+                DataRow titleRow = preview.NewRow();
+                titleRow[ColCuadrillaLabel] = $"Cuadrilla: {table.CuadrillaName}";
+                preview.Rows.Add(titleRow);
 
-            for (; a <= b; a = a.AddDays(1))
-                yield return a;
-        }
+                DataRow headerRow = preview.NewRow();
+                headerRow[ColFecha] = ColFecha;
+                foreach (string precio in table.PrecioColumns)
+                    headerRow[precio] = precio;
+                headerRow[ColTotal] = ColTotal;
+                preview.Rows.Add(headerRow);
 
-        private static IEnumerable<IGrouping<RowKeyBoxPerNumber, DataRow>> SortedGroups(DataTable flat)
-        {
-            return FlatRowsGrouped(flat)
-                .OrderBy(g => g.Key.Contratista)
-                .ThenBy(g => g.Key.Cuadrilla)
-                .ThenBy(g => g.Key.Numero, StringComparer.Ordinal)
-                .ThenBy(g => g.Key.IdEmpleado, StringComparer.Ordinal)
-                .ThenBy(g => g.Key.NombreEmpleado)
-                .ThenBy(g => g.Key.Categoria);
+                foreach (DateTime fecha in table.Fechas)
+                {
+                    DataRow dataRow = preview.NewRow();
+                    dataRow[ColFecha] = fecha.ToString("dd/MM/yyyy", CultureEs);
+
+                    decimal rowTotal = 0m;
+                    foreach (string precio in table.PrecioColumns)
+                    {
+                        decimal val = table.GetValue(fecha, precio);
+                        dataRow[precio] = FormatBoxes(val);
+                        rowTotal += val;
+                    }
+
+                    dataRow[ColTotal] = FormatBoxes(rowTotal);
+                    preview.Rows.Add(dataRow);
+                }
+
+                DataRow totalRow = preview.NewRow();
+                totalRow[ColFecha] = ColTotal;
+                decimal grandTotal = 0m;
+
+                foreach (string precio in table.PrecioColumns)
+                {
+                    decimal colTotal = table.GetColumnTotal(precio);
+                    totalRow[precio] = FormatBoxes(colTotal);
+                    grandTotal += colTotal;
+                }
+
+                totalRow[ColTotal] = FormatBoxes(grandTotal);
+                preview.Rows.Add(totalRow);
+
+                preview.Rows.Add(preview.NewRow());
+            }
+
+            return preview;
         }
 
         public void GenerateExcelReport(
-            DataTable flatTable,
+            DataTable dataTable,
             DateTime rangeStart,
             DateTime rangeEnd,
-            string period,
             string contractor,
             string workGroup,
-            string paymentPlace,
             string dateRange)
         {
-            if (flatTable == null || flatTable.Rows.Count == 0)
+            if (dataTable == null || dataTable.Rows.Count == 0)
             {
                 MessageBox.Show("No hay datos para generar el reporte.", "Reporte cajas por número",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            DataTable pivot = BuildPivotDataTable(flatTable, rangeStart, rangeEnd);
-
-            string fileName = GetFileReportName(period, dateRange);
+            string fileName = GetFileReportName(dateRange);
             string? filePath = GetFolderPath(fileName);
 
             if (filePath == null)
@@ -114,29 +145,25 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
                     $"El archivo '{filePath}' está abierto.\n\nCiérralo antes de generar el reporte.",
                     "Reporte cajas por número",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            using (var workbook = new XLWorkbook())
-            {
-                // Hoja con datos crudos (origen), similar a Poda "DATOS"
-                var wsDatos = workbook.Worksheets.Add(flatTable, "DATOS");
-                wsDatos.Tables.First().ShowAutoFilter = true;
-                wsDatos.Columns().AdjustToContents();
+            using var workbook = new XLWorkbook();
 
-                CreatePivotWorksheet(workbook, pivot, period, contractor, workGroup, paymentPlace, dateRange);
+            var wsData = workbook.Worksheets.Add(dataTable, DataSheetName);
+            wsData.Tables.First().ShowAutoFilter = true;
+            wsData.Columns().AdjustToContents();
 
-                workbook.SaveAs(filePath);
-            }
+            CreateReportWorksheet(workbook, dataTable, rangeStart, rangeEnd, contractor, workGroup, dateRange);
+
+            workbook.SaveAs(filePath);
 
             DialogResult result = MessageBox.Show(
                 "Reporte en excel generado correctamente.\n\n¿Deseas abrir el archivo?",
                 "Reporte cajas por número",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information
-            );
+                MessageBoxIcon.Information);
 
             if (result == DialogResult.Yes)
             {
@@ -148,77 +175,241 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             }
         }
 
-        private sealed record RowKeyBoxPerNumber(
-            string Contratista,
-            string Cuadrilla,
-            string? Numero,
-            string? IdEmpleado,
-            string NombreEmpleado,
-            string Categoria);
-
-        private static IEnumerable<IGrouping<RowKeyBoxPerNumber, DataRow>> FlatRowsGrouped(DataTable flat)
+        private IXLWorksheet CreateReportWorksheet(
+            XLWorkbook workbook,
+            DataTable dataTable,
+            DateTime rangeStart,
+            DateTime rangeEnd,
+            string contractor,
+            string workGroup,
+            string dateRange)
         {
-            return flat.Rows.Cast<DataRow>().GroupBy(r => new RowKeyBoxPerNumber(
-                r[ClsPayrollBoxPerNumberReport.Columns.Contratista]?.ToString()?.Trim() ?? string.Empty,
-                r[ClsPayrollBoxPerNumberReport.Columns.Cuadrilla]?.ToString()?.Trim() ?? string.Empty,
-                r[ClsPayrollBoxPerNumberReport.Columns.Numero]?.ToString()?.Trim(),
-                r[ClsPayrollBoxPerNumberReport.Columns.IdEmpleado]?.ToString()?.Trim(),
-                r[ClsPayrollBoxPerNumberReport.Columns.NombreEmpleado]?.ToString()?.Trim() ?? string.Empty,
-                r[ClsPayrollBoxPerNumberReport.Columns.Categoria]?.ToString()?.Trim() ?? string.Empty));
-        }
+            string sheetName = SanitizeSheetName(ReportSheetName);
+            if (string.Equals(sheetName, DataSheetName, StringComparison.OrdinalIgnoreCase))
+                sheetName = "Reporte";
 
-        private static DataTable CreateEmptyPivotSchema(DateTime rangeStart, DateTime rangeEnd)
-        {
-            var dt = new DataTable();
+            var ws = workbook.Worksheets.Add(sheetName);
 
-            void AddFixed(string name, Type type)
+            int infoRow = 1;
+            int infoCol = ReportSheetStartCol;
+
+            void AddInfo(string title, string value)
             {
-                var dc = dt.Columns.Add(name, type);
-                dc.Caption = name;
+                if (string.IsNullOrWhiteSpace(value)) return;
+                ws.Cell(infoRow, infoCol).Value = title;
+                ws.Cell(infoRow, infoCol).Style.Font.SetBold();
+                ws.Cell(infoRow, infoCol + 1).Value = value;
+                infoRow++;
             }
 
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.Contratista, typeof(string));
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.Cuadrilla, typeof(string));
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.Numero, typeof(object));
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.IdEmpleado, typeof(object));
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.NombreEmpleado, typeof(string));
-            AddFixed(ClsPayrollBoxPerNumberReport.Columns.Categoria, typeof(string));
+            AddInfo("Fechas:", dateRange);
+            AddInfo("Contratista:", contractor);
+            AddInfo("Cuadrilla:", workGroup);
 
-            DateTime cursor = rangeStart.Date;
-            DateTime last = rangeEnd.Date;
-            if (cursor > last)
-                return dt;
+            int tablesStartRow = infoRow < ReportSheetStartRow ? ReportSheetStartRow : infoRow + 1;
+            int currentCol = ReportSheetStartCol;
 
-            for (; cursor <= last; cursor = cursor.AddDays(1))
+            foreach (CuadrillaTableModel table in BuildCuadrillaTables(dataTable, rangeStart, rangeEnd))
             {
-                var dcDay = dt.Columns.Add(DayColumnName(cursor), typeof(decimal));
-                dcDay.Caption = DayHeaderCaption(cursor);
+                int tableWidth = WriteCuadrillaTable(ws, tablesStartRow, currentCol, table);
+                currentCol += tableWidth + TablesGapColumns;
             }
 
-            return dt;
+            ws.Columns().AdjustToContents();
+            return ws;
         }
 
-        private static string DayColumnName(DateTime d) => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-        private static string DayHeaderCaption(DateTime d)
+        /// <summary>
+        /// Escribe una tabla de cuadrilla en la posición indicada.
+        /// </summary>
+        /// <returns>Ancho de la tabla en columnas.</returns>
+        public int WriteCuadrillaTable(IXLWorksheet ws, int startRow, int startCol, CuadrillaTableModel table)
         {
-            CultureInfo ci = CultureEs;
-            string dayName = ci.TextInfo.ToTitleCase(d.ToString("dddd", ci));
-            return dayName + ", " + d.Day.ToString(ci);
+            int colCount = table.PrecioColumns.Count + 2;
+            int lastCol = startCol + colCount - 1;
+            int totalCol = lastCol;
+
+            ws.Cell(startRow, startCol - 1).Value = "Cuadrilla:";
+            ws.Cell(startRow, startCol - 1).Style.Font.SetBold();
+            ws.Cell(startRow, startCol).Value = table.CuadrillaName;
+            ws.Cell(startRow, startCol).Style.Font.SetBold();
+
+            int headerRow = startRow + 1;
+            int col = startCol;
+
+            ws.Cell(headerRow, col).Value = ColFecha;
+            col++;
+
+            foreach (string precio in table.PrecioColumns)
+            {
+                ws.Cell(headerRow, col).Value = precio;
+                col++;
+            }
+
+            ws.Cell(headerRow, col).Value = ColTotal;
+
+            int dataStartRow = headerRow + 1;
+            int row = dataStartRow;
+
+            foreach (DateTime fecha in table.Fechas)
+            {
+                col = startCol;
+                var fechaCell = ws.Cell(row, col);
+                fechaCell.Value = fecha;
+                fechaCell.Style.DateFormat.Format = "dd/MM/yyyy";
+                col++;
+
+                decimal rowTotal = 0m;
+
+                foreach (string precio in table.PrecioColumns)
+                {
+                    decimal val = table.GetValue(fecha, precio);
+                    var cell = ws.Cell(row, col);
+
+                    if (val != 0m)
+                    {
+                        ClsExcel.SetCellValue(cell, val);
+                        cell.Style.Fill.SetBackgroundColor(colorValueCell);
+                    }
+
+                    rowTotal += val;
+                    col++;
+                }
+
+                var totalCell = ws.Cell(row, col);
+                totalCell.Style.Font.SetBold();
+
+                if (rowTotal == 0m)
+                {
+                    fechaCell.Style.Fill.SetBackgroundColor(colorEmptyRow);
+                    totalCell.Style.Fill.SetBackgroundColor(colorEmptyRow);
+                }
+                else
+                {
+                    ClsExcel.SetCellValue(totalCell, rowTotal);
+                    totalCell.Style.Fill.SetBackgroundColor(colorValueCell);
+                }
+
+                row++;
+            }
+
+            int totalRow = row;
+            col = startCol;
+            ws.Cell(totalRow, col).Value = ColTotal;
+            ws.Cell(totalRow, col).Style.Font.SetBold();
+            col++;
+
+            decimal grandTotal = 0m;
+
+            foreach (string precio in table.PrecioColumns)
+            {
+                decimal colTotal = table.GetColumnTotal(precio);
+                var cell = ws.Cell(totalRow, col);
+                ClsExcel.SetCellValue(cell, colTotal);
+                cell.Style.Font.SetBold();
+                grandTotal += colTotal;
+                col++;
+            }
+
+            var grandCell = ws.Cell(totalRow, totalCol);
+            ClsExcel.SetCellValue(grandCell, grandTotal);
+            grandCell.Style.Font.SetBold();
+            grandCell.Style.Fill.SetBackgroundColor(colorGrandTotal);
+
+            var headerRange = ws.Range(headerRow, startCol, headerRow, lastCol);
+            headerRange.Style.Font.SetBold();
+            headerRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            headerRange.Style.Fill.SetBackgroundColor(colorTableHeader);
+            headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+            var tableBodyRange = ws.Range(headerRow, startCol, totalRow, lastCol);
+            tableBodyRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            if (totalRow > dataStartRow)
+            {
+                var dataRange = ws.Range(dataStartRow, startCol, totalRow, lastCol);
+                dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            }
+
+            return colCount;
         }
 
-        private static DateTime NormalizeWorkDay(object? value)
+        public static List<CuadrillaTableModel> BuildCuadrillaTables(
+            DataTable data,
+            DateTime rangeStart,
+            DateTime rangeEnd)
+        {
+            var tables = new List<CuadrillaTableModel>();
+
+            if (data == null || data.Rows.Count == 0)
+                return tables;
+
+            var groups = data.Rows.Cast<DataRow>()
+                .GroupBy(r => new
+                {
+                    Id = r[ClsPayrollBoxPerNumberReport.Columns.IdWorkGroup]?.ToString()?.Trim() ?? string.Empty,
+                    Name = r[ClsPayrollBoxPerNumberReport.Columns.Cuadrilla]?.ToString()?.Trim() ?? string.Empty,
+                })
+                .OrderBy(g => g.Key.Name, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var g in groups)
+            {
+                var table = new CuadrillaTableModel(g.Key.Name);
+
+                var priceOrder = g
+                    .Select(r => (
+                        Id: r[ClsPayrollBoxPerNumberReport.Columns.IdPrice]?.ToString()?.Trim() ?? string.Empty,
+                        Name: r[ClsPayrollBoxPerNumberReport.Columns.Precio]?.ToString()?.Trim() ?? string.Empty))
+                    .Where(p => !string.IsNullOrEmpty(p.Name))
+                    .Distinct()
+                    .OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
+                    .Select(p => p.Name)
+                    .ToList();
+
+                table.PrecioColumns.AddRange(priceOrder);
+                table.Fechas.AddRange(EachDayInclusive(rangeStart, rangeEnd));
+
+                foreach (DataRow row in g)
+                {
+                    DateTime fecha = NormalizeDate(row[ClsPayrollBoxPerNumberReport.Columns.Fecha]);
+                    string precio = row[ClsPayrollBoxPerNumberReport.Columns.Precio]?.ToString()?.Trim() ?? string.Empty;
+                    decimal cajas = ToDecimal(row[ClsPayrollBoxPerNumberReport.Columns.Cajas]);
+                    table.AddValue(fecha, precio, cajas);
+                }
+
+                tables.Add(table);
+            }
+
+            return tables;
+        }
+
+        private static IEnumerable<DateTime> EachDayInclusive(DateTime rangeStart, DateTime rangeEnd)
+        {
+            DateTime start = rangeStart.Date;
+            DateTime end = rangeEnd.Date;
+
+            if (start > end)
+                yield break;
+
+            for (DateTime day = start; day <= end; day = day.AddDays(1))
+                yield return day;
+        }
+
+        private static DateTime NormalizeDate(object? value)
         {
             if (value == null || value == DBNull.Value)
-                return DateTime.MinValue.Date;
+                return DateTime.MinValue;
 
-            if (value is DateTime dto)
-                return dto.Date;
+            if (value is DateTime dt)
+                return dt.Date;
 
             return DateTime.Parse(value.ToString()!, CultureInfo.InvariantCulture).Date;
         }
 
-        private static decimal BoxesToDecimal(object? value)
+        private static decimal ToDecimal(object? value)
         {
             if (value == null || value == DBNull.Value)
                 return 0m;
@@ -226,163 +417,42 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             return Convert.ToDecimal(value, CultureInfo.InvariantCulture);
         }
 
-        /// <summary>
-        /// Tabla pivote ya formateada como en asistencia: bloque filtros + encabezados + datos.
-        /// </summary>
-        private IXLWorksheet CreatePivotWorksheet(
-            XLWorkbook workbook,
-            DataTable pivotTable,
-            string period,
-            string contractor,
-            string workGroup,
-            string paymentPlace,
-            string dateRange)
-        {
-            string sheetName = SanitizeSheetName(string.IsNullOrWhiteSpace(period) ? "Cajas por número" : period);
-            if (string.Equals(sheetName, "DATOS", StringComparison.OrdinalIgnoreCase))
-                sheetName = "Reporte";
+        private static string FormatBoxes(decimal value)
+            => value == 0m ? string.Empty : value.ToString("0.##", CultureEs);
 
-            var ws = workbook.Worksheets.Add(sheetName);
-
-            int infoStartRow = 2;
-            int infoStartCol = 2;
-            int currentRow = infoStartRow;
-            int filterStarCol = infoStartCol + 1;
-
-            void AddInfoRow(string title, string value)
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    return;
-
-                ws.Cell(currentRow, filterStarCol).Value = title;
-                ws.Cell(currentRow, filterStarCol).Style.Font.SetBold();
-                ws.Cell(currentRow, filterStarCol + 1).Value = value;
-                currentRow++;
-            }
-
-            AddInfoRow("Semana", period);
-            AddInfoRow("Fechas", dateRange);
-            AddInfoRow("Contratista", contractor);
-            AddInfoRow("Cuadrilla", workGroup);
-            AddInfoRow("Lugar de pago", paymentPlace);
-
-            int infoEndRow = currentRow - 1;
-
-            if (infoEndRow >= infoStartRow)
-            {
-                var infoRange = ws.Range(infoStartRow, filterStarCol, infoEndRow, filterStarCol + 1);
-                infoRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                infoRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                infoRange.Columns(1, 1).Style.Fill.SetBackgroundColor(colorHeader);
-                infoRange.Columns(1, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
-            }
-
-            int tableStartRow = (infoEndRow >= infoStartRow ? infoEndRow + 2 : infoStartRow);
-            int tableStartCol = infoStartCol;
-
-            int headerRow = tableStartRow;
-            int colIdx = tableStartCol;
-
-            foreach (DataColumn col in pivotTable.Columns)
-            {
-                ws.Cell(headerRow, colIdx).Value = ColumnHeaderDisplay(col);
-                colIdx++;
-            }
-
-            int lastCol = colIdx - 1;
-
-            int dataStartRow = headerRow + 1;
-            int rowIndex = dataStartRow;
-
-            foreach (DataRow row in pivotTable.Rows)
-            {
-                int cCell = tableStartCol;
-                foreach (DataColumn col in pivotTable.Columns)
-                {
-                    object? cellVal = row[col.ColumnName];
-                    bool isDecimal = col.DataType == typeof(decimal);
-
-                    var cell = ws.Cell(rowIndex, cCell);
-                    ClsExcel.SetCellValue(cell, cellVal ?? (isDecimal ? 0 : null));
-
-                    if (isDecimal && cellVal != DBNull.Value && BoxesToDecimal(cellVal) == 0m)
-                        cell.Clear(XLClearOptions.Contents);
-
-                    cCell++;
-                }
-                rowIndex++;
-            }
-
-            int lastDataRow = rowIndex - 1;
-
-            var headerRange = ws.Range(headerRow, tableStartCol, headerRow, lastCol);
-            headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-            headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            headerRange.Style.Font.SetBold();
-            headerRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            headerRange.Style.Fill.SetBackgroundColor(colorTableHeader);
-
-            if (lastDataRow >= dataStartRow)
-            {
-                var dataRange = ws.Range(dataStartRow, tableStartCol, lastDataRow, lastCol);
-                dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            }
-
-            ws.Columns().AdjustToContents();
-            return ws;
-        }
-
-        private static string ColumnHeaderDisplay(DataColumn col)
-            => string.IsNullOrWhiteSpace(col.Caption) ? col.ColumnName : col.Caption;
-
-        private string GetFileReportName(string period, string dateRange)
+        private string GetFileReportName(string dateRange)
         {
             string reportName = "Reporte cajas por número";
-            if (!string.IsNullOrWhiteSpace(period))
-                reportName += " " + System.Text.RegularExpressions.Regex.Replace(period, @"[\\\/\?\*\[\]]", "-");
-            else if (!string.IsNullOrWhiteSpace(dateRange))
+            if (!string.IsNullOrWhiteSpace(dateRange))
                 reportName += " " + System.Text.RegularExpressions.Regex.Replace(dateRange, @"[\\\/\?\*\[\]]", "-");
 
-            reportName += ".xlsx";
-            return reportName;
+            return reportName + ".xlsx";
         }
 
         private string? GetFolderPath(string fileReportName)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            using var saveFileDialog = new SaveFileDialog
             {
-                saveFileDialog.Title = "Guardar reporte de Excel";
-                saveFileDialog.FileName = fileReportName;
+                Title = "Guardar reporte de Excel",
+                FileName = fileReportName,
+                Filter = "Archivo de Excel (*.xlsx)|*.xlsx|Archivo de Excel 97-2003 (*.xls)|*.xls|Todos los archivos (*.*)|*.*",
+                FilterIndex = 1,
+                AddExtension = true,
+                DefaultExt = "xlsx",
+                OverwritePrompt = true,
+            };
 
-                saveFileDialog.Filter =
-                    "Archivo de Excel (*.xlsx)|*.xlsx|" +
-                    "Archivo de Excel 97-2003 (*.xls)|*.xls|" +
-                    "Todos los archivos (*.*)|*.*";
-
-                saveFileDialog.FilterIndex = 1;
-                saveFileDialog.AddExtension = true;
-                saveFileDialog.DefaultExt = "xlsx";
-                saveFileDialog.OverwritePrompt = true;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    return saveFileDialog.FileName;
-                }
-            }
-
-            return null;
+            return saveFileDialog.ShowDialog() == DialogResult.OK ? saveFileDialog.FileName : null;
         }
 
-        private bool IsFileLocked(string filePath)
+        private static bool IsFileLocked(string filePath)
         {
             if (!File.Exists(filePath))
                 return false;
 
             try
             {
-                using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-                stream.Close();
+                using var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             }
             catch (IOException)
             {
@@ -395,7 +465,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         private static string SanitizeSheetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return "Cajas por número";
+                return "CAJAS";
 
             string sanitized = System.Text.RegularExpressions.Regex.Replace(name, @"[\\\/\?\*\[\]]", "-");
             if (sanitized.Length > 31)
@@ -403,5 +473,36 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
 
             return sanitized.Trim();
         }
+    }
+
+    /// <summary>Modelo de tabla pivote por cuadrilla (fecha × precio → cajas).</summary>
+    internal sealed class CuadrillaTableModel
+    {
+        public string CuadrillaName { get; }
+        public List<string> PrecioColumns { get; } = new();
+        public List<DateTime> Fechas { get; } = new();
+
+        private readonly Dictionary<(DateTime Fecha, string Precio), decimal> _values = new();
+
+        public CuadrillaTableModel(string cuadrillaName)
+        {
+            CuadrillaName = cuadrillaName;
+        }
+
+        public void AddValue(DateTime fecha, string precio, decimal cajas)
+        {
+            if (fecha == DateTime.MinValue || string.IsNullOrWhiteSpace(precio))
+                return;
+
+            var key = (fecha.Date, precio);
+            _values.TryGetValue(key, out decimal current);
+            _values[key] = current + cajas;
+        }
+
+        public decimal GetValue(DateTime fecha, string precio)
+            => _values.TryGetValue((fecha.Date, precio), out decimal val) ? val : 0m;
+
+        public decimal GetColumnTotal(string precio)
+            => Fechas.Sum(f => GetValue(f, precio));
     }
 }

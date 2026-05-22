@@ -28,10 +28,5 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         {
             cls.BtnGenerateExcelReport();
         }
-
-        private void cboPeriod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            cls.CboPeriodChanged();
-        }
     }
 }
