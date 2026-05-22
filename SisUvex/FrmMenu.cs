@@ -761,5 +761,13 @@ namespace SisUvex
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
         }
+
+        private void cajasPorCuadrillaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission()) return;
+
+            Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport.FrmPayrollBoxPerNumberReport cat = new();
+            AbrirVentanaHijo(cat);
+        }
     }
 }
