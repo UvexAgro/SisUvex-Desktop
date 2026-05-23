@@ -42,6 +42,8 @@
             label4 = new Label();
             lblField = new Label();
             cboContractor = new ComboBox();
+            cboReportType = new ComboBox();
+            labelReportType = new Label();
             btnSearch = new Button();
             dgvReport = new DataGridView();
             bgpInfo = new GroupBox();
@@ -70,6 +72,8 @@
             gpbFilters.Controls.Add(label4);
             gpbFilters.Controls.Add(lblField);
             gpbFilters.Controls.Add(cboContractor);
+            gpbFilters.Controls.Add(cboReportType);
+            gpbFilters.Controls.Add(labelReportType);
             gpbFilters.Font = new Font("Segoe UI", 12F);
             gpbFilters.Location = new Point(12, 33);
             gpbFilters.Name = "gpbFilters";
@@ -173,6 +177,25 @@
             cboContractor.Name = "cboContractor";
             cboContractor.Size = new Size(190, 29);
             cboContractor.TabIndex = 24;
+            // 
+            // cboReportType
+            // 
+            cboReportType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboReportType.FormattingEnabled = true;
+            cboReportType.Location = new Point(425, 20);
+            cboReportType.Name = "cboReportType";
+            cboReportType.Size = new Size(360, 29);
+            cboReportType.TabIndex = 54;
+            cboReportType.SelectedIndexChanged += cboReportType_SelectedIndexChanged;
+            // 
+            // labelReportType
+            // 
+            labelReportType.AutoSize = true;
+            labelReportType.Location = new Point(353, 23);
+            labelReportType.Name = "labelReportType";
+            labelReportType.Size = new Size(68, 21);
+            labelReportType.TabIndex = 55;
+            labelReportType.Text = "Consulta";
             // 
             // btnSearch
             // 
@@ -371,6 +394,8 @@
         private System.Windows.Forms.GroupBox gpbFilters;
         private System.Windows.Forms.Label lblField;
         public System.Windows.Forms.ComboBox cboContractor;
+        public System.Windows.Forms.ComboBox cboReportType;
+        private System.Windows.Forms.Label labelReportType;
         private System.Windows.Forms.Label label10;
         public System.Windows.Forms.ComboBox cboWorkGroup;
         private System.Windows.Forms.Button btnSearch;
