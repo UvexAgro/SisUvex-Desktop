@@ -28,5 +28,10 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         {
             cls.BtnGenerateExcelReport();
         }
+
+        private void cboReportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cls.CboReportTypeChanged();
+        }
     }
 }

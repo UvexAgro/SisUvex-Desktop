@@ -16,10 +16,16 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         public FrmPayrollBoxPerNumberReport? frm = null;
         public ClsPayrollBoxPerNumberReportExcel? excel = null;
 
-        /// <summary>Resultado de la consulta principal (hoja DATA).</summary>
-        private DataTable? _dtData;
+        private DataTable? _dtCajasData;
+        private DataTable? _dtBoletasData;
 
-        /// <summary>Nombres de columnas coherentes entre SQL, rejilla y Excel.</summary>
+        public static class ReportTypes
+        {
+            public const string CajasCapturadas = "CAJAS CAPTURADAS";
+            public const string BoletasPallet = "BOLETAS PALLET";
+        }
+
+        /// <summary>Nombres de columnas consulta cajas capturadas.</summary>
         internal static class Columns
         {
             public const string IdWorkGroup = "idWorkGroup";
@@ -28,6 +34,18 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             public const string IdPrice = "idPrice";
             public const string Precio = "Precio";
             public const string Cajas = "CAJAS";
+        }
+
+        /// <summary>Nombres de columnas consulta boletas pallet.</summary>
+        internal static class BoletasColumns
+        {
+            public const string Folio = "FOLIO";
+            public const string Fecha = "Fecha";
+            public const string Cuadrilla = "CUADRILLA";
+            public const string Contratista = "CONTRATISTA";
+            public const string Lote = "LOTE";
+            public const string Empaque = "EMPAQUE";
+            public const string Cajas = "Cajas";
         }
 
         public void BeginFormCat()
@@ -43,6 +61,11 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         private void SetControls()
         {
             if (frm == null) return;
+
+            frm.cboReportType.Items.Clear();
+            frm.cboReportType.Items.Add(ReportTypes.CajasCapturadas);
+            frm.cboReportType.Items.Add(ReportTypes.BoletasPallet);
+            frm.cboReportType.SelectedIndex = 0;
 
             ClsComboBoxes.CboLoadActives(frm.cboContractor, Contractor.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
@@ -80,8 +103,56 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             }
 
             SetLblReportDetails();
-            SetDgvReport();
+
+            try
+            {
+                _dtCajasData = FetchCajasDataFromDb();
+                _dtBoletasData = FetchBoletasDataFromDb();
+                BindDgvForSelectedReport();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Reporte cajas por número", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        public void CboReportTypeChanged()
+        {
+            if (_dtCajasData == null && _dtBoletasData == null)
+                return;
+
+            BindDgvForSelectedReport();
+        }
+
+        private void BindDgvForSelectedReport()
+        {
+            if (frm == null) return;
+
+            excel ??= new ClsPayrollBoxPerNumberReportExcel();
+
+            DataTable preview = IsBoletasReportSelected()
+                ? excel.BuildBoletasPreviewDataTable(
+                    _dtBoletasData,
+                    frm.dtpDate1.Value.Date,
+                    frm.dtpDate2.Value.Date)
+                : excel.BuildPreviewDataTable(
+                    _dtCajasData,
+                    frm.dtpDate1.Value.Date,
+                    frm.dtpDate2.Value.Date);
+
+            frm.dgvReport.AutoGenerateColumns = true;
+            frm.dgvReport.DataSource = preview;
+
+            if (frm.dgvReport.Columns.Count > 0 && preview.Columns.Count > 0)
+                ApplyDgColumnHeadersFromCaption(preview);
+        }
+
+        private bool IsBoletasReportSelected()
+            => frm != null
+               && string.Equals(
+                   frm.cboReportType.SelectedItem?.ToString(),
+                   ReportTypes.BoletasPallet,
+                   StringComparison.OrdinalIgnoreCase);
 
         private void SetLblReportDetails()
         {
@@ -100,32 +171,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             frm.lblDateRange.Text = $"{frm.dtpDate1.Value:dd/MM/yyyy} al {frm.dtpDate2.Value:dd/MM/yyyy}";
         }
 
-        private void SetDgvReport()
-        {
-            if (frm == null) return;
-
-            excel ??= new ClsPayrollBoxPerNumberReportExcel();
-
-            try
-            {
-                _dtData = FetchDataFromDb();
-                DataTable preview = excel.BuildPreviewDataTable(
-                    _dtData,
-                    frm.dtpDate1.Value.Date,
-                    frm.dtpDate2.Value.Date);
-
-                frm.dgvReport.AutoGenerateColumns = true;
-                frm.dgvReport.DataSource = preview;
-
-                if (frm.dgvReport.Columns.Count > 0 && preview.Columns.Count > 0)
-                    ApplyDgColumnHeadersFromCaption(preview);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Reporte cajas por número", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void ApplyDgColumnHeadersFromCaption(DataTable table)
         {
             if (frm == null) return;
@@ -140,8 +185,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             }
         }
 
-        /// <summary>Consulta por cuadrilla; filtros: fechas, contratista y/o cuadrilla.</summary>
-        private DataTable FetchDataFromDb()
+        private DataTable FetchCajasDataFromDb()
         {
             if (frm == null) return new DataTable();
 
@@ -167,16 +211,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
                             WHERE BOX.c_status = 'A'
                               AND CAST(BOX.d_workDay AS date) BETWEEN @date1 AND @date2");
 
-            if (frm.cboWorkGroup.SelectedIndex > 0 && frm.cboWorkGroup.SelectedValue != null)
-            {
-                sb.AppendLine("  AND BOX.id_workGroup = @idWorkGroup");
-                parameters.Add("@idWorkGroup", frm.cboWorkGroup.SelectedValue!.ToString()!.Trim());
-            }
-            else if (frm.cboContractor.SelectedIndex > 0 && frm.cboContractor.SelectedValue != null)
-            {
-                sb.AppendLine("  AND WGP.id_contractor = @idContractor");
-                parameters.Add("@idContractor", frm.cboContractor.SelectedValue!.ToString()!.Trim());
-            }
+            AppendWorkGroupOrContractorFilter(sb, parameters, "BOX.id_workGroup", "WGP.id_contractor");
 
             sb.AppendLine($@"GROUP BY
                                 BOX.d_workDay,
@@ -193,13 +228,92 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             return ClsQuerysDB.ExecuteParameterizedQuery(sb.ToString(), parameters);
         }
 
+        private DataTable FetchBoletasDataFromDb()
+        {
+            if (frm == null) return new DataTable();
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "@date1", frm.dtpDate1.Value.Date },
+                { "@date2", frm.dtpDate2.Value.Date },
+            };
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine($@"SELECT
+                                pal.v_invoice               AS [{BoletasColumns.Folio}],
+                                CONVERT(DATE, pal.d_packed) AS [{BoletasColumns.Fecha}],
+                                wgp.v_nameWorkGroup         AS [{BoletasColumns.Cuadrilla}],
+                                con.v_nameContractor        AS [{BoletasColumns.Contratista}],
+                                lot.v_nameLot               AS [{BoletasColumns.Lote}],
+                                pr.v_descriptionPrice       AS [{BoletasColumns.Empaque}],
+                                SUM(pal.i_boxes)            AS [{BoletasColumns.Cajas}]
+                            FROM dbo.Pack_Pallet AS pal
+                            LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan
+                            LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN
+                            LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety
+                            LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup
+                            LEFT JOIN dbo.Pack_Contractor AS con ON con.id_contractor = wgp.id_contractor
+                            LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size
+                            LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation
+                            LEFT JOIN dbo.Pack_Container AS cnt ON cnt.id_container = gtn.id_container
+                            LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety
+                            LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor
+                            LEFT JOIN dbo.Pack_Crop AS crop ON crop.id_crop = [var].id_crop
+                            LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                            LEFT JOIN dbo.Pack_Price AS pr ON pr.id_price = gtn.id_price
+                            WHERE CAST(pal.d_packed AS date) BETWEEN @date1 AND @date2
+                              AND pal.c_restowing != 'ER'");
+
+            AppendWorkGroupOrContractorFilter(sb, parameters, "wpl.id_workGroup", "wgp.id_contractor");
+
+            sb.AppendLine($@"GROUP BY
+                                pal.v_invoice,
+                                pal.d_packed,
+                                wgp.v_nameWorkGroup,
+                                con.v_nameContractor,
+                                lot.v_nameLot,
+                                pr.v_descriptionPrice");
+
+            sb.AppendLine($@"ORDER BY
+                                [{BoletasColumns.Cuadrilla}],
+                                [{BoletasColumns.Fecha}],
+                                [{BoletasColumns.Folio}],
+                                [{BoletasColumns.Empaque}];");
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(sb.ToString(), parameters);
+        }
+
+        private void AppendWorkGroupOrContractorFilter(
+            StringBuilder sb,
+            Dictionary<string, object> parameters,
+            string workGroupColumn,
+            string contractorColumn)
+        {
+            if (frm == null) return;
+
+            if (frm.cboWorkGroup.SelectedIndex > 0 && frm.cboWorkGroup.SelectedValue != null)
+            {
+                sb.AppendLine($"  AND {workGroupColumn} = @idWorkGroup");
+                parameters.Add("@idWorkGroup", frm.cboWorkGroup.SelectedValue!.ToString()!.Trim());
+            }
+            else if (frm.cboContractor.SelectedIndex > 0 && frm.cboContractor.SelectedValue != null)
+            {
+                sb.AppendLine($"  AND {contractorColumn} = @idContractor");
+                parameters.Add("@idContractor", frm.cboContractor.SelectedValue!.ToString()!.Trim());
+            }
+        }
+
         public void BtnGenerateExcelReport()
         {
             if (frm == null) return;
 
             excel ??= new ClsPayrollBoxPerNumberReportExcel();
 
-            if (_dtData == null || _dtData.Rows.Count == 0)
+            bool hasCajas = _dtCajasData != null && _dtCajasData.Rows.Count > 0;
+            bool hasBoletas = _dtBoletasData != null && _dtBoletasData.Rows.Count > 0;
+
+            if (!hasCajas && !hasBoletas)
             {
                 MessageBox.Show(
                     "No hay datos para generar el reporte (usa Buscar antes).",
@@ -210,7 +324,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             }
 
             excel.GenerateExcelReport(
-                _dtData,
+                _dtCajasData,
+                _dtBoletasData,
                 frm.dtpDate1.Value.Date,
                 frm.dtpDate2.Value.Date,
                 frm.lblContractor.Text,
