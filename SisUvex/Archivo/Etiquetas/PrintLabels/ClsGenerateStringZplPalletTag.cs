@@ -10,7 +10,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         ETagInfo eTag;
         private string idPal = string.Empty;
         private string qty = string.Empty;
-        private string zplBegin = "^XA";
+        private string zplBegin = "^XA\n^CI28 ^FX soporte de caracteres especiales\n";
         private string zplEnd = "^XZ\n";
         private string fontsize = "30,20";
         private string datePal = string.Empty;
