@@ -224,6 +224,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.nameVariety            = rows[0][Variety.ColumnName].ToString();
                 eTag.scientisVarierty       = rows[0][Variety.ColumnScientis].ToString();
                 eTag.shortNameVariety       = rows[0][Variety.ColumnShortName].ToString();
+                eTag.patentLegend           = rows[0][Variety.ColumnPatentLegend].ToString();
+                eTag.trademark              = rows[0][Variety.ColumnTradeMark].ToString();
                 eTag.idCrop                 = rows[0][Crop.ColumnId].ToString();
                 eTag.nameCrop               = rows[0][Crop.ColumnName].ToString();
                 eTag.idSize                 = rows[0][ClsObject.Size.ColumnId].ToString();

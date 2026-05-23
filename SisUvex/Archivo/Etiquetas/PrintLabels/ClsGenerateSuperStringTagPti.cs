@@ -22,7 +22,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
     {
         ETagInfo eTag;
 
-        private string zplBegin = "^XA";
+        private string zplBegin = "^XA\n^CI28 ^FX soporte de caracteres especiales\n";
         private string zplEnd = "^XZ\n";
         private string fontsize = "30,20";
 
@@ -31,6 +31,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string gtinZPL = string.Empty;
         private string distributorZPL = string.Empty;
         private string varietyZPL = string.Empty;
+        private string patentLegend = string.Empty;
         private string presentationZPL = string.Empty;
         private string qrcodeZPL = string.Empty;
         private string upcZPL = string.Empty;
@@ -52,7 +53,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "01":
                     //ESTANDAR (2026)                  -->se cambió en 28-abril-2026 la de dayka-walmart como standar para todas las demás, el standar viejo ahora es la "09" standar 2025
-                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
                     SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL("Grown/Packed by:", "Uvex Agro Internacional", "Distributed by:", eTag.nameDistributor); //PRESENTACION STANDAR
                     break;
                 case
@@ -133,7 +135,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /*Sobrecarga del metodo para generar el string ZPL para la etiqueta PTI*/
         private string SuperPrintPtiTag(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)
             {
@@ -145,7 +147,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SuperPrintPtiTagWithQrUniqueBox(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
 
             string superString = string.Empty;
 
@@ -414,18 +416,26 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /// <param name="Variety"></param>
         private void SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(string? ColorLine1, string? VarietyLine2, string? WeightLine3)
         {
+
             //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             varietyZPL = "^FX COLOR\n" +
                         $"^CF0,30,35 ^FO25,110^FD{ColorLine1}^FS\n"
                         + "^FX VARIETY\n" +
-                        $"^CF0,30,35 ^FO25,145^FD{VarietyLine2}^FS\n"
+                        $"^FO25,140^A0N,35,35^FH_^FD{VarietyLine2}^FS\n"
                         + "^FX WEIGHT\n" +
-                        $"^CF0,30,40 ^FO23,180^FD{WeightLine3}^FS\n";
+                        $"^CF0,30,40 ^FO23,200^FD{WeightLine3}^FS\n";
+        }
+        private void SetStringPtiStandar2026PatentLegendZPL(string? legendPatent)
+        {//2026, Pequeño renglon con leyenda de patente en variedad.
+            if (string.IsNullOrEmpty(legendPatent)) return;
+
+            patentLegend = "^FX LEYENDA PATENTE\n" +
+                        $"^^FO23,175^A0N,20,20^FD{legendPatent}^FS\n";
         }
         private void SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL(string? GrownBy1, string? GrowerLine2, string? DistributedBy3, string? DistributorLine4)
         {
             distributorZPL = "^FX  PRODUCTO DE\n" +
-                        $"^CF0,30,50^FO22,220^FDProduct of Mexico^FS\n"
+                        $"^CF0,30,50^FO22,230^FDProduct of Mexico^FS\n"
                         + "^FX GROWER\n" +
                         $"^CFF,30,10^FO23,260^FD{GrownBy1}^FS\n" +
                         $"^FO25,290^FD{GrowerLine2}^FS\n"

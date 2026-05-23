@@ -48,6 +48,8 @@ namespace SisUvex.Catalogos.Metods
                                                         , [var].v_nameComercial AS [{Variety.ColumnName}]
                                                         , [var].v_nameScientis AS [{Variety.ColumnScientis}]
                                                         , [var].v_shortName AS [{Variety.ColumnShortName}]
+                                                        , [var].v_patentLegend AS [{Variety.ColumnPatentLegend}]
+                                                        , [var].v_tradeMark AS [{Variety.ColumnTradeMark}]
                                                         , cro.id_crop AS [{Crop.ColumnId}]
                                                         , cro.v_nameCrop AS [{Crop.ColumnName}]
                                                         , wpl.id_size AS [{Size.ColumnId}]
@@ -195,6 +197,8 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Variedad";
             public const string ColumnScientis = "Variedad científica";
             public const string ColumnShortName = "shortVariety";
+            public const string ColumnPatentLegend = "patentLegend";
+            public const string ColumnTradeMark = "tradeMark";
             public const string ColumnId = "idVariety";
             public const string ColumnActive = "ActiveVariety";
             public const string Cbo = "CboVariety";
