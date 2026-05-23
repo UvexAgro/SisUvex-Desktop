@@ -117,5 +117,10 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             SisUvex.Archivo.WorkPlan.FrmWorkPlanCat frm = new();
             FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
         }
+
+        public void ClearInvoiceInfo()
+        {
+            txbInvoice.Text = string.Empty;
+        }
     }
 }

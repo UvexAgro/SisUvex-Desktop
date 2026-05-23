@@ -113,6 +113,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
             lsWGDep.Add((frm.cboSeason, Season.ColumnId));
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lsWGDep); //filtro de cuadrillas por temporada
+            frm.cboWorkGroup.SelectedValueChanged += (sender, e) => frm.ClearInvoiceInfo(); //limpiar papeleta al cambiar cuadrilla
 
             if (_seasonWorkGroupDayFilterHandler != null)
                 frm.cboSeason.SelectedValueChanged -= _seasonWorkGroupDayFilterHandler;
@@ -164,6 +165,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             comboBox.TextChanged += (sender, e) =>
             {
+                frm.ClearInvoiceInfo(); //limpiar papeleta
+
                 if (frm.cboWorkPlan.SelectedValue != null)
                     SetTagInfo(frm.cboWorkPlan.SelectedValue.ToString(), eTagInfo);
                     LoadTagInfoInLabelsForm();
@@ -320,6 +323,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         }
                         else
                         {//imprimir (se creó el pallet)
+                            frm.ClearInvoiceInfo();
+
                             print = new ClsPrintPtiTag();
 
                             eTagInfo.showDate = !frm.chbFechaOmitidaPallet.Checked;
