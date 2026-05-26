@@ -1,7 +1,10 @@
 
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Usuarios;
 using System.Data;
 using System.Diagnostics.Metrics;
 using System.Web;
@@ -218,13 +221,13 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboLot";
             public const string CboOnlyNameLot = "CboLotOnlyNameLot";
             public const string CboOnlyNameLotPlantTracking = "CboOnlyNameLotPlantTracking";
-			public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
-			public const string DgvCatalog = "DgvCatalogLot";
+            public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
+            public const string DgvCatalog = "DgvCatalogLot";
             public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}], id_farm AS [{Farm.ColumnId}]  FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
             public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm ORDER BY [{Column.name}] ";
             public const string QueryOnlyNameLotPlantTracking = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_plantTracking = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
-			public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UseFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
-			public const string QueryDgvCatalog = "queryLot";
+            public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UseFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryLot";
         }
 
         public static class Presentation
@@ -364,14 +367,14 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Temporada";
             public const string ColumnId = "idSeason";
             public const string ColumnActive = "ActiveSeason";
-			public const string ColumnStartDate = "StartDate";
-			public const string ColumnEndDate = "EndDate";
-			public const string CboWithDates = "CboWithDates";
-			public const string Cbo = "CboSeason";
+            public const string ColumnStartDate = "StartDate";
+            public const string ColumnEndDate = "EndDate";
+            public const string CboWithDates = "CboWithDates";
+            public const string Cbo = "CboSeason";
             public const string DgvCatalog = "DgvCatalogSeason";
             public const string QueryCbo = $" SELECT id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}] FROM Pack_Season ORDER BY [{Column.name}] ";
-			public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
-		}
+            public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
+        }
 
         public static class City
         {
@@ -646,6 +649,72 @@ namespace SisUvex.Catalogos.Metods
                 parameters.Add("@idEmployee", idEmployee);
 
                 return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            }
+        }
+
+        public static class UserFilter
+        {
+            private const string columnId = "idUser";
+
+            private static string GetQryUsersCboAnotadores()
+            {
+                return $@"
+                            SELECT
+                                CAST(usu.c_codigo_usu AS varchar(20)) AS [{Column.id}],
+                                usu.v_nombre_usu AS [{Column.name}],
+                                usu.v_nombre_usu AS [Anotador],
+                                usu.id_workGroup AS [{WorkGroup.ColumnId}],
+                                usu.c_active AS [{Column.active}],
+                                usu.id_role AS [idRole]
+                            FROM dbo.usuario usu
+                            WHERE usu.c_active = '1'
+                              AND usu.id_role IN ('02','03','04','12')
+                            ORDER BY usu.v_nombre_usu, usu.c_codigo_usu;";
+            }
+
+            private static string GetQryWorkGroupContractors()
+            {
+                return $@"
+                            SELECT
+                                id_workGroup AS [{WorkGroup.ColumnId}],
+                                id_contractor AS [{Contractor.ColumnId}]
+                            FROM dbo.Pack_WorkGroup;";
+            }
+
+            public static DataTable GetDtAnotadores()
+            {
+                DataTable dtUsers = ClsQuerysUsuarios.GetDataTable(GetQryUsersCboAnotadores());
+                DataTable dtWorkGroups = ClsQuerysDB.GetDataTable(GetQryWorkGroupContractors());
+
+                if (!dtUsers.Columns.Contains(Contractor.ColumnId))
+                    dtUsers.Columns.Add(Contractor.ColumnId, typeof(string));
+
+                var contractorByWorkGroup = dtWorkGroups.AsEnumerable()
+                    .Where(row => row[WorkGroup.ColumnId] != DBNull.Value)
+                    .ToDictionary(
+                        row => row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        row => row[Contractor.ColumnId] == DBNull.Value ? string.Empty : row[Contractor.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        StringComparer.OrdinalIgnoreCase);
+
+                foreach (DataRow row in dtUsers.Rows)
+                {
+                    string idWorkGroup = row[WorkGroup.ColumnId] == DBNull.Value
+                        ? string.Empty
+                        : row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty;
+
+                    row[Contractor.ColumnId] = contractorByWorkGroup.TryGetValue(idWorkGroup, out string? idContractor)
+                        ? idContractor
+                        : string.Empty;
+                }
+
+                return dtUsers;
+            }
+
+            public static void SetCboAnotadores(ComboBox cbo)
+            {
+                DataTable dt = GetDtAnotadores();
+
+                ClsComboBoxes.LoadComboBoxDataSource(cbo, dt);
             }
         }
     }

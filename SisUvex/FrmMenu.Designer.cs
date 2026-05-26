@@ -143,6 +143,9 @@ namespace SisUvex
             reporteDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
             reporteToolStripMenuItem = new ToolStripMenuItem();
             númerosEmpleadosToolStripMenuItem = new ToolStripMenuItem();
+            viejoToolStripMenuItem = new ToolStripMenuItem();
+            nuevoporAnotadorToolStripMenuItem = new ToolStripMenuItem();
+            cajasPorCuadrillaToolStripMenuItem = new ToolStripMenuItem();
             lugarDePagoToolStripMenuItem = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             plantasToolStripMenuItem = new ToolStripMenuItem();
@@ -171,7 +174,6 @@ namespace SisUvex
             statusStrip1 = new StatusStrip();
             tsslUsuario = new ToolStripStatusLabel();
             nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-            cajasPorCuadrillaToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -953,10 +955,32 @@ namespace SisUvex
             // 
             // númerosEmpleadosToolStripMenuItem
             // 
+            númerosEmpleadosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viejoToolStripMenuItem, nuevoporAnotadorToolStripMenuItem });
             númerosEmpleadosToolStripMenuItem.Name = "númerosEmpleadosToolStripMenuItem";
             númerosEmpleadosToolStripMenuItem.Size = new Size(184, 22);
             númerosEmpleadosToolStripMenuItem.Text = "Números empleados";
             númerosEmpleadosToolStripMenuItem.Click += númerosEmpleadosToolStripMenuItem_Click;
+            // 
+            // viejoToolStripMenuItem
+            // 
+            viejoToolStripMenuItem.Name = "viejoToolStripMenuItem";
+            viejoToolStripMenuItem.Size = new Size(189, 22);
+            viejoToolStripMenuItem.Text = "Viejo";
+            viejoToolStripMenuItem.Click += viejoToolStripMenuItem_Click;
+            // 
+            // nuevoporAnotadorToolStripMenuItem
+            // 
+            nuevoporAnotadorToolStripMenuItem.Name = "nuevoporAnotadorToolStripMenuItem";
+            nuevoporAnotadorToolStripMenuItem.Size = new Size(189, 22);
+            nuevoporAnotadorToolStripMenuItem.Text = "Nuevo (por anotador)";
+            nuevoporAnotadorToolStripMenuItem.Click += nuevoporAnotadorToolStripMenuItem_Click;
+            // 
+            // cajasPorCuadrillaToolStripMenuItem
+            // 
+            cajasPorCuadrillaToolStripMenuItem.Name = "cajasPorCuadrillaToolStripMenuItem";
+            cajasPorCuadrillaToolStripMenuItem.Size = new Size(184, 22);
+            cajasPorCuadrillaToolStripMenuItem.Text = "Cajas por cuadrilla";
+            cajasPorCuadrillaToolStripMenuItem.Click += cajasPorCuadrillaToolStripMenuItem_Click;
             // 
             // lugarDePagoToolStripMenuItem
             // 
@@ -1154,13 +1178,6 @@ namespace SisUvex
             nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
             nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // cajasPorCuadrillaToolStripMenuItem
-            // 
-            cajasPorCuadrillaToolStripMenuItem.Name = "cajasPorCuadrillaToolStripMenuItem";
-            cajasPorCuadrillaToolStripMenuItem.Size = new Size(184, 22);
-            cajasPorCuadrillaToolStripMenuItem.Text = "Cajas por cuadrilla";
-            cajasPorCuadrillaToolStripMenuItem.Click += cajasPorCuadrillaToolStripMenuItem_Click;
-            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1333,5 +1350,7 @@ namespace SisUvex
         private ToolStripMenuItem desestibarToolStripMenuItem;
         private ToolStripMenuItem númerosEmpleadosToolStripMenuItem;
         private ToolStripMenuItem cajasPorCuadrillaToolStripMenuItem;
+        private ToolStripMenuItem viejoToolStripMenuItem;
+        private ToolStripMenuItem nuevoporAnotadorToolStripMenuItem;
     }
 }
