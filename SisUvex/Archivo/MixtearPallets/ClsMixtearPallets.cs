@@ -454,6 +454,7 @@ namespace SisUvex.Archivo.MixtearPallets
                     SET   c_restowing = @restowing,
                           c_active    = @active,
                           userUpdate  = @user,
+                          id_rack     = NULL,
                           d_update    = CONVERT(DATE, SYSDATETIME())
                     WHERE id_pallet   = @idPallet", sql.cnn);
                 cmd.Parameters.AddWithValue("@idPallet",  idPallet);

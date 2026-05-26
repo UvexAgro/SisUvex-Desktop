@@ -754,6 +754,19 @@ namespace SisUvex
 
         private void númerosEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void cajasPorCuadrillaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission()) return;
+
+            Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport.FrmPayrollBoxPerNumberReport cat = new();
+            AbrirVentanaHijo(cat);
+        }
+
+        private void viejoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             if (!User.HasViewCatalogsPermission())
                 return;
 
@@ -762,11 +775,13 @@ namespace SisUvex
             AbrirVentanaHijo(cat);
         }
 
-        private void cajasPorCuadrillaToolStripMenuItem_Click(object sender, EventArgs e)
+        private void nuevoporAnotadorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!User.HasViewCatalogsPermission()) return;
+            if (!User.HasViewCatalogsPermission())
+                return;
 
-            Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport.FrmPayrollBoxPerNumberReport cat = new();
+            Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup.FrmNomEmployesPairNumberWgp cat = new();
+            cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
         }
     }
