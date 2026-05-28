@@ -46,11 +46,14 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             ClsComboBoxes.CboLoadActives(frm.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboContainer, Container.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboWorkGroupDuplicate, WorkGroup.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboLot, Lot.Cbo);
 
             List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
             lsWGDep.Add((frm.cboSeason, Season.ColumnId));
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lsWGDep);
+
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroupDuplicate, null, lsWGDep); //<-- cboWorkGroup de duplicar 
 
             List<(ComboBox Cbo, string IdColumnFilter)> lsLotDep = new();
             lsLotDep.Add((frm.cboVariety, Variety.ColumnId));
@@ -65,6 +68,8 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             frm.cboSeason.SelectedValueChanged += CboSeason_WorkPlanReload;
 
             AttachWorkPlanDependentFiltersHandlers();
+
+            frm.cboWorkGroupDuplicate.SelectedIndexChanged += (s, e) => MetodcboWorkGroupDuplicateSelectedIndexChanged();
         }
 
         bool TryGetSelectedSeasonDateRange(out DateTime start, out DateTime end)
@@ -442,6 +447,40 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                 sql.RollbackTransaction();
                 MessageBox.Show(ex.ToString(), "Error al añadir materiales de salida");
                 return false;
+            }
+        }
+
+        private void ClearCboFilters()
+        {
+            frm.cboDistribuidor.SelectedIndex = -1;
+            frm.cboPresentacion.SelectedIndex = -1;
+            frm.cboVariety.SelectedIndex = -1;
+            frm.cboContainer.SelectedIndex = -1;
+            frm.cboWorkGroup.SelectedIndex = -1;
+            frm.cboLot.SelectedIndex = -1;
+        }
+
+        private void MetodcboWorkGroupDuplicateSelectedIndexChanged()
+        {
+            if (frm.cboWorkGroupDuplicate.SelectedIndex > 0 && !string.IsNullOrEmpty(frm.txbWorkPlan.Text))
+            {
+                string idWorkPlan = frm.txbIdWorkPlan.Text;
+                string nameWorkPlan = frm.txbWorkPlan.Text;
+                string idWorkGroup = frm.cboWorkGroupDuplicate.SelectedValue.ToString();
+                string nameWorkGroup = frm.cboWorkGroupDuplicate.Text;
+
+                bool result = MessageBox.Show($"¿Desea duplicar el plan de trabajo:\n{nameWorkPlan}\nPara la cuadrilla: {nameWorkGroup}?", "Duplicar Plan de Trabajo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+                string idNewWorkPlan = string.Empty;
+
+                if (result)
+                    idNewWorkPlan = EworkPlan.DuplicateWorkPlan(idWorkPlan, idWorkGroup);
+
+                if (!string.IsNullOrEmpty(idNewWorkPlan))
+                {
+                    ClearCboFilters();
+                    ReloadWorkPlanDataFromDatabase();
+                    ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(frm.cboWorkPlan, idNewWorkPlan);
+                }
             }
         }
     }

@@ -1,4 +1,7 @@
-﻿namespace SisUvex.Archivo.WorkPlan.ConvertPallet
+﻿using DocumentFormat.OpenXml.Office2010.PowerPoint;
+using static SisUvex.Catalogos.Metods.ClsObject;
+
+namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 {
     internal partial class FrmConvertPallet : Form
     {
@@ -47,6 +50,19 @@
         {
             if (e.KeyChar == (char)Keys.Enter)
                 cls.BtnAddPallet();
+        }
+
+        private void btnDuplicar_Click(object sender, EventArgs e)
+        {
+
+            if (string.IsNullOrEmpty(txbWorkPlan.Text))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+
+            lblWorkGroupDuplicate.Visible = true;
+            cboWorkGroupDuplicate.Visible = true;
         }
     }
 }

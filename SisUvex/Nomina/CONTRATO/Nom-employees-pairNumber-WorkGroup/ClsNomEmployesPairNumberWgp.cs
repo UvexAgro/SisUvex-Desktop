@@ -20,6 +20,7 @@ namespace SisUvex.Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup
         private const string ColIdContractor = "idContractor";
         private const string ColIdUser = "idUser";
         private const string ColUserName = "ANOTADOR";
+        private const string ColOrdenNum = "ORDEN_NUM";
 
         private readonly List<string> _columnsToHide = new()
         {
@@ -27,6 +28,7 @@ namespace SisUvex.Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup
             ColIdContractor,
             ColIdUser,
             ColIdSeason,
+            ColOrdenNum,
         };
 
         public FrmNomEmployesPairNumberWgp? frm;
@@ -170,7 +172,7 @@ namespace SisUvex.Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup
             AddFilter(sb, parameters, "@idContractor", ColIdContractor, frm.cboContractor.ComboValueOrNull());
             AddFilter(sb, parameters, "@idUser", ColIdUser, frm.cboUser.ComboValueOrNull());
 
-            sb.AppendLine("ORDER BY CUADRILLA, NUMERO, PAREJA, CODIGO;");
+            sb.AppendLine("ORDER BY CUADRILLA, NUMERO, ORDEN_NUM, CODIGO;");
 
             DataTable dtReport = ClsQuerysDB.ExecuteParameterizedQuery(sb.ToString(), parameters);
             AddUserNameColumn(dtReport);

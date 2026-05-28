@@ -54,7 +54,6 @@ namespace SisUvex.Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup
             {
                 var wsDatos = workbook.Worksheets.Add(reportTable, "DATOS");
                 wsDatos.Tables.First().ShowAutoFilter = true;
-                HideColumnsInWorksheet(wsDatos, reportTable, hiddenColumns);
                 wsDatos.Columns().AdjustToContents();
 
                 var (wsReport, focusCell) = CreateReportWorksheet(workbook, reportTable, season, contractor, workGroup, user, hiddenColumns);
@@ -198,18 +197,6 @@ namespace SisUvex.Nomina.CONTRATO.Nom_employees_pairNumber_WorkGroup
                 .Cast<DataColumn>()
                 .Where(col => !hiddenColumns.Contains(col.ColumnName))
                 .ToList();
-        }
-
-        private static void HideColumnsInWorksheet(IXLWorksheet ws, DataTable reportTable, HashSet<string> hiddenColumns)
-        {
-            if (hiddenColumns.Count == 0)
-                return;
-
-            for (int i = 0; i < reportTable.Columns.Count; i++)
-            {
-                if (hiddenColumns.Contains(reportTable.Columns[i].ColumnName))
-                    ws.Column(i + 1).Hide();
-            }
         }
 
         private static void SetActiveSheet(XLWorkbook workbook, IXLWorksheet activeSheet)
