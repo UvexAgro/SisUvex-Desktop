@@ -328,7 +328,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                             print = new ClsPrintPtiTag();
 
                             eTagInfo.showDate = !frm.chbFechaOmitidaPallet.Checked;
-
+                            eTagInfo.invoice = invoice;
                             print.SendToPrintPalletTag(idPallet, eTagInfo, labelsCopiesPerPallet, palletBoxes, reverseOrientation, false);
 
                             AddNewRowToLastPallets(idPallet, palletBoxes.ToString());
