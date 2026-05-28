@@ -765,6 +765,14 @@ namespace SisUvex
             AbrirVentanaHijo(cat);
         }
 
+        private void cajasPorEmpleadoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission()) return;
+
+            Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport.FrmPayrollBoxPerEmployeeReport cat = new();
+            AbrirVentanaHijo(cat);
+        }
+
         private void viejoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!User.HasViewCatalogsPermission())
