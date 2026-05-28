@@ -1,4 +1,5 @@
-﻿using SisUvex.Archivo.Etiquetas.LabelInterface;
+﻿using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using SisUvex.Archivo.Etiquetas.LabelInterface;
 using SisUvex.Catalogos.Metods.Querys;
 using System.Data;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -50,19 +51,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             return SuperPrintPalletTag(copies);
         }
-
-        private string StringStowageList(string idPallet)
+        private string PalletInfoExtraWithQuery(string idPallet)
         {
+            string zplExtra = string.Empty;
             string q = @"SELECT * FROM Pack_Pallet WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) );";
             string idStow = string.Empty;
-            string zplStowage = string.Empty;
+            string invoice = string.Empty;
             Dictionary<string, object> p = new();
             p.Add("@idPallet", idPallet);
-            List<(string, string)>? stowageList = new();
+            List<(string, string, string)>? stowageList = new();
 
             DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(q, p);
 
-            if (dt != null && dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 1)
             {
                 idStow = dt.Rows[0]["c_stowage"].ToString() ?? string.Empty;
 
@@ -70,9 +71,36 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 {
                     string palletId = row["id_pallet"].ToString() ?? string.Empty;
                     string palletBoxes = row["i_boxes"].ToString() ?? string.Empty;
-                    stowageList.Add((palletId, palletBoxes));
+                    string invoiceStow = row["v_invoice"].ToString() ?? string.Empty;
+                    stowageList.Add((palletId, palletBoxes, invoiceStow));
+
+                    if (palletId == idPallet)
+                        invoice = invoiceStow; // Asigna la factura del pallet principal
                 }
             }
+
+            //AGREGAR ESTIBA EN ZPL:
+
+            string zplStowage = StringStowageList(idStow, stowageList);
+            string zplInvoice = string.Empty;
+
+            zplExtra = zplStowage + zplInvoice;
+            return zplExtra;
+        }
+
+        private string ZPLInvoice(string invoice)
+        {
+            string zplInvoice = string.Empty;
+            if (!string.IsNullOrEmpty(invoice))
+            {
+                zplInvoice += $"^FX STOW AND PALLETS\n"
+                           +  $"^CF0,30 ^FO635,20 ^FDInvoice: {invoice}^FS\n"; //<--- cambiar bien
+            }
+            return zplInvoice;
+        }
+        private string StringStowageList(string idStow, List<(string, string, string)>? stowageList)
+        {
+            string zplStowage = string.Empty;
 
             if (stowageList.Count > 0)
             {
@@ -80,7 +108,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 zplStowage += $"^FX STOW AND PALLETS\n"
                            + $"^CF0,40^FO635,{yBegin}^FD*{idStow}*^FS\n";
 
-                foreach ((string palletId, string palletBoxes) in stowageList)
+                foreach ((string palletId, string palletBoxes, string invoice) in stowageList)
                 {
                     yBegin += 40; // Incrementa la posición Y para cada pallet
                     zplStowage += $"^CF0,30 ^FO635,{yBegin} ^FD{palletId}({palletBoxes})^FS\n";
@@ -132,13 +160,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             string farmIndentation = farmIndentationValue.ToString();
 
-            string PalletString = "^XA^PW812"
+            string PalletString = "^XA^PW812\n"
+                                + "^XA\n^CI28 ^FX soporte de caracteres especiales\n"
                                 //+ "^POI" //Orientacion de impresion
                                 + "^FX BARCODE AND PALLET NUMBER\n"
                                 + "^BY5,2,90\n"
                                 + $"^FO181,20^BC^FD{idPal}^FS\n"
                                 + reprint
-                                + StringStowageList(idPal)
+                                + PalletInfoExtraWithQuery(idPal)
                                 + "^FX BIG INFO SECTION.\n"
                                 + "^CF0,80\n"
                                 + $"^FO{farmIndentation},170^FD{farmName}^FS\n"

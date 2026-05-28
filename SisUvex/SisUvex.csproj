@@ -159,6 +159,9 @@
       <DependentUpon>FrmVarietyCat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nomina\CONTRATO\NewFolder\" />
+  </ItemGroup>
 	<PropertyGroup>
 		<!-- Esto fuerza a no generar ni incluir recursos satélite (.resources.dll) -->
 		<SatelliteResourceLanguages></SatelliteResourceLanguages>

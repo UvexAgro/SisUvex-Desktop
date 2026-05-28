@@ -14,6 +14,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 {
     internal class ETagInfo
     {
+        public string? invoice { get; set; } //PAPELETA (INSERTAR VALOR MANUALMENTE SI SE QUIERE LA DEL PALLET)
         public bool? showDate { get; set; } //DETERMINA SI EN LA ETIQUETA SE VA A MOSTRAR LA FECHA O NO (DE MOMENTO SOLO AL IMPRIMIR EL PTI)
         public string? nameProduct { get; set; }
         public string? active { get; set; }
@@ -67,6 +68,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         public void ClearFields()
         {
+            invoice = null;
             nameProduct = null;
             active = null;
             idWorkPlan = null;
@@ -130,6 +132,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 else
                     this.dateWorkPlan = null;
 
+                //this.invoice = rows[0][WorkPlan.ColumnInvoice].ToString(); <-- ESTA COLUMNA NO EXISTE, SI SE QUIERE IMPRIMIR UN PALLET, ES METERLA A MANO
                 this.nameProduct = rows[0][Column.name].ToString();
                 this.active = rows[0][Column.active].ToString();
                 this.idWorkPlan = rows[0][Column.id].ToString();

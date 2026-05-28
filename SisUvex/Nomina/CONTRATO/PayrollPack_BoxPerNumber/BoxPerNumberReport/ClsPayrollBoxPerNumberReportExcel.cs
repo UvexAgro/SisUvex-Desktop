@@ -373,7 +373,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             var preview = new DataTable();
             preview.Columns.Add(ColCuadrillaLabel, typeof(string));
             preview.Columns.Add(ColFecha, typeof(string));
-            preview.Columns.Add(ColFolio, typeof(string));
+            // FOLIO se mantiene en la hoja de datos (BOLETAS_DATA), no en el reporte con formato (BOLETAS).
 
             if (data == null || data.Rows.Count == 0)
                 return preview;
@@ -403,7 +403,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
 
                 DataRow headerRow = preview.NewRow();
                 headerRow[ColFecha] = ColFecha;
-                headerRow[ColFolio] = ColFolio;
                 foreach (string empaque in table.EmpaqueColumns)
                     headerRow[empaque] = empaque;
                 headerRow[ColTotal] = ColTotal;
@@ -413,7 +412,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
                 {
                     DataRow dataRow = preview.NewRow();
                     dataRow[ColFecha] = rowKey.Fecha.ToString("dd/MM/yyyy", CultureEs);
-                    dataRow[ColFolio] = rowKey.Folio;
 
                     decimal rowTotal = 0m;
                     foreach (string empaque in table.EmpaqueColumns)
@@ -493,7 +491,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
 
         public int WriteBoletasCuadrillaTable(IXLWorksheet ws, int startRow, int startCol, BoletasCuadrillaTableModel table)
         {
-            int colCount = table.EmpaqueColumns.Count + 3;
+            // Columnas: Fecha + (empaques...) + Total
+            // Nota: FOLIO se deja únicamente en la hoja de datos (BOLETAS_DATA), NO en el reporte con formato (BOLETAS).
+            int colCount = table.EmpaqueColumns.Count + 2;
             int lastCol = startCol + colCount - 1;
             int totalCol = lastCol;
 
@@ -506,8 +506,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             int col = startCol;
 
             ws.Cell(headerRow, col).Value = ColFecha;
-            col++;
-            ws.Cell(headerRow, col).Value = ColFolio;
             col++;
 
             foreach (string empaque in table.EmpaqueColumns)
@@ -527,11 +525,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
                 var fechaCell = ws.Cell(row, col);
                 fechaCell.Value = rowKey.Fecha;
                 fechaCell.Style.DateFormat.Format = "dd/MM/yyyy";
-                col++;
-
-                var folioCell = ws.Cell(row, col);
-                if (!string.IsNullOrEmpty(rowKey.Folio))
-                    folioCell.Value = rowKey.Folio;
                 col++;
 
                 decimal rowTotal = 0m;
@@ -572,7 +565,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             col = startCol;
             ws.Cell(totalRow, col).Value = ColTotal;
             ws.Cell(totalRow, col).Style.Font.SetBold();
-            col++;
             col++;
 
             decimal grandTotal = 0m;
@@ -642,38 +634,16 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
                 foreach (DataRow row in g)
                 {
                     var key = new BoletaRowKey(
-                        NormalizeDate(row[ClsPayrollBoxPerNumberReport.BoletasColumns.Fecha]),
-                        row[ClsPayrollBoxPerNumberReport.BoletasColumns.Folio]?.ToString()?.Trim() ?? string.Empty);
+                        NormalizeDate(row[ClsPayrollBoxPerNumberReport.BoletasColumns.Fecha]));
                     string empaque = row[ClsPayrollBoxPerNumberReport.BoletasColumns.Empaque]?.ToString()?.Trim() ?? string.Empty;
                     decimal cajas = ToDecimal(row[ClsPayrollBoxPerNumberReport.BoletasColumns.Cajas]);
                     table.AddValue(key, empaque, cajas);
                 }
 
-                var foliosByDate = g
-                    .Select(r => new BoletaRowKey(
-                        NormalizeDate(r[ClsPayrollBoxPerNumberReport.BoletasColumns.Fecha]),
-                        r[ClsPayrollBoxPerNumberReport.BoletasColumns.Folio]?.ToString()?.Trim() ?? string.Empty))
-                    .Where(k => k.Fecha != DateTime.MinValue && !string.IsNullOrEmpty(k.Folio))
-                    .GroupBy(k => k.Fecha.Date)
-                    .ToDictionary(
-                        grp => grp.Key,
-                        grp => grp
-                            .Select(k => k.Folio)
-                            .Distinct(StringComparer.OrdinalIgnoreCase)
-                            .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
-                            .ToList());
-
                 foreach (DateTime fecha in EachDayInclusive(rangeStart, rangeEnd))
                 {
-                    if (foliosByDate.TryGetValue(fecha.Date, out List<string>? folios) && folios.Count > 0)
-                    {
-                        foreach (string folio in folios)
-                            table.Rows.Add(new BoletaRowKey(fecha, folio));
-                    }
-                    else
-                    {
-                        table.Rows.Add(new BoletaRowKey(fecha, string.Empty));
-                    }
+                    // Agrupado por día (sin FOLIO) en el reporte con formato.
+                    table.Rows.Add(new BoletaRowKey(fecha));
                 }
 
                 tables.Add(table);
@@ -852,7 +822,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
             => Fechas.Sum(f => GetValue(f, precio));
     }
 
-    internal readonly record struct BoletaRowKey(DateTime Fecha, string Folio);
+    internal readonly record struct BoletaRowKey(DateTime Fecha);
 
     internal sealed class BoletasCuadrillaTableModel
     {
@@ -860,7 +830,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
         public List<string> EmpaqueColumns { get; } = new();
         public List<BoletaRowKey> Rows { get; } = new();
 
-        private readonly Dictionary<(DateTime Fecha, string Folio, string Empaque), decimal> _values = new();
+        // Agrupado por fecha (folio solo queda en la hoja de datos, no en el formato)
+        private readonly Dictionary<(DateTime Fecha, string Empaque), decimal> _values = new();
 
         public BoletasCuadrillaTableModel(string cuadrillaName)
         {
@@ -869,16 +840,16 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerNumberReport
 
         public void AddValue(BoletaRowKey rowKey, string empaque, decimal cajas)
         {
-            if (rowKey.Fecha == DateTime.MinValue || string.IsNullOrWhiteSpace(rowKey.Folio) || string.IsNullOrWhiteSpace(empaque))
+            if (rowKey.Fecha == DateTime.MinValue || string.IsNullOrWhiteSpace(empaque))
                 return;
 
-            var key = (rowKey.Fecha.Date, rowKey.Folio, empaque);
+            var key = (rowKey.Fecha.Date, empaque);
             _values.TryGetValue(key, out decimal current);
             _values[key] = current + cajas;
         }
 
         public decimal GetValue(BoletaRowKey rowKey, string empaque)
-            => _values.TryGetValue((rowKey.Fecha.Date, rowKey.Folio, empaque), out decimal val) ? val : 0m;
+            => _values.TryGetValue((rowKey.Fecha.Date, empaque), out decimal val) ? val : 0m;
 
         public decimal GetColumnTotal(string empaque)
             => Rows.Sum(r => GetValue(r, empaque));

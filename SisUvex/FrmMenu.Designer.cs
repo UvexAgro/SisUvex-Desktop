@@ -146,6 +146,7 @@ namespace SisUvex
             viejoToolStripMenuItem = new ToolStripMenuItem();
             nuevoporAnotadorToolStripMenuItem = new ToolStripMenuItem();
             cajasPorCuadrillaToolStripMenuItem = new ToolStripMenuItem();
+            cajasPorEmpleadoToolStripMenuItem = new ToolStripMenuItem();
             lugarDePagoToolStripMenuItem = new ToolStripMenuItem();
             consultasToolStripMenuItem = new ToolStripMenuItem();
             plantasToolStripMenuItem = new ToolStripMenuItem();
@@ -934,7 +935,7 @@ namespace SisUvex
             // 
             // contratoToolStripMenuItem
             // 
-            contratoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { reporteDeAsistenciaToolStripMenuItem, reporteToolStripMenuItem, númerosEmpleadosToolStripMenuItem, cajasPorCuadrillaToolStripMenuItem });
+            contratoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { reporteDeAsistenciaToolStripMenuItem, reporteToolStripMenuItem, númerosEmpleadosToolStripMenuItem, cajasPorCuadrillaToolStripMenuItem, cajasPorEmpleadoToolStripMenuItem });
             contratoToolStripMenuItem.Name = "contratoToolStripMenuItem";
             contratoToolStripMenuItem.Size = new Size(189, 22);
             contratoToolStripMenuItem.Text = "Contrato";
@@ -981,6 +982,13 @@ namespace SisUvex
             cajasPorCuadrillaToolStripMenuItem.Size = new Size(184, 22);
             cajasPorCuadrillaToolStripMenuItem.Text = "Cajas por cuadrilla";
             cajasPorCuadrillaToolStripMenuItem.Click += cajasPorCuadrillaToolStripMenuItem_Click;
+            // 
+            // cajasPorEmpleadoToolStripMenuItem
+            // 
+            cajasPorEmpleadoToolStripMenuItem.Name = "cajasPorEmpleadoToolStripMenuItem";
+            cajasPorEmpleadoToolStripMenuItem.Size = new Size(184, 22);
+            cajasPorEmpleadoToolStripMenuItem.Text = "Cajas por empleado";
+            cajasPorEmpleadoToolStripMenuItem.Click += cajasPorEmpleadoToolStripMenuItem_Click;
             // 
             // lugarDePagoToolStripMenuItem
             // 
@@ -1350,6 +1358,7 @@ namespace SisUvex
         private ToolStripMenuItem desestibarToolStripMenuItem;
         private ToolStripMenuItem númerosEmpleadosToolStripMenuItem;
         private ToolStripMenuItem cajasPorCuadrillaToolStripMenuItem;
+        private ToolStripMenuItem cajasPorEmpleadoToolStripMenuItem;
         private ToolStripMenuItem viejoToolStripMenuItem;
         private ToolStripMenuItem nuevoporAnotadorToolStripMenuItem;
     }
