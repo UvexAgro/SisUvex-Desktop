@@ -64,6 +64,9 @@
             nudCopiasEtiqueta = new NumericUpDown();
             chkInvertirEtiqueta = new CheckBox();
             btnImprimir = new Button();
+            btnDuplicateWorkPlan = new Button();
+            lblWorkGroupDuplicate = new Label();
+            cboWorkGroupDuplicate = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvPallet).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudCopiasEtiqueta).BeginInit();
             SuspendLayout();
@@ -118,7 +121,7 @@
             dgvPallet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvPallet.EnableHeadersVisualStyles = false;
             dgvPallet.ImeMode = ImeMode.NoControl;
-            dgvPallet.Location = new Point(12, 265);
+            dgvPallet.Location = new Point(12, 332);
             dgvPallet.Name = "dgvPallet";
             dgvPallet.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -132,7 +135,7 @@
             dgvPallet.RowHeadersVisible = false;
             dgvPallet.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPallet.Size = new Size(776, 228);
+            dgvPallet.Size = new Size(776, 263);
             dgvPallet.TabIndex = 7;
             // 
             // lblIdPallet
@@ -176,7 +179,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 185);
+            label2.Location = new Point(14, 253);
             label2.Name = "label2";
             label2.Size = new Size(122, 15);
             label2.TabIndex = 23;
@@ -188,7 +191,7 @@
             cboWorkPlan.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkPlan.Font = new Font("Segoe UI", 9F);
             cboWorkPlan.FormattingEnabled = true;
-            cboWorkPlan.Location = new Point(12, 201);
+            cboWorkPlan.Location = new Point(14, 269);
             cboWorkPlan.Margin = new Padding(1);
             cboWorkPlan.MaximumSize = new Size(900, 0);
             cboWorkPlan.Name = "cboWorkPlan";
@@ -207,7 +210,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(12, 499);
+            btnAccept.Location = new Point(12, 601);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(127, 23);
             btnAccept.TabIndex = 8;
@@ -218,7 +221,7 @@
             // btnLimpiar
             // 
             btnLimpiar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnLimpiar.Location = new Point(282, 499);
+            btnLimpiar.Location = new Point(282, 601);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(127, 23);
             btnLimpiar.TabIndex = 10;
@@ -229,7 +232,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(147, 499);
+            btnCancel.Location = new Point(147, 601);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(127, 23);
             btnCancel.TabIndex = 9;
@@ -250,7 +253,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 6.75F);
-            label6.Location = new Point(585, 111);
+            label6.Location = new Point(587, 179);
             label6.Name = "label6";
             label6.Size = new Size(40, 12);
             label6.TabIndex = 67;
@@ -261,7 +264,7 @@
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkGroup.DropDownWidth = 400;
             cboWorkGroup.FormattingEnabled = true;
-            cboWorkGroup.Location = new Point(585, 123);
+            cboWorkGroup.Location = new Point(587, 191);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(203, 23);
             cboWorkGroup.TabIndex = 60;
@@ -270,7 +273,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 6.75F);
-            label7.Location = new Point(585, 146);
+            label7.Location = new Point(587, 214);
             label7.Name = "label7";
             label7.Size = new Size(22, 12);
             label7.TabIndex = 66;
@@ -281,7 +284,7 @@
             cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLot.DropDownWidth = 400;
             cboLot.FormattingEnabled = true;
-            cboLot.Location = new Point(585, 158);
+            cboLot.Location = new Point(587, 226);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(203, 23);
             cboLot.TabIndex = 61;
@@ -291,7 +294,7 @@
             cboVariety.DropDownStyle = ComboBoxStyle.DropDownList;
             cboVariety.DropDownWidth = 400;
             cboVariety.FormattingEnabled = true;
-            cboVariety.Location = new Point(134, 158);
+            cboVariety.Location = new Point(136, 226);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(203, 23);
             cboVariety.TabIndex = 57;
@@ -300,7 +303,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 6.75F);
-            label3.Location = new Point(134, 146);
+            label3.Location = new Point(136, 214);
             label3.Name = "label3";
             label3.Size = new Size(40, 12);
             label3.TabIndex = 64;
@@ -310,7 +313,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 6.75F);
-            label4.Location = new Point(343, 111);
+            label4.Location = new Point(345, 179);
             label4.Name = "label4";
             label4.Size = new Size(52, 12);
             label4.TabIndex = 65;
@@ -321,7 +324,7 @@
             cboContainer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboContainer.DropDownWidth = 400;
             cboContainer.FormattingEnabled = true;
-            cboContainer.Location = new Point(343, 123);
+            cboContainer.Location = new Point(345, 191);
             cboContainer.Name = "cboContainer";
             cboContainer.Size = new Size(236, 23);
             cboContainer.TabIndex = 58;
@@ -331,7 +334,7 @@
             cboDistribuidor.DropDownStyle = ComboBoxStyle.DropDownList;
             cboDistribuidor.DropDownWidth = 400;
             cboDistribuidor.FormattingEnabled = true;
-            cboDistribuidor.Location = new Point(134, 123);
+            cboDistribuidor.Location = new Point(136, 191);
             cboDistribuidor.Name = "cboDistribuidor";
             cboDistribuidor.Size = new Size(203, 23);
             cboDistribuidor.TabIndex = 56;
@@ -340,7 +343,7 @@
             // 
             lblDistribuidor.AutoSize = true;
             lblDistribuidor.Font = new Font("Segoe UI", 6.75F);
-            lblDistribuidor.Location = new Point(134, 111);
+            lblDistribuidor.Location = new Point(136, 179);
             lblDistribuidor.Name = "lblDistribuidor";
             lblDistribuidor.Size = new Size(50, 12);
             lblDistribuidor.TabIndex = 62;
@@ -350,7 +353,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 6.75F);
-            label5.Location = new Point(343, 146);
+            label5.Location = new Point(345, 214);
             label5.Name = "label5";
             label5.Size = new Size(56, 12);
             label5.TabIndex = 63;
@@ -361,7 +364,7 @@
             cboPresentacion.DropDownStyle = ComboBoxStyle.DropDownList;
             cboPresentacion.DropDownWidth = 400;
             cboPresentacion.FormattingEnabled = true;
-            cboPresentacion.Location = new Point(343, 158);
+            cboPresentacion.Location = new Point(345, 226);
             cboPresentacion.Name = "cboPresentacion";
             cboPresentacion.Size = new Size(236, 23);
             cboPresentacion.TabIndex = 59;
@@ -391,7 +394,7 @@
             // 
             lblCopiasEtiqueta.AutoSize = true;
             lblCopiasEtiqueta.Font = new Font("Segoe UI", 6.75F);
-            lblCopiasEtiqueta.Location = new Point(100, 225);
+            lblCopiasEtiqueta.Location = new Point(102, 293);
             lblCopiasEtiqueta.Name = "lblCopiasEtiqueta";
             lblCopiasEtiqueta.Size = new Size(32, 12);
             lblCopiasEtiqueta.TabIndex = 70;
@@ -399,7 +402,7 @@
             // 
             // nudCopiasEtiqueta
             // 
-            nudCopiasEtiqueta.Location = new Point(101, 238);
+            nudCopiasEtiqueta.Location = new Point(103, 306);
             nudCopiasEtiqueta.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             nudCopiasEtiqueta.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCopiasEtiqueta.Name = "nudCopiasEtiqueta";
@@ -410,7 +413,7 @@
             // chkInvertirEtiqueta
             // 
             chkInvertirEtiqueta.AutoSize = true;
-            chkInvertirEtiqueta.Location = new Point(131, 243);
+            chkInvertirEtiqueta.Location = new Point(133, 311);
             chkInvertirEtiqueta.Margin = new Padding(0);
             chkInvertirEtiqueta.Name = "chkInvertirEtiqueta";
             chkInvertirEtiqueta.Size = new Size(63, 19);
@@ -423,7 +426,7 @@
             // 
             btnImprimir.Image = Properties.Resources.imprimirIcon16;
             btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-            btnImprimir.Location = new Point(16, 236);
+            btnImprimir.Location = new Point(18, 304);
             btnImprimir.Name = "btnImprimir";
             btnImprimir.Size = new Size(79, 26);
             btnImprimir.TabIndex = 73;
@@ -432,11 +435,46 @@
             btnImprimir.UseVisualStyleBackColor = true;
             btnImprimir.Click += btnImprimir_Click;
             // 
+            // btnDuplicateWorkPlan
+            // 
+            btnDuplicateWorkPlan.Location = new Point(186, 120);
+            btnDuplicateWorkPlan.Name = "btnDuplicateWorkPlan";
+            btnDuplicateWorkPlan.Size = new Size(85, 26);
+            btnDuplicateWorkPlan.TabIndex = 74;
+            btnDuplicateWorkPlan.Text = "Duplicar plan";
+            btnDuplicateWorkPlan.UseVisualStyleBackColor = true;
+            btnDuplicateWorkPlan.Click += btnDuplicar_Click;
+            // 
+            // lblWorkGroupDuplicate
+            // 
+            lblWorkGroupDuplicate.AutoSize = true;
+            lblWorkGroupDuplicate.Font = new Font("Segoe UI", 6.75F);
+            lblWorkGroupDuplicate.Location = new Point(277, 110);
+            lblWorkGroupDuplicate.Name = "lblWorkGroupDuplicate";
+            lblWorkGroupDuplicate.Size = new Size(66, 12);
+            lblWorkGroupDuplicate.TabIndex = 76;
+            lblWorkGroupDuplicate.Text = "Nueva cuadrilla";
+            lblWorkGroupDuplicate.Visible = false;
+            // 
+            // cboWorkGroupDuplicate
+            // 
+            cboWorkGroupDuplicate.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboWorkGroupDuplicate.DropDownWidth = 400;
+            cboWorkGroupDuplicate.FormattingEnabled = true;
+            cboWorkGroupDuplicate.Location = new Point(277, 122);
+            cboWorkGroupDuplicate.Name = "cboWorkGroupDuplicate";
+            cboWorkGroupDuplicate.Size = new Size(203, 23);
+            cboWorkGroupDuplicate.TabIndex = 75;
+            cboWorkGroupDuplicate.Visible = false;
+            // 
             // FrmConvertPallet
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 534);
+            ClientSize = new Size(800, 636);
+            Controls.Add(lblWorkGroupDuplicate);
+            Controls.Add(cboWorkGroupDuplicate);
+            Controls.Add(btnDuplicateWorkPlan);
             Controls.Add(nudCopiasEtiqueta);
             Controls.Add(lblCopiasEtiqueta);
             Controls.Add(cboSeason);
@@ -515,5 +553,8 @@
         public NumericUpDown nudCopiasEtiqueta;
         public CheckBox chkInvertirEtiqueta;
         private Button btnImprimir;
+        private Button btnDuplicateWorkPlan;
+        private Label lblWorkGroupDuplicate;
+        public ComboBox cboWorkGroupDuplicate;
     }
 }
