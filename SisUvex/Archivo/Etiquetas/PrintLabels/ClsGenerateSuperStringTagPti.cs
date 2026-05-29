@@ -34,6 +34,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string patentLegend = string.Empty;
         private string presentationZPL = string.Empty;
         private string qrcodeZPL = string.Empty;
+        private string pluZPL = string.Empty;
         private string upcZPL = string.Empty;
         private string voicePickCodeZPL = string.Empty;
         private string reverseLabelOrientationZPL = string.Empty;
@@ -65,9 +66,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "03":
                     //DISTRIBUIDOR UVEX
-                    SetStringDistributorZPL("Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX"); //DISTRIBUIDOR UVEX
-                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
-                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    //SetStringDistributorZPL("Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX"); //DISTRIBUIDOR UVEX
+                    //SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
+                    //SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringPluZpl(eTag.PLU);
+                    SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL("Distributed by:", "Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX");
+
                     break;
                 case
                     "04":
@@ -135,7 +141,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /*Sobrecarga del metodo para generar el string ZPL para la etiqueta PTI*/
         private string SuperPrintPtiTag(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + qrcodeZPL + pluZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)
             {
@@ -147,7 +153,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SuperPrintPtiTagWithQrUniqueBox(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + pluZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
 
             string superString = string.Empty;
 
@@ -303,7 +309,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
-            distributorZPL = "^FX DISTRIBUTOR\n" +
+            distributorZPL += "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
                         "^FO25,300^FD" + Distributor + "^FS\n" +
                         "^CFF,30,10\n" +
@@ -354,6 +360,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         /*Se crea el string ZPL para el código de barras UPC*/
+
+        private string SetStringPluZpl (string? plu)
+        {
+            if (string.IsNullOrEmpty(plu))
+                return string.Empty;
+
+            pluZPL = "^FX PLU\n" + $"^FO430,270^A0N,30,30^FDPLU {plu} ^FS";
+            return pluZPL;
+        }
         private void SetStringUpcZPL(string upc)
         {
             if (upc.Length == 12)
@@ -443,7 +458,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         $"^CFF,30,10^FO25,330^FD{DistributedBy3}^FS\n" +
                         $"^FO25,360^FD{DistributorLine4}^FS\n";
         }
-
+        private void SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL(string? DistributedBy1, string? Line1Distributed, string? Line2Distributed, string? Line3Distributed)
+        {
+            distributorZPL = "^FX  PRODUCTO DE\n" +
+                        $"^CF0,30,40^FO22,230^FDProduct of Mexico^FS\n"
+                        + "^FX DISTRIBUIDOR\n" +
+                        $"^FO23,260^AAN,30,10^FD{DistributedBy1}^FS\n" +
+                        $"^FO25,290^AAN,30,10^FD{Line1Distributed}^FS\n" +
+                        $"^FO25,320^AAN,30,10^FD{Line2Distributed}^FS\n" +
+                        $"^FO25,350^AAN,30,10^FD{Line3Distributed}^FS\n";
+        }
         private void ChangeFontSize(string inputText)
         {
 
