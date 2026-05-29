@@ -29,6 +29,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             public const string OrdenNum = "ORDEN_NUM";
             public const string Codigo = "CODIGO";
             public const string Nombre = "NOMBRE";
+            public const string Lp = "LP";
             public const string Cuadrilla = "CUADRILLA";
             public const string Contratista = "CONTRATISTA";
             public const string Cajas = "CAJAS";

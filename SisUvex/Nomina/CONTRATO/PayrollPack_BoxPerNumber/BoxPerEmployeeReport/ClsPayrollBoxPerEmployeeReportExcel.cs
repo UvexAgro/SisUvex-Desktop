@@ -30,6 +30,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         public const string ColNumero = "NUMERO";
         public const string ColCodigo = "CODIGO";
         public const string ColNombre = "NOMBRE";
+        public const string ColLp = "LP";
 
         public DataTable BuildPreviewDataTable(DataTable? data, DateTime rangeStart, DateTime rangeEnd)
         {
@@ -37,6 +38,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             preview.Columns.Add(ColNumero, typeof(string));
             preview.Columns.Add(ColCodigo, typeof(string));
             preview.Columns.Add(ColNombre, typeof(string));
+            preview.Columns.Add(ColLp, typeof(string));
 
             if (data == null || data.Rows.Count == 0)
                 return preview;
@@ -57,6 +59,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                     r[ColNumero] = emp.Numero;
                     r[ColCodigo] = emp.Codigo;
                     r[ColNombre] = emp.Nombre;
+                    r[ColLp] = emp.Lp;
 
                     foreach (var col in colKeys)
                     {
@@ -155,7 +158,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
             var groups = BuildGroups(data);
             var colKeys = BuildDateEmpaqueColumns(data, rangeStart, rangeEnd);
-            int fixedCols = 3;
+            int fixedCols = 4;
             int totalCols = fixedCols + colKeys.Count;
 
             int row = 1;
@@ -199,7 +202,10 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 ws.Cell(headerRowDate, startCol + 2).Value = "Nombre";
                 ws.Range(headerRowDate, startCol + 2, headerRowEmpaque, startCol + 2).Merge();
 
-                ws.Range(headerRowDate, startCol, headerRowEmpaque, startCol + 2).Style
+                ws.Cell(headerRowDate, startCol + 3).Value = "LP";
+                ws.Range(headerRowDate, startCol + 3, headerRowEmpaque, startCol + 3).Merge();
+
+                ws.Range(headerRowDate, startCol, headerRowEmpaque, startCol + 3).Style
                     .Font.SetBold()
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                     .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
@@ -229,6 +235,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                     ws.Cell(dataRow, startCol).Value = emp.Numero;
                     ws.Cell(dataRow, startCol + 1).Value = emp.Codigo;
                     ws.Cell(dataRow, startCol + 2).Value = emp.Nombre;
+                    ws.Cell(dataRow, startCol + 3).Value = emp.Lp;
 
                     decimal rowTotal = 0m;
                     col = startCol + fixedCols;
@@ -445,7 +452,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
     internal readonly record struct GroupKey(string Contratista, string Cuadrilla, string Anotador, string IdUser);
 
-    internal readonly record struct EmployeeKey(string Numero, string Codigo, string Nombre, string OrdenNum);
+    internal readonly record struct EmployeeKey(string Numero, string Codigo, string Nombre, string Lp, string OrdenNum);
 
     internal readonly record struct DateEmpaqueColumnKey(DateTime Fecha, string Empaque, string IdPrice)
     {
@@ -470,11 +477,14 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             string numero = row[ClsPayrollBoxPerEmployeeReport.Columns.Numero] == DBNull.Value ? string.Empty : row[ClsPayrollBoxPerEmployeeReport.Columns.Numero].ToString()?.Trim() ?? string.Empty;
             string codigo = row[ClsPayrollBoxPerEmployeeReport.Columns.Codigo] == DBNull.Value ? string.Empty : row[ClsPayrollBoxPerEmployeeReport.Columns.Codigo].ToString()?.Trim() ?? string.Empty;
             string nombre = row[ClsPayrollBoxPerEmployeeReport.Columns.Nombre] == DBNull.Value ? string.Empty : row[ClsPayrollBoxPerEmployeeReport.Columns.Nombre].ToString()?.Trim() ?? string.Empty;
+            string lp = row.Table.Columns.Contains(ClsPayrollBoxPerEmployeeReport.Columns.Lp) && row[ClsPayrollBoxPerEmployeeReport.Columns.Lp] != DBNull.Value
+                ? row[ClsPayrollBoxPerEmployeeReport.Columns.Lp].ToString()?.Trim() ?? string.Empty
+                : string.Empty;
             string ordenNum = row.Table.Columns.Contains(ClsPayrollBoxPerEmployeeReport.Columns.OrdenNum) && row[ClsPayrollBoxPerEmployeeReport.Columns.OrdenNum] != DBNull.Value
                 ? row[ClsPayrollBoxPerEmployeeReport.Columns.OrdenNum].ToString()?.Trim() ?? string.Empty
                 : string.Empty;
 
-            var emp = new EmployeeKey(numero, codigo, nombre, ordenNum);
+            var emp = new EmployeeKey(numero, codigo, nombre, lp, ordenNum);
             if (!Employees.Contains(emp))
                 Employees.Add(emp);
 
