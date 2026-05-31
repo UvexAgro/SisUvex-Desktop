@@ -84,7 +84,7 @@ namespace SisUvex.Archivo.MixtearPallets
         {
             cls.InicializarColumnas(dgvPallets);
             cls.InicializarColumnas(dgvDestibar);
-            ActualizarTotales();
+            ActualizarTotales();   // también llama ActualizarCboPosicionMix internamente
 
             // Estilo de selección personalizado: fondo transparente + texto negrita azul marino
             dgvPallets.CellPainting  += DgvSeleccion_CellPainting;
@@ -95,8 +95,78 @@ namespace SisUvex.Archivo.MixtearPallets
         }
 
         // ============================================================================
-        // CIERRE DEL FORMULARIO
+        // POSICIÓN AL MIXTEAR (Rack / Manifiesto)
         // ============================================================================
+
+        /// <summary>
+        /// Representa una opción del combobox cboPosicionMix.
+        /// Carga las 3 columnas que se pasan al SP al guardar la mixteada.
+        /// </summary>
+        private sealed class ItemPosicionMix
+        {
+            public string  Texto             { get; init; } = "";
+            public string? IdManifest        { get; init; }
+            public string? PosicionManifest  { get; init; }
+            public string? IdRack            { get; init; }
+            public override string ToString() => Texto;
+        }
+
+        // Sentinel para las dos opciones fijas
+        private static readonly ItemPosicionMix _itemSeleccionar  = new() { Texto = "— Seleccionar —" };
+        private static readonly ItemPosicionMix _itemLimpiar      = new() { Texto = "✖  Limpiar de posición" };
+
+        /// <summary>
+        /// Recorre dgvPallets y reconstruye cboPosicionMix:
+        ///  • Si ningún pallet tiene Rack ni Manifiesto → Disabled, sin items.
+        ///  • Si hay al menos uno                       → Enabled, con "Seleccionar",
+        ///    "Limpiar de posición" y un item por cada pallet con posición.
+        /// </summary>
+        private void ActualizarCboPosicionMix()
+        {
+            cboPosicionMix.Items.Clear();
+
+            var conPosicion = new System.Collections.Generic.List<ItemPosicionMix>();
+
+            foreach (DataGridViewRow row in dgvPallets.Rows)
+            {
+                string idPallet  = row.Cells["Pallet"].Value?.ToString()?.Trim()      ?? "";
+                string manifest  = row.Cells["Manifiesto"].Value?.ToString()?.Trim()  ?? "";
+                string rack      = row.Cells["Rack"].Value?.ToString()?.Trim()        ?? "";
+                string posManStr = row.Cells["PosManifiesto"].Value?.ToString()?.Trim() ?? "";
+
+                if (string.IsNullOrEmpty(idPallet)) continue;
+                if (string.IsNullOrEmpty(manifest) && string.IsNullOrEmpty(rack)) continue;
+
+                string texto = !string.IsNullOrEmpty(rack)
+                    ? $"Pallet: {idPallet} / Rack: {rack}"
+                    : $"Pallet: {idPallet} / Man: {manifest}" +
+                      (!string.IsNullOrEmpty(posManStr) ? $"  Pos: {posManStr}" : "");
+
+                conPosicion.Add(new ItemPosicionMix
+                {
+                    Texto            = texto,
+                    IdManifest       = string.IsNullOrEmpty(manifest) ? null : manifest,
+                    PosicionManifest = string.IsNullOrEmpty(posManStr) ? null : posManStr,
+                    IdRack           = string.IsNullOrEmpty(rack)     ? null : rack,
+                });
+            }
+
+            if (conPosicion.Count == 0)
+            {
+                cboPosicionMix.Enabled = false;
+                lblPosicionMix.ForeColor = SystemColors.GrayText;
+                return;
+            }
+
+            cboPosicionMix.Items.Add(_itemSeleccionar);
+            cboPosicionMix.Items.Add(_itemLimpiar);
+            foreach (var item in conPosicion)
+                cboPosicionMix.Items.Add(item);
+
+            cboPosicionMix.Enabled       = true;
+            cboPosicionMix.SelectedIndex = 0;          // "— Seleccionar —"
+            lblPosicionMix.ForeColor     = SystemColors.ControlText;
+        }
 
         /// <summary>
         /// Detecta cambios pendientes (reestibas sin ejecutar o pallets en los listados)
@@ -521,13 +591,43 @@ namespace SisUvex.Archivo.MixtearPallets
 
             EjecutarYAplicarDeferreds();
 
-            string nuevaEstiba = cls.EjecutarMixtear(dgvPallets);
+            // ── Leer posición seleccionada para asignar a todos los pallets ──────────
+            ItemPosicionMix? posSelected = cboPosicionMix.Enabled
+                ? cboPosicionMix.SelectedItem as ItemPosicionMix
+                : null;
+
+            // Si el combobox está habilitado y sigue en "Seleccionar", bloquear
+            if (cboPosicionMix.Enabled && (posSelected == null || ReferenceEquals(posSelected, _itemSeleccionar)))
+            {
+                MessageBox.Show(
+                    "Hay pallets con Rack o Manifiesto asignado.\n\n" +
+                    "Seleccione la posición a la que se asignarán los pallets al mixtear,\n" +
+                    "o elija \"✖ Limpiar de posición\" para quitar las asignaciones.",
+                    "Posición requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboPosicionMix.Focus();
+                return;
+            }
+
+            // Extraer valores (null cuando se elige "Limpiar" o cuando está deshabilitado)
+            string? idManifestMix  = posSelected?.IdManifest;
+            string? posManiMix     = posSelected?.PosicionManifest;
+            string? idRackMix      = posSelected?.IdRack;
+
+            string nuevaEstiba = cls.EjecutarMixtear(dgvPallets, idManifestMix, posManiMix, idRackMix);
             if (string.IsNullOrEmpty(nuevaEstiba)) { txbIdPallet.Focus(); return; }
 
             for (int i = 0; i < dgvPallets.Rows.Count; i++)
             {
-                dgvPallets.Rows[i].Cells["Estiba"].Value = nuevaEstiba;
-                dgvPallets.Rows[i].Cells["Mix"].Value    = (i + 1).ToString("00");
+                dgvPallets.Rows[i].Cells["Estiba"].Value        = nuevaEstiba;
+                dgvPallets.Rows[i].Cells["Mix"].Value           = (i + 1).ToString("00");
+
+                // Reflejar la posición asignada (o limpiada) en la grilla
+                if (cboPosicionMix.Enabled)
+                {
+                    dgvPallets.Rows[i].Cells["Manifiesto"].Value    = idManifestMix  ?? string.Empty;
+                    dgvPallets.Rows[i].Cells["PosManifiesto"].Value = posManiMix     ?? string.Empty;
+                    dgvPallets.Rows[i].Cells["Rack"].Value          = idRackMix      ?? string.Empty;
+                }
             }
 
             cls.AplicarColorAdvertencias(dgvPallets);
@@ -1332,6 +1432,9 @@ namespace SisUvex.Archivo.MixtearPallets
 
             // Habilitar "Ajuste asistido" solo cuando hay exceso de cajas
             btnAsistido.Enabled = cajasMaxGtin > 0 && totalCajas > cajasMaxGtin;
+
+            // Actualizar opciones de posición según los pallets actuales en dgvPallets
+            ActualizarCboPosicionMix();
         }
 
         private static object[] CopiarCeldas(DataGridViewRow fila)

@@ -103,6 +103,7 @@ namespace SisUvex.Archivo.MixtearPallets
             new() { Nombre = "Caja",          Encabezado = "Caja",             AnchoMinimo = 30,  AnchoInicial = 35  },
             new() { Nombre = "Distribuidor",  Encabezado = "Distribuidor",     AnchoMinimo = 70,  AnchoInicial = 70 },
             new() { Nombre = "Manifiesto",    Encabezado = "Manifiesto",       AnchoMinimo = 70,  AnchoInicial = 85  },
+            new() { Nombre = "PosManifiesto", Encabezado = "Pos Man",          AnchoMinimo = 48,  AnchoInicial = 55  },
             new() { Nombre = "Rack",          Encabezado = "Rack",             AnchoMinimo = 50,  AnchoInicial = 65  },
             new() { Nombre = "Lote",          Encabezado = "Lote",             AnchoMinimo = 75,  AnchoInicial = 110 },
             new() { Nombre = "CajasPallet",   Encabezado = "Cjs/Pallet",       AnchoMinimo = 65,  AnchoInicial = 75  },
@@ -190,6 +191,7 @@ namespace SisUvex.Archivo.MixtearPallets
             new("Rack",          p => p.Rack),
             new("Lote",          p => p.Lote),
             new("Manifiesto",    p => p.Manifiesto),
+            new("Pos Manifiesto",p => p.PosManifiesto),
             new("Papeleta",      p => p.Papeleta),
             new("Cuadrilla",     p => p.Cuadrilla),
         };
@@ -297,7 +299,8 @@ namespace SisUvex.Archivo.MixtearPallets
                 vpal.Pre,
                 vpal.Pos,
                 vpal.Caja,
-                gtn.i_palletBoxes AS CajasPorPallet
+                gtn.i_palletBoxes AS CajasPorPallet,
+                vpal.Posicion     AS PosManifiesto
             FROM vw_PackPalletCon vpal
             LEFT JOIN gtn ON gtn.id_GTIN = vpal.GTIN";
 
@@ -399,6 +402,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 Variedad      = row["Variedad"].ToString() ?? "",
                 Distribuidor  = row["Distribuidor"].ToString() ?? "",
                 Manifiesto    = row["Manifiesto"].ToString() ?? "",
+                PosManifiesto = row["PosManifiesto"]?.ToString() ?? "",
                 Rack          = row["Rack"].ToString() ?? "",
                 Fecha         = fecha.Length >= 10 ? fecha[..10] : fecha,
                 Lote          = row["Lote"].ToString() ?? "",
@@ -503,7 +507,10 @@ namespace SisUvex.Archivo.MixtearPallets
         /// Retorna el ID de la nueva estiba, o string.Empty si falló.
         /// </summary>
         /// <param name="dgv">DataGridView dgvPallets con los pallets a mixtear</param>
-        public string EjecutarMixtear(DataGridView dgv)
+        public string EjecutarMixtear(DataGridView dgv,
+                                       string? idManifest = null,
+                                       string? positionManifest = null,
+                                       string? idRack = null)
         {
             string nuevaEstiba = ObtenerSiguienteEstiba();
             try
@@ -518,10 +525,13 @@ namespace SisUvex.Archivo.MixtearPallets
 
                     SqlCommand cmd = new("sp_PackPalletAddStowage", sql.cnn);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@idPallet",      idPallet);
-                    cmd.Parameters.AddWithValue("@stowage",       nuevaEstiba);
-                    cmd.Parameters.AddWithValue("@intMixPallet",  posicion);
-                    cmd.Parameters.AddWithValue("@userUpdate",    User.GetUserName());
+                    cmd.Parameters.AddWithValue("@idPallet",         idPallet);
+                    cmd.Parameters.AddWithValue("@stowage",          nuevaEstiba);
+                    cmd.Parameters.AddWithValue("@intMixPallet",     posicion);
+                    cmd.Parameters.AddWithValue("@userUpdate",       User.GetUserName());
+                    cmd.Parameters.AddWithValue("@idManifest",       (object?)idManifest       ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@positionManifest", (object?)positionManifest ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@idRack",           (object?)idRack           ?? DBNull.Value);
                     cmd.ExecuteNonQuery();
                 }
                 return nuevaEstiba;
@@ -686,6 +696,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 pallet.TipoCaja,       // Caja
                 pallet.Distribuidor,   // Distribuidor
                 pallet.Manifiesto,     // Manifiesto
+                pallet.PosManifiesto,  // PosManifiesto
                 pallet.Rack,           // Rack
                 pallet.Lote,           // Lote
                 pallet.CajasPorPallet, // CajasPallet
@@ -789,6 +800,7 @@ namespace SisUvex.Archivo.MixtearPallets
                 TipoCaja      = Cell("Caja"),
                 Lote          = Cell("Lote"),
                 Manifiesto    = Cell("Manifiesto"),
+                PosManifiesto = Cell("PosManifiesto"),
                 Rack          = Cell("Rack"),
                 Papeleta      = Cell("Papeleta"),
                 Cuadrilla     = Cell("Cuadrilla"),

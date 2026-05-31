@@ -88,6 +88,9 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>Pack_Pallet.id_manifest</summary>
         public string Manifiesto { get; set; } = string.Empty;
 
+        /// <summary>Pack_Pallet.c_position — posición del pallet dentro del manifiesto</summary>
+        public string PosManifiesto { get; set; } = string.Empty;
+
         /// <summary>Pack_Pallet.id_rack</summary>
         public string Rack { get; set; } = string.Empty;
 
