@@ -21,6 +21,9 @@ namespace SisUvex.Archivo.MixtearPallets
             numCajas = new NumericUpDown();
             lblSobrantesTxt = new Label();
             txbCajasSobrantes = new TextBox();
+            lblPositionTxt = new Label();
+            cboPosition = new ComboBox();
+            lblPosInfo = new Label();
             lblSobrantesInfo = new Label();
             lblTipoTxt = new Label();
             cboTipo = new ComboBox();
@@ -46,13 +49,16 @@ namespace SisUvex.Archivo.MixtearPallets
             grpReestiba.Controls.Add(numCajas);
             grpReestiba.Controls.Add(lblSobrantesTxt);
             grpReestiba.Controls.Add(txbCajasSobrantes);
+            grpReestiba.Controls.Add(lblPositionTxt);
+            grpReestiba.Controls.Add(cboPosition);
+            grpReestiba.Controls.Add(lblPosInfo);
             grpReestiba.Controls.Add(lblSobrantesInfo);
             grpReestiba.Controls.Add(lblTipoTxt);
             grpReestiba.Controls.Add(cboTipo);
             grpReestiba.Controls.Add(lblDescripcion);
             grpReestiba.Location = new Point(12, 68);
             grpReestiba.Name = "grpReestiba";
-            grpReestiba.Size = new Size(676, 185);
+            grpReestiba.Size = new Size(676, 230);
             grpReestiba.TabIndex = 1;
             grpReestiba.TabStop = false;
             grpReestiba.Text = "Configuración de la reestiba";
@@ -101,6 +107,35 @@ namespace SisUvex.Archivo.MixtearPallets
             txbCajasSobrantes.TabIndex = 1;
             txbCajasSobrantes.TextAlign = HorizontalAlignment.Right;
             // 
+            // lblPositionTxt
+            // 
+            lblPositionTxt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblPositionTxt.Location = new Point(6, 172);
+            lblPositionTxt.Name = "lblPositionTxt";
+            lblPositionTxt.Size = new Size(303, 18);
+            lblPositionTxt.TabIndex = 5;
+            lblPositionTxt.Text = "¿Mantener el mismo Rack/Manifiesto del original?";
+            // 
+            // cboPosition
+            // 
+            cboPosition.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPosition.Enabled = false;
+            cboPosition.Items.AddRange(new object[] { "No", "Sí" });
+            cboPosition.Location = new Point(12, 191);
+            cboPosition.Name = "cboPosition";
+            cboPosition.Size = new Size(49, 23);
+            cboPosition.TabIndex = 3;
+            // 
+            // lblPosInfo
+            // 
+            lblPosInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblPosInfo.ForeColor = Color.DarkRed;
+            lblPosInfo.Location = new Point(67, 194);
+            lblPosInfo.Name = "lblPosInfo";
+            lblPosInfo.Size = new Size(603, 18);
+            lblPosInfo.TabIndex = 6;
+            lblPosInfo.Visible = false;
+            // 
             // lblSobrantesInfo
             // 
             lblSobrantesInfo.AutoSize = true;
@@ -135,7 +170,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             lblDescripcion.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
             lblDescripcion.ForeColor = Color.Gray;
-            lblDescripcion.Location = new Point(12, 144);
+            lblDescripcion.Location = new Point(6, 140);
             lblDescripcion.Name = "lblDescripcion";
             lblDescripcion.Size = new Size(658, 32);
             lblDescripcion.TabIndex = 4;
@@ -147,7 +182,7 @@ namespace SisUvex.Archivo.MixtearPallets
             btnConfirmar.FlatStyle = FlatStyle.Flat;
             btnConfirmar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnConfirmar.ForeColor = Color.White;
-            btnConfirmar.Location = new Point(12, 259);
+            btnConfirmar.Location = new Point(12, 321);
             btnConfirmar.Name = "btnConfirmar";
             btnConfirmar.Size = new Size(90, 28);
             btnConfirmar.TabIndex = 3;
@@ -157,7 +192,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(108, 259);
+            btnCancelar.Location = new Point(108, 321);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(90, 28);
             btnCancelar.TabIndex = 4;
@@ -169,7 +204,7 @@ namespace SisUvex.Archivo.MixtearPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(701, 296);
+            ClientSize = new Size(701, 361);
             Controls.Add(grpInfoPallet);
             Controls.Add(grpReestiba);
             Controls.Add(btnConfirmar);
@@ -198,6 +233,9 @@ namespace SisUvex.Archivo.MixtearPallets
         private Label         lblSobrantesInfo;
         private Label         lblTipoTxt;
         private ComboBox      cboTipo;
+        private Label         lblPositionTxt;
+        private ComboBox      cboPosition;
+        private Label         lblPosInfo;
         private Label         lblDescripcion;
         private Button        btnConfirmar;
         private Button        btnCancelar;

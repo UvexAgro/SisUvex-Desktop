@@ -95,6 +95,46 @@ namespace SisUvex.Archivo.MixtearPallets
         }
 
         // ============================================================================
+        // CIERRE DEL FORMULARIO
+        // ============================================================================
+
+        /// <summary>
+        /// Detecta cambios pendientes (reestibas sin ejecutar o pallets en los listados)
+        /// y pide confirmación antes de cerrar.
+        /// </summary>
+        private void FrmMixtearPallets_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Solo aplica cuando el usuario cierra manualmente; no bloquear cierres del sistema
+            if (e.CloseReason != CloseReason.UserClosing) return;
+
+            bool hayReesibasPendientes = _reesibasDeferred.Count > 0;
+            bool hayPalletsEnMix      = dgvPallets.Rows.Count  > 0;
+            bool hayPalletsEnDes      = dgvDestibar.Rows.Count > 0;
+
+            if (!hayReesibasPendientes && !hayPalletsEnMix && !hayPalletsEnDes) return;
+
+            var detalles = new System.Collections.Generic.List<string>();
+            if (hayReesibasPendientes)
+                detalles.Add($"  • {_reesibasDeferred.Count} reestiba(s) pendiente(s) sin ejecutar.");
+            if (hayPalletsEnMix)
+                detalles.Add($"  • {dgvPallets.Rows.Count} pallet(s) en el listado de mixtear sin guardar.");
+            if (hayPalletsEnDes)
+                detalles.Add($"  • {dgvDestibar.Rows.Count} pallet(s) en el listado de desestibar sin procesar.");
+
+            var resp = MessageBox.Show(
+                "Hay cambios sin guardar:\n\n" +
+                string.Join("\n", detalles) + "\n\n" +
+                "¿Desea cerrar sin guardar?",
+                "Cerrar sin guardar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);   // "No" como botón predeterminado
+
+            if (resp != DialogResult.Yes)
+                e.Cancel = true;
+        }
+
+        // ============================================================================
         // CONTROLES DE PRUEBA – ajuste de anchos de columna
         // Para activar: descomentar la llamada a DebugCargarColumnas() en FrmMixtearPallets_Load.
         // ============================================================================
@@ -193,7 +233,7 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>
         /// Flujo para agregar un pallet al grid de mixteo con validaciones:
         ///   1. Duplicado en dgvPallets / en dgvDestibar (regresa directamente).
-        ///   2. Pallet en manifiesto → bloquear.
+        ///   2. Pallet en manifiesto → advertir y pedir confirmación.
         ///   3. Pallet con estiba → ofrecer toda la estiba.
         ///   4. Cajas vs. máximo GTIN.
         ///   5. Diferencias de producto.
@@ -231,16 +271,21 @@ namespace SisUvex.Archivo.MixtearPallets
                 return;
             }
 
-            // ── Validación 0: pallet en manifiesto → bloquear ─────────────────────
+            // ── Validación 0: pallet en manifiesto → avisar y confirmar ─────────────
             if (!string.IsNullOrEmpty(pallet.Manifiesto))
             {
-                MostrarAviso(
-                    $"El pallet {idPallet} no se puede agregar al mix porque ya está " +
-                    $"incluido en un manifiesto.\n\n" +
-                    $"  Manifiesto: {pallet.Manifiesto}",
-                    "Pallet en manifiesto");
-                FocarYSeleccionar(txbIdPallet);
-                return;
+                var resp = MessageBox.Show(
+                    $"El pallet {idPallet} ya está incluido en el manifiesto {pallet.Manifiesto}.\n\n" +
+                    "¿Desea agregarlo al mix de todas formas?",
+                    "Pallet en manifiesto",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2);   // "No" como opción por defecto
+
+                if (resp != DialogResult.Yes)
+                {
+                    FocarYSeleccionar(txbIdPallet);
+                    return;
+                }
             }
 
             // ── Validación 1: pallet con estiba → ofrecer toda la estiba ──────────
@@ -403,7 +448,8 @@ namespace SisUvex.Archivo.MixtearPallets
             using FrmReestibaPallet dlg = new(palletDlg, tipos);
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
 
-            EjecutarReestibaDeferredEnFila(fila, dlg.NuevasCajas, dlg.TipoSeleccionado, dlg.EsReestibaCompleta);
+            EjecutarReestibaDeferredEnFila(fila, dlg.NuevasCajas, dlg.TipoSeleccionado,
+                                           dlg.EsReestibaCompleta, dlg.MantenerPosicion);
 
             ActualizarTotales();
             cls.AplicarColorAdvertencias(dgvPallets);
@@ -638,7 +684,8 @@ namespace SisUvex.Archivo.MixtearPallets
                 using FrmReestibaPallet dlg = new(palletDlg, tipos, cajasOrigRec);
                 if (dlg.ShowDialog(this) != DialogResult.OK) continue;
 
-                EjecutarReestibaDeferredEnFila(accion.Fila, dlg.NuevasCajas, dlg.TipoSeleccionado, dlg.EsReestibaCompleta);
+                EjecutarReestibaDeferredEnFila(accion.Fila, dlg.NuevasCajas, dlg.TipoSeleccionado,
+                                               dlg.EsReestibaCompleta, dlg.MantenerPosicion);
             }
 
             // ── MOVER: copiar fila a dgvDestibar y quitar de dgvPallets ─────────────
@@ -942,7 +989,8 @@ namespace SisUvex.Archivo.MixtearPallets
         /// Muestra un MessageBox informativo al terminar.
         /// </summary>
         private void EjecutarReestibaDeferredEnFila(
-            DataGridViewRow filaOrig, int nuevasCajas, TipoReestiba tipo, bool esCompleta)
+            DataGridViewRow filaOrig, int nuevasCajas, TipoReestiba tipo,
+            bool esCompleta, bool mantenerPosicion = false)
         {
             string idRef  = filaOrig.Cells["Pallet"].Value?.ToString() ?? "";
             int    cajas  = GetCajasDeFilaGrid(filaOrig);
@@ -960,6 +1008,7 @@ namespace SisUvex.Archivo.MixtearPallets
                     NuevasCajasOriginal = cajas,
                     Tipo                = tipo,
                     EsCompleta          = true,
+                    // MantenerPosicion no aplica en reestiba completa (no hay nuevo pallet)
                 };
                 _reesibasDeferred.Add(def);
 
@@ -999,6 +1048,7 @@ namespace SisUvex.Archivo.MixtearPallets
                     CajasNuevoPallet    = nCajas,
                     Tipo                = tipo,
                     EsCompleta          = false,
+                    MantenerPosicion    = mantenerPosicion,
                 };
                 _reesibasDeferred.Add(def);
 
@@ -1007,26 +1057,64 @@ namespace SisUvex.Archivo.MixtearPallets
 
                 if (sobActivo)
                 {
-                    // ── Tipo ACTIVO (SOBRANTE): original → dgvDestibar, sobrante → dgvPallets ──
-                    filaOrig.Cells["Cajas"].Value = nuevasCajas;
-                    object[] valsOrigMod = CopiarCeldas(filaOrig);
-                    dgvDestibar.Rows.Add(valsOrigMod);
-                    dgvPallets.Rows.Remove(filaOrig);
+                    // Leer Manifiesto/Rack de valsBase antes de modificar la fila
+                    string manifest = valsBase[dgvPallets.Columns["Manifiesto"].Index]?.ToString()?.Trim() ?? string.Empty;
+                    string rack     = valsBase[dgvPallets.Columns["Rack"].Index]?.ToString()?.Trim()     ?? string.Empty;
 
-                    dgvPallets.Rows.Add(valsBase);
-                    DataGridViewRow filaRes = dgvPallets.Rows[dgvPallets.Rows.Count - 1];
-                    filaRes.Cells["Pallet"].Value      = idTemp;
-                    filaRes.Cells["Cajas"].Value       = nCajas;
-                    filaRes.Cells["Estiba"].Value      = string.Empty;
-                    filaRes.Cells["Mix"].Value         = string.Empty;
-                    filaRes.DefaultCellStyle.BackColor = Color.LightCyan;
+                    if (mantenerPosicion)
+                    {
+                        // ── MantenerPosicion = true: AMBOS permanecen en dgvPallets ─────────────
+                        //    Original (cajas reducidas) se queda en dgvPallets.
+                        //    Sobrante nuevo también se agrega a dgvPallets (cyan).
+                        //    El SP transferirá rack/manifiesto al sobrante (@keepPosition='1').
+                        filaOrig.Cells["Cajas"].Value = nuevasCajas;
 
-                    MessageBox.Show(
-                        $"Reestiba del pallet {idRef} registrada como pendiente.\n" +
-                        $"  • Original ({nuevasCajas} cjs.) → listado de desestibar.\n" +
-                        $"  • Sobrante temporal ({idTemp}, {nCajas} cjs.) → listado de mixtear.\n\n" +
-                        "Se aplicará al confirmar (Guardar o Desestibar listado).",
-                        "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        dgvPallets.Rows.Add(valsBase);
+                        DataGridViewRow filaRes = dgvPallets.Rows[dgvPallets.Rows.Count - 1];
+                        filaRes.Cells["Pallet"].Value      = idTemp;
+                        filaRes.Cells["Cajas"].Value       = nCajas;
+                        filaRes.Cells["Estiba"].Value      = string.Empty;
+                        filaRes.Cells["Mix"].Value         = string.Empty;
+                        filaRes.DefaultCellStyle.BackColor = Color.LightCyan;
+
+                        var partes = new System.Collections.Generic.List<string>();
+                        if (!string.IsNullOrEmpty(manifest)) partes.Add($"Manifiesto: {manifest}");
+                        if (!string.IsNullOrEmpty(rack))     partes.Add($"Rack: {rack}");
+                        string posMsg = partes.Count > 0
+                            ? $"\n  📌 Manteniéndose: {string.Join(" | ", partes)}"
+                            : string.Empty;
+
+                        MessageBox.Show(
+                            $"Reestiba del pallet {idRef} registrada como pendiente.\n" +
+                            $"  • Original ({nuevasCajas} cjs.) → permanece en listado de mixtear.\n" +
+                            $"  • Sobrante temporal ({idTemp}, {nCajas} cjs.) → listado de mixtear (heredará Rack/Manifiesto)." +
+                            posMsg + "\n\n" +
+                            "Se aplicará al confirmar (Guardar o Desestibar listado).",
+                            "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        // ── MantenerPosicion = false: original → dgvDestibar, sobrante → dgvPallets ──
+                        filaOrig.Cells["Cajas"].Value = nuevasCajas;
+                        object[] valsOrigMod = CopiarCeldas(filaOrig);
+                        dgvDestibar.Rows.Add(valsOrigMod);
+                        dgvPallets.Rows.Remove(filaOrig);
+
+                        dgvPallets.Rows.Add(valsBase);
+                        DataGridViewRow filaRes = dgvPallets.Rows[dgvPallets.Rows.Count - 1];
+                        filaRes.Cells["Pallet"].Value      = idTemp;
+                        filaRes.Cells["Cajas"].Value       = nCajas;
+                        filaRes.Cells["Estiba"].Value      = string.Empty;
+                        filaRes.Cells["Mix"].Value         = string.Empty;
+                        filaRes.DefaultCellStyle.BackColor = Color.LightCyan;
+
+                        MessageBox.Show(
+                            $"Reestiba del pallet {idRef} registrada como pendiente.\n" +
+                            $"  • Original ({nuevasCajas} cjs.) → listado de desestibar.\n" +
+                            $"  • Sobrante temporal ({idTemp}, {nCajas} cjs.) → listado de mixtear.\n\n" +
+                            "Se aplicará al confirmar (Guardar o Desestibar listado).",
+                            "Reestiba Pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 else
                 {

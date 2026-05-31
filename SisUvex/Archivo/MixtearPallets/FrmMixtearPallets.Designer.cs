@@ -345,7 +345,8 @@
             Name = "FrmMixtearPallets";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mixtear Pallets en Estiba";
-            Load += FrmMixtearPallets_Load;
+            Load         += FrmMixtearPallets_Load;
+            FormClosing  += FrmMixtearPallets_FormClosing;
             ((System.ComponentModel.ISupportInitialize)dgvPallets).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDestibar).EndInit();
             ResumeLayout(false);

@@ -224,6 +224,14 @@ namespace SisUvex.Archivo.MixtearPallets
         /// al original). En este caso IdPalletTemporal y CajasNuevoPallet son irrelevantes.
         /// </summary>
         public bool EsCompleta { get; set; }
+
+        /// <summary>
+        /// Si true, el nuevo pallet hereda el id_rack e id_manifest del pallet original
+        /// (corresponde a @keepPosition = '1' en sp_PackPalletReestiba).
+        /// Solo aplica en reestibas parciales con tipo activo (NuevoPalletActivo = true).
+        /// Cuando false o cuando EsCompleta = true, esas columnas se dejan en NULL.
+        /// </summary>
+        public bool MantenerPosicion { get; set; }
     }
 
     /// <summary>
