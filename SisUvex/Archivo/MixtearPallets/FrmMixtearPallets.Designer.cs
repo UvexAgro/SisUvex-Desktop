@@ -45,6 +45,8 @@
             button1 = new Button();
             btnQuitarDes = new Button();
             dgvDestibar = new DataGridView();
+            lblPosicionMix = new Label();
+            cboPosicionMix = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvPallets).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDestibar).BeginInit();
             SuspendLayout();
@@ -211,7 +213,7 @@
             txbBoxesStow.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txbBoxesStow.Enabled = false;
             txbBoxesStow.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txbBoxesStow.Location = new Point(235, 303);
+            txbBoxesStow.Location = new Point(237, 303);
             txbBoxesStow.Name = "txbBoxesStow";
             txbBoxesStow.Size = new Size(50, 23);
             txbBoxesStow.TabIndex = 11;
@@ -221,7 +223,7 @@
             // 
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new Point(138, 306);
+            label1.Location = new Point(149, 307);
             label1.Name = "label1";
             label1.Size = new Size(88, 15);
             label1.TabIndex = 10;
@@ -232,7 +234,7 @@
             txbBoxesMax.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txbBoxesMax.Enabled = false;
             txbBoxesMax.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txbBoxesMax.Location = new Point(400, 303);
+            txbBoxesMax.Location = new Point(386, 303);
             txbBoxesMax.Name = "txbBoxesMax";
             txbBoxesMax.Size = new Size(50, 23);
             txbBoxesMax.TabIndex = 13;
@@ -242,7 +244,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(300, 306);
+            label2.Location = new Point(293, 307);
             label2.Name = "label2";
             label2.Size = new Size(94, 15);
             label2.TabIndex = 12;
@@ -314,6 +316,25 @@
             dgvDestibar.Size = new Size(988, 238);
             dgvDestibar.TabIndex = 17;
             // 
+            // lblPosicionMix
+            // 
+            lblPosicionMix.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblPosicionMix.AutoSize = true;
+            lblPosicionMix.Location = new Point(443, 307);
+            lblPosicionMix.Name = "lblPosicionMix";
+            lblPosicionMix.Size = new Size(109, 15);
+            lblPosicionMix.TabIndex = 50;
+            lblPosicionMix.Text = "Posición al mixtear:";
+            // 
+            // cboPosicionMix
+            // 
+            cboPosicionMix.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cboPosicionMix.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPosicionMix.Location = new Point(551, 303);
+            cboPosicionMix.Name = "cboPosicionMix";
+            cboPosicionMix.Size = new Size(225, 23);
+            cboPosicionMix.TabIndex = 51;
+            // 
             // FrmMixtearPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -331,20 +352,23 @@
             Controls.Add(btnReconfigurar);
             Controls.Add(dgvPallets);
             Controls.Add(btnGuardar);
-            Controls.Add(label1);
             Controls.Add(txbBoxesStow);
-            Controls.Add(label2);
             Controls.Add(txbBoxesMax);
             Controls.Add(label3);
             Controls.Add(btnAddToUp);
             Controls.Add(button1);
             Controls.Add(btnQuitarDes);
             Controls.Add(dgvDestibar);
+            Controls.Add(cboPosicionMix);
+            Controls.Add(label1);
+            Controls.Add(label2);
+            Controls.Add(lblPosicionMix);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(900, 680);
             Name = "FrmMixtearPallets";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mixtear Pallets en Estiba";
+            FormClosing += FrmMixtearPallets_FormClosing;
             Load += FrmMixtearPallets_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPallets).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDestibar).EndInit();
@@ -376,5 +400,7 @@
         private Button           button1;
         private Button           btnQuitarDes;
         public  DataGridView     dgvDestibar;
+        private Label            lblPosicionMix;
+        private ComboBox         cboPosicionMix;
     }
 }

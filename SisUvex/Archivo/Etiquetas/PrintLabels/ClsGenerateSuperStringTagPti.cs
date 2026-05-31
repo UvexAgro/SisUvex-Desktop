@@ -370,21 +370,21 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             return pluZPL;
         }
         private void SetStringUpcZPL(string upc)
-        {
+        {//2026 ajustar posicion
             if (upc.Length == 12)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^BUN,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX UPC-A CODE\n" +
+                         "^FO430,320^BY2,1,60^BUN,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else if (upc.Length == 13)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^BEN,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX EAN-13 CODE\n" +
+                         "^FO430,320^BY2,1,60^BEN,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else if (upc.Length == 8)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^B8,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX EAN-8 CODE\n" +
+                         "^FO430,320^BY2,1,60^B8N,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else
             {
@@ -457,8 +457,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         + "^FX DISTRIBUIDOR\n" +
                         $"^CFF,30,10^FO25,330^FD{DistributedBy3}^FS\n" +
                         $"^FO25,360^FD{DistributorLine4}^FS\n";
-        }
-        private void SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL(string? DistributedBy1, string? Line1Distributed, string? Line2Distributed, string? Line3Distributed)
+        }private void SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL(string? DistributedBy1, string? Line1Distributed, string? Line2Distributed, string? Line3Distributed)
         {
             distributorZPL = "^FX  PRODUCTO DE\n" +
                         $"^CF0,30,40^FO22,230^FDProduct of Mexico^FS\n"

@@ -88,6 +88,9 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>Pack_Pallet.id_manifest</summary>
         public string Manifiesto { get; set; } = string.Empty;
 
+        /// <summary>Pack_Pallet.c_position — posición del pallet dentro del manifiesto</summary>
+        public string PosManifiesto { get; set; } = string.Empty;
+
         /// <summary>Pack_Pallet.id_rack</summary>
         public string Rack { get; set; } = string.Empty;
 
@@ -224,6 +227,14 @@ namespace SisUvex.Archivo.MixtearPallets
         /// al original). En este caso IdPalletTemporal y CajasNuevoPallet son irrelevantes.
         /// </summary>
         public bool EsCompleta { get; set; }
+
+        /// <summary>
+        /// Si true, el nuevo pallet hereda el id_rack e id_manifest del pallet original
+        /// (corresponde a @keepPosition = '1' en sp_PackPalletReestiba).
+        /// Solo aplica en reestibas parciales con tipo activo (NuevoPalletActivo = true).
+        /// Cuando false o cuando EsCompleta = true, esas columnas se dejan en NULL.
+        /// </summary>
+        public bool MantenerPosicion { get; set; }
     }
 
     /// <summary>
