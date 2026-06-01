@@ -54,7 +54,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         {
             if (frm == null) return;
 
-            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.CboWithDates);
             ClsComboBoxes.CboLoadActives(frm.cboContractor, Contractor.Cbo);
             ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
             UserFilter.SetCboAnotadores(frm.cboUser);
@@ -74,8 +74,48 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, workGroupFilters);
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboUser, null, userFilters);
 
-            // Temp. uva 2026 (mismo patrón que otros formularios)
+            frm.cboSeason.SelectedIndexChanged += CboSeason_SelectedIndexChanged;
+
+            // Temp. uva 2026 (mismo patrón que otros formularios; también aplica sus fechas al rango)
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08");
+        }
+
+        public void CboSeason_SelectedIndexChanged(object? sender, EventArgs e)
+            => ApplySeasonDatesToDatePickers();
+
+        private void ApplySeasonDatesToDatePickers()
+        {
+            if (frm == null || frm.cboSeason.SelectedIndex < 1)
+                return;
+
+            if (!TryGetSelectedSeasonDateRange(frm.cboSeason, out DateTime start, out DateTime end))
+                return;
+
+            frm.dtpDate1.Value = start;
+            frm.dtpDate2.Value = end;
+        }
+
+        private static bool TryGetSelectedSeasonDateRange(ComboBox cbo, out DateTime start, out DateTime end)
+        {
+            start = default;
+            end = default;
+
+            if (cbo.SelectedIndex < 1)
+                return false;
+
+            if (cbo.SelectedItem is not DataRowView drv)
+                return false;
+
+            DataTable tbl = drv.Row.Table;
+            if (!tbl.Columns.Contains(Season.ColumnStartDate) || !tbl.Columns.Contains(Season.ColumnEndDate))
+                return false;
+
+            if (drv.Row[Season.ColumnStartDate] is DBNull || drv.Row[Season.ColumnEndDate] is DBNull)
+                return false;
+
+            start = Convert.ToDateTime(drv.Row[Season.ColumnStartDate]).Date;
+            end = Convert.ToDateTime(drv.Row[Season.ColumnEndDate]).Date;
+            return true;
         }
 
         private void ClearLabels()
