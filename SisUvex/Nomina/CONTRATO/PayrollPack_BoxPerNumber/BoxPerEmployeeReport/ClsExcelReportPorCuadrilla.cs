@@ -258,9 +258,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         {
             Employees.Sort((a, b) =>
             {
-                int cmp = ParseInt(a.OrdenNum).CompareTo(ParseInt(b.OrdenNum));
+                int cmp = ParseInt(a.Numero).CompareTo(ParseInt(b.Numero));
                 if (cmp != 0) return cmp;
-                cmp = ParseInt(a.Numero).CompareTo(ParseInt(b.Numero));
+                cmp = ParseInt(a.OrdenNum).CompareTo(ParseInt(b.OrdenNum));
                 if (cmp != 0) return cmp;
                 return string.Compare(a.Codigo, b.Codigo, StringComparison.OrdinalIgnoreCase);
             });
