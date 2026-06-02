@@ -26,12 +26,25 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
         public FrmConvertPallet frm;
         DataTable? dtCboWorkPlan = null;
         DataTable? dtPalletList = null;
+        bool suppressSeasonReload = false;
         /// <summary>Coincide con el ValueMember del combo Lote (id_lote|id_variedad).</summary>
         const string ColumnLotCboKey = "lotCboKey";
         const string dateQuery = " REPLACE(FORMAT(wpl.d_workDay, 'MMM-dd', 'es-ES'), '.', '') ";
         /// <summary>Consulta base de planes; el rango por temporada se agrega en <see cref="BuildWorkPlanQuery"/>.</summary>
         const string queryCboWorkPlanBase = $" SELECT [Activo], [Código], CONCAT_WS(' ', Código, '|', {dateQuery},'|', Cuadrilla, '|', dis.v_nameDistShort, Lote, Variedad, Tamaño, CONCAT(Contenedor, CAST(Libras AS float)),[Pre etiqueta], Presentación, [Post etiqueta]) AS [Nombre], Fecha AS [Fecha], gtn.id_distributor AS [{ClsObject.Distributor.ColumnId}], wpl.id_lot AS [{ClsObject.Lot.ColumnId}],gtn.id_variety AS [{ClsObject.Variety.ColumnId}], gtn.id_presentation AS [{ClsObject.Presentation.ColumnId}], gtn.id_container  AS [{ClsObject.Container.ColumnId}], wpl.id_workGroup AS [{ClsObject.WorkGroup.ColumnId}], CONCAT(wpl.id_lot, '|', gtn.id_variety) AS [{ColumnLotCboKey}] FROM vw_PackWorkPlanCat cat JOIN Pack_WorkPlan wpl ON wpl.id_workPlan = cat.Código  JOIN Pack_GTIN gtn ON gtn.id_GTIN = cat.GTIN join Pack_Distributor dis ON dis.id_distributor = gtn.id_distributor WHERE [Activo] = '1' ";
-        string queryPallet = " SELECT * FROM vw_PackPalletCon ";
+        const string queryPallet = Pallet.QuerySelectBase;
+
+        /// <summary>
+        /// Columnas (IDs) que NO se permiten cambiar al convertir pallets en manifiesto.
+        /// Para agregar/quitar reglas, modificar esta lista.
+        /// </summary>
+        static readonly List<(string Label, string ColumnId)> validateInManifest =
+        [
+            ("Distribuidor", Distributor.ColumnId),
+            ("Presentación", Presentation.ColumnId),
+            ("Contenedor", Container.ColumnId),
+            ("Variedad", Variety.ColumnId),
+        ];
 
         public ClsConvertPallet()
         {
@@ -110,8 +123,63 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             ApplyWorkPlanRowFilter();
         }
 
-        void CboSeason_WorkPlanReload(object? sender, EventArgs e) =>
+        void CboSeason_WorkPlanReload(object? sender, EventArgs e)
+        {
+            if (suppressSeasonReload)
+                return;
             ReloadWorkPlanDataFromDatabase(); // LoadComboBoxDataSource deja plan de trabajo en ---Seleccionar---
+        }
+
+        bool TrySelectSeasonForDate(DateTime fecha)
+        {
+            if (frm.cboSeason.Items.Count == 0)
+                return false;
+
+            for (int i = 0; i < frm.cboSeason.Items.Count; i++)
+            {
+                if (frm.cboSeason.Items[i] is not DataRowView row)
+                    continue;
+
+                if (!row.Row.Table.Columns.Contains(Season.ColumnStartDate) ||
+                    !row.Row.Table.Columns.Contains(Season.ColumnEndDate))
+                    continue;
+
+                if (row[Season.ColumnStartDate] == DBNull.Value ||
+                    row[Season.ColumnEndDate] == DBNull.Value)
+                    continue;
+
+                DateTime inicio = Convert.ToDateTime(row[Season.ColumnStartDate]).Date;
+                DateTime fin = Convert.ToDateTime(row[Season.ColumnEndDate]).Date;
+
+                if (fecha.Date >= inicio && fecha.Date <= fin)
+                {
+                    if (frm.cboSeason.SelectedIndex != i)
+                        frm.cboSeason.SelectedIndex = i;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        string GetWorkPlanNameOrFallback(string planId)
+        {
+            if (dtCboWorkPlan == null || string.IsNullOrEmpty(planId))
+                return planId;
+
+            DataRow? row = dtCboWorkPlan.Rows.Cast<DataRow>()
+                .FirstOrDefault(r =>
+                    r.Table.Columns.Contains(Column.id) &&
+                    string.Equals(r[Column.id]?.ToString(), planId, StringComparison.OrdinalIgnoreCase));
+
+            if (row == null)
+                return planId;
+
+            if (!row.Table.Columns.Contains(Column.name))
+                return planId;
+
+            return row[Column.name]?.ToString() ?? planId;
+        }
 
         /// <summary>Filtro local sobre dtCboWorkPlan al cambiar distribuidor, presentación, variedad, contenedor, cuadrilla o lote (sin nueva consulta).</summary>
         void AttachWorkPlanDependentFiltersHandlers()
@@ -249,7 +317,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                 return;
             }
 
-            DataTable dtPallet = ClsQuerysDB.GetDataTable(queryPallet + " WHERE Pallet = '" + idPallet + "' ");
+            DataTable dtPallet = ClsQuerysDB.GetDataTable(queryPallet + " WHERE vw.Pallet = '" + idPallet + "' ");
 
             if (dtPallet.Rows.Count < 1)
             {
@@ -275,12 +343,22 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
                 if (idPlanTxb.IsNullOrEmpty())
                 {
-                    string fecha = DateTime.Parse(dtPallet.Rows[0]["Fecha"].ToString()).ToString("yyyy-MM-dd");
+                    DateTime fechaDt = DateTime.Parse(dtPallet.Rows[0]["Fecha"].ToString());
+                    string fecha = fechaDt.ToString("yyyy-MM-dd");
                     dtPalletList = dtPallet;
                     frm.dgvPallet.DataSource = dtPallet;
+                    Pallet.HideJoinedIdColumns(frm.dgvPallet);
                     frm.txbIdWorkPlan.Text = plan;
                     frm.txbDay.Text = fecha;
-                    frm.txbWorkPlan.Text = dtCboWorkPlan.Select($"Código = '{plan}'")[0]["Nombre"].ToString();
+
+                    // Asegurar que dtCboWorkPlan contenga el plan (por filtro de temporada en BD)
+                    suppressSeasonReload = true;
+                    bool seasonChanged = TrySelectSeasonForDate(fechaDt);
+                    suppressSeasonReload = false;
+                    if (seasonChanged)
+                        ReloadWorkPlanDataFromDatabase();
+
+                    frm.txbWorkPlan.Text = GetWorkPlanNameOrFallback(plan);
                     ApplyWorkPlanRowFilter();
                     EnsureWorkPlanCodeVisibleInFilter(plan);
                     SelectWorkPlanInCombo(plan);
@@ -366,6 +444,9 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             {
                 if (frm.txbIdWorkPlan.Text != frm.cboWorkPlan.SelectedValue.ToString())
                 {
+                    if (!ValidateManifestRestrictionsBeforeConvert())
+                        return;
+
                     DialogResult result = MessageBox.Show("¿Está seguro de aceptar los cambios?", "Aceptar cambios", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
@@ -407,7 +488,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             foreach (string palletId in palletIds)
             {
                 string safeId = palletId.Replace("'", "''");
-                DataTable dtOne = ClsQuerysDB.GetDataTable($"{queryPallet.Trim()} WHERE Pallet = '{safeId}' ");
+                DataTable dtOne = ClsQuerysDB.GetDataTable($"{queryPallet.Trim()} WHERE vw.Pallet = '{safeId}' ");
                 if (dtOne.Rows.Count == 0)
                     continue;
 
@@ -415,6 +496,63 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                 nueva.ItemArray = dtOne.Rows[0].ItemArray;
                 dtPalletList.Rows.Add(nueva);
             }
+
+            Pallet.HideJoinedIdColumns(frm.dgvPallet);
+        }
+
+        bool ValidateManifestRestrictionsBeforeConvert()
+        {
+            if (dtPalletList == null || dtPalletList.Rows.Count == 0 || dtCboWorkPlan == null)
+                return true;
+
+            string? selectedWorkPlan = frm.cboWorkPlan.SelectedValue?.ToString();
+            if (string.IsNullOrEmpty(selectedWorkPlan))
+                return true;
+
+            DataRow? wpRow = dtCboWorkPlan.Rows.Cast<DataRow>()
+                .FirstOrDefault(r => r.Table.Columns.Contains(Column.id) && r[Column.id]?.ToString() == selectedWorkPlan);
+            if (wpRow == null)
+                return true;
+
+            bool hasManifestId = dtPalletList.Columns.Contains(Pallet.ColumnManifestId);
+            bool hasManifestText = dtPalletList.Columns.Contains("Manifiesto");
+
+            List<string> diffs = new();
+
+            foreach (DataRow palRow in dtPalletList.Rows)
+            {
+                string palletId = palRow.Table.Columns.Contains("Pallet") ? palRow["Pallet"]?.ToString() ?? "" : "";
+                bool inManifest =
+                    (hasManifestId && !string.IsNullOrWhiteSpace(palRow[Pallet.ColumnManifestId]?.ToString())) ||
+                    (hasManifestText && !string.IsNullOrWhiteSpace(palRow["Manifiesto"]?.ToString()));
+
+                if (!inManifest)
+                    continue;
+
+                foreach (var (label, colId) in validateInManifest)
+                {
+                    if (!dtPalletList.Columns.Contains(colId) || !wpRow.Table.Columns.Contains(colId))
+                        continue;
+
+                    string palVal = palRow[colId]?.ToString() ?? "";
+                    string wpVal = wpRow[colId]?.ToString() ?? "";
+
+                    if (!string.Equals(palVal, wpVal, StringComparison.OrdinalIgnoreCase))
+                        diffs.Add($"{palletId}: {label}");
+                }
+            }
+
+            if (diffs.Count == 0)
+                return true;
+
+            string detalle = string.Join("\n", diffs.Distinct());
+            MessageBox.Show(
+                "No se puede convertir porque hay pallets en manifiesto,\nEl plan nuevo cambia columnas no permitidas.\n\n" +
+                "Diferencias detectadas (Pallet: columna):\n" + detalle,
+                "Validación manifiesto",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return false;
         }
 
         private bool UpdatePalletWorkPlan()
