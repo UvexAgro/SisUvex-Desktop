@@ -127,7 +127,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     //DISTRIBUIDOR
                     SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
                     SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
-                    SetStringDistributorZPL2025(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
