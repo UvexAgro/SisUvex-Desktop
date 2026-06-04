@@ -3,12 +3,9 @@ using SisUvex.Catalogos.Metods.DataGridViews;
 using System.Data;
 using SisUvex.Catalogos.Metods;
 using System.Data.SqlClient;
-using System.Text;
-using System.Threading.Tasks;
 using SisUvex.Catalogos.Metods.ComboBoxes;
-using SisUvex.Catalogos.Metods.CheckBoxes;
+using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
-using SisUvex.Catalogos.WorkGroup;
 using System.Media;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using Microsoft.IdentityModel.Tokens;
@@ -27,26 +24,29 @@ namespace SisUvex.Catalogos.Lot
         public FrmLotCat _frmCat;
         public ELot eLot;
         //public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
-        private string queryCatalogo = $" SELECT Activo AS '{_columnActive2}', * FROM vw_PackLotCat ";
+        private string QueryCatalogo => $@" SELECT cat.[{Column.active}] AS [{_columnActive2}], cat.*, lot.id_farm AS [{Farm.ColumnId}] FROM vw_PackLotCat cat LEFT JOIN Pack_Lot lot ON lot.id_lot = cat.[{Column.id}] AND lot.id_variety = cat.[{_columnVariety}] LEFT JOIN Grow_Farm farm ON farm.id_farm = lot.id_farm ";
+
         public DataView _dvCatalogo;
 
         public void BeginFormCat()
         {
-            _dvCatalogo = new DataView(ClsQuerysDB.GetDataTable(queryCatalogo));
+            _dvCatalogo = new DataView(ClsQuerysDB.GetDataTable(QueryCatalogo));
             _dvCatalogo.RowFilter = $"{_columnActive2} = '1'";
             _frmCat.dgvCatalog.DataSource = _dvCatalogo;
             _frmCat.dgvCatalog.Columns[_columnActive2].Visible = false;
             _frmCat.dgvCatalog.Columns[_columnVariety].Visible = false;
 
+            if (_frmCat.dgvCatalog.Columns.Contains(Farm.ColumnId))
+                _frmCat.dgvCatalog.Columns[Farm.ColumnId].Visible = false;
+
             ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboVariety, ClsObject.Variety.Cbo);
             ClsComboBoxes.CboApplyClickEvent(_frmCat.cboVariety, _frmCat.chbRemovedVariety);
+            _frmCat.cboVariety.SelectedIndexChanged += (_, _) => SetFilterCatalog();
 
-            _frmCat.cboVariety.SelectedIndexChanged += (sender, e) =>
-            {
-                SetFilterCatalog();
-            };
+            ClsComboBoxes.CboLoadAll(_frmCat.cboFarm, Farm.Cbo);
+            _frmCat.cboFarm.SelectedIndexChanged += (_, _) => SetFilterCatalog();
         }
 
         private void ProcedureRemoveRecover(bool active)
@@ -104,29 +104,27 @@ namespace SisUvex.Catalogos.Lot
             SetFilterCatalog();
         }
 
-        private void SetFilterCatalog()
+        public void SetFilterCatalog()
         {
-            string filter = string.Empty;
-
             foreach (DataRowView rowView in _dvCatalogo)
-            {
-                rowView[_columnActive2] = rowView[ClsObject.Column.active];
-            }
+                rowView[_columnActive2] = rowView[Column.active];
 
-            if (_frmCat.cboVariety.SelectedIndex > 0)
-            {
-                filter = $"var = '{_frmCat.cboVariety.SelectedValue}'";
-            }
+            List<string> filters = new();
 
             if (!_frmCat.chbRemoved.Checked)
-            {
-                if (filter != string.Empty)
-                    filter += " AND ";
+                filters.Add($"[{_columnActive2}] = '1'");
 
-                filter += "Activo = 1";
+            if (_frmCat.cboVariety.TryGetValue(out string varietyValue))
+                filters.Add($"{_columnVariety} = '{varietyValue.Replace("'", "''")}'");
+
+            if (_frmCat.cboFarm.TryGetValue(out string farmValue)
+                && _dvCatalogo.Table != null
+                && _dvCatalogo.Table.Columns.Contains(Farm.ColumnId))
+            {
+                filters.Add($"[{Farm.ColumnId}] = '{farmValue.Replace("'", "''")}'");
             }
 
-            _dvCatalogo.RowFilter = filter;
+            _dvCatalogo.RowFilter = filters.Count > 0 ? string.Join(" AND ", filters) : string.Empty;
         }
 
         public void OpenFrmAdd()
@@ -354,7 +352,7 @@ namespace SisUvex.Catalogos.Lot
 
         private void InsertLotInDGV()
         {
-            string qry = $"SELECT Activo AS [{_columnActive2}], * FROM vw_PackLotCat WHERE [{ClsObject.Column.id}] = @idLot AND [{_columnVariety}] = @idVariety";
+            string qry = $"{QueryCatalogo} WHERE cat.[{Column.id}] = @idLot AND cat.[{_columnVariety}] = @idVariety";
 
             Dictionary<string, object> parameters = new()
             {
