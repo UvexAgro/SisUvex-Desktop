@@ -5,7 +5,9 @@ using Microsoft.Identity.Client;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Usuarios;
+using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using System.Diagnostics.Metrics;
 using System.Web;
 
@@ -105,6 +107,102 @@ namespace SisUvex.Catalogos.Metods
                                                         LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color 
                                                         LEFT JOIN dbo.Grow_Farm AS farm ON farm.id_farm = lot.id_farm
                                                         LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox";
+        }
+
+        /// <summary>
+        /// Consultas sobre <c>vw_PackPalletCon</c> / <c>vw_PackPalletConWithShrinkage</c> con IDs de tablas relacionadas.
+        /// <see cref="ColumnsJoinedIds"/> lista los alias agregados por los JOIN (para ocultar en DGV, validaciones, etc.).
+        /// </summary>
+        public static class Pallet
+        {
+            public const string ViewCon = "vw_PackPalletCon";
+            public const string ViewConWithStowage = "vw_PackPalletConWithShrinkage";
+
+            public const string ColumnPalletId = "idPallet";
+            public const string ColumnManifestId = "idManifest";
+            public const string ColumnRackId = "idRack";
+
+            const string QueryJoins = @"
+                LEFT JOIN dbo.Pack_Pallet AS pal ON pal.id_pallet = vw.Pallet
+                LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan
+                LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN
+                LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup
+                LEFT JOIN dbo.Pack_Contractor AS con ON con.id_contractor = wgp.id_contractor
+                LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size
+                LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation
+                LEFT JOIN dbo.Pack_Container AS cnt ON cnt.id_container = gtn.id_container
+                LEFT JOIN dbo.Pack_Variety AS vrt ON vrt.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor
+                LEFT JOIN dbo.Pack_Crop AS crop ON crop.id_crop = vrt.id_crop
+                LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                LEFT JOIN dbo.Pack_Price AS pri ON pri.id_price = gtn.id_price";
+
+            const string QuerySelectJoinedIds = $@"
+                pal.id_pallet AS [{ColumnPalletId}],
+                pal.id_manifest AS [{ColumnManifestId}],
+                pal.id_rack AS [{ColumnRackId}],
+                wpl.id_workPlan AS [{WorkPlan.ColumnId}],
+                gtn.id_GTIN AS [{Gtin.ColumnId}],
+                gtn.id_pti AS [{Pti.ColumnId}],
+                lot.id_lot AS [{Lot.ColumnId}],
+                lot.id_farm AS [{Farm.ColumnId}],
+                vrt.id_variety AS [{Variety.ColumnId}],
+                vrt.id_color AS [{Color.ColumnId}],
+                wgp.id_workGroup AS [{WorkGroup.ColumnId}],
+                con.id_contractor AS [{Contractor.ColumnId}],
+                siz.id_size AS [{Size.ColumnId}],
+                pre.id_presentation AS [{Presentation.ColumnId}],
+                pre.id_category AS [{Category.ColumnId}],
+                gtn.id_container AS [{Container.ColumnId}],
+                dis.id_distributor AS [{Distributor.ColumnId}],
+                crop.id_crop AS [{Crop.ColumnId}],
+                box.id_typeBox AS [{TypeBox.ColumnId}],
+                pri.id_price AS [{Price.ColumnId}]";
+
+            public const string QuerySelectBase =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewCon + " vw " + QueryJoins;
+
+            public const string QuerySelectBaseWithStowage =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewConWithStowage + " vw " + QueryJoins;
+
+            /// <summary>Alias de columnas agregadas por los JOIN (no incluye <c>vw.*</c>). Coinciden con <see cref="QuerySelectJoinedIds"/>.</summary>
+            public static readonly List<string> ColumnsJoinedIds = new()
+            {
+                ColumnPalletId,
+                ColumnManifestId,
+                ColumnRackId,
+                WorkPlan.ColumnId,
+                Gtin.ColumnId,
+                Pti.ColumnId,
+                Lot.ColumnId,
+                Farm.ColumnId,
+                Variety.ColumnId,
+                Color.ColumnId,
+                WorkGroup.ColumnId,
+                Contractor.ColumnId,
+                Size.ColumnId,
+                Presentation.ColumnId,
+                Category.ColumnId,
+                Container.ColumnId,
+                Distributor.ColumnId,
+                Crop.ColumnId,
+                TypeBox.ColumnId,
+                Price.ColumnId,
+            };
+
+            /// <summary>Oculta en el DGV las columnas de IDs agregadas por los JOIN.</summary>
+            public static void HideJoinedIdColumns(DataGridView dgv)
+            {
+                if (dgv == null)
+                    return;
+
+                foreach (string columnName in ColumnsJoinedIds)
+                {
+                    if (dgv.Columns.Contains(columnName))
+                        dgv.Columns[columnName].Visible = false;
+                }
+            }
         }
 
         public static class Grower

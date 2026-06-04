@@ -369,6 +369,36 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             comboBoxDependent.DroppedDown = true;
         }
 
+        /// <summary>
+        /// Checkbox del ComboBox principal filtrado con AllForOne (varios combos dependientes).
+        /// </summary>
+        public static void CboApplyChbClickEventWithAllForOneDependents(
+            ComboBox comboBoxPrincipal,
+            CheckBox checkBox,
+            List<(ComboBox Cbo, string IdColumnFilter)> comboBoxesDependents)
+        {
+            checkBox.Click += (sender, e) =>
+            {
+                Metod_CboApplyChbClickEventWithAllForOneDependents(comboBoxPrincipal, checkBox, comboBoxesDependents);
+            };
+        }
+
+        public static void Metod_CboApplyChbClickEventWithAllForOneDependents(
+            ComboBox comboBoxPrincipal,
+            CheckBox checkBox,
+            List<(ComboBox Cbo, string IdColumnFilter)> comboBoxesDependents)
+        {
+            DataTable? dt = (DataTable?)comboBoxPrincipal.DataSource;
+            if (dt == null)
+                return;
+
+            Metods.CboFilterAllForOne(comboBoxPrincipal, checkBox, comboBoxesDependents);
+
+            comboBoxPrincipal.DataSource = dt;
+            comboBoxPrincipal.SelectedIndex = 0;
+            comboBoxPrincipal.DroppedDown = true;
+        }
+
         public class Events()
         {
             /// <summary>
@@ -432,7 +462,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     dependentCbo.SelectedValueChanged -= handler;
                     dependentCbo.SelectedValueChanged += handler;
 
-                    if (checkBoxPrincipal != null) //Aplicar metodos si hay un chb que cambie de valor
+                    if (checkBoxPrincipal != null) // Usar CboApplyChbClickEventWithAllForOneDependents en lugar de CboApplyClickEvent.
                     {
                         checkBoxPrincipal.CheckedChanged -= handler;
                         checkBoxPrincipal.CheckedChanged += handler;
@@ -513,21 +543,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
 
             private static string? StringFilterActives_Principal(DataTable? dataTable, CheckBox? checkBox)
-            {//Si el CheckBox es nulo o el DataTable no tiene la columna de activos, no se aplica ningún filtro y se muestran todos los elementos
-             //Intentar dejar antes de aquí el 1 = 1;
+            {
+                // Misma semántica que CboApplyClickEvent: sin marcar = solo activos; marcado = incluir inactivos.
                 if (checkBox == null || dataTable == null || !dataTable.Columns.Contains(ClsObject.Column.active))
                     return null;
 
-                if (checkBox.Checked)   //Mostrar solo activos '1'
-                {
-                    string? filterAnd = string.Empty;
-                    if (!string.IsNullOrEmpty(dataTable.DefaultView.RowFilter))
-                        filterAnd = " AND ";
-
-                    return $"{filterAnd} [{ClsObject.Column.active}] = '1' ";
-                }
-                else
+                if (checkBox.Checked)
                     return null;
+
+                return $"[{ClsObject.Column.active}] = '1'";
             }
         }
     }
