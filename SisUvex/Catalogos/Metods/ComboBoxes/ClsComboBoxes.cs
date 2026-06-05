@@ -478,9 +478,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 DataTable? dt = (DataTable?)comboBoxPrincipal.DataSource;
                 if (dt == null) return;
 
-                string? filter = StringFilterActives_Principal(dt, checkBoxPrincipal);
-
-                foreach (var item in comboBoxesDependents) //Filtro por cada columna de cboDependiente
+                List<string> dependentFilters = new();
+                foreach (var item in comboBoxesDependents)
                 {
                     ComboBox dependentCbo = item.Cbo;
                     string idColumnFilter = item.IdColumnFilter;
@@ -488,15 +487,33 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     if (dependentCbo.SelectedIndex < 1 || !dt.Columns.Contains(idColumnFilter))
                         continue;
 
-                    if (!string.IsNullOrEmpty(filter))
-                        filter += " AND ";
-
-                    filter += $" {idColumnFilter} = '{dependentCbo.SelectedValue}' ";
+                    dependentFilters.Add($"{idColumnFilter} = '{dependentCbo.SelectedValue}'");
                 }
 
-                if (!string.IsNullOrEmpty(filter)) //Añadir texto seleccion si hay otro filtro por columna
-                    filter += $" OR {ClsObject.Column.name} = '{textSelect}' ";
-                dt.DefaultView.RowFilter = filter;
+                string? dependentPart = dependentFilters.Count > 0
+                    ? string.Join(" AND ", dependentFilters)
+                    : null;
+
+                dt.DefaultView.RowFilter = BuildDependentRowFilter(dt, checkBoxPrincipal, dependentPart);
+            }
+
+            /// <summary>Arma RowFilter con activos (si aplica) + condiciones AND + fila ---Seleccionar---.</summary>
+            static string? BuildDependentRowFilter(DataTable dt, CheckBox? checkBox, string? andConditions)
+            {
+                string? filter = StringFilterActives_Principal(dt, checkBox);
+
+                if (!string.IsNullOrWhiteSpace(andConditions))
+                {
+                    if (!string.IsNullOrEmpty(filter))
+                        filter += " AND ";
+                    filter += andConditions;
+                }
+
+                if (string.IsNullOrEmpty(filter))
+                    return null;
+
+                filter += $" OR [{ClsObject.Column.name}] = '{textSelect}'";
+                return filter;
             }
 
             /// <summary>
@@ -510,10 +527,14 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     {
                         ComboBox dependentCbo = item.Item1;
                         string columnFilterName = item.Item2;
+                        CheckBox? checkBox = item.Item3;
                         DataTable? dt = (DataTable?)dependentCbo.DataSource;
                         if (dt != null)
                         {
-                            dt.DefaultView.RowFilter = $"{columnFilterName} = '{comboBoxPrincipal.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
+                            dt.DefaultView.RowFilter = BuildDependentRowFilter(
+                                dt,
+                                checkBox,
+                                $"{columnFilterName} = '{comboBoxPrincipal.SelectedValue}'");
                             dependentCbo.DataSource = dt;
                             dependentCbo.SelectedIndex = 0;
                         }
@@ -544,14 +565,15 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 
             private static string? StringFilterActives_Principal(DataTable? dataTable, CheckBox? checkBox)
             {
-                // Misma semántica que CboApplyClickEvent: sin marcar = solo activos; marcado = incluir inactivos.
-                if (checkBox == null || dataTable == null || !dataTable.Columns.Contains(ClsObject.Column.active))
+                // Sin checkbox: solo activos (igual que CboLoadActives / CboFilterOneForAll).
+                // Con checkbox: sin marcar = solo activos; marcado = incluir inactivos.
+                if (dataTable == null || !dataTable.Columns.Contains(ClsObject.Column.active))
                     return null;
 
-                if (checkBox.Checked)
-                    return null;
+                if (checkBox is null || !checkBox.Checked)
+                    return $"[{ClsObject.Column.active}] = '1'";
 
-                return $"[{ClsObject.Column.active}] = '1'";
+                return null;
             }
         }
     }
