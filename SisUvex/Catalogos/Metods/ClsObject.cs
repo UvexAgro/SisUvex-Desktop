@@ -110,13 +110,16 @@ namespace SisUvex.Catalogos.Metods
         }
 
         /// <summary>
-        /// Consultas sobre <c>vw_PackPalletCon</c> / <c>vw_PackPalletConWithShrinkage</c> con IDs de tablas relacionadas.
+        /// Consultas sobre <c>vw_PackPalletCon</c> (activos) y <c>vw_PackPalletConWithShrinkage</c> (incluye inactivos / reestibados) con IDs de tablas relacionadas.
         /// <see cref="ColumnsJoinedIds"/> lista los alias agregados por los JOIN (para ocultar en DGV, validaciones, etc.).
         /// </summary>
         public static class Pallet
         {
             public const string ViewCon = "vw_PackPalletCon";
+            /// <summary>Incluye pallets con <c>Activo = '0'</c> (reestibados, inactivos, etc.).</summary>
             public const string ViewConWithStowage = "vw_PackPalletConWithShrinkage";
+            /// <summary>Columna de estado en las vistas de pallet (<c>Activo</c>).</summary>
+            public const string ColumnActive = Column.active;
 
             public const string ColumnPalletId = "idPallet";
             public const string ColumnManifestId = "idManifest";

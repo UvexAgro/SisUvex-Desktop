@@ -27,12 +27,13 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
         DataTable? dtCboWorkPlan = null;
         DataTable? dtPalletList = null;
         bool suppressSeasonReload = false;
+        bool palletGridConditionalFormatApplied;
         /// <summary>Coincide con el ValueMember del combo Lote (id_lote|id_variedad).</summary>
         const string ColumnLotCboKey = "lotCboKey";
         const string dateQuery = " REPLACE(FORMAT(wpl.d_workDay, 'MMM-dd', 'es-ES'), '.', '') ";
         /// <summary>Consulta base de planes; el rango por temporada se agrega en <see cref="BuildWorkPlanQuery"/>.</summary>
         const string queryCboWorkPlanBase = $" SELECT [Activo], [Código], CONCAT_WS(' ', Código, '|', {dateQuery},'|', Cuadrilla, '|', dis.v_nameDistShort, Lote, Variedad, Tamaño, CONCAT(Contenedor, CAST(Libras AS float)),[Pre etiqueta], Presentación, [Post etiqueta]) AS [Nombre], Fecha AS [Fecha], gtn.id_distributor AS [{ClsObject.Distributor.ColumnId}], wpl.id_lot AS [{ClsObject.Lot.ColumnId}],gtn.id_variety AS [{ClsObject.Variety.ColumnId}], gtn.id_presentation AS [{ClsObject.Presentation.ColumnId}], gtn.id_container  AS [{ClsObject.Container.ColumnId}], wpl.id_workGroup AS [{ClsObject.WorkGroup.ColumnId}], CONCAT(wpl.id_lot, '|', gtn.id_variety) AS [{ColumnLotCboKey}] FROM vw_PackWorkPlanCat cat JOIN Pack_WorkPlan wpl ON wpl.id_workPlan = cat.Código  JOIN Pack_GTIN gtn ON gtn.id_GTIN = cat.GTIN join Pack_Distributor dis ON dis.id_distributor = gtn.id_distributor WHERE [Activo] = '1' ";
-        const string queryPallet = Pallet.QuerySelectBase;
+        const string queryPallet = Pallet.QuerySelectBaseWithStowage;
 
         /// <summary>
         /// Columnas (IDs) que NO se permiten cambiar al convertir pallets en manifiesto.
@@ -83,6 +84,37 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             AttachWorkPlanDependentFiltersHandlers();
 
             frm.cboWorkGroupDuplicate.SelectedIndexChanged += (s, e) => MetodcboWorkGroupDuplicateSelectedIndexChanged();
+
+            InitPalletDataGridSchema();
+        }
+
+        /// <summary>Carga el esquema del grid sin filas (WHERE 1=0) para tener columnas desde el inicio y poder aplicar formato.</summary>
+        void InitPalletDataGridSchema()
+        {
+            dtPalletList = ClsQuerysDB.GetDataTable($"{queryPallet.Trim()} WHERE 1 = 0");
+            frm.dgvPallet.DataSource = dtPalletList;
+            ApplyPalletGridPresentation();
+        }
+
+        void EnsurePalletGridConditionalFormat()
+        {
+            if (palletGridConditionalFormatApplied)
+                return;
+            if (!frm.dgvPallet.Columns.Contains(Pallet.ColumnActive))
+                return;
+
+            ClsDGVCatalog.DgvApplyConditionalRowFormat(
+                frm.dgvPallet,
+                Pallet.ColumnActive,
+                "0",
+                ClsDGVCatalog.CellFormat.soft_inactive);
+            palletGridConditionalFormatApplied = true;
+        }
+
+        void ApplyPalletGridPresentation()
+        {
+            Pallet.HideJoinedIdColumns(frm.dgvPallet);
+            EnsurePalletGridConditionalFormat();
         }
 
         bool TryGetSelectedSeasonDateRange(out DateTime start, out DateTime end)
@@ -347,7 +379,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                     string fecha = fechaDt.ToString("yyyy-MM-dd");
                     dtPalletList = dtPallet;
                     frm.dgvPallet.DataSource = dtPallet;
-                    Pallet.HideJoinedIdColumns(frm.dgvPallet);
+                    ApplyPalletGridPresentation();
                     frm.txbIdWorkPlan.Text = plan;
                     frm.txbDay.Text = fecha;
 
@@ -434,8 +466,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             frm.txbWorkPlan.Text = string.Empty;
             frm.txbDay.Text = string.Empty;
             ApplyWorkPlanRowFilter();
-            frm.dgvPallet.DataSource = null;
-            dtPalletList = null;
+            InitPalletDataGridSchema();
         }
 
         public void BtnAccept()
@@ -497,7 +528,7 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                 dtPalletList.Rows.Add(nueva);
             }
 
-            Pallet.HideJoinedIdColumns(frm.dgvPallet);
+            ApplyPalletGridPresentation();
         }
 
         bool ValidateManifestRestrictionsBeforeConvert()
