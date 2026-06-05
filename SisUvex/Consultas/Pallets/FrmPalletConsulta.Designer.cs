@@ -47,6 +47,7 @@
             btnPallet = new Button();
             btnImprimir = new Button();
             btnEliminar = new Button();
+            btnCambiarStatus = new Button();
             cboVariety = new ComboBox();
             label2 = new Label();
             label3 = new Label();
@@ -72,6 +73,8 @@
             cboSeason = new ComboBox();
             label11 = new Label();
             cboFarm = new ComboBox();
+            label12 = new Label();
+            chbAjustarColumnas = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvConsulta).BeginInit();
             SuspendLayout();
             // 
@@ -272,6 +275,20 @@
             btnEliminar.TextAlign = ContentAlignment.MiddleRight;
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
+            // 
+            // btnCambiarStatus
+            // 
+            btnCambiarStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCambiarStatus.Image = Properties.Resources.editIcon16;
+            btnCambiarStatus.ImageAlign = ContentAlignment.MiddleLeft;
+            btnCambiarStatus.Location = new Point(175, 475);
+            btnCambiarStatus.Name = "btnCambiarStatus";
+            btnCambiarStatus.Size = new Size(109, 24);
+            btnCambiarStatus.TabIndex = 19;
+            btnCambiarStatus.Text = "Cambiar status";
+            btnCambiarStatus.TextAlign = ContentAlignment.MiddleRight;
+            btnCambiarStatus.UseVisualStyleBackColor = true;
+            btnCambiarStatus.Click += btnCambiarStatus_Click;
             // 
             // cboVariety
             // 
@@ -524,11 +541,36 @@
             cboFarm.Size = new Size(135, 23);
             cboFarm.TabIndex = 41;
             // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 6.75F);
+            label12.Location = new Point(507, -1);
+            label12.Name = "label12";
+            label12.Size = new Size(33, 12);
+            label12.TabIndex = 45;
+            label12.Text = "Ajustar";
+            // 
+            // chbAjustarColumnas
+            // 
+            chbAjustarColumnas.Appearance = Appearance.Button;
+            chbAjustarColumnas.Location = new Point(506, 11);
+            chbAjustarColumnas.Name = "chbAjustarColumnas";
+            chbAjustarColumnas.Padding = new Padding(0, 0, 0, 1);
+            chbAjustarColumnas.Size = new Size(35, 25);
+            chbAjustarColumnas.TabIndex = 46;
+            chbAjustarColumnas.Text = ">|<";
+            chbAjustarColumnas.TextAlign = ContentAlignment.MiddleRight;
+            chbAjustarColumnas.UseVisualStyleBackColor = true;
+            chbAjustarColumnas.CheckedChanged += chbAjustarColumnas_CheckedChanged;
+            // 
             // FrmPalletConsulta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1018, 509);
+            Controls.Add(chbAjustarColumnas);
+            Controls.Add(label12);
             Controls.Add(label10);
             Controls.Add(cboSeason);
             Controls.Add(label11);
@@ -553,6 +595,7 @@
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(cboContainer);
+            Controls.Add(btnCambiarStatus);
             Controls.Add(btnEliminar);
             Controls.Add(btnImprimir);
             Controls.Add(btnPallet);
@@ -592,6 +635,7 @@
         private Button btnPallet;
         private Button btnImprimir;
         private Button btnEliminar;
+        private Button btnCambiarStatus;
         private Label label2;
         private Label label3;
         private Label label4;
@@ -623,5 +667,7 @@
         public ComboBox cboSeason;
         private Label label11;
         public ComboBox cboFarm;
+        private Label label12;
+        private CheckBox chbAjustarColumnas;
     }
 }

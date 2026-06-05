@@ -39,6 +39,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using SisUvex.Catalogos;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Archivo.MixtearPallets
@@ -305,13 +306,24 @@ namespace SisUvex.Archivo.MixtearPallets
             LEFT JOIN gtn ON gtn.id_GTIN = vpal.GTIN";
 
         /// <summary>
-        /// Consulta un pallet por ID en la vista de pallets activos.
-        /// Retorna null si el pallet no existe o no está activo.
+        /// Consulta un pallet por ID. Por defecto busca en la vista de activos;
+        /// con <paramref name="incluirInactivos"/> también consulta la vista con reestibados.
         /// </summary>
         /// <param name="idPallet">ID formateado con ceros (ej. "00123")</param>
-        public PalletInfo? ConsultarPallet(string idPallet)
+        public PalletInfo? ConsultarPallet(string idPallet, bool incluirInactivos = false)
         {
-            string qry = QUERY_PALLET_BASE + " WHERE vpal.Pallet = @idPallet";
+            PalletInfo? pallet = ConsultarPalletEnVista(idPallet, ClsObject.Pallet.ViewCon);
+            if (pallet is not null || !incluirInactivos)
+                return pallet;
+
+            return ConsultarPalletEnVista(idPallet, ClsObject.Pallet.ViewConWithStowage);
+        }
+
+        private PalletInfo? ConsultarPalletEnVista(string idPallet, string viewName)
+        {
+            string qry = QUERY_PALLET_BASE
+                .Replace("vw_PackPalletCon vpal", $"{viewName} vpal")
+                + " WHERE vpal.Pallet = @idPallet";
             var parameters = new Dictionary<string, object> { { "@idPallet", idPallet } };
             DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
             return dt.Rows.Count > 0 ? MapearFilaAPalletInfo(dt.Rows[0]) : null;
