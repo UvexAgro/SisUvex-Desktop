@@ -26,7 +26,6 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
         public FrmConvertPallet frm;
         DataTable? dtCboWorkPlan = null;
         DataTable? dtPalletList = null;
-        bool suppressSeasonReload = false;
         bool palletGridConditionalFormatApplied;
         /// <summary>Coincide con el ValueMember del combo Lote (id_lote|id_variedad).</summary>
         const string ColumnLotCboKey = "lotCboKey";
@@ -155,43 +154,34 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
             ApplyWorkPlanRowFilter();
         }
 
-        void CboSeason_WorkPlanReload(object? sender, EventArgs e)
-        {
-            if (suppressSeasonReload)
-                return;
+        void CboSeason_WorkPlanReload(object? sender, EventArgs e) =>
             ReloadWorkPlanDataFromDatabase(); // LoadComboBoxDataSource deja plan de trabajo en ---Seleccionar---
-        }
 
-        bool TrySelectSeasonForDate(DateTime fecha)
+        /// <summary>Si el plan no está en <see cref="dtCboWorkPlan"/> (p. ej. fuera del rango de temporada), lo consulta y lo agrega sin cambiar <c>cboSeason</c>.</summary>
+        void EnsureWorkPlanLoaded(string planId)
         {
-            if (frm.cboSeason.Items.Count == 0)
-                return false;
+            if (dtCboWorkPlan == null || string.IsNullOrWhiteSpace(planId))
+                return;
 
-            for (int i = 0; i < frm.cboSeason.Items.Count; i++)
+            bool exists = dtCboWorkPlan.Rows.Cast<DataRow>().Any(r =>
+                r.Table.Columns.Contains(Column.id) &&
+                string.Equals(r[Column.id]?.ToString(), planId, StringComparison.OrdinalIgnoreCase));
+
+            if (exists)
+                return;
+
+            string safePlan = EscapeRowFilterValue(planId);
+            DataTable dtOne = ClsQuerysDB.GetDataTable($"{queryCboWorkPlanBase} AND [Código] = '{safePlan}' ");
+            if (dtOne.Rows.Count == 0)
+                return;
+
+            DataRow newRow = dtCboWorkPlan.NewRow();
+            foreach (DataColumn col in dtOne.Columns)
             {
-                if (frm.cboSeason.Items[i] is not DataRowView row)
-                    continue;
-
-                if (!row.Row.Table.Columns.Contains(Season.ColumnStartDate) ||
-                    !row.Row.Table.Columns.Contains(Season.ColumnEndDate))
-                    continue;
-
-                if (row[Season.ColumnStartDate] == DBNull.Value ||
-                    row[Season.ColumnEndDate] == DBNull.Value)
-                    continue;
-
-                DateTime inicio = Convert.ToDateTime(row[Season.ColumnStartDate]).Date;
-                DateTime fin = Convert.ToDateTime(row[Season.ColumnEndDate]).Date;
-
-                if (fecha.Date >= inicio && fecha.Date <= fin)
-                {
-                    if (frm.cboSeason.SelectedIndex != i)
-                        frm.cboSeason.SelectedIndex = i;
-                    return true;
-                }
+                if (dtCboWorkPlan.Columns.Contains(col.ColumnName))
+                    newRow[col.ColumnName] = dtOne.Rows[0][col.ColumnName];
             }
-
-            return false;
+            dtCboWorkPlan.Rows.Add(newRow);
         }
 
         string GetWorkPlanNameOrFallback(string planId)
@@ -375,21 +365,14 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
                 if (idPlanTxb.IsNullOrEmpty())
                 {
-                    DateTime fechaDt = DateTime.Parse(dtPallet.Rows[0]["Fecha"].ToString());
-                    string fecha = fechaDt.ToString("yyyy-MM-dd");
+                    string fecha = DateTime.Parse(dtPallet.Rows[0]["Fecha"].ToString()).ToString("yyyy-MM-dd");
                     dtPalletList = dtPallet;
                     frm.dgvPallet.DataSource = dtPallet;
                     ApplyPalletGridPresentation();
                     frm.txbIdWorkPlan.Text = plan;
                     frm.txbDay.Text = fecha;
 
-                    // Asegurar que dtCboWorkPlan contenga el plan (por filtro de temporada en BD)
-                    suppressSeasonReload = true;
-                    bool seasonChanged = TrySelectSeasonForDate(fechaDt);
-                    suppressSeasonReload = false;
-                    if (seasonChanged)
-                        ReloadWorkPlanDataFromDatabase();
-
+                    EnsureWorkPlanLoaded(plan);
                     frm.txbWorkPlan.Text = GetWorkPlanNameOrFallback(plan);
                     ApplyWorkPlanRowFilter();
                     EnsureWorkPlanCodeVisibleInFilter(plan);
