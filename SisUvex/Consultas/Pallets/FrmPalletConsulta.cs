@@ -1,6 +1,7 @@
 ﻿using SisUvex.Archivo.MixtearPallets;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using static SisUvex.Catalogos.Metods.Extentions.ComboBoxExtensions;
@@ -32,6 +33,41 @@ namespace SisUvex.Consultas.Pallets
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(cboWorkGroup, null, lsWGDep);
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(cboSeason, "08"); //<-- temporada uva 2026
+
+            // Cuando viene vw_PackPalletConWithShrinkage (chbRestowing=true) normalmente existe la columna "Activo".
+            // Aplicamos un formato suave (casi rosa) a toda la fila para los que están inactivos (Activo=0).
+            dgvConsulta.DataBindingComplete += dgvConsulta_DataBindingComplete;
+        }
+
+        private void dgvConsulta_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (!chbRestowing.Checked)
+                return;
+
+            if (!dgvConsulta.Columns.Contains(Column.active))
+                return;
+
+            var format = ClsDGVCatalog.CellFormat.soft_inactive;
+
+            foreach (DataGridViewRow row in dgvConsulta.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                object? v = row.Cells[Column.active].Value;
+                bool isInactive =
+                    v != null && v != DBNull.Value &&
+                    (v.ToString() == "0" || v.ToString()?.Equals("false", StringComparison.OrdinalIgnoreCase) == true);
+
+                if (!isInactive)
+                    continue;
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    // Solo colores (sin tocar fuentes), para respetar estilos existentes del proyecto.
+                    format.Apply(cell.Style, dgvConsulta.Font);
+                }
+            }
         }
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -57,25 +93,41 @@ namespace SisUvex.Consultas.Pallets
             }
         }
         private void btnEliminar_Click(object sender, EventArgs e)
+            => AbrirCambioStatusPallet(ModoPalletAccion.Eliminar);
+
+        private void btnCambiarStatus_Click(object sender, EventArgs e)
+            => AbrirCambioStatusPallet(ModoPalletAccion.CambiarStatus);
+
+        private void AbrirCambioStatusPallet(ModoPalletAccion modo)
         {
-            if (dgvConsulta.Rows.Count > 0)
+            if (dgvConsulta.SelectedRows.Count == 0)
             {
-                DataGridViewRow dgv = dgvConsulta.SelectedRows[0];
-                string id = dgv.Cells["Pallet"].Value.ToString();
-
-                var frm = new FrmEliminarPallet(id);
-
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    // Eliminar fila del DataGridView
-                    dgvConsulta.Rows.Remove(dgv);
-
-                    // pallet ya está inactivo en DB
-                    // frm.TipoSeleccionado tiene el motivo usado
-                }
-            }
-            else
                 System.Media.SystemSounds.Hand.Play();
+                return;
+            }
+
+            DataGridViewRow dgv = dgvConsulta.SelectedRows[0];
+            string id = dgv.Cells["Pallet"].Value.ToString();
+
+            var frm = new FrmEliminarPallet(id, modo);
+
+            if (frm.ShowDialog() == DialogResult.OK)
+                ActualizarFilaPalletTrasStatus(dgv, frm.TipoSeleccionado);
+        }
+
+        private void ActualizarFilaPalletTrasStatus(DataGridViewRow dgv, TipoReestiba tipo)
+        {
+            string activoPallet = tipo.NuevoPalletActivo ? "1" : "0";
+
+            if (dgvConsulta.Columns.Contains(Column.active))
+            {
+                dgv.Cells[Column.active].Value = activoPallet;
+
+                if (dgvConsulta.Columns.Contains("Tipo"))
+                    dgv.Cells["Tipo"].Value = tipo.Prefijo;
+            }
+            else if (!tipo.NuevoPalletActivo)
+                dgvConsulta.Rows.Remove(dgv);
         }
 
 
@@ -128,6 +180,18 @@ namespace SisUvex.Consultas.Pallets
             {
                 cls.ConsultaWorkPlan(txbWorkPlan.Text);
             }
+        }
+
+        private void btnAjustarColumnas_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void chbAjustarColumnas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chbAjustarColumnas.Checked)
+                dgvConsulta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+            else
+                dgvConsulta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
     }
 }

@@ -1,89 +1,72 @@
 ﻿/*
  * FrmEliminarPallet.cs
  * ====================================================================================
- * Formulario modal para eliminar (marcar como inactivo) un pallet completo.
+ * Formulario modal para eliminar o cambiar el status de un pallet completo.
  *
- * FUNCIONAMIENTO:
- *   - Utiliza el mecanismo de reestiba COMPLETA: todo el pallet se marca con un motivo
- *     de tipo inactivo (c_activeInPallet = '0'). No se crea ningún pallet nuevo.
- *   - Solo muestra tipos de reestiba donde el pallet queda INACTIVO (c_activeInPallet='0'):
- *     SINIESTRADO, ERROR, CORTESÍA, REEMPAQUE, etc.
- *   - No permite seleccionar tipos que dejen el pallet activo (ej. SOBRANTE).
+ * MODOS:
+ *   - Eliminar       → solo tipos con c_activeInPallet = '0' (pallet queda inactivo).
+ *   - CambiarStatus  → todos los tipos activos del catálogo (c_active 0 o 1 según el tipo).
  *
  * USO DESDE OTRO FORMULARIO:
- *   var frm = new FrmEliminarPallet(palletInfo);
+ *   var frm = new FrmEliminarPallet(idPallet);
+ *   var frm = new FrmEliminarPallet(idPallet, ModoPalletAccion.CambiarStatus);
  *   if (frm.ShowDialog() == DialogResult.OK)
- *   {
- *       // El pallet ya fue marcado como inactivo en DB.
  *       // frm.TipoSeleccionado contiene el tipo usado.
- *   }
- *
- * ESCALABILIDAD:
- *   → Para mostrar más información del pallet, agregar propiedades en PalletInfo
- *     y poblarlas aquí en FrmEliminarPallet_Load.
- *   → Para ejecutar lógica adicional post-eliminación, ampliar btnConfirmar_Click.
  * ====================================================================================
  */
 
 namespace SisUvex.Archivo.MixtearPallets
 {
+    internal enum ModoPalletAccion
+    {
+        Eliminar,
+        CambiarStatus
+    }
+
     /// <summary>
-    /// Formulario modal para eliminar (marcar como inactivo) un pallet.
-    /// Ejecuta una reestiba completa con un tipo de motivo inactivo seleccionado por el usuario.
+    /// Formulario modal para eliminar o cambiar el status de un pallet.
+    /// Ejecuta una reestiba completa con el tipo de motivo seleccionado por el usuario.
     /// </summary>
     internal partial class FrmEliminarPallet : Form
     {
-        // ── Datos internos ───────────────────────────────────────────────────────────
-        private PalletInfo?        _pallet;   // Se carga desde DB al abrir el formulario
+        private PalletInfo?        _pallet;
         private readonly ClsMixtearPallets _cls;
-        private readonly string    _idPallet; // ID ya formateado con ceros
-
-        // ── Resultado público ────────────────────────────────────────────────────────
+        private readonly string    _idPallet;
+        private readonly ModoPalletAccion _modo;
 
         /// <summary>
-        /// Tipo de motivo seleccionado para la eliminación.
-        /// Solo válido si DialogResult == OK.
+        /// Tipo de motivo seleccionado. Solo válido si DialogResult == OK.
         /// </summary>
         public TipoReestiba TipoSeleccionado { get; private set; } = new();
 
-        // ── Constructor ──────────────────────────────────────────────────────────────
-
-        /// <summary>
-        /// Inicializa el formulario con el ID del pallet a eliminar.
-        /// El ID se formatea automáticamente con ceros a la izquierda (formato "00000").
-        /// La información completa del pallet se consulta desde la base de datos al cargar.
-        /// </summary>
-        /// <param name="idPallet">ID del pallet (con o sin ceros, ej. "123" → "00123")</param>
-        public FrmEliminarPallet(string idPallet)
+        public FrmEliminarPallet(string idPallet, ModoPalletAccion modo = ModoPalletAccion.Eliminar)
         {
             InitializeComponent();
             _cls      = new ClsMixtearPallets();
             _idPallet = _cls.FormatoCeros(idPallet.Trim(), "00000");
+            _modo     = modo;
         }
-
-        // ============================================================================
-        // CARGA DEL FORMULARIO
-        // ============================================================================
 
         private void FrmEliminarPallet_Load(object sender, EventArgs e)
         {
-            // Consultar el pallet desde DB usando el ID formateado
-            _pallet = _cls.ConsultarPallet(_idPallet);
+            ConfigurarModo();
+
+            _pallet = _cls.ConsultarPallet(_idPallet, incluirInactivos: _modo == ModoPalletAccion.CambiarStatus);
 
             if (_pallet is null)
             {
-                MessageBox.Show(
-                    $"No se encontró el pallet {_idPallet} o no está activo.",
-                    "Pallet no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string mensaje = _modo == ModoPalletAccion.Eliminar
+                    ? $"No se encontró el pallet {_idPallet} o no está activo."
+                    : $"No se encontró el pallet {_idPallet}.";
+
+                MessageBox.Show(mensaje, "Pallet no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 DialogResult = DialogResult.Cancel;
                 Close();
                 return;
             }
 
-            // ── Panel de información (dinámico, 3 columnas) ───────────────────────
             ClsMixtearPallets.PopularInfoPallet(grpInfoPallet, _pallet);
 
-            // Reposicionar la sección "Eliminar como" y botones debajo del panel de info
             int y = grpInfoPallet.Bottom + 10;
             lblTipoTxt.Top     = y;
             y += lblTipoTxt.Height + 4;
@@ -97,21 +80,40 @@ namespace SisUvex.Archivo.MixtearPallets
             btnCancelar.Top    = y;
             ClientSize         = new Size(ClientSize.Width, y + btnCancelar.Height + 12);
 
-            CargarTiposInactivos();
+            CargarTipos();
         }
 
-        /// <summary>
-        /// Carga en cboTipo únicamente los tipos con c_activeInPallet = '0'
-        /// (los que dejan el pallet inactivo: ERROR, SINIESTRADO, CORTESÍA, REEMPAQUE…).
-        /// Si no hay tipos disponibles, deshabilita el botón de confirmar.
-        /// </summary>
-        private void CargarTiposInactivos()
+        private void ConfigurarModo()
         {
-            List<TipoReestiba> tipos = _cls.ObtenerTiposReestibaInactivos();
+            if (_modo == ModoPalletAccion.CambiarStatus)
+            {
+                Text = "Cambiar Status Pallet";
+                lblTipoTxt.Text = "Cambiar status como:";
+                btnConfirmar.Text = "Cambiar status";
+                btnConfirmar.BackColor = Color.SteelBlue;
+            }
+            else
+            {
+                Text = "Eliminar Pallet";
+                lblTipoTxt.Text = "Eliminar como (opciones que dejan el pallet inactivo):";
+                btnConfirmar.Text = "Eliminar";
+                btnConfirmar.BackColor = Color.FromArgb(192, 0, 0);
+            }
+        }
+
+        private void CargarTipos()
+        {
+            List<TipoReestiba> tipos = _modo == ModoPalletAccion.CambiarStatus
+                ? _cls.ObtenerTiposReestiba()
+                : _cls.ObtenerTiposReestibaInactivos();
 
             if (tipos.Count == 0)
             {
-                lblTipoTxt.Text     = "No hay tipos de eliminación disponibles en la base de datos.";
+                string sinTipos = _modo == ModoPalletAccion.CambiarStatus
+                    ? "No hay tipos de status disponibles en la base de datos."
+                    : "No hay tipos de eliminación disponibles en la base de datos.";
+
+                lblTipoTxt.Text      = sinTipos;
                 lblTipoTxt.ForeColor = Color.Red;
                 btnConfirmar.Enabled = false;
                 return;
@@ -123,48 +125,64 @@ namespace SisUvex.Archivo.MixtearPallets
             cboTipo.SelectedIndex = 0;
 
             ActualizarDescripcion();
+            ActualizarAdvertencia();
         }
 
-        // ============================================================================
-        // EVENTOS DE CONTROLES
-        // ============================================================================
-
         private void cboTipo_SelectedIndexChanged(object sender, EventArgs e)
-            => ActualizarDescripcion();
+        {
+            ActualizarDescripcion();
+            ActualizarAdvertencia();
+        }
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             if (cboTipo.SelectedItem is not TipoReestiba tipoElegido)
             {
-                MessageBox.Show(
-                    "Seleccione el motivo de eliminación antes de confirmar.",
-                    "Motivo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string aviso = _modo == ModoPalletAccion.CambiarStatus
+                    ? "Seleccione el nuevo status antes de confirmar."
+                    : "Seleccione el motivo de eliminación antes de confirmar.";
+
+                MessageBox.Show(aviso, "Motivo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Confirmación explícita antes de marcar el pallet inactivo
-            string resumen =
-                $"¿Confirma la eliminación del pallet {_pallet!.IdPallet}?\n\n" +
-                $"  Motivo : {tipoElegido.Nombre}\n" +
-                $"  Cajas  : {_pallet.Cajas}\n\n" +
-                "El pallet quedará INACTIVO permanentemente.\n" +
-                "No se creará ningún pallet nuevo.";
+            string estadoNuevo = tipoElegido.NuevoPalletActivo ? "ACTIVO" : "INACTIVO";
+            string resumen = _modo == ModoPalletAccion.CambiarStatus
+                ? $"¿Confirma el cambio de status del pallet {_pallet!.IdPallet}?\n\n" +
+                  $"  Motivo      : {tipoElegido.Nombre}\n" +
+                  $"  Cajas       : {_pallet.Cajas}\n" +
+                  $"  Nuevo status: {estadoNuevo}\n\n" +
+                  "No se creará ningún pallet nuevo."
+                : $"¿Confirma la eliminación del pallet {_pallet!.IdPallet}?\n\n" +
+                  $"  Motivo : {tipoElegido.Nombre}\n" +
+                  $"  Cajas  : {_pallet.Cajas}\n\n" +
+                  "El pallet quedará INACTIVO permanentemente.\n" +
+                  "No se creará ningún pallet nuevo.";
 
-            var confirm = MessageBox.Show(
-                resumen, "Confirmar Eliminación",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button2);    // "No" como botón por defecto
-            if (confirm != DialogResult.Yes) return;
+            string titulo = _modo == ModoPalletAccion.CambiarStatus
+                ? "Confirmar Cambio de Status"
+                : "Confirmar Eliminación";
 
-            // Ejecutar reestiba completa (todo el pallet → inactivo)
+            if (MessageBox.Show(resumen, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                return;
+
             ResultadoReestiba resultado = _cls.EjecutarReestibaCompleta(_pallet.IdPallet, tipoElegido);
 
             if (resultado.Exito)
             {
-                MessageBox.Show(
-                    $"El pallet {_pallet.IdPallet} fue eliminado correctamente.\n" +
-                    $"Motivo asignado: {tipoElegido.Nombre}.",
-                    "Eliminación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string exito = _modo == ModoPalletAccion.CambiarStatus
+                    ? $"El status del pallet {_pallet.IdPallet} fue actualizado correctamente.\n" +
+                      $"Motivo asignado: {tipoElegido.Nombre}.\n" +
+                      $"Status: {estadoNuevo}."
+                    : $"El pallet {_pallet.IdPallet} fue eliminado correctamente.\n" +
+                      $"Motivo asignado: {tipoElegido.Nombre}.";
+
+                string tituloExito = _modo == ModoPalletAccion.CambiarStatus
+                    ? "Cambio de status exitoso"
+                    : "Eliminación exitosa";
+
+                MessageBox.Show(exito, tituloExito, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 TipoSeleccionado = tipoElegido;
                 DialogResult     = DialogResult.OK;
@@ -172,10 +190,14 @@ namespace SisUvex.Archivo.MixtearPallets
             }
             else
             {
+                string error = _modo == ModoPalletAccion.CambiarStatus
+                    ? $"No se pudo cambiar el status del pallet {_pallet.IdPallet}."
+                    : $"No se pudo eliminar el pallet {_pallet.IdPallet}.";
+
                 MessageBox.Show(
-                    $"No se pudo eliminar el pallet {_pallet.IdPallet}.\n\n" +
+                    $"{error}\n\n" +
                     (string.IsNullOrEmpty(resultado.Mensaje) ? "Error desconocido." : resultado.Mensaje),
-                    "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -185,13 +207,6 @@ namespace SisUvex.Archivo.MixtearPallets
             Close();
         }
 
-        // ============================================================================
-        // UTILIDADES INTERNAS
-        // ============================================================================
-
-        /// <summary>
-        /// Muestra la descripción del tipo seleccionado en el label inferior.
-        /// </summary>
         private void ActualizarDescripcion()
         {
             if (cboTipo.SelectedItem is TipoReestiba tipo)
@@ -200,6 +215,23 @@ namespace SisUvex.Archivo.MixtearPallets
                     ? ""
                     : $"ℹ  {tipo.Descripcion}";
             }
+        }
+
+        private void ActualizarAdvertencia()
+        {
+            if (cboTipo.SelectedItem is not TipoReestiba tipo)
+                return;
+
+            if (_modo == ModoPalletAccion.Eliminar)
+            {
+                lblAdvertencia.Text      = "⚠  El pallet quedará INACTIVO permanentemente en la base de datos.";
+                lblAdvertencia.ForeColor = Color.DarkOrange;
+                return;
+            }
+
+            string estado = tipo.NuevoPalletActivo ? "ACTIVO" : "INACTIVO";
+            lblAdvertencia.Text      = $"ℹ  El pallet quedará {estado} en la base de datos.";
+            lblAdvertencia.ForeColor = tipo.NuevoPalletActivo ? Color.ForestGreen : Color.DarkOrange;
         }
     }
 }

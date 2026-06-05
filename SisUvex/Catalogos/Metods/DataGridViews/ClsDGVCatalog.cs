@@ -3,6 +3,7 @@ using SisUvex.Catalogos.Metods.Querys;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -286,6 +287,152 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
             //Se cambió a este método para que use la función estática de Metods, ya que es un proceso más complejo y así se puede reutilizar en otros lugares sin necesidad de crear una instancia de ClsDGVCatalog
             Metods.ModifyIdRowInDGV_With2Ids(modifyRows, dtCatalog, idColumn, id2Column, activeColumnHide);
         }
+        /// <summary>
+        /// Estilos reutilizables para formato condicional en <see cref="DataGridView"/>.
+        /// </summary>
+        public sealed class CellFormat
+        {
+            public Color? BackColor { get; init; }
+            public Color? ForeColor { get; init; }
+            public System.Drawing.FontStyle? FontStyleValue { get; init; }
+
+            /// <summary>Si es true, no modifica la fuente de la celda (solo colores).</summary>
+            public bool KeepFont { get; init; }
+
+            /// <summary>Activo: fondo verde claro, texto verde oscuro, negritas (columna ID).</summary>
+            public static CellFormat Active_1 { get; } = new()
+            {
+                BackColor = Color.LightGreen,
+                ForeColor = Color.DarkGreen,
+                FontStyleValue = System.Drawing.FontStyle.Bold
+            };
+
+            // Alias solicitados por el usuario (para que el código se lea como el resto del proyecto).
+            public static CellFormat active_1 => Active_1;
+
+            /// <summary>Inactivo: fondo tomate, texto rojo oscuro, negritas (columna ID).</summary>
+            public static CellFormat Active_0 { get; } = new()
+            {
+                BackColor = Color.Tomato,
+                ForeColor = Color.DarkRed,
+                FontStyleValue = System.Drawing.FontStyle.Bold
+            };
+
+            // Alias solicitados por el usuario (para que el código se lea como el resto del proyecto).
+            public static CellFormat active_0 => Active_0;
+
+            /// <summary>Activo en la propia columna visible: verde claro / verde.</summary>
+            public static CellFormat ActiveColumn_1 { get; } = new()
+            {
+                BackColor = Color.LightGreen,
+                ForeColor = Color.Green
+            };
+
+            /// <summary>Inactivo en la propia columna visible: tomate / rojo.</summary>
+            public static CellFormat ActiveColumn_0 { get; } = new()
+            {
+                BackColor = Color.Tomato,
+                ForeColor = Color.Red
+            };
+
+            /// <summary>Inactivo suave: solo fondo rosa claro, sin cambiar fuente.</summary>
+            public static CellFormat SoftInactive { get; } = new()
+            {
+                BackColor = Color.MistyRose,
+                KeepFont = true
+            };
+
+            public static CellFormat soft_inactive => SoftInactive;
+
+            public void Apply(DataGridViewCellStyle cellStyle, Font gridFont)
+            {
+                if (BackColor.HasValue)
+                    cellStyle.BackColor = BackColor.Value;
+                if (ForeColor.HasValue)
+                    cellStyle.ForeColor = ForeColor.Value;
+                if (!KeepFont && FontStyleValue.HasValue)
+                    cellStyle.Font = new Font(gridFont, FontStyleValue.Value);
+            }
+        }
+
+        /// <summary>
+        /// Aplica <paramref name="format"/> a <paramref name="targetColumnName"/> cuando el valor de
+        /// <paramref name="conditionColumnName"/> coincide con <paramref name="conditionValue"/>.
+        /// </summary>
+        public static void DgvApplyConditionalCellFormat(
+            DataGridView dataGridView,
+            string targetColumnName,
+            string conditionColumnName,
+            string conditionValue,
+            CellFormat format)
+        {
+            if (dataGridView == null || format == null)
+                return;
+            if (!dataGridView.Columns.Contains(targetColumnName) || !dataGridView.Columns.Contains(conditionColumnName))
+                return;
+
+            dataGridView.CellFormatting += (_, e) =>
+            {
+                if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                    return;
+                if (dataGridView.Columns[e.ColumnIndex].Name != targetColumnName)
+                    return;
+
+                DataGridViewRow row = dataGridView.Rows[e.RowIndex];
+                if (!MatchesConditionValue(row.Cells[conditionColumnName].Value, conditionValue))
+                    return;
+
+                format.Apply(e.CellStyle, dataGridView.Font);
+            };
+        }
+
+        /// <summary>
+        /// Aplica <paramref name="format"/> a todas las celdas de la fila cuando el valor de
+        /// <paramref name="conditionColumnName"/> coincide con <paramref name="conditionValue"/>.
+        /// </summary>
+        public static void DgvApplyConditionalRowFormat(
+            DataGridView dataGridView,
+            string conditionColumnName,
+            string conditionValue,
+            CellFormat format)
+        {
+            if (dataGridView == null || format == null)
+                return;
+            if (!dataGridView.Columns.Contains(conditionColumnName))
+                return;
+
+            dataGridView.CellFormatting += (_, e) =>
+            {
+                if (e.RowIndex < 0)
+                    return;
+
+                DataGridViewRow row = dataGridView.Rows[e.RowIndex];
+                if (!MatchesConditionValue(row.Cells[conditionColumnName].Value, conditionValue))
+                    return;
+
+                format.Apply(e.CellStyle, dataGridView.Font);
+            };
+        }
+
+        private static bool MatchesConditionValue(object? cellValue, string conditionValue)
+        {
+            if (cellValue == null || cellValue == DBNull.Value)
+                return conditionValue is "0" or "";
+
+            string text = cellValue.ToString() ?? string.Empty;
+
+            if (string.Equals(text, conditionValue, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (conditionValue == "1")
+                return text == "1" || text.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+            if (conditionValue == "0")
+                return text == "0" || text.Equals("false", StringComparison.OrdinalIgnoreCase);
+
+            return false;
+        }
+
         public static void DgvApplyCellFormattingEvent(DataGridView dataGridView)
         {
             DgvApplyCellFormattingEvent(dataGridView, ClsObject.Column.active, ClsObject.Column.id);

@@ -110,13 +110,16 @@ namespace SisUvex.Catalogos.Metods
         }
 
         /// <summary>
-        /// Consultas sobre <c>vw_PackPalletCon</c> / <c>vw_PackPalletConWithShrinkage</c> con IDs de tablas relacionadas.
+        /// Consultas sobre <c>vw_PackPalletCon</c> (activos) y <c>vw_PackPalletConWithShrinkage</c> (incluye inactivos / reestibados) con IDs de tablas relacionadas.
         /// <see cref="ColumnsJoinedIds"/> lista los alias agregados por los JOIN (para ocultar en DGV, validaciones, etc.).
         /// </summary>
         public static class Pallet
         {
             public const string ViewCon = "vw_PackPalletCon";
+            /// <summary>Incluye pallets con <c>Activo = '0'</c> (reestibados, inactivos, etc.).</summary>
             public const string ViewConWithStowage = "vw_PackPalletConWithShrinkage";
+            /// <summary>Columna de estado en las vistas de pallet (<c>Activo</c>).</summary>
+            public const string ColumnActive = Column.active;
 
             public const string ColumnPalletId = "idPallet";
             public const string ColumnManifestId = "idManifest";
@@ -410,7 +413,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveWorkGroup";
             public const string Cbo = "CboWorkGroup";
             public const string DgvCatalog = "DgvCatalogWorkGroup";
-            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], wgp.c_active AS [{Column.active}], wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
             public const string QueryDgvCatalog = "queryWorkGroup";
         }
 
