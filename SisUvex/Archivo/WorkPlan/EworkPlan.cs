@@ -79,17 +79,28 @@ namespace SisUvex.Archivo.WorkPlan
             get { return idTypeBox; }
             set { idTypeBox = value; }
         }
-        public bool IsWorkPlanAvailable()
+        public static string GetNextId()
         {
-            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{idGtin}' AND wpl.d_workDay = '{workDay.ToString("yyyy-MM-dd")}' AND wpl.id_workGroup = '{idWorkGroup}' AND wpl.id_size = '{size}' AND gtn.id_variety = '{idVariety}' AND wpl.id_typeBox = '{idTypeBox}'";
-            Clipboard.SetText(query);
+            return ClsQuerysDB.GetData( "SELECT FORMAT(COALESCE(MAX(id_workPlan), 0) + 1, '0000') FROM Pack_WorkPlan").ToString();
+        }
+        public bool IsWorkPlanAvailable(string? excludeWorkPlanId = null)
+        {
+            string idTypeBoxFilter = string.IsNullOrEmpty(idTypeBox)
+                ? "NULL"
+                : $"'{idTypeBox}'";
+
+            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{idGtin}' AND wpl.d_workDay = '{workDay:yyyy-MM-dd}' AND wpl.id_workGroup = '{idWorkGroup}' AND wpl.id_size = '{size}' AND gtn.id_variety = '{idVariety}' AND wpl.id_typeBox = {idTypeBoxFilter}";
+
             string result = ClsQuerysDB.GetData(query);
 
             if (result.Length == 0)
                 return true;
 
+            if (!string.IsNullOrEmpty(excludeWorkPlanId) && result == excludeWorkPlanId)
+                return true;
+
             SystemSounds.Exclamation.Play();
-            MessageBox.Show($"Ya existe un Plan de trabajo para esa combinación.\nPlan de trabajo: {result}", "Plan de trabajo ya existe", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Ya existe un Plan de trabajo para esa combinación.\n\tPlan de trabajo: {result}", "Plan de trabajo ya existe", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -124,15 +135,14 @@ namespace SisUvex.Archivo.WorkPlan
                 sql.CloseConectionWrite();
             }
         }
-        public bool AddProcedure()
+        public (bool success, string? id) AddProcedure()
         {
-            bool result = false;
             try
             {
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new SqlCommand("sp_PackWorkPlanAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@active", active.ToString());
+                cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
                 cmd.Parameters.AddWithValue("@idLot", idLot);
                 cmd.Parameters.AddWithValue("@idWorkGroup", IdWorkGroup);
                 cmd.Parameters.AddWithValue("@idGtin", IdGtin);
@@ -142,24 +152,54 @@ namespace SisUvex.Archivo.WorkPlan
                 cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
                 cmd.Parameters.AddWithValue("@idTypeBox", idTypeBox);
 
-                string id = cmd.ExecuteScalar().ToString();
-
-                result = true;
-
-                MessageBox.Show("Se agregó el plan de trabajo: " + id, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string? id = cmd.ExecuteScalar()?.ToString();
+                if (string.IsNullOrEmpty(id))
+                    return (false, null);
 
                 idWorkPlan = id;
+                return (true, id);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Catálogo añadir");
+                return (false, null);
             }
             finally
             {
                 sql.CloseConectionWrite();
             }
+        }
 
-            return result;
+        public (bool success, string? id) ModifyProcedure()
+        {
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("sp_PackWorkPlanModify", sql.cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", IdWorkPlan);
+                cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
+                cmd.Parameters.AddWithValue("@idLot", idLot);
+                cmd.Parameters.AddWithValue("@idWorkGroup", IdWorkGroup);
+                cmd.Parameters.AddWithValue("@idGtin", IdGtin);
+                cmd.Parameters.AddWithValue("@voicePickCode", vpc);
+                cmd.Parameters.AddWithValue("@workDay", workDay.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@idSize", size);
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.Parameters.AddWithValue("@idTypeBox", idTypeBox);
+
+                cmd.ExecuteNonQuery();
+                return (true, IdWorkPlan);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Catálogo modificar");
+                return (false, null);
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
         }
 
         public static string DuplicateWorkPlan(string idWorkPlan, string idWorkGroup)
@@ -172,10 +212,11 @@ namespace SisUvex.Archivo.WorkPlan
             if (!eWorkPlan.IsWorkPlanAvailable()) //VALIDAR SI YA EXISTE
                 return string.Empty;
 
-            if (eWorkPlan.AddProcedure())
-                return eWorkPlan.IdWorkPlan; //SI SE CREA, DEVUELVE EL ID NUEVO
-            else
-                return string.Empty;
+            var result = eWorkPlan.AddProcedure();
+            if (result.success)
+                return result.id ?? string.Empty;
+
+            return string.Empty;
         }
     }
 }

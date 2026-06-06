@@ -179,7 +179,7 @@
             dgvGTIN.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvGTIN.EnableHeadersVisualStyles = false;
             dgvGTIN.ImeMode = ImeMode.NoControl;
-            dgvGTIN.Location = new Point(12, 417);
+            dgvGTIN.Location = new Point(12, 377);
             dgvGTIN.Name = "dgvGTIN";
             dgvGTIN.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -193,7 +193,7 @@
             dgvGTIN.RowHeadersVisible = false;
             dgvGTIN.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvGTIN.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvGTIN.Size = new Size(636, 186);
+            dgvGTIN.Size = new Size(636, 226);
             dgvGTIN.TabIndex = 20;
             dgvGTIN.MouseDoubleClick += dgvGTIN_MouseDoubleClick;
             // 

@@ -58,6 +58,7 @@
             cboSeason = new ComboBox();
             label11 = new Label();
             cboFarm = new ComboBox();
+            btnClone = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -366,11 +367,22 @@
             cboFarm.Size = new Size(135, 23);
             cboFarm.TabIndex = 46;
             // 
+            // btnClone
+            // 
+            btnClone.Location = new Point(379, 76);
+            btnClone.Name = "btnClone";
+            btnClone.Size = new Size(75, 23);
+            btnClone.TabIndex = 48;
+            btnClone.Text = "Duplicar";
+            btnClone.UseVisualStyleBackColor = true;
+            btnClone.Click += btnClone_Click;
+            // 
             // FrmWorkPlanCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1084, 450);
+            Controls.Add(btnClone);
             Controls.Add(label11);
             Controls.Add(cboFarm);
             Controls.Add(label10);
@@ -435,5 +447,6 @@
         public ComboBox cboSeason;
         private Label label11;
         public ComboBox cboFarm;
+        private Button btnClone;
     }
 }
