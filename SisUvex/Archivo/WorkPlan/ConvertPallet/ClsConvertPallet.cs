@@ -1,10 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Archivo.Etiquetas.PrintLabels;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.TextBoxes;
-using SisUvex.Archivo.Etiquetas.PrintLabels;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using System;
@@ -13,9 +13,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Media;
-using System.Windows.Forms;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.WorkPlan.ConvertPallet
@@ -627,12 +628,36 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
                 if (result)
                     idNewWorkPlan = EworkPlan.DuplicateWorkPlan(idWorkPlan, idWorkGroup);
 
-                if (!string.IsNullOrEmpty(idNewWorkPlan))
-                {
-                    ClearCboFilters();
-                    ReloadWorkPlanDataFromDatabase();
-                    ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(frm.cboWorkPlan, idNewWorkPlan);
-                }
+                ClearCbosAndSelectPlan(idNewWorkPlan);
+            }
+        }
+
+        public void BtnCloneWorkPlan()
+        {
+            string idWP = frm.txbIdWorkPlan.Text;
+            if (string.IsNullOrEmpty(idWP))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+
+            ClsWorkPlan cls = new();
+            cls.OpenFrmClone(idWP);
+            string? idNewWorkPlan = cls.idAddModify;
+
+            if (string.IsNullOrEmpty(idNewWorkPlan))
+                return;
+
+            ClearCbosAndSelectPlan(idNewWorkPlan);
+        }
+
+        private void ClearCbosAndSelectPlan(string? planId)
+        {
+            if (!string.IsNullOrEmpty(planId))
+            {
+                ClearCboFilters();
+                ReloadWorkPlanDataFromDatabase();
+                ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(frm.cboWorkPlan, planId);
             }
         }
     }

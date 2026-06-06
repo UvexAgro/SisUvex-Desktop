@@ -63,11 +63,13 @@ namespace SisUvex.Archivo.WorkPlan.ConvertPallet
 
             lblWorkGroupDuplicate.Visible = true;
             cboWorkGroupDuplicate.Visible = true;
+
+            btnClone.Visible = true;
         }
 
         private void btnClone_Click(object sender, EventArgs e)
         {
-
+            cls.BtnCloneWorkPlan();
         }
     }
 }
