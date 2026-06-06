@@ -144,7 +144,7 @@
             lblVPC.AutoSize = true;
             lblVPC.Font = new Font("Segoe UI", 12F);
             lblVPC.ForeColor = SystemColors.ControlDark;
-            lblVPC.Location = new Point(247, 54);
+            lblVPC.Location = new Point(418, 234);
             lblVPC.Name = "lblVPC";
             lblVPC.Size = new Size(119, 21);
             lblVPC.TabIndex = 162;
@@ -154,7 +154,7 @@
             // 
             txbVPC.Enabled = false;
             txbVPC.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbVPC.Location = new Point(368, 51);
+            txbVPC.Location = new Point(539, 231);
             txbVPC.Name = "txbVPC";
             txbVPC.Size = new Size(64, 29);
             txbVPC.TabIndex = 25;
@@ -303,7 +303,7 @@
             // 
             txbId.Enabled = false;
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbId.Location = new Point(368, 14);
+            txbId.Location = new Point(368, 50);
             txbId.Name = "txbId";
             txbId.Size = new Size(64, 29);
             txbId.TabIndex = 23;
@@ -323,7 +323,7 @@
             // 
             lblId.AutoSize = true;
             lblId.Font = new Font("Segoe UI", 12F);
-            lblId.Location = new Point(336, 17);
+            lblId.Location = new Point(336, 53);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
             lblId.TabIndex = 145;
@@ -333,7 +333,7 @@
             // 
             lblObliId.AutoSize = true;
             lblObliId.ForeColor = Color.Crimson;
-            lblObliId.Location = new Point(359, 14);
+            lblObliId.Location = new Point(359, 50);
             lblObliId.Name = "lblObliId";
             lblObliId.Size = new Size(12, 15);
             lblObliId.TabIndex = 147;

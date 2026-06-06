@@ -476,6 +476,7 @@
             btnClone.TabIndex = 77;
             btnClone.Text = "Completo";
             btnClone.UseVisualStyleBackColor = true;
+            btnClone.Visible = false;
             btnClone.Click += btnClone_Click;
             // 
             // FrmConvertPallet
