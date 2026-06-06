@@ -67,6 +67,7 @@
             btnDuplicateWorkPlan = new Button();
             lblWorkGroupDuplicate = new Label();
             cboWorkGroupDuplicate = new ComboBox();
+            btnClone = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvPallet).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudCopiasEtiqueta).BeginInit();
             SuspendLayout();
@@ -467,11 +468,22 @@
             cboWorkGroupDuplicate.TabIndex = 75;
             cboWorkGroupDuplicate.Visible = false;
             // 
+            // btnClone
+            // 
+            btnClone.Location = new Point(486, 120);
+            btnClone.Name = "btnClone";
+            btnClone.Size = new Size(73, 26);
+            btnClone.TabIndex = 77;
+            btnClone.Text = "Completo";
+            btnClone.UseVisualStyleBackColor = true;
+            btnClone.Click += btnClone_Click;
+            // 
             // FrmConvertPallet
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 636);
+            Controls.Add(btnClone);
             Controls.Add(lblWorkGroupDuplicate);
             Controls.Add(cboWorkGroupDuplicate);
             Controls.Add(btnDuplicateWorkPlan);
@@ -556,5 +568,6 @@
         private Button btnDuplicateWorkPlan;
         private Label lblWorkGroupDuplicate;
         public ComboBox cboWorkGroupDuplicate;
+        private Button btnClone;
     }
 }

@@ -1,27 +1,34 @@
-﻿using SisUvex.Catalogos.Metods;
-using SisUvex.Catalogos.Metods.CheckBoxes;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
+using SisUvex.Catalogos.Metods.Forms;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.WorkGroup;
 using System.Data;
-using System.Data.SqlClient;
 using System.Media;
 using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.WorkPlan
 {
-    internal  class ClsWorkPlan : ClsWorkPlanEventsControls
+    internal class ClsWorkPlan : ClsWorkPlanEventsControls
     {
-        SQLControl sql = new SQLControl();
         ClsControls controlList;
         public FrmWorkPlanAdd _frmAdd;
         public FrmWorkPlanCat _frmCat;
         public EworkPlan eWorkPlan;
-        //private string queryCatalog = "SELECT * FROM vw_PackWorkPlanCat";
         public DataTable dtCatalog = new DataTable();
         public string filter;
+
+        private readonly string queryCatalog = ClsObject.WorkPlan.QueryDgvCatalog;
+        public ClsDGVCatalog? dgv;
+
+        public bool IsAddOrModify = true;
+        public bool IsAddUpdate;
+        public bool IsModifyUpdate;
+        public string? idAddModify;
+
 
         public ClsWorkPlan()
         {
@@ -29,7 +36,7 @@ namespace SisUvex.Archivo.WorkPlan
         }
 
         public void BeginFormCat()
-        {   
+        {
             _frmCat.dtpDate1.Value = DateTime.Now;
             _frmCat.dtpDate2.Value = DateTime.Now;
             _frmCat.WindowState = FormWindowState.Maximized;
@@ -53,7 +60,37 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.Events.CboApplyEventFilterAllForOne(_frmCat.cboLot, null, lsLotDep);
 
             LoadDataGridViewCatalog();
-            ClsDGVCatalog.DgvApplyCellFormattingEvent(_frmCat.dgvCatalog);
+        }
+
+        public void BindDgvCatalog()
+        {
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+            dgv.AddHideColumn(ClsObject.WorkPlan.ColumnId);
+            dgv.AddHideColumn(ClsObject.WorkPlan.ColumnActive);
+            dgv.AddHideColumn(ClsObject.WorkPlan.ColumnDate);
+            dgv.HideColumnsList();
+
+            if (!_frmCat.chbRemoved.Checked)
+            {
+                dgv.CopyActiveValuesToHiddenColumn();
+                dgv.SetFilterActivesOnly();
+            }
+            else
+                dgv.SetFilterNull();
+        }
+
+        public void AddNewRowByIdInDGVCatalog()
+        {
+            string esc = idAddModify?.Replace("'", "''") ?? "";
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE w.id_workPlan = '{esc}'");
+            dgv!.AddNewRowToDGV(newIdRow);
+        }
+
+        public void ModifyRowByIdInDGVCatalog()
+        {
+            string esc = idAddModify?.Replace("'", "''") ?? "";
+            DataTable newIdRow = ClsQuerysDB.GetDataTable(queryCatalog + $" WHERE w.id_workPlan = '{esc}'");
+            dgv!.ModifyIdRowInDGV(newIdRow);
         }
         public void RemoveProcedure()
         {
@@ -65,24 +102,54 @@ namespace SisUvex.Archivo.WorkPlan
         }
         public void OpenFrmAdd()
         {
-            _frmAdd = new();
+            IsAddOrModify = true;
+            IsAddUpdate = false;
+            idAddModify = null;
+            _frmAdd = new(FormMode.Add);
             _frmAdd.cls = this;
             _frmAdd.Text = "Añadir plan de trabajo";
             _frmAdd.lblTitle.Text = "Añadir plan de trabajo";
+            _frmAdd.IsAddModify = true; //porque si añadirá uno nuevo, no se está modificando uno existente
+            _frmAdd.ShowDialog();
+        }
+        public void OpenFrmClone(string idClone)
+        {
+            IsAddOrModify = true;
+            IsAddUpdate = false;
+            idAddModify = null;
+            _frmAdd = new(FormMode.Clone);
+            _frmAdd.cls = this;
+            _frmAdd.Text = "Añadir plan de trabajo (duplicar)";
+            _frmAdd.lblTitle.Text = "Añadir plan de trabajo (duplicar)";
             _frmAdd.IsAddModify = true;
+            _frmAdd.idModify = idClone;
+
             _frmAdd.ShowDialog();
         }
         public void BeginFormAdd()
         {
             AddControlsToList();
             SetControls();
-            if (_frmAdd.IsAddModify)
+
+            switch (_frmAdd._mode)
             {
-                _frmAdd.chbActive.Checked = true;
-                _frmAdd.txbId.Text = ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_workPLan), 0) + 1, '0000') FROM Pack_WorkPlan").ToString();
+                case FormMode.Add:
+                    _frmAdd.chbActive.Checked = true;
+                    _frmAdd.txbId.Text = EworkPlan.GetNextId();
+                    break;
+
+                case FormMode.Modify:
+                    LoadControlsModify();
+                    break;
+
+                case FormMode.Clone:
+                    LoadControlsModify(); // carga datos del anterior
+
+                    _frmAdd.chbActive.Checked = true;
+                    _frmAdd.txbId.Text = EworkPlan.GetNextId(); // reemplaza por nuevo ID
+                    break;
             }
-            else
-                LoadControlsModify();
+
         }
         private void AddControlsToList()
         {
@@ -132,7 +199,7 @@ namespace SisUvex.Archivo.WorkPlan
             CboApplyValueChangedEventDateTimePicker(_frmAdd.dtpDateWorkPlan);
             ClsDataGridViewCatalogs.SetColorRow(_frmAdd.dgvGTIN, "Post etiqueta", "-", System.Drawing.Color.Yellow);
 
-		}
+        }
 
         private void LoadControlsModify()
         {
@@ -155,20 +222,18 @@ namespace SisUvex.Archivo.WorkPlan
             SetDgvFilterGTINBeginModify();
         }
 
-        public void OpenFrmModify()
+        public void OpenFrmModify(string idModify)
         {
-            if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
-            {
-                _frmAdd = new();
-                _frmAdd.cls = this;
-                _frmAdd.Text = "Modificar plan de trabajo";
-                _frmAdd.lblTitle.Text = "Modificar plan de trabajo";
-                _frmAdd.IsAddModify = false;
-                _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells[Column.id].Value.ToString();
-                _frmAdd.ShowDialog();
-            }
-            else
-                SystemSounds.Exclamation.Play();
+            IsAddOrModify = false;
+            IsModifyUpdate = false;
+            idAddModify = idModify;
+            _frmAdd = new(FormMode.Modify);
+            _frmAdd.cls = this;
+            _frmAdd.Text = "Modificar plan de trabajo";
+            _frmAdd.lblTitle.Text = "Modificar plan de trabajo";
+            _frmAdd.IsAddModify = false;
+            _frmAdd.idModify = idModify;
+            _frmAdd.ShowDialog();
         }
 
         public void SelectGTIN()
@@ -182,109 +247,67 @@ namespace SisUvex.Archivo.WorkPlan
                 SystemSounds.Exclamation.Play();
         }
 
-        private bool IsWorkPlanAvailable()
+        private EworkPlan SetEntity()
         {
-            string idLot = _frmAdd.txbIdLot.Text.Substring(0,4);
-            string idVariety = _frmAdd.txbIdLot.Text.Substring(5, 2);
-            string idTypeBox = _frmAdd.txbIdTypeBox.Text;
-            if (string.IsNullOrEmpty(idTypeBox))
-                idTypeBox = "NULL";
-            else
-                idTypeBox = $"'{idTypeBox}'"; //LAS COMULLAS AQUÍ POR SI FUERA NULL
+            eWorkPlan = new();
+            eWorkPlan.IdWorkPlan = _frmAdd.txbId.Text;
+            eWorkPlan.WorkDay = _frmAdd.dtpDateWorkPlan.Value;
+            eWorkPlan.Active = _frmAdd.chbActive.Checked ? 1 : 0;
+            eWorkPlan.IdWorkGroup = _frmAdd.txbIdWorkGroup.Text;
+            eWorkPlan.IdLot = _frmAdd.txbIdLot.Text.Substring(0, 4);
+            eWorkPlan.IdVariety = _frmAdd.txbIdLot.Text.Substring(5, 2);
+            eWorkPlan.IdGtin = _frmAdd.txbIdGTIN.Text;
+            eWorkPlan.VPC = _frmAdd.txbVPC.Text;
+            eWorkPlan.Size = _frmAdd.txbIdSize.Text;
+            eWorkPlan.IdTypeBox = _frmAdd.txbIdTypeBox.Text;
 
-            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{_frmAdd.txbIdGTIN.Text}' AND wpl.d_workDay = '{_frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd")}' AND wpl.id_workGroup = '{_frmAdd.txbIdWorkGroup.Text}' AND wpl.id_size = '{_frmAdd.txbIdSize.Text}' AND gtn.id_variety = '{idVariety}' AND wpl.id_typeBox = {idTypeBox}";
-
-            string result = ClsQuerysDB.GetData(query);
-
-            if (result.Length == 0)
-                return true;
-            else if (!_frmAdd.IsAddModify && result == _frmAdd.txbId.Text)
-                return true;
-
-            SystemSounds.Exclamation.Play();
-            MessageBox.Show($"Ya existe un Plan de trabajo para esa combinación.\n\tPlan de trabajo: {result}", "Plan de trabajo ya existe", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return false;
+            return eWorkPlan;
         }
+
         public void btnAcceptAddModify()
         {
             if (!controlList.ValidateControls())
                 return;
 
-            if (!IsWorkPlanAvailable())
+            EworkPlan entity = SetEntity();
+
+            string? excludeWorkPlanId = IsAddOrModify ? null : _frmAdd.txbId.Text;
+            if (!entity.IsWorkPlanAvailable(excludeWorkPlanId))
                 return;
 
-            if (_frmAdd.IsAddModify)
-                AddProcedure();
+            if (IsAddOrModify)
+            {
+                var result = entity.AddProcedure();
+                IsAddUpdate = result.success;
+                idAddModify = result.id;
+
+                if (IsAddUpdate)
+                {
+                    MessageBox.Show($"Se agregó el plan de trabajo: {idAddModify}.", "Añadir plan de trabajo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo agregar el plan de trabajo.", "Añadir plan de trabajo");
+                }
+            }
             else
-               ModifyProcedure();
+            {
+                var result = entity.ModifyProcedure();
+                IsModifyUpdate = result.success;
+                idAddModify = result.id;
 
-            if (_frmAdd.AddIsUpdate)
-            {
-                LoadDataGridViewCatalog();
-                _frmAdd.Close();
-            }
-        }
-        public void AddProcedure()
-        {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkPlanAdd", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@active", ClsCheckBoxes.GetCheckedValue(_frmAdd.chbActive));
-                cmd.Parameters.AddWithValue("@idLot", _frmAdd.txbIdLot.Text);
-                cmd.Parameters.AddWithValue("@idWorkGroup", _frmAdd.txbIdWorkGroup.Text);
-                cmd.Parameters.AddWithValue("@idGtin", _frmAdd.txbIdGTIN.Text);
-                cmd.Parameters.AddWithValue("@voicePickCode", _frmAdd.txbVPC.Text);
-                cmd.Parameters.AddWithValue("@workDay", _frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd"));
-                cmd.Parameters.AddWithValue("@idSize", _frmAdd.txbIdSize.Text);
-                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idTypeBox", _frmAdd.txbIdTypeBox.Text);
-
-                string id = cmd.ExecuteScalar().ToString();
-
-                _frmAdd.AddIsUpdate = true;
-
-                MessageBox.Show("Se agregó el plan de trabajo: " + id, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
-        }
-        public void ModifyProcedure()
-        {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkPlanModify", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", _frmAdd.txbId.Text);
-                cmd.Parameters.AddWithValue("@active", ClsCheckBoxes.GetCheckedValue(_frmAdd.chbActive));
-                cmd.Parameters.AddWithValue("@idLot", _frmAdd.txbIdLot.Text);
-                cmd.Parameters.AddWithValue("@idWorkGroup", _frmAdd.txbIdWorkGroup.Text);
-                cmd.Parameters.AddWithValue("@idGtin", _frmAdd.txbIdGTIN.Text);
-                cmd.Parameters.AddWithValue("@voicePickCode", _frmAdd.txbVPC.Text);
-                cmd.Parameters.AddWithValue("@workDay", _frmAdd.dtpDateWorkPlan.Value.ToString("yyyy-MM-dd"));
-                cmd.Parameters.AddWithValue("@idSize", _frmAdd.txbIdSize.Text);
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idTypeBox", _frmAdd.txbIdTypeBox.Text);
-
-                cmd.ExecuteNonQuery();
-
-                _frmAdd.AddIsUpdate = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo modificar");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
+                if (IsModifyUpdate)
+                {
+                    MessageBox.Show($"Se ha modificado el plan de trabajo con código: {idAddModify}.", "Modificar plan de trabajo");
+                    _frmAdd.Close();
+                }
+                else
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("No se pudo modificar el plan de trabajo.", "Modificar plan de trabajo");
+                }
             }
         }
 

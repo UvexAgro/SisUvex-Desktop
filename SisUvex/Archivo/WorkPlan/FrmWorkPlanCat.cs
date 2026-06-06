@@ -1,20 +1,12 @@
-﻿using Microsoft.CodeAnalysis;
-using SisUvex.Catalogos.Metods.DataGridViews;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Media;
+using SisUvex.Catalogos.Metods;
 
 namespace SisUvex.Archivo.WorkPlan
 {
     internal partial class FrmWorkPlanCat : Form
     {
-        public ClsWorkPlan cls;
+        public ClsWorkPlan cls = null!;
+
         public FrmWorkPlanCat()
         {
             InitializeComponent();
@@ -25,16 +17,35 @@ namespace SisUvex.Archivo.WorkPlan
             cls ??= new();
             cls._frmCat ??= this;
             cls.BeginFormCat();
-		}
+        }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             cls.OpenFrmAdd();
+
+            if (cls.IsAddUpdate)
+                cls.AddNewRowByIdInDGVCatalog();
         }
 
         private void btnModify_Click(object sender, EventArgs e)
         {
-            cls.OpenFrmModify();
+            OpenFrmModifyFromCat();
+        }
+
+        private void OpenFrmModifyFromCat()
+        {
+            if (dgvCatalog.SelectedRows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string idModify = dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString()!;
+
+            cls.OpenFrmModify(idModify);
+
+            if (cls.IsModifyUpdate)
+                cls.ModifyRowByIdInDGVCatalog();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -49,7 +60,7 @@ namespace SisUvex.Archivo.WorkPlan
 
         private void dgvCatalog_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            cls.OpenFrmModify();
+            OpenFrmModifyFromCat();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -60,6 +71,22 @@ namespace SisUvex.Archivo.WorkPlan
         public void chbRemoved_CheckedChanged(object sender, EventArgs e)
         {
             cls.ChbRemovedChecked();
+        }
+
+        private void btnClone_Click(object sender, EventArgs e)
+        {
+            if (dgvCatalog.SelectedRows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string idClone = dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString()!;
+
+            cls.OpenFrmClone(idClone);
+
+            if (cls.IsAddUpdate)
+                cls.AddNewRowByIdInDGVCatalog();
         }
     }
 }

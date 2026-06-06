@@ -277,33 +277,18 @@ namespace SisUvex.Archivo.WorkPlan
 
             clsWP.dtCatalog = ClsQuerysDB.GetDataTable(query);
 
-            clsWP._frmCat.dgvCatalog.DataSource = clsWP.dtCatalog;
-
-            if (!clsWP._frmCat.chbRemoved.Checked)
-                clsWP.dtCatalog.DefaultView.RowFilter = $" {ClsObject.WorkPlan.ColumnActive} = '1' ";
-
-            List<string> hiddenColumns = new List<string>()
-            {
-                ClsObject.WorkPlan.ColumnId,
-                ClsObject.WorkPlan.ColumnActive,
-                ClsObject.WorkPlan.ColumnDate
-            };
-
-            foreach (string column in hiddenColumns)
-            {
-                if (clsWP.dtCatalog.Columns.Contains(column))
-                {
-                    clsWP._frmCat.dgvCatalog.Columns[column].Visible = false;
-                }
-            }
+            clsWP.BindDgvCatalog();
         }
 
         public void ChbRemovedChecked()
         {
             if (clsWP._frmCat.chbRemoved.Checked)
-                clsWP.dtCatalog.DefaultView.RowFilter = null;
+                clsWP.dgv!.SetFilterNull();
             else
-                clsWP.dtCatalog.DefaultView.RowFilter = $" {ClsObject.Column.active} = '1' ";
+            {
+                clsWP.dgv!.CopyActiveValuesToHiddenColumn();
+                clsWP.dgv!.SetFilterActivesOnly();
+            }
         }
 
         public bool IsActive()

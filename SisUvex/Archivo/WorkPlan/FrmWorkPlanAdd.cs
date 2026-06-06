@@ -1,4 +1,5 @@
 ﻿using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,9 +17,13 @@ namespace SisUvex.Archivo.WorkPlan
         public ClsWorkPlan cls;
         public bool IsAddModify = true, AddIsUpdate = false;
         public string? idModify;
-        public FrmWorkPlanAdd()
+        public readonly FormMode _mode;
+        public string? idClone;
+        public FrmWorkPlanAdd(FormMode mode)
         {
             InitializeComponent();
+
+            _mode = mode;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
