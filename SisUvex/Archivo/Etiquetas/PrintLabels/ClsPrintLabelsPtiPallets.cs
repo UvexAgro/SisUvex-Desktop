@@ -264,6 +264,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 eTag.idTypeBox              = rows[0][TypeBox.ColumnId].ToString();
                 eTag.nameTypeBox            = rows[0][TypeBox.ColumnName].ToString();
                 eTag.shortNameTypeBox       = rows[0][TypeBox.ColumnShortName].ToString(); // Added for short name type box
+                eTag.idLabelLegend          = rows[0][LabelLegend.ColumnId].ToString();
+                eTag.labelLegend            = rows[0][LabelLegend.ColumnName].ToString();
+                eTag.labelLegend2           = rows[0][LabelLegend.ColumnLegend2].ToString();
             }
         }
 
