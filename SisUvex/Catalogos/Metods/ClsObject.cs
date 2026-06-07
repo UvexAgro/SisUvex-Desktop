@@ -713,6 +713,18 @@ namespace SisUvex.Catalogos.Metods
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
         }
 
+        public static class LabelLegend
+        {
+            public const string TableName = "Pack_LabelLegend";
+            public const string ColumnName = "Leyenda";
+            public const string ColumnId = "idLabelLegend";
+            public const string ColumnLegend2 = "Leyenda2";
+            public const string ColumnActive = "ActiveLabelLegend";
+            public const string Cbo = "CboLabelLegend";
+            public const string DgvCatalog = "DgvCatalogLabelLegend";
+            public const string QueryCbo = $" SELECT id_labelLegend as [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}] FROM Pack_LabelLegend ";
+        }
+
         public static class Payroll_AttendancePeriod
         {
             public const string TableName = "Payroll_AttendancePeriod";

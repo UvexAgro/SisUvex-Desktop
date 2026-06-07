@@ -1,9 +1,10 @@
-﻿using System.Data.SqlClient;
+﻿using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Values;
 using System.Data;
-using SisUvex.Catalogos.Metods.CheckBoxes;
-using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
-using SisUvex.Catalogos.Metods.Querys;
+using System.Data.SqlClient;
 using System.Media;
+using System.Windows.Forms;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.WorkPlan
 {
@@ -11,88 +12,40 @@ namespace SisUvex.Archivo.WorkPlan
     {
         SQLControl sql = new SQLControl();
 
-        private string idWorkPlan;
-        private string idLot;
-        private string idVariety;
-        private string idWorkGroup;
-        private string vpc;
-        private DateTime workDay;
-        private string size;
-        private int active;
-        private string materialPallet;
-        private string idGtin;
-        private string idTypeBox;
-        private string idNewWorkPlan; //Para se duplicada uno con el metodo DuplicateWorkPlan
+        public string IdWorkPlan { get; set; } = string.Empty;
+        public string IdLot { get; set; } = string.Empty;
+        public string IdVariety { get; set; } = string.Empty;
+        public string IdWorkGroup { get; set; } = string.Empty;
+        public string VPC { get; set; } = string.Empty;
+        public DateTime WorkDay { get; set; }
+        public string Size { get; set; } = string.Empty;
+        public int Active { get; set; }
+        public string IdGtin { get; set; } = string.Empty;
+        public string IdTypeBox { get; set; } = string.Empty;
+        public string? IdLabelLegend { get; set; }
 
-        public string IdWorkPlan
-        {
-            get { return idWorkPlan; }
-            set { idWorkPlan = value; }
-        }
-        public string IdLot
-        {
-            get { return idLot; }
-            set { idLot = value; }
-        }
-        public string IdVariety
-        {
-            get { return idVariety; }
-            set { idVariety = value; }
-        }
-        public string IdWorkGroup
-        {
-            get { return idWorkGroup; }
-            set { idWorkGroup = value; }
-        }
-        public string VPC
-        {
-            get { return vpc; }
-            set { vpc = value; }
-        }
-        public DateTime WorkDay
-        {
-            get { return workDay; }
-            set { workDay = value; }
-        }
-        public string Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
-        public int Active
-        {
-            get { return active; }
-            set { active = value; }
-        }
-        public string MaterialPallet
-        {
-            get { return materialPallet; }
-            set { materialPallet = value; }
-        }
-        public string IdGtin
-        {
-            get { return idGtin; }
-            set { idGtin = value; }
-        }
-        public string IdTypeBox
-        {
-            get { return idTypeBox; }
-            set { idTypeBox = value; }
-        }
         public static string GetNextId()
         {
-            return ClsQuerysDB.GetData( "SELECT FORMAT(COALESCE(MAX(id_workPlan), 0) + 1, '0000') FROM Pack_WorkPlan").ToString();
+            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_workPlan), 0) + 1, '0000') FROM Pack_WorkPlan").ToString();
         }
+
+        private static string? ReadField(SqlDataReader dr, string column)
+        {
+            int o = dr.GetOrdinal(column);
+            if (dr.IsDBNull(o))
+                return null;
+            return dr.GetValue(o).ToString();
+        }
+
         public bool IsWorkPlanAvailable(string? excludeWorkPlanId = null)
         {
-            string idTypeBoxFilter = string.IsNullOrEmpty(idTypeBox)
-                ? "NULL"
-                : $"'{idTypeBox}'";
+            string idLabelLegendFilter = string.IsNullOrEmpty(IdLabelLegend) ? "IS NULL" : $" = '{IdLabelLegend}'";
 
-            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{idLot}' AND wpl.id_GTIN = '{idGtin}' AND wpl.d_workDay = '{workDay:yyyy-MM-dd}' AND wpl.id_workGroup = '{idWorkGroup}' AND wpl.id_size = '{size}' AND gtn.id_variety = '{idVariety}' AND wpl.id_typeBox = {idTypeBoxFilter}";
+
+            string query = $"SELECT id_workPlan AS 'Count' FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN JOIN Pack_Lot lot ON lot.id_lot = wpl.id_lot AND gtn.id_variety = lot.id_variety WHERE wpl.id_lot = '{IdLot}' AND wpl.id_GTIN = '{IdGtin}' AND wpl.d_workDay = '{WorkDay:yyyy-MM-dd}' AND wpl.id_workGroup = '{IdWorkGroup}' AND wpl.id_size = '{Size}' AND gtn.id_variety = '{IdVariety}' AND wpl.id_typeBox = '{IdTypeBox}' AND wpl.id_labelLegend {idLabelLegendFilter}";
 
             string result = ClsQuerysDB.GetData(query);
-
+            Clipboard.SetText(query);
             if (result.Length == 0)
                 return true;
 
@@ -109,22 +62,26 @@ namespace SisUvex.Archivo.WorkPlan
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand($"SELECT wpl.*, gtn.id_variety FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN WHERE wpl.id_workPLan = '{idWorkPlan}'", sql.cnn);
-                SqlDataReader dr = cmd.ExecuteReader();
+                SqlCommand cmd = new(
+                    "SELECT wpl.*, gtn.id_variety FROM Pack_WorkPlan wpl JOIN Pack_GTIN gtn ON gtn.id_GTIN = wpl.id_GTIN WHERE wpl.id_workPlan = @id",
+                    sql.cnn);
+                cmd.Parameters.AddWithValue("@id", idWorkPlan);
 
-                if (dr.Read())
-                {
-                    IdWorkPlan = dr.GetValue(dr.GetOrdinal("id_workPlan")).ToString();
-                    Active = int.Parse(dr.GetValue(dr.GetOrdinal("c_active")).ToString());
-                    IdWorkGroup = dr.GetValue(dr.GetOrdinal("id_workGroup")).ToString();
-                    IdLot = dr.GetValue(dr.GetOrdinal("id_lot")).ToString();
-                    idVariety = dr.GetValue(dr.GetOrdinal("id_variety")).ToString();
-                    IdGtin = dr.GetValue(dr.GetOrdinal("id_GTIN")).ToString();
-                    VPC = dr.GetValue(dr.GetOrdinal("c_voicePickCode")).ToString();
-                    WorkDay = DateTime.Parse(dr.GetValue(dr.GetOrdinal("d_workDay")).ToString());
-                    Size = dr.GetValue(dr.GetOrdinal("id_size")).ToString();
-                    IdTypeBox = dr.GetValue(dr.GetOrdinal("id_typeBox")).ToString();
-                }
+                using SqlDataReader dr = cmd.ExecuteReader();
+                if (!dr.Read())
+                    return;
+
+                IdWorkPlan = ReadField(dr, "id_workPlan") ?? string.Empty;
+                Active = int.Parse(ReadField(dr, "c_active") ?? "0");
+                IdWorkGroup = ReadField(dr, "id_workGroup") ?? string.Empty;
+                IdLot = ReadField(dr, "id_lot") ?? string.Empty;
+                IdVariety = ReadField(dr, "id_variety") ?? string.Empty;
+                IdGtin = ReadField(dr, "id_GTIN") ?? string.Empty;
+                VPC = ReadField(dr, "c_voicePickCode") ?? string.Empty;
+                WorkDay = DateTime.Parse(ReadField(dr, "d_workDay") ?? DateTime.Today.ToString());
+                Size = ReadField(dr, "id_size") ?? string.Empty;
+                IdTypeBox = ReadField(dr, "id_typeBox") ?? string.Empty;
+                IdLabelLegend = ReadField(dr, "id_labelLegend");
             }
             catch (Exception ex)
             {
@@ -135,29 +92,46 @@ namespace SisUvex.Archivo.WorkPlan
                 sql.CloseConectionWrite();
             }
         }
+
+        private void AddExecuteParameters(SqlCommand cmd, string action, string? id)
+        {
+            cmd.Parameters.AddWithValue("@action", action);
+            cmd.Parameters.AddWithValue("@id", string.IsNullOrWhiteSpace(id) ? DBNull.Value : id.Trim());
+            cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
+            cmd.Parameters.AddWithValue("@idLot", IdLot);
+            cmd.Parameters.AddWithValue("@idWorkGroup", IdWorkGroup);
+            cmd.Parameters.AddWithValue("@idGtin", IdGtin);
+            cmd.Parameters.AddWithValue("@voicePickCode", VPC);
+            cmd.Parameters.AddWithValue("@workDay", WorkDay.Date);
+            cmd.Parameters.AddWithValue("@idSize", Size);
+            cmd.Parameters.AddWithValue("@idTypeBox", ClsValues.IfEmptyToDBNull(IdTypeBox));
+            cmd.Parameters.AddWithValue("@idLabelLegend", ClsValues.IfEmptyToDBNull(IdLabelLegend));
+            cmd.Parameters.AddWithValue("@user", User.GetUserName());
+        }
+
         public (bool success, string? id) AddProcedure()
         {
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkPlanAdd", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-                cmd.Parameters.AddWithValue("@idLot", idLot);
-                cmd.Parameters.AddWithValue("@idWorkGroup", IdWorkGroup);
-                cmd.Parameters.AddWithValue("@idGtin", IdGtin);
-                cmd.Parameters.AddWithValue("@voicePickCode", vpc);
-                cmd.Parameters.AddWithValue("@workDay", workDay.ToString("yyyy-MM-dd"));
-                cmd.Parameters.AddWithValue("@idSize", size);
-                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idTypeBox", idTypeBox);
+                SqlCommand cmd = new("sp_PackWorkPlanExecute", sql.cnn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                AddExecuteParameters(cmd, "ADD", null);
 
-                string? id = cmd.ExecuteScalar()?.ToString();
-                if (string.IsNullOrEmpty(id))
-                    return (false, null);
+                using SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    string? id = ReadField(dr, "id_workPlan");
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        IdWorkPlan = id;
+                        return (true, id);
+                    }
+                }
 
-                idWorkPlan = id;
-                return (true, id);
+                return (false, null);
             }
             catch (Exception ex)
             {
@@ -175,21 +149,20 @@ namespace SisUvex.Archivo.WorkPlan
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackWorkPlanModify", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", IdWorkPlan);
-                cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-                cmd.Parameters.AddWithValue("@idLot", idLot);
-                cmd.Parameters.AddWithValue("@idWorkGroup", IdWorkGroup);
-                cmd.Parameters.AddWithValue("@idGtin", IdGtin);
-                cmd.Parameters.AddWithValue("@voicePickCode", vpc);
-                cmd.Parameters.AddWithValue("@workDay", workDay.ToString("yyyy-MM-dd"));
-                cmd.Parameters.AddWithValue("@idSize", size);
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-                cmd.Parameters.AddWithValue("@idTypeBox", idTypeBox);
+                SqlCommand cmd = new("sp_PackWorkPlanExecute", sql.cnn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                AddExecuteParameters(cmd, "MODIFY", IdWorkPlan);
 
-                cmd.ExecuteNonQuery();
-                return (true, IdWorkPlan);
+                using SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    string? id = ReadField(dr, "id_workPlan");
+                    return (true, id ?? IdWorkPlan);
+                }
+
+                return (false, null);
             }
             catch (Exception ex)
             {
@@ -202,14 +175,42 @@ namespace SisUvex.Archivo.WorkPlan
             }
         }
 
+        public static bool ActiveProcedure(string id, string active)
+        {
+            SQLControl sql = new();
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new("sp_PackWorkPlanExecute", sql.cnn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@action", "STATUS");
+                cmd.Parameters.AddWithValue("@id", id.Trim());
+                cmd.Parameters.AddWithValue("@active", active);
+                cmd.Parameters.AddWithValue("@user", User.GetUserName());
+
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Activar/Desactivar plan de trabajo");
+                return false;
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
         public static string DuplicateWorkPlan(string idWorkPlan, string idWorkGroup)
         {
             EworkPlan eWorkPlan = new();
-
             eWorkPlan.SetWorkPlan(idWorkPlan);
-            eWorkPlan.IdWorkGroup = idWorkGroup; //CAMBIARLE CUADRILLA AQUI.
+            eWorkPlan.IdWorkGroup = idWorkGroup;
 
-            if (!eWorkPlan.IsWorkPlanAvailable()) //VALIDAR SI YA EXISTE
+            if (!eWorkPlan.IsWorkPlanAvailable())
                 return string.Empty;
 
             var result = eWorkPlan.AddProcedure();
