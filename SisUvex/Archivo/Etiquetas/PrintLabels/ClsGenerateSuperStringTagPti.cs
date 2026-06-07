@@ -48,6 +48,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
             string? fullPresentation = CONCAT_WS(" ", eTag.preLabel, eTag.namePresentation, eTag.postLabel);
             string? left2WGroup = eTag.workGroupName?.Substring(0,2);
+            string? legend = CONCAT_WS(" / ", eTag.patentLegend, eTag.labelLegend, eTag.labelLegend2); //2026-06-06 Por mientras juntar las dos leyendas
 
             switch (idPti)
             {
@@ -55,7 +56,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     "01":
                     //ESTANDAR (2026)                  -->se cambió en 28-abril-2026 la de dayka-walmart como standar para todas las demás, el standar viejo ahora es la "09" standar 2025
                     SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
-                    SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
                     SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL("Grown/Packed by:", "Uvex Agro Internacional", "Distributed by:", eTag.nameDistributor); //PRESENTACION STANDAR
                     break;
                 case
@@ -70,7 +71,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     //SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     //SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
                     SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
-                    SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
                     SetStringPluZpl(eTag.PLU);
                     SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL("Distributed by:", "Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX");
 
@@ -126,7 +127,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     "10":
                     //DISTRIBUIDOR
                     SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
-                    SetStringPtiStandar2026PatentLegendZPL(eTag.patentLegend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR

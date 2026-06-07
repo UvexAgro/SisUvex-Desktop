@@ -94,11 +94,12 @@ namespace SisUvex.Archivo.WorkPlan
         }
         public void RemoveProcedure()
         {
-            ProcedureRemove("sp_PackWorkPlanRemove");
+            ProcedureRemove();
         }
+
         public void RecoverProcedure()
         {
-            ProcedureRecover("sp_PackWorkPlanRecover");
+            ProcedureRecover();
         }
         public void OpenFrmAdd()
         {
@@ -172,6 +173,7 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, Variety.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboTypeBox, TypeBox.Cbo);
+            ClsComboBoxes.CboLoadAll(_frmAdd.cboLegend, LabelLegend.Cbo);
 
             List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
             lsWGDep.Add((_frmAdd.cboSeason, Season.ColumnId));
@@ -183,6 +185,7 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboWorkGroup, _frmAdd.txbIdWorkGroup);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSize, _frmAdd.txbIdSize);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTypeBox, _frmAdd.txbIdTypeBox);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboLegend, _frmAdd.txbLegend);
             CboApplyTextChangedEventInWorkPlanForLot(_frmAdd.cboLot, _frmAdd.txbIdLot);
             CboApplyTextChangedEventInWorkPlanForVariety(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
             CboApplyTextChangedEventInWorkPlanForDistributor(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
@@ -215,6 +218,7 @@ namespace SisUvex.Archivo.WorkPlan
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, eWorkPlan.IdVariety);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLot, eWorkPlan.IdLot + "|" + eWorkPlan.IdVariety);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTypeBox, eWorkPlan.IdTypeBox);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLegend, eWorkPlan.IdLabelLegend);
 
             _frmAdd.txbIdGTIN.Text = eWorkPlan.IdGtin;
             _frmAdd.txbVPC.Text = eWorkPlan.VPC;
@@ -260,6 +264,7 @@ namespace SisUvex.Archivo.WorkPlan
             eWorkPlan.VPC = _frmAdd.txbVPC.Text;
             eWorkPlan.Size = _frmAdd.txbIdSize.Text;
             eWorkPlan.IdTypeBox = _frmAdd.txbIdTypeBox.Text;
+            eWorkPlan.IdLabelLegend = string.IsNullOrWhiteSpace(_frmAdd.txbLegend.Text) ? null : _frmAdd.txbLegend.Text.Trim();
 
             return eWorkPlan;
         }

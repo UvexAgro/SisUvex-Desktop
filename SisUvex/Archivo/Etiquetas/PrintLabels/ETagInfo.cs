@@ -65,6 +65,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idTypeBox { get; set; }
         public string? nameTypeBox { get; set; }
         public string? shortNameTypeBox { get; set; } // Added for short name type box
+        public string? idLabelLegend { get; set; }
+        public string? labelLegend { get; set; }
+        public string? labelLegend2 { get; set; }
 
         public void ClearFields()
         {
@@ -118,6 +121,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             idTypeBox = null;
             nameTypeBox = null;
             shortNameTypeBox = null;
+            idLabelLegend = null;
+            labelLegend = null;
+            labelLegend2 = null;
         }
 
         public void SetTagInfo(string idWorkPlan)
@@ -178,6 +184,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 this.idTypeBox = rows[0][TypeBox.ColumnId].ToString();
                 this.nameTypeBox = rows[0][TypeBox.ColumnName].ToString();
                 this.shortNameTypeBox = rows[0][TypeBox.ColumnShortName].ToString();
+                this.idLabelLegend = rows[0][LabelLegend.ColumnId].ToString();
+                this.labelLegend = rows[0][LabelLegend.ColumnName].ToString();
+                this.labelLegend2 = rows[0][LabelLegend.ColumnLegend2].ToString();
             }
         }
     }

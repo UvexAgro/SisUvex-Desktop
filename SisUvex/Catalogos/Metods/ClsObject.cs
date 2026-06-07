@@ -91,6 +91,9 @@ namespace SisUvex.Catalogos.Metods
                                                         , box.v_nameTypeBox AS [{TypeBox.ColumnName}]
                                                         , box.id_typeBox AS [{TypeBox.ColumnId}]
                                                         , box.v_shortNameTypeBox AS [{TypeBox.ColumnShortName}]
+                                                        , leg.id_labelLegend AS [{LabelLegend.ColumnId}]
+                                                        , leg.v_labelLegend AS [{LabelLegend.ColumnName}]
+                                                        , leg.v_labelLegend2 AS [{LabelLegend.ColumnLegend2}]
                                                         FROM Pack_WorkPlan AS wpl 
                                                         LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup 
                                                         LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor 
@@ -106,7 +109,8 @@ namespace SisUvex.Catalogos.Metods
                                                         LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop 
                                                         LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color 
                                                         LEFT JOIN dbo.Grow_Farm AS farm ON farm.id_farm = lot.id_farm
-                                                        LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox";
+                                                        LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                                                        LEFT JOIN dbo.Pack_LabelLegend AS leg ON leg.id_labelLegend = wpl.id_labelLegend";
         }
 
         /// <summary>
@@ -711,6 +715,18 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboTypeBox";
             public const string DgvCatalog = "DgvCatalogTypeBox";
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
+        }
+
+        public static class LabelLegend
+        {
+            public const string TableName = "Pack_LabelLegend";
+            public const string ColumnName = "Leyenda";
+            public const string ColumnId = "idLabelLegend";
+            public const string ColumnLegend2 = "Leyenda2";
+            public const string ColumnActive = "ActiveLabelLegend";
+            public const string Cbo = "CboLabelLegend";
+            public const string DgvCatalog = "DgvCatalogLabelLegend";
+            public const string QueryCbo = $" SELECT id_labelLegend as [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}] FROM Pack_LabelLegend ";
         }
 
         public static class Payroll_AttendancePeriod
