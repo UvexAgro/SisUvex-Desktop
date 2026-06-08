@@ -70,7 +70,7 @@ partial class FrmVarietyAdd
         // 
         txbNameScientis.Font = new Font("Segoe UI", 12F);
         txbNameScientis.Location = new Point(169, 47);
-        txbNameScientis.MaxLength = 20;
+        txbNameScientis.MaxLength = 60;
         txbNameScientis.Name = "txbNameScientis";
         txbNameScientis.Size = new Size(363, 29);
         txbNameScientis.TabIndex = 3;
@@ -89,7 +89,7 @@ partial class FrmVarietyAdd
         // 
         txbNameComercial.Font = new Font("Segoe UI", 12F);
         txbNameComercial.Location = new Point(169, 82);
-        txbNameComercial.MaxLength = 20;
+        txbNameComercial.MaxLength = 60;
         txbNameComercial.Name = "txbNameComercial";
         txbNameComercial.Size = new Size(363, 29);
         txbNameComercial.TabIndex = 4;
