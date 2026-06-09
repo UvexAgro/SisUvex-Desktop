@@ -649,8 +649,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         {
             var preview = new DataTable();
             preview.Columns.Add("CODIGO / NOMBRE / LP", typeof(string));
-            preview.Columns.Add("FECHA",    typeof(string));
-            preview.Columns.Add("CUADRILLA", typeof(string));
+            preview.Columns.Add("FECHA",       typeof(string));
+            preview.Columns.Add("CUADRILLA",   typeof(string));
+            preview.Columns.Add("CONTRATISTA", typeof(string));
 
             // Columnas dinámicas de empaque
             var empaques = rawData.AsEnumerable()
@@ -680,6 +681,15 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 DataRow titleRow = preview.NewRow();
                 titleRow["CODIGO / NOMBRE / LP"] = $"{codigo} – {nombre} – LP: {lp}";
                 preview.Rows.Add(titleRow);
+
+                // Lookup (Fecha, Cuadrilla) → Contratista para este empleado
+                var contratistaLookup = empGroup
+                    .GroupBy(r => (
+                        Fecha:     NormalizeDate(r[ReportColumns.Fecha]),
+                        Cuadrilla: r[ReportColumns.Cuadrilla]?.ToString()?.Trim() ?? string.Empty))
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.First()[ReportColumns.Contratista]?.ToString()?.Trim() ?? string.Empty);
 
                 // Agrupar celdas por (Fecha, Cuadrilla, Empaque)
                 var cellData = empGroup
@@ -713,8 +723,10 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 foreach (var (fecha, cuadrilla) in allDays)
                 {
                     DataRow dataRow = preview.NewRow();
-                    dataRow["FECHA"]     = fecha.ToString("dd-MMM", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
-                    dataRow["CUADRILLA"] = cuadrilla;
+                    dataRow["FECHA"]       = fecha.ToString("dd-MMM", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+                    dataRow["CUADRILLA"]   = cuadrilla;
+                    contratistaLookup.TryGetValue((fecha, cuadrilla), out string? contratista);
+                    dataRow["CONTRATISTA"] = contratista ?? string.Empty;
 
                     decimal rowTotal = 0m;
                     for (int i = 0; i < empaques.Count; i++)
