@@ -67,6 +67,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // 
             gpbFilters.Controls.Add(cboUser);
             gpbFilters.Controls.Add(labelUser);
+            gpbFilters.Controls.Add(btnSearch);
             gpbFilters.Controls.Add(dtpDate2);
             gpbFilters.Controls.Add(dtpDate1);
             gpbFilters.Controls.Add(labelDateTo);
@@ -89,7 +90,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // 
             cboUser.DropDownStyle = ComboBoxStyle.DropDownList;
             cboUser.FormattingEnabled = true;
-            cboUser.Location = new Point(425, 92);
+            cboUser.Location = new Point(421, 61);
             cboUser.Margin = new Padding(0, 3, 3, 3);
             cboUser.Name = "cboUser";
             cboUser.Size = new Size(360, 29);
@@ -98,7 +99,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // labelUser
             // 
             labelUser.AutoSize = true;
-            labelUser.Location = new Point(353, 95);
+            labelUser.Location = new Point(349, 64);
             labelUser.Margin = new Padding(0);
             labelUser.Name = "labelUser";
             labelUser.Size = new Size(75, 21);
@@ -155,7 +156,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // 
             cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             cboWorkGroup.FormattingEnabled = true;
-            cboWorkGroup.Location = new Point(425, 57);
+            cboWorkGroup.Location = new Point(421, 26);
             cboWorkGroup.Margin = new Padding(0, 3, 3, 3);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(360, 29);
@@ -164,7 +165,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // labelWorkGroup
             // 
             labelWorkGroup.AutoSize = true;
-            labelWorkGroup.Location = new Point(353, 60);
+            labelWorkGroup.Location = new Point(349, 29);
             labelWorkGroup.Margin = new Padding(0);
             labelWorkGroup.Name = "labelWorkGroup";
             labelWorkGroup.Size = new Size(72, 21);
@@ -206,7 +207,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             btnSearch.Font = new Font("Segoe UI", 12F);
             btnSearch.Image = Properties.Resources.BuscarLupa1;
             btnSearch.ImageAlign = ContentAlignment.MiddleRight;
-            btnSearch.Location = new Point(774, 210);
+            btnSearch.Location = new Point(423, 125);
             btnSearch.Name = "btnSearch";
             btnSearch.Padding = new Padding(0, 0, 4, 0);
             btnSearch.Size = new Size(87, 31);
@@ -237,7 +238,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 353);
+            dgvReport.Location = new Point(12, 317);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -251,12 +252,13 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             dgvReport.RowHeadersVisible = false;
             dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(859, 302);
+            dgvReport.Size = new Size(859, 338);
             dgvReport.TabIndex = 69;
             // 
             // bgpInfo
             // 
             bgpInfo.Controls.Add(lblUser);
+            bgpInfo.Controls.Add(btnExcel);
             bgpInfo.Controls.Add(labelInfoUser);
             bgpInfo.Controls.Add(lblDateRange);
             bgpInfo.Controls.Add(labelInfoDates);
@@ -267,9 +269,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             bgpInfo.Controls.Add(lblSeason);
             bgpInfo.Controls.Add(labelInfoSeason);
             bgpInfo.Font = new Font("Segoe UI", 12F);
-            bgpInfo.Location = new Point(12, 241);
+            bgpInfo.Location = new Point(12, 206);
             bgpInfo.Name = "bgpInfo";
-            bgpInfo.Size = new Size(756, 105);
+            bgpInfo.Size = new Size(859, 105);
             bgpInfo.TabIndex = 70;
             bgpInfo.TabStop = false;
             bgpInfo.Text = "Detalles";
@@ -394,7 +396,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon;
             btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(774, 315);
+            btnExcel.Location = new Point(756, 68);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 4, 0);
             btnExcel.Size = new Size(97, 31);
@@ -425,8 +427,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             AutoScrollMinSize = new Size(0, 600);
             ClientSize = new Size(883, 667);
             Controls.Add(lblTitle);
-            Controls.Add(btnExcel);
-            Controls.Add(btnSearch);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
             Controls.Add(dgvReport);
