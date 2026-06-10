@@ -4,6 +4,7 @@ using SisUvex.Catalogos.Metods.Querys;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -51,6 +52,22 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             "idUser",
             "idSeason",
         };
+
+        // ── Colores del reporte ───────────────────────────────────────────────
+        private static readonly Color ColorTitle      = Color.FromArgb(0xD9, 0xE1, 0xF2); // azul claro
+        private static readonly Color ColorTotal      = Color.FromArgb(0xFF, 0xC0, 0x00); // amarillo
+        private static readonly Color ColorEmptyDay   = Color.FromArgb(0xFF, 0xC7, 0xCE); // rosa
+        private static readonly Color ColorValue      = Color.FromArgb(0xC5, 0xDF, 0xB4); // verde claro
+        private static readonly Color ColorSeparator  = SystemColors.Control;
+
+        private static readonly HashSet<string> FixedReportCols = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "CODIGO / NOMBRE / LP", "FECHA", "CUADRILLA", "CONTRATISTA", "TOTAL",
+        };
+
+        private enum RowKind { Title, Total, EmptyDay, Data, Separator }
+        private List<RowKind> _rowKinds = new();
+        private Font? _boldFont;
 
         // ── Estado interno ────────────────────────────────────────────────────
         /// <summary>Tabla maestra del listado de empleados (con columna "Sel." checkbox).</summary>
@@ -480,6 +497,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             if (frm == null || _dtReportPreview == null) return;
 
             _showingReport = true;
+            ClassifyReportRows();
 
             frm.dgvReport.ReadOnly = true;
             frm.dgvReport.AutoGenerateColumns = true;
@@ -488,6 +506,100 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
             frm.chbShowReport.Checked = true;
             frm.chbShowEmployees.Checked = false;
+        }
+
+        // ── Clasificación de filas para colorear el DGV ───────────────────────
+
+        private void ClassifyReportRows()
+        {
+            _rowKinds.Clear();
+            if (_dtReportPreview == null) return;
+
+            var empaqueColNames = _dtReportPreview.Columns
+                .Cast<DataColumn>()
+                .Select(c => c.ColumnName)
+                .Where(n => !FixedReportCols.Contains(n))
+                .ToList();
+
+            foreach (DataRow row in _dtReportPreview.Rows)
+            {
+                string codigoNombre = row["CODIGO / NOMBRE / LP"]?.ToString() ?? string.Empty;
+                string fecha        = row["FECHA"]?.ToString() ?? string.Empty;
+
+                if (!string.IsNullOrWhiteSpace(codigoNombre))
+                {
+                    _rowKinds.Add(RowKind.Title);
+                }
+                else if (fecha == "TOTAL")
+                {
+                    _rowKinds.Add(RowKind.Total);
+                }
+                else if (string.IsNullOrWhiteSpace(fecha))
+                {
+                    _rowKinds.Add(RowKind.Separator);
+                }
+                else
+                {
+                    bool hasValue = empaqueColNames.Any(col =>
+                        !string.IsNullOrWhiteSpace(row[col]?.ToString()));
+                    _rowKinds.Add(hasValue ? RowKind.Data : RowKind.EmptyDay);
+                }
+            }
+        }
+
+        // ── Colorear celdas del DGV reporte (evento CellFormatting) ──────────
+
+        public void DgvReport_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (!_showingReport || frm == null || _dtReportPreview == null) return;
+            if (e.RowIndex < 0 || e.RowIndex >= _rowKinds.Count || e.ColumnIndex < 0) return;
+
+            string colName = frm.dgvReport.Columns[e.ColumnIndex].DataPropertyName ?? string.Empty;
+
+            switch (_rowKinds[e.RowIndex])
+            {
+                case RowKind.Title:
+                    e.CellStyle.BackColor          = ColorTitle;
+                    e.CellStyle.SelectionBackColor = ControlPaint.Dark(ColorTitle, 0.1f);
+                    e.CellStyle.Font               = GetBoldFont();
+                    break;
+
+                case RowKind.Total:
+                    e.CellStyle.BackColor          = ColorTotal;
+                    e.CellStyle.SelectionBackColor = ControlPaint.Dark(ColorTotal, 0.1f);
+                    e.CellStyle.Font               = GetBoldFont();
+                    break;
+
+                case RowKind.EmptyDay:
+                    e.CellStyle.BackColor          = ColorEmptyDay;
+                    e.CellStyle.SelectionBackColor = ControlPaint.Dark(ColorEmptyDay, 0.1f);
+                    break;
+
+                case RowKind.Data:
+                    // Columnas fijas: sin color especial
+                    if (FixedReportCols.Contains(colName) && colName != "TOTAL") break;
+
+                    string? val = _dtReportPreview.Rows[e.RowIndex][colName]?.ToString();
+                    if (!string.IsNullOrWhiteSpace(val))
+                    {
+                        e.CellStyle.BackColor          = ColorValue;
+                        e.CellStyle.SelectionBackColor = ControlPaint.Dark(ColorValue, 0.1f);
+                    }
+                    if (colName == "TOTAL")
+                        e.CellStyle.Font = GetBoldFont();
+                    break;
+
+                case RowKind.Separator:
+                    e.CellStyle.BackColor = ColorSeparator;
+                    break;
+            }
+        }
+
+        private Font GetBoldFont()
+        {
+            if (_boldFont != null) return _boldFont;
+            var baseFont = frm?.dgvReport.DefaultCellStyle.Font ?? SystemFonts.DefaultFont;
+            return _boldFont = new Font(baseFont, FontStyle.Bold);
         }
 
         private void RefreshEmployeeDgv()
