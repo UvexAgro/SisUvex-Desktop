@@ -364,7 +364,8 @@
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvReport.Size = new Size(858, 338);
             dgvReport.TabIndex = 75;
-            dgvReport.CellContentClick += dgvReport_CellContentClick;
+            dgvReport.CellContentClick  += dgvReport_CellContentClick;
+            dgvReport.CellFormatting    += dgvReport_CellFormatting;
             // 
             // chbShowEmployees
             // 

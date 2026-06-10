@@ -49,6 +49,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             }
         }
 
+        private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => cls.DgvReport_CellFormatting(sender, e);
+
         private void dgvReport_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
         }

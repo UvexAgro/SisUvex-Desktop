@@ -114,8 +114,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 .OrderBy(e => e, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            // Número de columnas: Fecha + Cuadrilla + (empaques) + Total
-            int fixedCols = 2; // Fecha | Cuadrilla
+            // Número de columnas: Fecha + Cuadrilla + Contratista + (empaques) + Total
+            int fixedCols = 3; // Fecha | Cuadrilla | Contratista
             int totalCols = fixedCols + empaques.Count + 1; // +1 = TOTAL
 
             int row = 1;
@@ -155,6 +155,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 // Encabezados de columna
                 ws.Cell(headerRow, StartCol).Value     = "FECHA";
                 ws.Cell(headerRow, StartCol + 1).Value = "CUADRILLA";
+                ws.Cell(headerRow, StartCol + 2).Value = "CONTRATISTA";
                 for (int i = 0; i < empaques.Count; i++)
                     ws.Cell(headerRow, StartCol + fixedCols + i).Value = empaques[i];
                 ws.Cell(headerRow, StartCol + fixedCols + empaques.Count).Value = "TOTAL";
@@ -168,6 +169,15 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
                 row++;
                 int dataStartRow = row;
+
+                // Lookup (Fecha, Cuadrilla) → Contratista
+                var contratistaLookup = empGroup
+                    .GroupBy(r => (
+                        Fecha:     NormalizeDate(r[ClsPayrollBoxPerEmployeeDetailReport.ReportColumns.Fecha]),
+                        Cuadrilla: SafeStr(r, ClsPayrollBoxPerEmployeeDetailReport.ReportColumns.Cuadrilla)))
+                    .ToDictionary(
+                        g => g.Key,
+                        g => SafeStr(g.First(), ClsPayrollBoxPerEmployeeDetailReport.ReportColumns.Contratista));
 
                 // Precalcular datos (Fecha, Cuadrilla, Empaque) → suma cajas
                 var cellData = empGroup
@@ -207,6 +217,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                     fechaCell.Style.DateFormat.Format = "dd-MMM";
 
                     ws.Cell(row, StartCol + 1).Value = cuadrilla;
+                    contratistaLookup.TryGetValue((fecha, cuadrilla), out string? contratista);
+                    ws.Cell(row, StartCol + 2).Value = contratista ?? string.Empty;
 
                     decimal rowTotal = 0m;
                     bool hasData = false;
@@ -271,8 +283,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                     .Border.SetInsideBorder(XLBorderStyleValues.Thin)
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-                // Fecha y Cuadrilla alineadas a la izquierda
-                ws.Range(dataStartRow, StartCol, row, StartCol + 1)
+                // Fecha, Cuadrilla y Contratista alineadas a la izquierda
+                ws.Range(dataStartRow, StartCol, row, StartCol + 2)
                     .Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
 
                 row += 3;
