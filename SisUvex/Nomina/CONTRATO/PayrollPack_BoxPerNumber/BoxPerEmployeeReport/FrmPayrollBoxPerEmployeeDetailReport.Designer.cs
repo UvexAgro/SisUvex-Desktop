@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPayrollBoxPerEmployeeDetailReport));
             lblTitle = new Label();
             bgpInfo = new GroupBox();
             lblSobrantesInfo = new Label();
@@ -364,8 +365,8 @@
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvReport.Size = new Size(858, 338);
             dgvReport.TabIndex = 75;
-            dgvReport.CellContentClick  += dgvReport_CellContentClick;
-            dgvReport.CellFormatting    += dgvReport_CellFormatting;
+            dgvReport.CellContentClick += dgvReport_CellContentClick;
+            dgvReport.CellFormatting += dgvReport_CellFormatting;
             // 
             // chbShowEmployees
             // 
@@ -426,8 +427,9 @@
             Controls.Add(gpbFilters);
             Controls.Add(dgvReport);
             Controls.Add(lblTitle);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPayrollBoxPerEmployeeDetailReport";
-            Text = "FrmPayrollBoxPerEmployeeDetailReport";
+            Text = "Reporte cajas por cada empleado detallado";
             Load += FrmPayrollBoxPerEmployeeDetailReport_Load;
             bgpInfo.ResumeLayout(false);
             bgpInfo.PerformLayout();
