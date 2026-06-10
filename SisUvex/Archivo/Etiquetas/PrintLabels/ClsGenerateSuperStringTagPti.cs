@@ -128,6 +128,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     //DISTRIBUIDOR
                     SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
                     SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
@@ -317,12 +318,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
-            distributorZPL += "^FX DISTRIBUTOR\n" +
+            distributorZPL += "^FX  PRODUCTO DE\n" +
+                        $"^CF0,30,50^FO22,230^FDProduct of Mexico^FS\n"+
+                        "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
-                        "^FO25,300^FD" + Distributor + "^FS\n" +
+                        "^FO25,260^FD" + Distributor + "^FS\n" +
                         "^CFF,30,10\n" +
-                        "^FO23,335^FD" + AddresDistributor1 + "^FS\n" +
-                        "^FO23,365^FD" + AddresDistributor2 + "^FS\n";
+                        "^FO23,295^FD" + AddresDistributor1 + "^FS\n" +
+                        "^FO23,325^FD" + AddresDistributor2 + "^FS\n";
 
             return distributorZPL;
         }
