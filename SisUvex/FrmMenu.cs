@@ -800,5 +800,15 @@ namespace SisUvex
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
         }
+
+        private void leyendaDeEtiquetaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Catalogos.LabelLegend.FrmLabelLegendCat cat = new();
+            cat.WindowState = FormWindowState.Maximized;
+            AbrirVentanaHijo(cat);
+        }
     }
 }

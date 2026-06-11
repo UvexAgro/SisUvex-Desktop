@@ -723,10 +723,12 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Leyenda";
             public const string ColumnId = "idLabelLegend";
             public const string ColumnLegend2 = "Leyenda2";
+            public const string ColumnDescription = "Descripción";
             public const string ColumnActive = "ActiveLabelLegend";
             public const string Cbo = "CboLabelLegend";
             public const string DgvCatalog = "DgvCatalogLabelLegend";
-            public const string QueryCbo = $" SELECT id_labelLegend as [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}] FROM Pack_LabelLegend ";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackLabelLegendCat cat ";
+            public const string QueryCbo = $" SELECT id_labelLegend AS [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}], v_description AS [{ColumnDescription}] FROM Pack_LabelLegend ";
         }
 
         public static class Payroll_AttendancePeriod
