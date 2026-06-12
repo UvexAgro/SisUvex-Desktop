@@ -399,42 +399,86 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             comboBoxPrincipal.DroppedDown = true;
         }
 
+        /// <summary>
+        /// Checkbox del ComboBox principal que filtra varios dependientes (OneForAll).
+        /// </summary>
+        public static void CboApplyChbClickEventWithOneForAllDependents(
+            ComboBox comboBoxPrincipal,
+            CheckBox checkBox,
+            TextBox? idTextBox,
+            List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> comboBoxesDependents)
+        {
+            checkBox.Click += (sender, e) =>
+            {
+                Metod_CboApplyChbClickEventWithOneForAllDependents(comboBoxPrincipal, checkBox, idTextBox, comboBoxesDependents);
+            };
+        }
+
+        public static void Metod_CboApplyChbClickEventWithOneForAllDependents(
+            ComboBox comboBoxPrincipal,
+            CheckBox checkBox,
+            TextBox? idTextBox,
+            List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> comboBoxesDependents)
+        {
+            DataTable? dt = (DataTable?)comboBoxPrincipal.DataSource;
+            if (dt == null)
+                return;
+
+            if (checkBox.Checked)
+                dt.DefaultView.RowFilter = null;
+            else if (dt.Columns.Contains(ClsObject.Column.active))
+                dt.DefaultView.RowFilter = $"{ClsObject.Column.active} = '1'";
+
+            comboBoxPrincipal.DataSource = dt;
+
+            Metods.CboFilterOneForAll(comboBoxPrincipal, comboBoxesDependents);
+            Metods.ApplyIdTextBoxFromPrincipal(comboBoxPrincipal, idTextBox);
+
+            comboBoxPrincipal.SelectedIndex = 0;
+            comboBoxPrincipal.DroppedDown = true;
+        }
+
         public class Events()
         {
             /// <summary>
-            /// Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal. Si el índice seleccionado del ComboBox principal es mayor a 0, se filtran los ComboBox dependientes para mostrar solo los elementos relacionados con la selección del ComboBox principal. Si el índice seleccionado es 0 o menor, se eliminan los filtros y se muestran todos los elementos en los ComboBox dependientes.
+            /// Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal.
+            /// Si el índice seleccionado del principal es mayor a 0, filtra cada dependiente por <c>IdColumnFilter</c>.
+            /// Si es 0 o menor, restablece cada dependiente según su checkbox de activos (si tiene).
+            /// <paramref name="checkBoxPrincipal"/> e <paramref name="idTextBox"/> son opcionales (null si no aplican).
             /// </summary>
-            public static void CboApplyEventFilterOneForAll(ComboBox comboBoxOnePrincipal, string? idColumnPrincipal, CheckBox? checkBoxPrincipal, List<Tuple<ComboBox, CheckBox?>> comboBoxesList)
+            public static void CboApplyEventFilterOneForAll(
+                ComboBox comboBoxPrincipal,
+                CheckBox? checkBoxPrincipal,
+                TextBox? idTextBox,
+                List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> comboBoxesDependents)
             {
-                //TERMINAR DE CHECARLO BIEN, EN LO QUE SE HACE EL EVENTO CONTRARIO 
-                foreach (var item in comboBoxesList)
+                EventHandler filterHandler = (s, e) =>
                 {
-                    ComboBox dependentCbo = item.Item1;
-                    CheckBox? dependentChb = item.Item2;
+                    Metods.CboFilterOneForAll(comboBoxPrincipal, comboBoxesDependents);
+                    Metods.ApplyIdTextBoxFromPrincipal(comboBoxPrincipal, idTextBox);
+                };
 
-                    comboBoxOnePrincipal.SelectedValueChanged += (sender, e) =>
+                comboBoxPrincipal.SelectedValueChanged -= filterHandler;
+                comboBoxPrincipal.SelectedValueChanged += filterHandler;
+
+                if (checkBoxPrincipal != null)
+                {
+                    checkBoxPrincipal.CheckedChanged -= filterHandler;
+                    checkBoxPrincipal.CheckedChanged += filterHandler;
+                }
+
+                foreach (var item in comboBoxesDependents)
+                {
+                    if (item.Chb == null)
+                        continue;
+
+                    EventHandler chbHandler = (s, e) =>
                     {
-                        if (comboBoxOnePrincipal.SelectedIndex > 0)
-                        {
-                            //DataTable? dt = (DataTable?)dependentCbo.DataSource;
-                            //if (dt != null)
-                            //{
-                            //    dt.DefaultView.RowFilter = $" 1=1 {idColumnPrincipal} = '{comboBoxOnePrincipal.SelectedValue}' AND {ClsObject.Column.active} = '1' OR {ClsObject.Column.name} = '{textSelect}'";
-                            //    dependentCbo.DataSource = dt;
-                            //    dependentCbo.SelectedIndex = 0;
-                            //}
-                        }
-                        else
-                        {
-                            //DataTable? dt = (DataTable?)dependentCbo.DataSource;
-                            //if (dt != null)
-                            //{
-                            //    dt.DefaultView.RowFilter = null;
-                            //    dependentCbo.DataSource = dt;
-                            //    dependentCbo.SelectedIndex = 0;
-                            //}
-                        }
+                        Metods.CboFilterOneForAll(comboBoxPrincipal, comboBoxesDependents);
                     };
+
+                    item.Chb.CheckedChanged -= chbHandler;
+                    item.Chb.CheckedChanged += chbHandler;
                 }
             }
 
@@ -517,50 +561,137 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
 
             /// <summary>
-            ///Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal. Si el índice seleccionado del ComboBox principal es mayor a 0, se filtran los ComboBox dependientes para mostrar solo los elementos relacionados con la selección del ComboBox principal. Si el índice seleccionado es 0 o menor, se eliminan los filtros y se muestran todos los elementos en los ComboBox dependientes.
+            /// Aplica un filtro a varios ComboBox dependientes basado en la selección de un ComboBox principal.
+            /// Cada dependiente usa su propio checkbox (<c>Chb</c>) para incluir o no inactivos; puede ser null.
             /// </summary>
-            public static void CboFilterOneForAll(ComboBox comboBoxPrincipal, List<Tuple<ComboBox, string, CheckBox?>> comboBoxesDependents)
+            public static void CboFilterOneForAll(
+                ComboBox comboBoxPrincipal,
+                List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> comboBoxesDependents)
             {
                 if (comboBoxPrincipal.SelectedIndex > 0)
                 {
                     foreach (var item in comboBoxesDependents)
                     {
-                        ComboBox dependentCbo = item.Item1;
-                        string columnFilterName = item.Item2;
-                        CheckBox? checkBox = item.Item3;
+                        ComboBox dependentCbo = item.Cbo;
+                        string columnFilterName = item.IdColumnFilter;
+                        CheckBox? checkBox = item.Chb;
                         DataTable? dt = (DataTable?)dependentCbo.DataSource;
-                        if (dt != null)
-                        {
-                            dt.DefaultView.RowFilter = BuildDependentRowFilter(
+                        if (dt == null || !dt.Columns.Contains(columnFilterName))
+                            continue;
+
+                        CboApplyRowFilterKeepingSelection(
+                            dependentCbo,
+                            BuildDependentRowFilter(
                                 dt,
                                 checkBox,
-                                $"{columnFilterName} = '{comboBoxPrincipal.SelectedValue}'");
-                            dependentCbo.DataSource = dt;
-                            dependentCbo.SelectedIndex = 0;
-                        }
+                                $"{columnFilterName} = '{comboBoxPrincipal.SelectedValue}'"));
                     }
                 }
-                else //Dejar de mostrar filtros / (conservando del cboPrincipal activos o mostrando todos)
+                else
                 {
                     foreach (var item in comboBoxesDependents)
-                    {
-                        ComboBox dependentCbo = item.Item1;
-                        CheckBox? checkBox = item.Item3;
-                        CboActivesFilter(dependentCbo, checkBox);
-                    }
+                        CboActivesFilter(item.Cbo, item.Chb);
                 }
+            }
+
+            public static void ApplyIdTextBoxFromPrincipal(ComboBox comboBoxPrincipal, TextBox? idTextBox)
+            {
+                if (idTextBox == null)
+                    return;
+
+                idTextBox.Text = comboBoxPrincipal.SelectedIndex > 0
+                    ? comboBoxPrincipal.SelectedValue?.ToString() ?? string.Empty
+                    : string.Empty;
             }
 
             private static void CboActivesFilter(ComboBox cbo, CheckBox? checkBox)
             {
                 DataTable? dt = (DataTable?)cbo.DataSource;
                 if (dt != null)
+                    CboApplyRowFilterKeepingSelection(cbo, StringFilterActives_Principal(dt, checkBox));
+            }
+
+            /// <summary>
+            /// Aplica <paramref name="rowFilter"/> y mantiene la selección actual del ComboBox
+            /// si el valor seleccionado sigue presente en la vista filtrada; si no, usa índice 0.
+            /// </summary>
+            private static void CboApplyRowFilterKeepingSelection(ComboBox cbo, string? rowFilter)
+            {
+                DataTable? dt = (DataTable?)cbo.DataSource;
+                if (dt == null)
+                    return;
+
+                string? previousValue = cbo.SelectedIndex > 0
+                    ? cbo.SelectedValue?.ToString()
+                    : null;
+
+                dt.DefaultView.RowFilter = rowFilter;
+                cbo.DataSource = dt;
+
+                if (!string.IsNullOrEmpty(previousValue) && CboFilteredViewContainsValue(cbo, previousValue))
                 {
-                    string? filterActives = StringFilterActives_Principal(dt, checkBox);
-                    dt.DefaultView.RowFilter = filterActives;
-                    cbo.DataSource = dt;
-                    cbo.SelectedIndex = 0;
+                    try
+                    {
+                        cbo.SelectedValue = previousValue;
+                        return;
+                    }
+                    catch
+                    {
+                        // Si SelectedValue falla, se intenta por DisplayMember más abajo.
+                    }
+
+                    if (CboTrySelectByValueMember(cbo, previousValue))
+                        return;
                 }
+
+                cbo.SelectedIndex = cbo.Items.Count > 0 ? 0 : -1;
+            }
+
+            private static bool CboFilteredViewContainsValue(ComboBox cbo, string value)
+            {
+                if (cbo.DataSource is not DataTable dt)
+                    return false;
+
+                string valueMember = cbo.ValueMember;
+                if (string.IsNullOrEmpty(valueMember) || !dt.Columns.Contains(valueMember))
+                    return false;
+
+                foreach (DataRowView row in dt.DefaultView)
+                {
+                    if (row[valueMember]?.ToString() == value)
+                        return true;
+                }
+
+                return false;
+            }
+
+            private static bool CboTrySelectByValueMember(ComboBox cbo, string valueMemberText)
+            {
+                if (cbo.DataSource is not DataTable dt)
+                    return false;
+
+                string valueMember = cbo.ValueMember;
+                if (string.IsNullOrEmpty(valueMember))
+                    return false;
+
+                foreach (DataRowView row in dt.DefaultView)
+                {
+                    if (row[valueMember]?.ToString() != valueMemberText)
+                        continue;
+
+                    string? displayText = row[ClsObject.Column.name]?.ToString();
+                    if (string.IsNullOrEmpty(displayText))
+                        continue;
+
+                    int index = cbo.FindStringExact(displayText);
+                    if (index != -1)
+                    {
+                        cbo.SelectedIndex = index;
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
             private static string? StringFilterActives_Principal(DataTable? dataTable, CheckBox? checkBox)
