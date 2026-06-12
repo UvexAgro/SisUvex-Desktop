@@ -495,7 +495,7 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.txbObservations.Text = eManifest.observations;
             _frmAdd.txbThermometerContainer.Text = eManifest.thermometerContainer; //<-- No se cambia con el Cbo por el ReadOnly del FCat
             _frmAdd.txbFactura.Text = eManifest.factura;
-            _frmAdd.txbFolioFiscalFactura.Text = eManifest.factura;
+            _frmAdd.txbFolioFiscalFactura.Text = eManifest.facturaUuid;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
