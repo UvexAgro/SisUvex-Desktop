@@ -18,6 +18,7 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         public string activeColumn = ClsObject.Column.active;
         private string activeColumnHide = ClsObject.Column.active + "2";
         List<string?> lsHideColumns = new();
+        readonly List<string?> lsAuditColumns = new();
         //public string queryCatalog;
         public DataGridView dgvCatalog;
         public DataTable dtCatalog;
@@ -29,7 +30,17 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
         ///===== LAS COLUMNAS ACTIVE Y ACTIVE2, la 1 es el que muestra y jala el valor para cambiar el color a rojo y verde, el active2 es para mantener el valor y para seguir mostrando la fila por ejemplo: si está mostrando solo "activos" pero la fila seleccionada se hizo "inactivo" sin esta columna se desapareceria de las filas mostradas, con esta columna lo sigue mostrando, para efectos prácticos y el usuario siga viendo esa fila y reconozca cual fue la modificada. ===///
 
         public ClsDGVCatalog(DataGridView dgvCatalog, DataTable dtCatalog)
+            : this(dgvCatalog, dtCatalog, null, null)
         {
+        }
+
+        public ClsDGVCatalog(DataGridView dgvCatalog, DataTable dtCatalog, string? idColumnName, string? activeColumnName)
+        {
+            if (!string.IsNullOrWhiteSpace(idColumnName))
+                idColumn = idColumnName;
+            if (!string.IsNullOrWhiteSpace(activeColumnName))
+                activeColumn = activeColumnName;
+
             this.dtCatalog = dtCatalog;
             this.dgvCatalog = dgvCatalog;
             TextSearch = new CatalogDataViewTextSearch(dtCatalog);
@@ -62,6 +73,75 @@ namespace SisUvex.Catalogos.Metods.DataGridViews
                 if (dgvCatalog.Columns.Contains(columnName))
                     dgvCatalog.Columns[columnName].Visible = false;
             }
+        }
+
+        /// <summary>Columnas de auditoría u opcionales: ocultas por defecto y visibles con <see cref="SetAuditColumnsVisible"/>.</summary>
+        public void AddAuditColumn(string? columnName)
+        {
+            if (string.IsNullOrWhiteSpace(columnName))
+                return;
+            if (!lsAuditColumns.Contains(columnName))
+                lsAuditColumns.Add(columnName);
+        }
+
+        public void SetAuditColumnsVisible(bool visible)
+        {
+            RebindCatalogColumns(visible);
+        }
+
+        /// <summary>
+        /// Regenera columnas del DGV desde <see cref="dtCatalog"/> (respeta ordinal del SELECT)
+        /// y aplica visibilidad de auditoría. Evita que WinForms mueva columnas al final al usar Visible.
+        /// </summary>
+        public void RebindCatalogColumns(bool auditColumnsVisible)
+        {
+            if (dtCatalog == null || dgvCatalog == null)
+                return;
+
+            dgvCatalog.SuspendLayout();
+            try
+            {
+                dgvCatalog.AutoGenerateColumns = true;
+                dgvCatalog.DataSource = null;
+                dgvCatalog.DataSource = dtCatalog;
+
+                ApplyPersistentHiddenColumns();
+                HideColumnsList();
+
+                foreach (string? columnName in lsAuditColumns)
+                {
+                    DataGridViewColumn? col = FindGridColumn(columnName);
+                    if (col != null)
+                        col.Visible = auditColumnsVisible;
+                }
+            }
+            finally
+            {
+                dgvCatalog.ResumeLayout(true);
+            }
+        }
+
+        void ApplyPersistentHiddenColumns()
+        {
+            if (dgvCatalog.Columns.Contains(activeColumn))
+                dgvCatalog.Columns[activeColumn].Visible = false;
+            if (dgvCatalog.Columns.Contains(activeColumnHide))
+                dgvCatalog.Columns[activeColumnHide].Visible = false;
+        }
+
+        DataGridViewColumn? FindGridColumn(string? columnName)
+        {
+            if (string.IsNullOrWhiteSpace(columnName) || dgvCatalog == null)
+                return null;
+
+            foreach (DataGridViewColumn col in dgvCatalog.Columns)
+            {
+                if (string.Equals(col.DataPropertyName, columnName, StringComparison.Ordinal)
+                    || string.Equals(col.Name, columnName, StringComparison.Ordinal))
+                    return col;
+            }
+
+            return null;
         }
 
         public void SetColumnWidth(string columnName, int width)

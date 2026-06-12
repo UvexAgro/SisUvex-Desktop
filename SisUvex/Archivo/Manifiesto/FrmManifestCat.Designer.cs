@@ -58,6 +58,15 @@
             chbPrintManifestPerField = new CheckBox();
             btnPrintManifest = new Button();
             chbExcelLayout = new CheckBox();
+            chbShowAudit = new CheckBox();
+            label7 = new Label();
+            cboTransportLine = new ComboBox();
+            label8 = new Label();
+            cboDriver = new ComboBox();
+            label9 = new Label();
+            cboTruck = new ComboBox();
+            label10 = new Label();
+            cboFreightContainer = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -208,6 +217,7 @@
             // cboDistributor
             // 
             cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDistributor.DropDownWidth = 350;
             cboDistributor.FormattingEnabled = true;
             cboDistributor.Location = new Point(12, 18);
             cboDistributor.Name = "cboDistributor";
@@ -217,6 +227,7 @@
             // cboConsignee
             // 
             cboConsignee.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboConsignee.DropDownWidth = 350;
             cboConsignee.FormattingEnabled = true;
             cboConsignee.Location = new Point(221, 18);
             cboConsignee.Name = "cboConsignee";
@@ -246,6 +257,7 @@
             // cboDestination
             // 
             cboDestination.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDestination.DropDownWidth = 350;
             cboDestination.FormattingEnabled = true;
             cboDestination.Location = new Point(221, 54);
             cboDestination.Name = "cboDestination";
@@ -265,6 +277,7 @@
             // cboGrower
             // 
             cboGrower.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboGrower.DropDownWidth = 350;
             cboGrower.FormattingEnabled = true;
             cboGrower.Location = new Point(12, 54);
             cboGrower.Name = "cboGrower";
@@ -359,11 +372,114 @@
             chbExcelLayout.Text = "Excel layout";
             chbExcelLayout.UseVisualStyleBackColor = true;
             // 
+            // chbShowAudit
+            // 
+            chbShowAudit.Font = new Font("Microsoft Sans Serif", 9F);
+            chbShowAudit.Image = Properties.Resources.verIcon16;
+            chbShowAudit.ImageAlign = ContentAlignment.MiddleLeft;
+            chbShowAudit.Location = new Point(216, 95);
+            chbShowAudit.Name = "chbShowAudit";
+            chbShowAudit.Size = new Size(91, 19);
+            chbShowAudit.TabIndex = 394;
+            chbShowAudit.Text = "Auditoría";
+            chbShowAudit.TextAlign = ContentAlignment.MiddleRight;
+            chbShowAudit.UseVisualStyleBackColor = true;
+            chbShowAudit.CheckedChanged += chbShowAudit_CheckedChanged;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 6.75F);
+            label7.Location = new Point(430, 6);
+            label7.Name = "label7";
+            label7.Size = new Size(81, 12);
+            label7.TabIndex = 386;
+            label7.Text = "Línea de transporte";
+            // 
+            // cboTransportLine
+            // 
+            cboTransportLine.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTransportLine.DropDownWidth = 300;
+            cboTransportLine.FormattingEnabled = true;
+            cboTransportLine.Location = new Point(430, 18);
+            cboTransportLine.Name = "cboTransportLine";
+            cboTransportLine.Size = new Size(190, 23);
+            cboTransportLine.TabIndex = 387;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 6.75F);
+            label8.Location = new Point(430, 42);
+            label8.Name = "label8";
+            label8.Size = new Size(46, 12);
+            label8.TabIndex = 388;
+            label8.Text = "Conductor";
+            // 
+            // cboDriver
+            // 
+            cboDriver.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDriver.DropDownWidth = 300;
+            cboDriver.FormattingEnabled = true;
+            cboDriver.Location = new Point(430, 54);
+            cboDriver.Name = "cboDriver";
+            cboDriver.Size = new Size(190, 23);
+            cboDriver.TabIndex = 389;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 6.75F);
+            label9.Location = new Point(626, 6);
+            label9.Name = "label9";
+            label9.Size = new Size(32, 12);
+            label9.TabIndex = 390;
+            label9.Text = "Troque";
+            // 
+            // cboTruck
+            // 
+            cboTruck.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTruck.DropDownWidth = 200;
+            cboTruck.FormattingEnabled = true;
+            cboTruck.Location = new Point(626, 18);
+            cboTruck.Name = "cboTruck";
+            cboTruck.Size = new Size(162, 23);
+            cboTruck.TabIndex = 391;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 6.75F);
+            label10.Location = new Point(626, 42);
+            label10.Name = "label10";
+            label10.Size = new Size(23, 12);
+            label10.TabIndex = 392;
+            label10.Text = "Caja";
+            // 
+            // cboFreightContainer
+            // 
+            cboFreightContainer.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFreightContainer.DropDownWidth = 200;
+            cboFreightContainer.FormattingEnabled = true;
+            cboFreightContainer.Location = new Point(626, 54);
+            cboFreightContainer.Name = "cboFreightContainer";
+            cboFreightContainer.Size = new Size(162, 23);
+            cboFreightContainer.TabIndex = 393;
+            // 
             // FrmManifestCat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chbShowAudit);
+            Controls.Add(cboFreightContainer);
+            Controls.Add(label10);
+            Controls.Add(cboTruck);
+            Controls.Add(label9);
+            Controls.Add(cboDriver);
+            Controls.Add(label8);
+            Controls.Add(cboTransportLine);
+            Controls.Add(label7);
             Controls.Add(chbExcelLayout);
             Controls.Add(chbPrintManifestPerField);
             Controls.Add(btnPrintManifest);
@@ -430,5 +546,14 @@
         public CheckBox chbPrintManifestPerField;
         private Button btnPrintManifest;
         public CheckBox chbExcelLayout;
+        public CheckBox chbShowAudit;
+        private Label label7;
+        public ComboBox cboTransportLine;
+        private Label label8;
+        public ComboBox cboDriver;
+        private Label label9;
+        public ComboBox cboTruck;
+        private Label label10;
+        public ComboBox cboFreightContainer;
     }
 }

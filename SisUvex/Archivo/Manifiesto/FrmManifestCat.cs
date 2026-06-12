@@ -94,5 +94,10 @@ namespace SisUvex.Archivo.Manifiesto
         {
             cls.BtnPrintManifestFrmCat();
         }
+
+        private void chbShowAudit_CheckedChanged(object sender, EventArgs e)
+        {
+            cls.ChbShowAuditFilter();
+        }
     }
 }
