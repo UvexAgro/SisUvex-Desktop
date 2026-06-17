@@ -79,6 +79,12 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             new ClsExcelReportPorCuadrilla()
                 .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
 
+            new ClsExcelReportConcentradoCuadrillas()
+                .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+
+            new ClsPayrollBoxPerEmployeeResumeExcel()
+                .WriteSheet(workbook, reportData, filtersText);
+
             // ── Hoja de datos al final ─────────────────────────────────────────
             AddRawDataSheet(workbook, reportData, DataSheetName, ColorTabData);
 

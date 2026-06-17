@@ -55,6 +55,7 @@ namespace SisUvex.Archivo.Manifiesto
                 dgv.AddAuditColumn(columnName);
 
             dgv.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
 
             if (_frmCat.btnRemoved.Text == "Activos")
                 dgv.SetFilterNull();
@@ -129,6 +130,16 @@ namespace SisUvex.Archivo.Manifiesto
         public void ChbShowAuditFilter()
         {
             dgv?.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
+        }
+
+        private void ApplyAuditSelectionMode()
+        {
+            _frmCat.dgvCatalog.SelectionMode = _frmCat.chbShowAudit.Checked
+                ? DataGridViewSelectionMode.CellSelect
+                : DataGridViewSelectionMode.FullRowSelect;
+
+            _frmCat.dgvCatalog.ClearSelection();
         }
 
         private string SetStringQueryWithFilter()
