@@ -80,42 +80,31 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08");
         }
 
+        // ── Evento temporada → fechas ─────────────────────────────────────────
+
         public void CboSeason_SelectedIndexChanged(object? sender, EventArgs e)
             => ApplySeasonDatesToDatePickers();
 
+        /// <summary>
+        /// dtpDate1 = fecha inicio de la temporada.
+        /// dtpDate2 = si hoy está dentro del rango → hoy; si hoy ya pasó la fecha fin → fecha fin.
+        /// Si no hay temporada seleccionada, no modifica los pickers.
+        /// </summary>
         private void ApplySeasonDatesToDatePickers()
         {
-            if (frm == null || frm.cboSeason.SelectedIndex < 1)
-                return;
-
-            if (!TryGetSelectedSeasonDateRange(frm.cboSeason, out DateTime start, out DateTime end))
-                return;
-
-            frm.dtpDate1.Value = start;
-            frm.dtpDate2.Value = end;
-        }
-
-        private static bool TryGetSelectedSeasonDateRange(ComboBox cbo, out DateTime start, out DateTime end)
-        {
-            start = default;
-            end = default;
-
-            if (cbo.SelectedIndex < 1)
-                return false;
-
-            if (cbo.SelectedItem is not DataRowView drv)
-                return false;
+            if (frm == null || frm.cboSeason.SelectedIndex < 1) return;
+            if (frm.cboSeason.SelectedItem is not DataRowView drv) return;
 
             DataTable tbl = drv.Row.Table;
-            if (!tbl.Columns.Contains(Season.ColumnStartDate) || !tbl.Columns.Contains(Season.ColumnEndDate))
-                return false;
+            if (!tbl.Columns.Contains(Season.ColumnStartDate) || !tbl.Columns.Contains(Season.ColumnEndDate)) return;
+            if (drv.Row[Season.ColumnStartDate] is DBNull || drv.Row[Season.ColumnEndDate] is DBNull) return;
 
-            if (drv.Row[Season.ColumnStartDate] is DBNull || drv.Row[Season.ColumnEndDate] is DBNull)
-                return false;
+            DateTime seasonStart = Convert.ToDateTime(drv.Row[Season.ColumnStartDate]).Date;
+            DateTime seasonEnd = Convert.ToDateTime(drv.Row[Season.ColumnEndDate]).Date;
+            DateTime today = DateTime.Today;
 
-            start = Convert.ToDateTime(drv.Row[Season.ColumnStartDate]).Date;
-            end = Convert.ToDateTime(drv.Row[Season.ColumnEndDate]).Date;
-            return true;
+            frm.dtpDate1.Value = seasonStart;
+            frm.dtpDate2.Value = today <= seasonEnd ? today : seasonEnd;
         }
 
         private void ClearLabels()
