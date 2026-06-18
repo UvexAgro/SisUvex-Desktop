@@ -30,9 +30,11 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPayrollBoxPerEmployeeReport));
             gpbFilters = new GroupBox();
             cboUser = new ComboBox();
             labelUser = new Label();
+            btnSearch = new Button();
             dtpDate2 = new DateTimePicker();
             dtpDate1 = new DateTimePicker();
             labelDateTo = new Label();
@@ -43,10 +45,10 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             labelSeason = new Label();
             labelContractor = new Label();
             cboContractor = new ComboBox();
-            btnSearch = new Button();
             dgvReport = new DataGridView();
             bgpInfo = new GroupBox();
             lblUser = new Label();
+            btnExcel = new Button();
             labelInfoUser = new Label();
             lblDateRange = new Label();
             labelInfoDates = new Label();
@@ -56,11 +58,16 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             labelInfoContractor = new Label();
             lblSeason = new Label();
             labelInfoSeason = new Label();
-            btnExcel = new Button();
             lblTitle = new Label();
+            gpbExcelSheets = new GroupBox();
+            chbSheetResumen = new CheckBox();
+            chbSheetConcentrado = new CheckBox();
+            chbSheetCuadrilla = new CheckBox();
+            chbSheetAnotador = new CheckBox();
             gpbFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
             bgpInfo.SuspendLayout();
+            gpbExcelSheets.SuspendLayout();
             SuspendLayout();
             // 
             // gpbFilters
@@ -106,10 +113,25 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             labelUser.TabIndex = 55;
             labelUser.Text = "Anotador";
             // 
+            // btnSearch
+            // 
+            btnSearch.Font = new Font("Segoe UI", 12F);
+            btnSearch.Image = Properties.Resources.BuscarLupa1;
+            btnSearch.ImageAlign = ContentAlignment.MiddleRight;
+            btnSearch.Location = new Point(400, 125);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Padding = new Padding(0, 0, 4, 0);
+            btnSearch.Size = new Size(87, 31);
+            btnSearch.TabIndex = 68;
+            btnSearch.Text = "Buscar";
+            btnSearch.TextAlign = ContentAlignment.TopLeft;
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // dtpDate2
             // 
             dtpDate2.Format = DateTimePickerFormat.Short;
-            dtpDate2.Location = new Point(297, 127);
+            dtpDate2.Location = new Point(274, 127);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(120, 29);
             dtpDate2.TabIndex = 53;
@@ -202,21 +224,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             cboContractor.Size = new Size(190, 29);
             cboContractor.TabIndex = 24;
             // 
-            // btnSearch
-            // 
-            btnSearch.Font = new Font("Segoe UI", 12F);
-            btnSearch.Image = Properties.Resources.BuscarLupa1;
-            btnSearch.ImageAlign = ContentAlignment.MiddleRight;
-            btnSearch.Location = new Point(423, 125);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Padding = new Padding(0, 0, 4, 0);
-            btnSearch.Size = new Size(87, 31);
-            btnSearch.TabIndex = 68;
-            btnSearch.Text = "Buscar";
-            btnSearch.TextAlign = ContentAlignment.TopLeft;
-            btnSearch.UseVisualStyleBackColor = true;
-            btnSearch.Click += btnSearch_Click;
-            // 
             // dgvReport
             // 
             dgvReport.AllowUserToAddRows = false;
@@ -238,7 +245,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 317);
+            dgvReport.Location = new Point(12, 366);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -252,7 +259,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             dgvReport.RowHeadersVisible = false;
             dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(859, 338);
+            dgvReport.Size = new Size(859, 289);
             dgvReport.TabIndex = 69;
             // 
             // bgpInfo
@@ -287,6 +294,21 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             lblUser.TabIndex = 68;
             lblUser.Tag = "lotData";
             lblUser.Text = "lblUser";
+            // 
+            // btnExcel
+            // 
+            btnExcel.Font = new Font("Segoe UI", 12F);
+            btnExcel.Image = Properties.Resources.excelIcon;
+            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+            btnExcel.Location = new Point(756, 68);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Padding = new Padding(0, 0, 4, 0);
+            btnExcel.Size = new Size(97, 31);
+            btnExcel.TabIndex = 71;
+            btnExcel.Text = "Excel";
+            btnExcel.TextAlign = ContentAlignment.TopLeft;
+            btnExcel.UseVisualStyleBackColor = true;
+            btnExcel.Click += btnExcel_Click;
             // 
             // labelInfoUser
             // 
@@ -391,21 +413,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             labelInfoSeason.Text = "Temporada:";
             labelInfoSeason.TextAlign = ContentAlignment.TopRight;
             // 
-            // btnExcel
-            // 
-            btnExcel.Font = new Font("Segoe UI", 12F);
-            btnExcel.Image = Properties.Resources.excelIcon;
-            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(756, 68);
-            btnExcel.Name = "btnExcel";
-            btnExcel.Padding = new Padding(0, 0, 4, 0);
-            btnExcel.Size = new Size(97, 31);
-            btnExcel.TabIndex = 71;
-            btnExcel.Text = "Excel";
-            btnExcel.TextAlign = ContentAlignment.TopLeft;
-            btnExcel.UseVisualStyleBackColor = true;
-            btnExcel.Click += btnExcel_Click;
-            // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
@@ -418,18 +425,78 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             lblTitle.Tag = "lotData";
             lblTitle.Text = "Reporte cajas por empleado";
             // 
+            // gpbExcelSheets
+            // 
+            gpbExcelSheets.Controls.Add(chbSheetResumen);
+            gpbExcelSheets.Controls.Add(chbSheetConcentrado);
+            gpbExcelSheets.Controls.Add(chbSheetCuadrilla);
+            gpbExcelSheets.Controls.Add(chbSheetAnotador);
+            gpbExcelSheets.Font = new Font("Segoe UI", 10F);
+            gpbExcelSheets.Location = new Point(12, 317);
+            gpbExcelSheets.Name = "gpbExcelSheets";
+            gpbExcelSheets.Size = new Size(859, 43);
+            gpbExcelSheets.TabIndex = 72;
+            gpbExcelSheets.TabStop = false;
+            gpbExcelSheets.Text = "Hojas Excel";
+            // 
+            // chbSheetResumen
+            // 
+            chbSheetResumen.AutoSize = true;
+            chbSheetResumen.Checked = true;
+            chbSheetResumen.CheckState = CheckState.Checked;
+            chbSheetResumen.Location = new Point(715, 15);
+            chbSheetResumen.Name = "chbSheetResumen";
+            chbSheetResumen.Size = new Size(15, 14);
+            chbSheetResumen.TabIndex = 3;
+            chbSheetResumen.UseVisualStyleBackColor = true;
+            // 
+            // chbSheetConcentrado
+            // 
+            chbSheetConcentrado.AutoSize = true;
+            chbSheetConcentrado.Checked = true;
+            chbSheetConcentrado.CheckState = CheckState.Checked;
+            chbSheetConcentrado.Location = new Point(500, 15);
+            chbSheetConcentrado.Name = "chbSheetConcentrado";
+            chbSheetConcentrado.Size = new Size(15, 14);
+            chbSheetConcentrado.TabIndex = 2;
+            chbSheetConcentrado.UseVisualStyleBackColor = true;
+            // 
+            // chbSheetCuadrilla
+            // 
+            chbSheetCuadrilla.AutoSize = true;
+            chbSheetCuadrilla.Checked = true;
+            chbSheetCuadrilla.CheckState = CheckState.Checked;
+            chbSheetCuadrilla.Location = new Point(294, 13);
+            chbSheetCuadrilla.Name = "chbSheetCuadrilla";
+            chbSheetCuadrilla.Size = new Size(15, 14);
+            chbSheetCuadrilla.TabIndex = 1;
+            chbSheetCuadrilla.UseVisualStyleBackColor = true;
+            // 
+            // chbSheetAnotador
+            // 
+            chbSheetAnotador.AutoSize = true;
+            chbSheetAnotador.Checked = true;
+            chbSheetAnotador.CheckState = CheckState.Checked;
+            chbSheetAnotador.Location = new Point(92, 13);
+            chbSheetAnotador.Name = "chbSheetAnotador";
+            chbSheetAnotador.Size = new Size(15, 14);
+            chbSheetAnotador.TabIndex = 0;
+            chbSheetAnotador.UseVisualStyleBackColor = true;
+            // 
             // FrmPayrollBoxPerEmployeeReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             AutoScrollMargin = new Size(10, 10);
-            AutoScrollMinSize = new Size(0, 600);
+            AutoScrollMinSize = new Size(0, 650);
             ClientSize = new Size(883, 667);
+            Controls.Add(gpbExcelSheets);
             Controls.Add(lblTitle);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
             Controls.Add(dgvReport);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPayrollBoxPerEmployeeReport";
             Text = "Reporte cajas por empleado";
             Load += FrmPayrollBoxPerEmployeeReport_Load;
@@ -438,6 +505,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
             bgpInfo.ResumeLayout(false);
             bgpInfo.PerformLayout();
+            gpbExcelSheets.ResumeLayout(false);
+            gpbExcelSheets.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -472,6 +541,11 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         private System.Windows.Forms.Label labelUser;
         public System.Windows.Forms.Label lblUser;
         private System.Windows.Forms.Label labelInfoUser;
+        public System.Windows.Forms.GroupBox gpbExcelSheets;
+        public System.Windows.Forms.CheckBox chbSheetAnotador;
+        public System.Windows.Forms.CheckBox chbSheetCuadrilla;
+        public System.Windows.Forms.CheckBox chbSheetConcentrado;
+        public System.Windows.Forms.CheckBox chbSheetResumen;
     }
 }
 
