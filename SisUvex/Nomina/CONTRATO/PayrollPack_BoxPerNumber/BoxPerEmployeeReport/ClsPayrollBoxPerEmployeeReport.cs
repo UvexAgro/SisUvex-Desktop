@@ -1,4 +1,3 @@
-using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
@@ -6,7 +5,9 @@ using SisUvex.Usuarios;
 using System;
 using System.Collections.Generic;
 using System.Data;
+
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -78,6 +79,55 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
             // Temp. uva 2026 (mismo patrón que otros formularios; también aplica sus fechas al rango)
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08");
+
+            SetupExcelSheetCheckboxes();
+        }
+
+        private void SetupExcelSheetCheckboxes()
+        {
+            if (frm == null) return;
+
+            var sheetCheckboxes = new (CheckBox CheckBox, string SheetName)[]
+            {
+                (frm.chbSheetAnotador,    ClsExcelReportPorAnotador.SheetName),
+                (frm.chbSheetCuadrilla,   ClsExcelReportPorCuadrilla.SheetName),
+                (frm.chbSheetConcentrado, ClsExcelReportConcentradoCuadrillas.SheetName),
+                (frm.chbSheetResumen,     ClsPayrollBoxPerEmployeeResumeExcel.SheetName),
+            };
+
+            foreach (var (checkBox, sheetName) in sheetCheckboxes)
+            {
+                checkBox.Text    = sheetName;
+                checkBox.Checked = true;
+
+                checkBox.CheckedChanged -= ExcelSheetCheckbox_CheckedChanged;
+                checkBox.CheckedChanged += ExcelSheetCheckbox_CheckedChanged;
+            }
+        }
+
+        public void ExcelSheetCheckbox_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (frm == null || GetExcelSheetSelection().HasAnyReportSheet) return;
+
+            if (sender is CheckBox cb)
+            {
+                cb.Checked = true;
+                SystemSounds.Exclamation.Play();
+            }
+        }
+
+        private ExcelSheetSelection GetExcelSheetSelection()
+        {
+            if (frm == null)
+                return new ExcelSheetSelection();
+
+            return new ExcelSheetSelection
+            {
+                PorAnotador           = frm.chbSheetAnotador.Checked,
+                PorCuadrilla          = frm.chbSheetCuadrilla.Checked,
+                ConcentradoCuadrillas = frm.chbSheetConcentrado.Checked,
+                Resumen               = frm.chbSheetResumen.Checked,
+            };
         }
 
         // ── Evento temporada → fechas ─────────────────────────────────────────
@@ -307,6 +357,18 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 return;
             }
 
+            ExcelSheetSelection sheetSelection = GetExcelSheetSelection();
+            if (!sheetSelection.HasAnyReportSheet)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show(
+                    "Selecciona al menos una hoja de reporte para generar el Excel.",
+                    "Reporte cajas por empleado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             excel.GenerateExcelReport(
                 _dtReport,
                 frm.dtpDate1.Value.Date,
@@ -315,7 +377,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 frm.lblContractor.Text,
                 frm.lblWorkGroup.Text,
                 frm.lblUser.Text,
-                frm.lblDateRange.Text);
+                frm.lblDateRange.Text,
+                sheetSelection);
         }
     }
 }

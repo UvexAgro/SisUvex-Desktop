@@ -28,8 +28,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             DateTime rangeEnd,
             string filtersText)
         {
-            var ws = workbook.Worksheets.Add(
-                ClsPayrollBoxPerEmployeeReportExcel.SanitizeSheetName(SheetName));
+            var ws = workbook.Worksheets.Add(GetUniqueSheetName(workbook, SheetName));
             ws.TabColor = TabColor;
 
             var groups  = BuildGroups(data);
@@ -42,6 +41,24 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
             ws.Columns().AdjustToContents();
             return ws;
+        }
+
+        private static string GetUniqueSheetName(IXLWorkbook workbook, string desiredName)
+        {
+            string baseName = ClsPayrollBoxPerEmployeeReportExcel.SanitizeSheetName(desiredName);
+            string name = baseName;
+            int suffix = 2;
+
+            while (workbook.Worksheets.Any(ws => string.Equals(ws.Name, name, StringComparison.OrdinalIgnoreCase)))
+            {
+                string suffixText = $" ({suffix++})";
+                int maxBaseLen = Math.Max(1, 31 - suffixText.Length);
+                name = baseName.Length > maxBaseLen
+                    ? baseName[..maxBaseLen] + suffixText
+                    : baseName + suffixText;
+            }
+
+            return name;
         }
 
         private static int WriteFiltersHeader(IXLWorksheet ws, int row, string filtersText, int totalCols)
@@ -97,12 +114,15 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 col++;
             }
 
-            ws.Range(headerRowDate, StartCol + FixedCols, headerRowEmpaque, StartCol + totalCols - 1).Style
-                .Font.SetBold()
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
-                .Fill.SetBackgroundColor(ClsPayrollBoxPerEmployeeReportExcel.ColorTableHeader)
-                .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
-                .Border.SetInsideBorder(XLBorderStyleValues.Thin);
+            if (colKeys.Count > 0)
+            {
+                ws.Range(headerRowDate, StartCol + FixedCols, headerRowEmpaque, StartCol + totalCols - 1).Style
+                    .Font.SetBold()
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                    .Fill.SetBackgroundColor(ClsPayrollBoxPerEmployeeReportExcel.ColorTableHeader)
+                    .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
+                    .Border.SetInsideBorder(XLBorderStyleValues.Thin);
+            }
 
             row = headerRowEmpaque + 1;
 

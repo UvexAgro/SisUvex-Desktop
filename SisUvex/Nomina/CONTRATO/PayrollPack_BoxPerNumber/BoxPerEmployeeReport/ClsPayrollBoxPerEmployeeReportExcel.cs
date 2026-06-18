@@ -44,7 +44,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             string contractor,
             string workGroup,
             string user,
-            string dateRange)
+            string dateRange,
+            ExcelSheetSelection sheetSelection)
         {
             if (reportData == null || reportData.Rows.Count == 0)
             {
@@ -72,26 +73,93 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
             using var workbook = new XLWorkbook();
 
-            // ── Hojas de reporte primero (la primera quedará activa al abrir) ──
-            var firstSheet = new ClsExcelReportPorAnotador()
-                .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+            // ── Hojas de reporte seleccionadas (la primera quedará activa al abrir) ──
+            IXLWorksheet? firstSheet = null;
+            var writeErrors = new List<string>();
 
-            new ClsExcelReportPorCuadrilla()
-                .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+            if (sheetSelection.PorAnotador)
+            {
+                try
+                {
+                    var ws = new ClsExcelReportPorAnotador()
+                        .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+                    firstSheet ??= ws;
+                }
+                catch (Exception ex)
+                {
+                    writeErrors.Add($"{ClsExcelReportPorAnotador.SheetName}: {ex.Message}");
+                }
+            }
 
-            new ClsExcelReportConcentradoCuadrillas()
-                .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+            if (sheetSelection.PorCuadrilla)
+            {
+                try
+                {
+                    var ws = new ClsExcelReportPorCuadrilla()
+                        .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+                    firstSheet ??= ws;
+                }
+                catch (Exception ex)
+                {
+                    writeErrors.Add($"{ClsExcelReportPorCuadrilla.SheetName}: {ex.Message}");
+                }
+            }
 
-            new ClsPayrollBoxPerEmployeeResumeExcel()
-                .WriteSheet(workbook, reportData, filtersText);
+            if (sheetSelection.ConcentradoCuadrillas)
+            {
+                try
+                {
+                    var ws = new ClsExcelReportConcentradoCuadrillas()
+                        .WriteSheet(workbook, reportData, rangeStart, rangeEnd, filtersText);
+                    firstSheet ??= ws;
+                }
+                catch (Exception ex)
+                {
+                    writeErrors.Add($"{ClsExcelReportConcentradoCuadrillas.SheetName}: {ex.Message}");
+                }
+            }
 
-            // ── Hoja de datos al final ─────────────────────────────────────────
+            if (sheetSelection.Resumen)
+            {
+                try
+                {
+                    var ws = new ClsPayrollBoxPerEmployeeResumeExcel()
+                        .WriteSheet(workbook, reportData, filtersText);
+                    firstSheet ??= ws;
+                }
+                catch (Exception ex)
+                {
+                    writeErrors.Add($"{ClsPayrollBoxPerEmployeeResumeExcel.SheetName}: {ex.Message}");
+                }
+            }
+
+            if (firstSheet == null)
+            {
+                MessageBox.Show(
+                    "No se pudo generar ninguna hoja de reporte seleccionada.\n\n" +
+                    string.Join("\n", writeErrors),
+                    "Reporte cajas por empleado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            // ── Hoja DATA siempre al final ─────────────────────────────────────
             AddRawDataSheet(workbook, reportData, DataSheetName, ColorTabData);
 
-            // Activar la primera hoja de reporte al abrir el archivo
             firstSheet.SetTabActive();
 
             workbook.SaveAs(filePath);
+
+            if (writeErrors.Count > 0)
+            {
+                MessageBox.Show(
+                    "El archivo se generó, pero algunas hojas no pudieron crearse:\n\n" +
+                    string.Join("\n", writeErrors),
+                    "Reporte cajas por empleado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
 
             DialogResult result = MessageBox.Show(
                 "Reporte en excel generado correctamente.\n\n¿Deseas abrir el archivo?",
@@ -261,5 +329,17 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
     {
         public string EmpaqueDisplay => string.IsNullOrWhiteSpace(Empaque) ? string.Empty : Empaque;
         public string Display        => $"{Fecha:dd-MMM} {EmpaqueDisplay}".Trim();
+    }
+
+    /// <summary>Hojas de reporte seleccionadas para exportar (DATA siempre se incluye).</summary>
+    internal sealed class ExcelSheetSelection
+    {
+        public bool PorAnotador           { get; init; }
+        public bool PorCuadrilla          { get; init; }
+        public bool ConcentradoCuadrillas { get; init; }
+        public bool Resumen               { get; init; }
+
+        public bool HasAnyReportSheet =>
+            PorAnotador || PorCuadrilla || ConcentradoCuadrillas || Resumen;
     }
 }
