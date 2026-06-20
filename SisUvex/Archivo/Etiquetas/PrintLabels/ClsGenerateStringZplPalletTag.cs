@@ -58,6 +58,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string idStow = string.Empty;
             string invoice = string.Empty;
             string idWorkGroup = string.Empty;
+            string labelLegend = string.Empty;
             Dictionary<string, object> p = new();
             p.Add("@idPallet", idPallet);
             List<(string, string, string)>? stowageList = new();
@@ -79,6 +80,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     {
                         invoice = invoiceStow; // Asigna la papeleta del pallet principal
                         idWorkGroup = row["v_nameWorkGroup"].ToString() ?? string.Empty;
+                        labelLegend = row["v_labelLegend"].ToString() ?? string.Empty;
                     }
                 }
 
@@ -91,18 +93,25 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             //AGREGAR ESTIBA EN ZPL:
             string zplStowage = StringStowageList(idStow, stowageList);
             string zplInvoiceWorkGroup = ZPLInvoiceWorkGroup(invoice, idWorkGroup);
+            string zplLabelLegend = ZPLLabelLegend(labelLegend);
 
-            zplExtra = zplStowage + zplInvoiceWorkGroup;
+            zplExtra = zplStowage + zplInvoiceWorkGroup + zplLabelLegend;
             return zplExtra; 
         }
+        private string ZPLLabelLegend(string labelLegend)
+        {
+            string zplInvoice = string.Empty;
+            if (!string.IsNullOrEmpty(labelLegend))
+                zplInvoice += $"^CF0,40 ^FO30,1160 ^FD{labelLegend}^FS ^FXLabel Legend\n";
 
+            return zplInvoice;
+        }
         private string ZPLInvoiceWorkGroup(string invoice, string idWorkGroup)
         {
             string zplInvoice = string.Empty;
             if (!string.IsNullOrEmpty(invoice))
-            {
-                zplInvoice += $"^CF0,30 ^FO30,240 ^FD{invoice}/{idWorkGroup}^FS ^FXINVOICE/WORKGROUP\n"; //<--- cambiar bien
-            }
+                zplInvoice += $"^CF0,30 ^FO30,240 ^FD{invoice}/{idWorkGroup}^FS ^FXINVOICE/WORKGROUP\n";
+
             return zplInvoice;
         }
         private string StringStowageList(string idStow, List<(string, string, string)>? stowageList)
@@ -131,7 +140,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             labelsZPLString = PrintPalletString();
             string superSring = string.Empty;
-            Clipboard.SetText(labelsZPLString);
+            //Clipboard.SetText(labelsZPLString);
             for (int i = 0; i < copies; i++)
             {
                 superSring += "\n" + labelsZPLString;
