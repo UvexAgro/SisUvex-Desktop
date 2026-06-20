@@ -1,62 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Archivo.WorkPlan.ChangeDistributorPallet
 {
     public partial class FrmChangeDistributorPallet : Form
     {
         ClsChangeDistributorPallet cls = null!;
+
         public FrmChangeDistributorPallet()
         {
             InitializeComponent();
+
+            btnImprimir.Click    += (s, e) => cls?.BtnImprimir();
+            btnLimpiar.Click     += (s, e) => cls?.BtnLimpiar();
+            txbIdPallet.KeyDown  += txbIdPallet_KeyDown;
         }
 
         private void FrmChangeDistributorPallet_Load(object sender, EventArgs e)
         {
             cls ??= new();
             cls.frm = this;
-
             cls.BeginForm();
 
-
-            cls.BtnAddPallet("34528");
-            cls.BtnAddPallet("34552");
-            cls.BtnAddPallet("34559");
-            cls.BtnAddPallet("34567");
-            cls.BtnAddPallet("34563");
-            cls.BtnAddPallet("34564");
-            cls.BtnAddPallet("34565");
-            cls.BtnAddPallet("34566");
-            cls.BtnAddPallet("34556");
-            cls.BtnAddPallet("34618");
-
+            chbAjustarColumnas.Checked = true;
         }
 
-        private void btnAddPallet_Click(object sender, EventArgs e)
-        {
+        private void btnAddPallet_Click(object sender, EventArgs e) =>
             cls.BtnAddPallet(txbIdPallet.Text);
-        }
 
-        private void btnQuit_Click(object sender, EventArgs e)
-        {
+        private void btnQuit_Click(object sender, EventArgs e) =>
             cls.BtnQuitPallet();
-        }
 
-        private void chbAjustarColumnas_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chbAjustarColumnas.Checked)
-                dgvPallet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
-            else
-                dgvPallet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-        }
+        private void btnAccept_Click(object sender, EventArgs e) =>
+            cls.BtnAccept();
 
         private void txbIdPallet_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -64,9 +40,27 @@ namespace SisUvex.Archivo.WorkPlan.ChangeDistributorPallet
                 cls.BtnAddPallet(txbIdPallet.Text);
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        private void txbIdPallet_KeyDown(object sender, KeyEventArgs e)
         {
-            cls.pruebaGTIN();
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                e.SuppressKeyPress = true;
+                string clipText = Clipboard.GetText();
+
+                // Si el texto pegado contiene separadores (viene de Excel u otra fuente múltiple)
+                bool isMultiple = clipText.IndexOfAny(new[] { '\n', '\r', '\t', ',', ';' }) >= 0;
+                if (isMultiple)
+                    cls.PasteMultiplePallets(clipText);
+                else
+                    txbIdPallet.Text = clipText.Trim(); // pegado simple normal
+            }
+        }
+
+        private void chbAjustarColumnas_CheckedChanged(object sender, EventArgs e)
+        {
+            dgvPallet.AutoSizeColumnsMode = chbAjustarColumnas.Checked
+                ? DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader
+                : DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
     }
 }
