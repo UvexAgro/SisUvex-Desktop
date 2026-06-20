@@ -110,6 +110,7 @@
             btnImprimir.Location = new Point(513, 446);
             btnImprimir.Margin = new Padding(4);
             btnImprimir.Name = "btnImprimir";
+            btnImprimir.Padding = new Padding(4, 0, 0, 0);
             btnImprimir.Size = new Size(102, 29);
             btnImprimir.TabIndex = 110;
             btnImprimir.Text = "Imprimir";

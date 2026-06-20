@@ -13,6 +13,8 @@ namespace SisUvex.Consultas.Manifest.QueryPerManifest
     public partial class FrmQueryPerManifest : Form
     {
         ClsQueryPerManifest cls;
+        private static readonly Color ManifestHighlightColor = Color.FromArgb(220, 235, 252);
+
         public FrmQueryPerManifest()
         {
             InitializeComponent();
@@ -22,6 +24,7 @@ namespace SisUvex.Consultas.Manifest.QueryPerManifest
         {
             cls = new ClsQueryPerManifest();
             cls.frm = this;
+            dgvQuery.DataBindingComplete += dgvQuery_DataBindingComplete;
             cls.LoadForm();
         }
 
@@ -40,24 +43,33 @@ namespace SisUvex.Consultas.Manifest.QueryPerManifest
             cls.BtnManifest();
         }
 
-        private void dgvQuery_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void dgvQuery_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (dgvQuery.Columns[e.ColumnIndex].Name == "Manifiesto")
+            ApplyManifestGroupStyles();
+        }
+
+        private void ApplyManifestGroupStyles()
+        {
+            if (!dgvQuery.Columns.Contains("Manifiesto")) return;
+
+            int groupIndex = 0;
+            string lastManifest = null;
+
+            foreach (DataGridViewRow row in dgvQuery.Rows)
             {
-                if (e.RowIndex > 0 && dgvQuery.Rows[e.RowIndex - 1].Cells["Manifiesto"].Value.ToString() == e.Value.ToString())
-                {
-                    for (int i = 0; i < dgvQuery.Columns.Count; i++)
-                    {
-                        dgvQuery.Rows[e.RowIndex].Cells[i].Style.Font = new Font(dgvQuery.Font, FontStyle.Regular);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < dgvQuery.Columns.Count; i++)
-                    {
-                        dgvQuery.Rows[e.RowIndex].Cells[i].Style.Font = new Font(dgvQuery.Font, FontStyle.Bold);
-                    }
-                }
+                if (row.IsNewRow) continue;
+
+                string manifest = row.Cells["Manifiesto"].Value?.ToString() ?? "";
+                bool isNewGroup = manifest != lastManifest;
+
+                if (isNewGroup && lastManifest != null)
+                    groupIndex++;
+
+                Color bgColor = (groupIndex % 2 == 0) ? Color.White : ManifestHighlightColor;
+
+                row.DefaultCellStyle.BackColor = bgColor;
+
+                lastManifest = manifest;
             }
         }
     }

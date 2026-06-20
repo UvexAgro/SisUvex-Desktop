@@ -26,6 +26,7 @@ namespace SisUvex.Consultas.Manifest.QueryPerManifest
             " CONCAT_WS(' ', gtn.v_preLabel, pre.v_namePresentation, gtn.v_postLabel) AS 'Presentación'," +
             " CAST(gtn.n_lbs AS FLOAT) AS 'Libras', SUM(pal.i_boxes) AS 'Cajas'," +
             " SUM(pal.n_kg) AS 'Kilos totales'" +
+            " , leg.v_labelLegend AS Leyenda " +
             " FROM Pack_Manifest man " +
             " LEFT JOIN dbo.Pack_FreightContainer AS frc ON frc.id_freightContainer = man.id_freightContainer " +
             " LEFT JOIN dbo.Pack_Grower AS gro ON gro.id_grower = man.id_grower LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = man.id_distributor " +
@@ -42,9 +43,10 @@ namespace SisUvex.Consultas.Manifest.QueryPerManifest
             " LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti " +
             " LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety " +
             " LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop " +
-            " LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color  ";
+            " LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color  " +
+            " LEFT JOIN Pack_LabelLegend		AS leg		ON leg.id_labelLegend	= wpl.id_labelLegend ";
 
-        string gpbPresentationPerDay = " GROUP BY man.d_shipment, dis.id_distributor, pre.id_presentation, [var].id_variety, dis.v_nameDistShort,con.v_nameContainer, gtn.n_lbs, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, dis.v_nameDistributor, man.id_manifest, frc.v_ecoNumber, gro.v_nameGrower, siz.v_sizeValue ";
+        string gpbPresentationPerDay = " GROUP BY man.d_shipment, dis.id_distributor, pre.id_presentation, [var].id_variety, dis.v_nameDistShort,con.v_nameContainer, gtn.n_lbs, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, dis.v_nameDistributor, man.id_manifest, frc.v_ecoNumber, gro.v_nameGrower, siz.v_sizeValue, leg.v_labelLegend ";
         string orderBy = " ORDER BY man.id_manifest ";
         public void LoadForm()
         {

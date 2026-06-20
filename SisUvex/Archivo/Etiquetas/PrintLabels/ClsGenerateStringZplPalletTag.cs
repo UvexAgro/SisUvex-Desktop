@@ -54,55 +54,71 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string PalletInfoExtraWithQuery(string idPallet)
         {
             string zplExtra = string.Empty;
-            string q = @"SELECT * FROM Pack_Pallet WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) );";
+            string q = @"SELECT pal.*, wgp.v_nameWorkGroup, leg.v_labelLegend FROM Pack_Pallet pal LEFT JOIN Pack_WorkPlan wpl ON wpl.id_workPlan = pal.id_workPlan LEFT JOIN Pack_WorkGroup wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN Pack_LabelLegend leg ON leg.id_labelLegend = wpl.id_labelLegend WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) )";
             string idStow = string.Empty;
             string invoice = string.Empty;
+            string idWorkGroup = string.Empty;
+            string labelLegend = string.Empty;
             Dictionary<string, object> p = new();
             p.Add("@idPallet", idPallet);
             List<(string, string, string)>? stowageList = new();
 
             DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(q, p);
 
-            if (dt != null && dt.Rows.Count > 1)
+            if (dt != null && dt.Rows.Count > 0)
             {
-                idStow = dt.Rows[0]["c_stowage"].ToString() ?? string.Empty;
-
+                int count = 0;
                 foreach (DataRow row in dt.Rows)
                 {
+                    count++;
                     string palletId = row["id_pallet"].ToString() ?? string.Empty;
                     string palletBoxes = row["i_boxes"].ToString() ?? string.Empty;
                     string invoiceStow = row["v_invoice"].ToString() ?? string.Empty;
                     stowageList.Add((palletId, palletBoxes, invoiceStow));
 
                     if (palletId == idPallet)
-                        invoice = invoiceStow; // Asigna la factura del pallet principal
+                    {
+                        invoice = invoiceStow; // Asigna la papeleta del pallet principal
+                        idWorkGroup = row["v_nameWorkGroup"].ToString() ?? string.Empty;
+                        labelLegend = row["v_labelLegend"].ToString() ?? string.Empty;
+                    }
                 }
+
+                if (count > 1)
+                    idStow = dt.Rows[0]["c_stowage"].ToString() ?? string.Empty;
             }
+            else
+                return string.Empty;
 
             //AGREGAR ESTIBA EN ZPL:
-
             string zplStowage = StringStowageList(idStow, stowageList);
-            string zplInvoice = string.Empty;
+            string zplInvoiceWorkGroup = ZPLInvoiceWorkGroup(invoice, idWorkGroup);
+            string zplLabelLegend = ZPLLabelLegend(labelLegend);
 
-            zplExtra = zplStowage + zplInvoice;
-            return zplExtra;
+            zplExtra = zplStowage + zplInvoiceWorkGroup + zplLabelLegend;
+            return zplExtra; 
         }
+        private string ZPLLabelLegend(string labelLegend)
+        {
+            string zplInvoice = string.Empty;
+            if (!string.IsNullOrEmpty(labelLegend))
+                zplInvoice += $"^CF0,40 ^FO30,1160 ^FD{labelLegend}^FS ^FXLabel Legend\n";
 
-        private string ZPLInvoice(string invoice)
+            return zplInvoice;
+        }
+        private string ZPLInvoiceWorkGroup(string invoice, string idWorkGroup)
         {
             string zplInvoice = string.Empty;
             if (!string.IsNullOrEmpty(invoice))
-            {
-                zplInvoice += $"^FX STOW AND PALLETS\n"
-                           +  $"^CF0,30 ^FO635,20 ^FDInvoice: {invoice}^FS\n"; //<--- cambiar bien
-            }
+                zplInvoice += $"^CF0,30 ^FO30,240 ^FD{invoice}/{idWorkGroup}^FS ^FXINVOICE/WORKGROUP\n";
+
             return zplInvoice;
         }
         private string StringStowageList(string idStow, List<(string, string, string)>? stowageList)
         {
             string zplStowage = string.Empty;
 
-            if (stowageList.Count > 0)
+            if (stowageList.Count > 1)
             {
                 int yBegin = 20;
                 zplStowage += $"^FX STOW AND PALLETS\n"
@@ -124,7 +140,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             labelsZPLString = PrintPalletString();
             string superSring = string.Empty;
-            Clipboard.SetText(labelsZPLString);
+            //Clipboard.SetText(labelsZPLString);
             for (int i = 0; i < copies; i++)
             {
                 superSring += "\n" + labelsZPLString;
