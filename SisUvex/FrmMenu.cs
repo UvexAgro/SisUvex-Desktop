@@ -810,5 +810,14 @@ namespace SisUvex
             cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
         }
+
+        private void cambiarDistribuidorPalletsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasCreateRecordsPermission())
+                return;
+
+            Archivo.WorkPlan.ChangeDistributorPallet.FrmChangeDistributorPallet cat = new();
+            AbrirFormularioDialog(cat, 0);
+        }
     }
 }
