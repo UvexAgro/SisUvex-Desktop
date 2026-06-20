@@ -76,16 +76,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Archivo\Manifiesto\PalletsManifiesto.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PalletsManifiesto.xsd</DependentUpon>
-    </Compile>
-    <Compile Update="Archivo\Manifiesto\TotalesManifiesto.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TotalesManifiesto.xsd</DependentUpon>
-    </Compile>
     <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />
@@ -155,14 +145,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Archivo\Manifiesto\PalletsManifiesto.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>PalletsManifiesto.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Archivo\Manifiesto\TotalesManifiesto.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>TotalesManifiesto.Designer.cs</LastGenOutput>
-    </None>
     <None Update="pdfium.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

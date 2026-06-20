@@ -16,7 +16,7 @@ namespace SisUvex.Archivo.Manifiesto
         public static string columnPosition = "Posicion";
         private const string cIdDistributor = ClsObject.Distributor.ColumnId;
         public DataGridView dataGridView;
-        string qryPal = $" SELECT Activo, Posicion AS [{columnPosition}], Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack, gtn.id_distributor AS [{cIdDistributor}] FROM vw_PackPalletDetails vw JOIN Pack_GTIN gtn ON gtn.id_GTIN = vw.Programa ";
+        string qryPal = $" SELECT Activo, Posicion AS [{columnPosition}], Pallet, Mix, Estiba, Cajas, Contenedor, CONVERT(float, Libras) AS [Lbs], CONCAT_WS(' ', Pre, Presentación, Pos) AS [Presentación], VarCorto AS [Variedad], Etiqueta AS [Distribuidor], Leyenda, Tamaño, Lote, CONVERT(DATE, Fecha) AS [Fecha], [Plan], Programa AS [GTIN], Manifiesto, Rack, gtn.id_distributor AS [{cIdDistributor}] FROM vw_PackPalletDetails vw JOIN Pack_GTIN gtn ON gtn.id_GTIN = vw.Programa ";
         public int GetNextPalletPosition()
         {
             int maxPosition = 0;
@@ -49,6 +49,7 @@ namespace SisUvex.Archivo.Manifiesto
             dataGridView.Columns.Add("Tamaño", "Tamaño");
             dataGridView.Columns.Add("Presentación", "Presentación");
             dataGridView.Columns.Add("Variedad", "Variedad");
+            dataGridView.Columns.Add("Leyenda", "Leyenda");
             dataGridView.Columns.Add("Distribuidor", "Distribuidor");
             dataGridView.Columns.Add("Lote", "Lote");
             dataGridView.Columns.Add("Fecha", "Fecha");
@@ -118,7 +119,7 @@ namespace SisUvex.Archivo.Manifiesto
             foreach (DataRow row in dtPallets.Rows)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
-                newRow.CreateCells(dataGridView, row[columnPosition], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"], row[cIdDistributor]);
+                newRow.CreateCells(dataGridView, row[columnPosition], row["Pallet"], row["Estiba"], row["Mix"], row["Cajas"], row["Contenedor"], row["Lbs"], row["Tamaño"], row["Presentación"], row["Variedad"], row["Leyenda"], row["Distribuidor"], row["Lote"], row["Fecha"], row["Plan"], row["GTIN"], row[cIdDistributor]);
                 rowsToInsert.Add(newRow);
             }
 

@@ -57,6 +57,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string q = @"SELECT * FROM Pack_Pallet WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) );";
             string idStow = string.Empty;
             string invoice = string.Empty;
+            string workGroup = string.Empty;
             Dictionary<string, object> p = new();
             p.Add("@idPallet", idPallet);
             List<(string, string, string)>? stowageList = new();
