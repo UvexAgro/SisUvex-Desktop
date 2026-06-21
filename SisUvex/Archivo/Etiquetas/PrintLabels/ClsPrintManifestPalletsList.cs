@@ -91,21 +91,21 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         public DataTable GetDTManifestPallets(string idManifest)
         {
-            string qry = $"SELECT * FROM vw_PackPalletsManifest WHERE Manifiesto = '{idManifest}' ORDER BY Pos";
+            string qry = $"SELECT * FROM vw_PackPalletCon WHERE Manifiesto = '{idManifest}' ORDER BY Posicion";
 
             return ClsQuerysDB.GetDataTable(qry);
         }
 
         public DataTable GetDTPalletInfo(string idPallet)
         {
-            string qry = $"SELECT * FROM vw_PackPalletsManifest WHERE id_pallet = '{idPallet}' ORDER BY Pos";
+            string qry = $"SELECT * FROM vw_PackPalletCon WHERE Pallet = '{idPallet}' ORDER BY Posicion";
 
             return ClsQuerysDB.GetDataTable(qry);
         }
 
         public DataTable GetDTStowInfo(string idStow)
         {
-            string qry = $"SELECT * FROM vw_PackPalletsManifest WHERE id_stow = '{idStow}' ORDER BY Pos";
+            string qry = $"SELECT * FROM vw_PackPalletCon WHERE Estiba = '{idStow}' ORDER BY Posicion";
 
             return ClsQuerysDB.GetDataTable(qry);
         }

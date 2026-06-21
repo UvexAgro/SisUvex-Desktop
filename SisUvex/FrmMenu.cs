@@ -819,5 +819,11 @@ namespace SisUvex
             Archivo.WorkPlan.ChangeDistributorPallet.FrmChangeDistributorPallet cat = new();
             AbrirFormularioDialog(cat, 0);
         }
+
+        private void imprimirListadoDePalletsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Archivo.Etiquetas.PrintLabels.FrmPrintManifestPallets cat = new();
+            AbrirVentanaHijo(cat);
+        }
     }
 }

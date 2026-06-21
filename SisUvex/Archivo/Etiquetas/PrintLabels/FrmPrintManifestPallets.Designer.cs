@@ -137,7 +137,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dgvPallets.RowHeadersVisible = false;
             dgvPallets.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPallets.Size = new Size(776, 269);
+            dgvPallets.Size = new Size(1289, 598);
             dgvPallets.TabIndex = 50;
             dgvPallets.CellContentClick += dgvPallets_CellContentClick;
             // 
@@ -147,7 +147,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnPrint.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnPrint.Image = Properties.Resources.imprimirIcon32;
             btnPrint.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPrint.Location = new Point(11, 401);
+            btnPrint.Location = new Point(11, 730);
             btnPrint.Name = "btnPrint";
             btnPrint.Padding = new Padding(5, 0, 0, 0);
             btnPrint.Size = new Size(119, 38);
@@ -159,11 +159,12 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             // cboPrinters
             // 
+            cboPrinters.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             cboPrinters.DropDownStyle = ComboBoxStyle.DropDownList;
             cboPrinters.Font = new Font("Segoe UI", 15F);
             cboPrinters.FormattingEnabled = true;
-            cboPrinters.Items.AddRange(new object[] { "Pallets (4x6)", "Código (2x1)" });
-            cboPrinters.Location = new Point(133, 402);
+            cboPrinters.Items.AddRange(new object[] { "Pallets (Grande 4x6)", "Código (Chica 2x1)" });
+            cboPrinters.Location = new Point(133, 732);
             cboPrinters.Margin = new Padding(0, 3, 3, 3);
             cboPrinters.Name = "cboPrinters";
             cboPrinters.Size = new Size(132, 36);
@@ -255,7 +256,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1313, 779);
             Controls.Add(lblStow);
             Controls.Add(lblPallet);
             Controls.Add(btnClear);
