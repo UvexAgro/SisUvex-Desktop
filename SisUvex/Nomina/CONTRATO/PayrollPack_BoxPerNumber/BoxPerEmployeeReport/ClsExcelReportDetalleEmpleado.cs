@@ -19,7 +19,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
     /// </summary>
     internal sealed class ClsExcelReportDetalleEmpleado
     {
-        private static readonly XLColor TabColorReport   = XLColor.FromHtml("#7030A0");
+        private static readonly XLColor TabColorReport   = XLColor.FromHtml("#1F3864");
         private static readonly XLColor TabColorListado  = XLColor.FromHtml("#FF9900");
         private static readonly XLColor TabColorData     = XLColor.FromHtml("#BCE292");
 
@@ -71,10 +71,18 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             // 1. Hoja de reporte (primera → se abre al abrir el archivo)
             var wsReport = CreateReportSheet(wb, rawData, rangeStart, rangeEnd, dateRange);
 
-            // 2. Hoja de listado de empleados
+            string filtersText = $"Fechas: {dateRange}";
+
+            // 2. Hoja RESUMEN
+            new ClsPayrollBoxPerEmployeeResumeExcel().WriteSheet(wb, rawData, filtersText);
+
+            // 3. Hoja Cajas empleado (agrupado solo por empleado, sin contratista/cuadrilla/número)
+            new ClsExcelReportCajasEmpleado().WriteSheet(wb, rawData, filtersText);
+
+            // 4. Hoja de listado de empleados
             CreateListadoSheet(wb, selectedEmployees);
 
-            // 3. Hoja DATA
+            // 5. Hoja DATA
             AddRawDataSheet(wb, rawData);
 
             wsReport.SetTabActive();
