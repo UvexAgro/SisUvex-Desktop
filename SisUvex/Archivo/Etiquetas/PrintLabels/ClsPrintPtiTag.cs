@@ -34,10 +34,18 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             {
                 string SuperString = GenPallet.GenerateSuperStringTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, isReprint);
                 PrintZPL(SuperString, printerName);
-                //Clipboard.SetText(SuperString);
             }
             else
                 MessageBox.Show("Seleccione una impresora válida", "Impresora");
+        }
+
+        public void SendToPrintSmallPalletCodeTag(string zpl)
+        {
+            string printerName = ClsConfPrinter.GetPrinterCodeName();
+            if (!string.IsNullOrEmpty(printerName))
+                PrintZPL(zpl, printerName);
+            else
+                MessageBox.Show("Seleccione una impresora válida para código (2x1)", "Impresora");
         }
 
         private void PrintZPL(string superPrint, string printer)
