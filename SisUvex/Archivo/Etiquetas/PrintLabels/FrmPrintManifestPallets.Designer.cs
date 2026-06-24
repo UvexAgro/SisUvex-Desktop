@@ -31,7 +31,6 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrintManifestPallets));
-            btnPrintPallets = new Button();
             txbIdManifest = new TextBox();
             lblTitle = new Label();
             lblDescription = new Label();
@@ -40,26 +39,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnPrint = new Button();
             cboPrinters = new ComboBox();
             txbIdPallet = new TextBox();
-            txbIdStow = new TextBox();
             btnPalletAdd = new Button();
-            btnStowAdd = new Button();
             btnManifestAdd = new Button();
             btnClear = new Button();
             lblPallet = new Label();
-            lblStow = new Label();
+            chbAjustarColumnas = new CheckBox();
+            chbSeleccionarTodo = new CheckBox();
+            nudCopiasEtiquetas = new NumericUpDown();
+            labelCopias = new Label();
+            chbRevesePalletTag = new CheckBox();
+            chbFechaOmitidaPallet = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvPallets).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudCopiasEtiquetas).BeginInit();
             SuspendLayout();
-            // 
-            // btnPrintPallets
-            // 
-            btnPrintPallets.Font = new Font("Microsoft Sans Serif", 12F);
-            btnPrintPallets.Image = Properties.Resources.BuscarLupa1;
-            btnPrintPallets.Location = new Point(376, 55);
-            btnPrintPallets.Name = "btnPrintPallets";
-            btnPrintPallets.Size = new Size(31, 31);
-            btnPrintPallets.TabIndex = 0;
-            btnPrintPallets.UseVisualStyleBackColor = true;
-            btnPrintPallets.Click += btnManifestAdd_Click;
             // 
             // txbIdManifest
             // 
@@ -69,6 +61,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             txbIdManifest.Name = "txbIdManifest";
             txbIdManifest.Size = new Size(92, 30);
             txbIdManifest.TabIndex = 1;
+            txbIdManifest.KeyDown += txbIdManifest_KeyDown;
             // 
             // lblTitle
             // 
@@ -107,7 +100,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dgvPallets.AllowUserToAddRows = false;
             dgvPallets.AllowUserToDeleteRows = false;
             dgvPallets.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvPallets.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvPallets.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dgvPallets.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPallets.BackgroundColor = SystemColors.ControlLightLight;
             dgvPallets.BorderStyle = BorderStyle.Fixed3D;
@@ -137,9 +130,11 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             dgvPallets.RowHeadersVisible = false;
             dgvPallets.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPallets.Size = new Size(1289, 598);
+            dgvPallets.Size = new Size(1289, 596);
             dgvPallets.TabIndex = 50;
             dgvPallets.CellContentClick += dgvPallets_CellContentClick;
+            dgvPallets.CellValueChanged += dgvPallets_CellValueChanged;
+            dgvPallets.CurrentCellDirtyStateChanged += dgvPallets_CurrentCellDirtyStateChanged;
             // 
             // btnPrint
             // 
@@ -147,7 +142,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             btnPrint.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnPrint.Image = Properties.Resources.imprimirIcon32;
             btnPrint.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPrint.Location = new Point(11, 730);
+            btnPrint.Location = new Point(11, 733);
             btnPrint.Name = "btnPrint";
             btnPrint.Padding = new Padding(5, 0, 0, 0);
             btnPrint.Size = new Size(119, 38);
@@ -164,51 +159,35 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cboPrinters.Font = new Font("Segoe UI", 15F);
             cboPrinters.FormattingEnabled = true;
             cboPrinters.Items.AddRange(new object[] { "Pallets (Grande 4x6)", "Código (Chica 2x1)" });
-            cboPrinters.Location = new Point(133, 732);
+            cboPrinters.Location = new Point(133, 735);
             cboPrinters.Margin = new Padding(0, 3, 3, 3);
             cboPrinters.Name = "cboPrinters";
-            cboPrinters.Size = new Size(132, 36);
+            cboPrinters.Size = new Size(250, 36);
             cboPrinters.TabIndex = 52;
             // 
             // txbIdPallet
             // 
             txbIdPallet.Font = new Font("Microsoft Sans Serif", 12F);
-            txbIdPallet.Location = new Point(420, 55);
-            txbIdPallet.MaxLength = 20;
+            txbIdPallet.Location = new Point(479, 55);
+            txbIdPallet.MaxLength = 5000;
+            txbIdPallet.Multiline = true;
             txbIdPallet.Name = "txbIdPallet";
-            txbIdPallet.Size = new Size(80, 26);
+            txbIdPallet.ScrollBars = ScrollBars.Vertical;
+            txbIdPallet.Size = new Size(84, 60);
             txbIdPallet.TabIndex = 53;
-            // 
-            // txbIdStow
-            // 
-            txbIdStow.Font = new Font("Microsoft Sans Serif", 12F);
-            txbIdStow.Location = new Point(570, 55);
-            txbIdStow.MaxLength = 20;
-            txbIdStow.Name = "txbIdStow";
-            txbIdStow.Size = new Size(80, 26);
-            txbIdStow.TabIndex = 54;
+            txbIdPallet.KeyDown += txbIdPallet_KeyDown;
+            txbIdPallet.KeyPress += txbIdPallet_KeyPress;
             // 
             // btnPalletAdd
             // 
             btnPalletAdd.Font = new Font("Microsoft Sans Serif", 9F);
-            btnPalletAdd.Location = new Point(505, 55);
+            btnPalletAdd.Location = new Point(569, 55);
             btnPalletAdd.Name = "btnPalletAdd";
             btnPalletAdd.Size = new Size(58, 26);
             btnPalletAdd.TabIndex = 55;
             btnPalletAdd.Text = "Agregar";
             btnPalletAdd.UseVisualStyleBackColor = true;
             btnPalletAdd.Click += btnPalletAdd_Click;
-            // 
-            // btnStowAdd
-            // 
-            btnStowAdd.Font = new Font("Microsoft Sans Serif", 9F);
-            btnStowAdd.Location = new Point(655, 55);
-            btnStowAdd.Name = "btnStowAdd";
-            btnStowAdd.Size = new Size(58, 26);
-            btnStowAdd.TabIndex = 56;
-            btnStowAdd.Text = "Agregar";
-            btnStowAdd.UseVisualStyleBackColor = true;
-            btnStowAdd.Click += btnStowAdd_Click;
             // 
             // btnManifestAdd
             // 
@@ -224,7 +203,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // btnClear
             // 
             btnClear.Font = new Font("Microsoft Sans Serif", 9F);
-            btnClear.Location = new Point(478, 90);
+            btnClear.Location = new Point(569, 90);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(58, 26);
             btnClear.TabIndex = 58;
@@ -236,34 +215,99 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             // 
             lblPallet.AutoSize = true;
             lblPallet.Font = new Font("Microsoft Sans Serif", 10F);
-            lblPallet.Location = new Point(420, 35);
+            lblPallet.Location = new Point(479, 36);
             lblPallet.Name = "lblPallet";
             lblPallet.Size = new Size(43, 17);
             lblPallet.TabIndex = 59;
             lblPallet.Text = "Pallet";
             // 
-            // lblStow
+            // chbAjustarColumnas
             // 
-            lblStow.AutoSize = true;
-            lblStow.Font = new Font("Microsoft Sans Serif", 10F);
-            lblStow.Location = new Point(570, 35);
-            lblStow.Name = "lblStow";
-            lblStow.Size = new Size(38, 17);
-            lblStow.TabIndex = 60;
-            lblStow.Text = "Stow";
+            chbAjustarColumnas.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            chbAjustarColumnas.Appearance = Appearance.Button;
+            chbAjustarColumnas.Location = new Point(12, 94);
+            chbAjustarColumnas.Name = "chbAjustarColumnas";
+            chbAjustarColumnas.Padding = new Padding(0, 0, 0, 1);
+            chbAjustarColumnas.Size = new Size(35, 25);
+            chbAjustarColumnas.TabIndex = 61;
+            chbAjustarColumnas.Text = ">|<";
+            chbAjustarColumnas.TextAlign = ContentAlignment.MiddleRight;
+            chbAjustarColumnas.UseVisualStyleBackColor = true;
+            chbAjustarColumnas.CheckedChanged += chbAjustarColumnas_CheckedChanged;
+            // 
+            // chbSeleccionarTodo
+            // 
+            chbSeleccionarTodo.AutoSize = true;
+            chbSeleccionarTodo.Checked = true;
+            chbSeleccionarTodo.CheckState = CheckState.Checked;
+            chbSeleccionarTodo.Font = new Font("Segoe UI", 9F);
+            chbSeleccionarTodo.Location = new Point(53, 98);
+            chbSeleccionarTodo.Name = "chbSeleccionarTodo";
+            chbSeleccionarTodo.Size = new Size(114, 19);
+            chbSeleccionarTodo.TabIndex = 62;
+            chbSeleccionarTodo.Text = "Seleccionar todo";
+            chbSeleccionarTodo.UseVisualStyleBackColor = true;
+            chbSeleccionarTodo.CheckedChanged += chbSeleccionarTodo_CheckedChanged;
+            // 
+            // nudCopiasEtiquetas
+            // 
+            nudCopiasEtiquetas.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            nudCopiasEtiquetas.Font = new Font("Segoe UI", 16F);
+            nudCopiasEtiquetas.Location = new Point(388, 735);
+            nudCopiasEtiquetas.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            nudCopiasEtiquetas.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudCopiasEtiquetas.Name = "nudCopiasEtiquetas";
+            nudCopiasEtiquetas.Size = new Size(44, 36);
+            nudCopiasEtiquetas.TabIndex = 63;
+            nudCopiasEtiquetas.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // labelCopias
+            // 
+            labelCopias.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            labelCopias.AutoSize = true;
+            labelCopias.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelCopias.Location = new Point(382, 722);
+            labelCopias.Name = "labelCopias";
+            labelCopias.Size = new Size(59, 12);
+            labelCopias.TabIndex = 64;
+            labelCopias.Text = "Copias/pallet";
+            // 
+            // chbRevesePalletTag
+            // 
+            chbRevesePalletTag.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chbRevesePalletTag.AutoSize = true;
+            chbRevesePalletTag.Font = new Font("Segoe UI", 9F);
+            chbRevesePalletTag.Location = new Point(438, 733);
+            chbRevesePalletTag.Name = "chbRevesePalletTag";
+            chbRevesePalletTag.Size = new Size(109, 19);
+            chbRevesePalletTag.TabIndex = 65;
+            chbRevesePalletTag.Text = "Invertir etiqueta";
+            chbRevesePalletTag.UseVisualStyleBackColor = true;
+            // 
+            // chbFechaOmitidaPallet
+            // 
+            chbFechaOmitidaPallet.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chbFechaOmitidaPallet.AutoSize = true;
+            chbFechaOmitidaPallet.Font = new Font("Segoe UI", 9F);
+            chbFechaOmitidaPallet.Location = new Point(438, 756);
+            chbFechaOmitidaPallet.Name = "chbFechaOmitidaPallet";
+            chbFechaOmitidaPallet.Size = new Size(92, 19);
+            chbFechaOmitidaPallet.TabIndex = 66;
+            chbFechaOmitidaPallet.Text = "Omitir fecha";
+            chbFechaOmitidaPallet.UseVisualStyleBackColor = true;
             // 
             // FrmPrintManifestPallets
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1313, 779);
-            Controls.Add(lblStow);
+            ClientSize = new Size(1313, 782);
+            Controls.Add(nudCopiasEtiquetas);
+            Controls.Add(chbSeleccionarTodo);
+            Controls.Add(chbAjustarColumnas);
             Controls.Add(lblPallet);
             Controls.Add(btnClear);
             Controls.Add(btnManifestAdd);
-            Controls.Add(btnStowAdd);
             Controls.Add(btnPalletAdd);
-            Controls.Add(txbIdStow);
             Controls.Add(txbIdPallet);
             Controls.Add(cboPrinters);
             Controls.Add(btnPrint);
@@ -272,19 +316,21 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             Controls.Add(lblDescription);
             Controls.Add(lblTitle);
             Controls.Add(txbIdManifest);
-            Controls.Add(btnPrintPallets);
+            Controls.Add(labelCopias);
+            Controls.Add(chbFechaOmitidaPallet);
+            Controls.Add(chbRevesePalletTag);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrintManifestPallets";
-            Text = "FrmPrintManifestPallets";
+            Text = "Imprimir pallets de manifiesto";
             Load += FrmPrintManifestPallets_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPallets).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudCopiasEtiquetas).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button btnPrintPallets;
         private TextBox txbIdManifest;
         public Label lblTitle;
         private Label lblDescription;
@@ -293,12 +339,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private Button btnPrint;
         public ComboBox cboPrinters;
         private TextBox txbIdPallet;
-        private TextBox txbIdStow;
         private Button btnPalletAdd;
-        private Button btnStowAdd;
         private Button btnManifestAdd;
         private Button btnClear;
         private Label lblPallet;
-        private Label lblStow;
+        private CheckBox chbAjustarColumnas;
+        private CheckBox chbSeleccionarTodo;
+        private NumericUpDown nudCopiasEtiquetas;
+        private Label labelCopias;
+        private CheckBox chbRevesePalletTag;
+        private CheckBox chbFechaOmitidaPallet;
     }
 }

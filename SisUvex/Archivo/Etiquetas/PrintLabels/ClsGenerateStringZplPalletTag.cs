@@ -11,6 +11,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         ETagInfo eTag;
         private string idPal = string.Empty;
         private string qty = string.Empty;
+        private string qtyOriginal = string.Empty;
         private string zplBegin = "^XA\n^CI28 ^FX soporte de caracteres especiales\n";
         private string zplEnd = "^XZ\n";
         private string fontsize = "30,20";
@@ -25,11 +26,48 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string labelsZPLString = string.Empty;
         public string GenerateSuperStringTag(string idPallet, ETagInfo eTagInfo, int copies, int boxes, bool reverseOrientation, bool isReprint)
         {
+            PreparePalletTagFields(idPallet, eTagInfo, boxes, reverseOrientation, isReprint);
+            return SuperPrintPalletTag(copies);
+        }
+
+        /// <summary>
+        /// Genera una tira 4x1 con hasta dos códigos 2x1 (izquierda y derecha).
+        /// </summary>
+        public string GenerateSmallCodeStrip(
+            string idPallet1, ETagInfo eTagInfo1, int boxes1,
+            string? idPallet2, ETagInfo? eTagInfo2, int boxes2,
+            bool reverseOrientation,
+            bool isReprint)
+        {
+            const int stripY = 10;
+            int[] stripX = { 10, 416 };
+
+            string zpl = "^XA\n^CI28 ^FX soporte de caracteres especiales\n"
+                       + "^PW812\n";
+
+            PreparePalletTagFields(idPallet1, eTagInfo1, boxes1, reverseOrientation, isReprint);
+            zpl += BoxPalletZPLAt(stripX[0], stripY, qtyOriginal);
+
+            if (!string.IsNullOrWhiteSpace(idPallet2) && eTagInfo2 != null)
+            {
+                PreparePalletTagFields(idPallet2, eTagInfo2, boxes2, reverseOrientation, isReprint);
+                zpl += BoxPalletZPLAt(stripX[1], stripY, qtyOriginal);
+            }
+
+            zpl += ReverseLabelOrientation(reverseLabelOrientation);
+            zpl += "^XZ\n";
+            Clipboard.SetText(zpl);
+            return zpl;
+        }
+
+        private void PreparePalletTagFields(string idPallet, ETagInfo eTagInfo, int boxes, bool reverseOrientation, bool isReprint)
+        {
             eTag = eTagInfo;
             idPal = idPallet;
             qty = boxes.ToString();
+            presentationZPL = string.Empty;
 
-            if (eTag.showDate == true || eTag.showDate == null) //Si se desea mostrar la fecha en el pallet o no (dependiendo del botón/showDate)
+            if (eTag.showDate == true || eTag.showDate == null)
                 datePal = eTag.dateWorkPlan?.ToString("MMM-dd");
             else
                 datePal = string.Empty;
@@ -42,20 +80,19 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             if (!string.IsNullOrEmpty(eTag.postLabel)) presentationZPL += " " + eTag.postLabel;
             presentationZPL += " " + eTag.shortNameTypeBox;
 
-            //**Que no jale el nombre corto (si no hay) hasta que se cambie el procedimiento almacenado en hermosillo
             distribuidorZPL = eTag.shortNameDistributor;
             if (string.IsNullOrEmpty(distribuidorZPL)) distribuidorZPL = eTag.nameDistributor;
-            //todo esto
+
             farmName = eTag.growFarmName;
 
-
-            return SuperPrintPalletTag(copies);
+            PalletInfoExtraWithQuery(idPallet); //cajas estiba
         }
         private string PalletInfoExtraWithQuery(string idPallet)
         {
             string zplExtra = string.Empty;
             string q = @"SELECT pal.*, wgp.v_nameWorkGroup, leg.v_labelLegend FROM Pack_Pallet pal LEFT JOIN Pack_WorkPlan wpl ON wpl.id_workPlan = pal.id_workPlan LEFT JOIN Pack_WorkGroup wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN Pack_LabelLegend leg ON leg.id_labelLegend = wpl.id_labelLegend WHERE id_pallet = @idPallet OR ( c_stowage IS NOT NULL AND c_stowage = ( SELECT c_stowage  FROM Pack_Pallet  WHERE id_pallet = @idPallet ) )";
             string idStow = string.Empty;
+            string boxesOriginal = string.Empty;
             string invoice = string.Empty;
             string idWorkGroup = string.Empty;
             string labelLegend = string.Empty;
@@ -81,11 +118,16 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                         invoice = invoiceStow; // Asigna la papeleta del pallet principal
                         idWorkGroup = row["v_nameWorkGroup"].ToString() ?? string.Empty;
                         labelLegend = row["v_labelLegend"].ToString() ?? string.Empty;
+                        boxesOriginal = row["i_boxes"].ToString() ?? string.Empty; // Asigna la cantidad original de cajas del pallet principal
                     }
                 }
 
                 if (count > 1)
+                {
                     idStow = dt.Rows[0]["c_stowage"].ToString() ?? string.Empty;
+                    qtyOriginal = boxesOriginal; // Asigna la cantidad original de cajas del pallet principal
+                }
+
             }
             else
                 return string.Empty;
@@ -120,15 +162,25 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             if (stowageList.Count > 1)
             {
+                int totalBoxesStowage = 0;
                 int yBegin = 20;
                 zplStowage += $"^FX STOW AND PALLETS\n"
                            + $"^CF0,40^FO635,{yBegin}^FD*{idStow}*^FS\n";
 
                 foreach ((string palletId, string palletBoxes, string invoice) in stowageList)
                 {
+                    totalBoxesStowage += int.TryParse(palletBoxes, out int boxes) ? boxes : 0;
                     yBegin += 40; // Incrementa la posición Y para cada pallet
                     zplStowage += $"^CF0,30 ^FO635,{yBegin} ^FD{palletId}({palletBoxes})^FS\n";
+
+                    if (idPal == palletId)
+                    {
+                        zplStowage += $"^CF0,20^FO685,720^FD({palletBoxes})^FS\n"; // Muestra la cantidad de cajas del pallet principal en la etiqueta
+                        qtyOriginal = palletBoxes; // Asigna la cantidad original de cajas del pallet principal
+                    }
                 }
+
+                qty = totalBoxesStowage.ToString(); // Actualiza la cantidad total de cajas en la etiqueta
 
                 return zplStowage;
             }
@@ -140,7 +192,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
             labelsZPLString = PrintPalletString();
             string superSring = string.Empty;
-            //Clipboard.SetText(labelsZPLString);
+            Clipboard.SetText(labelsZPLString);
             for (int i = 0; i < copies; i++)
             {
                 superSring += "\n" + labelsZPLString;
@@ -176,6 +228,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
             string farmIndentation = farmIndentationValue.ToString();
 
+            string zplPalletInfoExtra = PalletInfoExtraWithQuery(idPal);
+
             string PalletString = "^XA^PW812\n"
                                 + "^XA\n^CI28 ^FX soporte de caracteres especiales\n"
                                 //+ "^POI" //Orientacion de impresion
@@ -183,7 +237,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                 + "^BY5,2,90\n"
                                 + $"^FO181,20^BC^FD{idPal}^FS\n"
                                 + reprint
-                                + PalletInfoExtraWithQuery(idPal)
+                                + zplPalletInfoExtra
                                 + "^FX BIG INFO SECTION.\n"
                                 + "^CF0,80\n"
                                 + $"^FO{farmIndentation},170^FD{farmName}^FS\n"
@@ -208,32 +262,30 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                                 + "^FO420,768^GB3,359,3^FS\n"
 
                                 + "^FX TEXTO EN CUADRICULA\n"
-                                + BoxPalletZPL(1)
-                                + BoxPalletZPL(2)
-                                + BoxPalletZPL(3)
-                                + BoxPalletZPL(4)
+                                + BoxPalletZPLAt(117, 768, qtyOriginal)
+                                + BoxPalletZPLAt(425, 768, qtyOriginal)
+                                + BoxPalletZPLAt(117, 950, qtyOriginal)
+                                + BoxPalletZPLAt(425, 950, qtyOriginal)
                                 + ReverseLabelOrientation(reverseLabelOrientation)
                                 + "^XZ";
 
             return PalletString;
         }
 
-        private string BoxPalletZPL(int boxNumber)
+        private string BoxPalletZPLAt(int offsetX, int offsetY, string qtyOriginal)
         {
-            int X = 117, Y = 768;
-
-            switch (boxNumber) { case 1: X = 117; Y = 768; break; case 2: X = 425; Y = 768; break; case 3: X = 117; Y = 950; break; case 4: X = 425; Y = 950; break; }
+            int X = offsetX;
+            int Y = offsetY;
 
             string presentationShort = presentationZPL.Length > 22 ? presentationZPL.Substring(0, 22) : presentationZPL;
             string varietyShort = eTag.nameVariety.Length > 22 ? eTag.nameVariety.Substring(0, 22) : eTag.nameVariety;
             string distributorShort = distribuidorZPL.Length > 13 ? distribuidorZPL.Substring(0, 13) : distribuidorZPL;
-
+            if (!string.IsNullOrEmpty(qtyOriginal)) qtyOriginal = "(" + qtyOriginal + ")";
             string reprint = string.Empty;
             if (isReprint)
                 reprint = $"^CF0,30^FO{188 + X},{57 + Y}^FD*^FS \n";
 
             string textZPL = "^FX TEXTO EN CUADRICULA\n"
-                            + $"^FX {boxNumber}rst Box\n"
                             + "^BY3,3,10\n"
                             + $"^FO{28  + X},{17  + Y}^BCN,35,Y,N,N,A^FD{idPal}^FS\n"
                             + reprint
@@ -244,7 +296,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                             + $"^FO{13  + X},{134 + Y}^FD{eTag.nameContainer}{eTag.Lbs} {eTag.nameSize}^FS\n"
                             + $"^FO{163 + X},{134 + Y}^FD{distributorShort}^FS\n"
                             + $"^FO{13  + X},{149 + Y}^FD{datePal}^FS\n"
-                            + $"^FO{163 + X},{149 + Y}^FDQTY: {qty}^FS\n"
+                            + $"^FO{133 + X},{149 + Y}^FDQTY: {qty} {qtyOriginal}^FS\n"
                             + $"^FO{233 + X},{149 + Y}^FD{eTag.nameLot}^FS\n";
 
             return textZPL;

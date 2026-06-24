@@ -118,39 +118,50 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         public static void ReprintPalletTag(string idPallet, int copies, bool reverseOrientation, bool showDate)
         {
-            string workPlan;
+            if (!TryGetPalletPrintData(idPallet, out string workPlan, out int palletBoxes))
+            {
+                MessageBox.Show("No se encontró el pallet", "Error");
+                return;
+            }
+
+            ETagInfo eTagInfo = new ETagInfo();
+            eTagInfo.SetTagInfo(workPlan);
+            eTagInfo.showDate = showDate;
+
+            ClsPrintPtiTag print = new();
+            print.SendToPrintPalletTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, true);
+        }
+
+        public static bool TryGetPalletPrintData(string idPallet, out string workPlan, out int palletBoxes)
+        {
+            workPlan = string.Empty;
+            palletBoxes = 0;
             SQLControl sql = new SQLControl();
-            int palletBoxes;
 
             try
             {
                 sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand($"SELECT [Plan de Trabajo], Cajas FROM vw_PackPalletCon WHERE Pallet = @idPallet", sql.cnn);
+                SqlCommand cmd = new SqlCommand("SELECT [Plan de Trabajo], Cajas FROM vw_PackPalletCon WHERE Pallet = @idPallet", sql.cnn);
                 cmd.Parameters.AddWithValue("@idPallet", idPallet);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 if (reader.Read())
                 {
-                    workPlan = reader[0].ToString();
+                    workPlan = reader[0].ToString() ?? string.Empty;
                     palletBoxes = Convert.ToInt32(reader[1].ToString());
-                }
-                else
-                {
-                    MessageBox.Show("No se encontró el pallet", "Error");
-                    return;
+                    return true;
                 }
 
-                ETagInfo eTagInfo = new ETagInfo();
-                eTagInfo.SetTagInfo(workPlan);
-
-                eTagInfo.showDate = showDate; //MOSTRAR U OCULTAR FECHA DEL PALLET (AQUI QUE MEJOR SE TOME LE DE EL VALOR DESDE DONDE SE USA ESTE METODO PARA EVITAER ENREDOS :D )
-
-                ClsPrintPtiTag print = new();
-                print.SendToPrintPalletTag(idPallet, eTagInfo, copies, palletBoxes, reverseOrientation, true);
+                return false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return false;
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
             }
         }
     }
