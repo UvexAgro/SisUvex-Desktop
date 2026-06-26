@@ -71,9 +71,14 @@ namespace SisUvex.Archivo.MixtearPallets
         /// </summary>
         private const bool PermitirSobrepasoMaxGtin = false;
 
-        public FrmMixtearPallets()
+        // Pallet a pre-cargar al abrir el formulario desde otro contexto (ej. FrmPalletConsulta).
+        // Se procesa en Load una vez que las columnas y cls están inicializados.
+        private readonly string? _idPalletInicial;
+
+        public FrmMixtearPallets(string? idPalletInicial = null)
         {
             InitializeComponent();
+            _idPalletInicial = idPalletInicial;
         }
 
         // ============================================================================
@@ -89,6 +94,13 @@ namespace SisUvex.Archivo.MixtearPallets
             // Estilo de selección personalizado: fondo transparente + texto negrita azul marino
             dgvPallets.CellPainting  += DgvSeleccion_CellPainting;
             dgvDestibar.CellPainting += DgvSeleccion_CellPainting;
+
+            // Pre-cargar pallet si se abrió el formulario desde otro contexto
+            if (!string.IsNullOrWhiteSpace(_idPalletInicial))
+            {
+                txbIdPallet.Text = _idPalletInicial;
+                AgregarPalletPorTexto(_idPalletInicial);
+            }
 
             // Para activar la herramienta de ajuste de columnas, descomentar la siguiente línea:
             // DebugCargarColumnas();
@@ -1543,5 +1555,18 @@ namespace SisUvex.Archivo.MixtearPallets
         private enum AccionAsistida { Mantener, Mover, Dividir }
 
         private record PalletPlan(DataGridViewRow Fila, AccionAsistida Accion, int CajasNuevasSobrante = 0);
+
+        /// <summary>
+        /// Abre el formulario de mixtear desde otro contexto (ej. FrmPalletConsulta)
+        /// y pre-carga el pallet indicado una vez que el formulario esté completamente inicializado.
+        /// </summary>
+        public static void OpenFrmMixtear(string idPallet)
+        {
+            if (!User.HasCreateRecordsPermission())
+                return;
+
+            FrmMixtearPallets frm = new(idPallet);
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
+        }
     }
 }

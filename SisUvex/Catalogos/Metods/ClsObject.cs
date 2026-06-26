@@ -482,6 +482,15 @@ namespace SisUvex.Catalogos.Metods
             public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
         }
 
+        public static class SeasonType
+        {
+            public const string TableName = "Pack_SeasonType";
+            public const string ColumnName = "Tipo temporada";
+            public const string ColumnId = "idSeasonType";
+            public const string Cbo = "CboSeasonType";
+            public const string QueryCbo = $" SELECT id_seasonType AS [{Column.id}], CONCAT(v_nameSeasonType, ' | ', id_seasonType) AS [{Column.name}], v_nameSeasonType AS [{ColumnName}] FROM Pack_SeasonType ORDER BY [{Column.name}] ";
+        }
+
         public static class City
         {
             public const string TableName = "Pack_City";
@@ -716,6 +725,12 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboTypeBox";
             public const string DgvCatalog = "DgvCatalogTypeBox";
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
+        }
+
+        public static class SeasonActivities
+        {
+            public const string TableName = "Payroll_SeasonActivities";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_Payroll_SeasonActivitiesCat cat ";
         }
 
         public static class LabelLegend

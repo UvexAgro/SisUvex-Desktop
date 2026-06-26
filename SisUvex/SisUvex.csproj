@@ -121,6 +121,18 @@
     <Compile Update="Catalogos\LabelLegend\FrmLabelLegendCat.Designer.cs">
       <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
     </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
+    </Compile>
     <Compile Update="Catalogos\Contratista\FrmContratistaAñadir.cs" />
     <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
     <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Añadir.cs" />
@@ -175,6 +187,12 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Catalogos\LabelLegend\FrmLabelLegendCat.resx">
       <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.resx">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.resx">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

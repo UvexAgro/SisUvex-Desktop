@@ -193,5 +193,18 @@ namespace SisUvex.Consultas.Pallets
             else
                 dgvConsulta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
+
+        private void btnOpenMixPallet_Click(object sender, EventArgs e)
+        {
+            if (dgvConsulta.SelectedRows.Count == 0)
+            {
+                System.Media.SystemSounds.Hand.Play();
+                return;
+            }
+
+            string idPallet = dgvConsulta.SelectedRows[0].Cells["Pallet"].Value.ToString();
+
+            FrmMixtearPallets.OpenFrmMixtear(idPallet);
+        }
     }
 }

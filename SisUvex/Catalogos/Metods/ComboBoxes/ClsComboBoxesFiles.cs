@@ -201,6 +201,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 				case ClsObject.Season.CboWithDates:
 					queryDataTable = ClsObject.Season.QueryCboWithDates;
 					break;
+                case ClsObject.SeasonType.Cbo:
+                    queryDataTable = ClsObject.SeasonType.QueryCbo;
+                    break;
 				case ClsObject.PlacePayment.Cbo:
                         queryDataTable = ClsObject.PlacePayment.QueryCbo;
                     break;
@@ -395,8 +398,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     return ClsObject.Contractor.TableName;
                 case ClsObject.Season.Cbo:
-				case ClsObject.Season.CboWithDates:
-					return ClsObject.Season.TableName;
+                case ClsObject.Season.CboWithDates:
+                    return ClsObject.Season.TableName;
+                case ClsObject.SeasonType.Cbo:
+                    return ClsObject.SeasonType.TableName;
                 case ClsObject.PlacePayment.Cbo:
                         return ClsObject.PlacePayment.TableName;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
