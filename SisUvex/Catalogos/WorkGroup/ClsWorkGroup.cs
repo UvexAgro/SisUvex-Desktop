@@ -19,7 +19,7 @@ internal class ClsWorkGroup
     public FrmWorkGroupCat _frmCat = null!;
     public EWorkGroup entity = null!;
 
-    private readonly string queryCatalog = $" SELECT cat.* FROM vw_PackWorkGroupCat cat ";
+    private readonly string queryCatalog = $"{Metods.ClsObject.WorkGroup.QueryDgvCatalog} ";
 
     ClsDGVCatalog? dgv;
     DataTable dtCatalog = null!;
@@ -28,6 +28,21 @@ internal class ClsWorkGroup
     public bool IsAddUpdate;
     public bool IsModifyUpdate;
     public string? idAddModify;
+
+    private void BindDgvCatalog(DataGridView dgvCatalog)
+    {
+        dgv = new ClsDGVCatalog(dgvCatalog, dtCatalog);
+        dgv.AddHideColumn(Season.ColumnId);
+        dgv.AddHideColumn(Contractor.ColumnId);
+        dgv.HideColumnsList();
+
+        dgv.CopyActiveValuesToHiddenColumn();
+        dgv.SetFilterActivesOnly();
+
+        if (dgvCatalog.Columns.Contains(Metods.ClsObject.WorkGroup.ColumnPayroll))
+            ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, Metods.ClsObject.WorkGroup.ColumnPayroll);
+    }
+
     private void SetFilterCatalog()
     {
         string filter = string.Empty;
@@ -62,13 +77,10 @@ internal class ClsWorkGroup
         ClsComboBoxes.CboLoadActives(_frmCat.cboSeason, Season.Cbo);
 
         dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
-        dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
-        dgv.AddHideColumn(Season.ColumnId);
-        dgv.AddHideColumn(Contractor.ColumnId);
-        dgv.HideColumnsList();
+        BindDgvCatalog(_frmCat.dgvCatalog);
 
-        _frmCat.cboContractor.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
-        _frmCat.cboSeason.SelectedIndexChanged += (sender, e) => { SetFilterCatalog(); };
+        _frmCat.cboContractor.SelectedIndexChanged += (_, _) => SetFilterCatalog();
+        _frmCat.cboSeason.SelectedIndexChanged += (_, _) => SetFilterCatalog();
     }
 
     public void BeginFormAdd()
@@ -79,6 +91,7 @@ internal class ClsWorkGroup
         if (IsAddOrModify)
         {
             _frmAdd.cboActive.SelectedIndex = 1;
+            _frmAdd.cboPayroll.SelectedIndex = 0;
             _frmAdd.txbId.Text = EWorkGroup.GetNextId();
         }
         else
@@ -95,7 +108,8 @@ internal class ClsWorkGroup
         controlList.ChangeHeadMessage("Para dar de alta una cuadrilla debe:\n");
         controlList.Add(_frmAdd.txbName, "Ingresar el nombre de la cuadrilla.");
         controlList.Add(_frmAdd.txbIdContractor, "Seleccionar un contratista.");
-        controlList.Add(_frmAdd.txbIdSeason, "Seleccionar una temporada.");
+        controlList.Add(_frmAdd.cboSeason, "Seleccionar una temporada.");
+        controlList.Add(_frmAdd.cboPayroll, "Seleccionar si es cuadrilla de contrato.");
         controlList.Add(_frmAdd.cboActive, "Seleccionar si la cuadrilla está activa.");
     }
 
@@ -120,6 +134,7 @@ internal class ClsWorkGroup
         _frmAdd.txbIdContractor.Text = entity.IdContractor ?? "";
         _frmAdd.txbIdSeason.Text = entity.IdSeason ?? "";
         _frmAdd.cboActive.SelectedIndex = entity.Active;
+        _frmAdd.cboPayroll.SelectedIndex = entity.Payroll;
 
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboContractor, _frmAdd.txbIdContractor);
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
@@ -133,6 +148,7 @@ internal class ClsWorkGroup
         entity.IdContractor = _frmAdd.cboContractor.ComboValueOrNull();
         entity.IdSeason = _frmAdd.cboSeason.ComboValueOrNull();
         entity.Active = _frmAdd.cboActive.SelectedIndex;
+        entity.Payroll = _frmAdd.cboPayroll.SelectedIndex;
 
         return entity;
     }
@@ -240,16 +256,13 @@ internal class ClsWorkGroup
 
     public void ChbRemovedFilter()
     {
-        dtCatalog = ClsQuerysDB.GetDataTable(queryCatalog + " WHERE 1 = 1 ");
-        dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog);
+        if (!_frmCat.chbRemoved.Checked)
+            dgv!.CopyActiveValuesToHiddenColumn();
 
         if (_frmCat.chbRemoved.Checked)
-            dgv.SetFilterNull();
+            dgv!.SetFilterNull();
         else
-        {
-            dgv.CopyActiveValuesToHiddenColumn();
-            dgv.SetFilterActivesOnly();
-        }
+            dgv!.SetFilterActivesOnly();
     }
 
     public void BtnSearchContractor()
