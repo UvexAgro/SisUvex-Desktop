@@ -82,7 +82,7 @@ namespace SisUvex
             }
         }
 
-        private void AbrirFormulario(Form f, int acs)
+        public void AbrirFormulario(Form f, int acs)
         {
             if (User.GetAccessLevel() >= acs)
             {
@@ -193,7 +193,7 @@ namespace SisUvex
                 return;
 
             SisUvex.Archivo.MixtearPallets.FrmMixtearPallets cat = new();
-            AbrirVentanaHijo(cat);
+            AbrirFormulario(cat, 0);
         }
 
         private void desestibarPalletsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -715,7 +715,7 @@ namespace SisUvex
         {
             Cuadro_de_herramientas.ZPL.FrmZPLPreview cat = new();
             //cat.Show();
-            AbrirVentanaHijo(cat, 0);
+            AbrirFormulario(cat, 0);
         }
 
         private void FrmMenu_Load(object sender, EventArgs e)
@@ -817,12 +817,23 @@ namespace SisUvex
                 return;
 
             Archivo.WorkPlan.ChangeDistributorPallet.FrmChangeDistributorPallet cat = new();
-            AbrirFormularioDialog(cat, 0);
+            cat.WindowState = FormWindowState.Normal;
+            AbrirFormulario(cat, 0);
         }
 
         private void imprimirListadoDePalletsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Archivo.Etiquetas.PrintLabels.FrmPrintManifestPallets cat = new();
+            AbrirVentanaHijo(cat);
+        }
+
+        private void actividadesDeTemporadaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Catalogos.CONTRATO.SeasonActivities.FrmSeasonActivitiesCat cat = new();
+            cat.WindowState = FormWindowState.Maximized;
             AbrirVentanaHijo(cat);
         }
     }

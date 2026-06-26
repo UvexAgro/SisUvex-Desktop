@@ -75,6 +75,7 @@
             cboFarm = new ComboBox();
             label12 = new Label();
             chbAjustarColumnas = new CheckBox();
+            btnOpenMixPallet = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvConsulta).BeginInit();
             SuspendLayout();
             // 
@@ -564,11 +565,27 @@
             chbAjustarColumnas.UseVisualStyleBackColor = true;
             chbAjustarColumnas.CheckedChanged += chbAjustarColumnas_CheckedChanged;
             // 
+            // btnOpenMixPallet
+            // 
+            btnOpenMixPallet.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnOpenMixPallet.Image = Properties.Resources.pallet16;
+            btnOpenMixPallet.ImageAlign = ContentAlignment.MiddleLeft;
+            btnOpenMixPallet.Location = new Point(290, 475);
+            btnOpenMixPallet.Name = "btnOpenMixPallet";
+            btnOpenMixPallet.Padding = new Padding(3, 0, 0, 0);
+            btnOpenMixPallet.Size = new Size(74, 24);
+            btnOpenMixPallet.TabIndex = 47;
+            btnOpenMixPallet.Text = "Mixtear";
+            btnOpenMixPallet.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenMixPallet.UseVisualStyleBackColor = true;
+            btnOpenMixPallet.Click += btnOpenMixPallet_Click;
+            // 
             // FrmPalletConsulta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1018, 509);
+            Controls.Add(btnOpenMixPallet);
             Controls.Add(chbAjustarColumnas);
             Controls.Add(label12);
             Controls.Add(label10);
@@ -669,5 +686,6 @@
         public ComboBox cboFarm;
         private Label label12;
         private CheckBox chbAjustarColumnas;
+        private Button btnOpenMixPallet;
     }
 }
