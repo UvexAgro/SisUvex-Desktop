@@ -50,6 +50,9 @@
             cboActive = new ComboBox();
             label4 = new Label();
             lblActivo = new Label();
+            cboPayroll = new ComboBox();
+            label5 = new Label();
+            label6 = new Label();
             SuspendLayout();
             // 
             // txbName
@@ -106,7 +109,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAccept.Location = new Point(370, 192);
+            btnAccept.Location = new Point(370, 223);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 8;
@@ -117,7 +120,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(451, 192);
+            btnCancel.Location = new Point(451, 223);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 9;
@@ -220,7 +223,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(23, 154);
+            label3.Location = new Point(27, 154);
             label3.Name = "label3";
             label3.Size = new Size(90, 21);
             label3.TabIndex = 52;
@@ -271,11 +274,44 @@
             lblActivo.TabIndex = 92;
             lblActivo.Text = "Activo: ";
             // 
+            // cboPayroll
+            // 
+            cboPayroll.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPayroll.Font = new Font("Segoe UI", 12F);
+            cboPayroll.FormattingEnabled = true;
+            cboPayroll.Items.AddRange(new object[] { "No", "Sí" });
+            cboPayroll.Location = new Point(171, 186);
+            cboPayroll.Name = "cboPayroll";
+            cboPayroll.Size = new Size(46, 29);
+            cboPayroll.TabIndex = 94;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = Color.Crimson;
+            label5.Location = new Point(162, 186);
+            label5.Name = "label5";
+            label5.Size = new Size(12, 15);
+            label5.TabIndex = 96;
+            label5.Text = "*";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 12F);
+            label6.Location = new Point(10, 189);
+            label6.Name = "label6";
+            label6.Size = new Size(162, 21);
+            label6.TabIndex = 95;
+            label6.Text = "Cuadrilla de contrato: ";
+            // 
             // FrmWorkGroupAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(535, 233);
+            ClientSize = new Size(535, 264);
+            Controls.Add(cboPayroll);
+            Controls.Add(label5);
             Controls.Add(cboActive);
             Controls.Add(label4);
             Controls.Add(lblActivo);
@@ -297,6 +333,7 @@
             Controls.Add(lblContractor);
             Controls.Add(label1);
             Controls.Add(lblId);
+            Controls.Add(label6);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -331,5 +368,8 @@
         public ComboBox cboActive;
         private Label label4;
         private Label lblActivo;
+        public ComboBox cboPayroll;
+        private Label label5;
+        private Label label6;
     }
 }

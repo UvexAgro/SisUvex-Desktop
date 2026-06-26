@@ -413,12 +413,13 @@ namespace SisUvex.Catalogos.Metods
         {
             public const string TableName = "Pack_WorkGroup";
             public const string ColumnName = "Cuadrilla";
+            public const string ColumnPayroll = "Contrato";
             public const string ColumnId = "idWorkGroup";
             public const string ColumnActive = "ActiveWorkGroup";
             public const string Cbo = "CboWorkGroup";
             public const string DgvCatalog = "DgvCatalogWorkGroup";
             public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], wgp.c_active AS [{Column.active}], wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
-            public const string QueryDgvCatalog = "queryWorkGroup";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackWorkGroupCat cat ";
         }
 
         public static class ProductionLine
