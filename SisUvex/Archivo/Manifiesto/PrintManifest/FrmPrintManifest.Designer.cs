@@ -206,9 +206,9 @@
             label1.Font = new Font("Microsoft Sans Serif", 12F);
             label1.Location = new Point(143, 140);
             label1.Name = "label1";
-            label1.Size = new Size(125, 20);
+            label1.Size = new Size(121, 20);
             label1.TabIndex = 384;
-            label1.Text = "Mostrar tamaño:";
+            label1.Text = "Mostrar tamaño";
             // 
             // tglShowSize
             // 
@@ -259,9 +259,9 @@
             label2.Font = new Font("Microsoft Sans Serif", 12F);
             label2.Location = new Point(143, 171);
             label2.Name = "label2";
-            label2.Size = new Size(86, 20);
+            label2.Size = new Size(82, 20);
             label2.TabIndex = 386;
-            label2.Text = "Manifiesto:";
+            label2.Text = "Manifiesto";
             // 
             // tglManifestPerFarm
             // 
@@ -291,9 +291,9 @@
             label3.Font = new Font("Microsoft Sans Serif", 12F);
             label3.Location = new Point(143, 202);
             label3.Name = "label3";
-            label3.Size = new Size(165, 20);
+            label3.Size = new Size(161, 20);
             label3.TabIndex = 388;
-            label3.Text = "Manifiesto por campo:";
+            label3.Text = "Manifiesto por campo";
             // 
             // label4
             // 
@@ -476,12 +476,13 @@
             Controls.Add(label17);
             Controls.Add(label20);
             Font = new Font("Microsoft Sans Serif", 12F);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmPrintManifest";
-            Text = "FrmPrintManifest";
+            Text = "Descargar documentos manifiesto";
             Load += FrmPrintManifest_Load;
             ResumeLayout(false);
             PerformLayout();

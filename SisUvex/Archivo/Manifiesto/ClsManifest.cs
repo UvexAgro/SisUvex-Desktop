@@ -793,7 +793,6 @@ namespace SisUvex.Archivo.Manifiesto
         public void BtnPrintManifestFrmAdd()
         {
             PrintManifest(_frmAdd.txbId.Text, _frmAdd.txbIdTemplate.Text);
-            //PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
         }
 
         public void BtnPrintManifestFrmCat()
@@ -801,7 +800,6 @@ namespace SisUvex.Archivo.Manifiesto
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
                 PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
-                //PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
             }
             else
                 SystemSounds.Exclamation.Play();

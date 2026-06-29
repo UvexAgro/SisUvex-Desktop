@@ -149,8 +149,6 @@
             txbIdTemplate = new TextBox();
             label21 = new Label();
             txbIdMarket = new TextBox();
-            chbPrintManifestPerField = new CheckBox();
-            chbExcelLayout = new CheckBox();
             label22 = new Label();
             txbThermometerContainer = new TextBox();
             btnEditTherFco = new Button();
@@ -165,7 +163,7 @@
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
-            btnPrintManifest.Location = new Point(638, 569);
+            btnPrintManifest.Location = new Point(582, 569);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 86;
@@ -1495,30 +1493,6 @@
             txbIdMarket.TextAlign = HorizontalAlignment.Center;
             txbIdMarket.TextChanged += txbIdMarket_TextChanged;
             // 
-            // chbPrintManifestPerField
-            // 
-            chbPrintManifestPerField.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            chbPrintManifestPerField.AutoSize = true;
-            chbPrintManifestPerField.Font = new Font("Microsoft Sans Serif", 9F);
-            chbPrintManifestPerField.Location = new Point(670, 587);
-            chbPrintManifestPerField.Name = "chbPrintManifestPerField";
-            chbPrintManifestPerField.Size = new Size(116, 19);
-            chbPrintManifestPerField.TabIndex = 88;
-            chbPrintManifestPerField.Text = "Man. por campo";
-            chbPrintManifestPerField.UseVisualStyleBackColor = true;
-            // 
-            // chbExcelLayout
-            // 
-            chbExcelLayout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            chbExcelLayout.AutoSize = true;
-            chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
-            chbExcelLayout.Location = new Point(670, 568);
-            chbExcelLayout.Name = "chbExcelLayout";
-            chbExcelLayout.Size = new Size(91, 19);
-            chbExcelLayout.TabIndex = 87;
-            chbExcelLayout.Text = "Excel layout";
-            chbExcelLayout.UseVisualStyleBackColor = true;
-            // 
             // label22
             // 
             label22.AutoSize = true;
@@ -1603,8 +1577,6 @@
             Controls.Add(btnEditTherFco);
             Controls.Add(txbThermometerContainer);
             Controls.Add(label22);
-            Controls.Add(chbExcelLayout);
-            Controls.Add(chbPrintManifestPerField);
             Controls.Add(txbIdMarket);
             Controls.Add(txbIdTemplate);
             Controls.Add(cboTemplate);
@@ -1851,8 +1823,6 @@
         public TextBox txbIdTemplate;
         private Label label21;
         public TextBox txbIdMarket;
-        public CheckBox chbPrintManifestPerField;
-        public CheckBox chbExcelLayout;
         private Label label22;
         public TextBox txbThermometerContainer;
         public Button button1;
