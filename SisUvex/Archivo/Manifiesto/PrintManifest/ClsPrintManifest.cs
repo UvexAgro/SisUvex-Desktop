@@ -1,4 +1,5 @@
-﻿using iText.Kernel.Pdf;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using iText.Kernel.Pdf;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Metods.ComboBoxes;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -79,7 +81,6 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
         }
         private void SelectTglConfManifest()
         {
-            MessageBox.Show("asdasd");
             frm.tglShowSize.Checked = confMan.printShowSize;
             frm.tglManifest.Checked = confMan.printManifest;
             frm.tglManifestPerFarm.Checked = confMan.printManifestPerFarm;
@@ -113,7 +114,86 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
         {
             finalManifestsFolderPath = Path.Combine(confMan.manifestFolderPath, "Manifiestos", disShortName, idManifest);
         }
-        private void PrintManifest(string idManifest, bool isManifestPerField, bool isExcelLayout)
+
+        private void SetPrintDocuments()
+        {
+            //idManifest = frm.mani //YA DEBE ESTA PUESTO AQUI
+            printShowSize = frm.tglShowSize.Checked;
+            printManifest = frm.tglManifest.Checked;
+            printManifestPerFarm = frm.tglManifestPerFarm.Checked;
+            printMaping = frm.tglMapping.Checked;
+            printExcelLayout = frm.tglExcelLayout.Checked;
+            printPackingList = frm.tglPrintPackingList.Checked;
+            finalManifestsFolderPath = frm.txbManifestFolderPath.Text;
+        }
+
+        public void BtnPrintDocuments(string idManifest)
+        {
+            SetPrintDocuments();
+
+            try
+            {
+                bool isPrint = false;
+
+                if (string.IsNullOrEmpty(idManifest) || string.IsNullOrEmpty(finalManifestsFolderPath))
+                {
+                    SystemSounds.Exclamation.Play();
+                    return;
+                }
+
+
+                //printShowSize //PENDIENTE
+
+                if (printManifest || printManifestPerFarm)
+                {
+                    // ClsPDFManifest pdfManifest = new ClsPDFManifest();
+                    ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
+
+                    if (!printManifestPerFarm)
+                        pdf.CreatePDFManifest(idManifest, finalManifestsFolderPath);
+                    else
+                        pdf.CreatePDFManifestTotalsPerLot(idManifest, finalManifestsFolderPath);
+
+                    isPrint = true;
+                }
+
+                if (printMaping)
+                {
+                    ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
+                    pdfMap.CreatePDFMaping(idManifest, finalManifestsFolderPath);
+
+                    isPrint = true;
+                }
+
+                if (printExcelLayout)
+                {
+                    ClsManifestExcelLayout exl = new ClsManifestExcelLayout();
+                    exl.CreateExcelLayout(idManifest, disShortName, finalManifestsFolderPath);
+
+                    isPrint = true;
+                }
+
+                if (printPackingList)
+                {
+                    ClsPDFPackingList pdfPacking = new ClsPDFPackingList();
+                    pdfPacking.CreatePDFPackingList(idManifest, finalManifestsFolderPath);
+
+                    isPrint = true;
+                }
+
+                if (isPrint)
+                    OpenManifestFolderPath(idManifest, finalManifestsFolderPath);
+                else
+                    SystemSounds.Exclamation.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /*
+        private void PrintManifest(string idManifest, string folderPath)
         {
             try
             {
@@ -128,10 +208,9 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
                     {
                         // ClsPDFManifest pdfManifest = new ClsPDFManifest();
                         ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
-                        pdf.desktopPath = conf.manifestFolderPath;
 
                         if (!isManifestPerField)
-                            pdf.CreatePDFManifest(idManifest);
+                            pdf.CreatePDFManifest(idManifest, folderPath);
                         else
                             pdf.CreatePDFManifestTotalsPerLot(idManifest);
 
@@ -180,14 +259,10 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
 
             }
         }
-
-        private void OpenManifestFolderPath(string idManifest)
+        */
+        private void OpenManifestFolderPath(string idManifest, string folderPath)
         {
-            string distributorShortName = ClsQuerysDB.GetData($"SELECT v_nameDistShort FROM Pack_Distributor WHERE id_distributor = (SELECT id_distributor FROM Pack_Manifest WHERE id_manifest = '{idManifest}')");
-
-            string manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
-
-            string path = Path.Combine(manifestFolderPath, "Manifiestos", distributorShortName, $"{idManifest}");
+            string path = Path.Combine(folderPath);
 
             DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
                 "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);

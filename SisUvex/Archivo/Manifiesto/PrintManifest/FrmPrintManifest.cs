@@ -34,7 +34,7 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
         }
         private void btnAccept_Click(object sender, EventArgs e)
         {
-
+            cls.BtnPrintDocuments(txbId.Text);
         }
 
         private void FrmPrintManifest_Load(object sender, EventArgs e)

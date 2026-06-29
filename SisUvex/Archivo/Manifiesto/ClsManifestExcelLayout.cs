@@ -15,7 +15,8 @@ namespace SisUvex.Archivo.Manifiesto
     {
         string? ManifestFolderPath;
         string? idManifest;
-        string? filePath;
+        string? distributor;
+        string? filePath = null;
         const string? layoutName = "Layout";
         public ClsManifestExcelLayout()
         {
@@ -36,49 +37,24 @@ namespace SisUvex.Archivo.Manifiesto
             return ClsQuerysDB.ExecuteParameterizedQuery("SELECT * FROM vw_PackOppyLayout WHERE BL = @IdManifest", new Dictionary<string, object> { { "@IdManifest", idManifest } });
         }
 
-        public void SetFilePath(string IdManifest)
+        public void SetFilePath(string IdManifest, string folderPath)
         {
             idManifest = IdManifest;
 
             if (string.IsNullOrEmpty(idManifest))
                 return;
 
-            ClsConfigManifest conf = new ClsConfigManifest();
-            conf.GetParameters();
-            ManifestFolderPath = conf.manifestFolderPath;
-
-            string distributor = ClsQuerysDB.GetStringExecuteParameterizedQuery("SELECT dis.v_nameDistShort FROM PACK_MANIFEST man JOIN Pack_Distributor dis ON dis.id_distributor = man.id_distributor WHERE man.id_manifest = @IdManifest", new Dictionary<string, object> { { "@IdManifest", idManifest } });
-
-            if (!string.IsNullOrEmpty(distributor))
-            {
-                ManifestFolderPath = Path.Combine(ManifestFolderPath, "Manifiestos", distributor, idManifest);
-
-                if (!Directory.Exists(ManifestFolderPath))
-                {
-                    Directory.CreateDirectory(ManifestFolderPath);
-                }
-
-                filePath = Path.Combine(ManifestFolderPath, $"{distributor} {layoutName} {IdManifest}.xlsx");
-            }
+            
         }
 
-        public bool CreateExcelLayout()
-        {
-            if (string.IsNullOrEmpty(idManifest))
-                return false;
-
-            return CreateExcelLayout(idManifest);
-        }
-
-
-        public bool CreateExcelLayout(string IdManifest)
+        public bool CreateExcelLayout(string IdManifest, string distributorShortName, string folderPath)
         {
             try
             {
                 idManifest = IdManifest;
-                // 1. Validar y obtener datos
-                if (string.IsNullOrEmpty(filePath))
-                    SetFilePath(idManifest);
+                distributor = distributorShortName;
+                ManifestFolderPath = folderPath;
+                filePath = Path.Combine(ManifestFolderPath, $"{distributor} {layoutName} {IdManifest}.xlsx");
 
                 DataTable dtLayout = GetDtLayout();
                 if (dtLayout == null || dtLayout.Rows.Count == 0)
