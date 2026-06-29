@@ -595,9 +595,15 @@ namespace SisUvex.Catalogos.Metods
             public const string TableName = "Pack_ManifestTemplates";
             public const string ColumnName = "Plantilla de manifiesto";
             public const string ColumnId = "idManifestTemplate";
+            public const string ColumnPrintShowSize = "Mostrar tamaño";
+            public const string ColumnPrintManifest = "Manifiesto";
+            public const string ColumnPrintManifestPerField = "Manifiesto por campo";
+            public const string ColumnPrintMaping = "Mapa de posiciones";
+            public const string ColumnPrintExcelLayout = "Excel layout";
+            public const string ColumnPrintPackingList = "Packing list";
             public const string Cbo = "CboManifestTemplate";
             public const string DgvCatalog = "DgvCatalogManifestTemplate";
-            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], c_active AS [{Column.active}], v_nameTemplate AS [{ColumnName}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], id_crop AS [{Crop.ColumnId}] FROM Pack_ManifestTemplates ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], c_active AS [{Column.active}], v_nameTemplate AS [{ColumnName}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], id_crop AS [{Crop.ColumnId}], c_printShowSize AS [{ColumnPrintShowSize}], c_printManifest AS [{ColumnPrintManifest}], c_printManifestPerField AS [{ColumnPrintManifestPerField}], c_printMaping AS [{ColumnPrintMaping}], c_printExcelLayout AS [{ColumnPrintExcelLayout}], c_printPackingList AS [{ColumnPrintPackingList}]  FROM Pack_ManifestTemplates ORDER BY [{Column.name}] ";
         }
 
         public static class Unit

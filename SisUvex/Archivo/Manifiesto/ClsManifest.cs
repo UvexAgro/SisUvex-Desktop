@@ -792,104 +792,29 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BtnPrintManifestFrmAdd()
         {
-            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.txbIdTemplate.Text);
+            //PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
         }
 
         public void BtnPrintManifestFrmCat()
         {
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
+                //PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
             }
             else
-            {
                 SystemSounds.Exclamation.Play();
-            }
         }
-
-        private void PrintManifest(string idManifest, bool isManifestPerField, bool isExcelLayout)
+        private void PrintManifest(string idManifest)
         {
-            try
-            {
-                if (!idManifest.IsNullOrEmpty())
-                {
-                    bool isPrint = false;
-
-                    ClsConfigManifest conf = new ClsConfigManifest();
-                    conf.GetParameters();
-
-                    if (conf.printManifest)
-                    {
-                        // ClsPDFManifest pdfManifest = new ClsPDFManifest();
-                        ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
-                        pdf.desktopPath = conf.manifestFolderPath;
-
-                        if (!isManifestPerField)
-                            pdf.CreatePDFManifest(idManifest);
-                        else
-                            pdf.CreatePDFManifestTotalsPerLot(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (isExcelLayout)
-                    {
-                        ClsManifestExcelLayout exl = new ClsManifestExcelLayout();
-                        exl.CreateExcelLayout(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (conf.printMaping)
-                    {
-                        ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
-                        pdfMap.desktopPath = conf.manifestFolderPath;
-                        pdfMap.CreatePDFMaping(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
-
-                    if (conf.printPackingList)
-                    {
-                        ClsPDFPackingList pdfPacking = new ClsPDFPackingList();
-                        pdfPacking.desktopPath = conf.manifestFolderPath;
-                        pdfPacking.CreatePDFPackingList(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (isPrint)
-                        OpenManifestFolderPath(idManifest);
-                }
-                else
-                {
-                    MessageBox.Show("Debe guardar el manifiesto antes de imprimirlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, null);
+            frmPrintManifest.ShowDialog();
         }
-
-        private void OpenManifestFolderPath(string idManifest)
+        private void PrintManifest(string idManifest, string? idTemplate)
         {
-            string distributorShortName = ClsQuerysDB.GetData($"SELECT v_nameDistShort FROM Pack_Distributor WHERE id_distributor = (SELECT id_distributor FROM Pack_Manifest WHERE id_manifest = '{idManifest}')");
-
-            string manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
-
-            string path = Path.Combine(manifestFolderPath, "Manifiestos", distributorShortName, $"{idManifest}");
-
-            DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
-                "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-                System.Diagnostics.Process.Start("explorer.exe", path);
-            }
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, idTemplate);
+            frmPrintManifest.ShowDialog();
         }
     }
 }

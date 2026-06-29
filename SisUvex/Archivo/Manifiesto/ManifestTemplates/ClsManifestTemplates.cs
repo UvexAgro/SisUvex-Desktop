@@ -42,6 +42,12 @@ internal class ClsManifestTemplates
         dgv.AddHideColumn(City.ColumnIdCrossPoint);
         dgv.AddHideColumn(City.ColumnIdDestiny);
         dgv.HideColumnsList();
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintShowSize);
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintManifest);
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintManifestPerField);
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintMaping);
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintExcelLayout);
+        ClsDGVCatalog.ConvertToCheckBoxColumn(dgvCatalog, ClsObject.ManifestTemplate.ColumnPrintPackingList);
     }
 
     private void WireCatalogFilterEvents()
@@ -135,6 +141,12 @@ internal class ClsManifestTemplates
         {
             _frmAdd.cboActive.SelectedIndex = 1;
             _frmAdd.txbId.Text = EManifestTemplate.GetNextId();
+            _frmAdd.tglShowSize.Checked = false;
+            _frmAdd.tglManifest.Checked = false;
+            _frmAdd.btnManifestPerFarm.Checked = false;
+            _frmAdd.tglMapping.Checked = false;
+            _frmAdd.tglExcelLayout.Checked = false;
+            _frmAdd.tglPrintPackingList.Checked = false;
         }
         else
         {
@@ -192,6 +204,13 @@ internal class ClsManifestTemplates
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, entity.IdMXAgencyTrade);
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, entity.IdCityCrossPoint);
         ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, entity.IdCityDestiny);
+
+        _frmAdd.tglShowSize.Checked = entity.printShowSize;
+        _frmAdd.tglManifest.Checked = entity.printManifest;
+        _frmAdd.btnManifestPerFarm.Checked = entity.printManifestPerFarm;
+        _frmAdd.tglMapping.Checked = entity.printMaping;
+        _frmAdd.tglExcelLayout.Checked = entity.printExcelLayout;
+        _frmAdd.tglPrintPackingList.Checked = entity.printPackingList;
     }
 
     private EManifestTemplate SetEntity()
@@ -210,6 +229,13 @@ internal class ClsManifestTemplates
         entity.IdMXAgencyTrade = _frmAdd.cboAgencyMX.ComboValueOrNull();
         entity.IdCityCrossPoint = _frmAdd.cboCityCrossPoint.ComboValueOrNull();
         entity.IdCityDestiny = _frmAdd.cboCityDestination.ComboValueOrNull();
+
+        entity.printShowSize = _frmAdd.tglShowSize.Checked;
+        entity.printManifest = _frmAdd.tglManifest.Checked;
+        entity.printManifestPerFarm = _frmAdd.btnManifestPerFarm.Checked;
+        entity.printMaping = _frmAdd.tglMapping.Checked;
+        entity.printExcelLayout = _frmAdd.tglExcelLayout.Checked;
+        entity.printPackingList = _frmAdd.tglPrintPackingList.Checked;
 
         return entity;
     }
