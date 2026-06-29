@@ -1698,6 +1698,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmManifestAdd";
             Text = "Añadir manifiesto";
+            FormClosing += FrmManifestAdd_FormClosing;
             Load += FrmManifestAdd_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).EndInit();
             ResumeLayout(false);

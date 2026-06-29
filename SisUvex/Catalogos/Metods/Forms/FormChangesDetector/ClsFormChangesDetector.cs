@@ -8,15 +8,9 @@ namespace SisUvex.Catalogos.Metods.Forms.FormChangesDetector
     internal class ClsFormChangesDetector
     {
         private readonly Form _form;
+        private readonly HashSet<Control> _subscribedControls = new();
 
-        /// <summary>
-        /// Indica si el formulario tiene cambios pendientes.
-        /// </summary>
         public bool HasChanges { get; private set; }
-
-        /// <summary>
-        /// Indica si el formulario ya fue guardado.
-        /// </summary>
         public bool Saved { get; private set; }
 
         public ClsFormChangesDetector(Form form)
@@ -24,131 +18,165 @@ namespace SisUvex.Catalogos.Metods.Forms.FormChangesDetector
             _form = form;
         }
 
-        /// <summary>
-        /// Aplica la detección de cambios a todos los controles del formulario.
-        /// Llamar una sola vez, después de cargar los datos.
-        /// </summary>
         public void ApplyDetectControlsChanges()
         {
-            ApplyDetectControlsChanges(_form);
-
-            // Reinicia el estado ya que cargar los datos puede disparar eventos.
+            ApplyDetectControlsChangesInternal(_form.Controls, onlyControls: null, exceptControls: null);
             ResetChanges();
         }
 
-        private void ApplyDetectControlsChanges(Control parent)
+        public void ApplyDetectControlsChangesOnly(params Control[] controls)
         {
-            foreach (Control control in parent.Controls)
+            ApplyDetectControlsChangesInternal(_form.Controls, onlyControls: controls.ToHashSet(), exceptControls: null);
+            ResetChanges();
+        }
+
+        public void ApplyDetectControlsChangesExcept(params Control[] controls)
+        {
+            ApplyDetectControlsChangesInternal(_form.Controls, onlyControls: null, exceptControls: controls.ToHashSet());
+            ResetChanges();
+        }
+
+        private void ApplyDetectControlsChangesInternal(
+            Control.ControlCollection controls,
+            HashSet<Control>? onlyControls,
+            HashSet<Control>? exceptControls)
+        {
+            foreach (Control control in controls)
             {
-                SubscribeControl(control);
+                bool apply =
+                    (onlyControls == null || onlyControls.Contains(control)) &&
+                    (exceptControls == null || !exceptControls.Contains(control));
+
+                if (apply)
+                    SubscribeControl(control);
 
                 if (control.HasChildren)
-                    ApplyDetectControlsChanges(control);
+                    ApplyDetectControlsChangesInternal(control.Controls, onlyControls, exceptControls);
             }
         }
 
         private void SubscribeControl(Control control)
         {
+            if (_subscribedControls.Contains(control))
+                return;
+
             switch (control)
             {
                 case TextBox txt:
-                    txt.TextChanged -= ControlChanged;
                     txt.TextChanged += ControlChanged;
                     break;
 
-                case ComboBox cbo:
-                    cbo.SelectedIndexChanged -= ControlChanged;
-                    cbo.SelectedIndexChanged += ControlChanged;
+                case RichTextBox rtxt:
+                    rtxt.TextChanged += ControlChanged;
                     break;
 
-                case CheckBox chk: //APLICA PARA TOGGLEBUTTON
-                    chk.CheckedChanged -= ControlChanged;
+                case MaskedTextBox mtxt:
+                    mtxt.TextChanged += ControlChanged;
+                    break;
+
+                case ComboBox cbo:
+                    cbo.SelectedIndexChanged += ControlChanged;
+                    cbo.TextChanged += ControlChanged;
+                    break;
+
+                case CheckBox chk:
                     chk.CheckedChanged += ControlChanged;
                     break;
 
                 case RadioButton rb:
-                    rb.CheckedChanged -= ControlChanged;
                     rb.CheckedChanged += ControlChanged;
                     break;
 
+                case CheckedListBox clb:
+                    clb.ItemCheck += CheckedListBoxChanged;
+                    break;
+
                 case DateTimePicker dtp:
-                    dtp.ValueChanged -= ControlChanged;
                     dtp.ValueChanged += ControlChanged;
                     break;
 
                 case NumericUpDown num:
-                    num.ValueChanged -= ControlChanged;
                     num.ValueChanged += ControlChanged;
                     break;
 
-                case DataGridView dgv:
-                    dgv.CellValueChanged -= DataGridViewChanged;
-                    dgv.RowsAdded -= DataGridViewRowsChanged;
-                    dgv.RowsRemoved -= DataGridViewRowsChanged;
+                case DomainUpDown domain:
+                    domain.SelectedItemChanged += ControlChanged;
+                    domain.TextChanged += ControlChanged;
+                    break;
 
+                case ListBox list:
+                    list.SelectedIndexChanged += ControlChanged;
+                    break;
+
+                case DataGridView dgv:
                     dgv.CellValueChanged += DataGridViewChanged;
                     dgv.RowsAdded += DataGridViewRowsChanged;
                     dgv.RowsRemoved += DataGridViewRowsChanged;
+                    dgv.UserDeletedRow += DataGridViewRowsChanged;
+                    dgv.CurrentCellDirtyStateChanged += DataGridViewDirtyChanged;
                     break;
 
-                    // Agrega aquí tus controles personalizados
-                    // case ToggleButton tgl:
-                    //     tgl.CheckedChanged -= ControlChanged;
-                    //     tgl.CheckedChanged += ControlChanged;
-                    //     break;
+                case FlowLayoutPanel:
+                    break;
+
+                case Button:
+                    break;
             }
+
+            _subscribedControls.Add(control);
         }
 
         private void ControlChanged(object? sender, EventArgs e)
         {
-            HasChanges = true;
-            Saved = false;
+            MarkChanged();
+        }
+
+        private void CheckedListBoxChanged(object? sender, ItemCheckEventArgs e)
+        {
+            MarkChanged();
         }
 
         private void DataGridViewChanged(object? sender, DataGridViewCellEventArgs e)
         {
-            HasChanges = true;
-            Saved = false;
+            MarkChanged();
         }
 
         private void DataGridViewRowsChanged(object? sender, EventArgs e)
+        {
+            MarkChanged();
+        }
+
+        private void DataGridViewDirtyChanged(object? sender, EventArgs e)
+        {
+            if (sender is DataGridView dgv && dgv.IsCurrentCellDirty)
+                dgv.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void MarkChanged()
         {
             HasChanges = true;
             Saved = false;
         }
 
-        /// <summary>
-        /// Reinicia el estado del detector.
-        /// </summary>
+        public bool HasPendingChanges()
+        {
+            return HasChanges;
+        }
+
         public void ResetChanges()
         {
             HasChanges = false;
             Saved = false;
         }
 
-        /// <summary>
-        /// Marca el formulario como guardado.
-        /// </summary>
         public void MarkSaved()
         {
             HasChanges = false;
             Saved = true;
         }
 
-        /// <summary>
-        /// Devuelve si existen cambios pendientes.
-        /// </summary>
-        public bool HasPendingChanges()
-        {
-            return HasChanges;
-        }
-
-        /// <summary>
-        /// Si existen cambios pregunta al usuario si desea continuar.
-        /// Devuelve true si puede continuar.
-        /// </summary>
         public bool AskIfHasChanges(
-            string message = "Hay cambios sin guardar.\n\n¿Deseas continuar?",
+            string message = "Hay cambios sin guardar.\n\n¿Deseas continuar sin guardar?",
             string title = "Cambios sin guardar")
         {
             if (!HasChanges)
