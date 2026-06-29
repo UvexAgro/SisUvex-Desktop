@@ -338,6 +338,7 @@ namespace SisUvex.Archivo.Manifiesto
         {
             clsPallets.dataGridView = _frmAdd.dgvPalletList;
             clsPallets.AddColumnsToDGVPalletList();
+            clsPallets.BindingTotalsDgv(_frmAdd.dgvTotal);
             AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
 
             CargarComboBoxes();

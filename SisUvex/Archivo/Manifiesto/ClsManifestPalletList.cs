@@ -324,5 +324,71 @@ namespace SisUvex.Archivo.Manifiesto
             }
             return true;
         }
+
+        public void BindingTotalsDgv(DataGridView dgvTotal)
+        {
+            dgvTotal.Columns.Add("Cajas", "Cajas");
+            dgvTotal.Columns.Add("Pos", "Pos.");
+            dgvTotal.Columns.Add("Contenedor", "Contenedor");
+            dgvTotal.Columns.Add("Lbs", "Libras");
+            dgvTotal.Columns.Add("Tamaño", "Tamaño");
+            dgvTotal.Columns.Add("Presentación", "Presentación");
+            dgvTotal.Columns.Add("Variedad", "Variedad");
+            dgvTotal.Columns.Add("Leyenda", "Leyenda");
+            dgvTotal.Columns.Add("Distribuidor", "Distribuidor");
+
+            dgvTotal.Columns["Cajas"].DefaultCellStyle.Font = new Font(dgvTotal.DefaultCellStyle.Font, FontStyle.Bold);
+            dgvTotal.Columns["Pos"].DefaultCellStyle.Font = new Font(dgvTotal.DefaultCellStyle.Font, FontStyle.Bold);
+            dgvTotal.Columns["Cajas"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvTotal.Columns["Pos"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            dataGridView.RowsAdded   += (s, e) => RefreshTotals(dgvTotal);
+            dataGridView.RowsRemoved += (s, e) => RefreshTotals(dgvTotal);
+
+            RefreshTotals(dgvTotal);
+        }
+
+        private void RefreshTotals(DataGridView dgvTotal)
+        {
+            dgvTotal.Rows.Clear();
+
+            if (dataGridView.Rows.Count == 0)
+                return;
+
+            var groups = dataGridView.Rows
+                .Cast<DataGridViewRow>()
+                .GroupBy(r => new
+                {
+                    Contenedor   = r.Cells["Contenedor"].Value?.ToString()   ?? "",
+                    Lbs          = r.Cells["Lbs"].Value?.ToString()          ?? "",
+                    Tamaño       = r.Cells["Tamaño"].Value?.ToString()       ?? "",
+                    Presentacion = r.Cells["Presentación"].Value?.ToString() ?? "",
+                    Variedad     = r.Cells["Variedad"].Value?.ToString()     ?? "",
+                    Leyenda      = r.Cells["Leyenda"].Value?.ToString()      ?? "",
+                    Distribuidor = r.Cells["Distribuidor"].Value?.ToString() ?? ""
+                });
+
+            foreach (var group in groups)
+            {
+                int sumCajas = group.Sum(r =>
+                    int.TryParse(r.Cells["Cajas"].Value?.ToString(), out int c) ? c : 0);
+
+                int countPos = group
+                    .Select(r => r.Cells[columnPosition].Value?.ToString())
+                    .Distinct()
+                    .Count();
+
+                dgvTotal.Rows.Add(
+                    sumCajas,
+                    countPos,
+                    group.Key.Contenedor,
+                    group.Key.Lbs,
+                    group.Key.Tamaño,
+                    group.Key.Presentacion,
+                    group.Key.Variedad,
+                    group.Key.Leyenda,
+                    group.Key.Distribuidor);
+            }
+        }
     }
 }

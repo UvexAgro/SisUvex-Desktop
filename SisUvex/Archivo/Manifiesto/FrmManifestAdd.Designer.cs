@@ -31,6 +31,8 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmManifestAdd));
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             btnPrintManifest = new Button();
             btnAccept = new Button();
             btnCancel = new Button();
@@ -156,14 +158,16 @@
             txbFactura = new TextBox();
             label23 = new Label();
             label24 = new Label();
+            dgvTotal = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTotal).BeginInit();
             SuspendLayout();
             // 
             // btnPrintManifest
             // 
             btnPrintManifest.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrintManifest.Image = Properties.Resources.imprimirIcon16;
-            btnPrintManifest.Location = new Point(582, 569);
+            btnPrintManifest.Location = new Point(571, 610);
             btnPrintManifest.Name = "btnPrintManifest";
             btnPrintManifest.Size = new Size(26, 25);
             btnPrintManifest.TabIndex = 86;
@@ -173,7 +177,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(446, 569);
+            btnAccept.Location = new Point(435, 610);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 84;
@@ -184,7 +188,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(512, 569);
+            btnCancel.Location = new Point(501, 610);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 85;
@@ -247,7 +251,7 @@
             // txbPalletPosition
             // 
             txbPalletPosition.Font = new Font("Microsoft Sans Serif", 9F);
-            txbPalletPosition.Location = new Point(496, 29);
+            txbPalletPosition.Location = new Point(485, 29);
             txbPalletPosition.MaxLength = 2;
             txbPalletPosition.Name = "txbPalletPosition";
             txbPalletPosition.Size = new Size(26, 21);
@@ -258,7 +262,7 @@
             // 
             lblPosicionPal.AutoSize = true;
             lblPosicionPal.Font = new Font("Microsoft Sans Serif", 8.25F);
-            lblPosicionPal.Location = new Point(494, 16);
+            lblPosicionPal.Location = new Point(483, 16);
             lblPosicionPal.Name = "lblPosicionPal";
             lblPosicionPal.Size = new Size(28, 13);
             lblPosicionPal.TabIndex = 348;
@@ -285,7 +289,7 @@
             dgvPalletList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvPalletList.EnableHeadersVisualStyles = false;
             dgvPalletList.ImeMode = ImeMode.NoControl;
-            dgvPalletList.Location = new Point(446, 55);
+            dgvPalletList.Location = new Point(435, 55);
             dgvPalletList.MultiSelect = false;
             dgvPalletList.Name = "dgvPalletList";
             dgvPalletList.ReadOnly = true;
@@ -300,14 +304,14 @@
             dgvPalletList.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPalletList.RowHeadersVisible = false;
             dgvPalletList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPalletList.Size = new Size(347, 508);
+            dgvPalletList.Size = new Size(406, 476);
             dgvPalletList.TabIndex = 83;
             // 
             // chbRejected
             // 
             chbRejected.AutoSize = true;
             chbRejected.Font = new Font("Microsoft Sans Serif", 9F);
-            chbRejected.Location = new Point(706, 30);
+            chbRejected.Location = new Point(695, 30);
             chbRejected.Name = "chbRejected";
             chbRejected.Size = new Size(89, 19);
             chbRejected.TabIndex = 81;
@@ -392,7 +396,7 @@
             btnRemovePallet.Font = new Font("Microsoft Sans Serif", 8.25F);
             btnRemovePallet.Image = Properties.Resources.basuraIcon16;
             btnRemovePallet.ImageAlign = ContentAlignment.MiddleRight;
-            btnRemovePallet.Location = new Point(600, 28);
+            btnRemovePallet.Location = new Point(589, 28);
             btnRemovePallet.Name = "btnRemovePallet";
             btnRemovePallet.Size = new Size(23, 23);
             btnRemovePallet.TabIndex = 80;
@@ -405,7 +409,7 @@
             btnAddPallet.Font = new Font("Microsoft Sans Serif", 9F);
             btnAddPallet.Image = Properties.Resources.mas_16;
             btnAddPallet.ImageAlign = ContentAlignment.BottomRight;
-            btnAddPallet.Location = new Point(523, 28);
+            btnAddPallet.Location = new Point(512, 28);
             btnAddPallet.Name = "btnAddPallet";
             btnAddPallet.Size = new Size(23, 23);
             btnAddPallet.TabIndex = 77;
@@ -416,7 +420,7 @@
             // txbIdPallet
             // 
             txbIdPallet.Font = new Font("Microsoft Sans Serif", 9F);
-            txbIdPallet.Location = new Point(448, 29);
+            txbIdPallet.Location = new Point(437, 29);
             txbIdPallet.MaxLength = 5;
             txbIdPallet.Name = "txbIdPallet";
             txbIdPallet.Size = new Size(47, 21);
@@ -1167,7 +1171,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Microsoft Sans Serif", 8.25F);
-            label15.Location = new Point(446, 16);
+            label15.Location = new Point(435, 16);
             label15.Name = "label15";
             label15.Size = new Size(38, 13);
             label15.TabIndex = 335;
@@ -1210,7 +1214,7 @@
             btnConfManifest.Font = new Font("Microsoft Sans Serif", 9F);
             btnConfManifest.Image = (Image)resources.GetObject("btnConfManifest.Image");
             btnConfManifest.ImageAlign = ContentAlignment.BottomRight;
-            btnConfManifest.Location = new Point(771, 2);
+            btnConfManifest.Location = new Point(817, 2);
             btnConfManifest.Name = "btnConfManifest";
             btnConfManifest.Size = new Size(24, 24);
             btnConfManifest.TabIndex = 82;
@@ -1419,7 +1423,7 @@
             btnMovePalletDown.Font = new Font("Microsoft Sans Serif", 9F);
             btnMovePalletDown.Image = Properties.Resources.downIcon16;
             btnMovePalletDown.ImageAlign = ContentAlignment.TopLeft;
-            btnMovePalletDown.Location = new Point(577, 28);
+            btnMovePalletDown.Location = new Point(566, 28);
             btnMovePalletDown.Name = "btnMovePalletDown";
             btnMovePalletDown.Size = new Size(23, 23);
             btnMovePalletDown.TabIndex = 79;
@@ -1432,7 +1436,7 @@
             btnMovePalletUp.Font = new Font("Microsoft Sans Serif", 9F);
             btnMovePalletUp.Image = Properties.Resources.upIcon16;
             btnMovePalletUp.ImageAlign = ContentAlignment.TopLeft;
-            btnMovePalletUp.Location = new Point(555, 28);
+            btnMovePalletUp.Location = new Point(544, 28);
             btnMovePalletUp.Name = "btnMovePalletUp";
             btnMovePalletUp.Size = new Size(23, 23);
             btnMovePalletUp.TabIndex = 78;
@@ -1564,12 +1568,49 @@
             label24.Text = "Folio Factura:";
             label24.TextAlign = ContentAlignment.TopRight;
             // 
+            // dgvTotal
+            // 
+            dgvTotal.AllowUserToAddRows = false;
+            dgvTotal.AllowUserToDeleteRows = false;
+            dgvTotal.AllowUserToResizeRows = false;
+            dgvTotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvTotal.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+            dgvTotal.BackgroundColor = SystemColors.ControlLightLight;
+            dgvTotal.BorderStyle = BorderStyle.Fixed3D;
+            dgvTotal.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvTotal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.GradientInactiveCaption;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvTotal.DefaultCellStyle = dataGridViewCellStyle4;
+            dgvTotal.EnableHeadersVisualStyles = false;
+            dgvTotal.ImeMode = ImeMode.NoControl;
+            dgvTotal.Location = new Point(435, 534);
+            dgvTotal.MultiSelect = false;
+            dgvTotal.Name = "dgvTotal";
+            dgvTotal.ReadOnly = true;
+            dgvTotal.RowHeadersVisible = false;
+            dgvTotal.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgvTotal.Size = new Size(406, 74);
+            dgvTotal.TabIndex = 400;
+            // 
             // FrmManifestAdd
             // 
             AutoScaleMode = AutoScaleMode.None;
             AutoScroll = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(797, 613);
+            ClientSize = new Size(845, 637);
             Controls.Add(txbFolioFiscalFactura);
             Controls.Add(txbFactura);
             Controls.Add(label23);
@@ -1605,6 +1646,7 @@
             Controls.Add(txbPalletPosition);
             Controls.Add(lblPosicionPal);
             Controls.Add(txbTermoPosition);
+            Controls.Add(dgvTotal);
             Controls.Add(dgvPalletList);
             Controls.Add(chbRejected);
             Controls.Add(txbNameOperator);
@@ -1701,6 +1743,7 @@
             FormClosing += FrmManifestAdd_FormClosing;
             Load += FrmManifestAdd_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPalletList).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTotal).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1717,6 +1760,7 @@
         public TextBox txbPalletPosition;
         private Label lblPosicionPal;
         public DataGridView dgvPalletList;
+        public DataGridView dgvTotal;
         public CheckBox chbRejected;
         public TextBox txbNameOperator;
         private Label label7;
