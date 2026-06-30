@@ -346,6 +346,7 @@ namespace SisUvex.Archivo.Manifiesto
             dataGridView.RowsRemoved += (s, e) => RefreshTotals(dgvTotal);
 
             RefreshTotals(dgvTotal);
+
         }
 
         private void RefreshTotals(DataGridView dgvTotal)
