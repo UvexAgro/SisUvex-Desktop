@@ -14,6 +14,19 @@ namespace SisUvex.Configuracion
         public static string PrintPallet { get; set; }
         public static string PrintCode { get; set; }
 
+        // ── Almacenamiento persistente entre actualizaciones ──────────────────
+        // Archivo fijo en AppData\Roaming\SisUvex\ — no depende de la versión.
+        private static readonly string AppDataFolder =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SisUvex");
+        private static readonly string PrintersConfigFile =
+            Path.Combine(AppDataFolder, "printers_config.txt");
+
+        private const string KeyDocuments = "PrinterDocuments";
+        private const string KeyPti       = "PrinterPti";
+        private const string KeyPallet    = "PrinterPallet";
+        private const string KeyCode      = "PrinterCode";
+        // ─────────────────────────────────────────────────────────────────────
+
         public ClsConfPrinter()
         {
         }
@@ -28,90 +41,151 @@ namespace SisUvex.Configuracion
 
         public void Guardar()
         {
-            Properties.Settings.Default.PrinterDocuments = PrinDocuments;
-            Properties.Settings.Default.PrinterPti = PrintTags;
-            Properties.Settings.Default.PrinterPallet = PrintPallet;
-            Properties.Settings.Default.PrinterCode = PrintCode;
-            Properties.Settings.Default.Save();
+            SetPrinterDocumentsName(PrinDocuments);
+            SetPrinterPtiName(PrintTags);
+            SetPrinterPalletName(PrintPallet);
+            SetPrinterCodeName(PrintCode);
         }
+
+        // ── Helpers de archivo persistente ────────────────────────────────────
+
+        /// <summary>
+        /// Lee el archivo printers_config.txt y devuelve un diccionario clave=valor.
+        /// Si no existe, intenta migrar los valores desde Properties.Settings.
+        /// </summary>
+        private static Dictionary<string, string> LoadConfig()
+        {
+            var config = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                [KeyDocuments] = string.Empty,
+                [KeyPti]       = string.Empty,
+                [KeyPallet]    = string.Empty,
+                [KeyCode]      = string.Empty,
+            };
+
+            if (File.Exists(PrintersConfigFile))
+            {
+                foreach (string line in File.ReadAllLines(PrintersConfigFile))
+                {
+                    int sep = line.IndexOf('=');
+                    if (sep > 0)
+                    {
+                        string key   = line[..sep].Trim();
+                        string value = line[(sep + 1)..].Trim();
+                        if (config.ContainsKey(key))
+                            config[key] = value;
+                    }
+                }
+            }
+            else
+            {
+                // Primera vez: migrar desde Properties.Settings
+                config[KeyDocuments] = Properties.Settings.Default.PrinterDocuments ?? string.Empty;
+                config[KeyPti]       = Properties.Settings.Default.PrinterPti       ?? string.Empty;
+                config[KeyPallet]    = Properties.Settings.Default.PrinterPallet     ?? string.Empty;
+                config[KeyCode]      = Properties.Settings.Default.PrinterCode       ?? string.Empty;
+                SaveConfig(config);
+            }
+
+            return config;
+        }
+
+        private static void SaveConfig(Dictionary<string, string> config)
+        {
+            try
+            {
+                Directory.CreateDirectory(AppDataFolder);
+                File.WriteAllLines(PrintersConfigFile,
+                    config.Select(kv => $"{kv.Key}={kv.Value}"));
+            }
+            catch { }
+
+            // Mantener Properties.Settings sincronizado (compatibilidad)
+            try
+            {
+                Properties.Settings.Default.PrinterDocuments = config[KeyDocuments];
+                Properties.Settings.Default.PrinterPti       = config[KeyPti];
+                Properties.Settings.Default.PrinterPallet    = config[KeyPallet];
+                Properties.Settings.Default.PrinterCode      = config[KeyCode];
+                Properties.Settings.Default.Save();
+            }
+            catch { }
+        }
+
+        private static string ReadValue(string key)
+        {
+            var config = LoadConfig();
+            return config.TryGetValue(key, out string? val) ? val : string.Empty;
+        }
+
+        private static void WriteValue(string key, string value)
+        {
+            var config = LoadConfig();
+            config[key] = value;
+            SaveConfig(config);
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
 
         public static bool ValidatePrinterName(string? printerName)
         {
             if (string.IsNullOrEmpty(printerName))
-            {
                 return false;
-            }
 
-            // Verifica si la impresora está instalada
             foreach (string installedPrinter in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {
                 if (installedPrinter.Equals(printerName, StringComparison.OrdinalIgnoreCase))
-                {
                     return true;
-                }
             }
             return false;
         }
 
         public static void SetPrinterDocumentsName(string? printerName)
         {
-            if (!ValidatePrinterName(printerName))
-                printerName = string.Empty;
-
-            Properties.Settings.Default.PrinterDocuments = printerName ;
-            Properties.Settings.Default.Save();
+            if (!ValidatePrinterName(printerName)) printerName = string.Empty;
+            WriteValue(KeyDocuments, printerName!);
         }
 
         public static void SetPrinterPtiName(string? printerName)
         {
-            if (!ValidatePrinterName(printerName))
-                printerName = string.Empty;
-            Properties.Settings.Default.PrinterPti = printerName;
-            Properties.Settings.Default.Save();
+            if (!ValidatePrinterName(printerName)) printerName = string.Empty;
+            WriteValue(KeyPti, printerName!);
         }
 
         public static void SetPrinterPalletName(string? printerName)
         {
-            if (!ValidatePrinterName(printerName))
-                printerName = string.Empty;
-            Properties.Settings.Default.PrinterPallet = printerName;
-            Properties.Settings.Default.Save();
+            if (!ValidatePrinterName(printerName)) printerName = string.Empty;
+            WriteValue(KeyPallet, printerName!);
         }
 
         public static void SetPrinterCodeName(string? printerName)
         {
-            if (!ValidatePrinterName(printerName))
-                printerName = string.Empty;
-            Properties.Settings.Default.PrinterCode = printerName;
-            Properties.Settings.Default.Save();
+            if (!ValidatePrinterName(printerName)) printerName = string.Empty;
+            WriteValue(KeyCode, printerName!);
         }
 
         public static string GetPrinterDocumentsName()
         {
-            if (!ValidatePrinterName(Properties.Settings.Default.PrinterDocuments))
-                return string.Empty;
-            return Properties.Settings.Default.PrinterDocuments;
+            string name = ReadValue(KeyDocuments);
+            return ValidatePrinterName(name) ? name : string.Empty;
         }
 
         public static string GetPrinterPtiName()
         {
-            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPti))
-                return string.Empty;
-            return Properties.Settings.Default.PrinterPti;
+            string name = ReadValue(KeyPti);
+            return ValidatePrinterName(name) ? name : string.Empty;
         }
 
         public static string GetPrinterPalletName()
         {
-            if (!ValidatePrinterName(Properties.Settings.Default.PrinterPallet))
-                return string.Empty;
-            return Properties.Settings.Default.PrinterPallet;
+            string name = ReadValue(KeyPallet);
+            return ValidatePrinterName(name) ? name : string.Empty;
         }
 
         public static string GetPrinterCodeName()
         {
-            if (!ValidatePrinterName(Properties.Settings.Default.PrinterCode))
-                return string.Empty;
-            return Properties.Settings.Default.PrinterCode;
+            string name = ReadValue(KeyCode);
+            return ValidatePrinterName(name) ? name : string.Empty;
         }
 
         public static string GetPrinterOrientation(string printerName)
