@@ -25,26 +25,71 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
         public string? transportTransportType { get; set; }
         public string? manifestFolderPath { get; set; }
 
+        // Archivo fijo en AppData\Roaming\SisUvex\ — no se borra al actualizar la app.
+        private static readonly string AppDataFolder =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SisUvex");
+        private static readonly string ManifestPathFile =
+            Path.Combine(AppDataFolder, "manifest_folder_path.txt");
+
         public ClsConfigManifest()
         {
-            if (string.IsNullOrEmpty(Properties.Settings.Default.ManifestsFolderPath))
+            manifestFolderPath = LoadManifestFolderPath();
+        }
+
+        /// <summary>
+        /// Lee la ruta guardada. Orden de prioridad:
+        ///   1. Archivo en AppData\Roaming\SisUvex\ (persiste entre actualizaciones).
+        ///   2. Properties.Settings (versión anterior antes de migrar).
+        ///   3. Escritorio como valor por defecto.
+        /// </summary>
+        private string LoadManifestFolderPath()
+        {
+            // 1. Archivo persistente
+            if (File.Exists(ManifestPathFile))
             {
-                // Obtener la ruta del escritorio
-                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                Properties.Settings.Default.ManifestsFolderPath = desktopPath;
-                Properties.Settings.Default.Save();
+                string saved = File.ReadAllText(ManifestPathFile).Trim();
+                if (!string.IsNullOrEmpty(saved))
+                    return saved;
             }
 
-            manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
+            // 2. Migrar desde Properties.Settings si tiene algo guardado
+            string settingsPath = Properties.Settings.Default.ManifestsFolderPath;
+            if (!string.IsNullOrEmpty(settingsPath))
+            {
+                PersistManifestFolderPath(settingsPath);
+                return settingsPath;
+            }
+
+            // 3. Valor por defecto: escritorio
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            PersistManifestFolderPath(desktop);
+            return desktop;
+        }
+
+        /// <summary>
+        /// Guarda la ruta en el archivo persistente de AppData y en Properties.Settings.
+        /// </summary>
+        private static void PersistManifestFolderPath(string path)
+        {
+            try
+            {
+                Directory.CreateDirectory(AppDataFolder);
+                File.WriteAllText(ManifestPathFile, path);
+            }
+            catch { }
+
+            try
+            {
+                Properties.Settings.Default.ManifestsFolderPath = path;
+                Properties.Settings.Default.Save();
+            }
+            catch { }
         }
 
         public void SetManifestPath(string path)
         {
             if (Directory.Exists(path))
-            {
-                Properties.Settings.Default.ManifestsFolderPath = path;
-                Properties.Settings.Default.Save();
-            }
+                PersistManifestFolderPath(path);
         }
 
         public void GetParameters()
