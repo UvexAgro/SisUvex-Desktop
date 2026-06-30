@@ -18,9 +18,11 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
         public bool printManifest { get; set; }
         public bool printMaping { get; set; }
         public bool printPackingList { get; set; }
+        public bool printManifestPerFarm { get; set; }
+        public bool printShowSize { get; set; }
+        public bool printExcelLayout { get; set; }
         public string? transportVehicle { get; set; }
         public string? transportTransportType { get; set; }
-
         public string? manifestFolderPath { get; set; }
 
         public ClsConfigManifest()
@@ -61,6 +63,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                 printManifest = dr["c_printManifest"].ToString() == "1";
                 printMaping = dr["c_printMaping"].ToString() == "1";
                 printPackingList = dr["c_printPackingList"].ToString() == "1";
+                printManifestPerFarm = dr["c_printManifestPerField"].ToString() == "1";
+                printShowSize = dr["c_printShowSize"].ToString() == "1";
+                printExcelLayout = dr["c_printExcelLayout"].ToString() == "1";
                 transportVehicle = dr["v_transportVehicle"].ToString();
                 transportTransportType = dr["v_transportType"].ToString();
             }
@@ -81,6 +86,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                     { "@printManifest", printManifest ? "1" : "0" },
                     { "@printMaping", printMaping ? "1" : "0" },
                     { "@printPackingList", printPackingList ? "1" : "0" },
+                    { "@manifestPerField", printManifestPerFarm ? "1" : "0" },
+                    { "@showSize", printShowSize ? "1" : "0" },
+                    { "@excelLayout", printExcelLayout ? "1" : "0" },
                     { "@transportVehicle", transportVehicle ?? (object)DBNull.Value },
                     { "@transportTransportType", transportTransportType ?? (object)DBNull.Value }
                 };
@@ -94,7 +102,10 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                  c_temperatureUnit, 
                                  c_printManifest, 
                                  c_printMaping, 
-                                 c_printPackingList, 
+                                 c_printPackingList,
+                                 c_printManifestPerField,
+                                 c_printShowSize,
+                                 c_printExcelLayout,
                                  v_transportVehicle, 
                                  v_transportType) 
                                  VALUES (
@@ -104,7 +115,10 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                  @temperatureUnit, 
                                  @printManifest, 
                                  @printMaping, 
-                                 @printPackingList, 
+                                 @printPackingList,
+                                 @manifestPerField, 
+                                 @showSize, 
+                                 @excelLayout, 
                                  @transportVehicle, 
                                  @transportTransportType)";
                 
@@ -120,6 +134,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                 c_printManifest = @printManifest, 
                                 c_printMaping = @printMaping, 
                                 c_printPackingList = @printPackingList, 
+                                c_printManifestPerField = @manifestPerField, 
+                                c_printShowSize = @showSize, 
+                                c_printExcelLayout = @excelLayout, 
                                 v_transportVehicle = @transportVehicle, 
                                 v_transportType = @transportTransportType";
 

@@ -53,13 +53,16 @@
             btnManifestFolderPath = new Button();
             txbIdMarket = new TextBox();
             cboMarket = new ComboBox();
+            chbShowSize = new CheckBox();
+            chbPrintManifestPerFarm = new CheckBox();
+            chbExcelLayout = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)nudTemperature).BeginInit();
             SuspendLayout();
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(124, 433);
+            btnAccept.Location = new Point(124, 488);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 395;
@@ -70,7 +73,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(194, 433);
+            btnCancel.Location = new Point(194, 488);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 394;
@@ -113,7 +116,7 @@
             // 
             chbPrintMaping.AutoSize = true;
             chbPrintMaping.Font = new Font("Microsoft Sans Serif", 9F);
-            chbPrintMaping.Location = new Point(15, 327);
+            chbPrintMaping.Location = new Point(13, 361);
             chbPrintMaping.Name = "chbPrintMaping";
             chbPrintMaping.Size = new Size(137, 19);
             chbPrintMaping.TabIndex = 389;
@@ -124,7 +127,7 @@
             // 
             chbPrintManifest.AutoSize = true;
             chbPrintManifest.Font = new Font("Microsoft Sans Serif", 9F);
-            chbPrintManifest.Location = new Point(15, 310);
+            chbPrintManifest.Location = new Point(13, 327);
             chbPrintManifest.Name = "chbPrintManifest";
             chbPrintManifest.Size = new Size(83, 19);
             chbPrintManifest.TabIndex = 388;
@@ -230,7 +233,7 @@
             // 
             chbPrintPackingList.AutoSize = true;
             chbPrintPackingList.Font = new Font("Microsoft Sans Serif", 9F);
-            chbPrintPackingList.Location = new Point(15, 344);
+            chbPrintPackingList.Location = new Point(13, 395);
             chbPrintPackingList.Name = "chbPrintPackingList";
             chbPrintPackingList.Size = new Size(88, 19);
             chbPrintPackingList.TabIndex = 390;
@@ -259,7 +262,7 @@
             // 
             // txbManifestFolderPath
             // 
-            txbManifestFolderPath.Location = new Point(13, 391);
+            txbManifestFolderPath.Location = new Point(13, 446);
             txbManifestFolderPath.Name = "txbManifestFolderPath";
             txbManifestFolderPath.Size = new Size(214, 23);
             txbManifestFolderPath.TabIndex = 398;
@@ -268,7 +271,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft Sans Serif", 9F);
-            label4.Location = new Point(11, 375);
+            label4.Location = new Point(11, 431);
             label4.Name = "label4";
             label4.Size = new Size(146, 15);
             label4.TabIndex = 399;
@@ -277,9 +280,8 @@
             // 
             // btnManifestFolderPath
             // 
-            btnManifestFolderPath.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnManifestFolderPath.Image = Properties.Resources.fileIcon16;
-            btnManifestFolderPath.Location = new Point(233, 390);
+            btnManifestFolderPath.Location = new Point(233, 445);
             btnManifestFolderPath.Name = "btnManifestFolderPath";
             btnManifestFolderPath.Size = new Size(26, 26);
             btnManifestFolderPath.TabIndex = 400;
@@ -306,11 +308,47 @@
             cboMarket.Size = new Size(213, 21);
             cboMarket.TabIndex = 401;
             // 
+            // chbShowSize
+            // 
+            chbShowSize.AutoSize = true;
+            chbShowSize.Font = new Font("Microsoft Sans Serif", 9F);
+            chbShowSize.Location = new Point(13, 310);
+            chbShowSize.Name = "chbShowSize";
+            chbShowSize.Size = new Size(113, 19);
+            chbShowSize.TabIndex = 404;
+            chbShowSize.Text = "Mostrar tamaño";
+            chbShowSize.UseVisualStyleBackColor = true;
+            // 
+            // chbPrintManifestPerFarm
+            // 
+            chbPrintManifestPerFarm.AutoSize = true;
+            chbPrintManifestPerFarm.Font = new Font("Microsoft Sans Serif", 9F);
+            chbPrintManifestPerFarm.Location = new Point(13, 344);
+            chbPrintManifestPerFarm.Name = "chbPrintManifestPerFarm";
+            chbPrintManifestPerFarm.Size = new Size(145, 19);
+            chbPrintManifestPerFarm.TabIndex = 405;
+            chbPrintManifestPerFarm.Text = "Manifiesto por campo";
+            chbPrintManifestPerFarm.UseVisualStyleBackColor = true;
+            // 
+            // chbExcelLayout
+            // 
+            chbExcelLayout.AutoSize = true;
+            chbExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
+            chbExcelLayout.Location = new Point(13, 378);
+            chbExcelLayout.Name = "chbExcelLayout";
+            chbExcelLayout.Size = new Size(91, 19);
+            chbExcelLayout.TabIndex = 406;
+            chbExcelLayout.Text = "Excel layout";
+            chbExcelLayout.UseVisualStyleBackColor = true;
+            // 
             // FrmConfManifest
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(272, 470);
+            ClientSize = new Size(272, 525);
+            Controls.Add(chbExcelLayout);
+            Controls.Add(chbPrintManifestPerFarm);
+            Controls.Add(chbShowSize);
             Controls.Add(txbIdMarket);
             Controls.Add(cboMarket);
             Controls.Add(btnManifestFolderPath);
@@ -373,5 +411,8 @@
         private Button btnManifestFolderPath;
         public TextBox txbIdMarket;
         public ComboBox cboMarket;
+        public CheckBox chbShowSize;
+        public CheckBox chbPrintManifestPerFarm;
+        public CheckBox chbExcelLayout;
     }
 }

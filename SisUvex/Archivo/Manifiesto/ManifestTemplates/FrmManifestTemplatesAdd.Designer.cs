@@ -64,12 +64,25 @@
             lblActivo = new Label();
             cboCrop = new ComboBox();
             label6 = new Label();
+            tglPrintPackingList = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            label7 = new Label();
+            tglExcelLayout = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            tglMapping = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            label8 = new Label();
+            label9 = new Label();
+            btnManifestPerFarm = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            label10 = new Label();
+            tglManifest = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            label11 = new Label();
+            tglShowSize = new SisUvex.Cuadro_de_herramientas.ToggleButton();
+            label12 = new Label();
+            label13 = new Label();
             SuspendLayout();
             // 
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAccept.Location = new Point(297, 390);
+            btnAccept.Location = new Point(297, 512);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(64, 25);
             btnAccept.TabIndex = 457;
@@ -80,7 +93,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.Location = new Point(363, 390);
+            btnCancel.Location = new Point(363, 512);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(64, 25);
             btnCancel.TabIndex = 456;
@@ -395,7 +408,7 @@
             // 
             txbId.Enabled = false;
             txbId.Font = new Font("Microsoft Sans Serif", 9F);
-            txbId.Location = new Point(390, 30);
+            txbId.Location = new Point(99, 32);
             txbId.MaxLength = 10;
             txbId.Name = "txbId";
             txbId.Size = new Size(37, 21);
@@ -406,7 +419,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft Sans Serif", 9F);
-            label4.Location = new Point(372, 33);
+            label4.Location = new Point(81, 35);
             label4.Name = "label4";
             label4.Size = new Size(20, 15);
             label4.TabIndex = 459;
@@ -419,7 +432,7 @@
             cboActive.Font = new Font("Microsoft Sans Serif", 9F);
             cboActive.FormattingEnabled = true;
             cboActive.Items.AddRange(new object[] { "No", "Sí" });
-            cboActive.Location = new Point(320, 28);
+            cboActive.Location = new Point(180, 31);
             cboActive.Name = "cboActive";
             cboActive.Size = new Size(46, 23);
             cboActive.TabIndex = 460;
@@ -429,7 +442,7 @@
             label5.AutoSize = true;
             label5.Font = new Font("Microsoft Sans Serif", 9F);
             label5.ForeColor = Color.Crimson;
-            label5.Location = new Point(311, 25);
+            label5.Location = new Point(171, 27);
             label5.Name = "label5";
             label5.Size = new Size(12, 15);
             label5.TabIndex = 462;
@@ -439,7 +452,7 @@
             // 
             lblActivo.AutoSize = true;
             lblActivo.Font = new Font("Microsoft Sans Serif", 9F);
-            lblActivo.Location = new Point(279, 33);
+            lblActivo.Location = new Point(139, 35);
             lblActivo.Name = "lblActivo";
             lblActivo.Size = new Size(44, 15);
             lblActivo.TabIndex = 461;
@@ -467,11 +480,232 @@
             label6.Text = "Cultivo:";
             label6.TextAlign = ContentAlignment.TopRight;
             // 
+            // tglPrintPackingList
+            // 
+            tglPrintPackingList.AnimationSpeed = 4;
+            tglPrintPackingList.Appearance = Appearance.Button;
+            tglPrintPackingList.BackColor = Color.Transparent;
+            tglPrintPackingList.BorderColor = Color.Empty;
+            tglPrintPackingList.FocusBackColor = Color.FromArgb(202, 167, 243);
+            tglPrintPackingList.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            tglPrintPackingList.Font = new Font("Microsoft Sans Serif", 9F);
+            tglPrintPackingList.Location = new Point(101, 519);
+            tglPrintPackingList.Margin = new Padding(1);
+            tglPrintPackingList.MinimumSize = new Size(20, 10);
+            tglPrintPackingList.Name = "tglPrintPackingList";
+            tglPrintPackingList.OffBackColor = Color.LightGray;
+            tglPrintPackingList.OnBackColor = Color.FromArgb(92, 53, 142);
+            tglPrintPackingList.Size = new Size(30, 18);
+            tglPrintPackingList.TabIndex = 477;
+            tglPrintPackingList.Text = "toggleButton6";
+            tglPrintPackingList.ThumbInset = 1;
+            tglPrintPackingList.ToggleColor = Color.White;
+            tglPrintPackingList.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            tglPrintPackingList.UseVisualStyleBackColor = false;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Microsoft Sans Serif", 9F);
+            label7.Location = new Point(132, 519);
+            label7.Name = "label7";
+            label7.Size = new Size(73, 15);
+            label7.TabIndex = 476;
+            label7.Text = "Packing List";
+            // 
+            // tglExcelLayout
+            // 
+            tglExcelLayout.AnimationSpeed = 4;
+            tglExcelLayout.Appearance = Appearance.Button;
+            tglExcelLayout.BackColor = Color.Transparent;
+            tglExcelLayout.BorderColor = Color.Empty;
+            tglExcelLayout.FocusBackColor = Color.FromArgb(202, 167, 243);
+            tglExcelLayout.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            tglExcelLayout.Font = new Font("Microsoft Sans Serif", 9F);
+            tglExcelLayout.Location = new Point(101, 497);
+            tglExcelLayout.Margin = new Padding(1);
+            tglExcelLayout.MinimumSize = new Size(20, 10);
+            tglExcelLayout.Name = "tglExcelLayout";
+            tglExcelLayout.OffBackColor = Color.LightGray;
+            tglExcelLayout.OnBackColor = Color.FromArgb(92, 53, 142);
+            tglExcelLayout.Size = new Size(30, 18);
+            tglExcelLayout.TabIndex = 475;
+            tglExcelLayout.Text = "toggleButton4";
+            tglExcelLayout.ThumbInset = 1;
+            tglExcelLayout.ToggleColor = Color.White;
+            tglExcelLayout.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            tglExcelLayout.UseVisualStyleBackColor = false;
+            // 
+            // tglMapping
+            // 
+            tglMapping.AnimationSpeed = 4;
+            tglMapping.Appearance = Appearance.Button;
+            tglMapping.BackColor = Color.Transparent;
+            tglMapping.BorderColor = Color.Empty;
+            tglMapping.FocusBackColor = Color.FromArgb(202, 167, 243);
+            tglMapping.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            tglMapping.Font = new Font("Microsoft Sans Serif", 9F);
+            tglMapping.Location = new Point(101, 475);
+            tglMapping.Margin = new Padding(1);
+            tglMapping.MinimumSize = new Size(20, 10);
+            tglMapping.Name = "tglMapping";
+            tglMapping.OffBackColor = Color.LightGray;
+            tglMapping.OnBackColor = Color.FromArgb(92, 53, 142);
+            tglMapping.Size = new Size(30, 18);
+            tglMapping.TabIndex = 474;
+            tglMapping.Text = "toggleButton5";
+            tglMapping.ThumbInset = 1;
+            tglMapping.ToggleColor = Color.White;
+            tglMapping.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            tglMapping.UseVisualStyleBackColor = false;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Microsoft Sans Serif", 9F);
+            label8.Location = new Point(132, 475);
+            label8.Name = "label8";
+            label8.Size = new Size(118, 15);
+            label8.TabIndex = 473;
+            label8.Text = "Mapa de posiciones";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Microsoft Sans Serif", 9F);
+            label9.Location = new Point(132, 497);
+            label9.Name = "label9";
+            label9.Size = new Size(72, 15);
+            label9.TabIndex = 472;
+            label9.Text = "Excel layout";
+            // 
+            // btnManifestPerFarm
+            // 
+            btnManifestPerFarm.AnimationSpeed = 4;
+            btnManifestPerFarm.Appearance = Appearance.Button;
+            btnManifestPerFarm.BackColor = Color.Transparent;
+            btnManifestPerFarm.BorderColor = Color.Empty;
+            btnManifestPerFarm.FocusBackColor = Color.FromArgb(202, 167, 243);
+            btnManifestPerFarm.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            btnManifestPerFarm.Font = new Font("Microsoft Sans Serif", 9F);
+            btnManifestPerFarm.Location = new Point(101, 453);
+            btnManifestPerFarm.Margin = new Padding(1);
+            btnManifestPerFarm.MinimumSize = new Size(20, 10);
+            btnManifestPerFarm.Name = "btnManifestPerFarm";
+            btnManifestPerFarm.OffBackColor = Color.LightGray;
+            btnManifestPerFarm.OnBackColor = Color.FromArgb(92, 53, 142);
+            btnManifestPerFarm.Size = new Size(30, 18);
+            btnManifestPerFarm.TabIndex = 471;
+            btnManifestPerFarm.Text = "toggleButton3";
+            btnManifestPerFarm.ThumbInset = 1;
+            btnManifestPerFarm.ToggleColor = Color.White;
+            btnManifestPerFarm.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            btnManifestPerFarm.UseVisualStyleBackColor = false;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Microsoft Sans Serif", 9F);
+            label10.Location = new Point(132, 453);
+            label10.Name = "label10";
+            label10.Size = new Size(126, 15);
+            label10.TabIndex = 470;
+            label10.Text = "Manifiesto por campo";
+            // 
+            // tglManifest
+            // 
+            tglManifest.AnimationSpeed = 4;
+            tglManifest.Appearance = Appearance.Button;
+            tglManifest.BackColor = Color.Transparent;
+            tglManifest.BorderColor = Color.Empty;
+            tglManifest.FocusBackColor = Color.FromArgb(202, 167, 243);
+            tglManifest.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            tglManifest.Font = new Font("Microsoft Sans Serif", 9F);
+            tglManifest.Location = new Point(101, 431);
+            tglManifest.Margin = new Padding(1);
+            tglManifest.MinimumSize = new Size(20, 10);
+            tglManifest.Name = "tglManifest";
+            tglManifest.OffBackColor = Color.LightGray;
+            tglManifest.OnBackColor = Color.FromArgb(92, 53, 142);
+            tglManifest.Size = new Size(30, 18);
+            tglManifest.TabIndex = 469;
+            tglManifest.Text = "toggleButton2";
+            tglManifest.ThumbInset = 1;
+            tglManifest.ToggleColor = Color.White;
+            tglManifest.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            tglManifest.UseVisualStyleBackColor = false;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Microsoft Sans Serif", 9F);
+            label11.Location = new Point(132, 431);
+            label11.Name = "label11";
+            label11.Size = new Size(64, 15);
+            label11.TabIndex = 468;
+            label11.Text = "Manifiesto";
+            // 
+            // tglShowSize
+            // 
+            tglShowSize.AnimationSpeed = 4;
+            tglShowSize.Appearance = Appearance.Button;
+            tglShowSize.BackColor = Color.Transparent;
+            tglShowSize.BorderColor = Color.Empty;
+            tglShowSize.FocusBackColor = Color.FromArgb(202, 167, 243);
+            tglShowSize.FocusBorderColor = Color.FromArgb(92, 53, 142);
+            tglShowSize.Font = new Font("Microsoft Sans Serif", 9F);
+            tglShowSize.Location = new Point(101, 409);
+            tglShowSize.Margin = new Padding(1);
+            tglShowSize.MinimumSize = new Size(20, 10);
+            tglShowSize.Name = "tglShowSize";
+            tglShowSize.OffBackColor = Color.LightGray;
+            tglShowSize.OnBackColor = Color.FromArgb(92, 53, 142);
+            tglShowSize.Size = new Size(30, 18);
+            tglShowSize.TabIndex = 467;
+            tglShowSize.Text = "toggleButton1";
+            tglShowSize.ThumbInset = 1;
+            tglShowSize.ToggleColor = Color.White;
+            tglShowSize.ToggleShape = Cuadro_de_herramientas.ToggleButtonShape.RoundedRectangle;
+            tglShowSize.UseVisualStyleBackColor = false;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Microsoft Sans Serif", 9F);
+            label12.Location = new Point(132, 409);
+            label12.Name = "label12";
+            label12.Size = new Size(94, 15);
+            label12.TabIndex = 466;
+            label12.Text = "Mostrar tamaño";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.Location = new Point(99, 392);
+            label13.Name = "label13";
+            label13.Size = new Size(87, 15);
+            label13.TabIndex = 478;
+            label13.Text = "Documentos";
+            // 
             // FrmManifestTemplatesAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(441, 427);
+            ClientSize = new Size(441, 549);
+            Controls.Add(label13);
+            Controls.Add(tglPrintPackingList);
+            Controls.Add(label7);
+            Controls.Add(tglExcelLayout);
+            Controls.Add(tglMapping);
+            Controls.Add(label8);
+            Controls.Add(label9);
+            Controls.Add(btnManifestPerFarm);
+            Controls.Add(label10);
+            Controls.Add(tglManifest);
+            Controls.Add(label11);
+            Controls.Add(tglShowSize);
+            Controls.Add(label12);
             Controls.Add(cboCrop);
             Controls.Add(label6);
             Controls.Add(cboActive);
@@ -512,7 +746,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmManifestTemplatesAdd";
-            Text = "FrmManifestTemplatesAdd";
+            Text = "Añadir plantillas de manifiesto";
             Load += FrmManifestTemplatesAdd_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -555,5 +789,18 @@
         private Label lblActivo;
         public ComboBox cboCrop;
         private Label label6;
+        public Cuadro_de_herramientas.ToggleButton tglPrintPackingList;
+        private Label label7;
+        public Cuadro_de_herramientas.ToggleButton tglExcelLayout;
+        public Cuadro_de_herramientas.ToggleButton tglMapping;
+        private Label label8;
+        private Label label9;
+        public Cuadro_de_herramientas.ToggleButton btnManifestPerFarm;
+        private Label label10;
+        public Cuadro_de_herramientas.ToggleButton tglManifest;
+        private Label label11;
+        public Cuadro_de_herramientas.ToggleButton tglShowSize;
+        private Label label12;
+        private Label label13;
     }
 }

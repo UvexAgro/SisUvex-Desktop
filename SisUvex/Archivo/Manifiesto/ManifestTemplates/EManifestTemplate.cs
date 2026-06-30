@@ -20,6 +20,13 @@ internal class EManifestTemplate
     public string? IdCityCrossPoint { get; set; }
     public string? IdCityDestiny { get; set; }
     public string? IdCrop { get; set; }
+    public bool printManifest { get; set; }
+    public bool printMaping { get; set; }
+    public bool printPackingList { get; set; }
+    public bool printManifestPerFarm { get; set; }
+    public bool printShowSize { get; set; }
+    public bool printExcelLayout { get; set; }
+
 
     public static string GetNextId()
     {
@@ -73,6 +80,12 @@ internal class EManifestTemplate
             IdCityDestiny = ReadField(dr, "id_cityDestiny");
             IdCrop = ReadField(dr, "id_crop");
             Active = CharActiveToInt(dr["c_active"]);
+            printManifest = dr["c_printManifest"].ToString() == "1";
+            printMaping = dr["c_printMaping"].ToString() == "1";
+            printPackingList = dr["c_printPackingList"].ToString() == "1";
+            printManifestPerFarm = dr["c_printManifestPerField"].ToString() == "1";
+            printShowSize = dr["c_printShowSize"].ToString() == "1";
+            printExcelLayout = dr["c_printExcelLayout"].ToString() == "1";
         }
         catch (Exception ex)
         {
@@ -107,6 +120,12 @@ internal class EManifestTemplate
             cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
             cmd.Parameters.AddWithValue("@id_crop", ClsValues.IfEmptyToDBNull(IdCrop));
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@c_printManifest", printManifest ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printMaping", printMaping ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printPackingList", printPackingList ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printManifestPerField", printManifestPerFarm ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printShowSize", printShowSize ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printExcelLayout", printExcelLayout ? "1" : "0");
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
@@ -152,6 +171,12 @@ internal class EManifestTemplate
             cmd.Parameters.AddWithValue("@c_active", Active == 1 ? "1" : "0");
             cmd.Parameters.AddWithValue("@id_crop", ClsValues.IfEmptyToDBNull(IdCrop));
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@c_printManifest", printManifest ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printMaping", printMaping ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printPackingList", printPackingList ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printManifestPerField", printManifestPerFarm ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printShowSize", printShowSize ? "1" : "0");
+            cmd.Parameters.AddWithValue("@c_printExcelLayout", printExcelLayout ? "1" : "0");
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
