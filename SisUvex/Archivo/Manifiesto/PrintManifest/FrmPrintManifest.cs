@@ -46,8 +46,13 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.Description = "Seleccione la carpeta de destino para los manifiestos finales";
-            folderBrowserDialog.ShowDialog();
-            cls.finalManifestsFolderPath = folderBrowserDialog.SelectedPath;
+
+            if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            // Aplica la misma resolución inteligente que la carga automática:
+            // busca Manifiestos/disShortName/idManifest dentro de la carpeta elegida.
+            cls.finalManifestsFolderPath = cls.ResolveFinalManifestPath(folderBrowserDialog.SelectedPath);
             txbManifestFolderPath.Text = cls.finalManifestsFolderPath;
         }
 

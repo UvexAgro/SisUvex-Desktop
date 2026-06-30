@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Media;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -112,8 +113,56 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
 
         private void GetFinalFolderManifestPath()
         {
-            finalManifestsFolderPath = Path.Combine(confMan.manifestFolderPath, "Manifiestos", disShortName, idManifest);
+            finalManifestsFolderPath = ResolveManifestPath(confMan.manifestFolderPath, idManifest, disShortName);
         }
+
+        /// <summary>
+        /// Resuelve la ruta final donde se guardarán los documentos del manifiesto.
+        /// Prioridad:
+        ///   1. Si baseFolder/idManifest ya existe → se usa directamente.
+        ///   2. Si baseFolder/Manifiestos existe:
+        ///      a. Si además existe baseFolder/Manifiestos/disShortName → baseFolder/Manifiestos/disShortName/idManifest
+        ///      b. Si no → baseFolder/Manifiestos/idManifest
+        ///   3. Fallback → baseFolder/Manifiestos/disShortName/idManifest (ruta completa esperada;
+        ///      las carpetas que falten se crean al imprimir).
+        /// Los documentos siempre quedan dentro de una carpeta con el nombre idManifest.
+        /// </summary>
+        private string ResolveManifestPath(string? baseFolder, string? idManifest, string? disShortName)
+        {
+            if (string.IsNullOrEmpty(baseFolder) || string.IsNullOrEmpty(idManifest))
+                return string.Empty;
+
+            // Prioridad 1: carpeta idManifest existe directamente en baseFolder
+            string directPath = Path.Combine(baseFolder, idManifest);
+            if (Directory.Exists(directPath))
+                return directPath;
+
+            // Prioridad 2: existe subcarpeta "Manifiestos"
+            string manifiestosSub = Path.Combine(baseFolder, "Manifiestos");
+            if (Directory.Exists(manifiestosSub))
+            {
+                if (!string.IsNullOrEmpty(disShortName))
+                {
+                    string disPath = Path.Combine(manifiestosSub, disShortName);
+                    if (Directory.Exists(disPath))
+                        return Path.Combine(disPath, idManifest);
+                }
+
+                return Path.Combine(manifiestosSub, idManifest);
+            }
+
+            // Fallback: ruta completa esperada (se crearán las carpetas al imprimir)
+            return !string.IsNullOrEmpty(disShortName)
+                ? Path.Combine(baseFolder, "Manifiestos", disShortName, idManifest)
+                : Path.Combine(baseFolder, "Manifiestos", idManifest);
+        }
+
+        /// <summary>
+        /// Aplica <see cref="ResolveManifestPath"/> usando el distribuidor y manifiesto
+        /// actuales. Úsalo desde el formulario al seleccionar una ruta manualmente.
+        /// </summary>
+        public string ResolveFinalManifestPath(string baseFolder)
+            => ResolveManifestPath(baseFolder, idManifest, disShortName);
 
         private void SetPrintDocuments()
         {
@@ -192,17 +241,57 @@ namespace SisUvex.Archivo.Manifiesto.PrintManifest
             }
         }
 
+        [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_RESTORE = 9;
+
         private void OpenManifestFolderPath(string idManifest, string folderPath)
         {
-            string path = Path.Combine(folderPath);
-
-            DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
+            DialogResult result = MessageBox.Show($"Archivos guardados en: {folderPath}\n\n¿Desea abrir la carpeta?",
                 "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes)
+                return;
+
+            if (!TryFocusExistingExplorerWindow(folderPath))
+                System.Diagnostics.Process.Start("explorer.exe", folderPath);
+        }
+
+        /// <summary>
+        /// Busca una ventana de Explorer ya abierta en <paramref name="path"/>.
+        /// Si la encuentra la restaura y la trae al frente; si no, devuelve false
+        /// para que el llamador abra una nueva ventana.
+        /// </summary>
+        private bool TryFocusExistingExplorerWindow(string path)
+        {
+            try
             {
-                System.Diagnostics.Process.Start("explorer.exe", path);
+                Type? shellType = Type.GetTypeFromProgID("Shell.Application");
+                if (shellType == null) return false;
+
+                dynamic shell   = Activator.CreateInstance(shellType)!;
+                dynamic windows = shell.Windows();
+
+                for (int i = 0; i < windows.Count; i++)
+                {
+                    dynamic window = windows.Item(i);
+                    try
+                    {
+                        string? location = window.Document.Folder.Self.Path;
+                        if (string.Equals(location, path, StringComparison.OrdinalIgnoreCase))
+                        {
+                            IntPtr hwnd = new IntPtr(Convert.ToInt64(window.HWND));
+                            ShowWindow(hwnd, SW_RESTORE);
+                            SetForegroundWindow(hwnd);
+                            return true;
+                        }
+                    }
+                    catch { }
+                }
             }
+            catch { }
+
+            return false;
         }
     }
 }
