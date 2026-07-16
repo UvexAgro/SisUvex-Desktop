@@ -1,0 +1,885 @@
+﻿namespace SisUvex.Archivo.WorkPlan
+{
+    partial class FrmWorkPlanAdd
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWorkPlanAdd));
+            txbIdSize = new TextBox();
+            cboSize = new ComboBox();
+            label1 = new Label();
+            lblSize = new Label();
+            dtpDateWorkPlan = new DateTimePicker();
+            lblVPC = new Label();
+            txbVPC = new TextBox();
+            dgvGTIN = new DataGridView();
+            btnIdGTINSelect = new Button();
+            lblWorkGroup = new Label();
+            txbIdWorkGroup = new TextBox();
+            cboWorkGroup = new ComboBox();
+            lblLot = new Label();
+            txbIdLot = new TextBox();
+            cboLot = new ComboBox();
+            lblIdGTIN = new Label();
+            txbIdGTIN = new TextBox();
+            txbId = new TextBox();
+            lblTitle = new Label();
+            lblId = new Label();
+            lblObliId = new Label();
+            label5 = new Label();
+            label8 = new Label();
+            label2 = new Label();
+            chbLotActives = new CheckBox();
+            chbSizeActives = new CheckBox();
+            lblDateWorkPlan = new Label();
+            label4 = new Label();
+            btnAccept = new Button();
+            btnCancel = new Button();
+            chbActive = new CheckBox();
+            label7 = new Label();
+            chbWorkGroupActives = new CheckBox();
+            chbGtinActives = new CheckBox();
+            chbVarietyActives = new CheckBox();
+            lblVariety = new Label();
+            txbIdVariety = new TextBox();
+            cboVariety = new ComboBox();
+            chbDistributorActives = new CheckBox();
+            lblDistributor = new Label();
+            txbIdDistributor = new TextBox();
+            cboDistributor = new ComboBox();
+            txbIdTypeBox = new TextBox();
+            cboTypeBox = new ComboBox();
+            label3 = new Label();
+            label6 = new Label();
+            chbSeasonActives = new CheckBox();
+            txbIdSeason = new TextBox();
+            cboSeason = new ComboBox();
+            label11 = new Label();
+            label10 = new Label();
+            txbLegend = new TextBox();
+            cboLegend = new ComboBox();
+            label13 = new Label();
+            ((System.ComponentModel.ISupportInitialize)dgvGTIN).BeginInit();
+            SuspendLayout();
+            // 
+            // txbIdSize
+            // 
+            txbIdSize.Enabled = false;
+            txbIdSize.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdSize.Location = new Point(92, 174);
+            txbIdSize.Name = "txbIdSize";
+            txbIdSize.Size = new Size(46, 29);
+            txbIdSize.TabIndex = 5;
+            txbIdSize.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboSize
+            // 
+            cboSize.DropDownHeight = 300;
+            cboSize.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSize.DropDownWidth = 100;
+            cboSize.Font = new Font("Segoe UI", 12F);
+            cboSize.FormattingEnabled = true;
+            cboSize.IntegralHeight = false;
+            cboSize.ItemHeight = 21;
+            cboSize.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
+            cboSize.Location = new Point(144, 174);
+            cboSize.Name = "cboSize";
+            cboSize.Size = new Size(244, 29);
+            cboSize.TabIndex = 6;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.Crimson;
+            label1.Location = new Point(84, 177);
+            label1.Name = "label1";
+            label1.Size = new Size(12, 15);
+            label1.TabIndex = 168;
+            label1.Text = "*";
+            // 
+            // lblSize
+            // 
+            lblSize.AutoSize = true;
+            lblSize.Font = new Font("Segoe UI", 12F);
+            lblSize.ForeColor = SystemColors.ControlText;
+            lblSize.Location = new Point(19, 176);
+            lblSize.Name = "lblSize";
+            lblSize.Size = new Size(67, 21);
+            lblSize.TabIndex = 164;
+            lblSize.Text = "Tamaño:";
+            // 
+            // dtpDateWorkPlan
+            // 
+            dtpDateWorkPlan.Font = new Font("Segoe UI", 12F);
+            dtpDateWorkPlan.Location = new Point(92, 63);
+            dtpDateWorkPlan.Name = "dtpDateWorkPlan";
+            dtpDateWorkPlan.Size = new Size(341, 29);
+            dtpDateWorkPlan.TabIndex = 1;
+            // 
+            // lblVPC
+            // 
+            lblVPC.AutoSize = true;
+            lblVPC.Font = new Font("Segoe UI", 12F);
+            lblVPC.ForeColor = SystemColors.ControlDark;
+            lblVPC.Location = new Point(419, 212);
+            lblVPC.Name = "lblVPC";
+            lblVPC.Size = new Size(119, 21);
+            lblVPC.TabIndex = 162;
+            lblVPC.Text = "Voice pick code:";
+            // 
+            // txbVPC
+            // 
+            txbVPC.Enabled = false;
+            txbVPC.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbVPC.Location = new Point(540, 209);
+            txbVPC.Name = "txbVPC";
+            txbVPC.Size = new Size(64, 29);
+            txbVPC.TabIndex = 25;
+            txbVPC.TextAlign = HorizontalAlignment.Center;
+            // 
+            // dgvGTIN
+            // 
+            dgvGTIN.AllowUserToAddRows = false;
+            dgvGTIN.AllowUserToDeleteRows = false;
+            dgvGTIN.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvGTIN.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvGTIN.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvGTIN.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvGTIN.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvGTIN.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvGTIN.EnableHeadersVisualStyles = false;
+            dgvGTIN.ImeMode = ImeMode.NoControl;
+            dgvGTIN.Location = new Point(10, 388);
+            dgvGTIN.Name = "dgvGTIN";
+            dgvGTIN.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvGTIN.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvGTIN.RowHeadersVisible = false;
+            dgvGTIN.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvGTIN.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvGTIN.Size = new Size(636, 182);
+            dgvGTIN.TabIndex = 20;
+            dgvGTIN.MouseDoubleClick += dgvGTIN_MouseDoubleClick;
+            // 
+            // btnIdGTINSelect
+            // 
+            btnIdGTINSelect.Location = new Point(134, 352);
+            btnIdGTINSelect.Name = "btnIdGTINSelect";
+            btnIdGTINSelect.Size = new Size(115, 29);
+            btnIdGTINSelect.TabIndex = 15;
+            btnIdGTINSelect.Text = "Seleccionar GTIN";
+            btnIdGTINSelect.UseVisualStyleBackColor = true;
+            btnIdGTINSelect.Click += btnIdGTINSelect_Click;
+            // 
+            // lblWorkGroup
+            // 
+            lblWorkGroup.AutoSize = true;
+            lblWorkGroup.Font = new Font("Segoe UI", 12F);
+            lblWorkGroup.ForeColor = SystemColors.ControlText;
+            lblWorkGroup.Location = new Point(11, 142);
+            lblWorkGroup.Name = "lblWorkGroup";
+            lblWorkGroup.Size = new Size(75, 21);
+            lblWorkGroup.TabIndex = 154;
+            lblWorkGroup.Text = "Cuadrilla:";
+            // 
+            // txbIdWorkGroup
+            // 
+            txbIdWorkGroup.Enabled = false;
+            txbIdWorkGroup.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdWorkGroup.Location = new Point(92, 139);
+            txbIdWorkGroup.Name = "txbIdWorkGroup";
+            txbIdWorkGroup.Size = new Size(46, 29);
+            txbIdWorkGroup.TabIndex = 2;
+            txbIdWorkGroup.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboWorkGroup
+            // 
+            cboWorkGroup.DropDownHeight = 300;
+            cboWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboWorkGroup.DropDownWidth = 464;
+            cboWorkGroup.Font = new Font("Segoe UI", 12F);
+            cboWorkGroup.FormattingEnabled = true;
+            cboWorkGroup.IntegralHeight = false;
+            cboWorkGroup.ItemHeight = 21;
+            cboWorkGroup.Location = new Point(144, 139);
+            cboWorkGroup.Name = "cboWorkGroup";
+            cboWorkGroup.Size = new Size(244, 29);
+            cboWorkGroup.TabIndex = 3;
+            // 
+            // lblLot
+            // 
+            lblLot.AutoSize = true;
+            lblLot.Font = new Font("Segoe UI", 12F);
+            lblLot.ForeColor = SystemColors.ControlText;
+            lblLot.Location = new Point(11, 318);
+            lblLot.Name = "lblLot";
+            lblLot.Size = new Size(43, 21);
+            lblLot.TabIndex = 150;
+            lblLot.Text = "Lote:";
+            // 
+            // txbIdLot
+            // 
+            txbIdLot.Enabled = false;
+            txbIdLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdLot.Location = new Point(63, 315);
+            txbIdLot.Name = "txbIdLot";
+            txbIdLot.Size = new Size(75, 29);
+            txbIdLot.TabIndex = 11;
+            txbIdLot.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboLot
+            // 
+            cboLot.DropDownHeight = 300;
+            cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboLot.DropDownWidth = 500;
+            cboLot.Font = new Font("Segoe UI", 12F);
+            cboLot.FormattingEnabled = true;
+            cboLot.IntegralHeight = false;
+            cboLot.ItemHeight = 21;
+            cboLot.Location = new Point(144, 315);
+            cboLot.Name = "cboLot";
+            cboLot.Size = new Size(460, 29);
+            cboLot.TabIndex = 12;
+            // 
+            // lblIdGTIN
+            // 
+            lblIdGTIN.AutoSize = true;
+            lblIdGTIN.Font = new Font("Segoe UI", 12F);
+            lblIdGTIN.Location = new Point(14, 355);
+            lblIdGTIN.Name = "lblIdGTIN";
+            lblIdGTIN.Size = new Size(48, 21);
+            lblIdGTIN.TabIndex = 149;
+            lblIdGTIN.Text = "GTIN:";
+            // 
+            // txbIdGTIN
+            // 
+            txbIdGTIN.Enabled = false;
+            txbIdGTIN.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdGTIN.Location = new Point(68, 352);
+            txbIdGTIN.MaxLength = 20;
+            txbIdGTIN.Name = "txbIdGTIN";
+            txbIdGTIN.ReadOnly = true;
+            txbIdGTIN.Size = new Size(60, 29);
+            txbIdGTIN.TabIndex = 14;
+            txbIdGTIN.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txbId
+            // 
+            txbId.Enabled = false;
+            txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbId.Location = new Point(369, 28);
+            txbId.Name = "txbId";
+            txbId.Size = new Size(64, 29);
+            txbId.TabIndex = 23;
+            txbId.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Arial Black", 12F);
+            lblTitle.Location = new Point(2, 0);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(205, 23);
+            lblTitle.TabIndex = 139;
+            lblTitle.Text = "Añadir plan de trabajo";
+            // 
+            // lblId
+            // 
+            lblId.AutoSize = true;
+            lblId.Font = new Font("Segoe UI", 12F);
+            lblId.Location = new Point(337, 31);
+            lblId.Name = "lblId";
+            lblId.Size = new Size(26, 21);
+            lblId.TabIndex = 145;
+            lblId.Text = "Id:";
+            // 
+            // lblObliId
+            // 
+            lblObliId.AutoSize = true;
+            lblObliId.ForeColor = Color.Crimson;
+            lblObliId.Location = new Point(360, 28);
+            lblObliId.Name = "lblObliId";
+            lblObliId.Size = new Size(12, 15);
+            lblObliId.TabIndex = 147;
+            lblObliId.Text = "*";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = Color.Crimson;
+            label5.Location = new Point(60, 353);
+            label5.Name = "label5";
+            label5.Size = new Size(12, 15);
+            label5.TabIndex = 158;
+            label5.Text = "*";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.ForeColor = Color.Crimson;
+            label8.Location = new Point(55, 319);
+            label8.Name = "label8";
+            label8.Size = new Size(12, 15);
+            label8.TabIndex = 160;
+            label8.Text = "*";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.ForeColor = Color.Crimson;
+            label2.Location = new Point(84, 143);
+            label2.Name = "label2";
+            label2.Size = new Size(12, 15);
+            label2.TabIndex = 159;
+            label2.Text = "*";
+            // 
+            // chbLotActives
+            // 
+            chbLotActives.Appearance = Appearance.Button;
+            chbLotActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbLotActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbLotActives.Font = new Font("Segoe UI", 10F);
+            chbLotActives.Location = new Point(610, 314);
+            chbLotActives.Name = "chbLotActives";
+            chbLotActives.Size = new Size(39, 31);
+            chbLotActives.TabIndex = 13;
+            chbLotActives.Text = "     ";
+            chbLotActives.UseVisualStyleBackColor = true;
+            // 
+            // chbSizeActives
+            // 
+            chbSizeActives.Appearance = Appearance.Button;
+            chbSizeActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbSizeActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbSizeActives.Font = new Font("Segoe UI", 10F);
+            chbSizeActives.Location = new Point(394, 173);
+            chbSizeActives.Name = "chbSizeActives";
+            chbSizeActives.Size = new Size(39, 31);
+            chbSizeActives.TabIndex = 7;
+            chbSizeActives.Text = "     ";
+            chbSizeActives.UseVisualStyleBackColor = true;
+            // 
+            // lblDateWorkPlan
+            // 
+            lblDateWorkPlan.AutoSize = true;
+            lblDateWorkPlan.Font = new Font("Segoe UI", 12F);
+            lblDateWorkPlan.ForeColor = SystemColors.ControlText;
+            lblDateWorkPlan.Location = new Point(33, 69);
+            lblDateWorkPlan.Name = "lblDateWorkPlan";
+            lblDateWorkPlan.Size = new Size(53, 21);
+            lblDateWorkPlan.TabIndex = 178;
+            lblDateWorkPlan.Text = "Fecha:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.Crimson;
+            label4.Location = new Point(84, 66);
+            label4.Name = "label4";
+            label4.Size = new Size(12, 15);
+            label4.TabIndex = 179;
+            label4.Text = "*";
+            // 
+            // btnAccept
+            // 
+            btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnAccept.Location = new Point(492, 576);
+            btnAccept.Name = "btnAccept";
+            btnAccept.Size = new Size(75, 29);
+            btnAccept.TabIndex = 21;
+            btnAccept.Text = "Aceptar";
+            btnAccept.UseVisualStyleBackColor = true;
+            btnAccept.Click += btnAccept_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCancel.Location = new Point(573, 576);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 29);
+            btnCancel.TabIndex = 22;
+            btnCancel.Text = "Cancelar";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // chbActive
+            // 
+            chbActive.Appearance = Appearance.Button;
+            chbActive.AutoSize = true;
+            chbActive.BackColor = Color.FromArgb(255, 224, 192);
+            chbActive.CheckAlign = ContentAlignment.MiddleCenter;
+            chbActive.Checked = true;
+            chbActive.CheckState = CheckState.Checked;
+            chbActive.FlatAppearance.BorderColor = SystemColors.ActiveBorder;
+            chbActive.FlatAppearance.CheckedBackColor = Color.FromArgb(192, 255, 192);
+            chbActive.FlatAppearance.MouseDownBackColor = SystemColors.ActiveCaption;
+            chbActive.FlatAppearance.MouseOverBackColor = SystemColors.ButtonFace;
+            chbActive.FlatStyle = FlatStyle.Flat;
+            chbActive.Font = new Font("Segoe UI", 12F);
+            chbActive.Location = new Point(92, 26);
+            chbActive.Name = "chbActive";
+            chbActive.Size = new Size(63, 31);
+            chbActive.TabIndex = 0;
+            chbActive.Text = "Activo";
+            chbActive.TextAlign = ContentAlignment.MiddleCenter;
+            chbActive.UseVisualStyleBackColor = false;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.ForeColor = Color.Crimson;
+            label7.Location = new Point(82, 29);
+            label7.Name = "label7";
+            label7.Size = new Size(12, 15);
+            label7.TabIndex = 182;
+            label7.Text = "*";
+            // 
+            // chbWorkGroupActives
+            // 
+            chbWorkGroupActives.Appearance = Appearance.Button;
+            chbWorkGroupActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbWorkGroupActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbWorkGroupActives.Font = new Font("Segoe UI", 10F);
+            chbWorkGroupActives.Location = new Point(394, 138);
+            chbWorkGroupActives.Name = "chbWorkGroupActives";
+            chbWorkGroupActives.Size = new Size(39, 31);
+            chbWorkGroupActives.TabIndex = 4;
+            chbWorkGroupActives.Text = "     ";
+            chbWorkGroupActives.UseVisualStyleBackColor = true;
+            // 
+            // chbGtinActives
+            // 
+            chbGtinActives.Appearance = Appearance.Button;
+            chbGtinActives.AutoSize = true;
+            chbGtinActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbGtinActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbGtinActives.Font = new Font("Segoe UI", 10F);
+            chbGtinActives.Location = new Point(255, 352);
+            chbGtinActives.Name = "chbGtinActives";
+            chbGtinActives.Size = new Size(39, 29);
+            chbGtinActives.TabIndex = 16;
+            chbGtinActives.Text = "     ";
+            chbGtinActives.UseVisualStyleBackColor = true;
+            // 
+            // chbVarietyActives
+            // 
+            chbVarietyActives.Appearance = Appearance.Button;
+            chbVarietyActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbVarietyActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbVarietyActives.Font = new Font("Segoe UI", 10F);
+            chbVarietyActives.Location = new Point(610, 278);
+            chbVarietyActives.Name = "chbVarietyActives";
+            chbVarietyActives.Size = new Size(39, 31);
+            chbVarietyActives.TabIndex = 10;
+            chbVarietyActives.Text = "     ";
+            chbVarietyActives.UseVisualStyleBackColor = true;
+            // 
+            // lblVariety
+            // 
+            lblVariety.AutoSize = true;
+            lblVariety.Font = new Font("Segoe UI", 10F);
+            lblVariety.ForeColor = SystemColors.Highlight;
+            lblVariety.Location = new Point(21, 274);
+            lblVariety.Name = "lblVariety";
+            lblVariety.Size = new Size(65, 38);
+            lblVariety.TabIndex = 186;
+            lblVariety.Text = "Filtro por\r\nvariedad:";
+            // 
+            // txbIdVariety
+            // 
+            txbIdVariety.Enabled = false;
+            txbIdVariety.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdVariety.ForeColor = SystemColors.ActiveCaption;
+            txbIdVariety.Location = new Point(92, 279);
+            txbIdVariety.Name = "txbIdVariety";
+            txbIdVariety.Size = new Size(46, 29);
+            txbIdVariety.TabIndex = 8;
+            txbIdVariety.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboVariety
+            // 
+            cboVariety.DropDownHeight = 300;
+            cboVariety.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboVariety.DropDownWidth = 500;
+            cboVariety.Font = new Font("Segoe UI", 12F);
+            cboVariety.ForeColor = SystemColors.MenuHighlight;
+            cboVariety.FormattingEnabled = true;
+            cboVariety.IntegralHeight = false;
+            cboVariety.ItemHeight = 21;
+            cboVariety.Location = new Point(144, 279);
+            cboVariety.Name = "cboVariety";
+            cboVariety.Size = new Size(460, 29);
+            cboVariety.TabIndex = 9;
+            // 
+            // chbDistributorActives
+            // 
+            chbDistributorActives.Appearance = Appearance.Button;
+            chbDistributorActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbDistributorActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbDistributorActives.Font = new Font("Segoe UI", 10F);
+            chbDistributorActives.Location = new Point(610, 351);
+            chbDistributorActives.Name = "chbDistributorActives";
+            chbDistributorActives.Size = new Size(39, 31);
+            chbDistributorActives.TabIndex = 19;
+            chbDistributorActives.Text = "     ";
+            chbDistributorActives.UseVisualStyleBackColor = true;
+            // 
+            // lblDistributor
+            // 
+            lblDistributor.AutoSize = true;
+            lblDistributor.Font = new Font("Segoe UI", 10F);
+            lblDistributor.ForeColor = SystemColors.Highlight;
+            lblDistributor.Location = new Point(317, 344);
+            lblDistributor.Name = "lblDistributor";
+            lblDistributor.Size = new Size(82, 38);
+            lblDistributor.TabIndex = 191;
+            lblDistributor.Text = "Filtro por\r\ndistribuidor:";
+            // 
+            // txbIdDistributor
+            // 
+            txbIdDistributor.Enabled = false;
+            txbIdDistributor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdDistributor.ForeColor = SystemColors.ActiveCaption;
+            txbIdDistributor.Location = new Point(405, 352);
+            txbIdDistributor.Name = "txbIdDistributor";
+            txbIdDistributor.Size = new Size(35, 29);
+            txbIdDistributor.TabIndex = 17;
+            txbIdDistributor.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboDistributor
+            // 
+            cboDistributor.DropDownHeight = 300;
+            cboDistributor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDistributor.DropDownWidth = 500;
+            cboDistributor.Font = new Font("Segoe UI", 12F);
+            cboDistributor.ForeColor = SystemColors.MenuHighlight;
+            cboDistributor.FormattingEnabled = true;
+            cboDistributor.IntegralHeight = false;
+            cboDistributor.ItemHeight = 21;
+            cboDistributor.Location = new Point(446, 352);
+            cboDistributor.Name = "cboDistributor";
+            cboDistributor.Size = new Size(158, 29);
+            cboDistributor.TabIndex = 18;
+            // 
+            // txbIdTypeBox
+            // 
+            txbIdTypeBox.Enabled = false;
+            txbIdTypeBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdTypeBox.Location = new Point(92, 209);
+            txbIdTypeBox.Name = "txbIdTypeBox";
+            txbIdTypeBox.Size = new Size(46, 29);
+            txbIdTypeBox.TabIndex = 192;
+            txbIdTypeBox.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboTypeBox
+            // 
+            cboTypeBox.DropDownHeight = 300;
+            cboTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTypeBox.DropDownWidth = 100;
+            cboTypeBox.Font = new Font("Segoe UI", 12F);
+            cboTypeBox.FormattingEnabled = true;
+            cboTypeBox.IntegralHeight = false;
+            cboTypeBox.ItemHeight = 21;
+            cboTypeBox.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
+            cboTypeBox.Location = new Point(144, 209);
+            cboTypeBox.Name = "cboTypeBox";
+            cboTypeBox.Size = new Size(244, 29);
+            cboTypeBox.TabIndex = 193;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.Crimson;
+            label3.Location = new Point(84, 212);
+            label3.Name = "label3";
+            label3.Size = new Size(12, 15);
+            label3.TabIndex = 196;
+            label3.Text = "*";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 12F);
+            label6.ForeColor = SystemColors.ControlText;
+            label6.Location = new Point(43, 212);
+            label6.Name = "label6";
+            label6.Size = new Size(43, 21);
+            label6.TabIndex = 195;
+            label6.Text = "Caja:";
+            // 
+            // chbSeasonActives
+            // 
+            chbSeasonActives.Appearance = Appearance.Button;
+            chbSeasonActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbSeasonActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbSeasonActives.Font = new Font("Segoe UI", 10F);
+            chbSeasonActives.Location = new Point(394, 97);
+            chbSeasonActives.Name = "chbSeasonActives";
+            chbSeasonActives.Size = new Size(39, 31);
+            chbSeasonActives.TabIndex = 199;
+            chbSeasonActives.Text = "     ";
+            chbSeasonActives.UseVisualStyleBackColor = true;
+            // 
+            // txbIdSeason
+            // 
+            txbIdSeason.Enabled = false;
+            txbIdSeason.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdSeason.Location = new Point(92, 98);
+            txbIdSeason.Name = "txbIdSeason";
+            txbIdSeason.Size = new Size(46, 29);
+            txbIdSeason.TabIndex = 197;
+            txbIdSeason.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboSeason
+            // 
+            cboSeason.DropDownHeight = 300;
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.DropDownWidth = 464;
+            cboSeason.Font = new Font("Segoe UI", 12F);
+            cboSeason.FormattingEnabled = true;
+            cboSeason.IntegralHeight = false;
+            cboSeason.ItemHeight = 21;
+            cboSeason.Location = new Point(144, 98);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(244, 29);
+            cboSeason.TabIndex = 198;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.ForeColor = Color.Crimson;
+            label11.Location = new Point(84, 102);
+            label11.Name = "label11";
+            label11.Size = new Size(12, 15);
+            label11.TabIndex = 201;
+            label11.Text = "*";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 10F);
+            label10.ForeColor = SystemColors.Highlight;
+            label10.Location = new Point(3, 93);
+            label10.Name = "label10";
+            label10.Size = new Size(83, 38);
+            label10.TabIndex = 202;
+            label10.Text = "Filtro por\r\n temporada:";
+            label10.TextAlign = ContentAlignment.TopRight;
+            // 
+            // txbLegend
+            // 
+            txbLegend.Enabled = false;
+            txbLegend.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbLegend.Location = new Point(92, 244);
+            txbLegend.Name = "txbLegend";
+            txbLegend.Size = new Size(46, 29);
+            txbLegend.TabIndex = 203;
+            txbLegend.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboLegend
+            // 
+            cboLegend.DropDownHeight = 300;
+            cboLegend.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboLegend.DropDownWidth = 100;
+            cboLegend.Font = new Font("Segoe UI", 12F);
+            cboLegend.FormattingEnabled = true;
+            cboLegend.IntegralHeight = false;
+            cboLegend.ItemHeight = 21;
+            cboLegend.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
+            cboLegend.Location = new Point(144, 244);
+            cboLegend.Name = "cboLegend";
+            cboLegend.Size = new Size(460, 29);
+            cboLegend.TabIndex = 204;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 12F);
+            label13.ForeColor = SystemColors.ControlText;
+            label13.Location = new Point(15, 247);
+            label13.Name = "label13";
+            label13.Size = new Size(71, 21);
+            label13.TabIndex = 205;
+            label13.Text = "Leyenda:";
+            // 
+            // FrmWorkPlanAdd
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(660, 613);
+            Controls.Add(txbLegend);
+            Controls.Add(cboLegend);
+            Controls.Add(label13);
+            Controls.Add(label10);
+            Controls.Add(chbSeasonActives);
+            Controls.Add(txbIdSeason);
+            Controls.Add(cboSeason);
+            Controls.Add(label11);
+            Controls.Add(txbIdTypeBox);
+            Controls.Add(cboTypeBox);
+            Controls.Add(label3);
+            Controls.Add(label6);
+            Controls.Add(chbDistributorActives);
+            Controls.Add(lblDistributor);
+            Controls.Add(txbIdDistributor);
+            Controls.Add(cboDistributor);
+            Controls.Add(chbVarietyActives);
+            Controls.Add(lblVariety);
+            Controls.Add(txbIdVariety);
+            Controls.Add(cboVariety);
+            Controls.Add(chbGtinActives);
+            Controls.Add(chbWorkGroupActives);
+            Controls.Add(chbActive);
+            Controls.Add(label7);
+            Controls.Add(btnAccept);
+            Controls.Add(btnCancel);
+            Controls.Add(lblDateWorkPlan);
+            Controls.Add(chbSizeActives);
+            Controls.Add(chbLotActives);
+            Controls.Add(txbIdSize);
+            Controls.Add(cboSize);
+            Controls.Add(label1);
+            Controls.Add(lblSize);
+            Controls.Add(dtpDateWorkPlan);
+            Controls.Add(lblVPC);
+            Controls.Add(txbVPC);
+            Controls.Add(dgvGTIN);
+            Controls.Add(btnIdGTINSelect);
+            Controls.Add(lblWorkGroup);
+            Controls.Add(txbIdWorkGroup);
+            Controls.Add(cboWorkGroup);
+            Controls.Add(lblLot);
+            Controls.Add(txbIdLot);
+            Controls.Add(cboLot);
+            Controls.Add(lblIdGTIN);
+            Controls.Add(txbIdGTIN);
+            Controls.Add(txbId);
+            Controls.Add(lblTitle);
+            Controls.Add(lblId);
+            Controls.Add(lblObliId);
+            Controls.Add(label5);
+            Controls.Add(label8);
+            Controls.Add(label2);
+            Controls.Add(label4);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(676, 594);
+            Name = "FrmWorkPlanAdd";
+            Text = "Añadir plan de trabajo";
+            Load += FrmWorkPlanAdd_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvGTIN).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Label lblTipoContenedor;
+
+        public TextBox txbIdTipoContenedor;
+        private ComboBox cboTipoContenedor;
+        private Label lblObligatorioTipoContenedor;
+        public TextBox txbIdTamaño;
+        private ComboBox cboTamaño;
+        private Label label1;
+        private Label label9;
+        public DateTimePicker dtpDateWorkPlan;
+        private Label lblVPC;
+        public TextBox txbVPC;
+        public DataGridView dgvGTIN;
+        private Button btnIdProgramaSel;
+        private Label lblWorkGroup;
+        public TextBox txbIdWorkGroup;
+        private Label lblLot;
+        public TextBox txbIdLot;
+        private Label lblIdPrograma;
+        public TextBox txbIdPrograma;
+        public TextBox txbId;
+        public Label lblTitle;
+        private Label lblId;
+        private Label lblObliId;
+        private Label label5;
+        private Label label8;
+        private Label label2;
+        public CheckBox chbActiveVariety;
+        public CheckBox chbLotActives;
+        public CheckBox checkBox2;
+        public CheckBox chbSizeActives;
+        private Label lblDateWorkPlan;
+        private Label label4;
+        public TextBox txbIdGTIN;
+        private Label lblSize;
+        public TextBox txbIdSize;
+        public TextBox txbIdWorkPlan;
+        private ComboBox cboWorkPlan;
+        private Label lblIdGTIN;
+        public Button btnIdGTINSelect;
+        private Button btnAccept;
+        private Button btnCancel;
+        public ComboBox cboWorkGroup;
+        public ComboBox cboLot;
+        public ComboBox cboSize;
+        public CheckBox chbActive;
+        private Label label7;
+        public CheckBox chbWorkGroupActives;
+        public CheckBox chbGtinActives;
+        private Label lblVariety;
+        public TextBox txbIdVariety;
+        public ComboBox cboVariety;
+        public CheckBox chbVarietyActives;
+        public CheckBox chbDistributorActives;
+        private Label lblDistributor;
+        public TextBox txbIdDistributor;
+        public ComboBox cboDistributor;
+        public TextBox txbIdTypeBox;
+        public ComboBox cboTypeBox;
+        private Label label3;
+        private Label label6;
+        public CheckBox chbSeasonActives;
+        public TextBox txbIdSeason;
+        public ComboBox cboSeason;
+        private Label label11;
+        private Label label10;
+        public TextBox txbLegend;
+        public ComboBox cboLegend;
+        private Label label13;
+    }
+}

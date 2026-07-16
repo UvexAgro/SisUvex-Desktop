@@ -1,0 +1,819 @@
+﻿using SisUvex.Catalogos.Metods.DataGridViews;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using System.Data;
+using System.Data.SqlClient;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.Values;
+using System.Media;
+using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Archivo.Manifiesto.ConfManifest;
+using SisUvex.Catalogos.Productor;
+using SisUvex.Catalogos.Metods.Extentions;
+using System.Web;
+using SisUvex.Catalogos.Metods.Controls;
+
+namespace SisUvex.Archivo.Manifiesto
+{
+    internal class ClsManifest
+    {
+        SQLControl sql = new SQLControl();
+        ClsControls controlList;
+        public FrmManifestAdd _frmAdd;
+        public FrmManifestCat _frmCat;
+        public EManifest eManifest;
+        public ClsDGVCatalog? dgv;
+        DataTable dtCatalog = null!;
+        ClsManifestPalletList clsPallets = new ClsManifestPalletList();
+
+        private const string IdColumnManifest = "Manifiesto";
+        private const string ActiveColumnManifest = "Activo";
+
+        private static readonly string[] AuditColumns =
+        [
+            "Caja R.",
+            "Pies",
+            "Factura",
+            "Folio fiscal",
+            "Termometro caja",
+            "Term. Pallet",
+            "Pos.",
+            "Orden",
+            "Booking",
+            "Fitosanitario",
+        ];
+
+        private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Hora, vw.[fco Num eco] AS 'Caja R.', vw.[fco Pies] AS 'Pies', vw.Factura, vw.[Folio fiscal], vw.[Termometro caja], vw.Termografo AS [Term. Pallet], vw.[Posicion termo] AS 'Pos.', vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Dis Short] AS 'Distribuidor', vw.Consignatario, vw.ProductorShortName AS 'Productor', vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
+        private string queryCatalogOrderBy = " ORDER BY Manifiesto Desc ";
+
+        private void BindDgvCatalog()
+        {
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog, IdColumnManifest, ActiveColumnManifest);
+
+            foreach (string columnName in AuditColumns)
+                dgv.AddAuditColumn(columnName);
+
+            dgv.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
+
+            if (_frmCat.btnRemoved.Text == "Activos")
+                dgv.SetFilterNull();
+            else
+            {
+                dgv.CopyActiveValuesToHiddenColumn();
+                dgv.SetFilterActivesOnly();
+            }
+        }
+
+        public void BeginFormCat()
+        {
+            SetDgvCatalog();
+
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, ClsObject.Grower.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDestination, ClsObject.City.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboConsignee, ClsObject.Consignee.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboTransportLine, ClsObject.TransportLine.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboFreightContainer, ClsObject.FreightContainer.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboTruck, ClsObject.Truck.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDriver, ClsObject.Driver.Cbo);
+
+            WireTransportLineComboFilters(
+                _frmCat.cboTransportLine,
+                _frmCat.cboDriver,
+                _frmCat.cboTruck,
+                _frmCat.cboFreightContainer);
+        }
+
+        /// <summary>
+        /// OneForAll: línea de transporte filtra conductor, troque y caja.
+        /// En catálogo los checkbox y textbox de ID son null; en Add se pasan los del formulario.
+        /// </summary>
+        private void WireTransportLineComboFilters(
+            ComboBox cboTransportLine,
+            ComboBox cboDriver,
+            ComboBox cboTruck,
+            ComboBox cboFreightContainer,
+            CheckBox? chbRemovedTransportLine = null,
+            CheckBox? chbRemovedDriver = null,
+            CheckBox? chbRemovedTruck = null,
+            CheckBox? chbRemovedFreightContainer = null,
+            TextBox? txbIdTransportLine = null)
+        {
+            List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> transportLineDependents =
+            [
+                (cboDriver, ClsObject.TransportLine.ColumnId, chbRemovedDriver),
+                (cboTruck, ClsObject.TransportLine.ColumnId, chbRemovedTruck),
+                (cboFreightContainer, ClsObject.TransportLine.ColumnId, chbRemovedFreightContainer),
+            ];
+
+            ClsComboBoxes.Events.CboApplyEventFilterOneForAll(
+                cboTransportLine, null, txbIdTransportLine, transportLineDependents);
+
+            if (chbRemovedTransportLine != null)
+            {
+                ClsComboBoxes.CboApplyChbClickEventWithOneForAllDependents(
+                    cboTransportLine,
+                    chbRemovedTransportLine,
+                    txbIdTransportLine,
+                    transportLineDependents);
+            }
+        }
+
+        public void SetDgvCatalog()
+        {
+            dtCatalog = ClsQuerysDB.GetDataTable(SetStringQueryWithFilter());
+            BindDgvCatalog();
+        }
+
+        public void ChbShowAuditFilter()
+        {
+            dgv?.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
+        }
+
+        private void ApplyAuditSelectionMode()
+        {
+            _frmCat.dgvCatalog.SelectionMode = _frmCat.chbShowAudit.Checked
+                ? DataGridViewSelectionMode.CellSelect
+                : DataGridViewSelectionMode.FullRowSelect;
+
+            _frmCat.dgvCatalog.ClearSelection();
+        }
+
+        private string SetStringQueryWithFilter()
+        {
+            string qry = queryCatalogo + $" WHERE vw.Fecha BETWEEN '{_frmCat.dtpDate1.Value.ToString("yyyy-MM-dd")}' AND '{_frmCat.dtpDate2.Value.ToString("yyyy-MM-dd")}' ";
+
+            if (_frmCat.cboDistributor.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idDis = '{_frmCat.cboDistributor.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboGrower.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idGro = '{_frmCat.cboGrower.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboConsignee.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idCons = '{_frmCat.cboConsignee.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboDestination.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idCitDE = '{_frmCat.cboDestination.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboTransportLine.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idTLn = '{_frmCat.cboTransportLine.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboDriver.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idDri = '{_frmCat.cboDriver.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboTruck.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idTru = '{_frmCat.cboTruck.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboFreightContainer.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idFco = '{_frmCat.cboFreightContainer.SelectedValue}' ";
+            }
+
+            return qry + " OR Fecha IS NULL " + queryCatalogOrderBy;
+        }
+
+        public void btnSearchManifest(string idManifest)
+        {
+            string qry;
+
+            if (int.TryParse(idManifest, out int manifestId))
+            {
+                idManifest = manifestId.ToString("D4");
+
+                qry = queryCatalogo + $" WHERE RIGHT(vw.Manifiesto, 4) = '{idManifest}' ";
+            }
+            else
+            {
+                qry = queryCatalogo + $" WHERE vw.Manifiesto = '{idManifest}' ";
+            }
+
+            dtCatalog = ClsQuerysDB.GetDataTable(qry);
+            BindDgvCatalog();
+        }
+
+        public void btnShowRemoved()
+        {
+            if (dgv == null)
+                return;
+
+            if (_frmCat.btnRemoved.Text == "Eliminados")
+            {
+                dgv.SetFilterNull();
+                _frmCat.btnRemoved.Text = "Activos";
+            }
+            else
+            {
+                dgv.CopyActiveValuesToHiddenColumn();
+                dgv.SetFilterActivesOnly();
+                _frmCat.btnRemoved.Text = "Eliminados";
+            }
+        }
+
+        private bool IsActiveSelectedRow()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0)
+                return false;
+
+            string? activeValue = _frmCat.dgvCatalog.SelectedRows[0].Cells[ActiveColumnManifest].Value?.ToString();
+            return activeValue == "1" || string.Equals(activeValue, "true", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public void btnRemoveProcedure()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0 || !IsActiveSelectedRow())
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string id = _frmCat.dgvCatalog.SelectedRows[0].Cells[IdColumnManifest].Value?.ToString() ?? string.Empty;
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("sp_PackManifestRemove", sql.cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.ExecuteNonQuery();
+
+                dgv?.ChangeActiveCell(_frmCat.dgvCatalog, "0");
+            }
+            catch (Exception ex)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show(ex.ToString(), "Catálogo eliminar");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
+        public void btnRecoverProcedure()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0 || IsActiveSelectedRow())
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string id = _frmCat.dgvCatalog.SelectedRows[0].Cells[IdColumnManifest].Value?.ToString() ?? string.Empty;
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("sp_PackManifestRecover", sql.cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.ExecuteNonQuery();
+
+                dgv?.ChangeActiveCell(_frmCat.dgvCatalog, "1");
+            }
+            catch (Exception ex)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show(ex.ToString(), "Catálogo recuperar");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
+        public void OpenFrmAdd()
+        {
+            _frmAdd = new FrmManifestAdd();
+            _frmAdd.cls = this;
+            _frmAdd.Text = "Añadir manifiesto";
+            _frmAdd.lblTitle.Text = "Añadir manifiesto";
+            _frmAdd.IsAddModify = true;
+
+            _frmAdd.ShowDialog();
+
+            if (_frmAdd.AddIsUpdate)
+                SetDgvCatalog();
+        }
+
+        public void OpenFrmModify()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count != 0)
+            {
+                _frmAdd = new FrmManifestAdd();
+                _frmAdd.Text = "Modificar manifiesto";
+                _frmAdd.lblTitle.Text = "Modificar manifiesto";
+                _frmAdd.IsAddModify = false;
+
+                _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString();
+                _frmAdd.ShowDialog();
+
+                if (_frmAdd.AddIsUpdate)
+                    SetDgvCatalog();
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+            }
+        }
+
+        public void BeginFormAdd()
+        {
+            clsPallets.dataGridView = _frmAdd.dgvPalletList;
+            clsPallets.AddColumnsToDGVPalletList();
+            clsPallets.BindingTotalsDgv(_frmAdd.dgvTotal);
+            AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
+
+            CargarComboBoxes();
+
+            if (_frmAdd.IsAddModify)
+            {
+                ClsConfigManifest clsConfManifest = new ClsConfigManifest();
+                clsConfManifest.GetParameters();
+                _frmAdd.txbTemperature.Text = clsConfManifest.temperature.ToString();
+                _frmAdd.cboTemperatureUnit.Text = clsConfManifest.temperatureUnit;
+                _frmAdd.cboTransportVehicle.Text = clsConfManifest.transportVehicle;
+                _frmAdd.cboTransportType.Text = clsConfManifest.transportTransportType;
+
+                _frmAdd.txbIdSeason.Text = clsConfManifest.idSeason;
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, clsConfManifest.idSeason);
+
+                _frmAdd.cboActive.SelectedIndex = 1;
+
+                _frmAdd.spnHour.Text = DateTime.Now.AddMinutes((15 - DateTime.Now.Minute % 15) % 15).ToString("HH:mm");
+
+                _frmAdd.cboMarket.SelectedIndexChanged += (sender, e) =>
+                {
+                    if (_frmAdd.cboMarket.SelectedIndex > 0)
+                    {
+                        string prefixMarket = (string)_frmAdd.cboMarket.GetColumnValue(ClsObject.Market.ColumnPrefix); ;
+                        _frmAdd.txbId.Text = GetIdNextManifest(prefixMarket);
+                    }
+                    else
+                        _frmAdd.txbId.Text = string.Empty;
+                };
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMarket, clsConfManifest.idMarket);
+
+            }
+            else
+            {
+                _frmAdd.cboMarket.Enabled = false;
+
+                LoadControlsModify();
+            }
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+        }
+        private void AddControlsToList()
+        {
+            controlList = new();
+
+            controlList.ChangeHeadMessage("Para registrar un manifiesto debe:\n");
+            controlList.Add(_frmAdd.txbId, "Ingresar el código del manifiesto.");
+            controlList.Add(_frmAdd.txbIdMarket, "Seleccionar el mercado.");
+        }
+        private void CargarComboBoxes()
+        {
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDistributor, ClsObject.Distributor.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboConsignee, ClsObject.Consignee.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, ClsObject.Grower.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyMX, ClsObject.AgencyTradeMX.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboAgencyUS, ClsObject.AgencyTradeUS.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboCityCrossPoint, ClsObject.City.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboCityDestination, ClsObject.City.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboTransportLine, ClsObject.TransportLine.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboDriver, ClsObject.Driver.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboTruck, ClsObject.Truck.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboFreightContainer, ClsObject.FreightContainer.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboSeason, ClsObject.Season.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboTemplate, ClsObject.ManifestTemplate.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmAdd.cboMarket, ClsObject.Market.Cbo);
+
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDistributor, _frmAdd.txbIdDistributor);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboConsignee, _frmAdd.txbIdConsignee);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboGrower, _frmAdd.txbIdGrower);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboAgencyUS, _frmAdd.txbIdAgencyUS);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboAgencyMX, _frmAdd.txbIdAgencyMX);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityCrossPoint, _frmAdd.txbIdCityCrossPoint);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboCityDestination, _frmAdd.txbIdCityDestination);
+            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTransportLine, _frmAdd.txbIdTransportLine);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboDriver, _frmAdd.txbIdDriver);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTruck, _frmAdd.txbIdTruck);
+            //ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFreightContainer, _frmAdd.txbIdFreightContainer);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboSeason, _frmAdd.txbIdSeason);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboTemplate, _frmAdd.txbIdTemplate);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboMarket, _frmAdd.txbIdMarket);
+
+
+            _frmAdd.cboFreightContainer.SelectedValueChanged += (sender, e) =>
+            {   _frmAdd.txbIdFreightContainer.Text = _frmAdd.cboFreightContainer.SelectedValue?.ToString();
+
+                if (_frmAdd.txbThermometerContainer.ReadOnly)
+                _frmAdd.txbThermometerContainer.Text = _frmAdd.cboFreightContainer.GetColumnValue(ClsObject.FreightContainer.ColumnThermometer).ToString();
+            };
+
+            // Diccionario para asignar columnas del DataTable del cmbPrincipal a cada ComboBox secundario
+            Dictionary<ComboBox, string> columnasRelacionadas = new Dictionary<ComboBox, string>
+            {
+                { _frmAdd.cboDistributor, ClsObject.Distributor.ColumnId },
+                { _frmAdd.cboConsignee, ClsObject.Consignee.ColumnId },
+                { _frmAdd.cboGrower, ClsObject.Grower.ColumnId },
+                { _frmAdd.cboAgencyUS, ClsObject.AgencyTradeUS.ColumnId },
+                { _frmAdd.cboAgencyMX, ClsObject.AgencyTradeMX.ColumnId },
+                { _frmAdd.cboCityCrossPoint, ClsObject.City.ColumnIdCrossPoint },
+                { _frmAdd.cboCityDestination, ClsObject.City.ColumnIdDestiny }
+            };
+            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(_frmAdd.cboTemplate, columnasRelacionadas, _frmAdd.txbIdTemplate);
+
+            WireTransportLineComboFilters(
+                _frmAdd.cboTransportLine,
+                _frmAdd.cboDriver,
+                _frmAdd.cboTruck,
+                _frmAdd.cboFreightContainer,
+                _frmAdd.chbRemovedTransportLine,
+                _frmAdd.chbRemovedDriver,
+                _frmAdd.chbRemovedTruck,
+                _frmAdd.chbRemovedFreightContainer,
+                _frmAdd.txbIdTransportLine);
+
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboGrower, _frmAdd.chbRemovedGrower);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyUS, _frmAdd.chbRemovedAgencyUS);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyMX, _frmAdd.chbRemovedAgencyMX);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityCrossPoint, _frmAdd.chbRemovedCityCrossPoint);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityDestination, _frmAdd.chbRemovedCityDestination);
+
+            ClsTextBoxes.TxbApplyKeyPressEventNumericWithLimit(_frmAdd.txbDieselLiters, 9, 2);
+            ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTermoPosition);
+            ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTemperature);
+        }
+
+        public string GetIdNextManifest(string? market)
+        {
+            if (string.IsNullOrWhiteSpace(market))
+                return string.Empty;
+
+            string qry = $" SELECT '{market}' + FORMAT(COALESCE(MAX(CAST(RIGHT(id_manifest, 4) AS INT)) + 1, 1), '0000') AS 'Id' FROM Pack_Manifest WHERE id_manifest LIKE '{market}%' "; 
+
+            return ClsQuerysDB.GetData(qry);
+        }
+
+        private void LoadControlsModify()
+        {
+            eManifest = new EManifest();
+
+            eManifest.SetManifest(_frmAdd.idModify);
+
+            _frmAdd.txbId.Text = eManifest.idManifest;
+            _frmAdd.cboActive.SelectedIndex = eManifest.active ?? 1;
+            _frmAdd.dtpDate.Value = eManifest.shipmentDate ?? DateTime.Now;
+            _frmAdd.spnHour.Text = eManifest.shipmentHour;
+            _frmAdd.txbPurchaseOrder.Text = eManifest.purchaseOrder;
+            _frmAdd.txbBooking.Text = eManifest.booking;
+            _frmAdd.txbPhytosanitary.Text = eManifest.phytosanitary;
+            _frmAdd.cboTransportVehicle.Text = eManifest.transportVehicle;
+            _frmAdd.cboTransportType.Text = eManifest.transportType;
+            _frmAdd.txbTermograph.Text = eManifest.termograph;
+            _frmAdd.txbTermoPosition.Text = eManifest.termoPosition;
+            _frmAdd.txbTemperature.Text = eManifest.temperature;
+            _frmAdd.cboTemperatureUnit.Text = eManifest.temperatureUnit;
+            _frmAdd.txbSeal1.Text = eManifest.seal1;
+            _frmAdd.txbSeal2.Text = eManifest.seal2;
+            _frmAdd.txbSeal3.Text = eManifest.seal3;
+            _frmAdd.txbDieselInvoice.Text = eManifest.dieselInvoice;
+            _frmAdd.txbDieselLiters.Text = eManifest.dieselLts;
+            _frmAdd.txbNameShipper.Text = eManifest.nameShipper;
+            _frmAdd.txbNameOperator.Text = eManifest.nameOperator;
+            _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
+            _frmAdd.txbObservations.Text = eManifest.observations;
+            _frmAdd.txbThermometerContainer.Text = eManifest.thermometerContainer; //<-- No se cambia con el Cbo por el ReadOnly del FCat
+            _frmAdd.txbFactura.Text = eManifest.factura;
+            _frmAdd.txbFolioFiscalFactura.Text = eManifest.facturaUuid;
+
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboConsignee, eManifest.idConsignee);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboGrower, eManifest.idGrower);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyUS, eManifest.idUSAgencyTrade);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboAgencyMX, eManifest.idMXAgencyTrade);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityCrossPoint, eManifest.idCityCrossPoint);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboCityDestination, eManifest.idCityDestiny);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboTransportLine, eManifest.idTransportLine);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboDriver, eManifest.idDriver);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboTruck, eManifest.idTruck);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboFreightContainer, eManifest.idFreightContainer);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMarket, eManifest.idMarket);
+
+            clsPallets.AddManifestPalletsToDGVPalletList(eManifest.idManifest);
+        }
+
+        public void BtnAddPallet()
+        {
+            if(!int.TryParse(_frmAdd.txbPalletPosition.Text, out int position))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+            else if (position == 0)
+            {
+                position = clsPallets.GetNextPalletPosition();
+            }
+
+            bool isPalletAdd = clsPallets.AddPalletToDGVPalletList(ClsValues.FormatZeros(_frmAdd.txbIdPallet.Text,"00000"), position);
+
+            if (isPalletAdd)
+            {
+                _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+            }
+
+            _frmAdd.txbIdPallet.Focus();
+            _frmAdd.txbIdPallet.SelectAll();
+        }
+
+        public void BtnRemovePallet()
+        {
+            clsPallets.RemovePalletFromDGVPalletList();
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+        }
+
+        public void BtnMovePalletUp()
+        {
+            clsPallets.MoveUpSelectedPalletPosition();
+
+            _frmAdd.dgvPalletList.Sort(_frmAdd.dgvPalletList.Columns["Posicion"], System.ComponentModel.ListSortDirection.Ascending);
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+        }
+
+        public void BtnMovePalletDown()
+        {
+            clsPallets.MoveDownSelectedPalletPosition();
+
+            _frmAdd.dgvPalletList.Sort(_frmAdd.dgvPalletList.Columns["Posicion"], System.ComponentModel.ListSortDirection.Ascending);
+
+            _frmAdd.txbPalletPosition.Text = clsPallets.GetNextPalletPosition().ToString();
+        }
+
+        public void btnAcceptAddModify()
+        {
+            if (!controlList.ValidateControls())
+                return;
+
+            if (!clsPallets.ValidateIdDistributorInPallets(_frmAdd.txbIdDistributor.Text))
+                return;
+
+            if (_frmAdd.IsAddModify)
+                AddProcedures();
+            else
+                ModifyProcedures();
+
+            //if (_frmAdd.AddIsUpdate)
+            //    _frmAdd.Close();
+
+            _frmAdd.cboMarket.Enabled = false;
+        }
+
+        public void AddProcedures()
+        {
+            try
+            {
+                sql.BeginTransaction();
+
+                string? idManifest = AddDetailsToNewManifest();
+
+                if (idManifest.IsNullOrEmpty())
+                    throw new Exception("No se pudo agregar el manifiesto");
+
+                AddPalletsToManifestPart(idManifest);
+
+                sql.CommitTransaction();
+
+                _frmAdd.txbId.Text = idManifest;
+
+                MessageBox.Show("Se agregó el manifiesto: " + idManifest, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                _frmAdd.AddIsUpdate = true;
+
+                _frmAdd.IsAddModify = false;
+            }
+            catch (Exception ex)
+            {
+                sql.RollbackTransaction();
+                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
+        public void ModifyProcedures()
+        {
+            try
+            {
+                sql.BeginTransaction();
+
+                ModifyDetailsToManifest();
+
+                RemovePalletsForManifest(_frmAdd.txbId.Text);
+
+                AddPalletsToManifestPart(_frmAdd.txbId.Text);
+
+                sql.CommitTransaction();
+
+                MessageBox.Show("Se modificó el manifiesto: " + _frmAdd.txbId.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                _frmAdd.AddIsUpdate = true;
+            }
+            catch (Exception ex)
+            {
+                sql.RollbackTransaction();
+                MessageBox.Show(ex.ToString(), "Catálogo añadir");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
+        }
+
+        private string AddDetailsToNewManifest()
+        {
+            SqlCommand cmd = new ("sp_PackManifestAdd", sql.cnn, sql.transaction);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@active", _frmAdd.cboActive.SelectedIndex);
+            cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
+            cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDistributor.Text));
+            cmd.Parameters.AddWithValue("@idConsignee", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdConsignee.Text));
+            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdGrower.Text));
+            cmd.Parameters.AddWithValue("@idUSAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyUS.Text));
+            cmd.Parameters.AddWithValue("@idMXAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyMX.Text));
+            cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdTransportLine.Text));
+            cmd.Parameters.AddWithValue("@idTruck", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdTruck.Text));
+            cmd.Parameters.AddWithValue("@idFreightContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdFreightContainer.Text));
+            cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDriver.Text));
+            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityCrossPoint.Text));
+            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityDestination.Text));
+            cmd.Parameters.AddWithValue("@seal1", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal1.Text));
+            cmd.Parameters.AddWithValue("@seal2", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal2.Text));
+            cmd.Parameters.AddWithValue("@seal3", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal3.Text));
+            cmd.Parameters.AddWithValue("@termograph", ClsValues.IfEmptyToDBNull(_frmAdd.txbTermograph.Text));
+            cmd.Parameters.AddWithValue("@purchaseOrder", ClsValues.IfEmptyToDBNull(_frmAdd.txbPurchaseOrder.Text));
+            cmd.Parameters.AddWithValue("@booking", ClsValues.IfEmptyToDBNull(_frmAdd.txbBooking.Text));
+            cmd.Parameters.AddWithValue("@dShipment", _frmAdd.dtpDate.Value.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@cShipment", _frmAdd.spnHour.Text);
+            cmd.Parameters.AddWithValue("@temperature", ClsValues.IfEmptyToDBNull(_frmAdd.txbTemperature.Text));
+            cmd.Parameters.AddWithValue("@temperatureUnit", ClsValues.IfEmptyToDBNull(_frmAdd.cboTemperatureUnit.Text));
+            cmd.Parameters.AddWithValue("@nameOperator", ClsValues.IfEmptyToDBNull(_frmAdd.txbNameOperator.Text));
+            cmd.Parameters.AddWithValue("@nameShipper", ClsValues.IfEmptyToDBNull(_frmAdd.txbNameShipper.Text));
+            cmd.Parameters.AddWithValue("@transportVehicle", ClsValues.IfEmptyToDBNull(_frmAdd.cboTransportVehicle.Text));
+            cmd.Parameters.AddWithValue("@transportType", ClsValues.IfEmptyToDBNull(_frmAdd.cboTransportType.Text));
+            cmd.Parameters.AddWithValue("@rejected", ClsValues.IfEmptyToDBNull(_frmAdd.chbRejected.Checked ? "1" : "0"));
+            cmd.Parameters.AddWithValue("@observations", ClsValues.IfEmptyToDBNull(_frmAdd.txbObservations.Text));
+            cmd.Parameters.AddWithValue("@termoPosition", ClsValues.IfEmptyToDBNull(_frmAdd.txbTermoPosition.Text));
+            cmd.Parameters.AddWithValue("@dieselInvoice", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselInvoice.Text));
+            cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
+            cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
+            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
+            cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
+
+            cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            string idManifest = string.Empty;
+
+            if (dr.Read())
+            {
+                idManifest = (string)dr["id_manifest"];
+
+                dr.Close();
+            }
+
+            return idManifest;
+        }
+
+        public void ModifyDetailsToManifest()
+        {
+            SqlCommand cmd = new SqlCommand("sp_PackManifestModify", sql.cnn, sql.transaction);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@active", _frmAdd.cboActive.SelectedIndex);
+            cmd.Parameters.AddWithValue("@idManifest", _frmAdd.txbId.Text);
+            cmd.Parameters.AddWithValue("@idDistributor", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDistributor.Text));
+            cmd.Parameters.AddWithValue("@idConsignee", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdConsignee.Text));
+            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdGrower.Text));
+            cmd.Parameters.AddWithValue("@idUSAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyUS.Text));
+            cmd.Parameters.AddWithValue("@idMXAgencyTrade", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdAgencyMX.Text));
+            cmd.Parameters.AddWithValue("@idTransportLine", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdTransportLine.Text));
+            cmd.Parameters.AddWithValue("@idTruck", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdTruck.Text));
+            cmd.Parameters.AddWithValue("@idFreightContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdFreightContainer.Text));
+            cmd.Parameters.AddWithValue("@idDriver", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdDriver.Text));
+            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityCrossPoint.Text));
+            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdCityDestination.Text));
+            cmd.Parameters.AddWithValue("@seal1", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal1.Text));
+            cmd.Parameters.AddWithValue("@seal2", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal2.Text));
+            cmd.Parameters.AddWithValue("@seal3", ClsValues.IfEmptyToDBNull(_frmAdd.txbSeal3.Text));
+            cmd.Parameters.AddWithValue("@termograph", ClsValues.IfEmptyToDBNull(_frmAdd.txbTermograph.Text));
+            cmd.Parameters.AddWithValue("@purchaseOrder", ClsValues.IfEmptyToDBNull(_frmAdd.txbPurchaseOrder.Text));
+            cmd.Parameters.AddWithValue("@booking", ClsValues.IfEmptyToDBNull(_frmAdd.txbBooking.Text));
+            cmd.Parameters.AddWithValue("@dShipment", _frmAdd.dtpDate.Value.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@cShipment", _frmAdd.spnHour.Text);
+            cmd.Parameters.AddWithValue("@temperature", ClsValues.IfEmptyToDBNull(_frmAdd.txbTemperature.Text));
+            cmd.Parameters.AddWithValue("@temperatureUnit", ClsValues.IfEmptyToDBNull(_frmAdd.cboTemperatureUnit.Text));
+            cmd.Parameters.AddWithValue("@nameOperator", ClsValues.IfEmptyToDBNull(_frmAdd.txbNameOperator.Text));
+            cmd.Parameters.AddWithValue("@nameShipper", ClsValues.IfEmptyToDBNull(_frmAdd.txbNameShipper.Text));
+            cmd.Parameters.AddWithValue("@transportVehicle", ClsValues.IfEmptyToDBNull(_frmAdd.cboTransportVehicle.Text));
+            cmd.Parameters.AddWithValue("@transportType", ClsValues.IfEmptyToDBNull(_frmAdd.cboTransportType.Text));
+            cmd.Parameters.AddWithValue("@rejected", ClsValues.IfEmptyToDBNull(_frmAdd.chbRejected.Checked ? "1" : "0"));
+            cmd.Parameters.AddWithValue("@observations", ClsValues.IfEmptyToDBNull(_frmAdd.txbObservations.Text));
+            cmd.Parameters.AddWithValue("@termoPosition", ClsValues.IfEmptyToDBNull(_frmAdd.txbTermoPosition.Text));
+            cmd.Parameters.AddWithValue("@dieselInvoice", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselInvoice.Text));
+            cmd.Parameters.AddWithValue("@dieselLiters", ClsValues.IfEmptyToDBNull(_frmAdd.txbDieselLiters.Text));
+            cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
+            cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
+            cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text)); 
+            cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
+
+            cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void AddPalletsToManifestPart(string idManifest)
+        {
+            foreach (DataGridViewRow row in _frmAdd.dgvPalletList.Rows)
+            {
+                SqlCommand cmd = new SqlCommand("sp_PackManifestAddPallet", sql.cnn, sql.transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@idManifest", idManifest);
+                cmd.Parameters.AddWithValue("@idPallet", row.Cells["Pallet"].Value.ToString());
+                cmd.Parameters.AddWithValue("@position", row.Cells["Posicion"].Value.ToString());
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void RemovePalletsForManifest(string idManifest)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Pack_Pallet SET c_position = NULL, id_manifest = NULL, userUpdate = @userUpdate, d_update = CONVERT(DATE, SYSDATETIME()) WHERE id_manifest = @idManifest", sql.cnn, sql.transaction);
+            cmd.CommandType = CommandType.Text;
+            cmd.Parameters.AddWithValue("@idManifest", idManifest);
+            cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+
+            cmd.ExecuteNonQuery();
+        }
+
+        public void BtnPrintManifestFrmAdd()
+        {
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.txbIdTemplate.Text);
+        }
+
+        public void BtnPrintManifestFrmCat()
+        {
+            if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
+            {
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
+            }
+            else
+                SystemSounds.Exclamation.Play();
+        }
+        private void PrintManifest(string idManifest)
+        {
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, null);
+            frmPrintManifest.ShowDialog();
+        }
+        private void PrintManifest(string idManifest, string? idTemplate)
+        {
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, idTemplate);
+            frmPrintManifest.ShowDialog();
+        }
+    }
+}

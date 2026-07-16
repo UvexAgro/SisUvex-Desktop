@@ -1,0 +1,862 @@
+
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.Identity.Client;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Usuarios;
+using System.Collections.Generic;
+using System.Data;
+using System.Windows.Forms;
+using System.Diagnostics.Metrics;
+using System.Web;
+
+namespace SisUvex.Catalogos.Metods
+{
+    class ClsObject
+    {
+        //LOS CAMPOS DE Cbo ES EL NOMBRE CLAVE PARA BUSCAR EN LOS METODOS DE CARGA DE COMBOBOX
+        //LO MISMO PARA LOS DgvCatalog
+
+        public static class String
+        {
+            public const string SelectText = "---Seleccionar---";
+        }
+        public static class Column
+        {
+            public const string name = "Nombre";
+            public const string id = "Código";
+            public const string active = "Activo";
+        }
+        public static class WorkPlan
+        {
+            public const string TableName = "Pack_WorkPlan";
+            public const string ColumnName = "Plan de trabajo";
+            public const string ColumnId = "idWorkPlan";
+            public const string ColumnActive = "ActiveWorkPlan";
+            public const string ColumnDate = "dateWorkPlan";
+            public const string ColumnVpc = "VPC";
+            public const string Cbo = "CboWorkPlan";
+            public const string DgvCatalog = "DgvCatalogWorkPlan";
+            public const string QueryCbo = "queryWorkPlan";
+            public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] LEFT JOIN Pack_GTIN gtn ON gtn.id_GTIN = w.id_GTIN LEFT JOIN Pack_Lot lot ON lot.id_lot = w.id_lot AND lot.id_variety = gtn.id_variety ";
+            public const string CboPresentation = "CboWorkPlanPresentation";
+            public const string QueryCboPresentation = $@"SELECT CONCAT_WS(' ', wpl.id_workPlan, '|', lot.v_nameLot, '|', dis.v_nameDistShort, '|', CONCAT(con.v_nameContainer, CAST(gtn.n_lbs AS FLOAT)), siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, box.v_shortNameTypeBox, leg.v_labelLegend) AS [{Column.name}]
+                                                        , wpl.c_active AS [{Column.active}]
+                                                        , wpl.id_workPlan AS [{Column.id}]
+                                                        , FORMAT(wpl.d_workDay, 'yyyy-MM-dd') AS [{ColumnDate}]
+                                                        , wpl.id_workGroup AS [{WorkGroup.ColumnId}]
+                                                        , wgp.v_nameWorkGroup AS [{WorkGroup.ColumnName}]
+                                                        , wpl.id_lot AS [{Lot.ColumnId}]
+                                                        , lot.v_nameLot AS [{Lot.ColumnName}]
+                                                        , gtn.id_variety AS [{Variety.ColumnId}]
+                                                        , [var].v_nameComercial AS [{Variety.ColumnName}]
+                                                        , [var].v_nameScientis AS [{Variety.ColumnScientis}]
+                                                        , [var].v_shortName AS [{Variety.ColumnShortName}]
+                                                        , [var].v_patentLegend AS [{Variety.ColumnPatentLegend}]
+                                                        , [var].v_tradeMark AS [{Variety.ColumnTradeMark}]
+                                                        , cro.id_crop AS [{Crop.ColumnId}]
+                                                        , cro.v_nameCrop AS [{Crop.ColumnName}]
+                                                        , wpl.id_size AS [{Size.ColumnId}]
+                                                        , siz.v_sizeValue AS [{Size.ColumnName}]
+                                                        , gtn.id_distributor AS [{Distributor.ColumnId}]
+                                                        , dis.v_nameDistributor AS [{Distributor.ColumnName}]
+                                                        , dis.v_address AS [{Distributor.ColumnAddress}]
+                                                        , dis.v_city AS [{Distributor.ColumnCity}]
+                                                        , dis.v_nameDistShort AS [{Distributor.ColumnShortName}]
+                                                        , wpl.id_GTIN AS [{Gtin.ColumnId}]
+                                                        , gtn.v_GTIN AS [{Gtin.ColumnName}]
+                                                        , gtn.id_container AS [{Container.ColumnId}]
+                                                        , gtn.v_UPC AS [{Gtin.ColumnUpc}]
+                                                        , gtn.c_PLU AS [{Gtin.ColumnPlu}]
+                                                        , con.v_nameContainer AS [{Container.ColumnName}]
+                                                        , gtn.n_lbs AS [{Gtin.ColumnLbs}]
+                                                        , gtn.v_preLabel AS [{Gtin.ColumnPreLabel}]
+                                                        , gtn.id_presentation AS [{Presentation.ColumnId}]
+                                                        , pre.v_namePresentation AS [{Presentation.ColumnName}]
+                                                        , gtn.v_postLabel AS [{Gtin.ColumnPostLabel}]
+                                                        , gtn.i_palletBoxes AS [{Gtin.ColumnPalletBoxes}]
+                                                        , gtn.id_pti AS [{Pti.ColumnId}]
+                                                        , pti.v_namePti AS [{Pti.ColumnName}]
+                                                        , [var].id_color AS [{Color.ColumnId}]
+                                                        , col.v_genericName AS [{Color.ColumnGenericName}]
+                                                        , col.v_nameColor AS [{Color.ColumnName}]
+                                                        , col.v_CanColorEn AS [{Color.ColumnNameCanEn}]
+                                                        , col.v_CanColorFr AS [{Color.ColumnNameCanFr}]
+                                                        , wpl.c_voicePickCode AS [{ColumnVpc}]
+                                                        , ctr.id_contractor AS [{Contractor.ColumnId}]
+                                                        , ctr.v_nameContractor AS [{Contractor.ColumnName}]
+                                                        , farm.id_farm AS [{Farm.ColumnId}]
+                                                        , farm.v_farmName as [{Farm.ColumnName}]
+                                                        , box.v_nameTypeBox AS [{TypeBox.ColumnName}]
+                                                        , box.id_typeBox AS [{TypeBox.ColumnId}]
+                                                        , box.v_shortNameTypeBox AS [{TypeBox.ColumnShortName}]
+                                                        , leg.id_labelLegend AS [{LabelLegend.ColumnId}]
+                                                        , leg.v_labelLegend AS [{LabelLegend.ColumnName}]
+                                                        , leg.v_labelLegend2 AS [{LabelLegend.ColumnLegend2}]
+                                                        FROM Pack_WorkPlan AS wpl 
+                                                        LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup 
+                                                        LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor 
+                                                        LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size 
+                                                        LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN 
+                                                        LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation 
+                                                        LEFT JOIN dbo.Pack_Container AS con ON con.id_container = gtn.id_container 
+                                                        LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety 
+                                                        LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor 
+                                                        LEFT JOIN dbo.Pack_Price AS prc ON prc.id_price = gtn.id_price 
+                                                        LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti 
+                                                        LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety 
+                                                        LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop 
+                                                        LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color 
+                                                        LEFT JOIN dbo.Grow_Farm AS farm ON farm.id_farm = lot.id_farm
+                                                        LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                                                        LEFT JOIN dbo.Pack_LabelLegend AS leg ON leg.id_labelLegend = wpl.id_labelLegend";
+        }
+
+        /// <summary>
+        /// Consultas sobre <c>vw_PackPalletCon</c> (activos) y <c>vw_PackPalletConWithShrinkage</c> (incluye inactivos / reestibados) con IDs de tablas relacionadas.
+        /// <see cref="ColumnsJoinedIds"/> lista los alias agregados por los JOIN (para ocultar en DGV, validaciones, etc.).
+        /// </summary>
+        public static class Pallet
+        {
+            public const string ViewCon = "vw_PackPalletCon";
+            /// <summary>Incluye pallets con <c>Activo = '0'</c> (reestibados, inactivos, etc.).</summary>
+            public const string ViewConWithStowage = "vw_PackPalletConWithShrinkage";
+            /// <summary>Columna de estado en las vistas de pallet (<c>Activo</c>).</summary>
+            public const string ColumnActive = Column.active;
+
+            public const string ColumnPalletId = "idPallet";
+            public const string ColumnManifestId = "idManifest";
+            public const string ColumnRackId = "idRack";
+
+            const string QueryJoins = @"
+                LEFT JOIN dbo.Pack_Pallet AS pal ON pal.id_pallet = vw.Pallet
+                LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan
+                LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN
+                LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup
+                LEFT JOIN dbo.Pack_Contractor AS con ON con.id_contractor = wgp.id_contractor
+                LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size
+                LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation
+                LEFT JOIN dbo.Pack_Container AS cnt ON cnt.id_container = gtn.id_container
+                LEFT JOIN dbo.Pack_Variety AS vrt ON vrt.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor
+                LEFT JOIN dbo.Pack_Crop AS crop ON crop.id_crop = vrt.id_crop
+                LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                LEFT JOIN dbo.Pack_Price AS pri ON pri.id_price = gtn.id_price";
+
+            const string QuerySelectJoinedIds = $@"
+                pal.id_pallet AS [{ColumnPalletId}],
+                pal.id_manifest AS [{ColumnManifestId}],
+                pal.id_rack AS [{ColumnRackId}],
+                wpl.id_workPlan AS [{WorkPlan.ColumnId}],
+                gtn.id_GTIN AS [{Gtin.ColumnId}],
+                gtn.id_pti AS [{Pti.ColumnId}],
+                lot.id_lot AS [{Lot.ColumnId}],
+                lot.id_farm AS [{Farm.ColumnId}],
+                vrt.id_variety AS [{Variety.ColumnId}],
+                vrt.id_color AS [{Color.ColumnId}],
+                wgp.id_workGroup AS [{WorkGroup.ColumnId}],
+                con.id_contractor AS [{Contractor.ColumnId}],
+                siz.id_size AS [{Size.ColumnId}],
+                pre.id_presentation AS [{Presentation.ColumnId}],
+                pre.id_category AS [{Category.ColumnId}],
+                gtn.id_container AS [{Container.ColumnId}],
+                dis.id_distributor AS [{Distributor.ColumnId}],
+                crop.id_crop AS [{Crop.ColumnId}],
+                box.id_typeBox AS [{TypeBox.ColumnId}],
+                pri.id_price AS [{Price.ColumnId}]";
+
+            public const string QuerySelectBase =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewCon + " vw " + QueryJoins;
+
+            public const string QuerySelectBaseWithStowage =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewConWithStowage + " vw " + QueryJoins;
+
+            /// <summary>Alias de columnas agregadas por los JOIN (no incluye <c>vw.*</c>). Coinciden con <see cref="QuerySelectJoinedIds"/>.</summary>
+            public static readonly List<string> ColumnsJoinedIds = new()
+            {
+                ColumnPalletId,
+                ColumnManifestId,
+                ColumnRackId,
+                WorkPlan.ColumnId,
+                Gtin.ColumnId,
+                Pti.ColumnId,
+                Lot.ColumnId,
+                Farm.ColumnId,
+                Variety.ColumnId,
+                Color.ColumnId,
+                WorkGroup.ColumnId,
+                Contractor.ColumnId,
+                Size.ColumnId,
+                Presentation.ColumnId,
+                Category.ColumnId,
+                Container.ColumnId,
+                Distributor.ColumnId,
+                Crop.ColumnId,
+                TypeBox.ColumnId,
+                Price.ColumnId,
+            };
+
+            /// <summary>Oculta en el DGV las columnas de IDs agregadas por los JOIN.</summary>
+            public static void HideJoinedIdColumns(DataGridView dgv)
+            {
+                if (dgv == null)
+                    return;
+
+                foreach (string columnName in ColumnsJoinedIds)
+                {
+                    if (dgv.Columns.Contains(columnName))
+                        dgv.Columns[columnName].Visible = false;
+                }
+            }
+        }
+
+        public static class Grower
+        {
+            public const string TableName = "Pack_Grower";
+            public const string ColumnName = "Productor";
+            public const string ColumnShortName = "shortNameGrower";
+            public const string ColumnId = "idGrower";
+            public const string ColumnActive = "ActiveGrower";
+            public const string ColumnAddress = "Dirección";
+            public const string ColumnCity = "Ciudad";
+            public const string ColumnRegPat = "RegPat";
+            public const string Cbo = "CboGrower";
+            public const string DgvCatalog = "DgvCatalogGrower";
+            public const string QueryCbo = $" SELECT id_grower AS [{Column.id}], CONCAT(v_nameGrower, ' | ', id_grower, ' | (',c_active,')') AS [{Column.name}], c_active AS [{Column.active}], v_regPat AS [{ColumnRegPat}], v_nameGrower AS [{ColumnName}], v_shortName AS [{ColumnShortName}] FROM Pack_Grower ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryGrower";
+        }
+
+        public static class Gtin
+        {
+            public const string TableName = "Pack_GTIN";
+            public const string ColumnName = "GTIN";
+            public const string ColumnId = "idGtin";
+            public const string ColumnActive = "ActivoGtin";
+            public const string ColumnLbs = "Libras";
+            public const string ColumnPreLabel = "Pre etiqueta";
+            public const string ColumnPostLabel = "Post etiqueta";
+            public const string ColumnPalletBoxes = "Cajas por pallet";
+            public const string ColumnUpc = "UPC";
+            public const string ColumnPlu = "PLU";
+            public const string Cbo = "CboGtin";
+            public const string DgvForWorkPlan = "DgvGtinForWorkPlan";
+            public const string DgvCatalog = "DgvCatalogGtin";
+            public const string QueryCbo = "queryGtin";
+            public const string QueryDgvCatalog = "queryGtin";
+            public const string QueryDgvForWorkPlan = $" SELECT gtnC.Código, gtnC.Variedad, gtnC.Distribuidor, gtnC.Presentación, gtnC.Libras, gtnC.[Pre etiqueta], gtnC.[Post etiqueta], gtnC.Contenedor, gtnC.[Cajas por pallet], gtnC.PTI, gtnC.GTIN, gtnC.PLU, gtnC.UPC, gtn.c_active AS [{ColumnActive}], gtn.id_GTIN AS [{ColumnId}], gtn.id_variety AS [{Variety.ColumnId}], gtn.id_presentation AS [{Presentation.ColumnId}], gtn.id_container AS [{Container.ColumnId}], id_price AS [{Price.ColumnId}], gtn.id_pti AS [{Pti.ColumnId}], gtn.id_distributor AS [{Distributor.ColumnId}]  from vw_PackGTINCat gtnC JOIN Pack_GTIN gtn ON gtn.id_GTIN = gtnC.Código ";
+        }
+
+        public static class Category
+        {
+            public const string TableName = "Pack_Category";
+            public const string ColumnName = "Categoría";
+            public const string ColumnId = "idCategory";
+            public const string ColumnActive = "ActiveCategory";
+            public const string Cbo = "CboCategory";
+            public const string DgvCatalog = "DgvCatalogCategory";
+            public const string QueryCbo = $" SELECT id_category AS [{Column.id}], CONCAT(v_nameCategory, ' | ', id_category,' | (',c_active,')') AS [{Column.name}], c_active AS [{Column.active}], v_nameCategory AS [{ColumnName}] FROM Pack_Category ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryCategory ";
+        }
+
+        public static class Crop
+        {
+            public const string TableName = "Pack_Crop";
+            public const string ColumnName = "Cultivo";
+            public const string ColumnId = "idCrop";
+            public const string ColumnActive = "ActiveCrop";
+            public const string Cbo = "CboCrop";
+            public const string DgvCatalog = "DgvCatalogCrop";
+            public const string QueryCbo = $" SELECT id_crop AS [{Column.id}], CONCAT(v_nameCrop, ' | ', id_crop) AS [{Column.name}], '1' AS [{Column.active}], v_nameCrop AS [{ColumnName}] FROM Pack_Crop ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryCrop";
+        }
+
+        public static class Color
+        {
+            public const string TableName = "Pack_Color";
+            public const string ColumnName = "Color";
+            public const string ColumnId = "idColor";
+            public const string ColumnActive = "ActiveColor";
+            public const string ColumnGenericName = "genericNameColor";
+            public const string ColumnNameCanEn = "ColorCanEn";
+            public const string ColumnNameCanFr = "ColorCanFr";
+            public const string Cbo = "CboColor";
+            public const string DgvCatalog = "DgvCatalogColor";
+            public const string QueryCbo = $" SELECT id_color AS [{Column.id}], CONCAT(v_nameColor, ' | ', id_color) AS [{Column.name}], '1' AS [{Column.active}], v_nameColor AS [{ColumnName}] FROM Pack_Color ";
+            public const string QueryDgvCatalog = "queryColor";
+        }
+
+        public static class Contractor
+        {
+            public const string TableName = "Pack_Contractor";
+            public const string ColumnName = "Contratista";
+            public const string ColumnId = "idContractor";
+            public const string ColumnActive = "ActiveContractor";
+            public const string Cbo = "CboContractor";
+            public const string DgvCatalog = "DgvCatalogContractor";
+            public const string QueryCbo = $" SELECT id_contractor AS [{Column.id}], CONCAT(v_nameContractor, ' | ', id_contractor, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameContractor AS [{ColumnName}] FROM Pack_Contractor ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryContractor";
+        }
+
+        public static class Variety
+        {
+            public const string TableName = "Pack_Variety";
+            public const string ColumnName = "Variedad";
+            public const string ColumnScientis = "Variedad científica";
+            public const string ColumnShortName = "shortVariety";
+            public const string ColumnPatentLegend = "patentLegend";
+            public const string ColumnTradeMark = "tradeMark";
+            public const string ColumnId = "idVariety";
+            public const string ColumnActive = "ActiveVariety";
+            public const string Cbo = "CboVariety";
+            public const string DgvCatalog = "DgvCatalogVariety";
+            /// <summary>Alias en <c>vw_PackVarietyCat</c> para <c>c_useFacility</c>.</summary>
+            public const string ColumnUseFacility = "Emp. Central";
+            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (', c_active, ') ', v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS [{Color.ColumnId}], id_crop AS [{Crop.ColumnId}], id_grower AS [{Grower.ColumnId}], c_useFacility AS [{ColumnUseFacility}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}], v_patentLegend AS [Leyenda patente], v_trademark AS [Marca registrada] FROM Pack_Variety ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryVariety";
+        }
+
+        public static class Lot
+        {
+            public const string TableName = "Pack_Lot";
+            public const string ColumnName = "Lote";
+            public const string ColumnId = "idLot";
+            public const string ColumnActive = "ActiveLot";
+            public const string Cbo = "CboLot";
+            public const string CboOnlyNameLot = "CboLotOnlyNameLot";
+            public const string CboOnlyNameLotPlantTracking = "CboOnlyNameLotPlantTracking";
+            public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
+            public const string DgvCatalog = "DgvCatalogLot";
+            public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}], id_farm AS [{Farm.ColumnId}]  FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
+            public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm ORDER BY [{Column.name}] ";
+            public const string QueryOnlyNameLotPlantTracking = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_plantTracking = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+            public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UseFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryLot";
+        }
+
+        public static class Presentation
+        {
+            public const string TableName = "Pack_Presentation";
+            public const string ColumnName = "Presentación";
+            public const string ColumnId = "idPresentation";
+            public const string ColumnActive = "ActivePresentation";
+            public const string Cbo = "CboPresentation";
+            public const string DgvCatalog = "DgvCatalogPresentation";
+            public const string QueryCbo = $" SELECT id_presentation AS [{Column.id}], CONCAT(v_namePresentation, ' | ', id_presentation, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_namePresentation AS [{ColumnName}] FROM Pack_Presentation ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryPresentation";
+        }
+
+        public static class Container
+        {
+            public const string TableName = "Pack_Container";
+            public const string ColumnName = "Contenedor";
+            public const string ColumnId = "idContainer";
+            public const string ColumnActive = "ActiveContainer";
+            public const string Cbo = "CboContainer";
+            public const string DgvCatalog = "DgvCatalogContainer";
+            public const string QueryCbo = $" SELECT id_container AS [{Column.id}], CONCAT(v_nameContainer, ' | ', id_container, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameContainer AS [{ColumnName}] FROM Pack_Container ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryContainer";
+        }
+
+        public static class Distributor
+        {
+            public const string TableName = "Pack_Distributor";
+            public const string ColumnName = "Distribuidor";
+            public const string ColumnShortName = "shortNameDistributor";
+            public const string ColumnId = "idDistributor";
+            public const string ColumnActive = "ActiveDistributor";
+            public const string ColumnAddress = "Dirección";
+            public const string ColumnCity = "Ciudad";
+            public const string Cbo = "CboDistributor";
+            public const string DgvCatalog = "DgvCatalogDistributor";
+            public const string QueryCbo = $"  SELECT id_distributor AS [{Column.id}], CONCAT(v_nameDistributor, ' | ', id_distributor, ' | (',c_active,')') AS [{Column.name}], c_active AS [{Column.active}], v_nameDistributor AS [{ColumnName}], v_nameDistShort AS [{ColumnShortName}] FROM Pack_Distributor ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryDistributor";
+        }
+
+        public static class Pti
+        {
+            public const string TableName = "Pack_PtiType";
+            public const string ColumnName = "Pti";
+            public const string ColumnId = "idPti";
+            public const string ColumnActive = "ActivePti";
+            public const string Cbo = "CboPti";
+            public const string DgvCatalog = "DgvCatalogPti";
+            public const string QueryCbo = $"SELECT id_pti AS [{Column.id}], CONCAT(v_namePti, ' | ', id_pti) AS [{Column.name}], '1' AS [{Column.active}], v_namePti AS [{ColumnName}] FROM Pack_PtiType";
+            public const string QueryDgvCatalog = "queryPti";
+        }
+
+        public static class Price
+        {
+            public const string TableName = "Pack_Price";
+            public const string ColumnName = "Precio";
+            public const string ColumnId = "idPrice";
+            public const string ColumnActive = "ActivePrice";
+            public const string Cbo = "CboPrice";
+            public const string DgvCatalog = "DgvCatalogPrice";
+            public const string QueryCbo = $" SELECT id_price AS [{Column.id}], CONCAT(v_descriptionPrice, ' | ', id_price) AS [{Column.name}], '1' AS [{Column.active}], v_descriptionPrice AS [{ColumnName}] FROM Pack_Price ";
+            public const string QueryDgvCatalog = "queryPrice";
+        }
+        public static class Size
+        {
+            public const string TableName = "Pack_Size";
+            public const string ColumnName = "Tamaño";
+            public const string ColumnId = "idSize";
+            public const string ColumnActive = "ActiveSize";
+            public const string Cbo = "CboSize";
+            public const string DgvCatalog = "DgvCatalogSize";
+            public const string QueryCbo = $" SELECT id_size AS [{Column.id}], CONCAT(v_sizeValue,' | ',id_size,' | (',c_active,')') AS [{Column.name}] , c_active AS [{Column.active}] ,  v_sizeValue AS [{ColumnName}] FROM Pack_Size ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "querySize";
+        }
+
+        public static class WorkGroup
+        {
+            public const string TableName = "Pack_WorkGroup";
+            public const string ColumnName = "Cuadrilla";
+            public const string ColumnPayroll = "Contrato";
+            public const string ColumnId = "idWorkGroup";
+            public const string ColumnActive = "ActiveWorkGroup";
+            public const string Cbo = "CboWorkGroup";
+            public const string DgvCatalog = "DgvCatalogWorkGroup";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], wgp.c_active AS [{Column.active}], wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackWorkGroupCat cat ";
+        }
+
+        public static class ProductionLine
+        {
+            public const string TableName = "Nom_ProductionLine";
+            public const string ColumnName = "Banda";
+            public const string ColumnId = "idProductionLine";
+            public const string ColumnActive = "ActiveProductionLine";
+            public const string Cbo = "CboProductionLine";
+            public const string DgvCatalog = "DgvCatalogProductionLine";
+            public const string QueryCbo = $" SELECT id_productionLine AS [{Column.id}], CONCAT(v_pLName, ' | ', id_productionLine, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_pLName AS [{ColumnName}] FROM Nom_ProductionLine ORDER BY [{Column.name}] ";
+        }
+
+        public static class PlacePayment
+        {
+            public const string TableName = "Nom_PlacePayment";
+            public const string ColumnName = "Lugar de pago";
+            public const string ColumnId = "idPlacePayment";
+            public const string ColumnActive = "ActivePlacePayment";
+            public const string Cbo = "CboPlacePayment";
+            public const string DgvCatalog = "DgvCatalogPlacePayment";
+            public const string QueryCbo = $" SELECT id_placePayment AS [{Column.id}], CONCAT_WS(' ',id_placePayment, '|', v_namePlace, IIF(c_activePlace <> '1', '| (0)', ''))  AS [{Column.name}], c_activePlace AS [{Column.active}], v_namePlace AS [{ColumnName}] FROM Nom_PlacePayment ORDER BY i_orderList desc ,[{Column.id}]  ";
+        }
+
+        public static class DiningHall
+        {
+            public const string TableName = "Nom_DiningHall";
+            public const string ColumnName = "Ventanilla";
+            public const string ColumnId = "idDiningHall";
+            public const string ColumnActive = "ActiveDiningHall";
+            public const string ColumnDinerProvider = "idDinerProvider";
+            public const string Cbo = "CboDiningHall";
+            public const string DgvCatalog = "DgvCatalogDiningHall";
+            public const string QueryCbo = $" SELECT dhl.id_dinningHall AS [{Column.id}], CONCAT(dhl.v_nameDiningHall, ' | ', dhl.id_dinningHall, ' | ', dpr.v_nameDinerProvider, ' | (', dhl.c_active, ')') AS [{Column.name}], dhl.c_active AS [{Column.active}], dhl.id_dinerProvider AS [{ColumnDinerProvider}], v_nameDiningHall AS [{ColumnName}] FROM Nom_DiningHall dhl LEFT JOIN Nom_DinerProvider dpr ON dpr.id_dinerProvider = dhl.id_dinerProvider ORDER BY [{Column.name}] ";
+        }
+
+        public static class DinerProvider
+        {
+            public const string TableName = "Nom_DinerProvider";
+            public const string ColumnName = "Proveedor";
+            public const string ColumnId = "id_dinerProvider";
+            public const string ColumnActive = "ActiveDinerProvider";
+            public const string Cbo = "CboDinerProvider";
+            public const string DgvCatalog = "DgvCatalogDinerProvider";
+            public const string QueryCbo = $" SELECT id_dinerProvider AS [{Column.id}], CONCAT(v_nameDinerProvider, ' | ', id_dinerProvider, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameDinerProvider AS [{ColumnName}] FROM Nom_DinerProvider ORDER BY [{Column.name}] ";
+        }
+
+        public static class Season
+        {
+            public const string TableName = "Pack_Season";
+            public const string ColumnName = "Temporada";
+            public const string ColumnId = "idSeason";
+            public const string ColumnActive = "ActiveSeason";
+            public const string ColumnStartDate = "StartDate";
+            public const string ColumnEndDate = "EndDate";
+            public const string CboWithDates = "CboWithDates";
+            public const string Cbo = "CboSeason";
+            public const string DgvCatalog = "DgvCatalogSeason";
+            public const string QueryCbo = $" SELECT id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}] FROM Pack_Season ORDER BY [{Column.name}] ";
+            public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
+        }
+
+        public static class SeasonType
+        {
+            public const string TableName = "Pack_SeasonType";
+            public const string ColumnName = "Tipo temporada";
+            public const string ColumnId = "idSeasonType";
+            public const string Cbo = "CboSeasonType";
+            public const string QueryCbo = $" SELECT id_seasonType AS [{Column.id}], CONCAT(v_nameSeasonType, ' | ', id_seasonType) AS [{Column.name}], v_nameSeasonType AS [{ColumnName}] FROM Pack_SeasonType ORDER BY [{Column.name}] ";
+        }
+
+        public static class City
+        {
+            public const string TableName = "Pack_City";
+            public const string ColumnName = "Ciudad";
+            public const string ColumnId = "idCity";
+            public const string ColumnActive = "ActiveCity";
+            public const string Cbo = "CboCity";
+            public const string DgvCatalog = "DgvCatalogCity";
+            public const string QueryCbo = $" SELECT id_city AS [{Column.id}], CONCAT_WS(', ',v_nameCity, v_state, v_country) + CONCAT(' | ', id_city, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}],  CONCAT_WS(', ',v_nameCity, v_state, v_country) AS [{ColumnName}] FROM Pack_City ORDER BY [{Column.name}] ";
+            //AUN NO SE USA LA COLUMNA DE NAME A: 2025-ABRIL-10
+            public const string ColumnNameCrossPoint = "Ciudad de cruce";
+            public const string ColumnIdCrossPoint = "idCityCrossPoint";
+            public const string ColumnNameDestiny = "Ciudad de destino";
+            public const string ColumnIdDestiny = "idCityDestiny";
+        }
+
+        public static class Consignee
+        {
+            public const string TableName = "Pack_Consignee";
+            public const string ColumnName = "Consignatario";
+            public const string ColumnId = "idConsignee";
+            public const string ColumnActive = "ActiveConsignee";
+            public const string Cbo = "CboConsignee";
+            public const string DgvCatalog = "DgvCatalogConsignee";
+            public const string QueryCbo = $" SELECT id_consignee AS [{Column.id}], CONCAT(v_nameConsignee, ' | ', id_consignee, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameConsignee AS [{ColumnName}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_Consignee ORDER BY [{Column.name}] ";
+        }
+
+        public static class AgencyTradeUS
+        {
+            public const string TableName = "Pack_AgencyTrade";
+            public const string ColumnName = "Agencia extrangera";
+            public const string ColumnId = "idAgencyTradeUS";
+            public const string ColumnActive = "ActiveAgencyTradeUS";
+            public const string ColumnCountry = "País";
+            public const string Cbo = "CboAgencyTradeUS";
+            public const string DgvCatalog = "DgvCatalogAgencyTradeUS";
+            public const string QueryCbo = $" SELECT id_agencyTrade AS [{Column.id}], CONCAT(v_nameAgency, ' | ', id_agencyTrade, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameAgency AS [{ColumnName}], c_country AS [{ColumnCountry}] FROM Pack_AgencyTrade WHERE c_country = 'US' ORDER BY [{Column.name}]";
+        }
+
+        public static class AgencyTradeMX
+        {
+            public const string TableName = "Pack_AgencyTrade";
+            public const string ColumnName = "Agencia nacional";
+            public const string ColumnId = "idAgencyTradeMX";
+            public const string ColumnActive = "ActiveAgencyTradeMX";
+            public const string ColumnCountry = "País";
+            public const string Cbo = "CboAgencyTradeMX";
+            public const string DgvCatalog = "DgvCatalogAgencyTradeMX";
+            public const string QueryCbo = $" SELECT id_agencyTrade AS [{Column.id}], CONCAT(v_nameAgency, ' | ', id_agencyTrade, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameAgency AS [{ColumnName}], c_country AS [{ColumnCountry}] FROM Pack_AgencyTrade WHERE c_country = 'MX' ORDER BY [{Column.name}] ";
+        }
+
+        public static class TransportLine
+        {
+            public const string TableName = "Pack_TransportLine";
+            public const string ColumnName = "Línea de transporte";
+            public const string ColumnId = "idTransportLine";
+            public const string ColumnActive = "ActiveTransportLine";
+            public const string Cbo = "CboTransportLine";
+            public const string DgvCatalog = "DgvCatalogTransportLine";
+            public const string QueryCbo = $" SELECT id_transportLine AS [{Column.id}], CONCAT(v_nameTransportLine, ' | ', id_transportLine, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameTransportLine AS [{ColumnName}] FROM Pack_TransportLine ORDER BY [{Column.name}] ";
+        }
+
+        public static class Driver
+        {
+            public const string TableName = "Pack_Driver";
+            public const string ColumnName = "Chofer";
+            public const string ColumnId = "idDriver";
+            public const string ColumnActive = "ActiveDriver";
+            public const string Cbo = "CboDriver";
+            public const string DgvCatalog = "DgvCatalogDriver";
+            public const string QueryCbo = $" SELECT id_driver AS [{Column.id}], CONCAT(v_lastNameDriver, ' ',v_nameDriver, ' | ', id_driver, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}] FROM Pack_Driver ORDER BY [{Column.name}] ";
+        }
+
+        public static class Truck
+        {
+            public const string TableName = "Pack_Truck";
+            public const string ColumnName = "Troque";
+            public const string ColumnId = "idTruck";
+            public const string ColumnActive = "ActiveTruck";
+            public const string Cbo = "CboTruck";
+            public const string DgvCatalog = "DgvCatalogTruck";
+            public const string QueryCbo = $" SELECT id_truck AS [{Column.id}], CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_truck + ')', '(' + c_active + ')' ) AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}] FROM Pack_Truck ";
+        }
+
+        public static class FreightContainer
+        {
+            public const string TableName = "Pack_FreightContainer";
+            public const string ColumnName = "Caja";
+            public const string ColumnId = "idFreightContainer";
+            public const string ColumnActive = "ActiveFreightContainer";
+            public const string ColumnThermometer = "ThermometerFrCon";
+            public const string Cbo = "CboFreightContainer";
+            public const string DgvCatalog = "DgvCatalogFreightContainer";
+            public const string QueryCbo = $" SELECT id_freightContainer AS [{Column.id}], CONCAT_WS(' | ', v_ecoNumber, v_plateUS, v_plateMX, '(' + id_freightContainer + ')', '(' + c_active + ')' ) AS [{Column.name}], c_active AS [{Column.active}], id_transportLine AS [{TransportLine.ColumnId}], v_thermometer AS [{ColumnThermometer}]  FROM Pack_FreightContainer ORDER BY [{Column.name}] ";
+            public const string CboTypeContainer = "CboTypeContainer";
+            public const string QueryCboTypeContainer = $"  SELECT DISTINCT '1' AS [{Column.id}], v_typeContainer AS [{Column.name}] FROM Pack_FreightContainer frc WHERE v_typeContainer IS NOT NULL ";
+
+        }
+
+        public static class ManifestTemplate
+        {
+            public const string TableName = "Pack_ManifestTemplates";
+            public const string ColumnName = "Plantilla de manifiesto";
+            public const string ColumnId = "idManifestTemplate";
+            public const string ColumnPrintShowSize = "Mostrar tamaño";
+            public const string ColumnPrintManifest = "Manifiesto";
+            public const string ColumnPrintManifestPerField = "Manifiesto por campo";
+            public const string ColumnPrintMaping = "Mapa de posiciones";
+            public const string ColumnPrintExcelLayout = "Excel layout";
+            public const string ColumnPrintPackingList = "Packing list";
+            public const string Cbo = "CboManifestTemplate";
+            public const string DgvCatalog = "DgvCatalogManifestTemplate";
+            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], c_active AS [{Column.active}], v_nameTemplate AS [{ColumnName}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], id_crop AS [{Crop.ColumnId}], c_printShowSize AS [{ColumnPrintShowSize}], c_printManifest AS [{ColumnPrintManifest}], c_printManifestPerField AS [{ColumnPrintManifestPerField}], c_printMaping AS [{ColumnPrintMaping}], c_printExcelLayout AS [{ColumnPrintExcelLayout}], c_printPackingList AS [{ColumnPrintPackingList}]  FROM Pack_ManifestTemplates ORDER BY [{Column.name}] ";
+        }
+
+        public static class Unit
+        {
+            public const string TableName = "Pack_Unit";
+            public const string ColumnName = "Unidad";
+            public const string ColumnId = "idUnit";
+            public const string ColumnActive = "ActiveUnit";
+            public const string Cbo = "CboUnit";
+            public const string DgvCatalog = "DgvCatalogUnit";
+            public const string QueryCbo = $" SELECT id_unit AS [{Column.id}], CONCAT(v_nameUnit, ' | ', id_unit) AS [{Column.name}], v_nameUnit AS [{ColumnName}] FROM Pack_Unit ORDER BY [{Column.name}] ";
+        }
+
+        public static class MaterialType //AGREGARLA AL LISTADO DONDE ESTAN LOS CLSCOMBOBOXES
+        {
+            public const string TableName = "Pack_MaterialType";
+            public const string ColumnName = "Tipo de material";
+            public const string ColumnId = "idMaterialType";
+            public const string ColumnActive = "ActiveMaterialType";
+            public const string Cbo = "CboMaterialType";
+            public const string DgvCatalog = "DgvCatalogMaterialType";
+            public const string QueryCbo = $" SELECT [id_matType] AS [{Column.id}], CONCAT([v_nameMatType], ' | ', [id_matType]) AS [{Column.name}], v_nameMatType AS [{ColumnName}] FROM [Pack_MaterialType] ORDER BY [{Column.name}] ";
+        }
+
+        public static class MaterialProvider
+        {
+            public const string TableName = "Pack_Provider";
+            public const string ColumnName = "Proveedor";
+            public const string ColumnShortName = "shortNameMaterialProvider";
+            public const string ColumnId = "idMaterialProvider";
+            public const string ColumnActive = "ActiveMaterialProvider";
+            public const string Cbo = "CboMaterialProvider";
+            public const string DgvCatalog = "DgvCatalogMaterialProvider";
+            public const string QueryCbo = $" SELECT id_provider AS [{Column.id}], CONCAT(v_nameProvider, ' | ', id_provider, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameProvider AS [{ColumnName}], v_shortName AS [{ColumnShortName}] FROM [Pack_Provider] ORDER BY [{Column.name}] ";
+        }
+
+        public static class MaterialWarehouse
+        {
+            public const string TableName = "Pack_Warehouses";
+            public const string ColumnName = "Almacén";
+            public const string ColumnId = "idMatWarehouse";
+            public const string ColumnActive = "ActiveMatWarehouse";
+            public const string Cbo = "CboMatWarehouse";
+            public const string DgvCatalog = "DgvCatalogMatWarehouse";
+            public const string QueryCbo = $" SELECT id_warehouses AS [{Column.id}], CONCAT(v_namewarehouses, ' | ', id_warehouses, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_namewarehouses AS [{ColumnName}] FROM Pack_Warehouses ORDER BY [{Column.name}] ";
+        }
+
+        public static class MaterialCatalog
+        {
+            public const string TableName = "Pack_MaterialCatalog";
+            public const string ColumnName = "Material";
+            public const string ColumnId = "idMaterialCatalog";
+            public const string ColumnActive = "ActiveMaterialCatalog";
+            public const string Cbo = "CboMaterialCatalog";
+            public const string DgvCatalog = "DgvCatalogMaterialCatalog";
+            public const string QueryCbo = $" SELECT CAST(id_matCatalog AS varchar(20)) AS [{Column.id}], CONCAT(v_nameMat, ' | ', id_matCatalog, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_nameMat AS [{ColumnName}], id_matType AS [{MaterialType.ColumnId}], id_color AS [{Color.ColumnId}], id_category AS [{Category.ColumnId}], id_unit AS [{Unit.ColumnId}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_MaterialCatalog ORDER BY [{Column.name}] ";
+        }
+
+        public static class ForeignDest
+        {
+            public const string TableName = "Pack_ForeignDest";
+            public const string ColumnName = "Destino extranjero";
+            public const string ColumnId = "idForeignDest";
+            public const string ColumnCity = "Ciudad destino extranjero";
+            public const string ColumnState = "Estado destino extranjero";
+            public const string ColumnAddress = "Dirección destino extranjero";
+            public const string ColumnCp = "CP destino extranjero";
+            public const string Cbo = "CboForeignDest";
+            public const string DgvCatalog = "DgvCatalogForeignDest";
+            public const string QueryCbo = $" SELECT id_foreignDest AS [{Column.id}], CONCAT_WS(' | ',v_address,'('+id_foreignDest+')', v_city, v_state) AS [{Column.name}], v_address AS [{ColumnAddress}], v_city AS [{ColumnCity}], v_state AS [{ColumnState}], c_codigoPost AS [{ColumnCp}] FROM Pack_ForeignDest ";
+        }
+
+        public static class Farm
+        {
+            public const string TableName = "Grow_Farm";
+            public const string ColumnName = "Campo";
+            public const string ColumnId = "idFarm";
+            public const string ColumnActive = "ActiveFarm";
+            public const string Cbo = "CboFarm";
+            public const string DgvCatalog = "DgvCatalogFarm";
+            public const string QueryCbo = $" SELECT id_farm AS [{Column.id}], CONCAT(v_farmName,' | ',id_farm) AS [{Column.name}], v_farmName AS [{ColumnName}], c_active AS [{Column.active}] FROM Grow_Farm ORDER BY [{Column.name}] ";
+        }
+
+        public static class VehicleType
+        {
+            public const string TableName = "Ast_VehicleType";
+            public const string ColumnName = "Tipo de vehículo";
+            public const string ColumnId = "idVehicleType";
+            public const string ColumnActive = "ActiveVehicleType";
+            public const string Cbo = "CboVehicleType";
+            public const string DgvCatalog = "DgvCatalogVehicleType";
+            public const string QueryCbo = $" SELECT id_vehicleType AS [{Column.id}], CONCAT_WS(' | ', v_nameVehicleType, v_implements, id_vehicleType) AS [{Column.name}], COALESCE(NULLIF(v_nameVehicleType, ''), v_implements) AS [{ColumnName}] FROM Ast_VehicleType ORDER BY [{Column.name}] ";
+        }
+
+        public static class Vehicle
+        {
+            public const string TableName = "Ast_Vehicle";
+            public const string ColumnName = "Vehículo";
+            public const string ColumnId = "idVehicle";
+            public const string ColumnActive = "ActiveVehicle";
+            public const string Cbo = "CboVehicle";
+            public const string DgvCatalog = "DgvCatalogVehicle";
+            public const string QueryCbo = $" SELECT c_active AS [{Column.active}],id_vehicle AS [{Column.id}], CONCAT_WS(' | ', v_prefix + v_ecoNumber, id_vehicle, '('+c_active+')') AS [{Column.name}], CONCAT(v_prefix, v_ecoNumber) AS [{ColumnName}], id_vehicleType AS [{VehicleType.ColumnId}] FROM Ast_Vehicle ORDER BY [{Column.name}] ";
+        }
+
+        public static class Market
+        {
+            public const string TableName = "Pack_Market";
+            public const string ColumnName = "Mercado";
+            public const string ColumnId = "idMarket";
+            public const string ColumnActive = "ActiveMarket";
+            public const string ColumnPrefix = "Nombre del mercado";
+            public const string Cbo = "CboMarket";
+            public const string DgvCatalog = "DgvCatalogMarket";
+            public const string QueryCbo = $" SELECT id_market AS [{Column.id}], CONCAT_WS(' | ',v_nameMarket, v_marketPrefix, id_market, '(' + c_active + ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameMarket AS [{ColumnName}], v_marketPrefix AS [{ColumnPrefix}] FROM Pack_Market ORDER BY [{Column.name}] ";
+        }
+
+        public static class TypeBox
+        {
+            public const string TableName = "Pack_TypeBox";
+            public const string ColumnName = "Tipo de caja";
+            public const string ColumnShortName = "shortNameTypeBox";
+            public const string ColumnId = "idTypeBox";
+            public const string ColumnActive = "ActiveTypeBox";
+            public const string Cbo = "CboTypeBox";
+            public const string DgvCatalog = "DgvCatalogTypeBox";
+            public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
+        }
+
+        public static class SeasonActivities
+        {
+            public const string TableName = "Payroll_SeasonActivities";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_Payroll_SeasonActivitiesCat cat ";
+        }
+
+        public static class LabelLegend
+        {
+            public const string TableName = "Pack_LabelLegend";
+            public const string ColumnName = "Leyenda";
+            public const string ColumnId = "idLabelLegend";
+            public const string ColumnLegend2 = "Leyenda2";
+            public const string ColumnDescription = "Descripción";
+            public const string ColumnActive = "ActiveLabelLegend";
+            public const string Cbo = "CboLabelLegend";
+            public const string DgvCatalog = "DgvCatalogLabelLegend";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackLabelLegendCat cat ";
+            public const string QueryCbo = $" SELECT id_labelLegend AS [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}], v_description AS [{ColumnDescription}] FROM Pack_LabelLegend ";
+        }
+
+        public static class Payroll_AttendancePeriod
+        {
+            public const string TableName = "Payroll_AttendancePeriod";
+            public const string ColumnId = "idPeriod";
+            public const string ColumnSequence = "Secuencia";
+            public const string ColumnName = "Nombre periodo";
+            public const string ColumnStartDate = "Fecha inicio";
+            public const string ColumnEndDate = "Fecha fin";
+            public const string ColumnActive = "ActiveAttendancePeriod";
+            public const string ColumnCreated = "d_created";
+            public const string ColumnUpdated = "d_updated";
+            public const string Cbo = "CboAttendancePeriod";
+            public const string DgvCatalog = "DgvCatalogAttendancePeriod";
+            public const string QueryCbo = $@" SELECT CONCAT(id_period, '|', c_sequence_per) AS [{Column.id}], 
+                                            v_name_per AS [{Column.name}], 
+                                            c_active AS [{Column.active}], 
+                                            id_period AS [{ColumnId}], 
+                                            c_sequence_per AS [{ColumnSequence}], 
+                                            d_startDate_per AS [{ColumnStartDate}], 
+                                            d_endDate_per AS [{ColumnEndDate}], 
+                                            id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+            public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+        }
+
+        public static class Employee
+        {
+            public const string TableName = "Nom_Employee";
+            public const string ColumnId = "idEmployee";
+            public const string ColumnName = "Nombre empleado";
+            public static DataTable? GetDtFullName(string idEmployee)
+            {
+                string qry = $"SELECT id_employee AS [{ColumnId}], CONCAT_WS(' ', v_lastNamePat, v_lastNameMat, v_name) AS [{ColumnName}] FROM Nom_Employees WHERE id_employee = @idEmployee";
+
+                Dictionary<string, object> parameters = new();
+                parameters.Add("@idEmployee", idEmployee);
+
+                return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            }
+        }
+
+        public static class UserFilter
+        {
+            private const string columnId = "idUser";
+
+            private static string GetQryUsersCboAnotadores()
+            {
+                return $@"
+                            SELECT
+                                CAST(usu.c_codigo_usu AS varchar(20)) AS [{Column.id}],
+                                usu.v_nombre_usu AS [{Column.name}],
+                                usu.v_nombre_usu AS [Anotador],
+                                usu.id_workGroup AS [{WorkGroup.ColumnId}],
+                                usu.c_active AS [{Column.active}],
+                                usu.id_role AS [idRole]
+                            FROM dbo.usuario usu
+                            WHERE usu.c_active = '1'
+                              AND usu.id_role IN ('02','03','04','12')
+                            ORDER BY usu.v_nombre_usu, usu.c_codigo_usu;";
+            }
+
+            private static string GetQryWorkGroupContractors()
+            {
+                return $@"
+                            SELECT
+                                id_workGroup AS [{WorkGroup.ColumnId}],
+                                id_contractor AS [{Contractor.ColumnId}]
+                            FROM dbo.Pack_WorkGroup;";
+            }
+
+            public static DataTable GetDtAnotadores()
+            {
+                DataTable dtUsers = ClsQuerysUsuarios.GetDataTable(GetQryUsersCboAnotadores());
+                DataTable dtWorkGroups = ClsQuerysDB.GetDataTable(GetQryWorkGroupContractors());
+
+                if (!dtUsers.Columns.Contains(Contractor.ColumnId))
+                    dtUsers.Columns.Add(Contractor.ColumnId, typeof(string));
+
+                var contractorByWorkGroup = dtWorkGroups.AsEnumerable()
+                    .Where(row => row[WorkGroup.ColumnId] != DBNull.Value)
+                    .ToDictionary(
+                        row => row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        row => row[Contractor.ColumnId] == DBNull.Value ? string.Empty : row[Contractor.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        StringComparer.OrdinalIgnoreCase);
+
+                foreach (DataRow row in dtUsers.Rows)
+                {
+                    string idWorkGroup = row[WorkGroup.ColumnId] == DBNull.Value
+                        ? string.Empty
+                        : row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty;
+
+                    row[Contractor.ColumnId] = contractorByWorkGroup.TryGetValue(idWorkGroup, out string? idContractor)
+                        ? idContractor
+                        : string.Empty;
+                }
+
+                return dtUsers;
+            }
+
+            public static void SetCboAnotadores(ComboBox cbo)
+            {
+                DataTable dt = GetDtAnotadores();
+
+                ClsComboBoxes.LoadComboBoxDataSource(cbo, dt);
+            }
+        }
+    }
+}

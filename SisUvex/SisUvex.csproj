@@ -1,0 +1,207 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>uvexvertical.ico</ApplicationIcon>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Archivo\Reimprimir\**" />
+    <EmbeddedResource Remove="Archivo\Reimprimir\**" />
+    <None Remove="Archivo\Reimprimir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\DESERTLogo.png" />
+    <None Remove="Resources\UVEXLogo.png" />
+  </ItemGroup>
+
+
+
+  <!-- COM References disabled for .NET Core compatibility
+  <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+    </COMReference>
+    <COMReference Include="VisioViewer">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>6</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>ba35b84e-a623-471b-8b09-6d72dd072f25</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  -->
+
+  <ItemGroup>
+    <Content Include="Resources\DESERTLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\UVEXLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="uvexvertical.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="ExcelDataReader" Version="3.7.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
+    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.0.0" />
+    <PackageReference Include="itext7" Version="9.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
+    <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.WebForms" Version="150.1652.0" />
+    <PackageReference Include="NPOI" Version="2.7.5" />
+    <PackageReference Include="PdfiumViewer.Core" Version="1.0.4" />
+    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.29" />
+    <PackageReference Include="System.Data.OleDb" Version="9.0.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
+    <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
+    <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />
+    <Compile Update="Catalogos\Ciudad\FrmCiudadAñadir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Ciudad\FrmCiudadCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.Designer.cs">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.Designer.cs">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.Designer.cs">
+      <DependentUpon>FrmLotCertificationAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.Designer.cs">
+      <DependentUpon>FrmLotCertificationCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendAdd.Designer.cs">
+      <DependentUpon>FrmLabelLegendAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendCat.Designer.cs">
+      <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Contratista\FrmContratistaAñadir.cs" />
+    <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
+    <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Añadir.cs" />
+    <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Cat.cs" />
+    <Compile Update="Catalogos\Productor\FrmProductorAñadir.cs" />
+    <Compile Update="Catalogos\Productor\FrmProductorCat.cs" />
+    <Compile Update="Catalogos\Tamaño\FrmTamañoAñadir.cs" />
+    <Compile Update="Catalogos\Tamaño\FrmTamañoCat.cs" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Usuarios\UserCrud\FrmUserConfirmPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="pdfium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyAdd.resx">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyCat.resx">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.resx">
+      <DependentUpon>FrmLotCertificationAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.resx">
+      <DependentUpon>FrmLotCertificationCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\LabelLegend\FrmLabelLegendAdd.resx">
+      <DependentUpon>FrmLabelLegendAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\LabelLegend\FrmLabelLegendCat.resx">
+      <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.resx">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.resx">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nomina\CONTRATO\NewFolder\" />
+  </ItemGroup>
+	<PropertyGroup>
+		<!-- Esto fuerza a no generar ni incluir recursos satélite (.resources.dll) -->
+		<SatelliteResourceLanguages></SatelliteResourceLanguages>
+	</PropertyGroup>
+
+
+</Project>

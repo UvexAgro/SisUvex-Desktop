@@ -1,0 +1,413 @@
+﻿using Microsoft.IdentityModel.Tokens;
+using SisUvex.Catalogos.Metods;
+using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.TextBoxes;
+using SisUvex.Catalogos.Metods.Values;
+using SisUvex.Nomina.Actualizar_datos_empelado;
+using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
+using System.Collections.Generic;
+using System.Data;
+using System.Media;
+using System.Reflection.Metadata.Ecma335;
+using System.Windows.Forms;
+using static SisUvex.Catalogos.Metods.ClsObject;
+
+
+namespace SisUvex.Archivo.Etiquetas.PrintLabels
+{
+    internal class ClsPrintLabelsPtiPallets
+    {
+
+        public FrmPrintLabelsPtiPallets frm;
+        private ClsPrintPtiTag print;
+        public DataTable? dtWorkPlan;
+        public ETagInfo eTagInfo = new ETagInfo();
+
+        DataTable? dtLastPallets = null;
+        private EventHandler? _dtpWorkDayValueChangedHandler;
+        private EventHandler? _seasonWorkGroupDayFilterHandler;
+
+        string queryLastPallets = $" SELECT TOP(10) CONVERT(DATE, pal.d_packed) AS 'Fecha', pal.id_pallet AS 'Pallet', pal.id_workPlan AS 'Plan', pal.v_invoice AS 'Papeleta', pal.i_boxes AS 'Cajas', CONCAT(con.v_nameContainer,CAST(gtn.n_lbs AS float)) AS 'Contenedor', CONCAT_WS(' ', siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, gtn.v_postLabel) AS 'Presentación', box.v_shortNameTypeBox AS 'Caja', [var].v_shortName AS 'Variedad', dis.v_nameDistShort AS 'Distribuidor', CONCAT_WS(' ', wgp.v_nameWorkGroup, ctr.v_nameContractor) AS 'Cuadrilla', CONCAT(lot.v_nameLot, ' (',lot.id_lot,')') AS 'Lote', leg.v_labelLegend AS Leyenda FROM dbo.Pack_Pallet AS pal LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation LEFT JOIN dbo.Pack_Container AS con ON con.id_container = gtn.id_container LEFT JOIN dbo.Pack_Variety AS [var] ON [var].id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Price AS prc ON prc.id_price = gtn.id_price LEFT JOIN dbo.Pack_PtiType AS pti ON pti.id_pti = gtn.id_pti LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox LEFT JOIN Pack_LabelLegend AS leg ON leg.id_labelLegend = wpl.id_labelLegend WHERE pal.userCreate = '{User.GetLastUser()}' ORDER BY id_pallet DESC ";
+        
+        private string GetFilterDayWG()
+        {
+            return $"{Column.active} = '1' AND {WorkGroup.ColumnId} = '{frm.cboWorkGroup.SelectedValue}' AND {ClsObject.WorkPlan.ColumnDate} = '{frm.dtpWorkDay.Value.ToString("yyyy-MM-dd")}' OR {Column.name} = '{ClsObject.String.SelectText}'";
+        }
+
+        /// <summary>
+        /// Deja en cboWorkGroup solo cuadrillas con plan activo en la fecha del día de trabajo (y temporada si aplica),
+        /// usando los datos ya cargados en dtWorkPlan (sin consulta adicional).
+        /// </summary>
+        private void RefreshWorkGroupFilterBySelectedDay()
+        {
+            if (frm == null || dtWorkPlan == null)
+                return;
+
+            DataTable? dtWg = frm.cboWorkGroup.DataSource as DataTable;
+            if (dtWg == null)
+                return;
+
+            string dateStr = frm.dtpWorkDay.Value.ToString("yyyy-MM-dd");
+            var idsWithPlanThisDay = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (DataRow row in dtWorkPlan.Rows)
+            {
+                if (row.RowState == DataRowState.Deleted)
+                    continue;
+
+                string planId = row[Column.id]?.ToString() ?? string.Empty;
+                if (planId.Length == 0)
+                    continue;
+
+                if ((row[Column.active]?.ToString() ?? string.Empty) != "1")
+                    continue;
+
+                if ((row[ClsObject.WorkPlan.ColumnDate]?.ToString() ?? string.Empty) != dateStr)
+                    continue;
+
+                string wgId = row[WorkGroup.ColumnId]?.ToString() ?? string.Empty;
+                if (wgId.Length > 0)
+                    idsWithPlanThisDay.Add(wgId);
+            }
+
+            var quotedIds = new List<string>();
+            foreach (string id in idsWithPlanThisDay)
+                quotedIds.Add("'" + id.Replace("'", "''") + "'");
+
+            string inList = quotedIds.Count > 0
+                ? string.Join(",", quotedIds)
+                : "'__no_plan_this_day__'";
+
+            var conditions = new List<string>();
+            if (frm.cboSeason.SelectedIndex >= 1 && dtWg.Columns.Contains(Season.ColumnId))
+            {
+                string seasonVal = (frm.cboSeason.SelectedValue?.ToString() ?? string.Empty).Replace("'", "''");
+                conditions.Add($"{Season.ColumnId} = '{seasonVal}'");
+            }
+
+            // En WorkGroup.Cbo el id va como Column.id ("Código"), no como WorkGroup.ColumnId.
+            if (!dtWg.Columns.Contains(Column.id))
+                return;
+            conditions.Add($"[{Column.id}] IN ({inList})");
+
+            string body = string.Join(" AND ", conditions);
+            string selectEsc = ClsObject.String.SelectText.Replace("'", "''");
+            dtWg.DefaultView.RowFilter = $"({body}) OR [{Column.name}] = '{selectEsc}'";
+
+            if (frm.cboWorkGroup.SelectedIndex > 0 && frm.cboWorkGroup.SelectedValue != null)
+            {
+                string? currentWg = frm.cboWorkGroup.SelectedValue.ToString();
+                if (currentWg != null && currentWg.Length > 0 && !idsWithPlanThisDay.Contains(currentWg))
+                    frm.cboWorkGroup.SelectedIndex = 0;
+            }
+        }
+
+        public void LoadFormPrintLabels()
+        {
+            frm.cboWorkGroup.TextChanged -= (sender, e) => { };
+            frm.cboWorkPlan.TextChanged -= (sender, e) => { };
+
+            ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboWorkGroup, WorkGroup.Cbo);
+
+            List<(ComboBox Cbo, string IdColumnFilter)> lsWGDep = new();
+            lsWGDep.Add((frm.cboSeason, Season.ColumnId));
+            ClsComboBoxes.Events.CboApplyEventFilterAllForOne(frm.cboWorkGroup, null, lsWGDep); //filtro de cuadrillas por temporada
+            frm.cboWorkGroup.SelectedValueChanged += (sender, e) => frm.ClearInvoiceInfo(); //limpiar papeleta al cambiar cuadrilla
+
+            if (_seasonWorkGroupDayFilterHandler != null)
+                frm.cboSeason.SelectedValueChanged -= _seasonWorkGroupDayFilterHandler;
+            _seasonWorkGroupDayFilterHandler = (_, _) => RefreshWorkGroupFilterBySelectedDay();
+            frm.cboSeason.SelectedValueChanged += _seasonWorkGroupDayFilterHandler;
+
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboSeason, "08"); //<-- preseleccionar la temporada uva 2026
+
+            frm.nudPalletsCopies.Value = Convert.ToInt32(Configuracion.Parameters.EParameters.GetValue("020", "02"));//<-- etiquetas por pallet
+
+            dtWorkPlan = ClsComboBoxFiles.GetCboCatalogDataTable(ClsObject.WorkPlan.CboPresentation);
+            dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
+            ClsComboBoxes.LoadComboBoxDataSource(frm.cboWorkPlan, dtWorkPlan);
+
+            ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbBoxesTotaL);
+            ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbInvoice);
+            ApplyEventComboBoxPrintLabels(frm.cboWorkGroup);
+            ApplyEventDateTimePickerPrintLabels(frm.dtpWorkDay);
+            ApplyEventComboBoxWorkPlanPrintLabels(frm.cboWorkPlan);
+
+            RefreshWorkGroupFilterBySelectedDay();
+
+            LoadDgvLastPallets();
+        }
+        public void ApplyEventComboBoxPrintLabels(ComboBox comboBox)
+        {
+            comboBox.TextChanged += (sender, e) =>
+            {
+                dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
+
+                frm.cboWorkPlan.SelectedIndex = 0;
+
+            };
+        }
+        public void ApplyEventDateTimePickerPrintLabels(DateTimePicker dateTimePicker)
+        {
+            if (_dtpWorkDayValueChangedHandler != null)
+                dateTimePicker.ValueChanged -= _dtpWorkDayValueChangedHandler;
+
+            _dtpWorkDayValueChangedHandler = (sender, e) =>
+            {
+                RefreshWorkGroupFilterBySelectedDay();
+                dtWorkPlan.DefaultView.RowFilter = GetFilterDayWG();
+                frm.cboWorkPlan.SelectedIndex = 0;
+            };
+            dateTimePicker.ValueChanged += _dtpWorkDayValueChangedHandler;
+        }
+        public void ApplyEventComboBoxWorkPlanPrintLabels(ComboBox comboBox)
+        {
+            comboBox.TextChanged += (sender, e) =>
+            {
+                frm.ClearInvoiceInfo(); //limpiar papeleta
+
+                if (frm.cboWorkPlan.SelectedValue != null)
+                    SetTagInfo(frm.cboWorkPlan.SelectedValue.ToString(), eTagInfo);
+                    LoadTagInfoInLabelsForm();
+            };
+        }
+        private void LoadTagInfoInLabelsForm()
+        {
+            frm.lblLotId.Text               = eTagInfo.idLot;
+            frm.lblLotName.Text             = eTagInfo.nameLot;
+            frm.lblVarietyName.Text         = eTagInfo.nameVariety;
+            frm.lblColorName.Text           = eTagInfo.nameColor;
+            frm.lblDistributorName.Text     = eTagInfo.nameDistributor;
+            frm.lblDistributorAddress.Text  = eTagInfo.addressDistributor;
+            frm.lblDistributorCity.Text     = eTagInfo.cityDistributor;
+            frm.lblContainerName.Text       = eTagInfo.nameContainer;
+            frm.lblLbsNum.Text              = eTagInfo.Lbs;
+            frm.lblSizeName.Text            = eTagInfo.nameSize;
+            frm.txbBoxesTotaL.Text          = eTagInfo.palletBoxes;
+            frm.lblPtiId.Text               = eTagInfo.idPti;
+            frm.lblPtiName.Text             = eTagInfo.namePti;
+            frm.lblGtinNumber.Text          = eTagInfo.valueGTIN;
+            frm.lblUpcNumber.Text           = eTagInfo.upcGTIN;
+            frm.lblPluNumber.Text           = eTagInfo.PLU;
+            frm.lblLabelLegend.Text          = eTagInfo.labelLegend;
+
+            if (!string.IsNullOrEmpty(eTagInfo.shortNameTypeBox))
+                frm.lblTypeBox.Text = eTagInfo.nameTypeBox + " (" + eTagInfo.shortNameTypeBox + ")";
+
+            string presentation = "";
+            if (!string.IsNullOrEmpty(eTagInfo.preLabel))
+                presentation += eTagInfo.preLabel + " ";
+            presentation += eTagInfo.namePresentation;
+            if (!string.IsNullOrEmpty(eTagInfo.postLabel))
+                presentation += " " + eTagInfo.postLabel;
+            frm.lblPresentationName.Text = presentation;
+        }
+
+        public void SetTagInfo(string idWorkPlan, ETagInfo eTag)
+        {
+
+            DataRow[] rows;
+            rows = dtWorkPlan.Select($"{Column.id} = '{idWorkPlan}'");
+
+            if (rows.Length > 0)
+            {
+                if (DateTime.TryParse(rows[0][ClsObject.WorkPlan.ColumnDate].ToString(), out DateTime dateWorkPlan))
+                        eTag.dateWorkPlan = dateWorkPlan;
+                    else
+                        eTag.dateWorkPlan = null;
+
+                eTag.nameProduct            = rows[0][Column.name].ToString();
+                eTag.active                 = rows[0][Column.active].ToString();
+                eTag.idWorkPlan             = rows[0][Column.id].ToString();
+                eTag.idWorkGroup            = rows[0][WorkGroup.ColumnId].ToString();
+                eTag.workGroupName          = rows[0][WorkGroup.ColumnName].ToString();
+                eTag.idLot                  = rows[0][Lot.ColumnId].ToString();
+                eTag.nameLot                = rows[0][Lot.ColumnName].ToString();
+                eTag.idVariety              = rows[0][Variety.ColumnId].ToString();
+                eTag.nameVariety            = rows[0][Variety.ColumnName].ToString();
+                eTag.scientisVarierty       = rows[0][Variety.ColumnScientis].ToString();
+                eTag.shortNameVariety       = rows[0][Variety.ColumnShortName].ToString();
+                eTag.patentLegend           = rows[0][Variety.ColumnPatentLegend].ToString();
+                eTag.trademark              = rows[0][Variety.ColumnTradeMark].ToString();
+                eTag.idCrop                 = rows[0][Crop.ColumnId].ToString();
+                eTag.nameCrop               = rows[0][Crop.ColumnName].ToString();
+                eTag.idSize                 = rows[0][ClsObject.Size.ColumnId].ToString();
+                eTag.nameSize               = rows[0][ClsObject.Size.ColumnName].ToString();
+                eTag.idDistributor          = rows[0][Distributor.ColumnId].ToString();
+                eTag.nameDistributor        = rows[0][Distributor.ColumnName].ToString();
+                eTag.addressDistributor     = rows[0][Distributor.ColumnAddress].ToString();
+                eTag.cityDistributor        = rows[0][Distributor.ColumnCity].ToString();
+                eTag.shortNameDistributor   = rows[0][Distributor.ColumnShortName].ToString();
+                eTag.idGTIN                 = rows[0][Gtin.ColumnId].ToString();
+                eTag.valueGTIN              = rows[0][Gtin.ColumnName].ToString();
+                eTag.upcGTIN                = rows[0][Gtin.ColumnUpc].ToString();
+                eTag.PLU                    = rows[0][Gtin.ColumnPlu].ToString();
+                eTag.idContainer            = rows[0][Container.ColumnId].ToString();
+                eTag.nameContainer          = rows[0][Container.ColumnName].ToString();
+                eTag.Lbs                    = ClsValues.RemoveTrailingZeros(rows[0][Gtin.ColumnLbs].ToString()); //Ej: de 10.00 a 10
+                eTag.preLabel               = rows[0][Gtin.ColumnPreLabel].ToString();
+                eTag.idPresentation         = rows[0][Presentation.ColumnId].ToString();
+                eTag.namePresentation       = rows[0][Presentation.ColumnName].ToString();
+                eTag.postLabel              = rows[0][Gtin.ColumnPostLabel].ToString();
+                eTag.palletBoxes            = rows[0][Gtin.ColumnPalletBoxes].ToString();
+                eTag.idPti                  = rows[0][Pti.ColumnId].ToString();
+                eTag.namePti                = rows[0][Pti.ColumnName].ToString();
+                eTag.idColor                = rows[0][ClsObject.Color.ColumnId].ToString();
+                eTag.nameColor              = rows[0][ClsObject.Color.ColumnName].ToString();
+                eTag.nameGenericColor       = rows[0][ClsObject.Color.ColumnGenericName].ToString();
+                eTag.voicePickCode          = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
+                eTag.idContractor           = rows[0][Contractor.ColumnId].ToString();
+                eTag.nameContractor         = rows[0][Contractor.ColumnName].ToString();
+                eTag.growFarmName           = rows[0][Farm.ColumnName].ToString();
+                eTag.nameColorCanEn         = rows[0][ClsObject.Color.ColumnNameCanEn].ToString();
+                eTag.nameColorCanFr         = rows[0][ClsObject.Color.ColumnNameCanFr].ToString();
+                eTag.idTypeBox              = rows[0][TypeBox.ColumnId].ToString();
+                eTag.nameTypeBox            = rows[0][TypeBox.ColumnName].ToString();
+                eTag.shortNameTypeBox       = rows[0][TypeBox.ColumnShortName].ToString(); // Added for short name type box
+                eTag.idLabelLegend          = rows[0][LabelLegend.ColumnId].ToString();
+                eTag.labelLegend            = rows[0][LabelLegend.ColumnName].ToString();
+                eTag.labelLegend2           = rows[0][LabelLegend.ColumnLegend2].ToString();
+            }
+        }
+
+        public void BtnPrintPtiTag()
+        {
+            if (IsInformationNeededToUpdate())
+                return;
+
+            if (frm.cboWorkPlan.SelectedIndex == 0)
+                SystemSounds.Exclamation.Play();
+            else
+            {
+                print = new ClsPrintPtiTag();
+
+                eTagInfo.showDate = !frm.chbFechaOmitidaPti.Checked;
+
+                print.SendToPrintPtiTag(eTagInfo, (int)frm.nudPtiTotal.Value, frm.chbReversePtiTag.Checked);
+            }
+        }
+        public void BtnPrintPalletTag()
+        {
+            if (IsInformationNeededToUpdate())
+                return;
+
+            if (frm.cboWorkPlan.SelectedIndex == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("Seleccione un plan de trabajo.", "Impresión Etiquetas.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                int palletBoxes = int.Parse(frm.txbBoxesTotaL.Text);
+                int cantityPallets = (int)frm.nudPalletTotal.Value;
+                string invoice = frm.txbInvoice.Text;
+                DateTime date = eTagInfo.dateWorkPlan ?? DateTime.Now;
+                bool reverseOrientation = frm.chbRevesePalletTag.Checked;
+                int labelsCopiesPerPallet = (int)frm.nudPalletsCopies.Value;
+
+                if (frm.nudPalletTotal.Text == string.Empty || frm.txbInvoice.Text.Length != 4)
+                {
+                    SystemSounds.Exclamation.Play();
+                    MessageBox.Show("Verifique papeleta o cantidad de pallets", "Impresión Etiquetas.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                else
+                {
+
+                    for (int i = 0; i < cantityPallets; i++)
+                    {
+                        string idPallet = ClsPalletCreate.InsertPallet(palletBoxes, eTagInfo.idWorkPlan, date, invoice);
+
+                        if (idPallet == string.Empty)
+                        {
+                            SystemSounds.Exclamation.Play();
+                            MessageBox.Show("No se pudo crear el pallet.", "Error al crear el pallet");
+                            return;
+                        }
+                        else
+                        {//imprimir (se creó el pallet)
+                            frm.ClearInvoiceInfo();
+
+                            print = new ClsPrintPtiTag();
+
+                            eTagInfo.showDate = !frm.chbFechaOmitidaPallet.Checked;
+                            eTagInfo.invoice = invoice;
+                            print.SendToPrintPalletTag(idPallet, eTagInfo, labelsCopiesPerPallet, palletBoxes, reverseOrientation, false);
+
+                            AddNewRowToLastPallets(idPallet, invoice, palletBoxes.ToString());
+                        }
+                    }
+                }
+
+            }
+        }
+        public bool IsInformationNeededToUpdate()
+        {
+            if (ClsComboBoxFiles.IsInfoNeededToUpdate(ClsObject.WorkPlan.CboPresentation))
+            {
+                frm.cboWorkGroup.SelectedIndex = 0;
+                frm.cboWorkPlan.SelectedIndex = 0;
+                SystemSounds.Hand.Play();
+                LoadFormPrintLabels();
+                MessageBox.Show("Se actualizaron los datos para el plan de trabajo.", "Impresión Etiquetas.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
+            }
+            return false;
+        }
+        public void LoadDgvLastPallets()
+        {
+            dtLastPallets = ClsQuerysDB.GetDataTable(queryLastPallets);
+            frm.dgvLastUserPallet.DataSource = dtLastPallets;
+        }
+        private void AddNewRowToLastPallets(string idPallet, string invoice, string boxes)
+        {
+            DataRow newRow = dtLastPallets.NewRow();
+            newRow["Fecha"] = $"{eTagInfo.dateWorkPlan?.ToString("yyyy-MM-dd")}";
+            newRow["Pallet"] = idPallet;
+            newRow["Plan"] = eTagInfo.idWorkPlan;
+            newRow["Papeleta"] = invoice;
+            newRow["Cajas"] = boxes;
+            newRow["Contenedor"] = $"{eTagInfo.nameContainer}{eTagInfo.Lbs}";
+            newRow["Presentación"] = $"{eTagInfo.nameSize} {eTagInfo.preLabel} {eTagInfo.namePresentation} {eTagInfo.postLabel}";
+            newRow["Caja"] = eTagInfo.shortNameTypeBox;
+            newRow["Variedad"] = eTagInfo.shortNameVariety;
+            newRow["Distribuidor"] = eTagInfo.shortNameDistributor;
+            newRow["Cuadrilla"] = $"{eTagInfo.workGroupName} {eTagInfo.nameContractor}";
+            newRow["Lote"] = $"{eTagInfo.nameLot} ({eTagInfo.idLot})";
+            newRow["Leyenda"] = eTagInfo.labelLegend;
+
+            dtLastPallets.Rows.InsertAt(newRow, 0);
+        }
+
+        public void ReprintSelectedPallet()
+        {
+            if (frm.dgvLastUserPallet.SelectedRows.Count > 0)
+            {
+                ETagInfo eTagInfoReprint = new ETagInfo();
+
+                string selectedPallet = frm.dgvLastUserPallet.SelectedRows[0].Cells["Pallet"].Value.ToString();
+                string selectedPlan = frm.dgvLastUserPallet.SelectedRows[0].Cells["Plan"].Value.ToString();
+                int selectedBoxes = int.Parse(frm.dgvLastUserPallet.SelectedRows[0].Cells["Cajas"].Value.ToString());
+
+                bool reverseOrientation = frm.chbReverseReprintPallet.Checked;
+                int labelsLastCopiesPerPallet = (int)frm.nudLastPalletsCopies.Value;
+
+
+                DataRow[] rows = dtWorkPlan.Select($"{Column.id} = '{selectedPlan}'");
+
+                if (rows.Length > 0)
+                {
+                    SetTagInfo(selectedPlan, eTagInfoReprint);
+
+                    eTagInfoReprint.showDate = !frm.chbFechaOmitidaReimprimirPallet.Checked;
+
+                    print = new ClsPrintPtiTag();
+
+                    print.SendToPrintPalletTag(selectedPallet, eTagInfoReprint, labelsLastCopiesPerPallet, selectedBoxes, reverseOrientation, true);
+                }
+            }
+        }
+
+    }
+}

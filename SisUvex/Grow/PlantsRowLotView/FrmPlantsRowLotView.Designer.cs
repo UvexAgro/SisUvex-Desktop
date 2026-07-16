@@ -1,0 +1,534 @@
+﻿namespace SisUvex.Grow.PlantsRowLot
+{
+    partial class FrmPlantsRowLotView
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPlantsRowLotView));
+            cboLot = new ComboBox();
+            label1 = new Label();
+            cboFarm = new ComboBox();
+            lblField = new Label();
+            cboVariety = new ComboBox();
+            label10 = new Label();
+            cboCrop = new ComboBox();
+            label11 = new Label();
+            gpbFilters = new GroupBox();
+            chbLotActives = new CheckBox();
+            chbVarietyActives = new CheckBox();
+            button1 = new Button();
+            button2 = new Button();
+            bgpLotInfo = new GroupBox();
+            dgvLotTotals = new DataGridView();
+            lblIdLot = new Label();
+            lblNameLot = new Label();
+            label8 = new Label();
+            label7 = new Label();
+            label13 = new Label();
+            lblTitle = new Label();
+            btnExcel = new Button();
+            btnLoadPlantsLot = new Button();
+            chbShowOrHideColumns = new CheckBox();
+            dgvPlants = new DataGridView();
+            chbDgvCrop = new CheckBox();
+            chbDgvVariety = new CheckBox();
+            gpbFilters.SuspendLayout();
+            bgpLotInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvLotTotals).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPlants).BeginInit();
+            SuspendLayout();
+            // 
+            // cboLot
+            // 
+            cboLot.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboLot.FlatStyle = FlatStyle.System;
+            cboLot.FormattingEnabled = true;
+            cboLot.Location = new Point(391, 53);
+            cboLot.Margin = new Padding(0, 3, 3, 3);
+            cboLot.Name = "cboLot";
+            cboLot.Size = new Size(350, 29);
+            cboLot.TabIndex = 27;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(351, 57);
+            label1.Margin = new Padding(0);
+            label1.Name = "label1";
+            label1.Size = new Size(40, 21);
+            label1.TabIndex = 26;
+            label1.Text = "Lote";
+            // 
+            // cboFarm
+            // 
+            cboFarm.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFarm.FormattingEnabled = true;
+            cboFarm.Location = new Point(72, 53);
+            cboFarm.Margin = new Padding(0, 3, 3, 3);
+            cboFarm.Name = "cboFarm";
+            cboFarm.Size = new Size(245, 29);
+            cboFarm.TabIndex = 24;
+            // 
+            // lblField
+            // 
+            lblField.AutoSize = true;
+            lblField.Location = new Point(12, 57);
+            lblField.Margin = new Padding(0);
+            lblField.Name = "lblField";
+            lblField.Size = new Size(60, 21);
+            lblField.TabIndex = 22;
+            lblField.Text = "Campo";
+            // 
+            // cboVariety
+            // 
+            cboVariety.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboVariety.FormattingEnabled = true;
+            cboVariety.Location = new Point(391, 15);
+            cboVariety.Margin = new Padding(0, 3, 3, 3);
+            cboVariety.Name = "cboVariety";
+            cboVariety.Size = new Size(350, 29);
+            cboVariety.TabIndex = 45;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(320, 19);
+            label10.Margin = new Padding(0);
+            label10.Name = "label10";
+            label10.Size = new Size(71, 21);
+            label10.TabIndex = 44;
+            label10.Text = "Variedad";
+            // 
+            // cboCrop
+            // 
+            cboCrop.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboCrop.FormattingEnabled = true;
+            cboCrop.Location = new Point(72, 16);
+            cboCrop.Margin = new Padding(0, 3, 3, 3);
+            cboCrop.Name = "cboCrop";
+            cboCrop.Size = new Size(245, 29);
+            cboCrop.TabIndex = 47;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(13, 20);
+            label11.Margin = new Padding(0);
+            label11.Name = "label11";
+            label11.Size = new Size(59, 21);
+            label11.TabIndex = 46;
+            label11.Text = "Cultivo";
+            // 
+            // gpbFilters
+            // 
+            gpbFilters.Controls.Add(chbLotActives);
+            gpbFilters.Controls.Add(chbVarietyActives);
+            gpbFilters.Controls.Add(button1);
+            gpbFilters.Controls.Add(button2);
+            gpbFilters.Controls.Add(lblField);
+            gpbFilters.Controls.Add(label1);
+            gpbFilters.Controls.Add(cboCrop);
+            gpbFilters.Controls.Add(cboFarm);
+            gpbFilters.Controls.Add(cboLot);
+            gpbFilters.Controls.Add(label11);
+            gpbFilters.Controls.Add(label10);
+            gpbFilters.Controls.Add(cboVariety);
+            gpbFilters.Font = new Font("Segoe UI", 12F);
+            gpbFilters.Location = new Point(12, 37);
+            gpbFilters.Name = "gpbFilters";
+            gpbFilters.Size = new Size(820, 94);
+            gpbFilters.TabIndex = 50;
+            gpbFilters.TabStop = false;
+            gpbFilters.Text = "Filtros";
+            // 
+            // chbLotActives
+            // 
+            chbLotActives.Appearance = Appearance.Button;
+            chbLotActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbLotActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbLotActives.Font = new Font("Segoe UI", 10F);
+            chbLotActives.Location = new Point(773, 52);
+            chbLotActives.Name = "chbLotActives";
+            chbLotActives.Size = new Size(39, 31);
+            chbLotActives.TabIndex = 66;
+            chbLotActives.Text = "     ";
+            chbLotActives.UseVisualStyleBackColor = true;
+            // 
+            // chbVarietyActives
+            // 
+            chbVarietyActives.Appearance = Appearance.Button;
+            chbVarietyActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbVarietyActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbVarietyActives.Font = new Font("Segoe UI", 10F);
+            chbVarietyActives.Location = new Point(773, 14);
+            chbVarietyActives.Name = "chbVarietyActives";
+            chbVarietyActives.Size = new Size(39, 31);
+            chbVarietyActives.TabIndex = 65;
+            chbVarietyActives.Text = "     ";
+            chbVarietyActives.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Font = new Font("Segoe UI", 12F);
+            button1.Image = Properties.Resources.BuscarLupa1;
+            button1.Location = new Point(742, 14);
+            button1.Name = "button1";
+            button1.Size = new Size(31, 31);
+            button1.TabIndex = 64;
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.Font = new Font("Segoe UI", 12F);
+            button2.Image = Properties.Resources.BuscarLupa1;
+            button2.Location = new Point(742, 52);
+            button2.Name = "button2";
+            button2.Size = new Size(31, 31);
+            button2.TabIndex = 63;
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // bgpLotInfo
+            // 
+            bgpLotInfo.Controls.Add(dgvLotTotals);
+            bgpLotInfo.Controls.Add(lblIdLot);
+            bgpLotInfo.Controls.Add(lblNameLot);
+            bgpLotInfo.Controls.Add(label8);
+            bgpLotInfo.Controls.Add(label7);
+            bgpLotInfo.Font = new Font("Segoe UI", 12F);
+            bgpLotInfo.Location = new Point(12, 131);
+            bgpLotInfo.Name = "bgpLotInfo";
+            bgpLotInfo.Size = new Size(913, 169);
+            bgpLotInfo.TabIndex = 51;
+            bgpLotInfo.TabStop = false;
+            bgpLotInfo.Text = "Datos del lote";
+            // 
+            // dgvLotTotals
+            // 
+            dgvLotTotals.AllowUserToAddRows = false;
+            dgvLotTotals.AllowUserToDeleteRows = false;
+            dgvLotTotals.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvLotTotals.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvLotTotals.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvLotTotals.BackgroundColor = SystemColors.ButtonFace;
+            dgvLotTotals.BorderStyle = BorderStyle.Fixed3D;
+            dgvLotTotals.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 12F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvLotTotals.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvLotTotals.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvLotTotals.EnableHeadersVisualStyles = false;
+            dgvLotTotals.ImeMode = ImeMode.NoControl;
+            dgvLotTotals.Location = new Point(0, 49);
+            dgvLotTotals.Name = "dgvLotTotals";
+            dgvLotTotals.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 12F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvLotTotals.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvLotTotals.RowHeadersVisible = false;
+            dgvLotTotals.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvLotTotals.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgvLotTotals.Size = new Size(913, 120);
+            dgvLotTotals.TabIndex = 72;
+            // 
+            // lblIdLot
+            // 
+            lblIdLot.AutoSize = true;
+            lblIdLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblIdLot.Location = new Point(75, 25);
+            lblIdLot.Margin = new Padding(0);
+            lblIdLot.Name = "lblIdLot";
+            lblIdLot.Size = new Size(69, 21);
+            lblIdLot.TabIndex = 55;
+            lblIdLot.Tag = "lotData";
+            lblIdLot.Text = "lblIdLot";
+            // 
+            // lblNameLot
+            // 
+            lblNameLot.AutoSize = true;
+            lblNameLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblNameLot.Location = new Point(215, 25);
+            lblNameLot.Margin = new Padding(0);
+            lblNameLot.Name = "lblNameLot";
+            lblNameLot.Size = new Size(100, 21);
+            lblNameLot.TabIndex = 54;
+            lblNameLot.Tag = "lotData";
+            lblNameLot.Text = "lblNameLot";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(12, 25);
+            label8.Margin = new Padding(0);
+            label8.Name = "label8";
+            label8.Size = new Size(63, 21);
+            label8.TabIndex = 53;
+            label8.Text = "Código:";
+            label8.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(144, 25);
+            label7.Margin = new Padding(0);
+            label7.Name = "label7";
+            label7.Size = new Size(71, 21);
+            label7.TabIndex = 52;
+            label7.Text = "Nombre:";
+            label7.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 12F);
+            label13.Location = new Point(12, 303);
+            label13.Name = "label13";
+            label13.Size = new Size(109, 21);
+            label13.TabIndex = 61;
+            label13.Text = "Líneas del lote";
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(12, 9);
+            lblTitle.Margin = new Padding(0);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(215, 25);
+            lblTitle.TabIndex = 61;
+            lblTitle.Tag = "";
+            lblTitle.Text = "Reporte líneas por lote";
+            // 
+            // btnExcel
+            // 
+            btnExcel.Font = new Font("Segoe UI", 12F);
+            btnExcel.Image = Properties.Resources.excelIcon16;
+            btnExcel.Location = new Point(141, 301);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Padding = new Padding(0, 0, 1, 0);
+            btnExcel.Size = new Size(25, 25);
+            btnExcel.TabIndex = 62;
+            btnExcel.UseVisualStyleBackColor = true;
+            btnExcel.Click += btnExcel_Click;
+            // 
+            // btnLoadPlantsLot
+            // 
+            btnLoadPlantsLot.Font = new Font("Segoe UI", 12F);
+            btnLoadPlantsLot.Image = Properties.Resources.BuscarLupa1;
+            btnLoadPlantsLot.ImageAlign = ContentAlignment.MiddleRight;
+            btnLoadPlantsLot.Location = new Point(838, 89);
+            btnLoadPlantsLot.Name = "btnLoadPlantsLot";
+            btnLoadPlantsLot.Padding = new Padding(0, 0, 4, 0);
+            btnLoadPlantsLot.Size = new Size(87, 31);
+            btnLoadPlantsLot.TabIndex = 67;
+            btnLoadPlantsLot.Text = "Buscar";
+            btnLoadPlantsLot.TextAlign = ContentAlignment.TopLeft;
+            btnLoadPlantsLot.UseVisualStyleBackColor = true;
+            btnLoadPlantsLot.Click += btnLoadPlantsLot_Click;
+            // 
+            // chbShowOrHideColumns
+            // 
+            chbShowOrHideColumns.Appearance = Appearance.Button;
+            chbShowOrHideColumns.AutoSize = true;
+            chbShowOrHideColumns.BackColor = Color.Transparent;
+            chbShowOrHideColumns.Location = new Point(299, 301);
+            chbShowOrHideColumns.Margin = new Padding(0);
+            chbShowOrHideColumns.Name = "chbShowOrHideColumns";
+            chbShowOrHideColumns.Size = new Size(112, 25);
+            chbShowOrHideColumns.TabIndex = 68;
+            chbShowOrHideColumns.Text = "Columnas ocultas";
+            chbShowOrHideColumns.TextAlign = ContentAlignment.TopRight;
+            chbShowOrHideColumns.UseVisualStyleBackColor = false;
+            chbShowOrHideColumns.CheckedChanged += chbHideOrShowColumns_CheckedChanged;
+            // 
+            // dgvPlants
+            // 
+            dgvPlants.AllowUserToAddRows = false;
+            dgvPlants.AllowUserToDeleteRows = false;
+            dgvPlants.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvPlants.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvPlants.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvPlants.BackgroundColor = SystemColors.ButtonFace;
+            dgvPlants.BorderStyle = BorderStyle.Fixed3D;
+            dgvPlants.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvPlants.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dgvPlants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvPlants.EnableHeadersVisualStyles = false;
+            dgvPlants.ImeMode = ImeMode.NoControl;
+            dgvPlants.Location = new Point(12, 327);
+            dgvPlants.Name = "dgvPlants";
+            dgvPlants.ReadOnly = true;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvPlants.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dgvPlants.RowHeadersVisible = false;
+            dgvPlants.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvPlants.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgvPlants.Size = new Size(896, 253);
+            dgvPlants.TabIndex = 69;
+            // 
+            // chbDgvCrop
+            // 
+            chbDgvCrop.Appearance = Appearance.Button;
+            chbDgvCrop.AutoSize = true;
+            chbDgvCrop.BackColor = Color.Transparent;
+            chbDgvCrop.CheckAlign = ContentAlignment.MiddleRight;
+            chbDgvCrop.Location = new Point(166, 301);
+            chbDgvCrop.Margin = new Padding(0);
+            chbDgvCrop.Name = "chbDgvCrop";
+            chbDgvCrop.Size = new Size(60, 25);
+            chbDgvCrop.TabIndex = 70;
+            chbDgvCrop.Text = "Cultivos";
+            chbDgvCrop.TextAlign = ContentAlignment.TopRight;
+            chbDgvCrop.UseVisualStyleBackColor = false;
+            // 
+            // chbDgvVariety
+            // 
+            chbDgvVariety.Appearance = Appearance.Button;
+            chbDgvVariety.AutoSize = true;
+            chbDgvVariety.BackColor = Color.Transparent;
+            chbDgvVariety.CheckAlign = ContentAlignment.MiddleRight;
+            chbDgvVariety.Location = new Point(226, 301);
+            chbDgvVariety.Margin = new Padding(0);
+            chbDgvVariety.Name = "chbDgvVariety";
+            chbDgvVariety.Size = new Size(73, 25);
+            chbDgvVariety.TabIndex = 71;
+            chbDgvVariety.Text = "Variedades";
+            chbDgvVariety.TextAlign = ContentAlignment.TopRight;
+            chbDgvVariety.UseVisualStyleBackColor = false;
+            // 
+            // FrmPlantsRowLotView
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(930, 598);
+            ClientSize = new Size(954, 544);
+            Controls.Add(chbDgvVariety);
+            Controls.Add(chbDgvCrop);
+            Controls.Add(dgvPlants);
+            Controls.Add(btnLoadPlantsLot);
+            Controls.Add(btnExcel);
+            Controls.Add(lblTitle);
+            Controls.Add(label13);
+            Controls.Add(bgpLotInfo);
+            Controls.Add(gpbFilters);
+            Controls.Add(chbShowOrHideColumns);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "FrmPlantsRowLotView";
+            Text = "Reporte líneas por lote";
+            Load += FrmPlantsRowLotView_Load;
+            gpbFilters.ResumeLayout(false);
+            gpbFilters.PerformLayout();
+            bgpLotInfo.ResumeLayout(false);
+            bgpLotInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvLotTotals).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPlants).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+        private Label label9;
+        private TextBox textBox8;
+        private Label label6;
+        private TextBox textBox5;
+        private Label label5;
+        private TextBox textBox4;
+        private Label label4;
+        private TextBox textBox3;
+        private Label label3;
+        private TextBox textBox2;
+        private Label label2;
+        private Label label1;
+        private TextBox textBox1;
+        private Label lblField;
+        private Label label10;
+        private Label label11;
+        private Button button1;
+        private Label label12;
+        private TextBox textBox9;
+        private GroupBox gpbFilters;
+        private GroupBox bgpLotInfo;
+        private Label label8;
+        private Label label7;
+        private Label label13;
+        private Label lblTitle;
+        private Button btnExcel;
+        public Label lblIdLot;
+        public Label lblUserUpdate;
+        public Label lblLastUpdate;
+        public Label lblPlantsFail;
+        public Label lblPlantsTotal;
+        public Label lblPlantsEfective;
+        public ComboBox cboLot;
+        public ComboBox cboFarm;
+        public ComboBox cboVariety;
+        public ComboBox cboCrop;
+        public Label lblNameLot;
+        private Button button2;
+        public CheckBox chbLotActives;
+        public CheckBox chbVarietyActives;
+        private Button btnLoadPlantsLot;
+        public Label lblFinal;
+        public Label lblStart;
+        private Label label17;
+        private Label label18;
+        public Label lblFormation;
+        private Label label15;
+        public CheckBox chbShowOrHideColumns;
+        public DataGridView dgvPlants;
+        public CheckBox chbDgvCrop;
+        public CheckBox chbDgvVariety;
+        public DataGridView dgvLotTotals;
+    }
+}

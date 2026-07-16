@@ -1,0 +1,234 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SisUvex.Catalogos.Metods.TextBoxes
+{
+    internal class ClsTextBoxes
+    {
+        public static void TxbApplyKeyPressEventInt(TextBox textBox)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                // Si no es un número válido, eliminar caracteres no numéricos
+                if (!int.TryParse(textBox.Text, out _))
+                {
+                    string cleanedText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+                    textBox.Text = cleanedText;
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+            };
+        }
+        public static void TxbApplyKeyPressEventDecimal(TextBox textBox)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.' && !char.IsControl(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+
+                // Solo permitir un punto decimal
+                if (e.KeyChar == '.' && (sender as TextBox).Text.Contains('.'))
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                // Si no es un decimal válido, limpiar el texto
+                if (!decimal.TryParse(textBox.Text, out _))
+                {
+                    // Permitir solo un punto y números
+                    var sb = new StringBuilder();
+                    bool hasDecimalPoint = false;
+
+                    foreach (char c in textBox.Text)
+                    {
+                        if (char.IsDigit(c))
+                        {
+                            sb.Append(c);
+                        }
+                        else if (c == '.' && !hasDecimalPoint)
+                        {
+                            sb.Append(c);
+                            hasDecimalPoint = true;
+                        }
+                    }
+
+                    string cleanedText = sb.ToString();
+                    if (cleanedText != textBox.Text)
+                    {
+                        int cursorPos = textBox.SelectionStart;
+                        textBox.Text = cleanedText;
+                        textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                    }
+                }
+            };
+        }
+        public static void TxbApplyKeyPressEventNumericWithLimit(TextBox textBox, int maxIntDigits, int maxDecimalDigits)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                // Permitir Backspace, Delete, Ctrl+A, etc.
+                if (char.IsControl(e.KeyChar))
+                {
+                    e.Handled = false;
+                    return;
+                }
+
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                if (e.KeyChar == '.' && textBox.Text.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                string currentText = textBox.Text;
+                int selectionStart = textBox.SelectionStart;
+
+                string newText = currentText.Substring(0, selectionStart)
+                               + e.KeyChar
+                               + currentText.Substring(selectionStart + textBox.SelectionLength);
+
+                string[] parts = newText.Split('.');
+
+                if (parts[0].Length > maxIntDigits)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                if (parts.Length > 1 && parts[1].Length > maxDecimalDigits)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                e.Handled = false;
+            };
+
+            // Validación al pegar texto
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text)) return;
+
+                // Verificar si el texto es un número válido
+                if (!decimal.TryParse(textBox.Text, out decimal _))
+                {
+                    // Limpiar caracteres no válidos manteniendo el formato numérico
+                    var sb = new StringBuilder();
+                    bool hasDecimalPoint = false;
+
+                    foreach (char c in textBox.Text)
+                    {
+                        if (char.IsDigit(c))
+                        {
+                            sb.Append(c);
+                        }
+                        else if (c == '.' && !hasDecimalPoint)
+                        {
+                            sb.Append(c);
+                            hasDecimalPoint = true;
+                        }
+                    }
+
+                    string cleanedText = sb.ToString();
+                    if (cleanedText != textBox.Text)
+                    {
+                        int cursorPos = textBox.SelectionStart;
+                        textBox.Text = cleanedText;
+                        textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                    }
+                }
+
+                // Validar límites después de limpieza
+                string[] parts = textBox.Text.Split('.');
+
+                // Truncar parte entera si excede el límite
+                if (parts[0].Length > maxIntDigits)
+                {
+                    parts[0] = parts[0].Substring(0, maxIntDigits);
+                    textBox.Text = parts.Length > 1 ? $"{parts[0]}.{parts[1]}" : parts[0];
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+
+                // Truncar parte decimal si excede el límite
+                if (parts.Length > 1 && parts[1].Length > maxDecimalDigits)
+                {
+                    parts[1] = parts[1].Substring(0, maxDecimalDigits);
+                    textBox.Text = $"{parts[0]}.{parts[1]}";
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+            };
+
+            // Validación al perder el foco (opcional)
+            textBox.Validating += (sender, e) =>
+            {
+                if (!string.IsNullOrEmpty(textBox.Text) && !decimal.TryParse(textBox.Text, out _))
+                {
+                    textBox.Text = "";
+                }
+            };
+        }
+        public static void TxbApplyKeyPressEventAlphaNumeric(TextBox textBox)
+        {
+            textBox.KeyPress += (sender, e) =>
+            {
+                // Permitir controles (backspace, delete, etc.)
+                if (char.IsControl(e.KeyChar))
+                    return;
+
+                // Permitir solo letras y números
+                if (!char.IsLetterOrDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            };
+
+            // Validar al pegar texto (Ctrl+V)
+            textBox.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                string cleanedText = new string(textBox.Text
+                    .Where(char.IsLetterOrDigit)
+                    .ToArray());
+
+                if (cleanedText != textBox.Text)
+                {
+                    int cursorPos = textBox.SelectionStart;
+                    textBox.Text = cleanedText;
+                    textBox.SelectionStart = Math.Min(cursorPos, cleanedText.Length);
+                }
+            };
+        }
+
+    }
+}

@@ -1,0 +1,141 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SisUvex.Catalogos.Metods.Extentions
+{
+    public static class ComboBoxExtensions
+    {
+        /// <summary>
+        /// <see cref="ComboBox.SelectedValue"/> recortado, o null si no hay selección válida (índice ≤ 0: típicamente "---").
+        /// </summary>
+        public static string? ComboValueOrNull(this ComboBox? cbo)
+        {
+            if (cbo == null)
+                return null;
+            if (cbo.SelectedIndex <= 0)
+                return null;
+            return cbo.SelectedValue?.ToString()?.Trim();
+        }
+
+        /// <summary>
+     /// Gets the value of a specific column from the ComboBox's DataSource
+     /// for the currently selected item.
+     /// </summary>
+     /// <param name="combo">ComboBox to get the value from</param>
+     /// <param name="columnName">Name of the column to retrieve</param>
+     /// <returns>The cell value or null if not found</returns>
+        public static object GetColumnValue(this ComboBox combo, string columnName)
+        {
+            if (combo == null)
+                throw new ArgumentNullException(nameof(combo));
+
+            if (string.IsNullOrEmpty(columnName))
+                throw new ArgumentNullException(nameof(columnName));
+
+            if (combo.SelectedIndex == -1)
+                return null;
+
+            if (combo.DataSource is DataTable dataTable)
+            {
+                return GetValueFromDataSource(combo, dataTable, columnName);
+            }
+
+            if (combo.DataSource is BindingSource bindingSource && bindingSource.DataSource is DataTable dt)
+            {
+                return GetValueFromDataSource(combo, dt, columnName);
+            }
+
+            throw new InvalidOperationException("ComboBox's DataSource is not a DataTable or BindingSource with DataTable");
+        }
+        public static T GetValueFromDataSource<T>(ComboBox combo, string valueSearch, string columnSearch, string columnResult)
+        {
+            if (!(combo.DataSource is DataTable dataTable))
+                return default;
+
+            DataRow row = dataTable.AsEnumerable()
+                                   .FirstOrDefault(r =>
+                                       string.Equals(
+                                           Convert.ToString(r[columnSearch])?.Trim(),
+                                           valueSearch?.Trim(),
+                                           StringComparison.OrdinalIgnoreCase));
+
+            if (row == null || row.IsNull(columnResult))
+                return default;
+
+            return (T)Convert.ChangeType(row[columnResult], typeof(T));
+        }
+
+        private static object GetValueFromDataSource(ComboBox combo, DataTable dataTable, string columnName)
+        {
+            if (!dataTable.Columns.Contains(columnName))
+                throw new ArgumentException($"Column '{columnName}' doesn't exist in the ComboBox's DataSource");
+
+            if (combo.SelectedItem is DataRowView selectedRowView)
+            {
+                return selectedRowView[columnName];
+            }
+
+            if (combo.SelectedItem is DataRow selectedRow)
+            {
+                return selectedRow[columnName];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Strongly-typed generic version
+        /// </summary>
+        public static T GetColumnValue<T>(this ComboBox combo, string columnName)
+        {
+            object value = combo.GetColumnValue(columnName);
+
+            if (value == null || value == DBNull.Value)
+                return default(T);
+
+            try
+            {
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                throw new InvalidCastException($"Cannot convert column '{columnName}' value to type {typeof(T).Name}");
+            }
+        }
+
+
+        /// <summary>
+        /// Valida si el ComboBox tiene un valor seleccionado y lo devuelve a través del parámetro de salida.
+        /// Se puede usar en las validaciones antes de un filtro o consulta para sacar el id que muestra el combobox.
+        /// </summary>
+        public static bool TryGetValue(this ComboBox cbo, out string value)
+        {
+            value = string.Empty;
+
+            if (cbo == null)
+                return false;
+
+            if (cbo.DataSource == null)
+                return false;
+
+            if (cbo.SelectedValue == null)
+                return false;
+
+            if (cbo.SelectedValue is DataRowView)
+                return false;
+
+            var text = cbo.SelectedValue.ToString();
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            value = text;
+            return true;
+        }
+    }
+}
