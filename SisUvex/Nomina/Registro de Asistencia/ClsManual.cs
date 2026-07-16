@@ -173,7 +173,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			//  lo que se muestra
 			string empleadoTexto = codigoFmt + " - " + nombre;
-			string actividadMostrar = actividadTexto; 
+			string actividadMostrar = actividadTexto;
 
 			int rowIndex = frm.dgvAsistencia.Rows.Add(
 				empleadoTexto,
@@ -181,12 +181,10 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				bandaFmt
 			);
 
-			//  datos reales (para SQL)
+			// Datos reales para guardar
 			frm.dgvAsistencia.Rows[rowIndex].Cells["EMPLEADO"].Tag = codigoFmt;
 			frm.dgvAsistencia.Rows[rowIndex].Cells["ACTIVIDAD"].Tag = actividadFmt;
 			frm.dgvAsistencia.Rows[rowIndex].Cells["BANDA"].Tag = bandaFmt;
-
-			// 🧹 limpiar
 			frm.txbCodigo.Clear();
 			frm.txbEmpleado.Clear();
 			frm.cboActividad.SelectedIndex = -1;
@@ -198,15 +196,14 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		{
 			frm.dgvAsistencia.Columns.Clear();
 
-			//  CREAR COLUMNAS
 			frm.dgvAsistencia.Columns.Add("EMPLEADO", "Codigo");
 			frm.dgvAsistencia.Columns.Add("ACTIVIDAD", "Actividad");
 			frm.dgvAsistencia.Columns.Add("BANDA", "Banda");
 
-			// Opcional (mejor vista)
 			frm.dgvAsistencia.Columns["EMPLEADO"].Width = 250;
 			frm.dgvAsistencia.Columns["ACTIVIDAD"].Width = 200;
-			frm.dgvAsistencia.Columns["BANDA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			frm.dgvAsistencia.Columns["BANDA"].DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleLeft;
 		}
 		public string ObtenerNombreEmpleado(string idEmpleado)
 		{
@@ -247,8 +244,8 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
 
 			//  quitar sombreado selección
-			dgv.DefaultCellStyle.SelectionBackColor = dgv.DefaultCellStyle.BackColor;
-			dgv.DefaultCellStyle.SelectionForeColor = dgv.DefaultCellStyle.ForeColor;
+			dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 120, 215);
+			dgv.DefaultCellStyle.SelectionForeColor = Color.White;
 
 			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

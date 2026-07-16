@@ -126,6 +126,8 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		private void btnAcceptarEmpleado_Click(object sender, EventArgs e)
 		{
 			cls.BotonAceptar();
+			dgvAsistencia.Rows.Clear();
+			cls.CargarAsistenciasPorFecha();
 		}
 
 		private void dtpDay_ValueChanged(object sender, EventArgs e)
@@ -142,6 +144,22 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			cls.CargarAsistenciasPorFecha();
+		}
+
+		private void btnEliminarR_Click(object sender, EventArgs e)
+		{
+			cls.EliminarRegistroSeleccionado();
+		}
+
+		private void txbCodigo_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				clsM.btnAgregarEmpleado();
+
+				e.SuppressKeyPress = true;
+				e.Handled = true;
+			}
 		}
 	}
 }
