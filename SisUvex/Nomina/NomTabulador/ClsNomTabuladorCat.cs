@@ -52,7 +52,7 @@ namespace SisUvex.Nomina.NomTabulador
 
 			frmAdd = new();
 			frmAdd.cls = this;
-			frmAdd.Text = "Modificar Fecha";
+			frmAdd.Text = "Modificar Sueldo, Comisiones y Sobre Sueldos";
 
 			frmAdd.ShowDialog();
 		}

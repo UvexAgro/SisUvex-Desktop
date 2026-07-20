@@ -40,25 +40,29 @@
 			txbHoras = new TextBox();
 			btnAccept = new Button();
 			btnCancel = new Button();
+			panel1 = new Panel();
+			pictureBox1 = new PictureBox();
+			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// lblAdd
 			// 
 			lblAdd.AutoSize = true;
 			lblAdd.Font = new Font("Arial Black", 16F);
-			lblAdd.Location = new Point(12, 29);
+			lblAdd.Location = new Point(131, 27);
 			lblAdd.Name = "lblAdd";
-			lblAdd.Size = new Size(217, 31);
+			lblAdd.Size = new Size(258, 38);
 			lblAdd.TabIndex = 70;
-			lblAdd.Text = "Añadir Concepto";
+			lblAdd.Text = "Nuevo Concepto";
 			// 
 			// lblId
 			// 
 			lblId.AutoSize = true;
-			lblId.Font = new Font("Segoe UI", 12F);
-			lblId.Location = new Point(497, 31);
+			lblId.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblId.Location = new Point(23, 114);
 			lblId.Name = "lblId";
-			lblId.Size = new Size(26, 21);
+			lblId.Size = new Size(29, 23);
 			lblId.TabIndex = 92;
 			lblId.Text = "Id:";
 			// 
@@ -66,75 +70,80 @@
 			// 
 			txbId.Enabled = false;
 			txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			txbId.Location = new Point(529, 27);
+			txbId.Location = new Point(23, 141);
+			txbId.Margin = new Padding(3, 4, 3, 4);
 			txbId.Name = "txbId";
-			txbId.Size = new Size(46, 29);
+			txbId.Size = new Size(76, 34);
 			txbId.TabIndex = 93;
 			txbId.TextAlign = HorizontalAlignment.Center;
 			// 
 			// lblConcepto
 			// 
 			lblConcepto.AutoSize = true;
-			lblConcepto.Font = new Font("Segoe UI", 12F);
-			lblConcepto.Location = new Point(12, 93);
+			lblConcepto.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblConcepto.Location = new Point(23, 184);
 			lblConcepto.Name = "lblConcepto";
-			lblConcepto.Size = new Size(79, 21);
+			lblConcepto.Size = new Size(88, 23);
 			lblConcepto.TabIndex = 94;
 			lblConcepto.Text = "Concepto:";
 			// 
 			// lblMonto
 			// 
 			lblMonto.AutoSize = true;
-			lblMonto.Font = new Font("Segoe UI", 12F);
-			lblMonto.Location = new Point(12, 143);
+			lblMonto.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblMonto.Location = new Point(23, 249);
 			lblMonto.Name = "lblMonto";
-			lblMonto.Size = new Size(59, 21);
+			lblMonto.Size = new Size(65, 23);
 			lblMonto.TabIndex = 95;
 			lblMonto.Text = "Monto:";
 			// 
 			// lblHoras
 			// 
 			lblHoras.AutoSize = true;
-			lblHoras.Font = new Font("Segoe UI", 12F);
-			lblHoras.Location = new Point(12, 193);
+			lblHoras.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblHoras.Location = new Point(23, 317);
 			lblHoras.Name = "lblHoras";
-			lblHoras.Size = new Size(99, 21);
+			lblHoras.Size = new Size(108, 23);
 			lblHoras.TabIndex = 96;
 			lblHoras.Text = "Horas Extras:";
 			// 
 			// txbConcepto
 			// 
 			txbConcepto.Font = new Font("Segoe UI", 12F);
-			txbConcepto.Location = new Point(149, 85);
+			txbConcepto.Location = new Point(23, 211);
+			txbConcepto.Margin = new Padding(3, 4, 3, 4);
 			txbConcepto.MaxLength = 300;
 			txbConcepto.Name = "txbConcepto";
-			txbConcepto.Size = new Size(331, 29);
+			txbConcepto.Size = new Size(475, 34);
 			txbConcepto.TabIndex = 97;
 			// 
 			// txbMonto
 			// 
 			txbMonto.Font = new Font("Segoe UI", 12F);
-			txbMonto.Location = new Point(149, 135);
+			txbMonto.Location = new Point(23, 274);
+			txbMonto.Margin = new Padding(3, 4, 3, 4);
 			txbMonto.MaxLength = 15;
 			txbMonto.Name = "txbMonto";
-			txbMonto.Size = new Size(54, 29);
+			txbMonto.Size = new Size(76, 34);
 			txbMonto.TabIndex = 98;
 			txbMonto.TextChanged += txbMonto_TextChanged;
 			// 
 			// txbHoras
 			// 
 			txbHoras.Font = new Font("Segoe UI", 12F);
-			txbHoras.Location = new Point(149, 185);
+			txbHoras.Location = new Point(23, 344);
+			txbHoras.Margin = new Padding(3, 4, 3, 4);
 			txbHoras.MaxLength = 15;
 			txbHoras.Name = "txbHoras";
-			txbHoras.Size = new Size(54, 29);
+			txbHoras.Size = new Size(76, 34);
 			txbHoras.TabIndex = 99;
 			// 
 			// btnAccept
 			// 
-			btnAccept.Location = new Point(405, 223);
+			btnAccept.Location = new Point(287, 417);
+			btnAccept.Margin = new Padding(3, 4, 3, 4);
 			btnAccept.Name = "btnAccept";
-			btnAccept.Size = new Size(75, 29);
+			btnAccept.Size = new Size(86, 39);
 			btnAccept.TabIndex = 100;
 			btnAccept.Text = "Aceptar";
 			btnAccept.UseVisualStyleBackColor = true;
@@ -142,19 +151,41 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new Point(508, 223);
+			btnCancel.Location = new Point(401, 417);
+			btnCancel.Margin = new Padding(3, 4, 3, 4);
 			btnCancel.Name = "btnCancel";
-			btnCancel.Size = new Size(75, 29);
+			btnCancel.Size = new Size(86, 39);
 			btnCancel.TabIndex = 101;
 			btnCancel.Text = "Cancelar";
 			btnCancel.UseVisualStyleBackColor = true;
 			btnCancel.Click += btnCancel_Click;
 			// 
+			// panel1
+			// 
+			panel1.BackColor = SystemColors.ControlLightLight;
+			panel1.Controls.Add(pictureBox1);
+			panel1.Controls.Add(lblAdd);
+			panel1.Location = new Point(12, 2);
+			panel1.Name = "panel1";
+			panel1.Size = new Size(481, 95);
+			panel1.TabIndex = 102;
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(3, 3);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(96, 89);
+			pictureBox1.TabIndex = 71;
+			pictureBox1.TabStop = false;
+			// 
 			// FrmAdd
 			// 
-			AutoScaleDimensions = new SizeF(7F, 15F);
+			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(595, 275);
+			ClientSize = new Size(505, 464);
+			Controls.Add(panel1);
 			Controls.Add(btnCancel);
 			Controls.Add(btnAccept);
 			Controls.Add(txbHoras);
@@ -165,13 +196,16 @@
 			Controls.Add(lblConcepto);
 			Controls.Add(txbId);
 			Controls.Add(lblId);
-			Controls.Add(lblAdd);
 			FormBorderStyle = FormBorderStyle.FixedSingle;
 			Icon = (Icon)resources.GetObject("$this.Icon");
+			Margin = new Padding(3, 4, 3, 4);
 			MaximizeBox = false;
 			Name = "FrmAdd";
 			Text = "Añadir Concepto";
 			Load += FrmAdd_Load;
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -189,5 +223,7 @@
 		public TextBox txbHoras;
 		private Button btnAccept;
 		private Button btnCancel;
+		private Panel panel1;
+		private PictureBox pictureBox1;
 	}
 }
