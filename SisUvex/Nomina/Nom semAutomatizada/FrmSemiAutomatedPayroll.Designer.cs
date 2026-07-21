@@ -36,37 +36,40 @@
 			dtpFecha = new DateTimePicker();
 			txbReferencia = new TextBox();
 			cboLote = new ComboBox();
-			lbencabezado = new Label();
-			btnCVS = new Button();
+			lblencabezado = new Label();
+			btnCSV = new Button();
 			btnExcel = new Button();
 			btncargar = new Button();
 			dgvEmployee = new DataGridView();
 			btnCalcularLibra = new Button();
 			cboLineas = new ComboBox();
 			lblLineas = new Label();
-			pllCsv = new Panel();
-			label1 = new Label();
 			btnFestivos = new Button();
-			lblTipodeNomina = new Label();
 			rbtEsparrago = new RadioButton();
 			pictureBox1 = new PictureBox();
 			rbtUva = new RadioButton();
 			pictureBox2 = new PictureBox();
-			lblLibras = new Label();
-			lblAccion = new Label();
+			groupBox1 = new GroupBox();
+			gbCsv = new GroupBox();
+			gbGenerar = new GroupBox();
+			gbLibras = new GroupBox();
+			btnGuardar = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
-			pllCsv.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+			groupBox1.SuspendLayout();
+			gbCsv.SuspendLayout();
+			gbGenerar.SuspendLayout();
+			gbLibras.SuspendLayout();
 			SuspendLayout();
 			// 
 			// lblLote
 			// 
 			lblLote.AutoSize = true;
 			lblLote.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblLote.Location = new Point(60, 36);
+			lblLote.Location = new Point(65, 41);
 			lblLote.Name = "lblLote";
-			lblLote.Size = new Size(47, 21);
+			lblLote.Size = new Size(59, 28);
 			lblLote.TabIndex = 0;
 			lblLote.Text = "Lote :";
 			// 
@@ -74,62 +77,66 @@
 			// 
 			lblReferencia.AutoSize = true;
 			lblReferencia.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblReferencia.Location = new Point(60, 92);
+			lblReferencia.Location = new Point(65, 114);
 			lblReferencia.Name = "lblReferencia";
-			lblReferencia.Size = new Size(90, 21);
+			lblReferencia.Size = new Size(110, 28);
 			lblReferencia.TabIndex = 1;
 			lblReferencia.Text = "Referencia :";
 			// 
 			// dtpFecha
 			// 
-			dtpFecha.Location = new Point(599, 73);
+			dtpFecha.Location = new Point(382, 71);
+			dtpFecha.Margin = new Padding(3, 4, 3, 4);
 			dtpFecha.Name = "dtpFecha";
-			dtpFecha.Size = new Size(319, 23);
+			dtpFecha.Size = new Size(364, 27);
 			dtpFecha.TabIndex = 2;
 			dtpFecha.ValueChanged += dtpFecha_ValueChanged;
 			// 
 			// txbReferencia
 			// 
-			txbReferencia.Location = new Point(156, 94);
+			txbReferencia.Location = new Point(189, 110);
+			txbReferencia.Margin = new Padding(3, 4, 3, 4);
 			txbReferencia.Multiline = true;
 			txbReferencia.Name = "txbReferencia";
-			txbReferencia.Size = new Size(135, 25);
+			txbReferencia.Size = new Size(154, 32);
 			txbReferencia.TabIndex = 3;
 			// 
 			// cboLote
 			// 
 			cboLote.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboLote.FormattingEnabled = true;
-			cboLote.Location = new Point(113, 38);
+			cboLote.Location = new Point(189, 45);
+			cboLote.Margin = new Padding(3, 4, 3, 4);
 			cboLote.Name = "cboLote";
-			cboLote.Size = new Size(135, 23);
+			cboLote.Size = new Size(154, 28);
 			cboLote.TabIndex = 4;
 			// 
-			// lbencabezado
+			// lblencabezado
 			// 
-			lbencabezado.AutoSize = true;
-			lbencabezado.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lbencabezado.Location = new Point(300, 9);
-			lbencabezado.Name = "lbencabezado";
-			lbencabezado.Size = new Size(329, 32);
-			lbencabezado.TabIndex = 5;
-			lbencabezado.Text = "Reporte de Empaque Central";
+			lblencabezado.AutoSize = true;
+			lblencabezado.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblencabezado.Location = new Point(366, 9);
+			lblencabezado.Name = "lblencabezado";
+			lblencabezado.Size = new Size(413, 41);
+			lblencabezado.TabIndex = 5;
+			lblencabezado.Text = "Reporte de Empaque Central";
 			// 
-			// btnCVS
+			// btnCSV
 			// 
-			btnCVS.BackgroundImageLayout = ImageLayout.Stretch;
-			btnCVS.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnCVS.Image = (Image)resources.GetObject("btnCVS.Image");
-			btnCVS.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCVS.Location = new Point(676, 20);
-			btnCVS.Name = "btnCVS";
-			btnCVS.Padding = new Padding(10, 0, 10, 0);
-			btnCVS.Size = new Size(158, 41);
-			btnCVS.TabIndex = 7;
-			btnCVS.Text = "Exportar CSV";
-			btnCVS.TextAlign = ContentAlignment.MiddleRight;
-			btnCVS.UseVisualStyleBackColor = true;
-			btnCVS.Click += btnCVS_Click;
+			btnCSV.BackgroundImageLayout = ImageLayout.Stretch;
+			btnCSV.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnCSV.Image = (Image)resources.GetObject("btnCSV.Image");
+			btnCSV.ImageAlign = ContentAlignment.MiddleLeft;
+			btnCSV.Location = new Point(771, 28);
+			btnCSV.Margin = new Padding(3, 4, 3, 4);
+			btnCSV.Name = "btnCSV";
+			btnCSV.Padding = new Padding(11, 0, 11, 0);
+			btnCSV.Size = new Size(181, 55);
+			btnCSV.TabIndex = 7;
+			btnCSV.Text = "Exportar CSV";
+			btnCSV.TextAlign = ContentAlignment.MiddleRight;
+			btnCSV.UseVisualStyleBackColor = true;
+			btnCSV.Click += btnCVS_Click;
 			// 
 			// btnExcel
 			// 
@@ -137,10 +144,11 @@
 			btnExcel.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnExcel.Image = Properties.Resources.excelIcon16;
 			btnExcel.ImageAlign = ContentAlignment.MiddleLeft;
-			btnExcel.Location = new Point(676, 81);
+			btnExcel.Location = new Point(771, 110);
+			btnExcel.Margin = new Padding(3, 4, 3, 4);
 			btnExcel.Name = "btnExcel";
-			btnExcel.Padding = new Padding(10, 0, 10, 0);
-			btnExcel.Size = new Size(158, 42);
+			btnExcel.Padding = new Padding(11, 0, 11, 0);
+			btnExcel.Size = new Size(181, 56);
 			btnExcel.TabIndex = 8;
 			btnExcel.Text = "Exportar Excel";
 			btnExcel.TextAlign = ContentAlignment.MiddleRight;
@@ -152,10 +160,11 @@
 			btncargar.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btncargar.Image = (Image)resources.GetObject("btncargar.Image");
 			btncargar.ImageAlign = ContentAlignment.MiddleLeft;
-			btncargar.Location = new Point(616, 204);
+			btncargar.Location = new Point(31, 44);
+			btncargar.Margin = new Padding(3, 4, 3, 4);
 			btncargar.Name = "btncargar";
-			btncargar.Padding = new Padding(10, 0, 10, 0);
-			btncargar.Size = new Size(148, 38);
+			btncargar.Padding = new Padding(11, 0, 11, 0);
+			btncargar.Size = new Size(182, 51);
 			btncargar.TabIndex = 9;
 			btncargar.Text = "Cargar Datos";
 			btncargar.TextAlign = ContentAlignment.MiddleRight;
@@ -184,9 +193,9 @@
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
-			dgvEmployee.Location = new Point(27, 465);
+			dgvEmployee.Location = new Point(31, 573);
+			dgvEmployee.Margin = new Padding(3, 4, 3, 4);
 			dgvEmployee.Name = "dgvEmployee";
-			dgvEmployee.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = SystemColors.Control;
 			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
@@ -197,16 +206,18 @@
 			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-			dgvEmployee.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvEmployee.Size = new Size(1277, 338);
+			dgvEmployee.SelectionMode = DataGridViewSelectionMode.CellSelect;
+			dgvEmployee.Size = new Size(1459, 466);
 			dgvEmployee.TabIndex = 17;
+			dgvEmployee.CellValueChanged += dgvEmployee_CellValueChanged;
 			// 
 			// btnCalcularLibra
 			// 
 			btnCalcularLibra.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnCalcularLibra.Location = new Point(408, 204);
+			btnCalcularLibra.Location = new Point(26, 44);
+			btnCalcularLibra.Margin = new Padding(3, 4, 3, 4);
 			btnCalcularLibra.Name = "btnCalcularLibra";
-			btnCalcularLibra.Size = new Size(148, 38);
+			btnCalcularLibra.Size = new Size(169, 51);
 			btnCalcularLibra.TabIndex = 18;
 			btnCalcularLibra.Text = "Cargar Libras";
 			btnCalcularLibra.UseVisualStyleBackColor = true;
@@ -216,46 +227,21 @@
 			// 
 			cboLineas.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboLineas.FormattingEnabled = true;
-			cboLineas.Location = new Point(787, 436);
+			cboLineas.Location = new Point(160, 537);
+			cboLineas.Margin = new Padding(3, 4, 3, 4);
 			cboLineas.Name = "cboLineas";
-			cboLineas.Size = new Size(131, 23);
+			cboLineas.Size = new Size(154, 28);
 			cboLineas.TabIndex = 19;
 			// 
 			// lblLineas
 			// 
 			lblLineas.AutoSize = true;
 			lblLineas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblLineas.Location = new Point(718, 438);
+			lblLineas.Location = new Point(36, 537);
 			lblLineas.Name = "lblLineas";
-			lblLineas.Size = new Size(63, 21);
+			lblLineas.Size = new Size(78, 28);
 			lblLineas.TabIndex = 20;
 			lblLineas.Text = "Bandas:";
-			// 
-			// pllCsv
-			// 
-			pllCsv.BackColor = SystemColors.ActiveCaption;
-			pllCsv.BorderStyle = BorderStyle.FixedSingle;
-			pllCsv.Controls.Add(lblLote);
-			pllCsv.Controls.Add(cboLote);
-			pllCsv.Controls.Add(lblReferencia);
-			pllCsv.Controls.Add(txbReferencia);
-			pllCsv.Controls.Add(btnExcel);
-			pllCsv.Controls.Add(btnCVS);
-			pllCsv.Controls.Add(label1);
-			pllCsv.Location = new Point(27, 267);
-			pllCsv.Name = "pllCsv";
-			pllCsv.Size = new Size(891, 151);
-			pllCsv.TabIndex = 21;
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(349, 20);
-			label1.Name = "label1";
-			label1.Size = new Size(165, 21);
-			label1.TabIndex = 0;
-			label1.Text = "Generar Reporte CSV";
 			// 
 			// btnFestivos
 			// 
@@ -263,32 +249,24 @@
 			btnFestivos.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnFestivos.Image = (Image)resources.GetObject("btnFestivos.Image");
 			btnFestivos.ImageAlign = ContentAlignment.MiddleLeft;
-			btnFestivos.Location = new Point(770, 204);
+			btnFestivos.Location = new Point(239, 44);
+			btnFestivos.Margin = new Padding(3, 4, 3, 4);
 			btnFestivos.Name = "btnFestivos";
-			btnFestivos.Padding = new Padding(10, 0, 10, 0);
-			btnFestivos.Size = new Size(148, 38);
+			btnFestivos.Padding = new Padding(15, 0, 15, 0);
+			btnFestivos.Size = new Size(169, 51);
 			btnFestivos.TabIndex = 9;
 			btnFestivos.Text = "Festivos";
 			btnFestivos.TextAlign = ContentAlignment.MiddleRight;
 			btnFestivos.UseVisualStyleBackColor = true;
 			btnFestivos.Click += btnFestivos_Click;
 			// 
-			// lblTipodeNomina
-			// 
-			lblTipodeNomina.AutoSize = true;
-			lblTipodeNomina.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblTipodeNomina.Location = new Point(27, 73);
-			lblTipodeNomina.Name = "lblTipodeNomina";
-			lblTipodeNomina.Size = new Size(131, 21);
-			lblTipodeNomina.TabIndex = 22;
-			lblTipodeNomina.Text = "Tipo de Nomina:";
-			// 
 			// rbtEsparrago
 			// 
 			rbtEsparrago.AutoSize = true;
-			rbtEsparrago.Location = new Point(75, 113);
+			rbtEsparrago.Location = new Point(55, 38);
+			rbtEsparrago.Margin = new Padding(3, 4, 3, 4);
 			rbtEsparrago.Name = "rbtEsparrago";
-			rbtEsparrago.Size = new Size(77, 19);
+			rbtEsparrago.Size = new Size(97, 24);
 			rbtEsparrago.TabIndex = 23;
 			rbtEsparrago.TabStop = true;
 			rbtEsparrago.Text = "Esparrago";
@@ -297,9 +275,10 @@
 			// pictureBox1
 			// 
 			pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-			pictureBox1.Location = new Point(36, 151);
+			pictureBox1.Location = new Point(10, 88);
+			pictureBox1.Margin = new Padding(3, 4, 3, 4);
 			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(33, 32);
+			pictureBox1.Size = new Size(38, 43);
 			pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
 			pictureBox1.TabIndex = 25;
 			pictureBox1.TabStop = false;
@@ -307,9 +286,10 @@
 			// rbtUva
 			// 
 			rbtUva.AutoSize = true;
-			rbtUva.Location = new Point(75, 155);
+			rbtUva.Location = new Point(55, 94);
+			rbtUva.Margin = new Padding(3, 4, 3, 4);
 			rbtUva.Name = "rbtUva";
-			rbtUva.Size = new Size(45, 19);
+			rbtUva.Size = new Size(55, 24);
 			rbtUva.TabIndex = 24;
 			rbtUva.TabStop = true;
 			rbtUva.Text = "Uva";
@@ -318,64 +298,111 @@
 			// pictureBox2
 			// 
 			pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-			pictureBox2.Location = new Point(36, 105);
+			pictureBox2.Location = new Point(10, 27);
+			pictureBox2.Margin = new Padding(3, 4, 3, 4);
 			pictureBox2.Name = "pictureBox2";
-			pictureBox2.Size = new Size(33, 27);
+			pictureBox2.Size = new Size(38, 36);
 			pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
 			pictureBox2.TabIndex = 25;
 			pictureBox2.TabStop = false;
 			// 
-			// lblLibras
+			// groupBox1
 			// 
-			lblLibras.AutoSize = true;
-			lblLibras.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblLibras.Location = new Point(408, 186);
-			lblLibras.Name = "lblLibras";
-			lblLibras.Size = new Size(134, 15);
-			lblLibras.TabIndex = 26;
-			lblLibras.Text = "Capture las libras del día";
+			groupBox1.Controls.Add(rbtUva);
+			groupBox1.Controls.Add(rbtEsparrago);
+			groupBox1.Controls.Add(pictureBox2);
+			groupBox1.Controls.Add(pictureBox1);
+			groupBox1.Location = new Point(31, 147);
+			groupBox1.Name = "groupBox1";
+			groupBox1.Size = new Size(198, 144);
+			groupBox1.TabIndex = 28;
+			groupBox1.TabStop = false;
+			groupBox1.Text = "Tipo de Nomina";
 			// 
-			// lblAccion
+			// gbCsv
 			// 
-			lblAccion.AutoSize = true;
-			lblAccion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblAccion.Location = new Point(724, 186);
-			lblAccion.Name = "lblAccion";
-			lblAccion.Size = new Size(92, 15);
-			lblAccion.TabIndex = 27;
-			lblAccion.Text = "Generar nómina";
+			gbCsv.Controls.Add(lblLote);
+			gbCsv.Controls.Add(cboLote);
+			gbCsv.Controls.Add(lblReferencia);
+			gbCsv.Controls.Add(btnCSV);
+			gbCsv.Controls.Add(txbReferencia);
+			gbCsv.Controls.Add(btnExcel);
+			gbCsv.Location = new Point(31, 331);
+			gbCsv.Name = "gbCsv";
+			gbCsv.Size = new Size(1037, 186);
+			gbCsv.TabIndex = 29;
+			gbCsv.TabStop = false;
+			gbCsv.Text = "Generar Reporte CSV";
+			// 
+			// gbGenerar
+			// 
+			gbGenerar.Controls.Add(btncargar);
+			gbGenerar.Controls.Add(btnFestivos);
+			gbGenerar.Location = new Point(630, 175);
+			gbGenerar.Name = "gbGenerar";
+			gbGenerar.Size = new Size(438, 116);
+			gbGenerar.TabIndex = 30;
+			gbGenerar.TabStop = false;
+			gbGenerar.Text = "Generar Nomina";
+			// 
+			// gbLibras
+			// 
+			gbLibras.Controls.Add(btnCalcularLibra);
+			gbLibras.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			gbLibras.Location = new Point(366, 175);
+			gbLibras.Name = "gbLibras";
+			gbLibras.Size = new Size(222, 116);
+			gbLibras.TabIndex = 31;
+			gbLibras.TabStop = false;
+			gbLibras.Text = "Procesar Libras del Día";
+			// 
+			// btnGuardar
+			// 
+			btnGuardar.BackgroundImageLayout = ImageLayout.Stretch;
+			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
+			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnGuardar.Location = new Point(1119, 510);
+			btnGuardar.Margin = new Padding(3, 4, 3, 4);
+			btnGuardar.Name = "btnGuardar";
+			btnGuardar.Padding = new Padding(7, 0, 7, 0);
+			btnGuardar.Size = new Size(181, 55);
+			btnGuardar.TabIndex = 21;
+			btnGuardar.Text = "Actualizar Sueldo ";
+			btnGuardar.TextAlign = ContentAlignment.MiddleRight;
+			btnGuardar.UseVisualStyleBackColor = true;
+			btnGuardar.Click += btnGuardar_Click;
 			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AllowDrop = true;
-			AutoScaleDimensions = new SizeF(7F, 15F);
+			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1329, 815);
-			Controls.Add(lblAccion);
-			Controls.Add(lblLibras);
-			Controls.Add(pictureBox1);
-			Controls.Add(pictureBox2);
-			Controls.Add(rbtUva);
-			Controls.Add(lblTipodeNomina);
-			Controls.Add(rbtEsparrago);
-			Controls.Add(btnFestivos);
-			Controls.Add(pllCsv);
-			Controls.Add(btncargar);
+			ClientSize = new Size(1519, 1055);
+			Controls.Add(btnGuardar);
+			Controls.Add(gbLibras);
+			Controls.Add(gbGenerar);
+			Controls.Add(gbCsv);
 			Controls.Add(lblLineas);
-			Controls.Add(cboLineas);
-			Controls.Add(btnCalcularLibra);
+			Controls.Add(groupBox1);
 			Controls.Add(dgvEmployee);
-			Controls.Add(lbencabezado);
+			Controls.Add(cboLineas);
+			Controls.Add(lblencabezado);
 			Controls.Add(dtpFecha);
 			Icon = (Icon)resources.GetObject("$this.Icon");
+			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmSemiAutomatedPayroll";
 			Text = "Reporte de Empaque Central";
 			Load += FrmSemiAutomatedPayroll_Load;
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).EndInit();
-			pllCsv.ResumeLayout(false);
-			pllCsv.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+			groupBox1.ResumeLayout(false);
+			groupBox1.PerformLayout();
+			gbCsv.ResumeLayout(false);
+			gbCsv.PerformLayout();
+			gbGenerar.ResumeLayout(false);
+			gbLibras.ResumeLayout(false);
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -384,26 +411,26 @@
 
 		private Label lblLote;
 		private Label lblReferencia;
-		private Label lbencabezado;
-		private Button btnCVS;
-		private Button btnExcel;
-		private Button btncargar;
 		public DateTimePicker dtpFecha;
 		public TextBox txbReferencia;
 		public ComboBox cboLote;
 		public DataGridView dgvEmployee;
-		private Button btnCalcularLibra;
 		private Label lblLineas;
 		public ComboBox cboLineas;
-		private Label label1;
 		private Button btnFestivos;
-		private Label lblTipodeNomina;
 		private PictureBox pictureBox1;
 		private PictureBox pictureBox2;
-		private Label lblLibras;
-		private Label lblAccion;
 		public RadioButton rbtEsparrago;
 		public RadioButton rbtUva;
-		public Panel pllCsv;
+		private GroupBox groupBox1;
+		public GroupBox gbCsv;
+		public Button btncargar;
+		public Button btnCalcularLibra;
+		public Button btnCSV;
+		public Button btnExcel;
+		public Label lblencabezado;
+		public GroupBox gbGenerar;
+		public GroupBox gbLibras;
+		public Button btnGuardar;
 	}
 }

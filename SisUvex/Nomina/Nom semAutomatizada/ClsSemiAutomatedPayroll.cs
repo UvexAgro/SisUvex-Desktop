@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
-using Microsoft.Data.SqlClient;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
@@ -99,10 +99,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					horasTrabajadas
 				);
 			}
-
-
-
-
 			return dtCsv;
 		}
 
@@ -283,21 +279,52 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
-			if (frm.dgvEmployee.Columns.Contains("Nw"))
+
+			// Todo solo lectura
+			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
 			{
-				frm.dgvEmployee.Columns["Nw"].Visible = false;
+				col.ReadOnly = true;
 			}
+
+			// Solo permitir editar el sueldo
+			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
+
+			GuardarSueldosOriginales();
+
+			// Guardar el valor original del sueldo
+			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
+			}
+
 			if (TipoNomina == "E") // esparrago
 			{
-				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
+				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
+				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
+				frm.gbGenerar.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
 			}
 			else // uva
 			{
-				frm.pllCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
+				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
+				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
+				frm.gbGenerar.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
 			}
 
-			//  aplicar estilo al grid
 			ActivarEstiloGrid(frm.dgvEmployee);
+		}
+
+		private void GuardarSueldosOriginales()
+		{
+			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
+			}
 		}
 
 		public void EjecutarCalculoProduccion()
@@ -607,7 +634,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				? System.Drawing.Color.FromArgb(180, 220, 180)
 				: System.Drawing.Color.FromArgb(210, 180, 230);
 
-			// 🔵 HEADER
+			//  HEADER
 			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
 			{
 				using (SolidBrush brush = new SolidBrush(colorHeader))
@@ -644,9 +671,33 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
 			{
 				//  alternado con color base
-				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
-					? fondoBase
-					: System.Drawing.Color.White;
+				System.Drawing.Color fondo;
+
+				// Solo para la columna SueldoTotal
+				if (dgv.Columns[e.ColumnIndex].Name == "SueldoTotal")
+				{
+					DataGridViewCell cell = dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+					decimal original = Convert.ToDecimal(cell.Tag);
+					decimal nuevo = Convert.ToDecimal(cell.Value);
+
+					if (original != nuevo)
+					{
+						fondo = System.Drawing.Color.FromArgb(255, 248, 180); // Amarillo
+					}
+					else
+					{
+						fondo = (e.RowIndex % 2 == 0)
+							? fondoBase
+							: System.Drawing.Color.White;
+					}
+				}
+				else
+				{
+					fondo = (e.RowIndex % 2 == 0)
+						? fondoBase
+						: System.Drawing.Color.White;
+				}
 
 				//  SIN SELECCIÓN
 				using (SolidBrush brush = new SolidBrush(fondo))
@@ -709,6 +760,113 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			dgv.CellPainting += PintarCeldaGrid;
 
 			dgv.SelectionChanged += (s, e) => dgv.ClearSelection();
+		}
+		public bool HayCambiosSueldos()
+		{
+			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				decimal original = Convert.ToDecimal(row.Cells["SueldoTotal"].Tag);
+				decimal actual = Convert.ToDecimal(row.Cells["SueldoTotal"].Value);
+
+				if (original != actual)
+					return true;
+			}
+
+			return false;
+		}
+		public bool GuardarCambiosSueldos()
+		{
+			try
+			{
+				SQLControl sql = new SQLControl();
+				sql.OpenConectionWrite();
+
+				bool huboCambios = false;
+
+				// Seleccionar el procedimiento según la nómina
+				string procedimiento = TipoNomina == "E"
+					? "sp_UpdateHistNominaSueldoEsparrago"
+					: "sp_UpdateHistNominaSueldoUva";
+
+				foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
+				{
+					if (row.IsNewRow)
+						continue;
+
+					decimal sueldoOriginal = Convert.ToDecimal(row.Cells["SueldoTotal"].Tag);
+					decimal sueldoNuevo = Convert.ToDecimal(row.Cells["SueldoTotal"].Value);
+
+					// Si no cambió el sueldo, continúa
+					if (sueldoOriginal == sueldoNuevo)
+						continue;
+
+					using (System.Data.SqlClient.SqlCommand cmd =
+						new System.Data.SqlClient.SqlCommand(procedimiento, sql.cnn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+
+						cmd.Parameters.AddWithValue("@Fecha",
+							Convert.ToDateTime(row.Cells["Fecha"].Value));
+
+						cmd.Parameters.AddWithValue("@IdEmpleado",
+							Convert.ToInt32(row.Cells["Codigo"].Value));
+
+						cmd.Parameters.AddWithValue("@CodigoActividad",
+							row.Cells["CodigoActividad"].Value.ToString());
+
+						cmd.Parameters.AddWithValue("@Sueldo",
+							sueldoNuevo);
+
+						cmd.ExecuteNonQuery();
+
+						row.Cells["SueldoTotal"].Tag = sueldoNuevo;
+
+						DataGridViewCell cell = row.Cells["SueldoTotal"];
+
+						cell.Style.BackColor = System.Drawing.Color.White;
+						cell.Style.SelectionBackColor = frm.dgvEmployee.DefaultCellStyle.SelectionBackColor;
+
+						cell.Style.ForeColor = System.Drawing.Color.Black;
+						cell.Style.SelectionForeColor = frm.dgvEmployee.DefaultCellStyle.SelectionForeColor;
+
+						cell.Style.Font = frm.dgvEmployee.Font;
+					}
+
+					// Actualizar el Tag para indicar que ya fue guardado
+					row.Cells["SueldoTotal"].Tag = sueldoNuevo;
+
+					huboCambios = true;
+				}
+
+				sql.CloseConectionWrite();
+
+				if (huboCambios)
+				{
+					MessageBox.Show(
+						"Los cambios de sueldo se guardaron correctamente.",
+						"Sistema",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show(
+						"No existen cambios para guardar.",
+						"Sistema",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Guardar cambios");
+				return false;
+			}
 		}
 	}
 }
