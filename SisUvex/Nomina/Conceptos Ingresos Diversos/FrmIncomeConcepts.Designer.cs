@@ -38,10 +38,8 @@
 			panel1 = new Panel();
 			label2 = new Label();
 			label1 = new Label();
-			pictureBox1 = new PictureBox();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
 			panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// btnAdd
@@ -132,7 +130,6 @@
 			panel1.BackColor = SystemColors.ControlLightLight;
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
-			panel1.Controls.Add(pictureBox1);
 			panel1.Location = new Point(12, 12);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(797, 79);
@@ -141,7 +138,7 @@
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(120, 44);
+			label2.Location = new Point(15, 47);
 			label2.Name = "label2";
 			label2.Size = new Size(485, 20);
 			label2.TabIndex = 2;
@@ -151,21 +148,11 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(120, 3);
+			label1.Location = new Point(15, 6);
 			label1.Name = "label1";
 			label1.Size = new Size(251, 31);
 			label1.TabIndex = 1;
 			label1.Text = "Conceptos de Ingresos";
-			// 
-			// pictureBox1
-			// 
-			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(3, 3);
-			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(96, 73);
-			pictureBox1.TabIndex = 0;
-			pictureBox1.TabStop = false;
 			// 
 			// FrmIncomeConcepts
 			// 
@@ -185,7 +172,6 @@
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -197,7 +183,6 @@
 		public DataGridView dgvCatalog;
 		private Panel panel1;
 		private Label label1;
-		private PictureBox pictureBox1;
 		private Label label2;
 	}
 }

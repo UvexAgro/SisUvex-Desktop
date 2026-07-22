@@ -41,16 +41,14 @@
 			btnAccept = new Button();
 			btnCancel = new Button();
 			panel1 = new Panel();
-			pictureBox1 = new PictureBox();
 			panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// lblAdd
 			// 
 			lblAdd.AutoSize = true;
 			lblAdd.Font = new Font("Arial Black", 16F);
-			lblAdd.Location = new Point(131, 27);
+			lblAdd.Location = new Point(125, 27);
 			lblAdd.Name = "lblAdd";
 			lblAdd.Size = new Size(258, 38);
 			lblAdd.TabIndex = 70;
@@ -163,22 +161,11 @@
 			// panel1
 			// 
 			panel1.BackColor = SystemColors.ControlLightLight;
-			panel1.Controls.Add(pictureBox1);
 			panel1.Controls.Add(lblAdd);
 			panel1.Location = new Point(12, 2);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(481, 95);
 			panel1.TabIndex = 102;
-			// 
-			// pictureBox1
-			// 
-			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(3, 3);
-			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(96, 89);
-			pictureBox1.TabIndex = 71;
-			pictureBox1.TabStop = false;
 			// 
 			// FrmAdd
 			// 
@@ -205,7 +192,6 @@
 			Load += FrmAdd_Load;
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -224,6 +210,5 @@
 		private Button btnAccept;
 		private Button btnCancel;
 		private Panel panel1;
-		private PictureBox pictureBox1;
 	}
 }
