@@ -236,45 +236,85 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (!ValidarHorasSemana(fecha))
 				return "";
 
-			//  Validar selección
+			// Usuario que inició sesión
+			string usuario = User.GetUserName(); 
+			// Validar selección
 			if (!frm.rbtEsparrago.Checked && !frm.rbtUva.Checked)
 			{
 				MessageBox.Show("Seleccione un tipo de nómina.");
 				return "";
 			}
 
-			//  ESPÁRRAGO
+			// ESPÁRRAGO
 			if (frm.rbtEsparrago.Checked)
 			{
-				TipoNomina = "E"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}'";
+				TipoNomina = "E";
+				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}', '{usuario}'";
 			}
 
-			//  UVA
+			// UVA
 			if (frm.rbtUva.Checked)
 			{
-				TipoNomina = "U"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}'";
+				TipoNomina = "U";
+				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}', '{usuario}'";
 			}
 
 			return "";
 		}
-
 		public void BtnCargarDatos()
 		{
-			string query = GetQueryNom();
+			TipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
+			DateTime fecha = frm.dtpFecha.Value;
 
-			if (string.IsNullOrEmpty(query))
-				return;
+			// Verificar si ya existe la nómina guardada
+			if (ExisteNominaDiaria(fecha))
+			{
+				DialogResult r = MessageBox.Show(
+				"La nómina para la fecha seleccionada ya fue generada.\n\n" +
+				"¿Qué deseas hacer?\n\n" +
+				"Sí  → Recalcular y actualizar la nómina.\n" +
+				"No → Mostrar la nómina guardada.",
+				"Nómina existente",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
 
-			dtNomina = ClsQuerysDB.GetDataTable(query);
+				if (r == DialogResult.No)
+				{
+					string fechaTexto = fecha.ToString("yyyy-MM-dd");
+					string queryGuardada = TipoNomina == "E"
+						? $"EXEC sp_GetReporteNominaDiaria_Esparrago '{fechaTexto}'"
+						: $"EXEC sp_GetReporteNominaDiaria_Uva '{fechaTexto}'";
+
+					dtNomina = ClsQuerysDB.GetDataTable(queryGuardada);
+				}
+				else
+				{
+					string query = GetQueryNom();
+
+					if (string.IsNullOrEmpty(query))
+						return;
+
+					dtNomina = ClsQuerysDB.GetDataTable(query);
+				}
+			}
+			else
+			{
+				string query = GetQueryNom();
+
+				if (string.IsNullOrEmpty(query))
+					return;
+
+				dtNomina = ClsQuerysDB.GetDataTable(query);
+			}
+
 
 			if (dtNomina.Rows.Count == 0)
 			{
-				MessageBox.Show("No existen registros para la fecha seleccionada.",
-								"Sistema",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information);
+				MessageBox.Show(
+					"No existen registros para la fecha seleccionada.",
+					"Sistema",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 				return;
 			}
 
@@ -282,16 +322,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			// Todo solo lectura
 			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
-			{
 				col.ReadOnly = true;
-			}
 
 			// Solo permitir editar el sueldo
 			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
 
 			GuardarSueldosOriginales();
 
-			// Guardar el valor original del sueldo
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 			{
 				if (row.IsNewRow)
@@ -300,13 +337,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
 			}
 
-			if (TipoNomina == "E") // esparrago
+			if (TipoNomina == "E")
 			{
 				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
 				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
 				frm.gbGenerar.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
 			}
-			else // uva
+			else
 			{
 				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
 				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
@@ -788,8 +825,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				// Seleccionar el procedimiento según la nómina
 				string procedimiento = TipoNomina == "E"
-					? "sp_UpdateHistNominaSueldoEsparrago"
-					: "sp_UpdateHistNominaSueldoUva";
+				   ? "sp_UpdateHistNominaSueldoEsparrago"
+				   : "sp_UpdateHistNominaSueldoUva";
 
 				foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 				{
@@ -819,6 +856,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 						cmd.Parameters.AddWithValue("@Sueldo",
 							sueldoNuevo);
+						cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
 
 						cmd.ExecuteNonQuery();
 
@@ -867,6 +905,21 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				MessageBox.Show(ex.Message, "Guardar cambios");
 				return false;
 			}
+		}
+		private bool ExisteNominaDiaria(DateTime fecha)
+		{
+			string tabla = TipoNomina == "E"
+				? "HistNom_ReporteDiarioEsparrago"
+				: "HistNom_ReporteDiarioUva";
+
+			string query = $@"
+		SELECT COUNT(*)
+		FROM {tabla}
+		WHERE Fecha = '{fecha:yyyy-MM-dd}'";
+
+			int registros = Convert.ToInt32(ClsQuerysDB.GetData(query));
+
+			return registros > 0;
 		}
 	}
 }
