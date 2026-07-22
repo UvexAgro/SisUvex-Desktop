@@ -359,7 +359,7 @@ namespace SisUvex.Nomina.Reporte_de_Emp_UVA
 
 				foreach (var emp in empleados)
 				{
-					var row = emp.First(); // 👈 tomamos solo uno
+					var row = emp.First(); //  tomamos solo uno
 
 					wsH.Cell(fila, 1).Value = row["Codigo"]?.ToString() ?? "";
 					wsH.Cell(fila, 2).Value = row["Nombre"]?.ToString() ?? "";

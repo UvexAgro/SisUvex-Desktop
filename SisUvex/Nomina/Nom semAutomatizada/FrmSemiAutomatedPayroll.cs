@@ -88,6 +88,46 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			clsF.BtnCargarDatos();
 		}
+
+		private void btnGuardar_Click(object sender, EventArgs e)
+		{
+			cls.GuardarCambiosSueldos();
+		}
+
+		private void dgvEmployee_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
+
+			if (dgvEmployee.Columns[e.ColumnIndex].Name != "SueldoTotal")
+				return;
+
+			DataGridViewCell cell = dgvEmployee.Rows[e.RowIndex].Cells["SueldoTotal"];
+
+			decimal original = Convert.ToDecimal(cell.Tag);
+			decimal nuevo = Convert.ToDecimal(cell.Value);
+
+			if (original != nuevo)
+			{
+				cell.Style.BackColor = System.Drawing.Color.FromArgb(255, 248, 200);
+				cell.Style.SelectionBackColor = System.Drawing.Color.FromArgb(255, 248, 200);
+
+				cell.Style.ForeColor = System.Drawing.Color.Red;
+				cell.Style.SelectionForeColor = System.Drawing.Color.Red;
+
+				cell.Style.Font = new Font(dgvEmployee.Font, FontStyle.Bold);
+			}
+			else
+			{
+				cell.Style.BackColor = System.Drawing.Color.White;
+				cell.Style.SelectionBackColor = dgvEmployee.DefaultCellStyle.SelectionBackColor;
+
+				cell.Style.ForeColor = System.Drawing.Color.Black;
+				cell.Style.SelectionForeColor = dgvEmployee.DefaultCellStyle.SelectionForeColor;
+
+				cell.Style.Font = dgvEmployee.Font;
+			}
+		}
 	}
 }
 
