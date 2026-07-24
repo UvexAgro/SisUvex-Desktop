@@ -100,6 +100,7 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.BackColor = SystemColors.Control;
 			groupBox1.Controls.Add(rbtFDescansado);
 			groupBox1.Controls.Add(rbtDescansado);
 			groupBox1.Controls.Add(rbtFestivoTrabajado);

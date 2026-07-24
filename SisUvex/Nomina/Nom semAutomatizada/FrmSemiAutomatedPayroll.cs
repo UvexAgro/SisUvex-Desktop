@@ -71,6 +71,18 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		private void btnFestivos_Click(object sender, EventArgs e)
 		{
+			// Primero validar tipo de nómina
+			if (!rbtEsparrago.Checked && !rbtUva.Checked)
+			{
+				MessageBox.Show(
+					"Seleccione un tipo de nómina.",
+					"Sistema",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
 			DateTime fecha = dtpFecha.Value;
 
 			if (!clsF.EsFestivo(fecha))
@@ -78,15 +90,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				MessageBox.Show("No es un día festivo.");
 				return;
 			}
+
 			FrmFestivo frmFestivo = new FrmFestivo();
 
 			if (frmFestivo.ShowDialog() == DialogResult.OK)
 			{
 				TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
 
+				clsF.BtnCargarDatos();
 			}
-
-			clsF.BtnCargarDatos();
 		}
 
 		private void btnGuardar_Click(object sender, EventArgs e)

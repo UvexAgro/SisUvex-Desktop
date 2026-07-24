@@ -28,8 +28,14 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		ClsControls controlList;
 		DataTable dtNomina;
 		public string TipoNomina = "E";
+		public string TemaActual = "E";
+		ClsFestivo clsF;
 		public void BeginForm()
 		{
+			clsF = new ClsFestivo();
+			clsF.frm = frm;
+			clsF.cls = this;
+
 			SetTxbReferencia();
 			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLotFacility);
 			AddControlsToList();
@@ -229,6 +235,45 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 		}
 
+		public void AplicarColores(string tipo)
+		{
+			// Guardar el tema actual
+			TemaActual = tipo;
+
+			System.Drawing.Color color;
+
+			switch (tipo)
+			{
+				case "E":
+					color = System.Drawing.Color.FromArgb(230, 245, 230);
+
+					frm.lblencabezado.Text = "Empaque Central - Espárrago";
+					break;
+
+				case "U":
+					color = System.Drawing.Color.FromArgb(240, 230, 250);
+
+					frm.lblencabezado.Text = "Empaque Central - Uva";
+					break;
+
+				default:
+					color = SystemColors.Control;
+
+					frm.lblencabezado.Text = "Reporte de Empaque Central";
+					break;
+			}
+
+			frm.gbCsv.BackColor = color;
+			frm.gbLibras.BackColor = color;
+			frm.gbGenerar.BackColor = color;
+
+			// Volver a pintar el DataGridView
+			if (frm.dgvEmployee != null)
+			{
+				frm.dgvEmployee.Invalidate();
+				frm.dgvEmployee.Refresh();
+			}
+		}
 		private string GetQueryNom()
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
@@ -236,62 +281,132 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (!ValidarHorasSemana(fecha))
 				return "";
 
-			//  Validar selección
+			// Usuario que inició sesión
+			string usuario = User.GetUserName(); 
+			// Validar selección
 			if (!frm.rbtEsparrago.Checked && !frm.rbtUva.Checked)
 			{
 				MessageBox.Show("Seleccione un tipo de nómina.");
 				return "";
 			}
 
-			//  ESPÁRRAGO
+			// ESPÁRRAGO
 			if (frm.rbtEsparrago.Checked)
 			{
-				TipoNomina = "E"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}'";
+				TipoNomina = "E";
+				return $"EXEC dbo.sp_ReporteNomina_Esparrago '{fecha}', '{usuario}'";
 			}
 
-			//  UVA
+			// UVA
 			if (frm.rbtUva.Checked)
 			{
-				TipoNomina = "U"; //  guardar tipo
-				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}'";
+				TipoNomina = "U";
+				return $"EXEC dbo.sp_ReporteNomina_Uva '{fecha}', '{usuario}'";
 			}
 
 			return "";
 		}
-
 		public void BtnCargarDatos()
 		{
-			string query = GetQueryNom();
+			TipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
+			DateTime fecha = frm.dtpFecha.Value;
 
-			if (string.IsNullOrEmpty(query))
-				return;
+			// Si es festivo, preguntar si desea generar la nómina festiva
+			if (clsF.EsFestivo(fecha))
+			{
+				DialogResult festivo = MessageBox.Show(
+					"La fecha seleccionada corresponde a un día festivo.\n\n" +
+					"¿Desea generar la nómina de día festivo?\n\n" +
+					"Sí → Generar nómina festiva.\n" +
+					"No → Continuar con la nómina normal.",
+					"Día festivo",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Information);
 
-			dtNomina = ClsQuerysDB.GetDataTable(query);
+				if (festivo == DialogResult.Yes)
+				{
+					FrmFestivo frmFestivo = new FrmFestivo();
+
+					if (frmFestivo.ShowDialog() == DialogResult.OK)
+					{
+						frm.TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
+						clsF.BtnCargarDatos(); // Genera la nómina festiva
+					}
+
+					return;
+				}
+			}
+
+
+			// Verificar si ya existe la nómina guardada
+			if (ExisteNominaDiaria(fecha))
+			{
+				DialogResult r = MessageBox.Show(
+				"La nómina para la fecha seleccionada ya fue generada.\n\n" +
+				"¿Qué deseas hacer?\n\n" +
+				"Sí  → Recalcular y actualizar la nómina.\n" +
+				"No → Mostrar la nómina guardada.",
+				"Nómina existente",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+				if (r == DialogResult.No)
+				{
+					string fechaTexto = fecha.ToString("yyyy-MM-dd");
+					string queryGuardada = TipoNomina == "E"
+						? $"EXEC sp_GetReporteNominaDiaria_Esparrago '{fechaTexto}'"
+						: $"EXEC sp_GetReporteNominaDiaria_Uva '{fechaTexto}'";
+
+					dtNomina = ClsQuerysDB.GetDataTable(queryGuardada);
+				}
+				else
+				{
+					string query = GetQueryNom();
+
+					if (string.IsNullOrEmpty(query))
+						return;
+
+					dtNomina = ClsQuerysDB.GetDataTable(query);
+				}
+			}
+			else
+			{
+				string query = GetQueryNom();
+
+				if (string.IsNullOrEmpty(query))
+					return;
+
+				dtNomina = ClsQuerysDB.GetDataTable(query);
+			}
+
 
 			if (dtNomina.Rows.Count == 0)
 			{
-				MessageBox.Show("No existen registros para la fecha seleccionada.",
-								"Sistema",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information);
+				MessageBox.Show(
+					"No existen registros para la fecha seleccionada.",
+					"Sistema",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 				return;
 			}
 
 			frm.dgvEmployee.DataSource = dtNomina;
 
+			if (TipoNomina == "E")
+				AplicarColores("E");
+			else
+				AplicarColores("U");
+
+
 			// Todo solo lectura
 			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
-			{
 				col.ReadOnly = true;
-			}
 
 			// Solo permitir editar el sueldo
 			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
 
 			GuardarSueldosOriginales();
 
-			// Guardar el valor original del sueldo
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 			{
 				if (row.IsNewRow)
@@ -300,23 +415,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
 			}
 
-			if (TipoNomina == "E") // esparrago
-			{
-				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
-				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
-				frm.gbGenerar.BackColor = System.Drawing.Color.FromArgb(230, 245, 230);
-			}
-			else // uva
-			{
-				frm.gbCsv.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
-				frm.gbLibras.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
-				frm.gbGenerar.BackColor = System.Drawing.Color.FromArgb(240, 230, 250);
-			}
+			
 
 			ActivarEstiloGrid(frm.dgvEmployee);
 		}
 
-		private void GuardarSueldosOriginales()
+		public void GuardarSueldosOriginales()
 		{
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 			{
@@ -618,23 +722,39 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 		private void PintarCeldaGrid(object sender, DataGridViewCellPaintingEventArgs e)
 		{
-			var dgv = sender as DataGridView;
+			DataGridView dgv = sender as DataGridView;
 			if (dgv == null) return;
 
-			//  COLORES SEGÚN TIPO
-			System.Drawing.Color colorHeader = TipoNomina == "E"
-				? System.Drawing.Color.FromArgb(34, 139, 34)     //  verde fuerte
-				: System.Drawing.Color.FromArgb(102, 0, 153);    //  morado fuerte
+			System.Drawing.Color colorHeader;
+			System.Drawing.Color fondoBase;
+			System.Drawing.Color colorLinea;
 
-			System.Drawing.Color fondoBase = TipoNomina == "E"
-				? System.Drawing.Color.FromArgb(240, 255, 240)   // verde suave
-				: System.Drawing.Color.FromArgb(245, 240, 255);  // morado suave
+			switch (TipoNomina)
+			{
+				case "E":
+					// Espárrago
+					colorHeader = System.Drawing.Color.FromArgb(34, 139, 34);
+					fondoBase = System.Drawing.Color.FromArgb(240, 255, 240);
+					colorLinea = System.Drawing.Color.FromArgb(180, 220, 180);
+					break;
 
-			System.Drawing.Color colorLinea = TipoNomina == "E"
-				? System.Drawing.Color.FromArgb(180, 220, 180)
-				: System.Drawing.Color.FromArgb(210, 180, 230);
+				case "U":
+					// Uva
+					colorHeader = System.Drawing.Color.FromArgb(102, 0, 153);
+					fondoBase = System.Drawing.Color.FromArgb(245, 240, 255);
+					colorLinea = System.Drawing.Color.FromArgb(210, 180, 230);
+					break;
 
-			//  HEADER
+				default:
+					colorHeader = SystemColors.ControlDark;
+					fondoBase = System.Drawing.Color.White;
+					colorLinea = SystemColors.ControlLight;
+					break;
+			}
+
+			//==========================
+			// HEADER
+			//==========================
 			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
 			{
 				using (SolidBrush brush = new SolidBrush(colorHeader))
@@ -648,58 +768,46 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					new Font("Segoe UI", 10, FontStyle.Bold),
 					e.CellBounds,
 					System.Drawing.Color.White,
-					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
-				);
+					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
-				// línea header
 				using (Pen pen = new Pen(colorLinea))
 				{
-					e.Graphics.DrawLine(
+					e.Graphics.DrawRectangle(
 						pen,
-						e.CellBounds.Right - 1,
-						e.CellBounds.Top,
-						e.CellBounds.Right - 1,
-						e.CellBounds.Bottom
-					);
+						e.CellBounds.X,
+						e.CellBounds.Y,
+						e.CellBounds.Width - 1,
+						e.CellBounds.Height - 1);
 				}
 
 				e.Handled = true;
 				return;
 			}
 
-			//  CELDAS
+			//==========================
+			// CELDAS
+			//==========================
 			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
 			{
-				//  alternado con color base
-				System.Drawing.Color fondo;
+				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
+					? fondoBase
+					: System.Drawing.Color.White;
 
-				// Solo para la columna SueldoTotal
+				// Resaltar cambios en SueldoTotal
 				if (dgv.Columns[e.ColumnIndex].Name == "SueldoTotal")
 				{
 					DataGridViewCell cell = dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-					decimal original = Convert.ToDecimal(cell.Tag);
-					decimal nuevo = Convert.ToDecimal(cell.Value);
+					decimal original = 0;
+					decimal nuevo = 0;
+
+					decimal.TryParse(Convert.ToString(cell.Tag), out original);
+					decimal.TryParse(Convert.ToString(cell.Value), out nuevo);
 
 					if (original != nuevo)
-					{
-						fondo = System.Drawing.Color.FromArgb(255, 248, 180); // Amarillo
-					}
-					else
-					{
-						fondo = (e.RowIndex % 2 == 0)
-							? fondoBase
-							: System.Drawing.Color.White;
-					}
-				}
-				else
-				{
-					fondo = (e.RowIndex % 2 == 0)
-						? fondoBase
-						: System.Drawing.Color.White;
+						fondo = System.Drawing.Color.FromArgb(255, 236, 179);
 				}
 
-				//  SIN SELECCIÓN
 				using (SolidBrush brush = new SolidBrush(fondo))
 				{
 					e.Graphics.FillRectangle(brush, e.CellBounds);
@@ -711,29 +819,16 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					new Font("Segoe UI", 10),
 					e.CellBounds,
 					System.Drawing.Color.Black,
-					TextFormatFlags.Left | TextFormatFlags.VerticalCenter
-				);
+					TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
 
-				//  líneas
 				using (Pen pen = new Pen(colorLinea))
 				{
-					// vertical
-					e.Graphics.DrawLine(
+					e.Graphics.DrawRectangle(
 						pen,
-						e.CellBounds.Right - 1,
-						e.CellBounds.Top,
-						e.CellBounds.Right - 1,
-						e.CellBounds.Bottom
-					);
-
-					// horizontal
-					e.Graphics.DrawLine(
-						pen,
-						e.CellBounds.Left,
-						e.CellBounds.Bottom - 1,
-						e.CellBounds.Right,
-						e.CellBounds.Bottom - 1
-					);
+						e.CellBounds.X,
+						e.CellBounds.Y,
+						e.CellBounds.Width - 1,
+						e.CellBounds.Height - 1);
 				}
 
 				e.Handled = true;
@@ -788,8 +883,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				// Seleccionar el procedimiento según la nómina
 				string procedimiento = TipoNomina == "E"
-					? "sp_UpdateHistNominaSueldoEsparrago"
-					: "sp_UpdateHistNominaSueldoUva";
+				   ? "sp_UpdateHistNominaSueldoEsparrago"
+				   : "sp_UpdateHistNominaSueldoUva";
 
 				foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 				{
@@ -819,6 +914,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 						cmd.Parameters.AddWithValue("@Sueldo",
 							sueldoNuevo);
+						cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
 
 						cmd.ExecuteNonQuery();
 
@@ -867,6 +963,21 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				MessageBox.Show(ex.Message, "Guardar cambios");
 				return false;
 			}
+		}
+		private bool ExisteNominaDiaria(DateTime fecha)
+		{
+			string tabla = TipoNomina == "E"
+				? "HistNom_ReporteDiarioEsparrago"
+				: "HistNom_ReporteDiarioUva";
+
+			string query = $@"
+		SELECT COUNT(*)
+		FROM {tabla}
+		WHERE Fecha = '{fecha:yyyy-MM-dd}'";
+
+			int registros = Convert.ToInt32(ClsQuerysDB.GetData(query));
+
+			return registros > 0;
 		}
 	}
 }
