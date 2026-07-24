@@ -44,7 +44,6 @@
 			btnCalcularLibra = new Button();
 			cboLineas = new ComboBox();
 			lblLineas = new Label();
-			btnFestivos = new Button();
 			rbtEsparrago = new RadioButton();
 			pictureBox1 = new PictureBox();
 			rbtUva = new RadioButton();
@@ -54,6 +53,7 @@
 			gbGenerar = new GroupBox();
 			gbLibras = new GroupBox();
 			btnGuardar = new Button();
+			lblTipoProceso = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -85,7 +85,7 @@
 			// 
 			// dtpFecha
 			// 
-			dtpFecha.Location = new Point(382, 71);
+			dtpFecha.Location = new Point(384, 101);
 			dtpFecha.Margin = new Padding(3, 4, 3, 4);
 			dtpFecha.Name = "dtpFecha";
 			dtpFecha.Size = new Size(364, 27);
@@ -214,10 +214,10 @@
 			// btnCalcularLibra
 			// 
 			btnCalcularLibra.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnCalcularLibra.Location = new Point(26, 44);
+			btnCalcularLibra.Location = new Point(31, 44);
 			btnCalcularLibra.Margin = new Padding(3, 4, 3, 4);
 			btnCalcularLibra.Name = "btnCalcularLibra";
-			btnCalcularLibra.Size = new Size(169, 51);
+			btnCalcularLibra.Size = new Size(182, 51);
 			btnCalcularLibra.TabIndex = 18;
 			btnCalcularLibra.Text = "Cargar Libras";
 			btnCalcularLibra.UseVisualStyleBackColor = true;
@@ -242,23 +242,6 @@
 			lblLineas.Size = new Size(78, 28);
 			lblLineas.TabIndex = 20;
 			lblLineas.Text = "Bandas:";
-			// 
-			// btnFestivos
-			// 
-			btnFestivos.BackgroundImageLayout = ImageLayout.Stretch;
-			btnFestivos.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnFestivos.Image = (Image)resources.GetObject("btnFestivos.Image");
-			btnFestivos.ImageAlign = ContentAlignment.MiddleLeft;
-			btnFestivos.Location = new Point(239, 44);
-			btnFestivos.Margin = new Padding(3, 4, 3, 4);
-			btnFestivos.Name = "btnFestivos";
-			btnFestivos.Padding = new Padding(15, 0, 15, 0);
-			btnFestivos.Size = new Size(169, 51);
-			btnFestivos.TabIndex = 9;
-			btnFestivos.Text = "Festivos";
-			btnFestivos.TextAlign = ContentAlignment.MiddleRight;
-			btnFestivos.UseVisualStyleBackColor = true;
-			btnFestivos.Click += btnFestivos_Click;
 			// 
 			// rbtEsparrago
 			// 
@@ -308,11 +291,12 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.BackColor = SystemColors.Control;
 			groupBox1.Controls.Add(rbtUva);
 			groupBox1.Controls.Add(rbtEsparrago);
 			groupBox1.Controls.Add(pictureBox2);
 			groupBox1.Controls.Add(pictureBox1);
-			groupBox1.Location = new Point(31, 147);
+			groupBox1.Location = new Point(31, 12);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(198, 144);
 			groupBox1.TabIndex = 28;
@@ -321,6 +305,7 @@
 			// 
 			// gbCsv
 			// 
+			gbCsv.BackColor = SystemColors.Control;
 			gbCsv.Controls.Add(lblLote);
 			gbCsv.Controls.Add(cboLote);
 			gbCsv.Controls.Add(lblReferencia);
@@ -336,22 +321,23 @@
 			// 
 			// gbGenerar
 			// 
+			gbGenerar.BackColor = SystemColors.Control;
 			gbGenerar.Controls.Add(btncargar);
-			gbGenerar.Controls.Add(btnFestivos);
-			gbGenerar.Location = new Point(630, 175);
+			gbGenerar.Location = new Point(824, 175);
 			gbGenerar.Name = "gbGenerar";
-			gbGenerar.Size = new Size(438, 116);
+			gbGenerar.Size = new Size(244, 116);
 			gbGenerar.TabIndex = 30;
 			gbGenerar.TabStop = false;
 			gbGenerar.Text = "Generar Nomina";
 			// 
 			// gbLibras
 			// 
+			gbLibras.BackColor = SystemColors.Control;
 			gbLibras.Controls.Add(btnCalcularLibra);
 			gbLibras.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			gbLibras.Location = new Point(366, 175);
+			gbLibras.Location = new Point(535, 175);
 			gbLibras.Name = "gbLibras";
-			gbLibras.Size = new Size(222, 116);
+			gbLibras.Size = new Size(244, 116);
 			gbLibras.TabIndex = 31;
 			gbLibras.TabStop = false;
 			gbLibras.Text = "Procesar Libras del Día";
@@ -373,12 +359,22 @@
 			btnGuardar.UseVisualStyleBackColor = true;
 			btnGuardar.Click += btnGuardar_Click;
 			// 
+			// lblTipoProceso
+			// 
+			lblTipoProceso.AutoSize = true;
+			lblTipoProceso.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblTipoProceso.Location = new Point(445, 50);
+			lblTipoProceso.Name = "lblTipoProceso";
+			lblTipoProceso.Size = new Size(0, 28);
+			lblTipoProceso.TabIndex = 33;
+			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AllowDrop = true;
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1519, 1055);
+			Controls.Add(lblTipoProceso);
 			Controls.Add(btnGuardar);
 			Controls.Add(gbLibras);
 			Controls.Add(gbGenerar);
@@ -417,7 +413,6 @@
 		public DataGridView dgvEmployee;
 		private Label lblLineas;
 		public ComboBox cboLineas;
-		private Button btnFestivos;
 		private PictureBox pictureBox1;
 		private PictureBox pictureBox2;
 		public RadioButton rbtEsparrago;
@@ -432,5 +427,6 @@
 		public GroupBox gbGenerar;
 		public GroupBox gbLibras;
 		public Button btnGuardar;
+		public Label lblTipoProceso;
 	}
 }
