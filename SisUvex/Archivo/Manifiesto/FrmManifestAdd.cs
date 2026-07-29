@@ -1,7 +1,9 @@
 ﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.IdentityModel.Tokens;
 using SisUvex.Archivo.Manifiesto.ConfManifest;
 using SisUvex.Catalogos.Metods.ComboBoxes;
+using SisUvex.Catalogos.Metods.Forms.FormChangesDetector;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.WorkGroup;
 using System;
@@ -21,6 +23,7 @@ namespace SisUvex.Archivo.Manifiesto
         public ClsManifest cls;
         public bool IsAddModify = true, AddIsUpdate = false;
         public string? idModify;
+        private ClsFormChangesDetector _changes;
         public FrmManifestAdd()
         {
             InitializeComponent();
@@ -34,6 +37,8 @@ namespace SisUvex.Archivo.Manifiesto
             txbThermometerContainer.ReadOnly = IsAddModify;
 
             cls.BeginFormAdd();
+
+            ApplyDetectControlsChangesExceptFrmManifestAdd();
         }
 
         private void chbRemovedDistributor_CheckedChanged(object sender, EventArgs e)
@@ -53,6 +58,8 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
+            _changes.MarkSaved(); //"Guardar cambios"
+
             cls.btnAcceptAddModify();
         }
 
@@ -100,6 +107,9 @@ namespace SisUvex.Archivo.Manifiesto
 
         private void btnPrintManifest_Click(object sender, EventArgs e)
         {
+            if (!_changes.AskIfHasChanges())
+                return; 
+
             cls.BtnPrintManifestFrmAdd();
         }
 
@@ -170,6 +180,21 @@ namespace SisUvex.Archivo.Manifiesto
         private void btnEditTherFco_Click(object sender, EventArgs e)
         {
             txbThermometerContainer.ReadOnly = !txbThermometerContainer.ReadOnly;
+        }
+
+        private void ApplyDetectControlsChangesExceptFrmManifestAdd()
+        {
+            _changes = new ClsFormChangesDetector(this);
+
+            _changes.ApplyDetectControlsChangesExcept(
+                txbIdPallet,
+                txbPalletPosition);
+        }
+
+        private void FrmManifestAdd_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_changes.AskIfHasChanges())
+                e.Cancel = true;
         }
     }
 }

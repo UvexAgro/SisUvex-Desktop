@@ -32,27 +32,20 @@ namespace SisUvex.Archivo.Manifiesto
         int heigthCarrier = 120;
         float maxWidthLogo = 72;
 
-        public string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        //public string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
 
-        public void CreatePDFManifest(string manifestNumber)
+        public void CreatePDFManifest(string manifestNumber, string folderPath)
         {
             queryManifest.GetManifestData(manifestNumber);
             queryManifest.GetManifestDetailData(manifestNumber);
             queryManifest.GetManifestTotalData(manifestNumber);
 
             // Crear un nuevo documento PDF
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
-
-            if (!queryManifest.distributorShortName.IsNullOrEmpty())
-            {
-                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
-            }
+            string manifestDirectory = Path.Combine(folderPath);
 
             if (!Directory.Exists(manifestDirectory))
-            {
                 Directory.CreateDirectory(manifestDirectory);
-            }
 
             string manifestPath = Path.Combine(manifestDirectory, $"MAN {manifestNumber}.pdf");
             PdfWriter writer = new PdfWriter(manifestPath);
@@ -617,6 +610,11 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
+            Paragraph thermoThermometerFco = new Paragraph("Termómetro caja: ")
+                .Add(queryManifest.manifestThermometerFreightContainer)
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
+                .SetFont(font);
 
             // Agregar los párrafos a la celda
             Cell fcoCell = new Cell();
@@ -625,6 +623,7 @@ namespace SisUvex.Archivo.Manifiesto
             fcoCell.Add(thermoUSPlateParagraph);
             fcoCell.Add(thermoMXPlateParagraph);
             fcoCell.Add(thermoLenghtParagraph);
+            fcoCell.Add(thermoThermometerFco);
             fcoCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             fcoCell.SetPaddingRight(0);
             fcoCell.SetPaddingBottom(0);
@@ -838,7 +837,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         ////MANIFIESTO CON TOTALES POR CAMPO 
         ///
-        public void CreatePDFManifestTotalsPerLot(string manifestNumber)
+        public void CreatePDFManifestTotalsPerLot(string manifestNumber, string folderPath)
         {
             queryManifest.GetManifestData(manifestNumber);
             queryManifest.GetManifestDetailData(manifestNumber);
@@ -846,17 +845,10 @@ namespace SisUvex.Archivo.Manifiesto
             queryManifest.GetManifestTotalData(manifestNumber);
 
             // Crear un nuevo documento PDF
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
-
-            if (!queryManifest.distributorShortName.IsNullOrEmpty())
-            {
-                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
-            }
+            string manifestDirectory = Path.Combine(folderPath);
 
             if (!Directory.Exists(manifestDirectory))
-            {
                 Directory.CreateDirectory(manifestDirectory);
-            }
 
             string manifestPath = Path.Combine(manifestDirectory, $"MAN {manifestNumber}.pdf");
             PdfWriter writer = new PdfWriter(manifestPath);

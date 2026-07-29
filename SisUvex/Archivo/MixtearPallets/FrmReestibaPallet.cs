@@ -36,8 +36,9 @@ namespace SisUvex.Archivo.MixtearPallets
     internal partial class FrmReestibaPallet : Form
     {
         // ── Datos de entrada ────────────────────────────────────────────────────────
-        private readonly PalletInfo         _pallet;   // Pallet seleccionado
-        private readonly List<TipoReestiba> _tipos;    // Tipos activos de Pack_PalletUnstowType
+        private readonly PalletInfo         _pallet;           // Pallet seleccionado
+        private readonly List<TipoReestiba> _tipos;            // Tipos activos de Pack_PalletUnstowType
+        private readonly int?               _cajasIniciales;   // Pre-selección para modo asistido
 
         // ── Resultado accesible por el formulario padre ─────────────────────────────
 
@@ -58,13 +59,26 @@ namespace SisUvex.Archivo.MixtearPallets
         /// </summary>
         public bool EsReestibaCompleta { get; private set; }
 
+        /// <summary>
+        /// Indica si el nuevo pallet debe heredar el Rack e id_manifest del pallet original.
+        /// Solo aplica cuando EsReestibaCompleta == false y el tipo tiene NuevoPalletActivo == true.
+        /// Corresponde a @keepPosition='1' en sp_PackPalletReestiba.
+        /// </summary>
+        public bool MantenerPosicion { get; private set; }
+
         /// <param name="pallet">PalletInfo del pallet a dividir</param>
         /// <param name="tipos">Lista de tipos activos de Pack_PalletUnstowType</param>
-        public FrmReestibaPallet(PalletInfo pallet, List<TipoReestiba> tipos)
+        /// <param name="cajasIniciales">
+        /// Si se provee, pre-selecciona numCajas con este valor (cajas que quedan en el original).
+        /// Usado por "Ajuste asistido" para recomendar la división óptima.
+        /// Si es null, se usa el valor por defecto (pallet.Cajas - 1).
+        /// </param>
+        public FrmReestibaPallet(PalletInfo pallet, List<TipoReestiba> tipos, int? cajasIniciales = null)
         {
             InitializeComponent();
-            _pallet = pallet;
-            _tipos  = tipos;
+            _pallet         = pallet;
+            _tipos          = tipos;
+            _cajasIniciales = cajasIniciales;
         }
 
         // ============================================================================
@@ -73,17 +87,23 @@ namespace SisUvex.Archivo.MixtearPallets
 
         private void FrmReestibaPallet_Load(object sender, EventArgs e)
         {
-            // ── Información del pallet ────────────────────────────────────────────
-            lblPalletVal.Text   = _pallet.IdPallet;
-            lblCajasActVal.Text = _pallet.Cajas.ToString();
-            lblProgramaVal.Text = string.IsNullOrEmpty(_pallet.Programa) ? "(sin programa)" : _pallet.Programa;
-            lblEstibaVal.Text   = string.IsNullOrEmpty(_pallet.Estiba)   ? "(sin estiba)"   : _pallet.Estiba;
+            // ── Panel de información (dinámico, 3 columnas) ───────────────────────
+            ClsMixtearPallets.PopularInfoPallet(grpInfoPallet, _pallet);
+
+            // Reposicionar grpReestiba y botones debajo del panel de info
+            grpReestiba.Top  = grpInfoPallet.Bottom + 8;
+            btnConfirmar.Top = grpReestiba.Bottom   + 10;
+            btnCancelar.Top  = grpReestiba.Bottom   + 10;
+            ClientSize       = new Size(ClientSize.Width, btnCancelar.Bottom + 12);
 
             // ── Rango del NumericUpDown ───────────────────────────────────────────
             // Mínimo: 1 caja.  Máximo: TODAS las cajas (permite reestiba completa).
             numCajas.Minimum = 1;
             numCajas.Maximum = Math.Max(1, _pallet.Cajas);
-            numCajas.Value   = Math.Max(1, _pallet.Cajas - 1); // Por defecto: conserva casi todo
+            // Si se recibió una recomendación, usarla; si no, el default es conservar casi todo
+            numCajas.Value = _cajasIniciales.HasValue
+                ? Math.Max(1, Math.Min(_pallet.Cajas, _cajasIniciales.Value))
+                : Math.Max(1, _pallet.Cajas - 1);
 
             // ── Tipos de reestiba ─────────────────────────────────────────────────
             cboTipo.DataSource    = _tipos;
@@ -168,6 +188,7 @@ namespace SisUvex.Archivo.MixtearPallets
             NuevasCajas        = nuevas;
             TipoSeleccionado   = tipoElegido;
             EsReestibaCompleta = completa;
+            MantenerPosicion   = !completa && cboPosition.Enabled && cboPosition.SelectedIndex == 1;
             DialogResult       = DialogResult.OK;
             Close();
         }
@@ -220,6 +241,53 @@ namespace SisUvex.Archivo.MixtearPallets
                 lblDescripcion.Text = string.IsNullOrEmpty(tipo.Descripcion)
                     ? ""
                     : $"ℹ {tipo.Descripcion}";
+            }
+
+            ActualizarEstadoPosition();
+        }
+
+        /// <summary>
+        /// Determina si cboPosition debe estar habilitado según dos condiciones:
+        ///   1. El pallet tiene Manifiesto o Rack asignado.
+        ///   2. El tipo seleccionado deja el nuevo pallet ACTIVO (NuevoPalletActivo = true).
+        ///   3. No es una reestiba completa (donde no se crea pallet nuevo).
+        /// Al habilitarse pone "Sí" por defecto; al deshabilitarse vuelve a "No".
+        /// </summary>
+        private void ActualizarEstadoPosition()
+        {
+            if (_pallet is null) return;
+
+            int  cajas      = int.TryParse(numCajas.Text, out int v) ? v : (int)numCajas.Value;
+            bool esCompleta = cajas >= _pallet.Cajas;
+
+            bool tienePosicion = !string.IsNullOrEmpty(_pallet.Manifiesto) ||
+                                  !string.IsNullOrEmpty(_pallet.Rack);
+
+            bool tipoActivo = cboTipo.SelectedItem is TipoReestiba t && t.NuevoPalletActivo;
+
+            bool habilitar = tienePosicion && tipoActivo && !esCompleta;
+
+            cboPosition.Enabled = habilitar;
+            // Selección automática: "Sí" al habilitar, "No" al deshabilitar
+            cboPosition.SelectedIndex = habilitar ? 1 : 0;
+
+            lblPositionTxt.ForeColor = habilitar ? SystemColors.ControlText : SystemColors.GrayText;
+
+            // Mostrar los valores actuales de Manifiesto y/o Rack bajo el combobox
+            if (tienePosicion)
+            {
+                var partes = new List<string>();
+                if (!string.IsNullOrEmpty(_pallet.Manifiesto))
+                    partes.Add($"Manifiesto: {_pallet.Manifiesto}");
+                if (!string.IsNullOrEmpty(_pallet.Rack))
+                    partes.Add($"Rack: {_pallet.Rack}");
+                lblPosInfo.Text    = "📌  " + string.Join("   |   ", partes);
+                lblPosInfo.Visible = true;
+            }
+            else
+            {
+                lblPosInfo.Text    = "";
+                lblPosInfo.Visible = false;
             }
         }
     }

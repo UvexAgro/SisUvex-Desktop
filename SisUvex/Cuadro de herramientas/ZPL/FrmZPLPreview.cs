@@ -247,7 +247,7 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
 
             try
             {
-                RawPrinterHelper.SendStringToPrinter(impresora, rtbZpl.Text);
+                RawPrinterHelper.SendUtf8StringToPrinter(impresora, rtbZpl.Text);
                 lblEstado.ForeColor = System.Drawing.SystemColors.ControlText;
                 lblEstado.Text = "ZPL enviado a impresora: " + impresora;
             }

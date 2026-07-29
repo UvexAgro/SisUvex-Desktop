@@ -12,6 +12,7 @@ using SisUvex.Catalogos;
 using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 using SisUvex.Nomina.Work_time;
@@ -20,9 +21,11 @@ using DrawingColor = System.Drawing.Color;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
 {
-	internal class ClsFestivo
+	public class ClsFestivo
 	{
 		public FrmSemiAutomatedPayroll frm;
+		internal ClsSemiAutomatedPayroll cls;
+		public FrmFestivo frmF;
 
 		public bool EsFestivo(DateTime fecha)
 		{
@@ -37,7 +40,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					"SELECT COUNT(*) FROM dbo.Cat_Festivos WHERE d_fecha = @Fecha",
 					sql.cnn);
 
-			
+
 				cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.Date;
 
 				int count = (int)cmd.ExecuteScalar();
@@ -53,65 +56,46 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return resultado;
 		}
-		public void BtnCargarDatos()
+		public DataTable ObtenerNominaFestiva()
 		{
-			DateTime fecha = frm.dtpFecha.Value;
+			SQLControl sql = new SQLControl();
 
-			//  VALIDAR PRIMERO SI ES FESTIVO
-			if (!EsFestivo(fecha))
+			sql.OpenConectionWrite();
+
+			SqlCommand cmd = new SqlCommand("sp_ReporteNomina_Festivo", sql.cnn);
+			cmd.CommandType = CommandType.StoredProcedure;
+
+			cmd.Parameters.AddWithValue("@Fecha", frm.dtpFecha.Value);
+			cmd.Parameters.AddWithValue("@TipoFestivo", frm.TipoFestivoSeleccionado);
+			cmd.Parameters.AddWithValue("@TipoNomina", cls.TipoNomina);
+			cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
+
+			DataTable dt = new DataTable();
+
+			new SqlDataAdapter(cmd).Fill(dt);
+
+			sql.CloseConectionWrite();
+
+			return dt;
+		}
+		public string ObtenerDescripcionFestivo(string tipo)
+		{
+			switch (tipo)
 			{
-				MessageBox.Show(
-					"Este día NO es festivo.\n\nNo se abrirá ni se procesará información.",
-					"Sistema",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
+				case "DESCANSO_TRABAJADO":
+					return "Descanso trabajado (Festivo)";
+					frm.lblTipoProceso.Visible = false;
 
-				return; 
-			}
+				case "TRABAJADO":
+					return "Festivo trabajado";
+					frm.lblTipoProceso.Visible = false;
 
-			string tipoFestivo = frm.TipoFestivoSeleccionado;
+				case "NO_TRABAJADO":
+					return "Festivo no trabajado";
+					frm.lblTipoProceso.Visible = false;
 
-			if (string.IsNullOrEmpty(tipoFestivo))
-			{
-				MessageBox.Show(
-					"Seleccione el tipo de día.",
-					"Sistema",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-				return;
-			}
-
-			try
-			{
-				SQLControl sql = new SQLControl();
-				sql.OpenConectionWrite();
-
-						SqlCommand cmd = new SqlCommand(@"
-				EXEC sp_ReporteNomina_Festivo
-				@Fecha, 
-				@TipoFestivo
-				", sql.cnn);
-
-				cmd.Parameters.AddWithValue("@Fecha", fecha);
-				cmd.Parameters.AddWithValue("@TipoFestivo", tipoFestivo);
-
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				DataTable dt = new DataTable();
-				da.Fill(dt);
-
-				if (dt.Rows.Count == 0)
-				{
-					MessageBox.Show("No existen registros para la fecha seleccionada.");
-					return;
-				}
-
-				frm.dgvEmployee.DataSource = dt;
-
-				sql.CloseConectionWrite();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
+				default:
+					return "";
 			}
 		}
 	}

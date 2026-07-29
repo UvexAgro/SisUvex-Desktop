@@ -5,6 +5,14 @@ namespace SisUvex.Catalogos.Metods.Extentions
 {
     public static class DataTableExtensions
     {
+        /// <summary>
+        /// DEVUELVE EL VALOR DE LA COLUMNA ESPECIFICADA EN EL DATATABLE, BUSCANDO POR EL VALOR DE OTRA COLUMNA, SI NO EXISTE DEVUELVE NULL
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="valueColumnName"></param>
+        /// <param name="searchColumnName"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public static object? GetValue(this DataTable? dataTable, string valueColumnName, string searchColumnName, object? searchValue)
         {
             if (dataTable == null || dataTable.Rows.Count == 0)
@@ -28,6 +36,24 @@ namespace SisUvex.Catalogos.Metods.Extentions
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// DEVOLVER EL PRIMER VALOR DE LA COLUMNA ESPECIFICADA EN EL DATATABLE, SI NO EXISTE DEVUELVE NULL
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="valueColumnName"></param>
+        /// <returns></returns>
+        public static object? GetValue(this DataTable? dataTable, string valueColumnName)
+        {
+            if (dataTable == null || dataTable.Rows.Count == 0)
+                return null;
+
+            // Verificar que las columnas existan
+            if (!dataTable.Columns.Contains(valueColumnName))
+                return null;
+
+            return dataTable.Rows[0][valueColumnName];
         }
 
         public static void CopyDataFrom(this DataTable? targetTable, DataTable? sourceTable)

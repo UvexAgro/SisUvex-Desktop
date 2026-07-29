@@ -22,7 +22,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
     {
         ETagInfo eTag;
 
-        private string zplBegin = "^XA";
+        private string zplBegin = "^XA\n^CI28 ^FX soporte de caracteres especiales\n";
         private string zplEnd = "^XZ\n";
         private string fontsize = "30,20";
 
@@ -31,8 +31,10 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         private string gtinZPL = string.Empty;
         private string distributorZPL = string.Empty;
         private string varietyZPL = string.Empty;
+        private string patentLegend = string.Empty;
         private string presentationZPL = string.Empty;
         private string qrcodeZPL = string.Empty;
+        private string pluZPL = string.Empty;
         private string upcZPL = string.Empty;
         private string voicePickCodeZPL = string.Empty;
         private string reverseLabelOrientationZPL = string.Empty;
@@ -46,13 +48,15 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             string kgs = (double.Parse(eTag.Lbs) * 0.453592).ToString("0.0");
             string? fullPresentation = CONCAT_WS(" ", eTag.preLabel, eTag.namePresentation, eTag.postLabel);
             string? left2WGroup = eTag.workGroupName?.Substring(0,2);
+            string? legend = CONCAT_WS(" / ", eTag.patentLegend, eTag.labelLegend, eTag.labelLegend2); //2026-06-06 Por mientras juntar las dos leyendas
 
             switch (idPti)
             {
                 case
                     "01":
                     //ESTANDAR (2026)                  -->se cambió en 28-abril-2026 la de dayka-walmart como standar para todas las demás, el standar viejo ahora es la "09" standar 2025
-                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
                     SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL("Grown/Packed by:", "Uvex Agro Internacional", "Distributed by:", eTag.nameDistributor); //PRESENTACION STANDAR
                     break;
                 case
@@ -63,9 +67,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 case
                     "03":
                     //DISTRIBUIDOR UVEX
-                    SetStringDistributorZPL("Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX"); //DISTRIBUIDOR UVEX
-                    SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
-                    SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    //SetStringDistributorZPL("Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX"); //DISTRIBUIDOR UVEX
+                    //SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
+                    //SetStringPresentationZPL(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringPluZpl(eTag.PLU);
+                    SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL("Distributed by:", "Uvex Agro Internacional", "Rafael Muñoz Espinoza", "469 Caborca 83640 MX");
+
                     break;
                 case
                     "04":
@@ -113,6 +122,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                     SetStringPresentationZPL2025(eTag.Lbs, eTag.namePresentation, eTag.nameContainer, eTag.preLabel, eTag.postLabel); //PRESENTACION STANDAR
                     SetStringDistributorZPL2025(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
                     break;
+
+                case
+                    "10":
+                    //DISTRIBUIDOR
+                    SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(eTag.nameGenericColor + " GRAPE", eTag.nameVariety + eTag.trademark, $"{eTag.Lbs}lb / {kgs}kg CASE {fullPresentation}"); //DISTRIBUIDOR STANDAR
+                    SetStringPtiStandar2026PatentLegendZPL(legend); //LEYENDA DE PATENTE EN RENGLO PEQUEÑO ENTRE VARIEDAD Y PRESENTACION
+                    SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
+                    break;
                 default:
                     SetStringCropVarietySizeZPL(eTag.nameCrop, eTag.nameVariety, eTag.nameSize); //VARIEDAD  STANDAR
                     SetStringDistributorZPL(eTag.nameDistributor, eTag.addressDistributor, eTag.cityDistributor); //DISTRIBUIDOR STANDAR
@@ -133,7 +150,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /*Sobrecarga del metodo para generar el string ZPL para la etiqueta PTI*/
         private string SuperPrintPtiTag(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + qrcodeZPL + pluZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)
             {
@@ -145,7 +162,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SuperPrintPtiTagWithQrUniqueBox(int copies)
         {
-            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
+            labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + patentLegend + presentationZPL + pluZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL;
 
             string superString = string.Empty;
 
@@ -165,14 +182,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         {
 
             string zplAlbertons = $"\n^CF0,30,30" +
-                                    $"\n^FT32,47^A@N,25,25^FD8/2 lb Clams^FS" +
-                                    $"\n^FT573,47^A@N,25,25^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
-                                    $"\n^FT178,98^A@N,25,25^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
-                                    $"\n^FT321,132^A@N,25,25^FDPack Date: {Juliana(eTag.dateWorkPlan)}^FS" +
-                                    $"\n^FT292,162^A@N,25,25^FDProduce of Mexico^FS" +
-                                    $"\n^FT173,210^A@N,25,25^FDDistributed by Better Living Brands, LLC^FS" +
-                                    $"\n^FT166,246^A@N,25,25^FDP.O. Box 99, Pleasanton, CA 94566-0009^FS" +
-                                    $"\n^FO180,290^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
+                                    $"\n^FT32,47^FD8/2 lb Clams^FS" +
+                                    $"\n^FT565,47^FD{textUPCAlbertons(eTag.upcGTIN)}^FS" +
+                                    $"\n^FT178,98^FDSignature Select {ClsValues.ToTitleCase(eTag.nameGenericColor)} Grapes^FS" +
+                                    $"\n^FT321,132^FDPack Date: {Juliana(eTag.dateWorkPlan)}^FS" +
+                                    $"\n^FT292,162^FDProduce of Mexico^FS" +
+                                    $"\n^FT173,210^FDDistributed by Better Living Brands, LLC^FS" +
+                                    $"\n^FT166,246^FD P.O. Box 99, Pleasanton, CA 94566-0009^FS" +
+                                    $"\n^FO165,290^B3N,N,70,Y^FD{eTag.valueGTIN}^FS";
             labelsZPLString = zplBegin + zplAlbertons + reverseLabelOrientationZPL + zplEnd;
             string superString = string.Empty;
             for (int i = 0; i < copies; i++)
@@ -301,12 +318,14 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 
         private string SetStringDistributorZPL(string Distributor, string AddresDistributor1, string AddresDistributor2)
         {
-            distributorZPL = "^FX DISTRIBUTOR\n" +
+            distributorZPL += "^FX  PRODUCTO DE\n" +
+                        $"^CF0,30,50^FO22,230^FDProduct of Mexico^FS\n"+
+                        "^FX DISTRIBUTOR\n" +
                         "^CFF,30,10\n" +
-                        "^FO25,300^FD" + Distributor + "^FS\n" +
+                        "^FO25,260^FD" + Distributor + "^FS\n" +
                         "^CFF,30,10\n" +
-                        "^FO23,335^FD" + AddresDistributor1 + "^FS\n" +
-                        "^FO23,365^FD" + AddresDistributor2 + "^FS\n";
+                        "^FO23,295^FD" + AddresDistributor1 + "^FS\n" +
+                        "^FO23,325^FD" + AddresDistributor2 + "^FS\n";
 
             return distributorZPL;
         }
@@ -352,22 +371,31 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         }
 
         /*Se crea el string ZPL para el código de barras UPC*/
-        private void SetStringUpcZPL(string upc)
+
+        private string SetStringPluZpl (string? plu)
         {
+            if (string.IsNullOrEmpty(plu))
+                return string.Empty;
+
+            pluZPL = "^FX PLU\n" + $"^FO430,270^A0N,30,30^FDPLU {plu} ^FS";
+            return pluZPL;
+        }
+        private void SetStringUpcZPL(string upc)
+        {//2026 ajustar posicion
             if (upc.Length == 12)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^BUN,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX UPC-A CODE\n" +
+                         "^FO430,320^BY2,1,60^BUN,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else if (upc.Length == 13)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^BEN,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX EAN-13 CODE\n" +
+                         "^FO430,320^BY2,1,60^BEN,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else if (upc.Length == 8)
             {
-                upcZPL = "^FX UPC CODE\n" +
-                        "^FO390,320^BY2^B8,60,Y,N,Y^FD" + upc + "^FS\n";
+                upcZPL = "^FX EAN-8 CODE\n" +
+                         "^FO430,320^BY2,1,60^B8N,60,Y,N,Y^FD" + upc + "^FS\n";
             }
             else
             {
@@ -414,26 +442,42 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         /// <param name="Variety"></param>
         private void SetStringPtiStandar2026ColorBoldColorVarietyLbsZPL(string? ColorLine1, string? VarietyLine2, string? WeightLine3)
         {
+
             //labelsZPLString = zplBegin + gtinZPL + distributorZPL + varietyZPL + presentationZPL + qrcodeZPL + upcZPL + voicePickCodeZPL + reverseLabelOrientationZPL + zplEnd;
             varietyZPL = "^FX COLOR\n" +
                         $"^CF0,30,35 ^FO25,110^FD{ColorLine1}^FS\n"
                         + "^FX VARIETY\n" +
-                        $"^CF0,30,35 ^FO25,145^FD{VarietyLine2}^FS\n"
+                        $"^FO25,140^A0N,35,35^FH_^FD{VarietyLine2}^FS\n"
                         + "^FX WEIGHT\n" +
-                        $"^CF0,30,40 ^FO23,180^FD{WeightLine3}^FS\n";
+                        $"^CF0,30,40 ^FO23,200^FD{WeightLine3}^FS\n";
+        }
+        private void SetStringPtiStandar2026PatentLegendZPL(string? legendPatent)
+        {//2026, Pequeño renglon con leyenda de patente en variedad.
+            if (string.IsNullOrEmpty(legendPatent)) return;
+
+            patentLegend = "^FX LEYENDA PATENTE\n" +
+                        $"^^FO23,175^A0N,20,20^FD{legendPatent}^FS\n";
         }
         private void SetStringPtiStandar2026PackedByDistributedByNameAndProductOfMexicoZPL(string? GrownBy1, string? GrowerLine2, string? DistributedBy3, string? DistributorLine4)
         {
             distributorZPL = "^FX  PRODUCTO DE\n" +
-                        $"^CF0,30,50^FO22,220^FDProduct of Mexico^FS\n"
+                        $"^CF0,30,50^FO22,230^FDProduct of Mexico^FS\n"
                         + "^FX GROWER\n" +
                         $"^CFF,30,10^FO23,260^FD{GrownBy1}^FS\n" +
                         $"^FO25,290^FD{GrowerLine2}^FS\n"
                         + "^FX DISTRIBUIDOR\n" +
                         $"^CFF,30,10^FO25,330^FD{DistributedBy3}^FS\n" +
                         $"^FO25,360^FD{DistributorLine4}^FS\n";
+        }private void SetStringPtiStandar2026PackedByDistributedByAddressAndProductOfMexicoZPL(string? DistributedBy1, string? Line1Distributed, string? Line2Distributed, string? Line3Distributed)
+        {
+            distributorZPL = "^FX  PRODUCTO DE\n" +
+                        $"^CF0,30,40^FO22,230^FDProduct of Mexico^FS\n"
+                        + "^FX DISTRIBUIDOR\n" +
+                        $"^FO23,260^AAN,30,10^FD{DistributedBy1}^FS\n" +
+                        $"^FO25,290^AAN,30,10^FD{Line1Distributed}^FS\n" +
+                        $"^FO25,320^AAN,30,10^FD{Line2Distributed}^FS\n" +
+                        $"^FO25,350^AAN,30,10^FD{Line3Distributed}^FS\n";
         }
-
         private void ChangeFontSize(string inputText)
         {
 

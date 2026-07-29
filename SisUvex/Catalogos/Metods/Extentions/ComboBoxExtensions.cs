@@ -52,6 +52,23 @@ namespace SisUvex.Catalogos.Metods.Extentions
 
             throw new InvalidOperationException("ComboBox's DataSource is not a DataTable or BindingSource with DataTable");
         }
+        public static T GetValueFromDataSource<T>(ComboBox combo, string valueSearch, string columnSearch, string columnResult)
+        {
+            if (!(combo.DataSource is DataTable dataTable))
+                return default;
+
+            DataRow row = dataTable.AsEnumerable()
+                                   .FirstOrDefault(r =>
+                                       string.Equals(
+                                           Convert.ToString(r[columnSearch])?.Trim(),
+                                           valueSearch?.Trim(),
+                                           StringComparison.OrdinalIgnoreCase));
+
+            if (row == null || row.IsNull(columnResult))
+                return default;
+
+            return (T)Convert.ChangeType(row[columnResult], typeof(T));
+        }
 
         private static object GetValueFromDataSource(ComboBox combo, DataTable dataTable, string columnName)
         {

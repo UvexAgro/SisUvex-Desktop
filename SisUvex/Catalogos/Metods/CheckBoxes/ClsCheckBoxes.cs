@@ -18,6 +18,13 @@ namespace SisUvex.Catalogos.Metods.CheckBoxes
             return GetCheckedValue(checkBox.Checked);
         }
 
-
+        public static int GetCheckedValueInt(bool isChecked)
+        {
+            return isChecked ? 1 : 0;
+        }
+        public static int GetCheckedValueInt(CheckBox checkBox)
+        {
+            return GetCheckedValueInt(checkBox.Checked);
+        }
     }
 }

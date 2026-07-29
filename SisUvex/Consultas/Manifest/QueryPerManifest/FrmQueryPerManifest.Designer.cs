@@ -211,7 +211,6 @@
             dgvQuery.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvQuery.Size = new Size(576, 337);
             dgvQuery.TabIndex = 10;
-            dgvQuery.CellFormatting += dgvQuery_CellFormatting;
             // 
             // btnSearch
             // 

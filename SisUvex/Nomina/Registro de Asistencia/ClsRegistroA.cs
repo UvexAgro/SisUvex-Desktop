@@ -304,12 +304,6 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				sql.CommitTransaction();
 
-				MessageBox.Show(
-					"Registros guardados correctamente.",
-					titulo,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
-				);
 			}
 			catch (Exception ex)
 			{
@@ -417,8 +411,10 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			string cuadrilla = frm.cboCuadrilla.SelectedValue.ToString();
 
 			string query = @"
-			SELECT 
-				a.id_employee + ' - ' + 
+			SELECT
+				a.id_attendence,
+
+				a.id_employee + ' - ' +
 				(e.v_lastNamePat + ' ' + e.v_lastNameMat + ' ' + e.v_name) AS Codigo,
 
 				a.c_codigo_tab + ' - ' + t.v_descripcion_tab AS Actividad,
@@ -426,16 +422,15 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				a.id_productionLine AS Banda
 
 			FROM Nom_AttendenceList a
-			LEFT JOIN Nom_Employees e 
+			LEFT JOIN Nom_Employees e
 				ON a.id_employee = e.id_employee
-			LEFT JOIN Nom_Tabulador t 
+			LEFT JOIN Nom_Tabulador t
 				ON a.c_codigo_tab = t.c_codigo_tab
 
 			WHERE CAST(a.d_attendence AS DATE) = @Fecha
 			AND a.id_workGroup = @Cuadrilla
 
-			ORDER BY a.id_employee
-			";
+			ORDER BY a.c_codigo_tab, a.id_employee";
 
 			DataTable dt = new DataTable();
 
@@ -454,11 +449,15 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				foreach (DataRow dr in dt.Rows)
 				{
-					frm.dgvAsistencia.Rows.Add(
+					int rowIndex = frm.dgvAsistencia.Rows.Add(
 						dr["Codigo"].ToString(),
 						dr["Actividad"].ToString(),
 						dr["Banda"].ToString()
 					);
+
+					// Guardar el ID oculto
+					frm.dgvAsistencia.Rows[rowIndex].Tag =
+						dr["id_attendence"].ToString();
 				}
 			}
 			catch (Exception ex)
@@ -562,5 +561,65 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 				MessageBox.Show(ex.ToString(), "Error");
 			}
 		}
-	}
+		public void EliminarRegistroSeleccionado()
+		{
+			if (frm.dgvAsistencia.CurrentRow == null)
+			{
+				MessageBox.Show("Seleccione un registro.");
+				return;
+			}
+
+			string idAttendence =
+				frm.dgvAsistencia.CurrentRow.Tag?.ToString();
+
+			if (string.IsNullOrEmpty(idAttendence))
+			{
+				MessageBox.Show("No se encontró el id del registro.");
+				return;
+			}
+
+			DialogResult resp = MessageBox.Show(
+				"¿Desea eliminar el registro seleccionado?\n\nTambién se eliminarán los ingresos relacionados.",
+				"Confirmar eliminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning);
+
+			if (resp != DialogResult.Yes)
+				return;
+
+			try
+			{
+				sql.BeginTransaction();
+
+				SqlCommand cmd1 = new SqlCommand(@"
+            DELETE FROM Nom_MiscellaneousIncome
+            WHERE id_attendence = @Id",
+					sql.cnn,
+					sql.transaction);
+
+				cmd1.Parameters.AddWithValue("@Id", idAttendence);
+				cmd1.ExecuteNonQuery();
+
+				SqlCommand cmd2 = new SqlCommand(@"
+            DELETE FROM Nom_AttendenceList
+            WHERE id_attendence = @Id",
+					sql.cnn,
+					sql.transaction);
+
+				cmd2.Parameters.AddWithValue("@Id", idAttendence);
+				cmd2.ExecuteNonQuery();
+
+				sql.CommitTransaction();
+
+				CargarAsistenciasPorFecha();
+
+				MessageBox.Show("Registro eliminado correctamente.");
+			}
+			catch (Exception ex)
+			{
+				sql.RollbackTransaction();
+				MessageBox.Show(ex.ToString(), "Error");
+			}
+		}
+	}	
 }

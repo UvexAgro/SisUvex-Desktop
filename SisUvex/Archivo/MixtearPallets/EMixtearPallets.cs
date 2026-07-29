@@ -46,6 +46,9 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>Pack_WorkPlan.id_GTIN — identificador del programa de empaque</summary>
         public string Programa { get; set; } = string.Empty;
 
+        /// <summary>Nombre o descripción del plan de trabajo (vw_PackPalletCon.[Plan de trabajo])</summary>
+        public string PlanTrabajo { get; set; } = string.Empty;
+
         /// <summary>Pack_GTIN.n_lbs — libras por caja según el GTIN</summary>
         public decimal LibrasPorCaja { get; set; }
 
@@ -84,6 +87,9 @@ namespace SisUvex.Archivo.MixtearPallets
 
         /// <summary>Pack_Pallet.id_manifest</summary>
         public string Manifiesto { get; set; } = string.Empty;
+
+        /// <summary>Pack_Pallet.c_position — posición del pallet dentro del manifiesto</summary>
+        public string PosManifiesto { get; set; } = string.Empty;
 
         /// <summary>Pack_Pallet.id_rack</summary>
         public string Rack { get; set; } = string.Empty;
@@ -125,28 +131,28 @@ namespace SisUvex.Archivo.MixtearPallets
         /// <summary>Pack_PalletUnstowType.v_description</summary>
         public string Descripcion { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Prefijo que se almacena en Pack_Pallet.c_restowing.
+        /// Viene directamente de Pack_PalletUnstowType.v_prefix (ej. 'SO', 'SI', 'ER', 'CO', 'RE').
+        /// Al agregar nuevos tipos en la tabla no se requiere cambiar código.
+        /// </summary>
+        public string Prefijo { get; set; } = string.Empty;
+
         /// <summary>Pack_PalletUnstowType.c_active = '1'</summary>
         public bool Activo { get; set; }
 
         /// <summary>
-        /// Mapeo al código del procedure heredado sp_PackPalletReestiba.
-        /// SOBRANTE('01')→'SO', SINIESTRADO('02')→'SI', ERROR('03')→'RE', CORTESÍA('04')→'CO'.
-        /// Agregar entradas al agregar nuevos tipos en Pack_PalletUnstowType.
+        /// Indica si el pallet reestibado queda activo (c_activeInPallet = '1').
+        /// Solo SOBRANTE queda activo; los demás tipos quedan inactivos.
+        /// Viene de Pack_PalletUnstowType.c_activeInPallet — no requiere hardcodeo.
         /// </summary>
-        public string CodigoHeredado => IdTipo switch
-        {
-            "01" => "SO",
-            "02" => "SI",
-            "03" => "RE",
-            "04" => "CO",
-            _ => "SO"
-        };
+        public bool NuevoPalletActivo { get; set; }
 
         /// <summary>
-        /// Solo SOBRANTE ('01') crea el nuevo pallet como activo (c_active = '1').
-        /// Los demás tipos crean el pallet como inactivo.
+        /// Código a asignar en c_restowing: equivale directamente a Prefijo.
+        /// Se mantiene por compatibilidad con llamadas existentes a EjecutarReestiba / EjecutarReestibaCompleta.
         /// </summary>
-        public bool NuevoPalletActivo => IdTipo == "01";
+        public string CodigoHeredado => Prefijo;
 
         /// <summary>Representación de texto para ComboBox</summary>
         public override string ToString() => Nombre;
@@ -221,6 +227,14 @@ namespace SisUvex.Archivo.MixtearPallets
         /// al original). En este caso IdPalletTemporal y CajasNuevoPallet son irrelevantes.
         /// </summary>
         public bool EsCompleta { get; set; }
+
+        /// <summary>
+        /// Si true, el nuevo pallet hereda el id_rack e id_manifest del pallet original
+        /// (corresponde a @keepPosition = '1' en sp_PackPalletReestiba).
+        /// Solo aplica en reestibas parciales con tipo activo (NuevoPalletActivo = true).
+        /// Cuando false o cuando EsCompleta = true, esas columnas se dejan en NULL.
+        /// </summary>
+        public bool MantenerPosicion { get; set; }
     }
 
     /// <summary>

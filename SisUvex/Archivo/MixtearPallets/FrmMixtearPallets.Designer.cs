@@ -21,8 +21,9 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMixtearPallets));
             lblTitulo = new Label();
             label4 = new Label();
             lblIdPallet = new Label();
@@ -32,6 +33,7 @@
             btnReestibar = new Button();
             btnReconfigurar = new Button();
             btnQuitarMix = new Button();
+            btnAsistido = new Button();
             dgvPallets = new DataGridView();
             btnGuardar = new Button();
             txbBoxesStow = new TextBox();
@@ -43,6 +45,8 @@
             button1 = new Button();
             btnQuitarDes = new Button();
             dgvDestibar = new DataGridView();
+            lblPosicionMix = new Label();
+            cboPosicionMix = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvPallets).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDestibar).BeginInit();
             SuspendLayout();
@@ -117,18 +121,6 @@
             btnReestibar.UseVisualStyleBackColor = true;
             btnReestibar.Click += btnReestibar_Click;
             // 
-            // btnQuitarMix  — elimina el pallet (o su estiba completa) del formulario
-            // 
-            btnQuitarMix.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            btnQuitarMix.ForeColor = Color.DarkRed;
-            btnQuitarMix.Location = new Point(484, 65);
-            btnQuitarMix.Name = "btnQuitarMix";
-            btnQuitarMix.Size = new Size(90, 25);
-            btnQuitarMix.TabIndex = 7;
-            btnQuitarMix.Text = "✕ Quitar";
-            btnQuitarMix.UseVisualStyleBackColor = true;
-            btnQuitarMix.Click += btnQuitarMix_Click;
-            // 
             // btnReconfigurar
             // 
             btnReconfigurar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -140,6 +132,30 @@
             btnReconfigurar.UseVisualStyleBackColor = true;
             btnReconfigurar.Click += btnReconfigurar_Click;
             // 
+            // btnQuitarMix
+            // 
+            btnQuitarMix.ForeColor = Color.DarkRed;
+            btnQuitarMix.Location = new Point(484, 65);
+            btnQuitarMix.Name = "btnQuitarMix";
+            btnQuitarMix.Size = new Size(90, 25);
+            btnQuitarMix.TabIndex = 7;
+            btnQuitarMix.Text = "✕ Quitar";
+            btnQuitarMix.UseVisualStyleBackColor = true;
+            btnQuitarMix.Click += btnQuitarMix_Click;
+            // 
+            // btnAsistido
+            // 
+            btnAsistido.Enabled = false;
+            btnAsistido.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            btnAsistido.ForeColor = Color.DarkGreen;
+            btnAsistido.Location = new Point(582, 65);
+            btnAsistido.Name = "btnAsistido";
+            btnAsistido.Size = new Size(150, 25);
+            btnAsistido.TabIndex = 8;
+            btnAsistido.Text = "⚙ Ajuste asistido";
+            btnAsistido.UseVisualStyleBackColor = true;
+            btnAsistido.Click += btnAsistido_Click;
+            // 
             // dgvPallets
             // 
             dgvPallets.AllowUserToAddRows = false;
@@ -149,30 +165,28 @@
             dgvPallets.BackgroundColor = SystemColors.ControlLightLight;
             dgvPallets.BorderStyle = BorderStyle.Fixed3D;
             dgvPallets.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvPallets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dgvPallets.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.ControlLightLight;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = Color.SteelBlue;
-            dataGridViewCellStyle4.SelectionForeColor = Color.White;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvPallets.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvPallets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.ControlLightLight;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.SteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvPallets.DefaultCellStyle = dataGridViewCellStyle2;
             dgvPallets.EnableHeadersVisualStyles = false;
             dgvPallets.ImeMode = ImeMode.NoControl;
             dgvPallets.Location = new Point(12, 98);
             dgvPallets.Name = "dgvPallets";
             dgvPallets.ReadOnly = true;
             dgvPallets.RowHeadersVisible = false;
-            dgvPallets.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvPallets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPallets.Size = new Size(988, 195);
             dgvPallets.TabIndex = 8;
@@ -199,7 +213,7 @@
             txbBoxesStow.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txbBoxesStow.Enabled = false;
             txbBoxesStow.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txbBoxesStow.Location = new Point(235, 303);
+            txbBoxesStow.Location = new Point(237, 303);
             txbBoxesStow.Name = "txbBoxesStow";
             txbBoxesStow.Size = new Size(50, 23);
             txbBoxesStow.TabIndex = 11;
@@ -209,7 +223,7 @@
             // 
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new Point(138, 306);
+            label1.Location = new Point(149, 307);
             label1.Name = "label1";
             label1.Size = new Size(88, 15);
             label1.TabIndex = 10;
@@ -220,7 +234,7 @@
             txbBoxesMax.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txbBoxesMax.Enabled = false;
             txbBoxesMax.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txbBoxesMax.Location = new Point(400, 303);
+            txbBoxesMax.Location = new Point(386, 303);
             txbBoxesMax.Name = "txbBoxesMax";
             txbBoxesMax.Size = new Size(50, 23);
             txbBoxesMax.TabIndex = 13;
@@ -230,7 +244,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(300, 306);
+            label2.Location = new Point(293, 307);
             label2.Name = "label2";
             label2.Size = new Size(94, 15);
             label2.TabIndex = 12;
@@ -271,7 +285,7 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // btnQuitarDes  — elimina el pallet (o su estiba completa) del formulario
+            // btnQuitarDes
             // 
             btnQuitarDes.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnQuitarDes.ForeColor = Color.DarkRed;
@@ -292,19 +306,34 @@
             dgvDestibar.BackgroundColor = SystemColors.ControlLightLight;
             dgvDestibar.BorderStyle = BorderStyle.Fixed3D;
             dgvDestibar.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            //dgvDestibar.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvDestibar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            //dgvDestibar.DefaultCellStyle = dataGridViewCellStyle2;
             dgvDestibar.EnableHeadersVisualStyles = false;
             dgvDestibar.ImeMode = ImeMode.NoControl;
             dgvDestibar.Location = new Point(12, 390);
             dgvDestibar.Name = "dgvDestibar";
             dgvDestibar.ReadOnly = true;
             dgvDestibar.RowHeadersVisible = false;
-            dgvDestibar.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvDestibar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDestibar.Size = new Size(988, 238);
             dgvDestibar.TabIndex = 17;
+            // 
+            // lblPosicionMix
+            // 
+            lblPosicionMix.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblPosicionMix.AutoSize = true;
+            lblPosicionMix.Location = new Point(443, 307);
+            lblPosicionMix.Name = "lblPosicionMix";
+            lblPosicionMix.Size = new Size(109, 15);
+            lblPosicionMix.TabIndex = 50;
+            lblPosicionMix.Text = "Posición al mixtear:";
+            // 
+            // cboPosicionMix
+            // 
+            cboPosicionMix.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cboPosicionMix.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPosicionMix.Location = new Point(551, 303);
+            cboPosicionMix.Name = "cboPosicionMix";
+            cboPosicionMix.Size = new Size(225, 23);
+            cboPosicionMix.TabIndex = 51;
             // 
             // FrmMixtearPallets
             // 
@@ -319,22 +348,27 @@
             Controls.Add(btnQuitPallet);
             Controls.Add(btnReestibar);
             Controls.Add(btnQuitarMix);
+            Controls.Add(btnAsistido);
             Controls.Add(btnReconfigurar);
             Controls.Add(dgvPallets);
             Controls.Add(btnGuardar);
-            Controls.Add(label1);
             Controls.Add(txbBoxesStow);
-            Controls.Add(label2);
             Controls.Add(txbBoxesMax);
             Controls.Add(label3);
             Controls.Add(btnAddToUp);
             Controls.Add(button1);
             Controls.Add(btnQuitarDes);
             Controls.Add(dgvDestibar);
+            Controls.Add(cboPosicionMix);
+            Controls.Add(label1);
+            Controls.Add(label2);
+            Controls.Add(lblPosicionMix);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(900, 680);
             Name = "FrmMixtearPallets";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mixtear Pallets en Estiba";
+            FormClosing += FrmMixtearPallets_FormClosing;
             Load += FrmMixtearPallets_Load;
             ((System.ComponentModel.ISupportInitialize)dgvPallets).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDestibar).EndInit();
@@ -361,9 +395,12 @@
         private Label        label2;
         private Label        label3;
         private Button       btnQuitarMix;
-        private Button       btnAddToUp;
-        private Button       button1;
-        private Button       btnQuitarDes;
-        public  DataGridView dgvDestibar;
+        private Button           btnAsistido;
+        private Button           btnAddToUp;
+        private Button           button1;
+        private Button           btnQuitarDes;
+        public  DataGridView     dgvDestibar;
+        private Label            lblPosicionMix;
+        private ComboBox         cboPosicionMix;
     }
 }

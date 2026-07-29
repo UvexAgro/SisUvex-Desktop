@@ -68,25 +68,44 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			cls.EjecutarCalculoProduccion();
 		}
-
-		private void btnFestivos_Click(object sender, EventArgs e)
+		private void btnGuardar_Click(object sender, EventArgs e)
 		{
-			DateTime fecha = dtpFecha.Value;
+			cls.GuardarCambiosSueldos();
+		}
 
-			if (!clsF.EsFestivo(fecha))
-			{
-				MessageBox.Show("No es un día festivo.");
+		private void dgvEmployee_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0)
 				return;
-			}
-			FrmFestivo frmFestivo = new FrmFestivo();
 
-			if (frmFestivo.ShowDialog() == DialogResult.OK)
+			if (dgvEmployee.Columns[e.ColumnIndex].Name != "SueldoTotal")
+				return;
+
+			DataGridViewCell cell = dgvEmployee.Rows[e.RowIndex].Cells["SueldoTotal"];
+
+			decimal original = Convert.ToDecimal(cell.Tag);
+			decimal nuevo = Convert.ToDecimal(cell.Value);
+
+			if (original != nuevo)
 			{
-				TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
+				cell.Style.BackColor = System.Drawing.Color.FromArgb(255, 248, 200);
+				cell.Style.SelectionBackColor = System.Drawing.Color.FromArgb(255, 248, 200);
 
+				cell.Style.ForeColor = System.Drawing.Color.Red;
+				cell.Style.SelectionForeColor = System.Drawing.Color.Red;
+
+				cell.Style.Font = new Font(dgvEmployee.Font, FontStyle.Bold);
 			}
+			else
+			{
+				cell.Style.BackColor = System.Drawing.Color.White;
+				cell.Style.SelectionBackColor = dgvEmployee.DefaultCellStyle.SelectionBackColor;
 
-			clsF.BtnCargarDatos();
+				cell.Style.ForeColor = System.Drawing.Color.Black;
+				cell.Style.SelectionForeColor = dgvEmployee.DefaultCellStyle.SelectionForeColor;
+
+				cell.Style.Font = dgvEmployee.Font;
+			}
 		}
 	}
 }

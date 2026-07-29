@@ -31,6 +31,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                 cls.printManifest = chbPrintManifest.Checked;
                 cls.printMaping = chbPrintMaping.Checked;
                 cls.printPackingList = chbPrintPackingList.Checked;
+                cls.printManifestPerFarm = chbPrintManifestPerFarm.Checked;
+                cls.printShowSize = chbShowSize.Checked;
+                cls.printExcelLayout = chbExcelLayout.Checked;
                 cls.transportVehicle = cboTransportVehicle.Text;
                 cls.transportTransportType = cboTransportType.Text;
 
@@ -72,6 +75,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
             chbPrintManifest.Checked = cls.printManifest;
             chbPrintMaping.Checked = cls.printMaping;
             chbPrintPackingList.Checked = cls.printPackingList;
+            chbPrintManifestPerFarm.Checked = cls.printManifestPerFarm;
+            chbShowSize.Checked = cls.printShowSize;
+            chbExcelLayout.Checked = cls.printExcelLayout;
             cboTransportVehicle.Text = cls.transportVehicle;
             cboTransportType.Text = cls.transportTransportType;
 

@@ -61,4 +61,33 @@ internal static class ClsQuerysUsuarios
 
         return dato;
     }
+
+    public static DataTable ExecuteParameterizedQuery(string query, Dictionary<string, object> parameters)
+    {
+        DataTable dataTable = new();
+        SQLControl sql = new();
+        try
+        {
+            sql.OpenConectionRead();
+            SqlCommand cmd = new(query, sql.cnn);
+
+            foreach (var param in parameters)
+            {
+                cmd.Parameters.AddWithValue(param.Key, param.Value);
+            }
+
+            SqlDataAdapter dataAdapter = new(cmd);
+            dataAdapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.ToString(), "Consulta parametrizada (base de usuarios)");
+        }
+        finally
+        {
+            sql.CloseConectionRead();
+        }
+
+        return dataTable;
+    }
 }

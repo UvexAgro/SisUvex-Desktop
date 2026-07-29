@@ -1,0 +1,1274 @@
+version=1
+
+# This file caches language service data to improve the performance of C# Dev Kit.
+# It is not intended for manual editing. It can safely be deleted and will be
+# regenerated automatically. For more information, see https://aka.ms/lscache
+#
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
+
+[project]
+language=C#
+primary
+lastDtbSucceeded
+
+[properties]
+AssemblyName=SisUvex
+CommandLineArgsForDesignTimeEvaluation=-langversion:12.0 -define:TRACE
+CompilerGeneratedFilesOutputPath=
+MaxSupportedLangVersion=12.0
+ProjectAssetsFile=<PATH>obj/project.assets.json
+RootNamespace=SisUvex
+RunAnalyzers=
+RunAnalyzersDuringLiveAnalysis=
+SolutionPath=<PATH>../SisUvex.sln
+TargetFrameworkIdentifier=.NETCoreApp
+TargetPath=<PATH>bin/Debug/net8.0-windows/SisUvex.dll
+TargetRefPath=<PATH>obj/Debug/net8.0-windows/ref/SisUvex.dll
+TemporaryDependencyNodeTargetIdentifier=net8.0-windows
+
+[commandLineArguments]
+/noconfig
+/unsafe-
+/checked-
+/nowarn:1701,1702,1701,1702,8002
+/fullpaths
+/nostdlib+
+/errorreport:prompt
+/warn:8
+/define:TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+/highentropyva+
+/nullable:enable
+/debug+
+/debug:full
+/filealign:512
+/optimize-
+/out:obj\Debug\net8.0-windows\SisUvex.dll
+/refout:obj\Debug\net8.0-windows\refint\SisUvex.dll
+/target:winexe
+/warnaserror-
+/utf8output
+/win32icon:uvexvertical.ico
+/deterministic+
+/langversion:12.0
+/warnaserror+:NU1605,SYSLIB0011
+
+[sourceFiles]
+Archivo/Desestibar/
+ ClsDesestibar.cs
+ FrmDesestibar.cs
+ FrmDesestibar.Designer.cs
+Archivo/Etiquetas/CajaEmpleado/
+ ClsCajaEmpleado.cs
+ FrmCajaEmpleado.cs
+ FrmCajaEmpleado.Designer.cs
+Archivo/Etiquetas/
+ FrmEtiquetas.cs
+ FrmEtiquetas.Designer.cs
+ LabelInterface/
+  IPallet.cs
+  IPti.cs
+  IZPLstring.cs
+  LabelEmployeeCode.cs
+  LabelEmployeeUniqueBox.cs
+  LabelPti.cs
+  LabelZebra.cs
+  UniqueBox.cs
+ NombreYCodigo2x1/
+  ClsNombreYCodigo2x1.cs
+  FrmNombreYCodigo2x1.cs
+  FrmNombreYCodigo2x1.Designer.cs
+ PrintLabels/
+  ClsGenerateStringZplPalletTag.cs
+  ClsGenerateSuperStringTagPti.cs
+  ClsPalletCreate.cs
+  ClsPrintLabelsPtiPallets.cs
+  ClsPrintManifestPalletsList.cs
+  ClsPrintPtiTag.cs
+  ClsReprintPallet.cs
+  ClsUniqueBox.cs
+  ETagInfo.cs
+  FrmPrintLabelsPtiPallets.cs
+  FrmPrintLabelsPtiPallets.Designer.cs
+  FrmPrintManifestPallets.cs
+  FrmPrintManifestPallets.Designer.cs
+  FrmRePrintPallet.cs
+  FrmRePrintPallet.Designer.cs
+ PrintPallet.cs
+ PruebasEtiquetasTextoZPL.cs
+ PruebasEtiquetasTextoZPL.Designer.cs
+ TagHelper.cs
+ WorkPlanData/
+  ChooseWorkPlan.cs
+  GetDataWorkPlan.cs
+Archivo/Manifiesto/
+ ClsManifest.cs
+ ClsManifestExcelLayout.cs
+ ClsManifestPalletList.cs
+ ClsPDFLoadingMap.cs
+ ClsPDFManifiesto.cs
+ ClsPDFPackingList.cs
+ ClsPruebaManifiesto.cs
+ ClsQueryLoadingMap.cs
+ ClsQueryManifest.cs
+ ConfManifest/
+  ClsConfigManifest.cs
+  FrmConfManifest.cs
+  FrmConfManifest.Designer.cs
+ EManifest.cs
+ FrmManifestAdd.cs
+ FrmManifestAdd.Designer.cs
+ FrmManifestCat.cs
+ FrmManifestCat.Designer.cs
+ FrmManifestOptionRemove.cs
+ FrmManifestOptionRemove.Designer.cs
+ ManifestTemplates/
+  ClsManifestTemplates.cs
+  EManifestTemplate.cs
+  FrmManifestTemplatesAdd.cs
+  FrmManifestTemplatesAdd.Designer.cs
+  FrmManifestTemplatesCat.cs
+  FrmManifestTemplatesCat.Designer.cs
+ PalletsManifiesto.Designer.cs
+ TotalesManifiesto.Designer.cs
+Archivo/Mixteada/
+ ClsMixteado.cs
+ FrmMixteado.cs
+ FrmMixteado.Designer.cs
+Archivo/MixtearPallets/
+ ClsMixtearPallets.cs
+ EMixtearPallets.cs
+ FrmMixtearPallets.cs
+ FrmMixtearPallets.Designer.cs
+ FrmReestibaPallet.cs
+ FrmReestibaPallet.Designer.cs
+Archivo/Reestibado/
+ ClsReestibado.cs
+ FrmReestibado.cs
+ FrmReestibado.Designer.cs
+Archivo/RegistroMaterial/
+ ClsRegistroMaterial.cs
+ FrmRegistroMaterial.cs
+ FrmRegistroMaterial.Designer.cs
+ FrmRegistroMaterialCat.cs
+ FrmRegistroMaterialCat.Designer.cs
+ LoadDataRegistroMaterial.cs
+Archivo/WorkPlan/
+ ClsVoicePickCode.cs
+ ClsWorkPlan.cs
+ ClsWorkPlanEventsControls.cs
+ ConvertPallet/
+  ClsConvertPallet.cs
+  FrmConvertPallet.cs
+  FrmConvertPallet.Designer.cs
+ EworkPlan.cs
+ FrmWorkPlanAdd.cs
+ FrmWorkPlanAdd.Designer.cs
+ FrmWorkPlanCat.cs
+ FrmWorkPlanCat.Designer.cs
+Assets/Vehicle/Vehicle/
+ ClsVehicle.cs
+ EVehicle.cs
+ FrmVehicleAdd.cs
+ FrmVehicleAdd.Designer.cs
+ FrmVehicleCat.cs
+ FrmVehicleCat.Designer.cs
+Assets/Vehicle/VehicleType/
+ ClsVehicleType.cs
+ EVehicleType.cs
+ FrmVehicleTypeAdd.cs
+ FrmVehicleTypeAdd.Designer.cs
+ FrmVehicleTypeCat.cs
+ FrmVehicleTypeCat.Designer.cs
+Catalogos/AgenciaAduanal/
+ ClsAgenciaAduanal.cs
+ FrmAgenciaAduanalAñadir.cs
+ FrmAgenciaAduanalAñadir.Designer.cs
+ FrmAgenciaAduanalCat.cs
+ FrmAgenciaAduanalCat.Designer.cs
+Catalogos/Categoría/
+ ClsCategoria.cs
+ ECategoría.cs
+ FrmCategoriaAñadir.cs
+ FrmCategoriaAñadir.Designer.cs
+ FrmCategoriaCat.cs
+ FrmCategoriaCat.Designer.cs
+Catalogos/Ciudad/
+ ClsCiudad.cs
+ FrmCiudadAñadir.cs
+ FrmCiudadAñadir.Designer.cs
+ FrmCiudadCat.cs
+ FrmCiudadCat.Designer.cs
+Catalogos/
+ ClsCatalogos.cs
+ Consignee/
+  ClsConsignee.cs
+  EConsignee.cs
+  FrmConsigneeAdd.cs
+  FrmConsigneeAdd.Designer.cs
+  FrmConsigneeCat.cs
+  FrmConsigneeCat.Designer.cs
+ Container/
+  ClsContainer.cs
+  EContainer.cs
+  FrmContainerAdd.cs
+  FrmContainerAdd.Designer.cs
+  FrmContainerCat.cs
+  FrmContainerCat.Designer.cs
+ Contratista/
+  ClsContratista.cs
+  FrmContratistaAñadir.cs
+  FrmContratistaAñadir.Designer.cs
+  FrmContratistaCat.cs
+  FrmContratistaCat.Designer.cs
+ Distributor/
+  ClsDistributor.cs
+  EDistributor.cs
+  FrmDistributorAdd.cs
+  FrmDistributorAdd.Designer.cs
+  FrmDistributorCat.cs
+  FrmDistributorCat.Designer.cs
+ Driver/
+  ClsDriver.cs
+  EDriver.cs
+  FrmDriverAdd.cs
+  FrmDriverAdd.Designer.cs
+  FrmDriverCat.cs
+  FrmDriverCat.Designer.cs
+ FechasFestivas/
+  ClsCatFestivo.cs
+  ClsDiasFestivos.cs
+  FrmCatFestivo.cs
+  FrmCatFestivo.Designer.cs
+  FrmDiasFestivos.cs
+  FrmDiasFestivos.Designer.cs
+ FreightContainer/
+  ClsFreightContainer.cs
+  EFreightContainer.cs
+  FrmFreightContainerAdd.cs
+  FrmFreightContainerAdd.Designer.cs
+  FrmFreightContainerCat.cs
+  FrmFreightContainerCat.Designer.cs
+ GTIN-UPC/
+  ClsGTIN.cs
+  Egtin.cs
+  FrmGtinAdd.cs
+  FrmGtinAdd.Designer.cs
+  FrmGTINCat.cs
+  FrmGTINCat.Designer.cs
+ Lot/
+  ClsLot.cs
+  ELot.cs
+  FrmLotAdd.cs
+  FrmLotAdd.Designer.cs
+  FrmLotCat.cs
+  FrmLotCat.Designer.cs
+ Metods/
+  Buttons/ClsButtons.cs
+  CheckBoxes/ClsCheckBoxes.cs
+  ClsObject.cs
+  ComboBoxes/
+   ClsComboBoxes.cs
+   ClsComboBoxesFiles.cs
+  Controls/ClsControls.cs
+  DataGridViews/
+   ClsDataGridViewCatalogs.cs
+   ClsDGVCatalog.cs
+  ExcelLoad/
+   ClsExcel.cs
+   ExcelDocument.cs
+  Extentions/
+   ComboBoxExtensions.cs
+   DataTableExtentions.cs
+  Forms/BigResult/
+   FrmBigResultText.cs
+   FrmBigResultText.Designer.cs
+  Forms/SelectionForms/SelectCellDataGridView/
+   ClsSelectionForm.cs
+   FrmSelectCellDataGridView.cs
+   FrmSelectCellDataGridView.Designer.cs
+  Images/
+   ClsImageCatalog.cs
+   ClsImages.cs
+  Querys/ClsQuerysDB.cs
+  TextBoxes/ClsTextBoxes.cs.cs
+  Values/ClsValues.cs
+ Nom Deducciones/
+  ClsAddDeducciones.cs
+  ClsDeducciones.cs
+  FrmAddDeducciones.cs
+  FrmAddDeducciones.Designer.cs
+  FrmDeduccion.cs
+  FrmDeduccion.Designer.cs
+ Nomina/LOAD/
+  ClsNomina.cs
+  LNOMINA/TextBoxUtils.cs
+  LoadData.cs
+  LoadRepCom.cs
+ Nomina/
+  REPORTECOMEDOR.cs
+  REPORTECOMEDOR.Designer.cs
+  UExcel.cs
+  UExcel.Designer.cs
+ Presentacion/
+  ClsPresentation.cs
+  EPresentacion.cs
+  FrmPresentationAdd.cs
+  FrmPresentationAdd.Designer.cs
+  FrmPresentationCat.cs
+  FrmPresentationCat.Designer.cs
+ Productor/
+  ClsProductor.cs
+  FrmProductorAñadir.cs
+  FrmProductorAñadir.Designer.cs
+  FrmProductorCat.cs
+  FrmProductorCat.Designer.cs
+ Tamaño/
+  ClsTamaño.cs
+  FrmTamañoAñadir.cs
+  FrmTamañoAñadir.Designer.cs
+  FrmTamañoCat.cs
+  FrmTamañoCat.Designer.cs
+ TransportLine/
+  ClsTransportLine.cs
+  ETransportLine.cs
+  FrmTransportLineAdd.cs
+  FrmTransportLineAdd.Designer.cs
+  FrmTransportLineCat.cs
+  FrmTransportLineCat.Designer.cs
+ Truck/
+  ClsTruck.cs
+  ETruck.cs
+  FrmTruckAdd.cs
+  FrmTruckAdd.Designer.cs
+  FrmTruckCat.cs
+  FrmTruckCat.Designer.cs
+ Variety/
+  ClsVariety.cs
+  EVariety.cs
+  FrmVarietyAdd.cs
+  FrmVarietyAdd.Designer.cs
+  FrmVarietyCat.cs
+  FrmVarietyCat.Designer.cs
+ WorkGroup/
+  ClsWorkGroup.cs
+  EWorkGroup.cs
+  FrmWorkGroupAdd.cs
+  FrmWorkGroupAdd.Designer.cs
+  FrmWorkGroupCat.cs
+  FrmWorkGroupCat.Designer.cs
+Configuracion/
+ ClsConfig.cs
+ ClsConfPrinter.cs
+ ClsXmlArchivos.cs
+ ClsXmlCreate.cs
+ ClsXmlPrinter.cs
+ FrmConfiguracion.cs
+ FrmConfiguracion.Designer.cs
+ FrmSetupPrint.cs
+ FrmSetupPrint.Designer.cs
+ Parameters/
+  ClsParameterParser.cs
+  ClsParameters.cs
+  EParameters.cs
+  FrmParametersAdd.cs
+  FrmParametersAdd.Designer.cs
+  FrmParametersCat.cs
+  FrmParametersCat.Designer.cs
+ PrintersSetUp.cs
+ SeasonClose/
+  FrmSeasonClose.cs
+  FrmSeasonClose.Designer.cs
+Consultas/Manifest/
+ ClsManifestQuery.cs
+ FrmManifestQuery.cs
+ FrmManifestQuery.Designer.cs
+ QueryPerManifest/
+  ClsQueryPerManifest.cs
+  FrmQueryPerManifest.cs
+  FrmQueryPerManifest.Designer.cs
+Consultas/Pallets/
+ ClsPalletConsulta.cs
+ FrmPalletConsulta.cs
+ FrmPalletConsulta.Designer.cs
+ FrmPapeleta.cs
+ FrmPapeleta.Designer.cs
+Crc16.cs
+Cuadro de herramientas/
+ Colors/ColorUvex.cs
+ Loading/
+  FormConfGrapeLoading.cs
+  FormConfGrapeLoading.Designer.cs
+  GrapeLoadingControl .cs
+ ToggleButton/ToggleButton .cs
+ ZPL/
+  ClsZplPreview.cs
+  FrmZPLPreview.cs
+  FrmZPLPreview.Designer.cs
+DesertGhost/
+ FrmAddEmployees.cs
+ FrmAddEmployees.Designer.cs
+Extensiones.cs
+Facility/FaciIityPackagingTracking/Catalog/
+ ClsFaciIityPackagingTracking.cs
+ EFaciIityPackagingTracking.cs
+ FrmFaciIityPackagingTrackingAdd.cs
+ FrmFaciIityPackagingTrackingAdd.Designer.cs
+ FrmFaciIityPackagingTrackingCat.cs
+ FrmFaciIityPackagingTrackingCat.Designer.cs
+FrmConection.Designer.cs
+FrmMenu.cs
+FrmMenu.Designer.cs
+Grow/PlantsLotTotals/
+ ClsPlantsLotTotals.cs
+ FrmPlantsLotTotals.cs
+ FrmPlantsLotTotals.Designer.cs
+Grow/PlantsRowLotLoadExcel/
+ ClsPlantsRowLotLoadExcel.cs
+ FrmPlantsRowLotLoadExcel.cs
+ FrmPlantsRowLotLoadExcel.Designer.cs
+Grow/PlantsRowLotView/
+ ClsExcelPlantsRowLotView.cs
+ ClsPlantsRowLotView.cs
+ FrmPlantsRowLotView.cs
+ FrmPlantsRowLotView.Designer.cs
+Grow/RootStock/
+ ClsRootStock.cs
+ FrmRootStock.cs
+ FrmRootStock.Designer.cs
+Inicio/
+ PantallaCarga.cs
+ PantallaCarga.Designer.cs
+Material/MaterialCatalog/
+ ClsMaterialCatalog.cs
+ EMaterialCatalog.cs
+ FrmMaterialAdd.cs
+ FrmMaterialAdd.Designer.cs
+ FrmMaterialCatalog.cs
+ FrmMaterialCatalog.Designer.cs
+Material/MaterialForeignDest/
+ ClsMaterialForeignDest.cs
+ EMaterialForeignDest.cs
+ FrmMaterialForeignDestAdd.cs
+ FrmMaterialForeignDestAdd.Designer.cs
+ FrmMaterialForeignDestCat.cs
+ FrmMaterialForeignDestCat.Designer.cs
+Material/MaterialProvider/
+ ClsMaterialProvider.cs
+ EMaterialProvider.cs
+ FrmMaterialProviderAdd.cs
+ FrmMaterialProviderAdd.Designer.cs
+ FrmMaterialProviderCat.cs
+ FrmMaterialProviderCat.Designer.cs
+Material/MaterialRegister/Entry/
+ ClsMaterialRegisterEntry.cs
+ EMaterialRegisterEntry.cs
+ FrmMaterialRegisterEntry.cs
+ FrmMaterialRegisterEntry.Designer.cs
+ FrmMaterialRegisterEntryCat.cs
+ FrmMaterialRegisterEntryCat.Designer.cs
+Material/MaterialRegister/Exit/
+ ClsMaterialRegisterExit.cs
+ EMaterialRegisterExit.cs
+ FrmMaterialRegisterExit.cs
+ FrmMaterialRegisterExit.Designer.cs
+ FrmMaterialRegisterExitCat.cs
+ FrmMaterialRegisterExitCat.Designer.cs
+Material/MaterialRegister/FieldExit/
+ ClsMaterialRegisterFieldExit.cs
+ FrmMaterialRegisterFieldExit.cs
+ FrmMaterialRegisterFieldExit.Designer.cs
+ FrmMaterialRegisterFieldExitCat.cs
+ FrmMaterialRegisterFieldExitCat.Designer.cs
+Material/MaterialReports/Inventory/
+ ClsMaterialReportInventory.cs
+ FrmMaterialReportInventory.cs
+ FrmMaterialReportInventory.Designer.cs
+Material/MaterialType/
+ ClsMaterialType.cs
+ EMaterialType.cs
+ FrmMaterialTypeAdd.cs
+ FrmMaterialTypeAdd.Designer.cs
+ FrmMaterialTypeCat.cs
+ FrmMaterialTypeCat.Designer.cs
+Material/MaterialWarehouses/
+ ClsMaterialWareHouses.cs
+ EMaterialWareHouse.cs
+ FrmMaterialWarehousesAdd.cs
+ FrmMaterialWarehousesAdd.Designer.cs
+ FrmMaterialWareHousesCat.cs
+ FrmMaterialWareHousesCat.Designer.cs
+Nomina/Actualizar datos empelado/
+ FrmActualizarDatosEmpleados.cs
+ FrmActualizarDatosEmpleados.Designer.cs
+Nomina/Actualizar empleados/
+ FrmActualizarEmpleados.cs
+ FrmActualizarEmpleados.Designer.cs
+Nomina/Asistencia contrato/Consulta/
+ ClsExcelPayrollAttendance.cs
+ ClsPayrollAttendance.cs
+ FrmPayrollAttendance.cs
+ FrmPayrollAttendance.Designer.cs
+Nomina/Asistencia de empaque/
+ ClsAsistenciaEmpaque.cs
+ ClsAsistenciaEmpaqueEmpleado.cs
+ ClsAsistenciaEmpaqueNuevo.cs
+ ClsAsistenciaEmpaqueVista.cs
+ FrmAsistenciaEmpaque.cs
+ FrmAsistenciaEmpaque.Designer.cs
+ FrmAsistenciaEmpaqueEmpleado.cs
+ FrmAsistenciaEmpaqueEmpleado.Designer.cs
+ FrmAsistenciaEmpaqueNuevo.cs
+ FrmAsistenciaEmpaqueNuevo.Designer.cs
+ FrmAsistenciaEmpaqueVista.cs
+ FrmAsistenciaEmpaqueVista.Designer.cs
+ FrmInstruccionesExcelAsistencia.cs
+ FrmInstruccionesExcelAsistencia.Designer.cs
+Nomina/
+ ClsSearchEmployees.cs
+ Comedores/DiningHall/
+  ClsDiningHall.cs
+  EDiningHall.cs
+  FrmDiningHallAdd.cs
+  FrmDiningHallAdd.Designer.cs
+  FrmDiningHallCat.cs
+  FrmDiningHallCat.Designer.cs
+ Comedores/DiningReports/AbsenceReport/
+  FrmAbsenceReport.cs
+  FrmAbsenceReport.Designer.cs
+ Comedores/DiningReports/
+  ClsDiningReports.cs
+  FrmDiningReport.cs
+  FrmDiningReport.Designer.cs
+ Comedores/EmployeeDiningHallAssignment/
+  ClsEmployeeDiningHallAssignment.cs
+  FrmEmployeeDiningHallAsingment.cs
+  FrmEmployeeDiningHallAsingment.Designer.cs
+ Comedores/Registers/SyncRegisters/
+  FrmSyncRegisters.cs
+  FrmSyncRegisters.Designer.cs
+ Conceptos Ingresos Diversos/
+  CatConcepto.cs
+  FrmAdd.cs
+  FrmAdd.Designer.cs
+  FrmIncomeConcepts.cs
+  FrmIncomeConcepts.Designer.cs
+  IncomeConcepts.cs
+ CONTRATO/PayrollPack_BoxPerNumber/BoxPerNumberReport/
+  ClsPayrollBoxPerNumberReport.cs
+  ClsPayrollBoxPerNumberReportExcel.cs
+  FrmPayrollBoxPerNumberReport.cs
+  FrmPayrollBoxPerNumberReport.Designer.cs
+ EmployeeCredentials/
+  ClsCredentials.cs
+  FrmCredentials.cs
+  FrmCredentials.Designer.cs
+ Ingresos Diversos/
+  ClsDeducciones.cs
+  ClsIngresosDiversos.cs
+  FrmAddIngresos.cs
+  FrmAddIngresos.Designer.cs
+  FrmDeducciones.cs
+  FrmDeducciones.Designer.cs
+  FrmListaAsitencia.cs
+  FrmListaAsitencia.Designer.cs
+ Nom Descuento de personal/
+  ClsAddDesc.cs
+  ClsDescuento.cs
+  FrmAddDesc.cs
+  FrmAddDesc.Designer.cs
+  FrmDescuento.cs
+  FrmDescuento.Designer.cs
+ Nom Reporte de sueldos diarios/
+  ClsNomSemana.cs
+  FrmNomsemana.cs
+  FrmNomsemana.Designer.cs
+ Nom semAutomatizada/
+  ClsFestivo.cs
+  ClsSemiAutomatedPayroll.cs
+  FrmFestivo.cs
+  FrmFestivo.Designer.cs
+  FrmSemiAutomatedPayroll.cs
+  FrmSemiAutomatedPayroll.Designer.cs
+ NomTabulador/
+  ClsAddTabulador.cs
+  ClsNomTabuladorCat.cs
+  FrmAddTabulador.cs
+  FrmAddTabulador.Designer.cs
+  FrmNomTabulador.cs
+  FrmNomTabulador.Designer.cs
+ Padron/SUA/
+  ClsSuaConfig.cs
+  ClsSUALoad.cs
+  FrmNSSDuplicates.cs
+  FrmNSSDuplicates.Designer.cs
+  FrmSuaConfigCat.cs
+  FrmSuaConfigCat.Designer.cs
+  FrmSUALoad.cs
+  FrmSUALoad.Designer.cs
+ PlacePaymentLP/
+  ClsPlacePayment.cs
+  EPlacePayment.cs
+  FrmPlacePaymentAdd.cs
+  FrmPlacePaymentAdd.Designer.cs
+  FrmPlacePaymentCat.cs
+  FrmPlacePaymentCat.Designer.cs
+ Poda/Reporte lineas/
+  ClsPayrollPruningReport.cs
+  FrmPayrollPruningReport.cs
+  FrmPayrollPruningReport.Designer.cs
+ Prices/Prices/
+  ClsPrices.cs
+  EPrices.cs
+  FrmPricesAdd.cs
+  FrmPricesAdd.Designer.cs
+  FrmPricesCat.cs
+  FrmPricesCat.Designer.cs
+ Prices/PricesGtin/
+  ClsPricesGtin.cs
+  EPricesGtin.cs
+  FrmPricesGtinAdd.cs
+  FrmPricesGtinAdd.Designer.cs
+  FrmPricesGtinCat.cs
+  FrmPricesGtinCat.Designer.cs
+ Registration/NewEmployeeRegistrationSA/
+  ClsNewEmployeeRegisrationMin.cs
+  FrmNewEmployeeRegistrationMin.cs
+  FrmNewEmployeeRegistrationMin.Designer.cs
+ Registro de Asistencia/
+  ClsManual.cs
+  ClsRegistroA.cs
+  FrmRegistroA.cs
+  FrmRegistroA.Designer.cs
+ Reporte de Asistencia/
+  ClsDgvAsistncia.cs
+  ClsRasistencia.cs
+  FrmAsistenciaR.cs
+  FrmAsistenciaR.Designer.cs
+ Reporte de Emp UVA/
+  ClsUva.cs
+  FrmUva.cs
+  FrmUva.Designer.cs
+ Reporte de Empacador/
+  ClsPackersReport.cs
+  FrmPackersReport.cs
+  FrmPackersReport.Designer.cs
+ Reporte de horas/
+  ClsAñadir.cs
+  ClSPackingHours.cs
+  FrmAñadir.cs
+  FrmAñadir.Designer.cs
+  FrmPackingHours.cs
+  FrmPackingHours.Designer.cs
+ Work time/
+  ClsWorkTime.cs
+  EWorkTime.cs
+  FrmBoxesPackedPerEmployee.cs
+  FrmBoxesPackedPerEmployee.Designer.cs
+  FrmWorkTimeAdd.cs
+  FrmWorkTimeAdd.Designer.cs
+  FrmWorkTimeCat.cs
+  FrmWorkTimeCat.Designer.cs
+  PDFPackedReport/ClsEmployeeBoxesReport.cs
+obj/Debug/net8.0-windows/
+ .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+ SisUvex.AssemblyInfo.cs
+ SisUvex.GlobalUsings.g.cs
+Operacion Factor/
+ ClsFactor.cs
+ FrmFactor.cs
+ FrmFactor.Designer.cs
+Operacion/
+ ClsCajasGranelRegistro.cs
+ FrmCajasGranelRegistro.cs
+ FrmCajasGranelRegistro.Designer.cs
+ FrmCajasGranelRegistroCat.cs
+ FrmCajasGranelRegistroCat.Designer.cs
+Packing/Maintenance/
+ FrmPackingMaintenance.cs
+ FrmPackingMaintenance.Designer.cs
+Program.cs
+Properties/
+ PrintSettings.cs
+ Resources.Designer.cs
+ Settings.Designer.cs
+RawPrinterHelper.cs
+Reports/
+ JulianDate.cs
+ palletTag.cs
+ PrintPalletBox.cs
+ PrintPalletBox.Designer.cs
+ PrintProgram.cs
+ PrintProgram.Designer.cs
+ PTIAlbertsons.cs
+ PTITag.cs
+Settings.cs
+SQLControl.cs
+Usuarios/
+ ClsQuerysUsuarios.cs
+ CreacionUsuario.cs
+ CreacionUsuario.Designer.cs
+ FrmLogin.cs
+ FrmLogin.Designer.cs
+ Role/
+  ClsUserRole.cs
+  EUserRole.cs
+  FrmUserRoleAdd.cs
+  FrmUserRoleAdd.Designer.cs
+  FrmUserRoleCat.cs
+  FrmUserRoleCat.Designer.cs
+ UserCrud/
+  ClsUserCrud.cs
+  EUserCrud.cs
+  FrmUserAdd.cs
+  FrmUserAdd.Designer.cs
+  FrmUserCat.cs
+  FrmUserCat.Designer.cs
+  FrmUserChangePass.cs
+  FrmUserChangePass.Designer.cs
+  FrmUserConfirmPass.cs
+  FrmUserConfirmPass.Designer.cs
+ Usuario.cs
+
+[metadataReferences]
+<DOTNET>/packs/Microsoft.NETCore.App.Ref/8.0.27/ref/net8.0/
+ Microsoft.CSharp.dll
+ Microsoft.VisualBasic.Core.dll
+ Microsoft.Win32.Primitives.dll
+ Microsoft.Win32.Registry.dll
+ mscorlib.dll
+ netstandard.dll
+ System.AppContext.dll
+ System.Buffers.dll
+ System.Collections.Concurrent.dll
+ System.Collections.dll
+ System.Collections.Immutable.dll
+ System.Collections.NonGeneric.dll
+ System.Collections.Specialized.dll
+ System.ComponentModel.Annotations.dll
+ System.ComponentModel.DataAnnotations.dll
+ System.ComponentModel.dll
+ System.ComponentModel.EventBasedAsync.dll
+ System.ComponentModel.Primitives.dll
+ System.ComponentModel.TypeConverter.dll
+ System.Configuration.dll
+ System.Console.dll
+ System.Core.dll
+ System.Data.Common.dll
+ System.Data.DataSetExtensions.dll
+ System.Data.dll
+ System.Diagnostics.Contracts.dll
+ System.Diagnostics.Debug.dll
+ System.Diagnostics.DiagnosticSource.dll
+ System.Diagnostics.FileVersionInfo.dll
+ System.Diagnostics.Process.dll
+ System.Diagnostics.StackTrace.dll
+ System.Diagnostics.TextWriterTraceListener.dll
+ System.Diagnostics.Tools.dll
+ System.Diagnostics.TraceSource.dll
+ System.Diagnostics.Tracing.dll
+ System.dll
+ System.Drawing.Primitives.dll
+ System.Dynamic.Runtime.dll
+ System.Formats.Asn1.dll
+ System.Formats.Tar.dll
+ System.Globalization.Calendars.dll
+ System.Globalization.dll
+ System.Globalization.Extensions.dll
+ System.IO.Compression.Brotli.dll
+ System.IO.Compression.dll
+ System.IO.Compression.FileSystem.dll
+ System.IO.Compression.ZipFile.dll
+ System.IO.dll
+ System.IO.FileSystem.AccessControl.dll
+ System.IO.FileSystem.dll
+ System.IO.FileSystem.DriveInfo.dll
+ System.IO.FileSystem.Primitives.dll
+ System.IO.FileSystem.Watcher.dll
+ System.IO.IsolatedStorage.dll
+ System.IO.MemoryMappedFiles.dll
+ System.IO.Pipes.AccessControl.dll
+ System.IO.Pipes.dll
+ System.IO.UnmanagedMemoryStream.dll
+ System.Linq.dll
+ System.Linq.Expressions.dll
+ System.Linq.Parallel.dll
+ System.Linq.Queryable.dll
+ System.Memory.dll
+ System.Net.dll
+ System.Net.Http.dll
+ System.Net.Http.Json.dll
+ System.Net.HttpListener.dll
+ System.Net.Mail.dll
+ System.Net.NameResolution.dll
+ System.Net.NetworkInformation.dll
+ System.Net.Ping.dll
+ System.Net.Primitives.dll
+ System.Net.Quic.dll
+ System.Net.Requests.dll
+ System.Net.Security.dll
+ System.Net.ServicePoint.dll
+ System.Net.Sockets.dll
+ System.Net.WebClient.dll
+ System.Net.WebHeaderCollection.dll
+ System.Net.WebProxy.dll
+ System.Net.WebSockets.Client.dll
+ System.Net.WebSockets.dll
+ System.Numerics.dll
+ System.Numerics.Vectors.dll
+ System.ObjectModel.dll
+ System.Reflection.DispatchProxy.dll
+ System.Reflection.dll
+ System.Reflection.Emit.dll
+ System.Reflection.Emit.ILGeneration.dll
+ System.Reflection.Emit.Lightweight.dll
+ System.Reflection.Extensions.dll
+ System.Reflection.Metadata.dll
+ System.Reflection.Primitives.dll
+ System.Reflection.TypeExtensions.dll
+ System.Resources.Reader.dll
+ System.Resources.ResourceManager.dll
+ System.Resources.Writer.dll
+ System.Runtime.CompilerServices.Unsafe.dll
+ System.Runtime.CompilerServices.VisualC.dll
+ System.Runtime.dll
+ System.Runtime.Extensions.dll
+ System.Runtime.Handles.dll
+ System.Runtime.InteropServices.dll
+ System.Runtime.InteropServices.JavaScript.dll
+ System.Runtime.InteropServices.RuntimeInformation.dll
+ System.Runtime.Intrinsics.dll
+ System.Runtime.Loader.dll
+ System.Runtime.Numerics.dll
+ System.Runtime.Serialization.dll
+ System.Runtime.Serialization.Formatters.dll
+ System.Runtime.Serialization.Json.dll
+ System.Runtime.Serialization.Primitives.dll
+ System.Runtime.Serialization.Xml.dll
+ System.Security.AccessControl.dll
+ System.Security.Claims.dll
+ System.Security.Cryptography.Algorithms.dll
+ System.Security.Cryptography.Cng.dll
+ System.Security.Cryptography.Csp.dll
+ System.Security.Cryptography.dll
+ System.Security.Cryptography.Encoding.dll
+ System.Security.Cryptography.OpenSsl.dll
+ System.Security.Cryptography.Primitives.dll
+ System.Security.Cryptography.X509Certificates.dll
+ System.Security.dll
+ System.Security.Principal.dll
+ System.Security.Principal.Windows.dll
+ System.Security.SecureString.dll
+ System.ServiceModel.Web.dll
+ System.ServiceProcess.dll
+ System.Text.Encoding.CodePages.dll
+ System.Text.Encoding.dll
+ System.Text.Encoding.Extensions.dll
+ System.Text.Encodings.Web.dll
+ System.Text.Json.dll
+ System.Text.RegularExpressions.dll
+ System.Threading.Channels.dll
+ System.Threading.dll
+ System.Threading.Overlapped.dll
+ System.Threading.Tasks.Dataflow.dll
+ System.Threading.Tasks.dll
+ System.Threading.Tasks.Extensions.dll
+ System.Threading.Tasks.Parallel.dll
+ System.Threading.Thread.dll
+ System.Threading.ThreadPool.dll
+ System.Threading.Timer.dll
+ System.Transactions.dll
+ System.Transactions.Local.dll
+ System.ValueTuple.dll
+ System.Web.dll
+ System.Web.HttpUtility.dll
+ System.Windows.dll
+ System.Xml.dll
+ System.Xml.Linq.dll
+ System.Xml.ReaderWriter.dll
+ System.Xml.Serialization.dll
+ System.Xml.XDocument.dll
+ System.Xml.XmlDocument.dll
+ System.Xml.XmlSerializer.dll
+ System.Xml.XPath.dll
+ System.Xml.XPath.XDocument.dll
+ WindowsBase.dll
+<DOTNET>/packs/Microsoft.WindowsDesktop.App.Ref/8.0.27/ref/net8.0/
+ Accessibility.dll
+ Microsoft.VisualBasic.dll
+ Microsoft.VisualBasic.Forms.dll
+ Microsoft.Win32.Registry.AccessControl.dll
+ System.CodeDom.dll
+ System.Design.dll
+ System.DirectoryServices.dll
+ System.Drawing.Design.dll
+ System.Drawing.dll
+ System.IO.Packaging.dll
+ System.Resources.Extensions.dll
+ System.Security.Cryptography.Pkcs.dll
+ System.Security.Cryptography.Xml.dll
+ System.Security.Permissions.dll
+ System.Threading.AccessControl.dll
+ System.Windows.Extensions.dll
+ System.Windows.Forms.Design.dll
+ System.Windows.Forms.Design.Editors.dll
+ System.Windows.Forms.dll
+ System.Windows.Forms.Primitives.dll
+<NUGET>/
+ azure.core/1.38.0/lib/net6.0/Azure.Core.dll
+ azure.identity/1.11.4/lib/netstandard2.0/Azure.Identity.dll
+ bcrypt.net-next/4.0.3/lib/net6.0/BCrypt.Net-Next.dll
+ bouncycastle.cryptography/2.4.0/lib/net6.0/BouncyCastle.Cryptography.dll
+ bouncycastle.netcore/2.2.1/lib/netstandard2.0/BouncyCastle.Crypto.dll
+ closedxml.parser/2.0.0/lib/netstandard2.1/ClosedXML.Parser.dll
+ closedxml/0.105.0/lib/netstandard2.1/ClosedXML.dll
+ documentformat.openxml.framework/3.1.1/lib/net8.0/DocumentFormat.OpenXml.Framework.dll
+ documentformat.openxml/3.1.1/lib/net8.0/DocumentFormat.OpenXml.dll
+ enums.net/5.0.0/lib/net7.0/Enums.NET.dll
+ exceldatareader.dataset/3.7.0/lib/netstandard2.1/ExcelDataReader.DataSet.dll
+ exceldatareader/3.7.0/lib/netstandard2.1/ExcelDataReader.dll
+ excelnumberformat/1.1.0/lib/netstandard2.0/ExcelNumberFormat.dll
+ extendednumerics.bigdecimal/2025.1001.2.129/lib/net8.0/ExtendedNumerics.BigDecimal.dll
+ itext.bouncy-castle-adapter/9.0.0/lib/netstandard2.0/itext.bouncy-castle-adapter.dll
+ itext.commons/9.0.0/lib/netstandard2.0/itext.commons.dll
+ itext/9.0.0/lib/netstandard2.0/
+  itext.barcodes.dll
+  itext.bouncy-castle-connector.dll
+  itext.forms.dll
+  itext.io.dll
+  itext.kernel.dll
+  itext.layout.dll
+  itext.pdfa.dll
+  itext.pdfua.dll
+  itext.sign.dll
+  itext.styledxmlparser.dll
+  itext.svg.dll
+ mathnet.numerics.signed/5.0.0/lib/net6.0/MathNet.Numerics.dll
+ microsoft.bcl.asyncinterfaces/1.1.1/ref/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll
+ microsoft.codeanalysis.common/4.11.0/lib/net8.0/Microsoft.CodeAnalysis.dll
+ microsoft.codeanalysis.visualbasic/4.11.0/lib/net8.0/Microsoft.CodeAnalysis.VisualBasic.dll
+ microsoft.data.sqlclient/5.2.2/ref/net8.0/Microsoft.Data.SqlClient.dll
+ microsoft.dotnet.platformabstractions/1.1.0/lib/netstandard1.3/Microsoft.DotNet.PlatformAbstractions.dll
+ microsoft.extensions.dependencyinjection.abstractions/5.0.0/lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+ microsoft.extensions.dependencyinjection/5.0.0/lib/net5.0/Microsoft.Extensions.DependencyInjection.dll
+ microsoft.extensions.dependencymodel/1.1.0/lib/netstandard1.6/Microsoft.Extensions.DependencyModel.dll
+ microsoft.extensions.logging.abstractions/5.0.0/lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll
+ microsoft.extensions.logging/5.0.0/lib/netstandard2.1/Microsoft.Extensions.Logging.dll
+ microsoft.extensions.objectpool/8.0.10/lib/net8.0/Microsoft.Extensions.ObjectPool.dll
+ microsoft.extensions.options/5.0.0/lib/net5.0/Microsoft.Extensions.Options.dll
+ microsoft.extensions.primitives/5.0.0/lib/netcoreapp3.0/Microsoft.Extensions.Primitives.dll
+ microsoft.identity.client.extensions.msal/4.61.3/lib/net6.0/Microsoft.Identity.Client.Extensions.Msal.dll
+ microsoft.identity.client/4.61.3/lib/net6.0/Microsoft.Identity.Client.dll
+ microsoft.identitymodel.abstractions/6.35.0/lib/net6.0/Microsoft.IdentityModel.Abstractions.dll
+ microsoft.identitymodel.jsonwebtokens/6.35.0/lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll
+ microsoft.identitymodel.logging/6.35.0/lib/net6.0/Microsoft.IdentityModel.Logging.dll
+ microsoft.identitymodel.protocols.openidconnect/6.35.0/lib/net6.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+ microsoft.identitymodel.protocols/6.35.0/lib/net6.0/Microsoft.IdentityModel.Protocols.dll
+ microsoft.identitymodel.tokens/6.35.0/lib/net6.0/Microsoft.IdentityModel.Tokens.dll
+ microsoft.io.recyclablememorystream/3.0.1/lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll
+ microsoft.office.interop.excel/15.0.4795.1001/lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll
+ microsoft.reportingservices.reportviewercontrol.webforms/150.1652.0/lib/net40/
+  Microsoft.ReportViewer.Common.dll
+  Microsoft.ReportViewer.DataVisualization.dll
+  Microsoft.ReportViewer.Design.dll
+  Microsoft.ReportViewer.ProcessingObjectModel.dll
+  Microsoft.ReportViewer.WebDesign.dll
+  Microsoft.ReportViewer.WebForms.dll
+ microsoft.sqlserver.server/1.0.0/lib/netstandard2.0/Microsoft.SqlServer.Server.dll
+ microsoft.sqlserver.types/14.0.314.76/lib/net40/Microsoft.SqlServer.Types.dll
+ microsoft.win32.systemevents/9.0.0/lib/net8.0/Microsoft.Win32.SystemEvents.dll
+ newtonsoft.json/13.0.1/lib/netstandard2.0/Newtonsoft.Json.dll
+ npoi/2.7.5/lib/net8.0/
+  NPOI.Core.dll
+  NPOI.OOXML.dll
+  NPOI.OpenXml4Net.dll
+  NPOI.OpenXmlFormats.dll
+ nsax/1.0.2/lib/net6.0/NSax.dll
+ pdfiumviewer.core/1.0.4/lib/netcoreapp3.1/PdfiumViewer.dll
+ rbush.signed/4.0.0/lib/net8.0/RBush.dll
+ reportviewercore.winforms/15.1.29/lib/net8.0-windows7/Microsoft.ReportViewer.WinForms.dll
+ sharpziplib/1.4.2/lib/net6.0/ICSharpCode.SharpZipLib.dll
+ sixlabors.fonts/1.0.1/lib/netcoreapp3.1/SixLabors.Fonts.dll
+ sixlabors.imagesharp/2.1.11/lib/netcoreapp3.1/SixLabors.ImageSharp.dll
+ system.clientmodel/1.0.0/lib/net6.0/System.ClientModel.dll
+ system.configuration.configurationmanager/9.0.2/lib/net8.0/System.Configuration.ConfigurationManager.dll
+ system.data.oledb/9.0.2/lib/net8.0/System.Data.OleDb.dll
+ system.data.sqlclient/4.9.0/lib/net8.0/System.Data.SqlClient.dll
+ system.diagnostics.eventlog/9.0.2/lib/net8.0/System.Diagnostics.EventLog.dll
+ system.diagnostics.performancecounter/9.0.2/lib/net8.0/System.Diagnostics.PerformanceCounter.dll
+ system.drawing.common/9.0.0/lib/net8.0/
+  System.Drawing.Common.dll
+  System.Private.Windows.Core.dll
+ system.identitymodel.tokens.jwt/6.35.0/lib/net6.0/System.IdentityModel.Tokens.Jwt.dll
+ system.memory.data/1.0.2/lib/netstandard2.0/System.Memory.Data.dll
+ system.security.cryptography.protecteddata/9.0.2/lib/net8.0/System.Security.Cryptography.ProtectedData.dll
+ system.servicemodel.http/8.1.0/ref/net8.0/System.ServiceModel.Http.dll
+ system.servicemodel.primitives/8.1.0/ref/net8.0/System.ServiceModel.Primitives.dll
+ zstring/2.6.0/lib/net7.0/ZString.dll
+ zxing.net.bindings.windows.compatibility/0.16.12/lib/net7.0/ZXing.Windows.Compatibility.dll
+ zxing.net/0.16.9/lib/net7.0/zxing.dll
+
+[analyzerReferences]
+<DOTNET>/packs/Microsoft.NETCore.App.Ref/8.0.27/analyzers/dotnet/cs/
+ Microsoft.Interop.ComInterfaceGenerator.dll
+ Microsoft.Interop.JavaScript.JSImportGenerator.dll
+ Microsoft.Interop.LibraryImportGenerator.dll
+ Microsoft.Interop.SourceGeneration.dll
+ System.Text.Json.SourceGeneration.dll
+ System.Text.RegularExpressions.Generator.dll
+<DOTNET>/packs/Microsoft.WindowsDesktop.App.Ref/8.0.27/analyzers/dotnet/
+ cs/System.Windows.Forms.Analyzers.CSharp.dll
+ System.Windows.Forms.Analyzers.dll
+<DOTNET>/sdk/10.0.204/Sdks/Microsoft.NET.Sdk/analyzers/
+ Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
+ Microsoft.CodeAnalysis.NetAnalyzers.dll
+<NUGET>/microsoft.codeanalysis.analyzers/3.3.4/analyzers/dotnet/cs/
+ Microsoft.CodeAnalysis.Analyzers.dll
+ Microsoft.CodeAnalysis.CSharp.Analyzers.dll
+
+[analyzerConfigFiles]
+<DOTNET>/sdk/10.0.204/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_8_default.globalconfig
+obj/Debug/net8.0-windows/SisUvex.GeneratedMSBuildEditorConfig.editorconfig
+
+[additionalFiles]
+Archivo/
+ Desestibar/FrmDesestibar.resx
+ Etiquetas/
+  CajaEmpleado/FrmCajaEmpleado.resx
+  FrmEtiquetas.resx
+  NombreYCodigo2x1/FrmNombreYCodigo2x1.resx
+  PrintLabels/
+   FrmPrintLabelsPtiPallets.resx
+   FrmPrintManifestPallets.resx
+   FrmRePrintPallet.resx
+  PruebasEtiquetasTextoZPL.resx
+ Manifiesto/
+  ConfManifest/FrmConfManifest.resx
+  FrmManifestAdd.resx
+  FrmManifestCat.resx
+  FrmManifestOptionRemove.resx
+  ManifestTemplates/
+   FrmManifestTemplatesAdd.resx
+   FrmManifestTemplatesCat.resx
+ Mixteada/FrmMixteado.resx
+ MixtearPallets/
+  FrmMixtearPallets.resx
+  FrmReestibaPallet.resx
+ Reestibado/FrmReestibado.resx
+ RegistroMaterial/
+  FrmRegistroMaterial.resx
+  FrmRegistroMaterialCat.resx
+ WorkPlan/
+  ConvertPallet/FrmConvertPallet.resx
+  FrmWorkPlanAdd.resx
+  FrmWorkPlanCat.resx
+Assets/Vehicle/Vehicle/
+ FrmVehicleAdd.resx
+ FrmVehicleCat.resx
+Assets/Vehicle/VehicleType/
+ FrmVehicleTypeAdd.resx
+ FrmVehicleTypeCat.resx
+Catalogos/AgenciaAduanal/
+ FrmAgenciaAduanalAñadir.resx
+ FrmAgenciaAduanalCat.resx
+Catalogos/Categoría/
+ FrmCategoriaAñadir.resx
+ FrmCategoriaCat.resx
+Catalogos/Ciudad/
+ FrmCiudadAñadir.resx
+ FrmCiudadCat.resx
+Catalogos/Consignee/
+ FrmConsigneeAdd.resx
+ FrmConsigneeCat.resx
+Catalogos/Container/
+ FrmContainerAdd.resx
+ FrmContainerCat.resx
+Catalogos/Contratista/
+ FrmContratistaAñadir.resx
+ FrmContratistaCat.resx
+Catalogos/Distributor/
+ FrmDistributorAdd.resx
+ FrmDistributorCat.resx
+Catalogos/Driver/
+ FrmDriverAdd.resx
+ FrmDriverCat.resx
+Catalogos/FechasFestivas/
+ FrmCatFestivo.resx
+ FrmDiasFestivos.resx
+Catalogos/FreightContainer/
+ FrmFreightContainerAdd.resx
+ FrmFreightContainerCat.resx
+Catalogos/GTIN-UPC/
+ FrmGtinAdd.resx
+ FrmGTINCat.resx
+Catalogos/Lot/
+ FrmLotAdd.resx
+ FrmLotCat.resx
+Catalogos/Metods/Forms/
+ BigResult/FrmBigResultText.resx
+ SelectionForms/SelectCellDataGridView/FrmSelectCellDataGridView.resx
+Catalogos/Nom Deducciones/
+ FrmAddDeducciones.resx
+ FrmDeduccion.resx
+Catalogos/Nomina/
+ REPORTECOMEDOR.resx
+ UExcel.resx
+Catalogos/Presentacion/
+ FrmPresentationAdd.resx
+ FrmPresentationCat.resx
+Catalogos/Productor/
+ FrmProductorAñadir.resx
+ FrmProductorCat.resx
+Catalogos/Tamaño/
+ FrmTamañoAñadir.resx
+ FrmTamañoCat.resx
+Catalogos/TransportLine/
+ FrmTransportLineAdd.resx
+ FrmTransportLineCat.resx
+Catalogos/Truck/
+ FrmTruckAdd.resx
+ FrmTruckCat.resx
+Catalogos/Variety/
+ FrmVarietyAdd.resx
+ FrmVarietyCat.resx
+Catalogos/WorkGroup/
+ FrmWorkGroupAdd.resx
+ FrmWorkGroupCat.resx
+Configuracion/
+ FrmConfiguracion.resx
+ FrmSetupPrint.resx
+ Parameters/
+  FrmParametersAdd.resx
+  FrmParametersCat.resx
+ SeasonClose/FrmSeasonClose.resx
+Consultas/Manifest/
+ FrmManifestQuery.resx
+ QueryPerManifest/FrmQueryPerManifest.resx
+Consultas/Pallets/
+ ClsPalletConsulta.resx
+ FrmPalletConsulta.resx
+ FrmPapeleta.resx
+Cuadro de herramientas/
+ Loading/FormConfGrapeLoading.resx
+ ZPL/FrmZPLPreview.resx
+DesertGhost/FrmAddEmployees.resx
+Facility/FaciIityPackagingTracking/Catalog/
+ FrmFaciIityPackagingTrackingAdd.resx
+ FrmFaciIityPackagingTrackingCat.resx
+FrmMenu.resx
+Grow/
+ PlantsLotTotals/FrmPlantsLotTotals.resx
+ PlantsRowLotLoadExcel/FrmPlantsRowLotLoadExcel.resx
+ PlantsRowLotView/FrmPlantsRowLotView.resx
+ RootStock/FrmRootStock.resx
+Inicio/PantallaCarga.resx
+Material/MaterialCatalog/
+ FrmMaterialAdd.resx
+ FrmMaterialCatalog.resx
+Material/MaterialForeignDest/
+ FrmMaterialForeignDestAdd.resx
+ FrmMaterialForeignDestCat.resx
+Material/MaterialProvider/
+ FrmMaterialProviderAdd.resx
+ FrmMaterialProviderCat.resx
+Material/MaterialRegister/Entry/
+ FrmMaterialRegisterEntry.resx
+ FrmMaterialRegisterEntryCat.resx
+Material/MaterialRegister/Exit/
+ FrmMaterialRegisterExit.resx
+ FrmMaterialRegisterExitCat.resx
+Material/MaterialRegister/FieldExit/
+ FrmMaterialRegisterFieldExit.resx
+ FrmMaterialRegisterFieldExitCat.resx
+Material/
+ MaterialReports/Inventory/FrmMaterialReportInventory.resx
+ MaterialType/
+  FrmMaterialTypeAdd.resx
+  FrmMaterialTypeCat.resx
+ MaterialWarehouses/
+  FrmMaterialWarehousesAdd.resx
+  FrmMaterialWareHousesCat.resx
+Nomina/
+ Actualizar datos empelado/FrmActualizarDatosEmpleados.resx
+ Actualizar empleados/FrmActualizarEmpleados.resx
+ Asistencia contrato/Consulta/FrmPayrollAttendance.resx
+ Asistencia de empaque/
+  FrmAsistenciaEmpaque.resx
+  FrmAsistenciaEmpaqueEmpleado.resx
+  FrmAsistenciaEmpaqueNuevo.resx
+  FrmAsistenciaEmpaqueVista.resx
+  FrmInstruccionesExcelAsistencia.resx
+ Comedores/DiningHall/
+  FrmDiningHallAdd.resx
+  FrmDiningHallCat.resx
+ Comedores/DiningReports/
+  AbsenceReport/FrmAbsenceReport.resx
+  FrmDiningReport.resx
+ Comedores/
+  EmployeeDiningHallAssignment/FrmEmployeeDiningHallAsingment.resx
+  Registers/SyncRegisters/FrmSyncRegisters.resx
+ Conceptos Ingresos Diversos/
+  FrmAdd.resx
+  FrmIncomeConcepts.resx
+ CONTRATO/PayrollPack_BoxPerNumber/BoxPerNumberReport/FrmPayrollBoxPerNumberReport.resx
+ EmployeeCredentials/FrmCredentials.resx
+ Ingresos Diversos/
+  FrmAddIngresos.resx
+  FrmDeducciones.resx
+  FrmListaAsitencia.resx
+ Nom Descuento de personal/
+  FrmAddDesc.resx
+  FrmDescuento.resx
+ Nom Reporte de sueldos diarios/FrmNomsemana.resx
+ Nom semAutomatizada/
+  FrmFestivo.resx
+  FrmSemiAutomatedPayroll.resx
+ NomTabulador/
+  FrmAddTabulador.resx
+  FrmNomTabulador.resx
+ Padron/SUA/
+  FrmNSSDuplicates.resx
+  FrmSuaConfigCat.resx
+  FrmSUALoad.resx
+ PlacePaymentLP/
+  FrmPlacePaymentAdd.resx
+  FrmPlacePaymentCat.resx
+ Poda/Reporte lineas/FrmPayrollPruningReport.resx
+ Prices/Prices/
+  FrmPricesAdd.resx
+  FrmPricesCat.resx
+ Prices/PricesGtin/
+  FrmPricesGtinAdd.resx
+  FrmPricesGtinCat.resx
+ Registration/NewEmployeeRegistrationSA/FrmNewEmployeeRegistrationMin.resx
+ Registro de Asistencia/FrmRegistroA.resx
+ Reporte de Asistencia/FrmAsistenciaR.resx
+ Reporte de Emp UVA/FrmUva.resx
+ Reporte de Empacador/FrmPackersReport.resx
+ Reporte de horas/
+  FrmAñadir.resx
+  FrmPackingHours.resx
+ Work time/
+  FrmBoxesPackedPerEmployee.resx
+  FrmWorkTimeAdd.resx
+  FrmWorkTimeCat.resx
+Operacion Factor/FrmFactor.resx
+Operacion/
+ FrmCajasGranelRegistro.resx
+ FrmCajasGranelRegistroCat.resx
+Packing/Maintenance/FrmPackingMaintenance.resx
+Properties/Resources.resx
+Reports/
+ PrintPalletBox.resx
+ PrintProgram.resx
+Usuarios/
+ CreacionUsuario.resx
+ FrmLogin.resx
+ Role/
+  FrmUserRoleAdd.resx
+  FrmUserRoleCat.resx
+ UserCrud/
+  FrmUserAdd.resx
+  FrmUserCat.resx
+  FrmUserChangePass.resx
+  FrmUserConfirmPass.resx

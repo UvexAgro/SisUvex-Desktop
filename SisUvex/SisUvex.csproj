@@ -76,20 +76,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Archivo\Manifiesto\PalletsManifiesto.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PalletsManifiesto.xsd</DependentUpon>
-    </Compile>
-    <Compile Update="Archivo\Manifiesto\TotalesManifiesto.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TotalesManifiesto.xsd</DependentUpon>
-    </Compile>
-    <Compile Update="Archivo\PlanTrabajo\FrmPlanTrabajoAñadir.cs" />
-    <Compile Update="Archivo\PlanTrabajo\FrmPlanTrabajoCat.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Archivo\RegistroMaterial\FrmRegistroMaterialCat.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalAñadir.cs" />
     <Compile Update="Catalogos\AgenciaAduanal\FrmAgenciaAduanalCat.cs" />
@@ -99,8 +85,54 @@
     <Compile Update="Catalogos\Ciudad\FrmCiudadCat.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Catalogos\Consignatario\FrmConsignatarioAñadir.cs" />
-    <Compile Update="Catalogos\Consignatario\FrmConsignatarioCat.cs" />
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyAdd.Designer.cs">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Variety\FrmVarietyCat.Designer.cs">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.Designer.cs">
+      <DependentUpon>FrmLotCertificationAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.Designer.cs">
+      <DependentUpon>FrmLotCertificationCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendAdd.Designer.cs">
+      <DependentUpon>FrmLabelLegendAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\LabelLegend\FrmLabelLegendCat.Designer.cs">
+      <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.Designer.cs">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
+    </Compile>
     <Compile Update="Catalogos\Contratista\FrmContratistaAñadir.cs" />
     <Compile Update="Catalogos\Contratista\FrmContratistaCat.cs" />
     <Compile Update="Catalogos\PlantillaV1\FrmPlantillaV1Añadir.cs" />
@@ -125,14 +157,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Archivo\Manifiesto\PalletsManifiesto.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>PalletsManifiesto.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Archivo\Manifiesto\TotalesManifiesto.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>TotalesManifiesto.Designer.cs</LastGenOutput>
-    </None>
     <None Update="pdfium.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -146,6 +170,33 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyAdd.resx">
+      <DependentUpon>FrmVarietyAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Variety\FrmVarietyCat.resx">
+      <DependentUpon>FrmVarietyCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Lot\LotCertification\FrmLotCertificationAdd.resx">
+      <DependentUpon>FrmLotCertificationAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\Lot\LotCertification\FrmLotCertificationCat.resx">
+      <DependentUpon>FrmLotCertificationCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\LabelLegend\FrmLabelLegendAdd.resx">
+      <DependentUpon>FrmLabelLegendAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\LabelLegend\FrmLabelLegendCat.resx">
+      <DependentUpon>FrmLabelLegendCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesAdd.resx">
+      <DependentUpon>FrmSeasonActivitiesAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Catalogos\CONTRATO\SeasonActivities\FrmSeasonActivitiesCat.resx">
+      <DependentUpon>FrmSeasonActivitiesCat.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nomina\CONTRATO\NewFolder\" />
   </ItemGroup>
 	<PropertyGroup>
 		<!-- Esto fuerza a no generar ni incluir recursos satélite (.resources.dll) -->

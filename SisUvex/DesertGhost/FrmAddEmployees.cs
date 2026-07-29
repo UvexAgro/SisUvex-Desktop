@@ -82,7 +82,7 @@ namespace SisUvex.DesertGhost
                     {
                         string? idEmployee = ClsValues.FormatZeros(fila.Cells["CODIGO"].Value.ToString(), "000000");
 
-                        string? idWorkGroup = ClsValues.FormatZeros(fila.Cells["CUADRILLA"].Value.ToString(),"00");
+                        string? idWorkGroup = ClsValues.FormatZeros(fila.Cells["CUADRILLA"].Value.ToString(),"0000");
 
                         string? idProductionLine = ClsValues.FormatZeros(fila.Cells["BANDA"].Value.ToString(), "000");
 

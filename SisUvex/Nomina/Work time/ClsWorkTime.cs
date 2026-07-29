@@ -224,7 +224,7 @@ namespace SisUvex.Nomina.Work_time
         {
             _frmAdd = new FrmWorkTimeAdd(_frmCat, this);
             _frmAdd.Text = "Añadir horario de empaque";
-            _frmAdd.lblTitle.Text = "Añadir horario de empaque";
+            _frmAdd.lblTitle.Text = "Añadir Horario";
             _frmAdd.IsAddModify = true;
 
             _frmAdd.ShowDialog();
@@ -235,7 +235,7 @@ namespace SisUvex.Nomina.Work_time
 			{
 				_frmAdd = new FrmWorkTimeAdd(_frmCat, this);
 				_frmAdd.Text = "Modificar horario de empaque";
-				_frmAdd.lblTitle.Text = "Modificar horario de empaque";
+				_frmAdd.lblTitle.Text = "Modificar Horario";
 				_frmAdd.IsAddModify = false;
 
 				_frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
@@ -830,8 +830,8 @@ namespace SisUvex.Nomina.Work_time
 
             frmReport.lblSubTitle.Text = $"Banda: {frmReport.idProductionLine}       Fecha: {date}       Precios para: {priceType}";
 
-            //string qryNameProc = "sp_NomPackedBoxEmployeePerDay"; //PARA LA TEMPORADA DE UVA
-            string qryNameProc = "sp_NomPackedUniqueBoxEmployeePerDay"; //PARA LA TEMPORADA DE ESPARRAGO
+            string qryNameProc = "sp_NomPackedBoxEmployeePerDay"; //PARA LA TEMPORADA DE UVA
+            //string qryNameProc = "sp_NomPackedUniqueBoxEmployeePerDay"; //PARA LA TEMPORADA DE ESPARRAGO
 
             frmReport.dgvCatalog.DataSource = ClsQuerysDB.GetDataTable($"EXEC {qryNameProc} '{frmReport.idProductionLine}', '{frmReport.dWorkTime}', '{rType}'");
         }

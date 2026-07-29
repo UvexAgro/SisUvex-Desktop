@@ -72,14 +72,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return;
 
             if (cboWorkPlan.SelectedIndex == 0)
-            {   SystemSounds.Exclamation.Play();
+            {
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
-            int cantityPallets = (int)nudPalletTotal.Value;
-
             ClsGenerateStringZplPalletTag GenPallet = new();
-            string ZplPtiTag = GenPallet.GenerateSuperStringTag("X00001", cls.eTagInfo, 1, cantityPallets, chbRevesePalletTag.Checked, false);
+            string ZplPtiTag = GenPallet.GenerateSuperStringTag("X00001", cls.eTagInfo, 1, 1, chbRevesePalletTag.Checked, false);
             Clipboard.SetText(ZplPtiTag);
         }
 
@@ -89,7 +88,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 return;
 
             if (cboWorkPlan.SelectedIndex == 0)
-            {   SystemSounds.Exclamation.Play();
+            {
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
@@ -98,6 +98,29 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             cls.eTagInfo.showDate = !chbFechaOmitidaPti.Checked;
             string ZplPtiTag = GenPti.GenerateSuperStringTag(cls.eTagInfo, 1, chbReversePtiTag.Checked);
             Clipboard.SetText(ZplPtiTag);
+        }
+
+        private void btnOpenMixPallets_Click(object sender, EventArgs e)
+        {
+            if (FrmMenu.FrmMenuInstance == null)
+                return;
+
+            SisUvex.Archivo.MixtearPallets.FrmMixtearPallets frm = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
+        }
+
+        private void btnbtnOpenWorkPlan_Click(object sender, EventArgs e)
+        {
+            if (FrmMenu.FrmMenuInstance == null)
+                return;
+
+            SisUvex.Archivo.WorkPlan.FrmWorkPlanCat frm = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
+        }
+
+        public void ClearInvoiceInfo()
+        {
+            txbInvoice.Text = string.Empty;
         }
     }
 }

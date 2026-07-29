@@ -14,6 +14,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
 {
     internal class ETagInfo
     {
+        public string? invoice { get; set; } //PAPELETA (INSERTAR VALOR MANUALMENTE SI SE QUIERE LA DEL PALLET)
         public bool? showDate { get; set; } //DETERMINA SI EN LA ETIQUETA SE VA A MOSTRAR LA FECHA O NO (DE MOMENTO SOLO AL IMPRIMIR EL PTI)
         public string? nameProduct { get; set; }
         public string? active { get; set; }
@@ -27,6 +28,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? nameVariety { get; set; }
         public string? scientisVarierty { get; set; }
         public string? shortNameVariety { get; set; }
+        public string? patentLegend { get; set; }
+        public string? trademark { get; set; }
         public string? idCrop { get; set; }
         public string? nameCrop { get; set; }
         public string? idSize { get; set; }
@@ -62,9 +65,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
         public string? idTypeBox { get; set; }
         public string? nameTypeBox { get; set; }
         public string? shortNameTypeBox { get; set; } // Added for short name type box
+        public string? idLabelLegend { get; set; }
+        public string? labelLegend { get; set; }
+        public string? labelLegend2 { get; set; }
 
         public void ClearFields()
         {
+            invoice = null;
             nameProduct = null;
             active = null;
             idWorkPlan = null;
@@ -77,6 +84,8 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             nameVariety = null;
             scientisVarierty = null;
             shortNameVariety = null;
+            patentLegend = null;
+            trademark = null;
             idCrop = null;
             nameCrop = null;
             idSize = null;
@@ -108,10 +117,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
             voicePickCode = null;
             idContractor = null;
             nameContractor = null;
-            growFarmName = null; // Clear grow farm name
+            growFarmName = null;
             idTypeBox = null;
             nameTypeBox = null;
             shortNameTypeBox = null;
+            idLabelLegend = null;
+            labelLegend = null;
+            labelLegend2 = null;
         }
 
         public void SetTagInfo(string idWorkPlan)
@@ -126,6 +138,7 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 else
                     this.dateWorkPlan = null;
 
+                //this.invoice = rows[0][WorkPlan.ColumnInvoice].ToString(); <-- ESTA COLUMNA NO EXISTE, SI SE QUIERE IMPRIMIR UN PALLET, ES METERLA A MANO
                 this.nameProduct = rows[0][Column.name].ToString();
                 this.active = rows[0][Column.active].ToString();
                 this.idWorkPlan = rows[0][Column.id].ToString();
@@ -136,6 +149,9 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 this.idVariety = rows[0][Variety.ColumnId].ToString();
                 this.nameVariety = rows[0][Variety.ColumnName].ToString();
                 this.scientisVarierty = rows[0][Variety.ColumnScientis].ToString();
+                this.shortNameVariety = rows[0][Variety.ColumnShortName].ToString();
+                this.patentLegend = rows[0][Variety.ColumnPatentLegend].ToString();
+                this.trademark = rows[0][Variety.ColumnTradeMark].ToString();
                 this.idCrop = rows[0][Crop.ColumnId].ToString();
                 this.nameCrop = rows[0][Crop.ColumnName].ToString();
                 this.idSize = rows[0][ClsObject.Size.ColumnId].ToString();
@@ -164,7 +180,13 @@ namespace SisUvex.Archivo.Etiquetas.PrintLabels
                 this.voicePickCode = rows[0][ClsObject.WorkPlan.ColumnVpc].ToString();
                 this.idContractor = rows[0][Contractor.ColumnId].ToString();
                 this.nameContractor = rows[0][Contractor.ColumnName].ToString();
-                this.growFarmName = rows[0][Farm.ColumnName].ToString(); // Added for grow farm name
+                this.growFarmName = rows[0][Farm.ColumnName].ToString();
+                this.idTypeBox = rows[0][TypeBox.ColumnId].ToString();
+                this.nameTypeBox = rows[0][TypeBox.ColumnName].ToString();
+                this.shortNameTypeBox = rows[0][TypeBox.ColumnShortName].ToString();
+                this.idLabelLegend = rows[0][LabelLegend.ColumnId].ToString();
+                this.labelLegend = rows[0][LabelLegend.ColumnName].ToString();
+                this.labelLegend2 = rows[0][LabelLegend.ColumnLegend2].ToString();
             }
         }
     }

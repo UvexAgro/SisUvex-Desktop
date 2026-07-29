@@ -23,35 +23,123 @@ namespace SisUvex.Archivo.Manifiesto
         public FrmManifestAdd _frmAdd;
         public FrmManifestCat _frmCat;
         public EManifest eManifest;
-        public ClsDataGridViewCatalogs dgv = new ClsDataGridViewCatalogs();
+        public ClsDGVCatalog? dgv;
+        DataTable dtCatalog = null!;
         ClsManifestPalletList clsPallets = new ClsManifestPalletList();
 
-        private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Hora, vw.Distribuidor, vw.Consignatario, vw.Productor, vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
+        private const string IdColumnManifest = "Manifiesto";
+        private const string ActiveColumnManifest = "Activo";
+
+        private static readonly string[] AuditColumns =
+        [
+            "Caja R.",
+            "Pies",
+            "Factura",
+            "Folio fiscal",
+            "Termometro caja",
+            "Term. Pallet",
+            "Pos.",
+            "Orden",
+            "Booking",
+            "Fitosanitario",
+        ];
+
+        private string queryCatalogo = $" SELECT vw.Activo, vw.Manifiesto, vw.Fecha, vw.Hora, vw.[fco Num eco] AS 'Caja R.', vw.[fco Pies] AS 'Pies', vw.Factura, vw.[Folio fiscal], vw.[Termometro caja], vw.Termografo AS [Term. Pallet], vw.[Posicion termo] AS 'Pos.', vw.Orden, vw.Booking, vw.Fitosanitario, vw.[Dis Short] AS 'Distribuidor', vw.Consignatario, vw.ProductorShortName AS 'Productor', vw.[Agencia nacional], vw.[Agencia extranjera], CONCAT(vw.[Ciudad destino],' ',vw.[ctDe Estado]) AS [Ciudad destino], CONCAT(vw.[Ciudad cruce],' ',vw.[ctCrv Estado]) AS [Ciudad cruce], vw.[Linea de transporte], vw.[tru Num eco] AS 'Troque', vw.[tru Placas US] AS 'Placas US', vw.[tru Placas MX] AS 'Placas MX', vw.[fco Num eco] AS 'Caja', vw.[fco Placas US] AS 'Placas US', vw.[fco Placas MX] AS 'Placas MX', vw.Conductor, vw.Embarcador FROM vw_PackManifestAllDetails vw ";
         private string queryCatalogOrderBy = " ORDER BY Manifiesto Desc ";
-        public DataTable dtCatalogo;
-        public DataTable dtCatalogoActivos;
+
+        private void BindDgvCatalog()
+        {
+            dgv = new ClsDGVCatalog(_frmCat.dgvCatalog, dtCatalog, IdColumnManifest, ActiveColumnManifest);
+
+            foreach (string columnName in AuditColumns)
+                dgv.AddAuditColumn(columnName);
+
+            dgv.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
+
+            if (_frmCat.btnRemoved.Text == "Activos")
+                dgv.SetFilterNull();
+            else
+            {
+                dgv.CopyActiveValuesToHiddenColumn();
+                dgv.SetFilterActivesOnly();
+            }
+        }
 
         public void BeginFormCat()
         {
-            dgv.idColumn = "Manifiesto";
-            dgv.activeColumn = "Activo";
-            dgv.dgvCatalog = _frmCat.dgvCatalog;
-            dgv.btnRemoved = _frmCat.btnRemoved;
-
             SetDgvCatalog();
-            ClsDGVCatalog.DgvApplyCellFormattingEvent(dgv.dgvCatalog, dgv.activeColumn, dgv.idColumn);
 
             ClsComboBoxes.CboLoadActives(_frmCat.cboDistributor, ClsObject.Distributor.Cbo);
             ClsComboBoxes.CboLoadActives(_frmCat.cboGrower, ClsObject.Grower.Cbo);
-            ClsComboBoxes.CboLoadActives(_frmCat.cboDestination, ClsObject.City.Cbo);/////
-            ClsComboBoxes.CboLoadActives(_frmCat.cboConsignee, ClsObject.Consignee.Cbo);/////
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDestination, ClsObject.City.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboConsignee, ClsObject.Consignee.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboTransportLine, ClsObject.TransportLine.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboFreightContainer, ClsObject.FreightContainer.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboTruck, ClsObject.Truck.Cbo);
+            ClsComboBoxes.CboLoadActives(_frmCat.cboDriver, ClsObject.Driver.Cbo);
+
+            WireTransportLineComboFilters(
+                _frmCat.cboTransportLine,
+                _frmCat.cboDriver,
+                _frmCat.cboTruck,
+                _frmCat.cboFreightContainer);
+        }
+
+        /// <summary>
+        /// OneForAll: línea de transporte filtra conductor, troque y caja.
+        /// En catálogo los checkbox y textbox de ID son null; en Add se pasan los del formulario.
+        /// </summary>
+        private void WireTransportLineComboFilters(
+            ComboBox cboTransportLine,
+            ComboBox cboDriver,
+            ComboBox cboTruck,
+            ComboBox cboFreightContainer,
+            CheckBox? chbRemovedTransportLine = null,
+            CheckBox? chbRemovedDriver = null,
+            CheckBox? chbRemovedTruck = null,
+            CheckBox? chbRemovedFreightContainer = null,
+            TextBox? txbIdTransportLine = null)
+        {
+            List<(ComboBox Cbo, string IdColumnFilter, CheckBox? Chb)> transportLineDependents =
+            [
+                (cboDriver, ClsObject.TransportLine.ColumnId, chbRemovedDriver),
+                (cboTruck, ClsObject.TransportLine.ColumnId, chbRemovedTruck),
+                (cboFreightContainer, ClsObject.TransportLine.ColumnId, chbRemovedFreightContainer),
+            ];
+
+            ClsComboBoxes.Events.CboApplyEventFilterOneForAll(
+                cboTransportLine, null, txbIdTransportLine, transportLineDependents);
+
+            if (chbRemovedTransportLine != null)
+            {
+                ClsComboBoxes.CboApplyChbClickEventWithOneForAllDependents(
+                    cboTransportLine,
+                    chbRemovedTransportLine,
+                    txbIdTransportLine,
+                    transportLineDependents);
+            }
         }
 
         public void SetDgvCatalog()
         {
-            dgv.queryCatalog = SetStringQueryWithFilter();
-            dgv.LoadDataTableCatalog();
-            _frmCat.dgvCatalog.DataSource = dgv.GetDataTableCatalogActives();
+            dtCatalog = ClsQuerysDB.GetDataTable(SetStringQueryWithFilter());
+            BindDgvCatalog();
+        }
+
+        public void ChbShowAuditFilter()
+        {
+            dgv?.SetAuditColumnsVisible(_frmCat.chbShowAudit.Checked);
+            ApplyAuditSelectionMode();
+        }
+
+        private void ApplyAuditSelectionMode()
+        {
+            _frmCat.dgvCatalog.SelectionMode = _frmCat.chbShowAudit.Checked
+                ? DataGridViewSelectionMode.CellSelect
+                : DataGridViewSelectionMode.FullRowSelect;
+
+            _frmCat.dgvCatalog.ClearSelection();
         }
 
         private string SetStringQueryWithFilter()
@@ -78,6 +166,26 @@ namespace SisUvex.Archivo.Manifiesto
                 qry += $" AND vw.idCitDE = '{_frmCat.cboDestination.SelectedValue}' ";
             }
 
+            if (_frmCat.cboTransportLine.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idTLn = '{_frmCat.cboTransportLine.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboDriver.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idDri = '{_frmCat.cboDriver.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboTruck.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idTru = '{_frmCat.cboTruck.SelectedValue}' ";
+            }
+
+            if (_frmCat.cboFreightContainer.SelectedIndex > 0)
+            {
+                qry += $" AND vw.idFco = '{_frmCat.cboFreightContainer.SelectedValue}' ";
+            }
+
             return qry + " OR Fecha IS NULL " + queryCatalogOrderBy;
         }
 
@@ -96,22 +204,99 @@ namespace SisUvex.Archivo.Manifiesto
                 qry = queryCatalogo + $" WHERE vw.Manifiesto = '{idManifest}' ";
             }
 
-            _frmCat.dgvCatalog.DataSource = ClsQuerysDB.GetDataTable(qry);
+            dtCatalog = ClsQuerysDB.GetDataTable(qry);
+            BindDgvCatalog();
         }
 
         public void btnShowRemoved()
         {
-            dgv.UpdateCatalogButtonActivesDeletes();
+            if (dgv == null)
+                return;
+
+            if (_frmCat.btnRemoved.Text == "Eliminados")
+            {
+                dgv.SetFilterNull();
+                _frmCat.btnRemoved.Text = "Activos";
+            }
+            else
+            {
+                dgv.CopyActiveValuesToHiddenColumn();
+                dgv.SetFilterActivesOnly();
+                _frmCat.btnRemoved.Text = "Eliminados";
+            }
+        }
+
+        private bool IsActiveSelectedRow()
+        {
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0)
+                return false;
+
+            string? activeValue = _frmCat.dgvCatalog.SelectedRows[0].Cells[ActiveColumnManifest].Value?.ToString();
+            return activeValue == "1" || string.Equals(activeValue, "true", StringComparison.OrdinalIgnoreCase);
         }
 
         public void btnRemoveProcedure()
         {
-            dgv.ProcedureRemove("sp_PackManifestRemove");
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0 || !IsActiveSelectedRow())
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string id = _frmCat.dgvCatalog.SelectedRows[0].Cells[IdColumnManifest].Value?.ToString() ?? string.Empty;
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("sp_PackManifestRemove", sql.cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.ExecuteNonQuery();
+
+                dgv?.ChangeActiveCell(_frmCat.dgvCatalog, "0");
+            }
+            catch (Exception ex)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show(ex.ToString(), "Catálogo eliminar");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
         }
 
         public void btnRecoverProcedure()
         {
-            dgv.ProcedureRecover("sp_PackManifestRecover");
+            if (_frmCat.dgvCatalog.SelectedRows.Count == 0 || IsActiveSelectedRow())
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            string id = _frmCat.dgvCatalog.SelectedRows[0].Cells[IdColumnManifest].Value?.ToString() ?? string.Empty;
+
+            try
+            {
+                sql.OpenConectionWrite();
+                SqlCommand cmd = new SqlCommand("sp_PackManifestRecover", sql.cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+                cmd.ExecuteNonQuery();
+
+                dgv?.ChangeActiveCell(_frmCat.dgvCatalog, "1");
+            }
+            catch (Exception ex)
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show(ex.ToString(), "Catálogo recuperar");
+            }
+            finally
+            {
+                sql.CloseConectionWrite();
+            }
         }
 
         public void OpenFrmAdd()
@@ -124,7 +309,8 @@ namespace SisUvex.Archivo.Manifiesto
 
             _frmAdd.ShowDialog();
 
-            dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+            if (_frmAdd.AddIsUpdate)
+                SetDgvCatalog();
         }
 
         public void OpenFrmModify()
@@ -139,7 +325,8 @@ namespace SisUvex.Archivo.Manifiesto
                 _frmAdd.idModify = _frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString();
                 _frmAdd.ShowDialog();
 
-                dgv.UpdateCatalogAfterAddModify(_frmAdd.AddIsUpdate);
+                if (_frmAdd.AddIsUpdate)
+                    SetDgvCatalog();
             }
             else
             {
@@ -151,6 +338,7 @@ namespace SisUvex.Archivo.Manifiesto
         {
             clsPallets.dataGridView = _frmAdd.dgvPalletList;
             clsPallets.AddColumnsToDGVPalletList();
+            clsPallets.BindingTotalsDgv(_frmAdd.dgvTotal);
             AddControlsToList(); //////////POR MIENTRAS NO porque no hay obligatorios
 
             CargarComboBoxes();
@@ -255,12 +443,16 @@ namespace SisUvex.Archivo.Manifiesto
             };
             ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumnTemplates(_frmAdd.cboTemplate, columnasRelacionadas, _frmAdd.txbIdTemplate);
 
-            List<Tuple<ComboBox, CheckBox?, string>> cboTransportLineDepends = new List<Tuple<ComboBox, CheckBox?, string>>();
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId));
-            cboTransportLineDepends.Add(new Tuple<ComboBox, CheckBox?, string>(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId));
-
-            ClsComboBoxes.CboApplyEventCboSelectedValueChangedWithCboDependensColumn(_frmAdd.cboTransportLine, cboTransportLineDepends, _frmAdd.txbIdTransportLine);
+            WireTransportLineComboFilters(
+                _frmAdd.cboTransportLine,
+                _frmAdd.cboDriver,
+                _frmAdd.cboTruck,
+                _frmAdd.cboFreightContainer,
+                _frmAdd.chbRemovedTransportLine,
+                _frmAdd.chbRemovedDriver,
+                _frmAdd.chbRemovedTruck,
+                _frmAdd.chbRemovedFreightContainer,
+                _frmAdd.txbIdTransportLine);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDistributor, _frmAdd.chbRemovedDistributor);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboConsignee, _frmAdd.chbRemovedConsignee);
@@ -269,13 +461,6 @@ namespace SisUvex.Archivo.Manifiesto
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboAgencyMX, _frmAdd.chbRemovedAgencyMX);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityCrossPoint, _frmAdd.chbRemovedCityCrossPoint);
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboCityDestination, _frmAdd.chbRemovedCityDestination);
-            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTransportLine, _frmAdd.chbRemovedTransportLine);
-            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver);
-            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck);
-            //ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer);
-            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboDriver, _frmAdd.chbRemovedDriver, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
-            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboTruck, _frmAdd.chbRemovedTruck, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
-            ClsComboBoxes.CboApplyChbClickEventWithCboDependensColumn(_frmAdd.cboFreightContainer, _frmAdd.chbRemovedFreightContainer, ClsObject.TransportLine.ColumnId, _frmAdd.txbIdTransportLine);
 
             ClsTextBoxes.TxbApplyKeyPressEventNumericWithLimit(_frmAdd.txbDieselLiters, 9, 2);
             ClsTextBoxes.TxbApplyKeyPressEventInt(_frmAdd.txbTermoPosition);
@@ -321,6 +506,8 @@ namespace SisUvex.Archivo.Manifiesto
             _frmAdd.chbRejected.Checked = eManifest.rejected == "1";
             _frmAdd.txbObservations.Text = eManifest.observations;
             _frmAdd.txbThermometerContainer.Text = eManifest.thermometerContainer; //<-- No se cambia con el Cbo por el ReadOnly del FCat
+            _frmAdd.txbFactura.Text = eManifest.factura;
+            _frmAdd.txbFolioFiscalFactura.Text = eManifest.facturaUuid;
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboSeason, eManifest.idSeason);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboDistributor, eManifest.idDistributor);
@@ -510,6 +697,8 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@phytosanitary", ClsValues.IfEmptyToDBNull(_frmAdd.txbPhytosanitary.Text));
             cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text));
             cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
 
             cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 
@@ -569,7 +758,8 @@ namespace SisUvex.Archivo.Manifiesto
             cmd.Parameters.AddWithValue("@idMarket", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdMarket.Text));
             cmd.Parameters.AddWithValue("@idSeason", ClsValues.IfEmptyToDBNull(_frmAdd.txbIdSeason.Text)); 
             cmd.Parameters.AddWithValue("@thermometerContainer", ClsValues.IfEmptyToDBNull(_frmAdd.txbThermometerContainer.Text));
-
+            cmd.Parameters.AddWithValue("@factura", ClsValues.IfEmptyToDBNull(_frmAdd.txbFactura.Text));
+            cmd.Parameters.AddWithValue("@facturaUuid", ClsValues.IfEmptyToDBNull(_frmAdd.txbFolioFiscalFactura.Text));
 
             cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
 
@@ -603,104 +793,27 @@ namespace SisUvex.Archivo.Manifiesto
 
         public void BtnPrintManifestFrmAdd()
         {
-            PrintManifest(_frmAdd.txbId.Text, _frmAdd.chbPrintManifestPerField.Checked, _frmAdd.chbExcelLayout.Checked);
+            PrintManifest(_frmAdd.txbId.Text, _frmAdd.txbIdTemplate.Text);
         }
 
         public void BtnPrintManifestFrmCat()
         {
             if (_frmCat.dgvCatalog.Rows.Count > 0 && _frmCat.dgvCatalog.SelectedRows.Count != 0)
             {
-                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString(), _frmCat.chbPrintManifestPerField.Checked, _frmCat.chbExcelLayout.Checked);
+                PrintManifest(_frmCat.dgvCatalog.SelectedRows[0].Cells["Manifiesto"].Value.ToString());
             }
             else
-            {
                 SystemSounds.Exclamation.Play();
-            }
         }
-
-        private void PrintManifest(string idManifest, bool isManifestPerField, bool isExcelLayout)
+        private void PrintManifest(string idManifest)
         {
-            try
-            {
-                if (!idManifest.IsNullOrEmpty())
-                {
-                    bool isPrint = false;
-
-                    ClsConfigManifest conf = new ClsConfigManifest();
-                    conf.GetParameters();
-
-                    if (conf.printManifest)
-                    {
-                        // ClsPDFManifest pdfManifest = new ClsPDFManifest();
-                        ClsPruebaManifiesto pdf = new ClsPruebaManifiesto();
-                        pdf.desktopPath = conf.manifestFolderPath;
-
-                        if (!isManifestPerField)
-                            pdf.CreatePDFManifest(idManifest);
-                        else
-                            pdf.CreatePDFManifestTotalsPerLot(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (isExcelLayout)
-                    {
-                        ClsManifestExcelLayout exl = new ClsManifestExcelLayout();
-                        exl.CreateExcelLayout(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (conf.printMaping)
-                    {
-                        ClsPDFLoadingMap pdfMap = new ClsPDFLoadingMap();
-                        pdfMap.desktopPath = conf.manifestFolderPath;
-                        pdfMap.CreatePDFMaping(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    //ClsPDFManifiesto pdf = new ClsPDFManifiesto();
-
-                    if (conf.printPackingList)
-                    {
-                        ClsPDFPackingList pdfPacking = new ClsPDFPackingList();
-                        pdfPacking.desktopPath = conf.manifestFolderPath;
-                        pdfPacking.CreatePDFPackingList(idManifest);
-
-                        isPrint = true;
-                    }
-
-                    if (isPrint)
-                        OpenManifestFolderPath(idManifest);
-                }
-                else
-                {
-                    MessageBox.Show("Debe guardar el manifiesto antes de imprimirlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, null);
+            frmPrintManifest.ShowDialog();
         }
-
-        private void OpenManifestFolderPath(string idManifest)
+        private void PrintManifest(string idManifest, string? idTemplate)
         {
-            string distributorShortName = ClsQuerysDB.GetData($"SELECT v_nameDistShort FROM Pack_Distributor WHERE id_distributor = (SELECT id_distributor FROM Pack_Manifest WHERE id_manifest = '{idManifest}')");
-
-            string manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
-
-            string path = Path.Combine(manifestFolderPath, "Manifiestos", distributorShortName, $"{idManifest}");
-
-            DialogResult result = MessageBox.Show($"Archivos guardados en: {path}\n\n¿Desea abrir la carpeta?",
-                "Ruta de la carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-                System.Diagnostics.Process.Start("explorer.exe", path);
-            }
+            Archivo.Manifiesto.PrintManifest.FrmPrintManifest frmPrintManifest = new(idManifest, idTemplate);
+            frmPrintManifest.ShowDialog();
         }
     }
 }

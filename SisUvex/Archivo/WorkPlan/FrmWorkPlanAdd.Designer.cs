@@ -77,6 +77,14 @@
             cboTypeBox = new ComboBox();
             label3 = new Label();
             label6 = new Label();
+            chbSeasonActives = new CheckBox();
+            txbIdSeason = new TextBox();
+            cboSeason = new ComboBox();
+            label11 = new Label();
+            label10 = new Label();
+            txbLegend = new TextBox();
+            cboLegend = new ComboBox();
+            label13 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvGTIN).BeginInit();
             SuspendLayout();
             // 
@@ -84,7 +92,7 @@
             // 
             txbIdSize.Enabled = false;
             txbIdSize.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdSize.Location = new Point(91, 155);
+            txbIdSize.Location = new Point(92, 174);
             txbIdSize.Name = "txbIdSize";
             txbIdSize.Size = new Size(46, 29);
             txbIdSize.TabIndex = 5;
@@ -100,7 +108,7 @@
             cboSize.IntegralHeight = false;
             cboSize.ItemHeight = 21;
             cboSize.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
-            cboSize.Location = new Point(143, 155);
+            cboSize.Location = new Point(144, 174);
             cboSize.Name = "cboSize";
             cboSize.Size = new Size(244, 29);
             cboSize.TabIndex = 6;
@@ -109,7 +117,7 @@
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.Crimson;
-            label1.Location = new Point(83, 158);
+            label1.Location = new Point(84, 177);
             label1.Name = "label1";
             label1.Size = new Size(12, 15);
             label1.TabIndex = 168;
@@ -120,7 +128,7 @@
             lblSize.AutoSize = true;
             lblSize.Font = new Font("Segoe UI", 12F);
             lblSize.ForeColor = SystemColors.ControlText;
-            lblSize.Location = new Point(18, 157);
+            lblSize.Location = new Point(19, 176);
             lblSize.Name = "lblSize";
             lblSize.Size = new Size(67, 21);
             lblSize.TabIndex = 164;
@@ -129,7 +137,7 @@
             // dtpDateWorkPlan
             // 
             dtpDateWorkPlan.Font = new Font("Segoe UI", 12F);
-            dtpDateWorkPlan.Location = new Point(91, 85);
+            dtpDateWorkPlan.Location = new Point(92, 63);
             dtpDateWorkPlan.Name = "dtpDateWorkPlan";
             dtpDateWorkPlan.Size = new Size(341, 29);
             dtpDateWorkPlan.TabIndex = 1;
@@ -139,7 +147,7 @@
             lblVPC.AutoSize = true;
             lblVPC.Font = new Font("Segoe UI", 12F);
             lblVPC.ForeColor = SystemColors.ControlDark;
-            lblVPC.Location = new Point(247, 54);
+            lblVPC.Location = new Point(419, 212);
             lblVPC.Name = "lblVPC";
             lblVPC.Size = new Size(119, 21);
             lblVPC.TabIndex = 162;
@@ -149,7 +157,7 @@
             // 
             txbVPC.Enabled = false;
             txbVPC.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbVPC.Location = new Point(368, 51);
+            txbVPC.Location = new Point(540, 209);
             txbVPC.Name = "txbVPC";
             txbVPC.Size = new Size(64, 29);
             txbVPC.TabIndex = 25;
@@ -174,7 +182,7 @@
             dgvGTIN.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvGTIN.EnableHeadersVisualStyles = false;
             dgvGTIN.ImeMode = ImeMode.NoControl;
-            dgvGTIN.Location = new Point(12, 335);
+            dgvGTIN.Location = new Point(10, 388);
             dgvGTIN.Name = "dgvGTIN";
             dgvGTIN.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -188,13 +196,13 @@
             dgvGTIN.RowHeadersVisible = false;
             dgvGTIN.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvGTIN.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvGTIN.Size = new Size(636, 177);
+            dgvGTIN.Size = new Size(636, 182);
             dgvGTIN.TabIndex = 20;
             dgvGTIN.MouseDoubleClick += dgvGTIN_MouseDoubleClick;
             // 
             // btnIdGTINSelect
             // 
-            btnIdGTINSelect.Location = new Point(133, 300);
+            btnIdGTINSelect.Location = new Point(134, 352);
             btnIdGTINSelect.Name = "btnIdGTINSelect";
             btnIdGTINSelect.Size = new Size(115, 29);
             btnIdGTINSelect.TabIndex = 15;
@@ -207,7 +215,7 @@
             lblWorkGroup.AutoSize = true;
             lblWorkGroup.Font = new Font("Segoe UI", 12F);
             lblWorkGroup.ForeColor = SystemColors.ControlText;
-            lblWorkGroup.Location = new Point(10, 123);
+            lblWorkGroup.Location = new Point(11, 142);
             lblWorkGroup.Name = "lblWorkGroup";
             lblWorkGroup.Size = new Size(75, 21);
             lblWorkGroup.TabIndex = 154;
@@ -217,7 +225,7 @@
             // 
             txbIdWorkGroup.Enabled = false;
             txbIdWorkGroup.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdWorkGroup.Location = new Point(91, 120);
+            txbIdWorkGroup.Location = new Point(92, 139);
             txbIdWorkGroup.Name = "txbIdWorkGroup";
             txbIdWorkGroup.Size = new Size(46, 29);
             txbIdWorkGroup.TabIndex = 2;
@@ -232,7 +240,7 @@
             cboWorkGroup.FormattingEnabled = true;
             cboWorkGroup.IntegralHeight = false;
             cboWorkGroup.ItemHeight = 21;
-            cboWorkGroup.Location = new Point(143, 120);
+            cboWorkGroup.Location = new Point(144, 139);
             cboWorkGroup.Name = "cboWorkGroup";
             cboWorkGroup.Size = new Size(244, 29);
             cboWorkGroup.TabIndex = 3;
@@ -242,7 +250,7 @@
             lblLot.AutoSize = true;
             lblLot.Font = new Font("Segoe UI", 12F);
             lblLot.ForeColor = SystemColors.ControlText;
-            lblLot.Location = new Point(10, 266);
+            lblLot.Location = new Point(11, 318);
             lblLot.Name = "lblLot";
             lblLot.Size = new Size(43, 21);
             lblLot.TabIndex = 150;
@@ -252,7 +260,7 @@
             // 
             txbIdLot.Enabled = false;
             txbIdLot.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdLot.Location = new Point(62, 263);
+            txbIdLot.Location = new Point(63, 315);
             txbIdLot.Name = "txbIdLot";
             txbIdLot.Size = new Size(75, 29);
             txbIdLot.TabIndex = 11;
@@ -267,7 +275,7 @@
             cboLot.FormattingEnabled = true;
             cboLot.IntegralHeight = false;
             cboLot.ItemHeight = 21;
-            cboLot.Location = new Point(143, 263);
+            cboLot.Location = new Point(144, 315);
             cboLot.Name = "cboLot";
             cboLot.Size = new Size(460, 29);
             cboLot.TabIndex = 12;
@@ -276,7 +284,7 @@
             // 
             lblIdGTIN.AutoSize = true;
             lblIdGTIN.Font = new Font("Segoe UI", 12F);
-            lblIdGTIN.Location = new Point(13, 303);
+            lblIdGTIN.Location = new Point(14, 355);
             lblIdGTIN.Name = "lblIdGTIN";
             lblIdGTIN.Size = new Size(48, 21);
             lblIdGTIN.TabIndex = 149;
@@ -286,7 +294,7 @@
             // 
             txbIdGTIN.Enabled = false;
             txbIdGTIN.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdGTIN.Location = new Point(67, 300);
+            txbIdGTIN.Location = new Point(68, 352);
             txbIdGTIN.MaxLength = 20;
             txbIdGTIN.Name = "txbIdGTIN";
             txbIdGTIN.ReadOnly = true;
@@ -298,7 +306,7 @@
             // 
             txbId.Enabled = false;
             txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbId.Location = new Point(368, 14);
+            txbId.Location = new Point(369, 28);
             txbId.Name = "txbId";
             txbId.Size = new Size(64, 29);
             txbId.TabIndex = 23;
@@ -307,10 +315,10 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Arial Black", 16F);
-            lblTitle.Location = new Point(10, 11);
+            lblTitle.Font = new Font("Arial Black", 12F);
+            lblTitle.Location = new Point(2, 0);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(283, 31);
+            lblTitle.Size = new Size(205, 23);
             lblTitle.TabIndex = 139;
             lblTitle.Text = "Añadir plan de trabajo";
             // 
@@ -318,7 +326,7 @@
             // 
             lblId.AutoSize = true;
             lblId.Font = new Font("Segoe UI", 12F);
-            lblId.Location = new Point(336, 17);
+            lblId.Location = new Point(337, 31);
             lblId.Name = "lblId";
             lblId.Size = new Size(26, 21);
             lblId.TabIndex = 145;
@@ -328,7 +336,7 @@
             // 
             lblObliId.AutoSize = true;
             lblObliId.ForeColor = Color.Crimson;
-            lblObliId.Location = new Point(359, 14);
+            lblObliId.Location = new Point(360, 28);
             lblObliId.Name = "lblObliId";
             lblObliId.Size = new Size(12, 15);
             lblObliId.TabIndex = 147;
@@ -338,7 +346,7 @@
             // 
             label5.AutoSize = true;
             label5.ForeColor = Color.Crimson;
-            label5.Location = new Point(59, 301);
+            label5.Location = new Point(60, 353);
             label5.Name = "label5";
             label5.Size = new Size(12, 15);
             label5.TabIndex = 158;
@@ -348,7 +356,7 @@
             // 
             label8.AutoSize = true;
             label8.ForeColor = Color.Crimson;
-            label8.Location = new Point(54, 267);
+            label8.Location = new Point(55, 319);
             label8.Name = "label8";
             label8.Size = new Size(12, 15);
             label8.TabIndex = 160;
@@ -358,7 +366,7 @@
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.Crimson;
-            label2.Location = new Point(83, 124);
+            label2.Location = new Point(84, 143);
             label2.Name = "label2";
             label2.Size = new Size(12, 15);
             label2.TabIndex = 159;
@@ -370,7 +378,7 @@
             chbLotActives.BackgroundImage = Properties.Resources.Imagen6;
             chbLotActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbLotActives.Font = new Font("Segoe UI", 10F);
-            chbLotActives.Location = new Point(609, 262);
+            chbLotActives.Location = new Point(610, 314);
             chbLotActives.Name = "chbLotActives";
             chbLotActives.Size = new Size(39, 31);
             chbLotActives.TabIndex = 13;
@@ -383,7 +391,7 @@
             chbSizeActives.BackgroundImage = Properties.Resources.Imagen6;
             chbSizeActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbSizeActives.Font = new Font("Segoe UI", 10F);
-            chbSizeActives.Location = new Point(393, 154);
+            chbSizeActives.Location = new Point(394, 173);
             chbSizeActives.Name = "chbSizeActives";
             chbSizeActives.Size = new Size(39, 31);
             chbSizeActives.TabIndex = 7;
@@ -395,7 +403,7 @@
             lblDateWorkPlan.AutoSize = true;
             lblDateWorkPlan.Font = new Font("Segoe UI", 12F);
             lblDateWorkPlan.ForeColor = SystemColors.ControlText;
-            lblDateWorkPlan.Location = new Point(32, 91);
+            lblDateWorkPlan.Location = new Point(33, 69);
             lblDateWorkPlan.Name = "lblDateWorkPlan";
             lblDateWorkPlan.Size = new Size(53, 21);
             lblDateWorkPlan.TabIndex = 178;
@@ -405,7 +413,7 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = Color.Crimson;
-            label4.Location = new Point(83, 88);
+            label4.Location = new Point(84, 66);
             label4.Name = "label4";
             label4.Size = new Size(12, 15);
             label4.TabIndex = 179;
@@ -414,7 +422,7 @@
             // btnAccept
             // 
             btnAccept.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnAccept.Location = new Point(492, 518);
+            btnAccept.Location = new Point(492, 576);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 21;
@@ -425,7 +433,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(573, 518);
+            btnCancel.Location = new Point(573, 576);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 22;
@@ -447,7 +455,7 @@
             chbActive.FlatAppearance.MouseOverBackColor = SystemColors.ButtonFace;
             chbActive.FlatStyle = FlatStyle.Flat;
             chbActive.Font = new Font("Segoe UI", 12F);
-            chbActive.Location = new Point(91, 48);
+            chbActive.Location = new Point(92, 26);
             chbActive.Name = "chbActive";
             chbActive.Size = new Size(63, 31);
             chbActive.TabIndex = 0;
@@ -459,7 +467,7 @@
             // 
             label7.AutoSize = true;
             label7.ForeColor = Color.Crimson;
-            label7.Location = new Point(81, 51);
+            label7.Location = new Point(82, 29);
             label7.Name = "label7";
             label7.Size = new Size(12, 15);
             label7.TabIndex = 182;
@@ -471,7 +479,7 @@
             chbWorkGroupActives.BackgroundImage = Properties.Resources.Imagen6;
             chbWorkGroupActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbWorkGroupActives.Font = new Font("Segoe UI", 10F);
-            chbWorkGroupActives.Location = new Point(393, 119);
+            chbWorkGroupActives.Location = new Point(394, 138);
             chbWorkGroupActives.Name = "chbWorkGroupActives";
             chbWorkGroupActives.Size = new Size(39, 31);
             chbWorkGroupActives.TabIndex = 4;
@@ -485,7 +493,7 @@
             chbGtinActives.BackgroundImage = Properties.Resources.Imagen6;
             chbGtinActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbGtinActives.Font = new Font("Segoe UI", 10F);
-            chbGtinActives.Location = new Point(254, 300);
+            chbGtinActives.Location = new Point(255, 352);
             chbGtinActives.Name = "chbGtinActives";
             chbGtinActives.Size = new Size(39, 29);
             chbGtinActives.TabIndex = 16;
@@ -498,7 +506,7 @@
             chbVarietyActives.BackgroundImage = Properties.Resources.Imagen6;
             chbVarietyActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbVarietyActives.Font = new Font("Segoe UI", 10F);
-            chbVarietyActives.Location = new Point(609, 226);
+            chbVarietyActives.Location = new Point(610, 278);
             chbVarietyActives.Name = "chbVarietyActives";
             chbVarietyActives.Size = new Size(39, 31);
             chbVarietyActives.TabIndex = 10;
@@ -510,7 +518,7 @@
             lblVariety.AutoSize = true;
             lblVariety.Font = new Font("Segoe UI", 10F);
             lblVariety.ForeColor = SystemColors.Highlight;
-            lblVariety.Location = new Point(20, 222);
+            lblVariety.Location = new Point(21, 274);
             lblVariety.Name = "lblVariety";
             lblVariety.Size = new Size(65, 38);
             lblVariety.TabIndex = 186;
@@ -521,7 +529,7 @@
             txbIdVariety.Enabled = false;
             txbIdVariety.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdVariety.ForeColor = SystemColors.ActiveCaption;
-            txbIdVariety.Location = new Point(91, 227);
+            txbIdVariety.Location = new Point(92, 279);
             txbIdVariety.Name = "txbIdVariety";
             txbIdVariety.Size = new Size(46, 29);
             txbIdVariety.TabIndex = 8;
@@ -537,7 +545,7 @@
             cboVariety.FormattingEnabled = true;
             cboVariety.IntegralHeight = false;
             cboVariety.ItemHeight = 21;
-            cboVariety.Location = new Point(143, 227);
+            cboVariety.Location = new Point(144, 279);
             cboVariety.Name = "cboVariety";
             cboVariety.Size = new Size(460, 29);
             cboVariety.TabIndex = 9;
@@ -548,7 +556,7 @@
             chbDistributorActives.BackgroundImage = Properties.Resources.Imagen6;
             chbDistributorActives.BackgroundImageLayout = ImageLayout.Stretch;
             chbDistributorActives.Font = new Font("Segoe UI", 10F);
-            chbDistributorActives.Location = new Point(609, 299);
+            chbDistributorActives.Location = new Point(610, 351);
             chbDistributorActives.Name = "chbDistributorActives";
             chbDistributorActives.Size = new Size(39, 31);
             chbDistributorActives.TabIndex = 19;
@@ -560,7 +568,7 @@
             lblDistributor.AutoSize = true;
             lblDistributor.Font = new Font("Segoe UI", 10F);
             lblDistributor.ForeColor = SystemColors.Highlight;
-            lblDistributor.Location = new Point(316, 292);
+            lblDistributor.Location = new Point(317, 344);
             lblDistributor.Name = "lblDistributor";
             lblDistributor.Size = new Size(82, 38);
             lblDistributor.TabIndex = 191;
@@ -571,7 +579,7 @@
             txbIdDistributor.Enabled = false;
             txbIdDistributor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             txbIdDistributor.ForeColor = SystemColors.ActiveCaption;
-            txbIdDistributor.Location = new Point(404, 300);
+            txbIdDistributor.Location = new Point(405, 352);
             txbIdDistributor.Name = "txbIdDistributor";
             txbIdDistributor.Size = new Size(35, 29);
             txbIdDistributor.TabIndex = 17;
@@ -587,7 +595,7 @@
             cboDistributor.FormattingEnabled = true;
             cboDistributor.IntegralHeight = false;
             cboDistributor.ItemHeight = 21;
-            cboDistributor.Location = new Point(445, 300);
+            cboDistributor.Location = new Point(446, 352);
             cboDistributor.Name = "cboDistributor";
             cboDistributor.Size = new Size(158, 29);
             cboDistributor.TabIndex = 18;
@@ -596,7 +604,7 @@
             // 
             txbIdTypeBox.Enabled = false;
             txbIdTypeBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txbIdTypeBox.Location = new Point(91, 190);
+            txbIdTypeBox.Location = new Point(92, 209);
             txbIdTypeBox.Name = "txbIdTypeBox";
             txbIdTypeBox.Size = new Size(46, 29);
             txbIdTypeBox.TabIndex = 192;
@@ -612,7 +620,7 @@
             cboTypeBox.IntegralHeight = false;
             cboTypeBox.ItemHeight = 21;
             cboTypeBox.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
-            cboTypeBox.Location = new Point(143, 190);
+            cboTypeBox.Location = new Point(144, 209);
             cboTypeBox.Name = "cboTypeBox";
             cboTypeBox.Size = new Size(244, 29);
             cboTypeBox.TabIndex = 193;
@@ -621,7 +629,7 @@
             // 
             label3.AutoSize = true;
             label3.ForeColor = Color.Crimson;
-            label3.Location = new Point(83, 193);
+            label3.Location = new Point(84, 212);
             label3.Name = "label3";
             label3.Size = new Size(12, 15);
             label3.TabIndex = 196;
@@ -632,17 +640,120 @@
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12F);
             label6.ForeColor = SystemColors.ControlText;
-            label6.Location = new Point(42, 193);
+            label6.Location = new Point(43, 212);
             label6.Name = "label6";
             label6.Size = new Size(43, 21);
             label6.TabIndex = 195;
             label6.Text = "Caja:";
             // 
+            // chbSeasonActives
+            // 
+            chbSeasonActives.Appearance = Appearance.Button;
+            chbSeasonActives.BackgroundImage = Properties.Resources.Imagen6;
+            chbSeasonActives.BackgroundImageLayout = ImageLayout.Stretch;
+            chbSeasonActives.Font = new Font("Segoe UI", 10F);
+            chbSeasonActives.Location = new Point(394, 97);
+            chbSeasonActives.Name = "chbSeasonActives";
+            chbSeasonActives.Size = new Size(39, 31);
+            chbSeasonActives.TabIndex = 199;
+            chbSeasonActives.Text = "     ";
+            chbSeasonActives.UseVisualStyleBackColor = true;
+            // 
+            // txbIdSeason
+            // 
+            txbIdSeason.Enabled = false;
+            txbIdSeason.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdSeason.Location = new Point(92, 98);
+            txbIdSeason.Name = "txbIdSeason";
+            txbIdSeason.Size = new Size(46, 29);
+            txbIdSeason.TabIndex = 197;
+            txbIdSeason.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboSeason
+            // 
+            cboSeason.DropDownHeight = 300;
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.DropDownWidth = 464;
+            cboSeason.Font = new Font("Segoe UI", 12F);
+            cboSeason.FormattingEnabled = true;
+            cboSeason.IntegralHeight = false;
+            cboSeason.ItemHeight = 21;
+            cboSeason.Location = new Point(144, 98);
+            cboSeason.Name = "cboSeason";
+            cboSeason.Size = new Size(244, 29);
+            cboSeason.TabIndex = 198;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.ForeColor = Color.Crimson;
+            label11.Location = new Point(84, 102);
+            label11.Name = "label11";
+            label11.Size = new Size(12, 15);
+            label11.TabIndex = 201;
+            label11.Text = "*";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 10F);
+            label10.ForeColor = SystemColors.Highlight;
+            label10.Location = new Point(3, 93);
+            label10.Name = "label10";
+            label10.Size = new Size(83, 38);
+            label10.TabIndex = 202;
+            label10.Text = "Filtro por\r\n temporada:";
+            label10.TextAlign = ContentAlignment.TopRight;
+            // 
+            // txbLegend
+            // 
+            txbLegend.Enabled = false;
+            txbLegend.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbLegend.Location = new Point(92, 244);
+            txbLegend.Name = "txbLegend";
+            txbLegend.Size = new Size(46, 29);
+            txbLegend.TabIndex = 203;
+            txbLegend.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboLegend
+            // 
+            cboLegend.DropDownHeight = 300;
+            cboLegend.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboLegend.DropDownWidth = 100;
+            cboLegend.Font = new Font("Segoe UI", 12F);
+            cboLegend.FormattingEnabled = true;
+            cboLegend.IntegralHeight = false;
+            cboLegend.ItemHeight = 21;
+            cboLegend.Items.AddRange(new object[] { "11", "22", "33", "44", "55", "66", "77", "88", "99" });
+            cboLegend.Location = new Point(144, 244);
+            cboLegend.Name = "cboLegend";
+            cboLegend.Size = new Size(460, 29);
+            cboLegend.TabIndex = 204;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 12F);
+            label13.ForeColor = SystemColors.ControlText;
+            label13.Location = new Point(15, 247);
+            label13.Name = "label13";
+            label13.Size = new Size(71, 21);
+            label13.TabIndex = 205;
+            label13.Text = "Leyenda:";
+            // 
             // FrmWorkPlanAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(660, 555);
+            ClientSize = new Size(660, 613);
+            Controls.Add(txbLegend);
+            Controls.Add(cboLegend);
+            Controls.Add(label13);
+            Controls.Add(label10);
+            Controls.Add(chbSeasonActives);
+            Controls.Add(txbIdSeason);
+            Controls.Add(cboSeason);
+            Controls.Add(label11);
             Controls.Add(txbIdTypeBox);
             Controls.Add(cboTypeBox);
             Controls.Add(label3);
@@ -762,5 +873,13 @@
         public ComboBox cboTypeBox;
         private Label label3;
         private Label label6;
+        public CheckBox chbSeasonActives;
+        public TextBox txbIdSeason;
+        public ComboBox cboSeason;
+        private Label label11;
+        private Label label10;
+        public TextBox txbLegend;
+        public ComboBox cboLegend;
+        private Label label13;
     }
 }

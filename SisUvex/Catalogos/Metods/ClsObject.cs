@@ -1,8 +1,13 @@
 
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Identity.Client;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Usuarios;
+using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using System.Diagnostics.Metrics;
 using System.Web;
 
@@ -34,9 +39,9 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboWorkPlan";
             public const string DgvCatalog = "DgvCatalogWorkPlan";
             public const string QueryCbo = "queryWorkPlan";
-            public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] ";
+            public const string QueryDgvCatalog = $" SELECT wpl.*, w.id_workPlan AS [{ColumnId}], w.c_active AS [{ColumnActive}], w.d_workDay AS [{ColumnDate}], w.id_lot AS [{Lot.ColumnId}] FROM vw_PackWorkPlanCat wpl JOIN Pack_WorkPlan w ON w.id_workPlan = wpl.[Código] LEFT JOIN Pack_GTIN gtn ON gtn.id_GTIN = w.id_GTIN LEFT JOIN Pack_Lot lot ON lot.id_lot = w.id_lot AND lot.id_variety = gtn.id_variety ";
             public const string CboPresentation = "CboWorkPlanPresentation";
-            public const string QueryCboPresentation = $@"SELECT CONCAT_WS(' ', wpl.id_workPlan, '|', lot.v_nameLot, '|', dis.v_nameDistShort, '|', CONCAT(con.v_nameContainer, CAST(gtn.n_lbs AS FLOAT)), siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, box.v_shortNameTypeBox) AS [{Column.name}]
+            public const string QueryCboPresentation = $@"SELECT CONCAT_WS(' ', wpl.id_workPlan, '|', lot.v_nameLot, '|', dis.v_nameDistShort, '|', CONCAT(con.v_nameContainer, CAST(gtn.n_lbs AS FLOAT)), siz.v_sizeValue, gtn.v_preLabel, pre.v_namePresentation, [var].v_nameComercial, gtn.v_postLabel, box.v_shortNameTypeBox, leg.v_labelLegend) AS [{Column.name}]
                                                         , wpl.c_active AS [{Column.active}]
                                                         , wpl.id_workPlan AS [{Column.id}]
                                                         , FORMAT(wpl.d_workDay, 'yyyy-MM-dd') AS [{ColumnDate}]
@@ -48,6 +53,8 @@ namespace SisUvex.Catalogos.Metods
                                                         , [var].v_nameComercial AS [{Variety.ColumnName}]
                                                         , [var].v_nameScientis AS [{Variety.ColumnScientis}]
                                                         , [var].v_shortName AS [{Variety.ColumnShortName}]
+                                                        , [var].v_patentLegend AS [{Variety.ColumnPatentLegend}]
+                                                        , [var].v_tradeMark AS [{Variety.ColumnTradeMark}]
                                                         , cro.id_crop AS [{Crop.ColumnId}]
                                                         , cro.v_nameCrop AS [{Crop.ColumnName}]
                                                         , wpl.id_size AS [{Size.ColumnId}]
@@ -84,6 +91,9 @@ namespace SisUvex.Catalogos.Metods
                                                         , box.v_nameTypeBox AS [{TypeBox.ColumnName}]
                                                         , box.id_typeBox AS [{TypeBox.ColumnId}]
                                                         , box.v_shortNameTypeBox AS [{TypeBox.ColumnShortName}]
+                                                        , leg.id_labelLegend AS [{LabelLegend.ColumnId}]
+                                                        , leg.v_labelLegend AS [{LabelLegend.ColumnName}]
+                                                        , leg.v_labelLegend2 AS [{LabelLegend.ColumnLegend2}]
                                                         FROM Pack_WorkPlan AS wpl 
                                                         LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup 
                                                         LEFT JOIN dbo.Pack_Contractor AS ctr ON ctr.id_contractor = wgp.id_contractor 
@@ -99,7 +109,107 @@ namespace SisUvex.Catalogos.Metods
                                                         LEFT JOIN dbo.Pack_Crop AS cro ON cro.id_crop = [var].id_crop 
                                                         LEFT JOIN dbo.Pack_Color AS col ON col.id_color = [var].id_color 
                                                         LEFT JOIN dbo.Grow_Farm AS farm ON farm.id_farm = lot.id_farm
-                                                        LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox";
+                                                        LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                                                        LEFT JOIN dbo.Pack_LabelLegend AS leg ON leg.id_labelLegend = wpl.id_labelLegend";
+        }
+
+        /// <summary>
+        /// Consultas sobre <c>vw_PackPalletCon</c> (activos) y <c>vw_PackPalletConWithShrinkage</c> (incluye inactivos / reestibados) con IDs de tablas relacionadas.
+        /// <see cref="ColumnsJoinedIds"/> lista los alias agregados por los JOIN (para ocultar en DGV, validaciones, etc.).
+        /// </summary>
+        public static class Pallet
+        {
+            public const string ViewCon = "vw_PackPalletCon";
+            /// <summary>Incluye pallets con <c>Activo = '0'</c> (reestibados, inactivos, etc.).</summary>
+            public const string ViewConWithStowage = "vw_PackPalletConWithShrinkage";
+            /// <summary>Columna de estado en las vistas de pallet (<c>Activo</c>).</summary>
+            public const string ColumnActive = Column.active;
+
+            public const string ColumnPalletId = "idPallet";
+            public const string ColumnManifestId = "idManifest";
+            public const string ColumnRackId = "idRack";
+
+            const string QueryJoins = @"
+                LEFT JOIN dbo.Pack_Pallet AS pal ON pal.id_pallet = vw.Pallet
+                LEFT JOIN dbo.Pack_WorkPlan AS wpl ON wpl.id_workPlan = pal.id_workPlan
+                LEFT JOIN dbo.Pack_GTIN AS gtn ON gtn.id_GTIN = wpl.id_GTIN
+                LEFT JOIN dbo.Pack_Lot AS lot ON lot.id_lot = wpl.id_lot AND lot.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_WorkGroup AS wgp ON wgp.id_workGroup = wpl.id_workGroup
+                LEFT JOIN dbo.Pack_Contractor AS con ON con.id_contractor = wgp.id_contractor
+                LEFT JOIN dbo.Pack_Size AS siz ON siz.id_size = wpl.id_size
+                LEFT JOIN dbo.Pack_Presentation AS pre ON pre.id_presentation = gtn.id_presentation
+                LEFT JOIN dbo.Pack_Container AS cnt ON cnt.id_container = gtn.id_container
+                LEFT JOIN dbo.Pack_Variety AS vrt ON vrt.id_variety = gtn.id_variety
+                LEFT JOIN dbo.Pack_Distributor AS dis ON dis.id_distributor = gtn.id_distributor
+                LEFT JOIN dbo.Pack_Crop AS crop ON crop.id_crop = vrt.id_crop
+                LEFT JOIN dbo.Pack_TypeBox AS box ON box.id_typeBox = wpl.id_typeBox
+                LEFT JOIN dbo.Pack_Price AS pri ON pri.id_price = gtn.id_price";
+
+            const string QuerySelectJoinedIds = $@"
+                pal.id_pallet AS [{ColumnPalletId}],
+                pal.id_manifest AS [{ColumnManifestId}],
+                pal.id_rack AS [{ColumnRackId}],
+                wpl.id_workPlan AS [{WorkPlan.ColumnId}],
+                gtn.id_GTIN AS [{Gtin.ColumnId}],
+                gtn.id_pti AS [{Pti.ColumnId}],
+                lot.id_lot AS [{Lot.ColumnId}],
+                lot.id_farm AS [{Farm.ColumnId}],
+                vrt.id_variety AS [{Variety.ColumnId}],
+                vrt.id_color AS [{Color.ColumnId}],
+                wgp.id_workGroup AS [{WorkGroup.ColumnId}],
+                con.id_contractor AS [{Contractor.ColumnId}],
+                siz.id_size AS [{Size.ColumnId}],
+                pre.id_presentation AS [{Presentation.ColumnId}],
+                pre.id_category AS [{Category.ColumnId}],
+                gtn.id_container AS [{Container.ColumnId}],
+                dis.id_distributor AS [{Distributor.ColumnId}],
+                crop.id_crop AS [{Crop.ColumnId}],
+                box.id_typeBox AS [{TypeBox.ColumnId}],
+                pri.id_price AS [{Price.ColumnId}]";
+
+            public const string QuerySelectBase =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewCon + " vw " + QueryJoins;
+
+            public const string QuerySelectBaseWithStowage =
+                "SELECT vw.*, " + QuerySelectJoinedIds + " FROM " + ViewConWithStowage + " vw " + QueryJoins;
+
+            /// <summary>Alias de columnas agregadas por los JOIN (no incluye <c>vw.*</c>). Coinciden con <see cref="QuerySelectJoinedIds"/>.</summary>
+            public static readonly List<string> ColumnsJoinedIds = new()
+            {
+                ColumnPalletId,
+                ColumnManifestId,
+                ColumnRackId,
+                WorkPlan.ColumnId,
+                Gtin.ColumnId,
+                Pti.ColumnId,
+                Lot.ColumnId,
+                Farm.ColumnId,
+                Variety.ColumnId,
+                Color.ColumnId,
+                WorkGroup.ColumnId,
+                Contractor.ColumnId,
+                Size.ColumnId,
+                Presentation.ColumnId,
+                Category.ColumnId,
+                Container.ColumnId,
+                Distributor.ColumnId,
+                Crop.ColumnId,
+                TypeBox.ColumnId,
+                Price.ColumnId,
+            };
+
+            /// <summary>Oculta en el DGV las columnas de IDs agregadas por los JOIN.</summary>
+            public static void HideJoinedIdColumns(DataGridView dgv)
+            {
+                if (dgv == null)
+                    return;
+
+                foreach (string columnName in ColumnsJoinedIds)
+                {
+                    if (dgv.Columns.Contains(columnName))
+                        dgv.Columns[columnName].Visible = false;
+                }
+            }
         }
 
         public static class Grower
@@ -195,11 +305,15 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Variedad";
             public const string ColumnScientis = "Variedad científica";
             public const string ColumnShortName = "shortVariety";
+            public const string ColumnPatentLegend = "patentLegend";
+            public const string ColumnTradeMark = "tradeMark";
             public const string ColumnId = "idVariety";
             public const string ColumnActive = "ActiveVariety";
             public const string Cbo = "CboVariety";
             public const string DgvCatalog = "DgvCatalogVariety";
-            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (',c_active,') ',v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS 'Color.ColumnId', id_crop AS [{Crop.ColumnId}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}] FROM Pack_Variety ORDER BY [{Column.name}]  ";
+            /// <summary>Alias en <c>vw_PackVarietyCat</c> para <c>c_useFacility</c>.</summary>
+            public const string ColumnUseFacility = "Emp. Central";
+            public const string QueryCbo = $" SELECT id_variety AS [{Column.id}], CONCAT(v_nameComercial, ' | ', id_variety, ' (', c_active, ') ', v_nameScientis) AS [{Column.name}], c_active AS [{Column.active}], id_color AS [{Color.ColumnId}], id_crop AS [{Crop.ColumnId}], id_grower AS [{Grower.ColumnId}], c_useFacility AS [{ColumnUseFacility}], v_nameComercial AS [{ColumnName}], v_nameScientis AS [{ColumnScientis}], v_shortName AS [{ColumnShortName}], v_patentLegend AS [Leyenda patente], v_trademark AS [Marca registrada] FROM Pack_Variety ORDER BY [{Column.name}] ";
             public const string QueryDgvCatalog = "queryVariety";
         }
 
@@ -212,13 +326,13 @@ namespace SisUvex.Catalogos.Metods
             public const string Cbo = "CboLot";
             public const string CboOnlyNameLot = "CboLotOnlyNameLot";
             public const string CboOnlyNameLotPlantTracking = "CboOnlyNameLotPlantTracking";
-			public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
-			public const string DgvCatalog = "DgvCatalogLot";
+            public const string CboOnlyNameLotFacility = "CboOnlyNameLotFacility";
+            public const string DgvCatalog = "DgvCatalogLot";
             public const string QueryCbo = $" SELECT CONCAT(lot.id_lot, '|',lot.id_variety) AS [{Column.id}], lot.id_lot AS [{Lot.ColumnId}], lot.id_variety AS [{Variety.ColumnId}], CONCAT(lot.v_nameLot, ' | ', var.v_nameComercial, ' | ', lot.id_lot, '|', var.id_variety, CASE WHEN var.v_nameScientis IS NOT NULL THEN CONCAT(' | (', var.v_nameScientis, ')') ELSE '' END,' (',lot.c_active,')') AS [{Column.name}], lot.c_active AS [{Column.active}], v_nameLot AS [{ColumnName}], id_farm AS [{Farm.ColumnId}]  FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety ORDER BY [{Column.name}] ";
             public const string QueryCboOnlyNameLot = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm ORDER BY [{Column.name}] ";
             public const string QueryOnlyNameLotPlantTracking = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_plantTracking = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
-			public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UseFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
-			public const string QueryDgvCatalog = "queryLot";
+            public const string QueryCboOnlyNameLotFacility = $" SELECT lot.id_lot AS [{Column.id}], CONCAT_WS(' ', lot.v_nameLot, '|', lot.id_lot) AS [{Column.name}], MAX(lot.c_active) AS [{Column.active}], v_nameLot AS [{ColumnName}], lot.id_farm AS [{Farm.ColumnId}] FROM Pack_Lot lot JOIN Pack_Variety var ON var.id_variety = lot.id_variety WHERE lot.c_UseFacility = '1' GROUP BY lot.id_lot, lot.v_nameLot, lot.id_farm  ORDER BY [{Column.name}] ";
+            public const string QueryDgvCatalog = "queryLot";
         }
 
         public static class Presentation
@@ -299,12 +413,13 @@ namespace SisUvex.Catalogos.Metods
         {
             public const string TableName = "Pack_WorkGroup";
             public const string ColumnName = "Cuadrilla";
+            public const string ColumnPayroll = "Contrato";
             public const string ColumnId = "idWorkGroup";
             public const string ColumnActive = "ActiveWorkGroup";
             public const string Cbo = "CboWorkGroup";
             public const string DgvCatalog = "DgvCatalogWorkGroup";
-            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], '1' AS [{Column.active}] , wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
-            public const string QueryDgvCatalog = "queryWorkGroup";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CONCAT_WS(' ', v_nameWorkGroup,COALESCE('('+con.v_nameContractor+')',NULL), '|', id_workGroup) [{Column.name}], wgp.id_contractor AS [{Contractor.ColumnId}], con.v_nameContractor AS [{Contractor.ColumnName}], wgp.c_active AS [{Column.active}], wgp.v_nameWorkGroup AS [{ColumnName}], wgp.id_season AS [{Season.ColumnId}] FROM Pack_WorkGroup wgp LEFT JOIN Pack_Contractor con ON con.id_contractor = wgp.id_contractor ORDER BY wgp.v_nameWorkGroup ";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackWorkGroupCat cat ";
         }
 
         public static class ProductionLine
@@ -358,14 +473,23 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Temporada";
             public const string ColumnId = "idSeason";
             public const string ColumnActive = "ActiveSeason";
-			public const string ColumnStartDate = "StartDate";
-			public const string ColumnEndDate = "EndDate";
-			public const string CboWithDates = "CboWithDates";
-			public const string Cbo = "CboSeason";
+            public const string ColumnStartDate = "StartDate";
+            public const string ColumnEndDate = "EndDate";
+            public const string CboWithDates = "CboWithDates";
+            public const string Cbo = "CboSeason";
             public const string DgvCatalog = "DgvCatalogSeason";
             public const string QueryCbo = $" SELECT id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}] FROM Pack_Season ORDER BY [{Column.name}] ";
-			public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
-		}
+            public const string QueryCboWithDates = $" SELECT  id_season AS [{Column.id}], CONCAT(v_nameSeason, ' | ', id_season, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}], v_nameSeason AS [{ColumnName}], d_seasonBegins AS [{ColumnStartDate}], d_seasonEnds AS [{ColumnEndDate}] FROM Pack_Season ORDER BY [{Column.name}] ";
+        }
+
+        public static class SeasonType
+        {
+            public const string TableName = "Pack_SeasonType";
+            public const string ColumnName = "Tipo temporada";
+            public const string ColumnId = "idSeasonType";
+            public const string Cbo = "CboSeasonType";
+            public const string QueryCbo = $" SELECT id_seasonType AS [{Column.id}], CONCAT(v_nameSeasonType, ' | ', id_seasonType) AS [{Column.name}], v_nameSeasonType AS [{ColumnName}] FROM Pack_SeasonType ORDER BY [{Column.name}] ";
+        }
 
         public static class City
         {
@@ -471,9 +595,15 @@ namespace SisUvex.Catalogos.Metods
             public const string TableName = "Pack_ManifestTemplates";
             public const string ColumnName = "Plantilla de manifiesto";
             public const string ColumnId = "idManifestTemplate";
+            public const string ColumnPrintShowSize = "Mostrar tamaño";
+            public const string ColumnPrintManifest = "Manifiesto";
+            public const string ColumnPrintManifestPerField = "Manifiesto por campo";
+            public const string ColumnPrintMaping = "Mapa de posiciones";
+            public const string ColumnPrintExcelLayout = "Excel layout";
+            public const string ColumnPrintPackingList = "Packing list";
             public const string Cbo = "CboManifestTemplate";
             public const string DgvCatalog = "DgvCatalogManifestTemplate";
-            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], '1' AS [{ClsObject.Column.active}] FROM Pack_ManifestTemplates ";
+            public const string QueryCbo = $" SELECT id_template AS [{Column.id}], v_nameTemplate AS [{Column.name}], c_active AS [{Column.active}], v_nameTemplate AS [{ColumnName}], id_distributor AS [{Distributor.ColumnId}], id_grower AS [{Grower.ColumnId}], id_USAgencyTrade AS [{AgencyTradeUS.ColumnId}], id_MXAgencyTrade AS [{AgencyTradeMX.ColumnId}], id_cityCrossPoint AS [{City.ColumnIdCrossPoint}], id_cityDestiny AS [{City.ColumnIdDestiny}], id_consignee AS [{Consignee.ColumnId}], id_crop AS [{Crop.ColumnId}], c_printShowSize AS [{ColumnPrintShowSize}], c_printManifest AS [{ColumnPrintManifest}], c_printManifestPerField AS [{ColumnPrintManifestPerField}], c_printMaping AS [{ColumnPrintMaping}], c_printExcelLayout AS [{ColumnPrintExcelLayout}], c_printPackingList AS [{ColumnPrintPackingList}]  FROM Pack_ManifestTemplates ORDER BY [{Column.name}] ";
         }
 
         public static class Unit
@@ -529,7 +659,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveMaterialCatalog";
             public const string Cbo = "CboMaterialCatalog";
             public const string DgvCatalog = "DgvCatalogMaterialCatalog";
-            public const string QueryCbo = $" SELECT id_matCatalog AS [{Column.id}], CONCAT(v_nameMat, ' | ', id_matCatalog, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_nameMat AS [{ColumnName}], id_matType AS [{MaterialType.ColumnId}], id_color AS [{Color.ColumnId}], id_category AS [{Category.ColumnId}], id_unit AS [{Unit.ColumnId}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_MaterialCatalog ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT CAST(id_matCatalog AS varchar(20)) AS [{Column.id}], CONCAT(v_nameMat, ' | ', id_matCatalog, ' | (', c_active, ')') AS [{Column.name}], c_active AS [{Column.active}] ,v_nameMat AS [{ColumnName}], id_matType AS [{MaterialType.ColumnId}], id_color AS [{Color.ColumnId}], id_category AS [{Category.ColumnId}], id_unit AS [{Unit.ColumnId}], id_distributor AS [{Distributor.ColumnId}] FROM Pack_MaterialCatalog ORDER BY [{Column.name}] ";
         }
 
         public static class ForeignDest
@@ -603,6 +733,26 @@ namespace SisUvex.Catalogos.Metods
             public const string QueryCbo = $" SELECT id_typeBox AS [{Column.id}], CONCAT_WS(' | ', v_nameTypeBox, v_shortNameTypeBox, id_typeBox) AS [{Column.name}], v_nameTypeBox AS [{ColumnName}], v_shortNameTypeBox AS [{ColumnShortName}] FROM Pack_TypeBox ORDER BY [{Column.name}] ";
         }
 
+        public static class SeasonActivities
+        {
+            public const string TableName = "Payroll_SeasonActivities";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_Payroll_SeasonActivitiesCat cat ";
+        }
+
+        public static class LabelLegend
+        {
+            public const string TableName = "Pack_LabelLegend";
+            public const string ColumnName = "Leyenda";
+            public const string ColumnId = "idLabelLegend";
+            public const string ColumnLegend2 = "Leyenda2";
+            public const string ColumnDescription = "Descripción";
+            public const string ColumnActive = "ActiveLabelLegend";
+            public const string Cbo = "CboLabelLegend";
+            public const string DgvCatalog = "DgvCatalogLabelLegend";
+            public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackLabelLegendCat cat ";
+            public const string QueryCbo = $" SELECT id_labelLegend AS [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}], v_description AS [{ColumnDescription}] FROM Pack_LabelLegend ";
+        }
+
         public static class Payroll_AttendancePeriod
         {
             public const string TableName = "Payroll_AttendancePeriod";
@@ -640,6 +790,72 @@ namespace SisUvex.Catalogos.Metods
                 parameters.Add("@idEmployee", idEmployee);
 
                 return ClsQuerysDB.ExecuteParameterizedQuery(qry, parameters);
+            }
+        }
+
+        public static class UserFilter
+        {
+            private const string columnId = "idUser";
+
+            private static string GetQryUsersCboAnotadores()
+            {
+                return $@"
+                            SELECT
+                                CAST(usu.c_codigo_usu AS varchar(20)) AS [{Column.id}],
+                                usu.v_nombre_usu AS [{Column.name}],
+                                usu.v_nombre_usu AS [Anotador],
+                                usu.id_workGroup AS [{WorkGroup.ColumnId}],
+                                usu.c_active AS [{Column.active}],
+                                usu.id_role AS [idRole]
+                            FROM dbo.usuario usu
+                            WHERE usu.c_active = '1'
+                              AND usu.id_role IN ('02','03','04','12')
+                            ORDER BY usu.v_nombre_usu, usu.c_codigo_usu;";
+            }
+
+            private static string GetQryWorkGroupContractors()
+            {
+                return $@"
+                            SELECT
+                                id_workGroup AS [{WorkGroup.ColumnId}],
+                                id_contractor AS [{Contractor.ColumnId}]
+                            FROM dbo.Pack_WorkGroup;";
+            }
+
+            public static DataTable GetDtAnotadores()
+            {
+                DataTable dtUsers = ClsQuerysUsuarios.GetDataTable(GetQryUsersCboAnotadores());
+                DataTable dtWorkGroups = ClsQuerysDB.GetDataTable(GetQryWorkGroupContractors());
+
+                if (!dtUsers.Columns.Contains(Contractor.ColumnId))
+                    dtUsers.Columns.Add(Contractor.ColumnId, typeof(string));
+
+                var contractorByWorkGroup = dtWorkGroups.AsEnumerable()
+                    .Where(row => row[WorkGroup.ColumnId] != DBNull.Value)
+                    .ToDictionary(
+                        row => row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        row => row[Contractor.ColumnId] == DBNull.Value ? string.Empty : row[Contractor.ColumnId].ToString()?.Trim() ?? string.Empty,
+                        StringComparer.OrdinalIgnoreCase);
+
+                foreach (DataRow row in dtUsers.Rows)
+                {
+                    string idWorkGroup = row[WorkGroup.ColumnId] == DBNull.Value
+                        ? string.Empty
+                        : row[WorkGroup.ColumnId].ToString()?.Trim() ?? string.Empty;
+
+                    row[Contractor.ColumnId] = contractorByWorkGroup.TryGetValue(idWorkGroup, out string? idContractor)
+                        ? idContractor
+                        : string.Empty;
+                }
+
+                return dtUsers;
+            }
+
+            public static void SetCboAnotadores(ComboBox cbo)
+            {
+                DataTable dt = GetDtAnotadores();
+
+                ClsComboBoxes.LoadComboBoxDataSource(cbo, dt);
             }
         }
     }

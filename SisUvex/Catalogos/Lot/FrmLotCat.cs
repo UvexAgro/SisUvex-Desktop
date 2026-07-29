@@ -57,7 +57,16 @@ namespace SisUvex.Catalogos.Lot
 
         private void cboVariety_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cls.BtnRemoved();
+            cls.SetFilterCatalog();
+        }
+
+        private void btnOpenLotCertification_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            LotCertification.FrmLotCertificationCat cat = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(cat);
         }
     }
 }

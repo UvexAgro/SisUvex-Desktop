@@ -3,17 +3,15 @@ using System.Data;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using static SisUvex.Catalogos.Metods.Extentions.ComboBoxExtensions;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.SqlClient;
 using System.Media;
-using System.Windows.Forms;
 
 namespace SisUvex.Archivo.WorkPlan
 {
     internal class ClsWorkPlanEventsControls
     {
-        public ClsWorkPlan clsWP; 
-        private SQLControl sql = new SQLControl();
+        public ClsWorkPlan clsWP;
         string queryCatalog = ClsObject.WorkPlan.QueryDgvCatalog;
         public void SetCboFilterLots()
         {
@@ -247,54 +245,48 @@ namespace SisUvex.Archivo.WorkPlan
             //en los filtros: GTIN Porque la tabla tiene como columna GTIN y Cuadrilla por el workGroup solo tiene el numero y no todo el nombre completo
 
             if (clsWP._frmCat.cboDistribuidor.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboDistribuidor.SelectedValue}' IN (SELECT gtn.id_distributor FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_distributor = '{clsWP._frmCat.cboDistribuidor.SelectedValue}' ";
 
             if (clsWP._frmCat.cboPresentacion.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboPresentacion.SelectedValue}' IN (SELECT gtn.id_presentation FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_presentation = '{clsWP._frmCat.cboPresentacion.SelectedValue}' ";
 
             if (clsWP._frmCat.cboVariety.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboVariety.SelectedValue}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_variety = '{clsWP._frmCat.cboVariety.SelectedValue}' ";
 
             if (clsWP._frmCat.cboContainer.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboContainer.SelectedValue}' IN (SELECT gtn.id_container FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+                query += $" AND gtn.id_container = '{clsWP._frmCat.cboContainer.SelectedValue}' ";
 
             if (clsWP._frmCat.cboWorkGroup.SelectedIndex > 0)
-                query += $" AND '{clsWP._frmCat.cboWorkGroup.SelectedValue}' IN (SELECT wgp.id_workGroup FROM wgp WHERE wgp.id_workGroup = Cuadrilla) ";
+                query += $" AND w.id_workGroup = '{clsWP._frmCat.cboWorkGroup.SelectedValue}' ";
 
-            if (clsWP._frmCat.cboLot.SelectedIndex > 0 && clsWP._frmCat.cboLot.SelectedValue.ToString().Length == 7)
-                query += $" AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(0, 4)}' IN (SELECT lot.id_lot FROM lot WHERE lot.id_lot = w.id_lot) AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(7 - 2)}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
+            if (clsWP._frmCat.cboFarm.SelectedIndex > 0)
+                query += $" AND lot.id_farm = '{clsWP._frmCat.cboFarm.SelectedValue}' ";
+
+            if (clsWP._frmCat.cboLot.SelectedIndex > 0)
+            {
+                query += $" AND w.id_lot = '{clsWP._frmCat.cboLot.GetColumnValue(Lot.ColumnId).ToString()}' ";
+                query += $" AND gtn.id_variety = '{clsWP._frmCat.cboLot.GetColumnValue(Variety.ColumnId).ToString()}' ";
+            }
+
+            //if (clsWP._frmCat.cboLot.SelectedIndex > 0 && clsWP._frmCat.cboLot.SelectedValue.ToString().Length == 7)
+            //    query += $" AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(0, 4)}' IN (SELECT lot.id_lot FROM lot WHERE lot.id_lot = w.id_lot) AND '{clsWP._frmCat.cboLot.SelectedValue.ToString().Substring(7 - 2)}' IN (SELECT gtn.id_variety FROM gtn WHERE gtn.id_GTIN = GTIN) ";
             
             //Clipboard.SetText(query); //Copiar la query en el portapapeles
 
             clsWP.dtCatalog = ClsQuerysDB.GetDataTable(query);
 
-            clsWP._frmCat.dgvCatalog.DataSource = clsWP.dtCatalog;
-
-            if (!clsWP._frmCat.chbRemoved.Checked)
-                clsWP.dtCatalog.DefaultView.RowFilter = $" {ClsObject.WorkPlan.ColumnActive} = '1' ";
-
-            List<string> hiddenColumns = new List<string>()
-            {
-                ClsObject.WorkPlan.ColumnId,
-                ClsObject.WorkPlan.ColumnActive,
-                ClsObject.WorkPlan.ColumnDate
-            };
-
-            foreach (string column in hiddenColumns)
-            {
-                if (clsWP.dtCatalog.Columns.Contains(column))
-                {
-                    clsWP._frmCat.dgvCatalog.Columns[column].Visible = false;
-                }
-            }
+            clsWP.BindDgvCatalog();
         }
 
         public void ChbRemovedChecked()
         {
             if (clsWP._frmCat.chbRemoved.Checked)
-                clsWP.dtCatalog.DefaultView.RowFilter = null;
+                clsWP.dgv!.SetFilterNull();
             else
-                clsWP.dtCatalog.DefaultView.RowFilter = $" {ClsObject.Column.active} = '1' ";
+            {
+                clsWP.dgv!.CopyActiveValuesToHiddenColumn();
+                clsWP.dgv!.SetFilterActivesOnly();
+            }
         }
 
         public bool IsActive()
@@ -305,99 +297,36 @@ namespace SisUvex.Archivo.WorkPlan
             }
             return false;
         }
-        public void ProcedureRemove(string procedureName)
+        public void ProcedureRemove()
         {
             if (clsWP._frmCat.dgvCatalog.SelectedRows.Count > 0)
             {
                 if (IsActive())
                 {
-                    string id = clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
+                    string id = clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString()!;
 
-                    try
-                    {
-                        sql.OpenConectionWrite();
-                        SqlCommand cmd = new SqlCommand(procedureName, sql.cnn);
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                        cmd.ExecuteNonQuery();
-
-                        clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value = "0";
-
-                        DeleteInDataTable(id);
-                    }
-                    catch (Exception ex)
-                    {
-                        SystemSounds.Exclamation.Play();
-                        MessageBox.Show(ex.ToString(), "Catálogo eliminar");
-                    }
-                    finally
-                    {
-                        sql.CloseConectionWrite();
-                    }
+                    if (EworkPlan.ActiveProcedure(id, "0"))
+                        clsWP.dgv!.ChangeActiveCell(clsWP._frmCat.dgvCatalog, "0");
                 }
             }
             else
                 SystemSounds.Exclamation.Play();
         }
-        public void ProcedureRecover(string procedureName)
+
+        public void ProcedureRecover()
         {
             if (clsWP._frmCat.dgvCatalog.SelectedRows.Count > 0)
             {
                 if (!IsActive())
                 {
-                    string id = clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
+                    string id = clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString()!;
 
-                    try
-                    {
-                        sql.OpenConectionWrite();
-                        SqlCommand cmd = new SqlCommand(procedureName, sql.cnn);
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                        cmd.ExecuteNonQuery();
-
-                        clsWP._frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value = "1";
-
-                        RecoverInDataTable(id);
-                    }
-                    catch (Exception ex)
-                    {
-                        SystemSounds.Exclamation.Play();
-                        MessageBox.Show(ex.ToString(), "Catálogo recuperar");
-                    }
-                    finally
-                    {
-                        sql.CloseConectionWrite();
-                    }
+                    if (EworkPlan.ActiveProcedure(id, "1"))
+                        clsWP.dgv!.ChangeActiveCell(clsWP._frmCat.dgvCatalog, "1");
                 }
             }
             else
                 SystemSounds.Exclamation.Play();
-        }
-        public void DeleteInDataTable(string id)
-        {
-            foreach (DataGridViewRow row in clsWP._frmCat.dgvCatalog.Rows)
-            {
-                if (row.Cells[ClsObject.WorkPlan.ColumnId].Value?.ToString() == id)
-                {
-                    row.Cells[Column.active].Value = "0";
-                    break;
-                }
-            }
-        }
-        public void RecoverInDataTable(string id)
-        {
-            foreach (DataGridViewRow row in clsWP._frmCat.dgvCatalog.Rows)
-            {
-                if (row.Cells[ClsObject.WorkPlan.ColumnId].Value?.ToString() == id)
-                {
-                    row.Cells[Column.active].Value = "1";
-                    break;
-                }
-            }
         }
     }
 }

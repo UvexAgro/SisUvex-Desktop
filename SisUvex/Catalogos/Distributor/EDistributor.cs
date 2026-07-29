@@ -24,6 +24,7 @@ internal class EDistributor
     public string? IdCityCrossPoint { get; set; }
     public string? IdCityDestiny { get; set; }
     public string? Country { get; set; }
+    public string? taxId { get; set; }
 
     public static string GetNextId()
     {
@@ -80,6 +81,7 @@ internal class EDistributor
             Country = ReadField(dr, "v_Country");
             ShortName = ReadField(dr, "v_nameDistShort");
             Active = CharActiveToInt(dr["c_active"]);
+            taxId = ReadField(dr, "v_taxId");
         }
         catch (Exception ex)
         {
@@ -104,20 +106,21 @@ internal class EDistributor
             cmd.Parameters.AddWithValue("@action", "ADD");
             cmd.Parameters.AddWithValue("@id", DBNull.Value);
             cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency?.Trim()));
-            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency?.Trim()));
-            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower?.Trim()));
+            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor);
+            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency));
+            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency));
+            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower));
             cmd.Parameters.AddWithValue("@marketTarget", MarketTarget?.Trim().Length >= 1 ? MarketTarget.Trim()[..1] : DBNull.Value);
-            cmd.Parameters.AddWithValue("@address", Address?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@city", City?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@RFC", RFC?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint?.Trim()));
-            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny?.Trim()));
-            cmd.Parameters.AddWithValue("@country", Country?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@shortName", ShortName?.Trim() ?? string.Empty);
+            cmd.Parameters.AddWithValue("@address", Address);
+            cmd.Parameters.AddWithValue("@city", City);
+            cmd.Parameters.AddWithValue("@RFC", RFC);
+            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
+            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
+            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
+            cmd.Parameters.AddWithValue("@country", Country);
+            cmd.Parameters.AddWithValue("@shortName", ShortName);
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@taxId", taxId);
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())
@@ -150,22 +153,23 @@ internal class EDistributor
                 CommandType = CommandType.StoredProcedure
             };
             cmd.Parameters.AddWithValue("@action", "MODIFY");
-            cmd.Parameters.AddWithValue("@id", IdDistributor?.Trim() ?? string.Empty);
+            cmd.Parameters.AddWithValue("@id", IdDistributor);
             cmd.Parameters.AddWithValue("@active", Active == 1 ? "1" : "0");
-            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency?.Trim()));
-            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency?.Trim()));
-            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower?.Trim()));
+            cmd.Parameters.AddWithValue("@nameDistributor", NameDistributor);
+            cmd.Parameters.AddWithValue("@idUSAgency", ClsValues.IfEmptyToDBNull(IdUSAgency));
+            cmd.Parameters.AddWithValue("@idMXAgency", ClsValues.IfEmptyToDBNull(IdMXAgency));
+            cmd.Parameters.AddWithValue("@idGrower", ClsValues.IfEmptyToDBNull(IdGrower));
             cmd.Parameters.AddWithValue("@marketTarget", MarketTarget?.Trim().Length >= 1 ? MarketTarget.Trim()[..1] : DBNull.Value);
-            cmd.Parameters.AddWithValue("@address", Address?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@city", City?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@RFC", RFC?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint?.Trim()));
-            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny?.Trim()));
-            cmd.Parameters.AddWithValue("@country", Country?.Trim() ?? string.Empty);
-            cmd.Parameters.AddWithValue("@shortName", ShortName?.Trim() ?? string.Empty);
+            cmd.Parameters.AddWithValue("@address", Address);
+            cmd.Parameters.AddWithValue("@city", City);
+            cmd.Parameters.AddWithValue("@RFC", RFC);
+            cmd.Parameters.AddWithValue("@phoneNumber", PhoneNumber);
+            cmd.Parameters.AddWithValue("@idCityCrossPoint", ClsValues.IfEmptyToDBNull(IdCityCrossPoint));
+            cmd.Parameters.AddWithValue("@idCityDestiny", ClsValues.IfEmptyToDBNull(IdCityDestiny));
+            cmd.Parameters.AddWithValue("@country", Country);
+            cmd.Parameters.AddWithValue("@shortName", ShortName);
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
+            cmd.Parameters.AddWithValue("@taxId", taxId);
 
             using SqlDataReader dr = cmd.ExecuteReader();
             if (dr.Read())

@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -76,6 +77,21 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
             if (string.IsNullOrEmpty(t))
                 return "https://api.labelary.com";
             return t.TrimEnd('/');
+        }
+
+        /// <summary>
+        /// Cuerpo POST para Labelary: multipart <c>file</c> (UTF-8), evita decodificación errónea de urlencoded.
+        /// </summary>
+        private static HttpContent CrearContenidoPostLabelary(string zpl)
+        {
+            byte[] utf8 = Encoding.UTF8.GetBytes(zpl);
+            var stream = new MemoryStream(utf8, writable: false);
+            var filePart = new StreamContent(stream);
+            filePart.Headers.ContentType = new MediaTypeHeaderValue("text/plain") { CharSet = "utf-8" };
+
+            var form = new MultipartFormDataContent();
+            form.Add(filePart, "file", "label.zpl");
+            return form;
         }
 
         /// <summary>URL de la petición de vista previa (útil para depuración).</summary>
@@ -230,8 +246,10 @@ namespace SisUvex.Cuadro_de_herramientas.ZPL
             string h = FormatInches(heightInches);
             string url = $"{apiBaseRoot}/v1/printers/{dpmm}dpmm/labels/{w}x{h}/{labelIndex}/";
 
-            using var content = new ByteArrayContent(Encoding.UTF8.GetBytes(zpl));
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+            // Labelary acepta POST como x-www-form-urlencoded (cuerpo = ZPL crudo) o multipart con campo "file".
+            // Sin charset=utf-8 en urlencoded, algunos servidores interpretan el cuerpo como Latin-1 y rompen
+            // caracteres UTF-8 (p. ej. ®). Multipart con archivo reproduce lo de `curl --form file=@label.zpl`.
+            using HttpContent content = CrearContenidoPostLabelary(zpl);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
             request.Headers.TryAddWithoutValidation("X-Quality",

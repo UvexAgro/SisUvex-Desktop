@@ -18,31 +18,78 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
         public bool printManifest { get; set; }
         public bool printMaping { get; set; }
         public bool printPackingList { get; set; }
+        public bool printManifestPerFarm { get; set; }
+        public bool printShowSize { get; set; }
+        public bool printExcelLayout { get; set; }
         public string? transportVehicle { get; set; }
         public string? transportTransportType { get; set; }
-
         public string? manifestFolderPath { get; set; }
+
+        // Archivo fijo en AppData\Roaming\SisUvex\ — no se borra al actualizar la app.
+        private static readonly string AppDataFolder =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SisUvex");
+        private static readonly string ManifestPathFile =
+            Path.Combine(AppDataFolder, "manifest_folder_path.txt");
 
         public ClsConfigManifest()
         {
-            if (string.IsNullOrEmpty(Properties.Settings.Default.ManifestsFolderPath))
+            manifestFolderPath = LoadManifestFolderPath();
+        }
+
+        /// <summary>
+        /// Lee la ruta guardada. Orden de prioridad:
+        ///   1. Archivo en AppData\Roaming\SisUvex\ (persiste entre actualizaciones).
+        ///   2. Properties.Settings (versión anterior antes de migrar).
+        ///   3. Escritorio como valor por defecto.
+        /// </summary>
+        private string LoadManifestFolderPath()
+        {
+            // 1. Archivo persistente
+            if (File.Exists(ManifestPathFile))
             {
-                // Obtener la ruta del escritorio
-                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                Properties.Settings.Default.ManifestsFolderPath = desktopPath;
-                Properties.Settings.Default.Save();
+                string saved = File.ReadAllText(ManifestPathFile).Trim();
+                if (!string.IsNullOrEmpty(saved))
+                    return saved;
             }
 
-            manifestFolderPath = Properties.Settings.Default.ManifestsFolderPath;
+            // 2. Migrar desde Properties.Settings si tiene algo guardado
+            string settingsPath = Properties.Settings.Default.ManifestsFolderPath;
+            if (!string.IsNullOrEmpty(settingsPath))
+            {
+                PersistManifestFolderPath(settingsPath);
+                return settingsPath;
+            }
+
+            // 3. Valor por defecto: escritorio
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            PersistManifestFolderPath(desktop);
+            return desktop;
+        }
+
+        /// <summary>
+        /// Guarda la ruta en el archivo persistente de AppData y en Properties.Settings.
+        /// </summary>
+        private static void PersistManifestFolderPath(string path)
+        {
+            try
+            {
+                Directory.CreateDirectory(AppDataFolder);
+                File.WriteAllText(ManifestPathFile, path);
+            }
+            catch { }
+
+            try
+            {
+                Properties.Settings.Default.ManifestsFolderPath = path;
+                Properties.Settings.Default.Save();
+            }
+            catch { }
         }
 
         public void SetManifestPath(string path)
         {
             if (Directory.Exists(path))
-            {
-                Properties.Settings.Default.ManifestsFolderPath = path;
-                Properties.Settings.Default.Save();
-            }
+                PersistManifestFolderPath(path);
         }
 
         public void GetParameters()
@@ -61,6 +108,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                 printManifest = dr["c_printManifest"].ToString() == "1";
                 printMaping = dr["c_printMaping"].ToString() == "1";
                 printPackingList = dr["c_printPackingList"].ToString() == "1";
+                printManifestPerFarm = dr["c_printManifestPerField"].ToString() == "1";
+                printShowSize = dr["c_printShowSize"].ToString() == "1";
+                printExcelLayout = dr["c_printExcelLayout"].ToString() == "1";
                 transportVehicle = dr["v_transportVehicle"].ToString();
                 transportTransportType = dr["v_transportType"].ToString();
             }
@@ -81,6 +131,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                     { "@printManifest", printManifest ? "1" : "0" },
                     { "@printMaping", printMaping ? "1" : "0" },
                     { "@printPackingList", printPackingList ? "1" : "0" },
+                    { "@manifestPerField", printManifestPerFarm ? "1" : "0" },
+                    { "@showSize", printShowSize ? "1" : "0" },
+                    { "@excelLayout", printExcelLayout ? "1" : "0" },
                     { "@transportVehicle", transportVehicle ?? (object)DBNull.Value },
                     { "@transportTransportType", transportTransportType ?? (object)DBNull.Value }
                 };
@@ -94,7 +147,10 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                  c_temperatureUnit, 
                                  c_printManifest, 
                                  c_printMaping, 
-                                 c_printPackingList, 
+                                 c_printPackingList,
+                                 c_printManifestPerField,
+                                 c_printShowSize,
+                                 c_printExcelLayout,
                                  v_transportVehicle, 
                                  v_transportType) 
                                  VALUES (
@@ -104,7 +160,10 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                  @temperatureUnit, 
                                  @printManifest, 
                                  @printMaping, 
-                                 @printPackingList, 
+                                 @printPackingList,
+                                 @manifestPerField, 
+                                 @showSize, 
+                                 @excelLayout, 
                                  @transportVehicle, 
                                  @transportTransportType)";
                 
@@ -120,6 +179,9 @@ namespace SisUvex.Archivo.Manifiesto.ConfManifest
                                 c_printManifest = @printManifest, 
                                 c_printMaping = @printMaping, 
                                 c_printPackingList = @printPackingList, 
+                                c_printManifestPerField = @manifestPerField, 
+                                c_printShowSize = @showSize, 
+                                c_printExcelLayout = @excelLayout, 
                                 v_transportVehicle = @transportVehicle, 
                                 v_transportType = @transportTransportType";
 

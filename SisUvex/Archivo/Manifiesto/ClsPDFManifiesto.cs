@@ -634,6 +634,11 @@ namespace SisUvex.Archivo.Manifiesto
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
                 .SetFont(font);
+            Paragraph thermoThermometerFco = new Paragraph("Termómetro caja: ")
+                .Add(queryManifest.manifestThermometerFreightContainer)
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                .SetFontSize(fontSizeBody) // Cambiar el tamaño de la fuente a 10
+                .SetFont(font);
 
             // Agregar los párrafos a la celda
             Cell fcoCell = new Cell();
@@ -642,6 +647,7 @@ namespace SisUvex.Archivo.Manifiesto
             fcoCell.Add(thermoUSPlateParagraph);
             fcoCell.Add(thermoMXPlateParagraph);
             fcoCell.Add(thermoLenghtParagraph);
+            fcoCell.Add(thermoThermometerFco);
             fcoCell.SetPaddingLeft(5); // Agregar relleno a la izquierda para separar el texto del margen
             fcoCell.SetPaddingRight(0);
             fcoCell.SetBorder(Border.NO_BORDER);

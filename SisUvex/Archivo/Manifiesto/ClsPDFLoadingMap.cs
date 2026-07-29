@@ -41,7 +41,7 @@ namespace SisUvex.Archivo.Manifiesto
 
         public string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-        public void CreatePDFMaping(string manifestNumber)
+        public void CreatePDFMaping(string manifestNumber, string folderPath)
         {
             queryManifest.GetManifestData(manifestNumber);
             queryManifest.GetManifestDetailData(manifestNumber);
@@ -49,17 +49,10 @@ namespace SisUvex.Archivo.Manifiesto
             queryLoadingMap.GetLoadingMapData(manifestNumber);
 
             // Crear un nuevo documento PDF
-            string manifestDirectory = Path.Combine(desktopPath, "Manifiestos", $"{manifestNumber}");
-
-            if (!queryManifest.distributorShortName.IsNullOrEmpty())
-            {
-                manifestDirectory = Path.Combine(desktopPath, "Manifiestos", queryManifest.distributorShortName, $"{manifestNumber}");
-            }
+            string manifestDirectory = Path.Combine(folderPath);
 
             if (!Directory.Exists(manifestDirectory))
-            {
                 Directory.CreateDirectory(manifestDirectory);
-            }
 
             string manifestPath = Path.Combine(manifestDirectory, $"MAPING {manifestNumber}.pdf");
             PdfWriter writer = new PdfWriter(manifestPath);

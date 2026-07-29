@@ -28,43 +28,59 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDescuento));
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDescuento));
 			btnAdd = new Button();
 			btnModify = new Button();
 			btnRemove = new Button();
 			dgvCatalog = new DataGridView();
+			panel1 = new Panel();
+			label2 = new Label();
+			label1 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
+			panel1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// btnAdd
 			// 
-			btnAdd.Location = new Point(12, 12);
+			btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
+			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
+			btnAdd.Location = new Point(17, 90);
+			btnAdd.Margin = new Padding(3, 4, 3, 4);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(75, 23);
+			btnAdd.Size = new Size(110, 31);
 			btnAdd.TabIndex = 2;
 			btnAdd.Text = "Añadir";
+			btnAdd.TextAlign = ContentAlignment.MiddleRight;
 			btnAdd.UseVisualStyleBackColor = true;
 			btnAdd.Click += btnAdd_Click;
 			// 
 			// btnModify
 			// 
-			btnModify.Location = new Point(93, 12);
+			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
+			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
+			btnModify.Location = new Point(144, 90);
+			btnModify.Margin = new Padding(3, 4, 3, 4);
 			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(75, 23);
+			btnModify.Size = new Size(110, 31);
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Modificar";
+			btnModify.TextAlign = ContentAlignment.MiddleRight;
 			btnModify.UseVisualStyleBackColor = true;
 			btnModify.Click += btnModify_Click;
 			// 
 			// btnRemove
 			// 
-			btnRemove.Location = new Point(174, 12);
+			btnRemove.Image = (Image)resources.GetObject("btnRemove.Image");
+			btnRemove.ImageAlign = ContentAlignment.MiddleLeft;
+			btnRemove.Location = new Point(271, 90);
+			btnRemove.Margin = new Padding(3, 4, 3, 4);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new Size(75, 23);
+			btnRemove.Size = new Size(110, 31);
 			btnRemove.TabIndex = 5;
 			btnRemove.Text = "Eliminar";
+			btnRemove.TextAlign = ContentAlignment.MiddleRight;
 			btnRemove.UseVisualStyleBackColor = true;
 			btnRemove.Click += btnRemove_Click;
 			// 
@@ -86,10 +102,12 @@
 			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
 			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
 			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dgvCatalog.ColumnHeadersHeight = 29;
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(12, 41);
+			dgvCatalog.Location = new Point(12, 129);
+			dgvCatalog.Margin = new Padding(3, 4, 3, 4);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -103,23 +121,56 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(776, 387);
+			dgvCatalog.Size = new Size(887, 458);
 			dgvCatalog.TabIndex = 12;
+			// 
+			// panel1
+			// 
+			panel1.BackColor = SystemColors.GradientActiveCaption;
+			panel1.Controls.Add(label2);
+			panel1.Controls.Add(label1);
+			panel1.Location = new Point(12, 12);
+			panel1.Name = "panel1";
+			panel1.Size = new Size(889, 71);
+			panel1.TabIndex = 13;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new Point(6, 40);
+			label2.Name = "label2";
+			label2.Size = new Size(522, 20);
+			label2.TabIndex = 1;
+			label2.Text = "Administra los descuentos de personal asignados a cada línea de producción.";
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.Location = new Point(5, 9);
+			label1.Name = "label1";
+			label1.Size = new Size(373, 28);
+			label1.TabIndex = 0;
+			label1.Text = "DESCUENTOS DE PERSONAL POR LÍNEA";
 			// 
 			// FrmDescuento
 			// 
-			AutoScaleDimensions = new SizeF(7F, 15F);
+			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 450);
+			ClientSize = new Size(914, 600);
+			Controls.Add(panel1);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
 			Icon = (Icon)resources.GetObject("$this.Icon");
+			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmDescuento";
 			Text = "Descuento de Personal por Linea ";
 			Load += FrmDescuento_Load;
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
 			ResumeLayout(false);
 		}
 
@@ -129,5 +180,8 @@
 		private Button btnModify;
 		private Button btnRemove;
 		public DataGridView dgvCatalog;
+		private Panel panel1;
+		private Label label2;
+		private Label label1;
 	}
 }

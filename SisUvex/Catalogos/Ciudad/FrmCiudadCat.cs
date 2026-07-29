@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
-using SisUvex.Catalogos.Variedad;
-
 namespace SisUvex.Catalogos.Ciudad
 {
     public partial class FrmCiudadCat : Form

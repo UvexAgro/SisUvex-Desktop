@@ -201,6 +201,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
 				case ClsObject.Season.CboWithDates:
 					queryDataTable = ClsObject.Season.QueryCboWithDates;
 					break;
+                case ClsObject.SeasonType.Cbo:
+                    queryDataTable = ClsObject.SeasonType.QueryCbo;
+                    break;
 				case ClsObject.PlacePayment.Cbo:
                         queryDataTable = ClsObject.PlacePayment.QueryCbo;
                     break;
@@ -270,6 +273,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.TypeBox.Cbo:
                     queryDataTable = ClsObject.TypeBox.QueryCbo;
                     break;
+                case ClsObject.LabelLegend.Cbo:
+                    queryDataTable = ClsObject.LabelLegend.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -302,7 +308,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.WorkPlan.DgvCatalog:
                 case ClsObject.WorkPlan.CboPresentation:
-                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox') ";
+                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox', 'Pack_LabelLegend') ";
                     break;
                 case ClsObject.ProductionLine.Cbo:
                     query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
@@ -392,8 +398,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Contractor.Cbo:
                     return ClsObject.Contractor.TableName;
                 case ClsObject.Season.Cbo:
-				case ClsObject.Season.CboWithDates:
-					return ClsObject.Season.TableName;
+                case ClsObject.Season.CboWithDates:
+                    return ClsObject.Season.TableName;
+                case ClsObject.SeasonType.Cbo:
+                    return ClsObject.SeasonType.TableName;
                 case ClsObject.PlacePayment.Cbo:
                         return ClsObject.PlacePayment.TableName;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
@@ -439,6 +447,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.Market.TableName;
                 case ClsObject.TypeBox.Cbo:
                     return ClsObject.TypeBox.TableName;
+                case ClsObject.LabelLegend.Cbo:
+                    return ClsObject.LabelLegend.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }
