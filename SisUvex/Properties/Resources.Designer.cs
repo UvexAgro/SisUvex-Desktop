@@ -183,6 +183,26 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap esparragos {
+            get {
+                object obj = ResourceManager.GetObject("esparragos", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap esparragos_24__1_ {
+            get {
+                object obj = ResourceManager.GetObject("esparragos 24 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap excelIcon {
             get {
                 object obj = ResourceManager.GetObject("excelIcon", resourceCulture);
@@ -413,6 +433,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap refrescar {
+            get {
+                object obj = ResourceManager.GetObject("refrescar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap reiniciar {
             get {
                 object obj = ResourceManager.GetObject("reiniciar", resourceCulture);
@@ -513,6 +543,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap uvas {
+            get {
+                object obj = ResourceManager.GetObject("uvas", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap uvexvertical {
             get {
                 object obj = ResourceManager.GetObject("uvexvertical", resourceCulture);
@@ -526,6 +566,16 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap verIcon16 {
             get {
                 object obj = ResourceManager.GetObject("verIcon16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap x__1_ {
+            get {
+                object obj = ResourceManager.GetObject("x (1)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
