@@ -296,7 +296,7 @@
 			groupBox1.Controls.Add(rbtEsparrago);
 			groupBox1.Controls.Add(pictureBox2);
 			groupBox1.Controls.Add(pictureBox1);
-			groupBox1.Location = new Point(31, 12);
+			groupBox1.Location = new Point(36, 147);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(198, 144);
 			groupBox1.TabIndex = 28;
@@ -335,7 +335,7 @@
 			gbLibras.BackColor = SystemColors.Control;
 			gbLibras.Controls.Add(btnCalcularLibra);
 			gbLibras.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			gbLibras.Location = new Point(535, 175);
+			gbLibras.Location = new Point(488, 175);
 			gbLibras.Name = "gbLibras";
 			gbLibras.Size = new Size(244, 116);
 			gbLibras.TabIndex = 31;

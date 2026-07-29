@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Configuracion.Parameters;
 using ZXing;
 using static SisUvex.Catalogos.Metods.ClsObject;
-using System.Drawing;
+using static SisUvex.Nomina.Nom_semAutomatizada.FrmNominaExistente;
 namespace SisUvex.Nomina.Nom_semAutomatizada
 
 {
@@ -61,7 +62,18 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (!controlList.ValidateControls())
 				return;
 
-			//Metodo para generar el archivo CSV
+			if (HayCambiosSueldos())
+			{
+				MessageBox.Show(
+					"Se detectaron cambios en los sueldos.\n\n" +
+					"Antes de generar el archivo CSV, haga clic en el botón 'Actualizar Sueldo' para guardar los cambios.",
+					"Cambios sin guardar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
 			GenerarArchivoCsv();
 		}
 		private DataTable GetDtCSV()
@@ -311,54 +323,118 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			TipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
 			DateTime fecha = frm.dtpFecha.Value;
 
-			// Si es festivo, preguntar si desea generar la nómina festiva
-			if (clsF.EsFestivo(fecha))
+			bool existeNomina = ExisteNominaDiaria(fecha);
+			bool esFestivo = clsF.EsFestivo(fecha);
+			// YA EXISTE UNA NÓMINA
+			if (existeNomina)
 			{
-				DialogResult festivo = MessageBox.Show(
-					"La fecha seleccionada corresponde a un día festivo.\n\n" +
-					"¿Desea generar la nómina de día festivo?\n\n" +
-					"Sí → Generar nómina festiva.\n" +
-					"No → Continuar con la nómina normal.",
-					"Día festivo",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Information);
+				FrmNominaExistente frmExiste = new FrmNominaExistente();
 
-				if (festivo == DialogResult.Yes)
-				{
-					FrmFestivo frmFestivo = new FrmFestivo();
+				if (esFestivo)
+					frmExiste.ConfigurarModo(ModoNomina.NominaFestivaExistente);
+				else
+					frmExiste.ConfigurarModo(ModoNomina.NominaExistente);
 
-					if (frmFestivo.ShowDialog() == DialogResult.OK)
-					{
-						frm.TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
-						clsF.BtnCargarDatos(); // Genera la nómina festiva
-					}
+				frmExiste.CargarDatos(TipoNomina, fecha);
 
+				DialogResult r = frmExiste.ShowDialog();
+
+				if (r == DialogResult.Cancel)
 					return;
-				}
-			}
 
-
-			// Verificar si ya existe la nómina guardada
-			if (ExisteNominaDiaria(fecha))
-			{
-				DialogResult r = MessageBox.Show(
-				"La nómina para la fecha seleccionada ya fue generada.\n\n" +
-				"¿Qué deseas hacer?\n\n" +
-				"Sí  → Recalcular y actualizar la nómina.\n" +
-				"No → Mostrar la nómina guardada.",
-				"Nómina existente",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question);
-
+				// Mostrar Nómina
 				if (r == DialogResult.No)
 				{
 					string fechaTexto = fecha.ToString("yyyy-MM-dd");
-					string queryGuardada = TipoNomina == "E"
+
+					string query = TipoNomina == "E"
 						? $"EXEC sp_GetReporteNominaDiaria_Esparrago '{fechaTexto}'"
 						: $"EXEC sp_GetReporteNominaDiaria_Uva '{fechaTexto}'";
 
-					dtNomina = ClsQuerysDB.GetDataTable(queryGuardada);
+					dtNomina = ClsQuerysDB.GetDataTable(query);
+
+					frm.lblTipoProceso.Visible = false;
 				}
+
+				else if (r == DialogResult.Yes)
+				{
+					// Recalcular nómina normal
+					string query = GetQueryNom();
+
+					if (string.IsNullOrEmpty(query))
+						return;
+
+					dtNomina = ClsQuerysDB.GetDataTable(query);
+
+					frm.lblTipoProceso.Visible = false;
+				}
+				else if (r == DialogResult.Retry)
+				{
+					// Recalcular nómina festiva
+					FrmFestivo frmFestivo = new FrmFestivo();
+
+					if (frmFestivo.ShowDialog() != DialogResult.OK)
+						return;
+
+					frm.TipoFestivoSeleccionado = frmFestivo.TipoSeleccionado;
+
+					dtNomina = clsF.ObtenerNominaFestiva();
+
+					frm.lblTipoProceso.Text =
+						clsF.ObtenerDescripcionFestivo(frm.TipoFestivoSeleccionado);
+
+					frm.lblTipoProceso.Visible = true;
+				}
+			}
+			// NO EXISTE NÓMINa
+			else
+			{
+				// Es festivo
+				if (esFestivo)
+				{
+					FrmNominaExistente frmFestivo = new FrmNominaExistente();
+
+					frmFestivo.ConfigurarModo(ModoNomina.FestivoInicial);
+					frmFestivo.CargarDatos(TipoNomina, fecha);
+
+					DialogResult r = frmFestivo.ShowDialog();
+
+					if (r == DialogResult.Cancel)
+						return;
+
+					// Generar Normal
+					if (r == DialogResult.No)
+					{
+						string query = GetQueryNom();
+
+						if (string.IsNullOrEmpty(query))
+							return;
+
+						dtNomina = ClsQuerysDB.GetDataTable(query);
+
+						frm.lblTipoProceso.Visible = false;
+					}
+
+					// Generar Festiva
+					else if (r == DialogResult.Yes)
+					{
+						FrmFestivo frmTipo = new FrmFestivo();
+
+						if (frmTipo.ShowDialog() != DialogResult.OK)
+							return;
+
+						frm.TipoFestivoSeleccionado = frmTipo.TipoSeleccionado;
+
+						dtNomina = clsF.ObtenerNominaFestiva();
+
+						frm.lblTipoProceso.Text =
+							clsF.ObtenerDescripcionFestivo(frm.TipoFestivoSeleccionado);
+
+						frm.lblTipoProceso.Visible = true;
+					}
+				}
+
+				// No es festivo
 				else
 				{
 					string query = GetQueryNom();
@@ -367,20 +443,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 						return;
 
 					dtNomina = ClsQuerysDB.GetDataTable(query);
+
+					frm.lblTipoProceso.Visible = false;
 				}
 			}
-			else
-			{
-				string query = GetQueryNom();
-
-				if (string.IsNullOrEmpty(query))
-					return;
-
-				dtNomina = ClsQuerysDB.GetDataTable(query);
-			}
-
-
-			if (dtNomina.Rows.Count == 0)
+			// MOSTRAR DATOS
+			if (dtNomina == null || dtNomina.Rows.Count == 0)
 			{
 				MessageBox.Show(
 					"No existen registros para la fecha seleccionada.",
@@ -390,36 +458,47 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 			}
 
+			frm.dgvEmployee.Visible = false;
 			frm.dgvEmployee.DataSource = dtNomina;
 
-			if (TipoNomina == "E")
-				AplicarColores("E");
-			else
-				AplicarColores("U");
+			AplicarColores(TipoNomina);
 
-
-			// Todo solo lectura
 			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
 				col.ReadOnly = true;
 
-			// Solo permitir editar el sueldo
 			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
 
 			GuardarSueldosOriginales();
 
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
 			{
-				if (row.IsNewRow)
-					continue;
-
-				row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
+				if (!row.IsNewRow)
+					row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
 			}
 
-			
-
 			ActivarEstiloGrid(frm.dgvEmployee);
+			frm.dgvEmployee.Visible = true;
 		}
+		public DataTable ObtenerInfoNomina(DateTime fecha, string tipo)
+		{
+			SQLControl sql = new SQLControl();
 
+			sql.OpenConectionWrite();
+
+			SqlCommand cmd = new SqlCommand("sp_GetInfoNomina", sql.cnn);
+			cmd.CommandType = CommandType.StoredProcedure;
+
+			cmd.Parameters.AddWithValue("@Fecha", fecha.Date);
+			cmd.Parameters.AddWithValue("@Tipo", tipo);
+
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			DataTable dt = new DataTable();
+			da.Fill(dt);
+
+			sql.CloseConectionWrite();
+
+			return dt;
+		}
 		public void GuardarSueldosOriginales()
 		{
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
@@ -751,10 +830,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					colorLinea = SystemColors.ControlLight;
 					break;
 			}
-
-			//==========================
 			// HEADER
-			//==========================
 			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
 			{
 				using (SolidBrush brush = new SolidBrush(colorHeader))
@@ -783,10 +859,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				e.Handled = true;
 				return;
 			}
-
-			//==========================
 			// CELDAS
-			//==========================
 			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
 			{
 				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
@@ -971,9 +1044,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				: "HistNom_ReporteDiarioUva";
 
 			string query = $@"
-		SELECT COUNT(*)
-		FROM {tabla}
-		WHERE Fecha = '{fecha:yyyy-MM-dd}'";
+			SELECT COUNT(*)
+			FROM {tabla}
+			WHERE Fecha = '{fecha:yyyy-MM-dd}'";
 
 			int registros = Convert.ToInt32(ClsQuerysDB.GetData(query));
 
