@@ -30,8 +30,6 @@ namespace SisUvex.Nomina.Work_time
         public const string ColumnDateWtm = "idFecha";
 		private string queryCatalog = $" SELECT [id_workTime] AS '{ClsObject.Column.id}',  d_workTime, FORMAT(d_workTime, 'yyyy-MMM-dd, dddd', 'es-MX') AS 'Fecha', FORMAT([d_workTime], 'yyyy-MM-dd') AS '{ColumnDateWtm}', id_ProductionLine AS '{ClsObject.ProductionLine.ColumnName}', [id_workGroup] AS '{ClsObject.WorkGroup.ColumnName}' ,FORMAT([d_dateHourBeginNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Inicio hora normal' ,FORMAT([d_dateHourEndNormal],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora normal' ,FORMAT([d_dateHourBeginExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Inicio hora extra' ,FORMAT([d_dateHourEndExtra],'yy/MM/dd hh:mm tt', 'es-MX') AS 'Fin hora extra',d_overtime AS 'Horas Extras', i_workers AS 'Trabajadores', FORMAT(CAST(t_BreakStart AS DATETIME), 'hh:mm tt', 'es-MX') AS 'Break Inicio', FORMAT(CAST(t_BreakEnd AS DATETIME), 'hh:mm tt', 'es-MX') AS 'Break Fin', d_BreakHours AS 'Horas Break', FORMAT(CAST(t_LunchStart AS DATETIME), 'hh:mm tt', 'es-MX') AS 'Comida Inicio',FORMAT(CAST(t_LunchEnd AS DATETIME), ' hh:mm tt', 'es-MX') AS 'Comida Fin', d_LunchHours AS 'Horas Comida', FORMAT(CAST(t_DinnerStart AS DATETIME), 'hh:mm tt', 'es-MX') AS 'Cena Inicio', FORMAT(CAST(t_DinnerEnd AS DATETIME), 'hh:mm tt', 'es-MX') AS 'Cena Fin', d_DinnerHours AS 'Horas Cena', FORMAT(CAST(t_BreakStart2 AS DATETIME), ' hh:mm tt', 'es-MX') AS 'Break2 Inicio', FORMAT(CAST(t_BreakEnd2 AS DATETIME), ' hh:mm tt', 'es-MX') AS 'Break2 Fin', d_BreakHours2 AS 'Horas2 Break' FROM [Nom_WorkTime] ";
 		private string queryOrderBy = " ORDER BY [d_workTime] DESC";
-        public DataTable dtCatalog; 
-        public DataTable dtCatalogActives;
         public ClsWorkTime()
         {
             _frmCat = new FrmWorkTimeCat(this);
@@ -222,7 +220,19 @@ namespace SisUvex.Nomina.Work_time
 		}
 		public void OpenFrmAdd()
         {
-            _frmAdd = new FrmWorkTimeAdd(_frmCat, this);
+			if (_frmCat.cboTemporada.SelectedIndex <= 0)
+			{
+				MessageBox.Show(
+					"Debe seleccionar una temporada para agregar un horario de empaque.",
+					"Temporada requerida",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				_frmCat.cboTemporada.Focus();
+				return;
+			}
+
+			_frmAdd = new FrmWorkTimeAdd(_frmCat, this);
             _frmAdd.Text = "Añadir horario de empaque";
             _frmAdd.lblTitle.Text = "Añadir Horario";
             _frmAdd.IsAddModify = true;
@@ -387,7 +397,7 @@ namespace SisUvex.Nomina.Work_time
 					SqlCommand cmd = new SqlCommand("sp_Nom_WorkTimeAdd", sql.cnn);
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					// 🔹 DATOS PRINCIPALES
+					//  DATOS PRINCIPALES
 					cmd.Parameters.AddWithValue("@idProductionLine", _frmAdd.cboProductionLine.SelectedValue);
 					cmd.Parameters.AddWithValue("@idWorkGroup", cuad.Id);
 
@@ -572,10 +582,6 @@ namespace SisUvex.Nomina.Work_time
 			public string Id { get; set; }
 			public string Nombre { get; set; }
 
-			public override string ToString()
-			{
-				return Nombre;
-			}
 		}
 		public void CargarCuadrillasCheckList()
 		{
@@ -658,17 +664,16 @@ namespace SisUvex.Nomina.Work_time
 		{
 			DataGridView dgv = (DataGridView)sender;
 
-			// SOLO encabezados
 			if (e.RowIndex != -1 || e.ColumnIndex < 0)
 				return;
 
 			var grupos = new[]
 			{
-		new { Nombre = "Comida", Inicio = "Comida Inicio", Fin = "Comida Fin", Horas = "Horas Comida", Color = _frmCat.colorComida},
-		new { Nombre = "Cena", Inicio = "Cena Inicio", Fin = "Cena Fin", Horas = "Horas Cena", Color = _frmCat.colorCena},
-		new { Nombre = "Descanso", Inicio = "Break Inicio", Fin = "Break Fin", Horas = "Horas Break", Color = _frmCat.colorDescanso},
-		new { Nombre = "Descanso 2", Inicio = "Break2 Inicio", Fin = "Break2 Fin", Horas = "Horas2 Break", Color = _frmCat.colorDescanso2}
-	};
+				new { Nombre = "Comida", Inicio = "Comida Inicio", Fin = "Comida Fin", Horas = "Horas Comida", Color = _frmCat.colorComida},
+				new { Nombre = "Cena", Inicio = "Cena Inicio", Fin = "Cena Fin", Horas = "Horas Cena", Color = _frmCat.colorCena},
+				new { Nombre = "Descanso", Inicio = "Break Inicio", Fin = "Break Fin", Horas = "Horas Break", Color = _frmCat.colorDescanso},
+				new { Nombre = "Descanso 2", Inicio = "Break2 Inicio", Fin = "Break2 Fin", Horas = "Horas2 Break", Color = _frmCat.colorDescanso2}
+			};
 
 			
 			var gruposOrdenados = grupos
@@ -687,7 +692,7 @@ namespace SisUvex.Nomina.Work_time
 				int colFin = dgv.Columns[g.Fin].Index;
 				int colHoras = dgv.Columns[g.Horas].Index;
 
-				// 🔥 OBTENER POSICIÓN REAL EN PANTALLA
+				//  OBTENER POSICIÓN REAL EN PANTALLA
 				Rectangle r1 = dgv.GetCellDisplayRectangle(colInicio, -1, true);
 				Rectangle r2 = dgv.GetCellDisplayRectangle(colFin, -1, true);
 				Rectangle r3 = dgv.GetCellDisplayRectangle(colHoras, -1, true);
@@ -699,7 +704,7 @@ namespace SisUvex.Nomina.Work_time
 					r1.Height
 				);
 
-				// 🔹 PARTE SUPERIOR (TÍTULO DEL GRUPO)
+				//  PARTE SUPERIOR (TÍTULO DEL GRUPO)
 				if (e.ColumnIndex == colInicio)
 				{
 					using (SolidBrush brush = new SolidBrush(System.Drawing.Color.WhiteSmoke))
@@ -733,7 +738,7 @@ namespace SisUvex.Nomina.Work_time
 					e.Handled = true;
 				}
 
-				// 🔹 PARTE INFERIOR (SUBCOLUMNAS)
+				//  PARTE INFERIOR (SUBCOLUMNAS)
 				if (e.ColumnIndex == colInicio ||
 					e.ColumnIndex == colFin ||
 					e.ColumnIndex == colHoras)

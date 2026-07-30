@@ -134,11 +134,6 @@ namespace SisUvex.Nomina.Work_time
                 dgvCatalog.Refresh();
             }));
         }
-
-        private void dgvCatalog_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 
 }
