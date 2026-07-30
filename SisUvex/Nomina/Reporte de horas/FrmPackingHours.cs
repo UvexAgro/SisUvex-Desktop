@@ -39,7 +39,6 @@ namespace SisUvex.Nomina.Reporte_de_horas
 
 			cls.CargarTemporada();
 			clsA.CargarHorasInicial();
-			clsA.FormatearColumnasHora(dgvHoras);
 
 			//  ESTILO HEADER
 			dgvHoras.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;

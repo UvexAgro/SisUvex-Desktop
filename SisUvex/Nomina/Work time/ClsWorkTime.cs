@@ -576,13 +576,17 @@ namespace SisUvex.Nomina.Work_time
 				nud.Value = 0;
 			}
 		}
-
 		public class ItemCuadrilla
 		{
 			public string Id { get; set; }
 			public string Nombre { get; set; }
 
+			public override string ToString()
+			{
+				return $"{Id} - {Nombre}";
+			}
 		}
+
 		public void CargarCuadrillasCheckList()
 		{
 			int temporada = Convert.ToInt32(_frmCat.cboTemporada.SelectedValue);
