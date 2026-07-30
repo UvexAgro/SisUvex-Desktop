@@ -142,24 +142,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		private void CargarImagenTipoNomina(string tipoNomina)
 		{
-			string nombreImagen = tipoNomina == "E"
-				? "esparragos1.png"
-				: "uvas1.png";
+			ptbGenero.SizeMode = PictureBoxSizeMode.Zoom;
 
-			string ruta = Path.Combine(
-				@"C:\SisUvex\SisUvex-Desktop\SisUvex\Resources",
-				nombreImagen);
-
-			if (File.Exists(ruta))
-			{
-				ptbGenero.SizeMode = PictureBoxSizeMode.Zoom;
-				ptbGenero.Image = Image.FromFile(ruta);
-			}
+			if (tipoNomina == "E")
+				ptbGenero.Image = Properties.Resources.esparragos;
 			else
-			{
-				MessageBox.Show("No se encontró la imagen:\n" + ruta);
-				ptbGenero.Image = null;
-			}
+				ptbGenero.Image = Properties.Resources.uvas;
 		}
 		private void FrmNominaExistente_Load(object sender, EventArgs e)
 		{
