@@ -46,10 +46,10 @@
 			// 
 			btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
 			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAdd.Location = new Point(17, 90);
-			btnAdd.Margin = new Padding(3, 4, 3, 4);
+			btnAdd.Location = new Point(15, 68);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(110, 31);
+			btnAdd.Padding = new Padding(8, 0, 8, 0);
+			btnAdd.Size = new Size(96, 23);
 			btnAdd.TabIndex = 2;
 			btnAdd.Text = "Añadir";
 			btnAdd.TextAlign = ContentAlignment.MiddleRight;
@@ -60,10 +60,10 @@
 			// 
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(144, 90);
-			btnModify.Margin = new Padding(3, 4, 3, 4);
+			btnModify.Location = new Point(126, 68);
 			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(110, 31);
+			btnModify.Padding = new Padding(5, 0, 5, 0);
+			btnModify.Size = new Size(96, 23);
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Modificar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -74,10 +74,10 @@
 			// 
 			btnRemove.Image = (Image)resources.GetObject("btnRemove.Image");
 			btnRemove.ImageAlign = ContentAlignment.MiddleLeft;
-			btnRemove.Location = new Point(271, 90);
-			btnRemove.Margin = new Padding(3, 4, 3, 4);
+			btnRemove.Location = new Point(237, 68);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new Size(110, 31);
+			btnRemove.Padding = new Padding(5, 0, 5, 0);
+			btnRemove.Size = new Size(96, 23);
 			btnRemove.TabIndex = 5;
 			btnRemove.Text = "Eliminar";
 			btnRemove.TextAlign = ContentAlignment.MiddleRight;
@@ -106,8 +106,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(12, 129);
-			dgvCatalog.Margin = new Padding(3, 4, 3, 4);
+			dgvCatalog.Location = new Point(10, 97);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -121,7 +120,7 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(887, 458);
+			dgvCatalog.Size = new Size(776, 344);
 			dgvCatalog.TabIndex = 12;
 			// 
 			// panel1
@@ -129,17 +128,18 @@
 			panel1.BackColor = SystemColors.GradientActiveCaption;
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
-			panel1.Location = new Point(12, 12);
+			panel1.Location = new Point(10, 9);
+			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(889, 71);
+			panel1.Size = new Size(778, 53);
 			panel1.TabIndex = 13;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(6, 40);
+			label2.Location = new Point(5, 30);
 			label2.Name = "label2";
-			label2.Size = new Size(522, 20);
+			label2.Size = new Size(414, 15);
 			label2.TabIndex = 1;
 			label2.Text = "Administra los descuentos de personal asignados a cada línea de producción.";
 			// 
@@ -147,24 +147,23 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(5, 9);
+			label1.Location = new Point(4, 7);
 			label1.Name = "label1";
-			label1.Size = new Size(373, 28);
+			label1.Size = new Size(297, 21);
 			label1.TabIndex = 0;
 			label1.Text = "DESCUENTOS DE PERSONAL POR LÍNEA";
 			// 
 			// FrmDescuento
 			// 
-			AutoScaleDimensions = new SizeF(8F, 20F);
+			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(914, 600);
+			ClientSize = new Size(800, 450);
 			Controls.Add(panel1);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmDescuento";
 			Text = "Descuento de Personal por Linea ";
 			Load += FrmDescuento_Load;
