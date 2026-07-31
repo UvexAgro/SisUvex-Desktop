@@ -47,10 +47,10 @@
 			btnAdd.BackgroundImageLayout = ImageLayout.Zoom;
 			btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
 			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAdd.Location = new Point(15, 98);
-			btnAdd.Margin = new Padding(3, 4, 3, 4);
+			btnAdd.Location = new Point(13, 74);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(111, 31);
+			btnAdd.Padding = new Padding(8, 0, 8, 0);
+			btnAdd.Size = new Size(97, 23);
 			btnAdd.TabIndex = 1;
 			btnAdd.Text = "Añadir";
 			btnAdd.TextAlign = ContentAlignment.MiddleRight;
@@ -61,10 +61,10 @@
 			// 
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(132, 98);
-			btnModify.Margin = new Padding(3, 4, 3, 4);
+			btnModify.Location = new Point(116, 74);
 			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(111, 31);
+			btnModify.Padding = new Padding(5, 0, 5, 0);
+			btnModify.Size = new Size(97, 23);
 			btnModify.TabIndex = 2;
 			btnModify.Text = "Modificar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -75,10 +75,10 @@
 			// 
 			btnRemove.Image = (Image)resources.GetObject("btnRemove.Image");
 			btnRemove.ImageAlign = ContentAlignment.MiddleLeft;
-			btnRemove.Location = new Point(249, 98);
-			btnRemove.Margin = new Padding(3, 4, 3, 4);
+			btnRemove.Location = new Point(218, 74);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new Size(111, 31);
+			btnRemove.Padding = new Padding(5, 0, 5, 0);
+			btnRemove.Size = new Size(97, 23);
 			btnRemove.TabIndex = 4;
 			btnRemove.Text = "Eliminar";
 			btnRemove.TextAlign = ContentAlignment.MiddleRight;
@@ -107,8 +107,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(14, 137);
-			dgvCatalog.Margin = new Padding(3, 4, 3, 4);
+			dgvCatalog.Location = new Point(12, 103);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -122,7 +121,7 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(819, 434);
+			dgvCatalog.Size = new Size(717, 326);
 			dgvCatalog.TabIndex = 11;
 			// 
 			// panel1
@@ -130,17 +129,18 @@
 			panel1.BackColor = SystemColors.ControlLightLight;
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
-			panel1.Location = new Point(12, 12);
+			panel1.Location = new Point(10, 9);
+			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(797, 79);
+			panel1.Size = new Size(697, 59);
 			panel1.TabIndex = 12;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(15, 47);
+			label2.Location = new Point(13, 35);
 			label2.Name = "label2";
-			label2.Size = new Size(485, 20);
+			label2.Size = new Size(385, 15);
 			label2.TabIndex = 2;
 			label2.Text = "Administra los conceptos utilizados para generar ingresos en la nómina.";
 			// 
@@ -148,24 +148,23 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(15, 6);
+			label1.Location = new Point(13, 4);
 			label1.Name = "label1";
-			label1.Size = new Size(251, 31);
+			label1.Size = new Size(205, 25);
 			label1.TabIndex = 1;
 			label1.Text = "Conceptos de Ingresos";
 			// 
 			// FrmIncomeConcepts
 			// 
-			AutoScaleDimensions = new SizeF(8F, 20F);
+			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(845, 605);
+			ClientSize = new Size(739, 454);
 			Controls.Add(panel1);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmIncomeConcepts";
 			Text = "Conceptos";
 			Load += FrmIncomeConcepts_Load;
