@@ -547,51 +547,26 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			cargando = false;
 		}
-		//public DataTable CboCuadrilla()
-		//{
-		//	DataTable dt = new DataTable();
-
-		//	sql.OpenConectionWrite();
-
-		//	string query = @" SELECT 
-		//		g.id_workGroup AS Código,
-		//		g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
-		//	FROM Pack_WorkGroup g
-		//	INNER JOIN Pack_Contractor c 
-		//		ON g.id_contractor = c.id_contractor
-		//	INNER JOIN Pack_Season s
-		//		ON g.id_season = s.id_season
-		//	WHERE 
-		//		CAST(GETDATE() AS DATE) 
-		//		BETWEEN CAST(s.d_seasonBegins AS DATE) 
-		//		AND CAST(s.d_seasonEnds AS DATE)
-		//		AND g.c_active = 1
-		//	ORDER BY g.v_nameWorkGroup";
-		//	SqlCommand cmd = new SqlCommand(query, sql.cnn);
-
-		//	SqlDataAdapter da = new SqlDataAdapter(cmd);
-		//	da.Fill(dt);
-
-		//	sql.CloseConectionWrite();
-
-		//	return dt;
-		//}
 		public DataTable CboCuadrilla()
 		{
 			DataTable dt = new DataTable();
 
 			sql.OpenConectionWrite();
 
-			string query = @"
-        SELECT
-            g.id_workGroup AS Código,
-            g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
-        FROM Pack_WorkGroup g
-        INNER JOIN Pack_Contractor c
-            ON g.id_contractor = c.id_contractor
-        WHERE g.c_active = 1
-        ORDER BY g.v_nameWorkGroup";
-
+			string query = @" SELECT 
+				g.id_workGroup AS Código,
+				g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
+			FROM Pack_WorkGroup g
+			INNER JOIN Pack_Contractor c 
+				ON g.id_contractor = c.id_contractor
+			INNER JOIN Pack_Season s
+				ON g.id_season = s.id_season
+			WHERE 
+				CAST(GETDATE() AS DATE) 
+				BETWEEN CAST(s.d_seasonBegins AS DATE) 
+				AND CAST(s.d_seasonEnds AS DATE)
+				AND g.c_active = 1
+			ORDER BY g.v_nameWorkGroup";
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
 			SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -601,6 +576,31 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return dt;
 		}
+		//public DataTable CboCuadrilla()
+		//{
+		//	DataTable dt = new DataTable();
+
+		//	sql.OpenConectionWrite();
+
+		//	string query = @"
+		//      SELECT
+		//          g.id_workGroup AS Código,
+		//          g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
+		//      FROM Pack_WorkGroup g
+		//      INNER JOIN Pack_Contractor c
+		//          ON g.id_contractor = c.id_contractor
+		//      WHERE g.c_active = 1
+		//      ORDER BY g.v_nameWorkGroup";
+
+		//	SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+		//	SqlDataAdapter da = new SqlDataAdapter(cmd);
+		//	da.Fill(dt);
+
+		//	sql.CloseConectionWrite();
+
+		//	return dt;
+		//}
 		public void EliminarAsistenciaPorCuadrilla(DateTime fechaSeleccionada, object cuadrillaValue)
 		{
 			string fecha = fechaSeleccionada.ToString("yyyy-MM-dd");
