@@ -379,6 +379,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 				int conteo = 0;
 				string fecha = frm.dtpDay.Value.ToString("yyyy-MM-dd");
+				string tipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
 
 				string idCuadrilla = frm.cboCuadrilla.SelectedValue.ToString().PadLeft(2, '0');
 
@@ -395,6 +396,7 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 					cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
 					cmd.Parameters.AddWithValue("@banda", ClsValues.IfEmptyToDBNull(banda));
 					cmd.Parameters.AddWithValue("@idWorkGroup", idCuadrilla);
+					cmd.Parameters.AddWithValue("@payrollType", tipoNomina);
 
 					try
 					{

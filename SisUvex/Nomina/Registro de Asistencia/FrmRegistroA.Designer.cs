@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistroA));
 			btnMostrarEmpleado = new Button();
 			btnAgregarListado = new Button();
@@ -62,11 +62,18 @@
 			groupBox1 = new GroupBox();
 			groupBox2 = new GroupBox();
 			groupBox3 = new GroupBox();
+			label2 = new Label();
+			rbtEsparrago = new RadioButton();
+			rbtUva = new RadioButton();
+			pictureBox2 = new PictureBox();
+			pictureBox1 = new PictureBox();
 			label1 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
 			groupBox3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// btnMostrarEmpleado
@@ -186,9 +193,9 @@
 			// 
 			// dtpDay
 			// 
-			dtpDay.Location = new Point(15, 24);
+			dtpDay.Location = new Point(15, 27);
 			dtpDay.Name = "dtpDay";
-			dtpDay.Size = new Size(308, 23);
+			dtpDay.Size = new Size(278, 23);
 			dtpDay.TabIndex = 150;
 			dtpDay.ValueChanged += dtpDay_ValueChanged;
 			// 
@@ -282,19 +289,19 @@
 			// 
 			cboCuadrilla.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboCuadrilla.FormattingEnabled = true;
-			cboCuadrilla.Location = new Point(641, 20);
+			cboCuadrilla.Location = new Point(401, 25);
 			cboCuadrilla.Name = "cboCuadrilla";
-			cboCuadrilla.Size = new Size(321, 23);
+			cboCuadrilla.Size = new Size(270, 23);
 			cboCuadrilla.TabIndex = 111;
 			cboCuadrilla.SelectedIndexChanged += cboCuadrilla_SelectedIndexChanged;
 			// 
 			// lblCuadrilla
 			// 
 			lblCuadrilla.AutoSize = true;
-			lblCuadrilla.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-			lblCuadrilla.Location = new Point(565, 21);
+			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			lblCuadrilla.Location = new Point(426, 0);
 			lblCuadrilla.Name = "lblCuadrilla";
-			lblCuadrilla.Size = new Size(68, 19);
+			lblCuadrilla.Size = new Size(56, 15);
 			lblCuadrilla.TabIndex = 111;
 			lblCuadrilla.Text = "Cuadrilla:";
 			// 
@@ -318,14 +325,14 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvAsistencia.ColumnHeadersHeight = 58;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
@@ -333,14 +340,14 @@
 			dgvAsistencia.Location = new Point(20, 399);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -426,17 +433,74 @@
 			// groupBox3
 			// 
 			groupBox3.BackColor = SystemColors.ControlLight;
+			groupBox3.Controls.Add(label2);
+			groupBox3.Controls.Add(rbtEsparrago);
+			groupBox3.Controls.Add(rbtUva);
+			groupBox3.Controls.Add(pictureBox2);
+			groupBox3.Controls.Add(pictureBox1);
 			groupBox3.Controls.Add(dtpDay);
 			groupBox3.Controls.Add(cboCuadrilla);
 			groupBox3.Controls.Add(lblCuadrilla);
-			groupBox3.Location = new Point(20, 81);
+			groupBox3.Location = new Point(20, 74);
 			groupBox3.Margin = new Padding(3, 2, 3, 2);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Padding = new Padding(3, 2, 3, 2);
-			groupBox3.Size = new Size(1016, 62);
+			groupBox3.Size = new Size(1016, 69);
 			groupBox3.TabIndex = 159;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Informacion General";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label2.Location = new Point(840, 0);
+			label2.Name = "label2";
+			label2.Size = new Size(91, 13);
+			label2.TabIndex = 155;
+			label2.Text = "Tipo de Nomina ";
+			// 
+			// rbtEsparrago
+			// 
+			rbtEsparrago.AutoSize = true;
+			rbtEsparrago.Location = new Point(811, 30);
+			rbtEsparrago.Name = "rbtEsparrago";
+			rbtEsparrago.Size = new Size(77, 19);
+			rbtEsparrago.TabIndex = 153;
+			rbtEsparrago.TabStop = true;
+			rbtEsparrago.Text = "Esparrago";
+			rbtEsparrago.UseVisualStyleBackColor = true;
+			// 
+			// rbtUva
+			// 
+			rbtUva.AutoSize = true;
+			rbtUva.Location = new Point(954, 29);
+			rbtUva.Name = "rbtUva";
+			rbtUva.Size = new Size(45, 19);
+			rbtUva.TabIndex = 151;
+			rbtUva.TabStop = true;
+			rbtUva.Text = "Uva";
+			rbtUva.UseVisualStyleBackColor = true;
+			// 
+			// pictureBox2
+			// 
+			pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+			pictureBox2.Location = new Point(778, 26);
+			pictureBox2.Name = "pictureBox2";
+			pictureBox2.Size = new Size(27, 23);
+			pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
+			pictureBox2.TabIndex = 154;
+			pictureBox2.TabStop = false;
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+			pictureBox1.Location = new Point(921, 26);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(27, 23);
+			pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+			pictureBox1.TabIndex = 152;
+			pictureBox1.TabStop = false;
 			// 
 			// label1
 			// 
@@ -471,6 +535,8 @@
 			groupBox2.PerformLayout();
 			groupBox3.ResumeLayout(false);
 			groupBox3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -509,5 +575,10 @@
 		private GroupBox groupBox2;
 		private GroupBox groupBox3;
 		private Label label1;
+		public RadioButton rbtUva;
+		private PictureBox pictureBox1;
+		private Label label2;
+		public RadioButton rbtEsparrago;
+		private PictureBox pictureBox2;
 	}
 }
