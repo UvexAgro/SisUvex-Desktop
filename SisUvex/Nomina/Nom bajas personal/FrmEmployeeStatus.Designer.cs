@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmEmployeeStatus));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			groupBox1 = new GroupBox();
 			btnMostrar = new Button();
 			label4 = new Label();
@@ -41,11 +41,11 @@
 			label1 = new Label();
 			label3 = new Label();
 			dgvCatalog = new DataGridView();
-			button1 = new Button();
+			this.btnAplicar = new Button();
 			groupBox2 = new GroupBox();
 			txbEmpleado = new TextBox();
 			label5 = new Label();
-			button2 = new Button();
+			btnQuitar = new Button();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
 			groupBox2.SuspendLayout();
@@ -153,52 +153,52 @@
 			dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
 			dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
 			dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvCatalog.ColumnHeadersHeight = 29;
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
 			dgvCatalog.Location = new Point(5, 310);
 			dgvCatalog.Name = "dgvCatalog";
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvCatalog.Size = new Size(910, 499);
 			dgvCatalog.TabIndex = 14;
 			// 
-			// button1
+			// btnAplicar
 			// 
-			button1.Image = (Image)resources.GetObject("button1.Image");
-			button1.ImageAlign = ContentAlignment.MiddleLeft;
-			button1.Location = new Point(422, 37);
-			button1.Name = "button1";
-			button1.Padding = new Padding(15, 0, 40, 0);
-			button1.Size = new Size(167, 26);
-			button1.TabIndex = 7;
-			button1.Text = "Aplicar Baja";
-			button1.TextAlign = ContentAlignment.MiddleRight;
-			button1.UseVisualStyleBackColor = true;
-			button1.Click += button1_Click;
+			this.btnAplicar.Image = (Image)resources.GetObject("btnAplicar.Image");
+			this.btnAplicar.ImageAlign = ContentAlignment.MiddleLeft;
+			this.btnAplicar.Location = new Point(422, 37);
+			this.btnAplicar.Name = "btnAplicar";
+			this.btnAplicar.Padding = new Padding(15, 0, 40, 0);
+			this.btnAplicar.Size = new Size(167, 26);
+			this.btnAplicar.TabIndex = 7;
+			this.btnAplicar.Text = "Aplicar Baja";
+			this.btnAplicar.TextAlign = ContentAlignment.MiddleRight;
+			this.btnAplicar.UseVisualStyleBackColor = true;
+			this.btnAplicar.Click += this.button1_Click;
 			// 
 			// groupBox2
 			// 
 			groupBox2.Controls.Add(dtpFecha);
-			groupBox2.Controls.Add(button1);
+			groupBox2.Controls.Add(this.btnAplicar);
 			groupBox2.Controls.Add(label1);
 			groupBox2.Location = new Point(12, 188);
 			groupBox2.Name = "groupBox2";
@@ -225,26 +225,26 @@
 			label5.TabIndex = 17;
 			label5.Text = "Empleado :";
 			// 
-			// button2
+			// btnQuitar
 			// 
-			button2.Image = (Image)resources.GetObject("button2.Image");
-			button2.ImageAlign = ContentAlignment.MiddleLeft;
-			button2.Location = new Point(434, 281);
-			button2.Name = "button2";
-			button2.Padding = new Padding(15, 0, 40, 0);
-			button2.Size = new Size(167, 23);
-			button2.TabIndex = 18;
-			button2.Text = "Quitar Baja";
-			button2.TextAlign = ContentAlignment.MiddleRight;
-			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click;
+			btnQuitar.Image = (Image)resources.GetObject("btnQuitar.Image");
+			btnQuitar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnQuitar.Location = new Point(434, 281);
+			btnQuitar.Name = "btnQuitar";
+			btnQuitar.Padding = new Padding(15, 0, 40, 0);
+			btnQuitar.Size = new Size(167, 23);
+			btnQuitar.TabIndex = 18;
+			btnQuitar.Text = "Quitar Baja";
+			btnQuitar.TextAlign = ContentAlignment.MiddleRight;
+			btnQuitar.UseVisualStyleBackColor = true;
+			btnQuitar.Click += button2_Click;
 			// 
 			// FrmEmployeeStatus
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(927, 821);
-			Controls.Add(button2);
+			Controls.Add(btnQuitar);
 			Controls.Add(label5);
 			Controls.Add(txbEmpleado);
 			Controls.Add(groupBox2);
@@ -277,10 +277,10 @@
 		private Label label4;
 		public ComboBox cboTemporada;
 		private Button btnMostrar;
-		private Button button1;
+		private Button btnAplicar;
 		private GroupBox groupBox2;
 		private TextBox txbEmpleado;
 		private Label label5;
-		private Button button2;
+		private Button btnQuitar;
 	}
 }

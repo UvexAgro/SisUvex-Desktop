@@ -19,7 +19,15 @@ namespace SisUvex.Nomina.Nom_bajas_personal
 			cls = new();
 			cls.frm = this;
 		}
+		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
+		{
+			if (User.HasEditCatalogsPermission())
+				return;
 
+			btnMostrar.Enabled = false;
+			btnQuitar.Enabled = false;
+			btnAplicar.Enabled = false;
+		}
 		private void FrmEmployeeStatus_Load(object sender, EventArgs e)
 		{
 			cls.CargarTemporada();
@@ -33,6 +41,7 @@ namespace SisUvex.Nomina.Nom_bajas_personal
 			{
 				cboTemporada.Focus();
 			}));
+			HasEditCatalogsPermission(); //metodo para dar permisos al usuario 
 		}
 
 		private void cboTemporada_SelectedIndexChanged(object sender, EventArgs e)
