@@ -155,7 +155,8 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			else
 			{//GUARDAR REGISTROS
 
-				if (ValidarColumnaCodigo(frm.dgvAsistencia) && ValidarColumnaActividad(frm.dgvAsistencia) && ValidarColumnaBanda(frm.dgvAsistencia) && ValidarEmpleadoRepetido(frm.dgvAsistencia))
+				if (ValidarColumnaCodigo(frm.dgvAsistencia) && ValidarColumnaActividad(frm.dgvAsistencia) && ValidarColumnaBanda(frm.dgvAsistencia) && ValidarEmpleadoRepetido(frm.dgvAsistencia) &&
+				ValidarEmpleadosBaja(frm.dgvAsistencia))
 				{
 					ConfirmarAccionAceptar();
 				}
@@ -277,7 +278,64 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			return true;
 		}
-		
+		public bool ValidarEmpleadosBaja(DataGridView dgv)
+		{
+			SQLControl sql = new SQLControl();
+
+			sql.OpenConectionWrite();
+
+			foreach (DataGridViewRow row in dgv.Rows)
+			{
+				if (row.IsNewRow)
+					continue;
+
+				string valor = row.Cells[frm.idEmpleado].Value?.ToString().Trim();
+
+				if (string.IsNullOrWhiteSpace(valor))
+					continue;
+
+				// Obtener solo el código del empleado
+				string idEmpleado = valor.Contains("-")
+					? valor.Split('-')[0].Trim()
+					: valor;
+
+				SqlCommand cmd = new SqlCommand(@"
+            SELECT
+                d_exitDate,
+                v_lastNamePat + ' ' + v_lastNameMat + ' ' + v_name AS Nombre
+            FROM Nom_Employees
+            WHERE id_employee = @IdEmployee", sql.cnn);
+
+				cmd.Parameters.AddWithValue("@IdEmployee", idEmpleado);
+
+				using (SqlDataReader dr = cmd.ExecuteReader())
+				{
+					if (dr.Read())
+					{
+						if (dr["d_exitDate"] != DBNull.Value)
+						{
+							DateTime fechaBaja = Convert.ToDateTime(dr["d_exitDate"]);
+							string nombre = dr["Nombre"].ToString();
+
+							MessageBox.Show(
+								$"El empleado:\n{idEmpleado} - {nombre}\n\n" +
+								$"fue dado de baja el {fechaBaja:dd/MM/yyyy}.\n\n" +
+								"No es posible registrar la asistencia.",
+								"Empleado dado de baja",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning);
+
+							sql.CloseConectionWrite();
+							return false;
+						}
+					}
+				}
+			}
+
+			sql.CloseConectionWrite();
+			return true;
+		}
+
 		public void ConfirmarAccionAceptar()
 		{
 			if (frm.cboCuadrilla.SelectedValue == null || frm.cboCuadrilla.SelectedValue == DBNull.Value)
@@ -374,12 +432,12 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 			{
 			
 				SqlCommand cmd1 = new SqlCommand(@"
-            DELETE mi
-            FROM Nom_MiscellaneousIncome mi
-            INNER JOIN Nom_AttendenceList a
-                ON mi.id_attendence = a.id_attendence
-            WHERE CAST(a.d_attendence AS DATE) = @Fecha
-            AND a.id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
+				DELETE mi
+				FROM Nom_MiscellaneousIncome mi
+				INNER JOIN Nom_AttendenceList a
+					ON mi.id_attendence = a.id_attendence
+				WHERE CAST(a.d_attendence AS DATE) = @Fecha
+				AND a.id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
 
 				cmd1.Parameters.AddWithValue("@Fecha", fecha);
 				cmd1.Parameters.AddWithValue("@Cuadrilla", cuadrilla);
@@ -387,9 +445,9 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			
 				SqlCommand cmd2 = new SqlCommand(@"
-            DELETE FROM Nom_AttendenceList
-            WHERE CAST(d_attendence AS DATE) = @Fecha
-            AND id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
+				DELETE FROM Nom_AttendenceList
+				WHERE CAST(d_attendence AS DATE) = @Fecha
+				AND id_workGroup = @Cuadrilla", sql.cnn, sql.transaction);
 
 				cmd2.Parameters.AddWithValue("@Fecha", fecha);
 				cmd2.Parameters.AddWithValue("@Cuadrilla", cuadrilla);
@@ -487,26 +545,51 @@ namespace SisUvex.Nomina.Registro_de_Asistencia
 
 			cargando = false;
 		}
+		//public DataTable CboCuadrilla()
+		//{
+		//	DataTable dt = new DataTable();
+
+		//	sql.OpenConectionWrite();
+
+		//	string query = @" SELECT 
+		//		g.id_workGroup AS Código,
+		//		g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
+		//	FROM Pack_WorkGroup g
+		//	INNER JOIN Pack_Contractor c 
+		//		ON g.id_contractor = c.id_contractor
+		//	INNER JOIN Pack_Season s
+		//		ON g.id_season = s.id_season
+		//	WHERE 
+		//		CAST(GETDATE() AS DATE) 
+		//		BETWEEN CAST(s.d_seasonBegins AS DATE) 
+		//		AND CAST(s.d_seasonEnds AS DATE)
+		//		AND g.c_active = 1
+		//	ORDER BY g.v_nameWorkGroup";
+		//	SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+		//	SqlDataAdapter da = new SqlDataAdapter(cmd);
+		//	da.Fill(dt);
+
+		//	sql.CloseConectionWrite();
+
+		//	return dt;
+		//}
 		public DataTable CboCuadrilla()
 		{
 			DataTable dt = new DataTable();
 
 			sql.OpenConectionWrite();
 
-			string query = @" SELECT 
-				g.id_workGroup AS Código,
-				g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
-			FROM Pack_WorkGroup g
-			INNER JOIN Pack_Contractor c 
-				ON g.id_contractor = c.id_contractor
-			INNER JOIN Pack_Season s
-				ON g.id_season = s.id_season
-			WHERE 
-				CAST(GETDATE() AS DATE) 
-				BETWEEN CAST(s.d_seasonBegins AS DATE) 
-				AND CAST(s.d_seasonEnds AS DATE)
-				AND g.c_active = 1
-			ORDER BY g.v_nameWorkGroup";
+			string query = @"
+        SELECT
+            g.id_workGroup AS Código,
+            g.v_nameWorkGroup + ' - ' + c.v_nameContractor AS Nombre
+        FROM Pack_WorkGroup g
+        INNER JOIN Pack_Contractor c
+            ON g.id_contractor = c.id_contractor
+        WHERE g.c_active = 1
+        ORDER BY g.v_nameWorkGroup";
+
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
 			SqlDataAdapter da = new SqlDataAdapter(cmd);
