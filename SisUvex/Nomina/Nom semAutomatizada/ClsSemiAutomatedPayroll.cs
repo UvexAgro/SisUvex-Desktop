@@ -321,6 +321,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BtnCargarDatos()
 		{
 			TipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
+			if (!ValidarTipoNomina(frm.dtpFecha.Value, TipoNomina))
+				return;
 			DateTime fecha = frm.dtpFecha.Value;
 
 			bool existeNomina = ExisteNominaDiaria(fecha);
@@ -478,6 +480,39 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			ActivarEstiloGrid(frm.dgvEmployee);
 			frm.dgvEmployee.Visible = true;
+		}
+		public bool ValidarTipoNomina(DateTime fecha, string tipoNomina)
+		{
+			SQLControl sql = new SQLControl();
+
+			sql.OpenConectionWrite();
+
+			string query = @"
+			SELECT COUNT(*)
+			FROM Nom_AttendenceList
+			WHERE CAST(d_attendence AS DATE) = @Fecha
+			AND c_payrollType = @TipoNomina";
+
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+			cmd.Parameters.AddWithValue("@Fecha", fecha.Date);
+			cmd.Parameters.AddWithValue("@TipoNomina", tipoNomina);
+
+			int total = Convert.ToInt32(cmd.ExecuteScalar());
+
+			sql.CloseConectionWrite();
+
+			if (total == 0)
+			{
+				MessageBox.Show(
+					$"No existe asistencia de {(tipoNomina == "E" ? "Espárrago" : "Uva")} para la fecha seleccionada.",
+					"Sistema",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return false;
+			}
+
+			return true;
 		}
 		public DataTable ObtenerInfoNomina(DateTime fecha, string tipo)
 		{
