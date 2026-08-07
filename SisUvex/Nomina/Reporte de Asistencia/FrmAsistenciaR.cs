@@ -30,7 +30,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		string lastNamePat;
 		string lastNameMat;
 		string name;
-		bool cuadrilla_Empleado = false; 
+		bool cuadrilla_Empleado = false;
 		bool isLoaded = false;
 
 
@@ -86,17 +86,7 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 			if (cboSemanaInicial.SelectedIndex == -1)
 				return;
 
-			// 🔥 aquí controlas TODO
 			cboSemanaFinal.SelectedIndex = cboSemanaInicial.SelectedIndex;
-
-		}
-
-		private void btnAceptarCuadrilla_Click(object sender, EventArgs e)
-		{
-			dtEmpleados.Rows.Clear();
-			cls.CargarAsistencia();
-			clsDgv.CargarDgvAsistencia();
-			cuadrilla_Empleado = true;
 
 		}
 
@@ -213,6 +203,23 @@ namespace SisUvex.Nomina.Reporte_de_Asistencia
 		private void btnEliminar_Click(object sender, EventArgs e)
 		{
 			clsDgv.btnEliminar();
+		}
+
+		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cargando)
+				return;
+
+			if (cboCuadrilla.SelectedIndex <= 0)
+				return;
+
+			dtEmpleados.Rows.Clear();
+
+			cls.CargarAsistencia();
+
+			clsDgv.CargarDgvAsistencia();
+
+			cuadrilla_Empleado = true;
 		}
 	}
 }

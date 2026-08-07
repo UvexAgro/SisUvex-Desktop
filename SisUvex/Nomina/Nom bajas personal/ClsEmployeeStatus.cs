@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -169,9 +169,9 @@ namespace SisUvex.Nomina.Nom_bajas_personal
 			sql.OpenConectionWrite();
 
 			string query = @"
-        UPDATE Nom_Employees
-        SET d_exitDate = NULL
-        WHERE id_employee = @IdEmployee";
+			UPDATE Nom_Employees
+			SET d_exitDate = NULL
+			WHERE id_employee = @IdEmployee";
 
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 			cmd.Parameters.AddWithValue("@IdEmployee", idEmployee);
