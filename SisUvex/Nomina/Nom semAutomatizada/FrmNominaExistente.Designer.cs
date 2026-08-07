@@ -282,7 +282,6 @@
 		private Label label3;
 		private GroupBox gbAccion;
 		private Button btnCancelar;
-		private Button btnRecalcular;
 		private Button btnMostrar;
 		private PictureBox ptbFecha;
 		private PictureBox ptbGenero;
@@ -293,5 +292,6 @@
 		public Label lblUsuario;
 		private Label label1;
 		private GroupBox groupBox1;
+		public Button btnRecalcular;
 	}
 }

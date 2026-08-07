@@ -148,6 +148,9 @@
   <data name="PrintIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PrintIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="circuloVerde" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circuloVerde.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="imprimirIcon321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\imprimirIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -157,8 +160,11 @@
   <data name="personIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\personIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="reiniciar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\reiniciar1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="x (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\x (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refrescar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refrescar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="screenload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screenload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,6 +211,9 @@
   <data name="reiniciar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciar2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="downIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\downIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="buscarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\buscarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -238,8 +247,8 @@
   <data name="limpiarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\limpiarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="downIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\downIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="verIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\verIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="basuraIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\basuraIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -250,11 +259,17 @@
   <data name="editPencilIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\editPencilIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="abierto" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\abierto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="fileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\fileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="reiniciar3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciar3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reiniciar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reiniciar1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Imagen6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Imagen6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -271,13 +286,10 @@
   <data name="guardarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\guardarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="verIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\verIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="circuloRojo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circuloRojo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="x (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\x (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="refrescar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\refrescar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="cerrado" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cerrado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

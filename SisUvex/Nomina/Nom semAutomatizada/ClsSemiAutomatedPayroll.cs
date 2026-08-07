@@ -31,11 +31,17 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public string TipoNomina = "E";
 		public string TemaActual = "E";
 		ClsFestivo clsF;
+		ClsCierre clsC;
+		public FrmNominaExistente frmN;
 		public void BeginForm()
 		{
 			clsF = new ClsFestivo();
 			clsF.frm = frm;
 			clsF.cls = this;
+
+			clsC = new ClsCierre(); 
+			clsC.frm = frm; 
+			clsC.cls = this;
 
 			SetTxbReferencia();
 			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLotFacility);
@@ -325,6 +331,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 			DateTime fecha = frm.dtpFecha.Value;
 
+			// Validar cierre de la semana anterior
+			if (fecha.DayOfWeek == DayOfWeek.Friday)
+			{
+				if (!clsC.ValidarCierreSemanaAnterior(fecha))
+					return;
+			}
+
 			bool existeNomina = ExisteNominaDiaria(fecha);
 			bool esFestivo = clsF.EsFestivo(fecha);
 			// YA EXISTE UNA NÓMINA
@@ -338,6 +351,23 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					frmExiste.ConfigurarModo(ModoNomina.NominaExistente);
 
 				frmExiste.CargarDatos(TipoNomina, fecha);
+
+				// Verificar si la semana está cerrada
+				DataTable dt = clsC.ObtenerInfoCierreSemana(fecha);
+
+				if (dt.Rows.Count > 0)
+				{
+					bool cerrada = clsC.SemanaCerrada(
+						dt.Rows[0]["id_season"].ToString(),
+						dt.Rows[0]["c_sequence_per"].ToString(),
+						TipoNomina);
+
+					if (cerrada)
+					{
+						frmExiste.BloquearRecalculo();
+					}
+				}
+
 
 				DialogResult r = frmExiste.ShowDialog();
 
@@ -480,6 +510,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			ActivarEstiloGrid(frm.dgvEmployee);
 			frm.dgvEmployee.Visible = true;
+			clsC.ValidarSemanaCerrada();
 		}
 		public bool ValidarTipoNomina(DateTime fecha, string tipoNomina)
 		{

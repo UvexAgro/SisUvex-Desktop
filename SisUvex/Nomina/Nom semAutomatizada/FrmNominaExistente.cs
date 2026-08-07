@@ -14,11 +14,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 	public partial class FrmNominaExistente : Form
 	{
 	    ClsSemiAutomatedPayroll cls;
+		ClsCierre clsC;
 		private Color colorTema;
 		public FrmNominaExistente()
 		{
 			InitializeComponent();
 			cls = new ClsSemiAutomatedPayroll();
+			clsC = new ClsCierre();
 			// Asignar eventos
 			btnMostrar.MouseEnter += Boton_MouseEnter;
 			btnMostrar.MouseLeave += Boton_MouseLeave;
@@ -194,6 +196,10 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			btnCancelar.FlatStyle = FlatStyle.Flat;
 			btnCancelar.FlatAppearance.BorderColor = Color.Gray;
 			btnCancelar.FlatAppearance.BorderSize = 1;
+		}
+		public void BloquearRecalculo()
+		{
+			btnRecalcular.Enabled = false;
 		}
 	}
 }

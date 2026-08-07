@@ -17,6 +17,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 	public partial class FrmSemiAutomatedPayroll : Form
 	{
 		ClsSemiAutomatedPayroll cls;
+		ClsCierre clsC;
 		ClsFestivo clsF;
 		public string TipoFestivoSeleccionado = "";
 
@@ -31,6 +32,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			cls.frm ??= this;
 			clsF ??= new ClsFestivo();
 			clsF.frm = this;
+			clsC ??= new ClsCierre();
+			clsC.frm = this;
 			cls.BeginForm();
 
 		}
@@ -49,8 +52,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		private void btncargar_Click(object sender, EventArgs e)
 		{
-			cls.BtnCargarDatos();
 
+				cls.BtnCargarDatos();
 		}
 
 		private void btnExcel_Click(object sender, EventArgs e)

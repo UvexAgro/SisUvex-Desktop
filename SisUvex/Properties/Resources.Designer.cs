@@ -63,6 +63,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap abierto {
+            get {
+                object obj = ResourceManager.GetObject("abierto", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addFileIcon16 {
             get {
                 object obj = ResourceManager.GetObject("addFileIcon16", resourceCulture);
@@ -136,6 +146,36 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap BuscarLupa1 {
             get {
                 object obj = ResourceManager.GetObject("BuscarLupa1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cerrado {
+            get {
+                object obj = ResourceManager.GetObject("cerrado", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap circuloRojo {
+            get {
+                object obj = ResourceManager.GetObject("circuloRojo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap circuloVerde {
+            get {
+                object obj = ResourceManager.GetObject("circuloVerde", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
