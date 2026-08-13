@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Nomina.LOAD;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
@@ -63,6 +64,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void CargarDatos(string tipoNomina, DateTime fecha)
 		{
 			lblGenero.Text = tipoNomina == "E" ? "Espárrago" : "Uva";
+			lblFechaNomina.Text = $"{fecha:dd/MM/yyyy}";
 
 			DataTable dt = cls.ObtenerInfoNomina(fecha, tipoNomina);
 
@@ -77,6 +79,23 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				lblUsuario.Text = "";
 				lblFecha.Text = fecha.ToString("dd/MM/yyyy HH:mm");
 			}
+
+			// Obtener empleados de la nómina
+			string fechaTexto =
+				fecha.ToString("yyyy-MM-dd");
+
+			string query = tipoNomina == "E"
+				? $"EXEC sp_GetReporteNominaDiaria_Esparrago '{fechaTexto}'"
+				: $"EXEC sp_GetReporteNominaDiaria_Uva '{fechaTexto}'";
+
+			DataTable dtNomina =
+				ClsQuerysDB.GetDataTable(query);
+
+			int cantidadEmpleados =
+				dtNomina.Rows.Count;
+
+			lblCantidadEmpleados.Text =
+				$"{cantidadEmpleados}";
 
 			CargarImagenTipoNomina(tipoNomina);
 			AplicarColores(tipoNomina);
