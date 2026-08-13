@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.RootFinding;
+using Microsoft.VisualBasic;
+using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos.Metods.Querys;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
@@ -37,9 +40,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return dt;
 		}
-		public void CargarInformacionCierre(FrmCierre frmC)
+		public void CargarInformacionCierre(FrmCierre frmC, DateTime fechaCierre)
 		{
-			DataTable dt = ObtenerInfoCierreSemana(frm.dtpFecha.Value);
+			DataTable dt = ObtenerInfoCierreSemana(fechaCierre);
 
 			if (dt.Rows.Count == 0)
 			{
@@ -68,32 +71,66 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				User.GetUserName();
 
 			bool cerrada = SemanaCerrada(
-					row["id_season"].ToString(),
-					row["c_sequence_per"].ToString(),
-					cls.TipoNomina);
+				row["id_season"].ToString(),
+				row["c_sequence_per"].ToString(),
+				cls.TipoNomina);
 
 			if (cerrada)
 			{
+				frmC.lblTitulo.Text = "SEMANA CERRADA";
+				frmC.lblTitulo.ForeColor =
+					Color.FromArgb(180, 45, 45);
+
 				frmC.lblEstado.Text = "Cerrada";
-				frmC.pbColor.Image = Properties.Resources.circuloRojo;
-				// Deshabilitar botón
+				frmC.pbColor.Image =
+					Properties.Resources.circuloRojo;
+
 				frmC.btnCerrar.Enabled = false;
 				frmC.btnCerrar.Text = "Semana Cerrada";
-				frmC.btnCerrar.Image = Properties.Resources.cerrado;
+
+				// Mensaje cuando ya está cerrada
+				frmC.lblMensaje.Text =
+					"Esta semana ya está cerrada y no puede modificarse.";
+
+				frmC.lblMensaje.Visible = true;
+				frmC.pbAviso.Image =
+					Properties.Resources.advertenciaRojo;
+
+				// Panel de aviso
+				frmC.pnlAviso.BackColor =
+					Color.FromArgb(253, 242, 242);
+
+				frmC.pnlLinea.BackColor = Color.FromArgb(190, 50, 50);
 			}
 			else
 			{
+				frmC.lblTitulo.Text = "CERRAR SEMANA";
+				frmC.lblTitulo.ForeColor =
+					Color.FromArgb(30, 120, 50);
+
 				frmC.lblEstado.Text = "Abierta";
-				frmC.pbColor.Image = Properties.Resources.circuloVerde;
-				// Habilitar botón
+				frmC.pbColor.Image =
+					Properties.Resources.circuloVerde;
+
 				frmC.btnCerrar.Enabled = true;
 				frmC.btnCerrar.Text = "Cerrar Semana";
-				frmC.btnCerrar.Image = Properties.Resources.abierto;
+
+				// Mensaje cuando todavía puede cerrarse
+				frmC.lblMensaje.Text =
+					"Importante: Verifique que toda la información de la semana sea correcta antes de realizar el cierre.";
+
+				frmC.lblMensaje.Visible = true;
+				frmC.pbAviso.Image =
+					Properties.Resources.advertenciaVerde;
+
+				// Panel de aviso
+				frmC.pnlAviso.BackColor =
+					Color.FromArgb(244, 250, 244);
+
+				frmC.pnlLinea.BackColor = Color.FromArgb(42, 140, 65);
 			}
 		}
-		public bool SemanaCerrada(string temporada,
-						  string semana,
-						  string tipoNomina)
+		public bool SemanaCerrada(string temporada, string semana, string tipoNomina)
 		{
 			string query = $@"
 			SELECT COUNT(*)
@@ -107,24 +144,52 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return registros > 0;
 		}
-		public bool CerrarSemana()
+		public bool CerrarSemana(DateTime fechaCierre)
 		{
-			DataTable dt = ObtenerInfoCierreSemana(frm.dtpFecha.Value);
+			DataTable dt =
+				ObtenerInfoCierreSemana(fechaCierre);
 
 			if (dt.Rows.Count == 0)
 				return false;
 
 			DataRow row = dt.Rows[0];
-			DateTime inicio = Convert.ToDateTime(row["d_startDate_per"]);
-			DateTime fin = Convert.ToDateTime(row["d_endDate_per"]);
+
+			string temporada =
+				row["id_season"].ToString();
+
+			string semana =
+				row["c_sequence_per"].ToString();
+
+
+			bool yaCerrada = SemanaCerrada(
+				temporada,
+				semana,
+				cls.TipoNomina);
+
+			if (yaCerrada)
+			{
+				MessageBox.Show(
+					"La semana ya se encuentra cerrada.",
+					"Cierre de Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return true;
+			}
+
+			DateTime inicio =
+				Convert.ToDateTime(row["d_startDate_per"]);
+
+			DateTime fin =
+				Convert.ToDateTime(row["d_endDate_per"]);
 
 			string mensaje;
 
 			if (!ValidarDiasSemana(
-					cls.TipoNomina,
-					inicio,
-					fin,
-					out mensaje))
+				cls.TipoNomina,
+				inicio,
+				fin,
+				out mensaje))
 			{
 				MessageBox.Show(
 					mensaje,
@@ -132,45 +197,56 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 
-				frmC.Close();
 				return false;
 			}
 
 			string query = $@"
+        INSERT INTO Nom_PayrollClose
+        (
+            id_season,
+            c_sequence_per,
+            c_typePayroll,
+            c_userClosed,
+            d_dateClosed
+        )
+        VALUES
+        (
+            '{temporada}',
+            '{semana}',
+            '{cls.TipoNomina}',
+            '{User.GetUserName()}',
+            GETDATE()
+        )";
 
-			INSERT INTO Nom_PayrollClose
-			(
-				id_season,
-				c_sequence_per,
-				c_typePayroll,
-				c_userClosed,
-				d_dateClosed
-			)
-			VALUES
-			(
-				'{row["id_season"]}',
-				'{row["c_sequence_per"]}',
-				'{cls.TipoNomina}',
-				'{User.GetUserName()}',
-				GETDATE()
-			)";
+			bool resultado =
+				ClsQuerysDB.ExecuteQuery(query);
 
-			return ClsQuerysDB.ExecuteQuery(query);
+			return resultado;
 		}
 		public void BloquearSemanaCerrada()
 		{
-			// Bloquear acciones
+			// Bloquear botones que modifican la nómina
 			frm.btnGuardar.Enabled = false;
 			frm.btnCalcularLibra.Enabled = false;
-			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = true;
+
+			// Bloquear edición de sueldo
+			if (frm.dgvEmployee.Columns.Contains("SueldoTotal"))
+			{
+				frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = true;
+			}
 		}
+		
 		public void DesbloquearSemana()
 		{
 			frm.btnGuardar.Enabled = true;
 			frm.btnCalcularLibra.Enabled = true;
 
-			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
+			if (frm.dgvEmployee.Columns.Contains("SueldoTotal"))
+			{
+				frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
+			}
 		}
+		
 		public void ValidarSemanaCerrada()
 		{
 			DataTable dt = ObtenerInfoCierreSemana(frm.dtpFecha.Value);
@@ -178,51 +254,25 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (dt.Rows.Count == 0)
 				return;
 
-			bool cerrada = SemanaCerrada(
-				dt.Rows[0]["id_season"].ToString(),
-				dt.Rows[0]["c_sequence_per"].ToString(),
-				cls.TipoNomina);
-
-			if (cerrada)
-				BloquearSemanaCerrada();
-			else
-				DesbloquearSemana();
-		}
-		public bool ValidarCierreSemanaAnterior(DateTime fecha)
-		{
-			// La semana anterior termina un día antes
-			DateTime fechaAnterior = fecha.AddDays(-1);
-
-			DataTable dt = ObtenerInfoCierreSemana(fechaAnterior);
-
-			if (dt.Rows.Count == 0)
-				return true;
+			string temporada = dt.Rows[0]["id_season"].ToString();
+			string semana = dt.Rows[0]["c_sequence_per"].ToString();
+			string tipo = cls.TipoNomina;
 
 			bool cerrada = SemanaCerrada(
-				dt.Rows[0]["id_season"].ToString(),
-				dt.Rows[0]["c_sequence_per"].ToString(),
-				cls.TipoNomina);
+				temporada,
+				semana,
+				tipo);
 
 			if (cerrada)
-				return true;
-
-			DialogResult r = MessageBox.Show(
-				$"La semana anterior ({Convert.ToDateTime(dt.Rows[0]["d_startDate_per"]):dd/MM/yyyy} al {Convert.ToDateTime(dt.Rows[0]["d_endDate_per"]):dd/MM/yyyy}) aún no ha sido cerrada.\n\n" +
-				"Debe cerrar esa semana antes de generar la nómina de la nueva semana.\n\n" +
-				"¿Deseas Cerrar la Semana?",
-				"Cierre de Semana Pendiente",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Warning);
-
-			if (r == DialogResult.Yes)
 			{
-				FrmCierre frmCerrar = new FrmCierre();
-				frmCerrar.clsC = this;
-				frmCerrar.ShowDialog();
+				BloquearSemanaCerrada();
 			}
-
-			return false;
+			else
+			{
+				DesbloquearSemana();
+			}
 		}
+		
 		public bool ValidarDiasSemana(
 			string tipoNomina,
 			DateTime fechaInicio,
@@ -272,6 +322,72 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return false;
 		}
-		
+
+		public DataRow ObtenerSemanaPendiente(DateTime fecha, string tipoNomina)
+		{
+			// 1. Obtener el período de la fecha seleccionada
+			DataTable dtActual =
+				ObtenerInfoCierreSemana(fecha);
+
+			if (dtActual.Rows.Count == 0)
+				return null;
+
+			DataRow periodoActual =
+				dtActual.Rows[0];
+
+			string temporada =
+				periodoActual["id_season"].ToString();
+
+			DateTime inicioPeriodoActual =
+				Convert.ToDateTime(
+					periodoActual["d_startDate_per"]);
+
+			// 2. Buscar el último período anterior
+			//    que tenga asistencia del mismo tipo
+			string query = $@"
+			SELECT TOP 1
+				p.id_season,
+				p.c_sequence_per,
+				p.d_startDate_per,
+				p.d_endDate_per
+			FROM Payroll_AttendancePeriod p
+			WHERE p.id_season = '{temporada}'
+			  AND p.d_endDate_per < '{inicioPeriodoActual:yyyy-MM-dd}'
+			  AND EXISTS
+			  (
+				  SELECT 1
+				  FROM Nom_AttendenceList a
+				  WHERE a.c_payrollType = '{tipoNomina}'
+					AND CAST(a.d_attendence AS DATE)
+						BETWEEN
+							CAST(p.d_startDate_per AS DATE)
+						AND
+							CAST(p.d_endDate_per AS DATE)
+			  )
+			ORDER BY p.d_endDate_per DESC";
+
+			DataTable dtAnterior =
+				ClsQuerysDB.GetDataTable(query);
+
+			if (dtAnterior.Rows.Count == 0)
+				return null;
+
+			DataRow semanaAnterior =
+				dtAnterior.Rows[0];
+
+			// 3. Verificar si ese período ya está cerrado
+			bool cerrada =
+				SemanaCerrada(
+					semanaAnterior["id_season"].ToString(),
+					semanaAnterior["c_sequence_per"].ToString(),
+					tipoNomina);
+
+			// Si ya está cerrada, no hay pendiente
+			if (cerrada)
+				return null;
+
+			// 4. Está abierta → devolver el período
+			return semanaAnterior;
+		}
 	}
 }

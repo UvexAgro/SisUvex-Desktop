@@ -103,6 +103,26 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap advertenciaRojo {
+            get {
+                object obj = ResourceManager.GetObject("advertenciaRojo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap advertenciaVerde {
+            get {
+                object obj = ResourceManager.GetObject("advertenciaVerde", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap basuraIcon16 {
             get {
                 object obj = ResourceManager.GetObject("basuraIcon16", resourceCulture);
@@ -146,6 +166,26 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap BuscarLupa1 {
             get {
                 object obj = ResourceManager.GetObject("BuscarLupa1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap candado__1_ {
+            get {
+                object obj = ResourceManager.GetObject("candado (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap candado__1_1 {
+            get {
+                object obj = ResourceManager.GetObject("candado (1)1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -139,6 +139,9 @@
   <data name="modifyFileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\modifyFileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="addImageIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\addImageIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="guardarIcon321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\guardarIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -157,6 +160,9 @@
   <data name="reiniciar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="verIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\verIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="personIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\personIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -166,11 +172,17 @@
   <data name="refrescar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refrescar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="cerrado" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cerrado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="screenload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screenload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="addFileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\addFileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reiniciar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reiniciar2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="guardarIcon32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\guardarIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -181,8 +193,8 @@
   <data name="menos-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\menos-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="screenload1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\screenload1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="advertenciaVerde" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\advertenciaVerde.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AddRowIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\AddRowIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,8 +202,8 @@
   <data name="fileTextIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\fileTextIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="addImageIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\addImageIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="advertenciaRojo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\advertenciaRojo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="excelIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\excelIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,17 +220,11 @@
   <data name="mas+16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\mas+16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="reiniciar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\reiniciar2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="downIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\downIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="abierto" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\abierto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="buscarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\buscarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="uvexvertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\uvexvertical.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="upIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\upIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -232,8 +238,8 @@
   <data name="editIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\editIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="xIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\xIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="uvexvertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\uvexvertical.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Instrucciones cargar excel asistencia de empaque" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Instrucciones cargar excel asistencia de empaque.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -244,11 +250,14 @@
   <data name="imprimirIcon32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\imprimirIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="candado (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\candado (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="limpiarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\limpiarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="verIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\verIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="downIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\downIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="basuraIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\basuraIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -259,8 +268,8 @@
   <data name="editPencilIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\editPencilIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="abierto" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\abierto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="screenload1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\screenload1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\fileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -277,6 +286,9 @@
   <data name="peopleIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\peopleIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="xIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\xIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="excelIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\excelIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -289,7 +301,7 @@
   <data name="circuloRojo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\circuloRojo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cerrado" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cerrado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="candado (1)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\candado (1)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

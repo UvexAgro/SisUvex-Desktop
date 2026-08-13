@@ -14,6 +14,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 	public partial class FrmCierre : Form
 	{
 		internal ClsCierre clsC;
+		public FrmSemiAutomatedPayroll frm;
+		public DateTime FechaCierre { get; set; }
 		public FrmCierre()
 		{
 			InitializeComponent();
@@ -22,7 +24,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		private void FrmCierre_Load(object sender, EventArgs e)
 		{
 			clsC.frmC = this;
-			clsC.CargarInformacionCierre(this);
+			clsC.CargarInformacionCierre(this, FechaCierre);
 		}
 
 		private void button2_Click(object sender, EventArgs e)
@@ -41,7 +43,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (respuesta == DialogResult.No)
 				return;
 
-			if (clsC.CerrarSemana())
+			if (clsC.CerrarSemana(FechaCierre))
 			{
 				MessageBox.Show(
 					"La semana se cerró correctamente.",
