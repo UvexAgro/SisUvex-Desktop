@@ -48,12 +48,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void dtpFecha_ValueChanged(object sender, EventArgs e)
 		{
 			cls.SetTxbReferencia();
+			cls.MostrarEstadoCierre();
 		}
 
 		private void btncargar_Click(object sender, EventArgs e)
 		{
 
-				cls.BtnCargarDatos();
+			cls.BtnCargarDatos();
 		}
 
 		private void btnExcel_Click(object sender, EventArgs e)
@@ -109,6 +110,31 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				cell.Style.Font = dgvEmployee.Font;
 			}
+		}
+
+		private void btnCerrar_Click(object sender, EventArgs e)
+		{
+			cls.TipoNomina = rbtEsparrago.Checked ? "E" : "U";
+
+			FrmCierre frmCerrar = new FrmCierre();
+
+			frmCerrar.clsC = clsC;
+
+			frmCerrar.clsC.cls = cls;
+
+			frmCerrar.FechaCierre = dtpFecha.Value;
+
+			frmCerrar.ShowDialog();
+		}
+
+		private void rbtEsparrago_CheckedChanged(object sender, EventArgs e)
+		{
+			cls.MostrarEstadoCierre();
+		}
+
+		private void rbtUva_CheckedChanged(object sender, EventArgs e)
+		{
+			cls.MostrarEstadoCierre();
 		}
 	}
 }

@@ -29,8 +29,9 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSemiAutomatedPayroll));
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			lblLote = new Label();
 			lblReferencia = new Label();
 			dtpFecha = new DateTimePicker();
@@ -54,6 +55,9 @@
 			gbLibras = new GroupBox();
 			btnGuardar = new Button();
 			lblTipoProceso = new Label();
+			groupBox2 = new GroupBox();
+			btnCerrar = new Button();
+			lblAvisoCierre = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -61,6 +65,7 @@
 			gbCsv.SuspendLayout();
 			gbGenerar.SuspendLayout();
 			gbLibras.SuspendLayout();
+			groupBox2.SuspendLayout();
 			SuspendLayout();
 			// 
 			// lblLote
@@ -175,28 +180,36 @@
 			dgvEmployee.BackgroundColor = SystemColors.ControlLightLight;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvEmployee.ColumnHeadersHeight = 58;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Window;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle2;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
 			dgvEmployee.Location = new Point(27, 430);
 			dgvEmployee.Name = "dgvEmployee";
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEmployee.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -248,6 +261,7 @@
 			rbtEsparrago.TabStop = true;
 			rbtEsparrago.Text = "Esparrago";
 			rbtEsparrago.UseVisualStyleBackColor = true;
+			rbtEsparrago.CheckedChanged += rbtEsparrago_CheckedChanged;
 			// 
 			// pictureBox1
 			// 
@@ -269,6 +283,7 @@
 			rbtUva.TabStop = true;
 			rbtUva.Text = "Uva";
 			rbtUva.UseVisualStyleBackColor = true;
+			rbtUva.CheckedChanged += rbtUva_CheckedChanged;
 			// 
 			// pictureBox2
 			// 
@@ -366,12 +381,50 @@
 			lblTipoProceso.Size = new Size(0, 21);
 			lblTipoProceso.TabIndex = 33;
 			// 
+			// groupBox2
+			// 
+			groupBox2.BackColor = SystemColors.Control;
+			groupBox2.Controls.Add(btnCerrar);
+			groupBox2.Location = new Point(1090, 62);
+			groupBox2.Margin = new Padding(3, 2, 3, 2);
+			groupBox2.Name = "groupBox2";
+			groupBox2.Padding = new Padding(3, 2, 3, 2);
+			groupBox2.Size = new Size(214, 87);
+			groupBox2.TabIndex = 31;
+			groupBox2.TabStop = false;
+			groupBox2.Text = "Cerrar Nomina ";
+			// 
+			// btnCerrar
+			// 
+			btnCerrar.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			btnCerrar.Image = (Image)resources.GetObject("btnCerrar.Image");
+			btnCerrar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnCerrar.Location = new Point(41, 25);
+			btnCerrar.Name = "btnCerrar";
+			btnCerrar.Padding = new Padding(15, 0, 15, 0);
+			btnCerrar.Size = new Size(159, 38);
+			btnCerrar.TabIndex = 9;
+			btnCerrar.Text = "Cerrar Nomina";
+			btnCerrar.TextAlign = ContentAlignment.MiddleRight;
+			btnCerrar.UseVisualStyleBackColor = true;
+			btnCerrar.Click += btnCerrar_Click;
+			// 
+			// lblAvisoCierre
+			// 
+			lblAvisoCierre.AutoSize = true;
+			lblAvisoCierre.Location = new Point(649, 219);
+			lblAvisoCierre.Name = "lblAvisoCierre";
+			lblAvisoCierre.Size = new Size(0, 15);
+			lblAvisoCierre.TabIndex = 34;
+			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AllowDrop = true;
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1329, 791);
+			Controls.Add(lblAvisoCierre);
+			Controls.Add(groupBox2);
 			Controls.Add(lblTipoProceso);
 			Controls.Add(btnGuardar);
 			Controls.Add(gbLibras);
@@ -396,6 +449,7 @@
 			gbCsv.PerformLayout();
 			gbGenerar.ResumeLayout(false);
 			gbLibras.ResumeLayout(false);
+			groupBox2.ResumeLayout(false);
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -425,5 +479,8 @@
 		public GroupBox gbLibras;
 		public Button btnGuardar;
 		public Label lblTipoProceso;
+		public GroupBox groupBox2;
+		public Button btnCerrar;
+		public Label lblAvisoCierre;
 	}
 }
