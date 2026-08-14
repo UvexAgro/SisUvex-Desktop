@@ -707,7 +707,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveVehicle";
             public const string Cbo = "CboVehicle";
             public const string DgvCatalog = "DgvCatalogVehicle";
-            public const string QueryCbo = $" SELECT veh.c_active AS [{Column.active}], CAST(veh.id_vehicle AS VARCHAR(20)) AS [{Column.id}], CONCAT_WS(' | ', typ.v_prefix, veh.v_ecoNumber, veh.id_vehicle, '('+veh.c_active+')') AS [{Column.name}], veh.v_ecoNumber AS [{ColumnName}], CAST(veh.id_vehicleType AS VARCHAR(20)) AS [{VehicleType.ColumnId}] FROM Ast_Vehicle veh LEFT JOIN Ast_VehicleType typ ON typ.id_vehicleType = veh.id_vehicleType ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT veh.c_active AS [{Column.active}], CAST(veh.id_vehicle AS VARCHAR(20)) AS [{Column.id}], CONCAT_WS(' | ', veh.v_ecoNumber, veh.id_vehicle, '('+veh.c_active+')') AS [{Column.name}], veh.v_ecoNumber AS [{ColumnName}], CAST(veh.id_vehicleType AS VARCHAR(20)) AS [{VehicleType.ColumnId}] FROM Ast_Vehicle veh LEFT JOIN Ast_VehicleType typ ON typ.id_vehicleType = veh.id_vehicleType ORDER BY [{Column.name}] ";
         }
 
         public static class Market

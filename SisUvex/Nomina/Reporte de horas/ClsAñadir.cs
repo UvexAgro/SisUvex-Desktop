@@ -541,6 +541,30 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			try
 			{
+				if (!ValidarBloque(frmA.dtpComidaInicial,
+					   frmA.dtpComidaFinal,
+					   frmA.nudComidaHora,
+					   "Comida"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpCenaInicial,
+								   frmA.dtpCenaFinal,
+								   frmA.nudCenaHora,
+								   "Cena"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpDescansoInicial,
+								   frmA.dtpDescansoFinal,
+								   frmA.nudHorasDescanso,
+								   "Descanso"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpD2,
+								   frmA.dtpDf2,
+								   frmA.nudD2,
+								   "Descanso 2"))
+					return;
+
 				if (frmA.clbCuadrilla.CheckedItems.Count == 0)
 				{
 					MessageBox.Show("Selecciona al menos una cuadrilla");
@@ -643,6 +667,30 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			try
 			{
+				if (!ValidarBloque(frmA.dtpComidaInicial,
+					   frmA.dtpComidaFinal,
+					   frmA.nudComidaHora,
+					   "Comida"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpCenaInicial,
+								   frmA.dtpCenaFinal,
+								   frmA.nudCenaHora,
+								   "Cena"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpDescansoInicial,
+								   frmA.dtpDescansoFinal,
+								   frmA.nudHorasDescanso,
+								   "Descanso"))
+					return;
+
+				if (!ValidarBloque(frmA.dtpD2,
+								   frmA.dtpDf2,
+								   frmA.nudD2,
+								   "Descanso 2"))
+					return;
+
 				DateTime fecha = frmA.dtpDay.Value.Date;
 
 				DateTime inicioNormal = frmA.dtpBeginNormal.Value.SinMs();
@@ -928,12 +976,53 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				sql.CloseConectionWrite();
 			}
 		}
-		private TimeSpan SHMS(DateTime dt)
+		public bool ValidarBloque(
+			DateTimePicker dtpInicio,
+			DateTimePicker dtpFin,
+			NumericUpDown nudHoras,
+			string nombre)
 		{
-			return new TimeSpan(dt.Hour, dt.Minute, 0);
+			if (!dtpInicio.Checked && !dtpFin.Checked)
+				return true;
+
+			if (dtpInicio.Checked != dtpFin.Checked)
+			{
+				MessageBox.Show(
+					$"Debe seleccionar la hora inicial y la hora final para {nombre}.",
+					"Horario incompleto",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return false;
+			}
+
+			// NUEVA VALIDACIÓN
+			if (dtpInicio.Value.TimeOfDay == TimeSpan.Zero ||
+				dtpFin.Value.TimeOfDay == TimeSpan.Zero)
+			{
+				MessageBox.Show(
+					$"Debe capturar una hora válida para {nombre}.",
+					"Horario incompleto",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return false;
+			}
+
+			if (nudHoras.Value <= 0)
+			{
+				MessageBox.Show(
+					$"Debe indicar las horas de {nombre}.",
+					"Información incompleta",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return false;
+			}
+
+			return true;
 		}
 	}
-
 }
 public static class DateTimeExtensions
 {

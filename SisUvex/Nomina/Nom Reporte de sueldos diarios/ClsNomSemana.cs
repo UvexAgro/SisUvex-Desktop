@@ -31,10 +31,10 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 		private string ObtenerTabla()
 		{
 			if (frmNom.rbtEsparrago.Checked)
-				return "HistNom_ReporteSemanalEsparrago";
+				return "HistNom_ReporteDiarioEsparrago";
 
 			if (frmNom.rbtUva.Checked)
-				return "HistNom_ReporteSemanalUva";
+				return "HistNom_ReporteDiarioUva";
 
 			MessageBox.Show("Selecciona tipo de nómina");
 			return null;
@@ -84,8 +84,8 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 
 			string filtro = string.Join(",", empleadosSeleccionados.Select(e => $"'{e}'"));
 
-			// columnas dinámicas (fechas)
 			List<string> columnas = new();
+
 			for (DateTime d = fechaInicio; d <= fechaFin; d = d.AddDays(1))
 			{
 				columnas.Add($"[{d:yyyy-MM-dd}]");
@@ -97,27 +97,14 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			SELECT *
 			FROM
 			(
-				SELECT 
-					h.IdEmpleado as Codigo,
-					h.NombreCompleto,
-					v.Fecha,
-					v.SueldoTotal
-				FROM {tabla} h
-
-				CROSS APPLY
-				(
-					VALUES
-					(DATEADD(DAY,0,h.FechaInicioSemana),h.Vie),
-					(DATEADD(DAY,1,h.FechaInicioSemana),h.Sab),
-					(DATEADD(DAY,2,h.FechaInicioSemana),h.Dom),
-					(DATEADD(DAY,3,h.FechaInicioSemana),h.Lun),
-					(DATEADD(DAY,4,h.FechaInicioSemana),h.Mar),
-					(DATEADD(DAY,5,h.FechaInicioSemana),h.Mie),
-					(DATEADD(DAY,6,h.FechaInicioSemana),h.Jue)
-				) v(Fecha,SueldoTotal)
-
-				WHERE h.FechaInicioSemana = '{fechaInicio:yyyy-MM-dd}'
-				AND h.IdEmpleado IN ({filtro})
+				SELECT
+					IdEmpleado AS Codigo,
+					NombreCompleto,
+					Fecha,
+					SueldoTotal
+				FROM {tabla}
+				WHERE Fecha BETWEEN '{fechaInicio:yyyy-MM-dd}' AND '{fechaFin:yyyy-MM-dd}'
+				AND IdEmpleado IN ({filtro})
 			) src
 
 			PIVOT
@@ -205,32 +192,19 @@ namespace SisUvex.Nomina.Nom_Reporte_de_sueldos_diarios
 			SELECT *
 			FROM
 			(
-			SELECT 
-            h.IdEmpleado as Codigo,
-            h.NombreCompleto,
-            v.Fecha,
-            v.SueldoTotal
-			FROM {tabla} h
-
-			CROSS APPLY
-			(
-            VALUES
-            (DATEADD(DAY,0,h.FechaInicioSemana),h.Vie),
-            (DATEADD(DAY,1,h.FechaInicioSemana),h.Sab),
-            (DATEADD(DAY,2,h.FechaInicioSemana),h.Dom),
-            (DATEADD(DAY,3,h.FechaInicioSemana),h.Lun),
-            (DATEADD(DAY,4,h.FechaInicioSemana),h.Mar),
-            (DATEADD(DAY,5,h.FechaInicioSemana),h.Mie),
-            (DATEADD(DAY,6,h.FechaInicioSemana),h.Jue)
-			) v(Fecha,SueldoTotal)
-
-			WHERE h.FechaInicioSemana = '{f1}'
+				SELECT
+					IdEmpleado AS Codigo,
+					NombreCompleto,
+					Fecha,
+					SueldoTotal
+				FROM {tabla}
+				WHERE Fecha BETWEEN '{f1}' AND '{f2}'
 			) src
 
 			PIVOT
 			(
-			SUM(SueldoTotal)
-			FOR Fecha IN ({columnasPivot})
+				SUM(SueldoTotal)
+				FOR Fecha IN ({columnasPivot})
 			) p
 
 			ORDER BY NombreCompleto";

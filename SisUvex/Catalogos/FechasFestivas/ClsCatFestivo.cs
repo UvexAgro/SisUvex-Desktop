@@ -257,7 +257,7 @@ namespace SisUvex.Catalogos.FechasFestivas
 			//  Ajustes
 			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dgv.RowTemplate.Height = 30;
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgv.MultiSelect = false;
 			dgv.ReadOnly = true;
 			dgv.AllowUserToAddRows = false;
