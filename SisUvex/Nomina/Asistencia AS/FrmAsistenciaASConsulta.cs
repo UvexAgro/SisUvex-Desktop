@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
+namespace SisUvex.Nomina.Asistencia_AS
 {
-    public partial class FrmPayrollBoxPerEmployeeDetailReport : Form
+    public partial class FrmAsistenciaASConsulta : Form
     {
-        private readonly ClsPayrollBoxPerEmployeeDetailReport cls;
+        private readonly ClsAsistenciaASConsulta cls;
 
-        public FrmPayrollBoxPerEmployeeDetailReport()
+        public FrmAsistenciaASConsulta()
         {
             InitializeComponent();
-            cls = new ClsPayrollBoxPerEmployeeDetailReport { frm = this };
+            cls = new ClsAsistenciaASConsulta { frm = this };
         }
 
-        private void FrmPayrollBoxPerEmployeeDetailReport_Load(object sender, EventArgs e)
+        private void FrmAsistenciaASConsulta_Load(object sender, EventArgs e)
             => cls.BeginFormCat();
 
         private void btnSearchEmployee_Click(object sender, EventArgs e)
@@ -28,17 +28,20 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         private void btnClearList_Click(object sender, EventArgs e)
             => cls.BtnClearList();
 
+        private void chbShowEmployees_CheckedChanged(object sender, EventArgs e)
+            => cls.ChbShowEmployees_CheckedChanged();
+
+        private void chbShowReport_CheckedChanged(object sender, EventArgs e)
+            => cls.ChbShowReport_CheckedChanged();
+
         private void btnLoadReport_Click(object sender, EventArgs e)
             => cls.BtnLoadReport();
 
         private void btnExcel_Click(object sender, EventArgs e)
             => cls.BtnGenerateExcelReport();
 
-        private void chbShowEmployees_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowEmployees_CheckedChanged();
-
-        private void chbShowReport_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowReport_CheckedChanged();
+        private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => cls.DgvReport_CellFormatting(sender, e);
 
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {
@@ -55,13 +58,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 e.SuppressKeyPress = true;
                 cls.PasteEmployeeCodesAsPlainText();
             }
-        }
-
-        private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-            => cls.DgvReport_CellFormatting(sender, e);
-
-        private void dgvReport_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
         }
     }
 }

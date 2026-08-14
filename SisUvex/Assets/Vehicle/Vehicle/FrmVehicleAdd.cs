@@ -18,11 +18,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
             InitializeComponent();
         }
 
-        private void lblName_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void FrmVehicleAdd_Load(object sender, EventArgs e)
         {
             cls ??= new();

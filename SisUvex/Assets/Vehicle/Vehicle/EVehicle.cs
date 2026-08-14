@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using SisUvex.Catalogos.Metods;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.Values.ClsValues;
 
@@ -13,7 +12,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
         public string? idVehicle { get; set; }
         public string? idVehicleType { get; set; }
         public string? active { get; set; }
-        public string? prefix { get; set; }
         public string? ecoNumber { get; set; }
         public string? serialNumber { get; set; }
         public string? plate { get; set; }
@@ -22,20 +20,16 @@ namespace SisUvex.Assets.Vehicle.Vehicle
         public string? year { get; set; }
         public string? comments { get; set; }
         public string? idGrower { get; set; }
+        public string? vehicleDescription { get; set; }
 
         public static string GetNextId()
         {
-            return ClsQuerysDB.GetData("SELECT FORMAT(COALESCE(MAX(id_vehicle), 0) +1, '0000') FROM Ast_Vehicle");
-        }
-        public static DataTable? GetDtPrefix()
-        {
-            return ClsQuerysDB.GetDataTable($" SELECT DISTINCT v_prefix FROM Ast_vehicle  ");
+            return ClsQuerysDB.GetData("SELECT MAX(id_vehicle) + 1 FROM Ast_Vehicle");
         }
 
         private void ValidateVehicle()
         {
             if (string.IsNullOrEmpty(idVehicle) || string.IsNullOrEmpty(idVehicleType) ||
-                string.IsNullOrEmpty(active) || string.IsNullOrEmpty(prefix) ||
                 string.IsNullOrEmpty(ecoNumber))
             {
                 throw new Exception("Faltan datos obligatorios del vehículo.");
@@ -56,7 +50,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                     idVehicle = dr.GetValue(dr.GetOrdinal("id_vehicle")).ToString();
                     idVehicleType = dr.GetValue(dr.GetOrdinal("id_vehicleType")).ToString();
                     active = dr.GetValue(dr.GetOrdinal("c_active")).ToString();
-                    prefix = dr.GetValue(dr.GetOrdinal("v_prefix")).ToString();
                     ecoNumber = dr.GetValue(dr.GetOrdinal("v_ecoNumber")).ToString();
                     serialNumber = dr.GetValue(dr.GetOrdinal("v_serialNumber")).ToString();
                     plate = dr.GetValue(dr.GetOrdinal("v_plate")).ToString();
@@ -65,6 +58,7 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                     year = dr.GetValue(dr.GetOrdinal("c_year")).ToString();
                     comments = dr.GetValue(dr.GetOrdinal("v_comments")).ToString();
                     idGrower = dr.GetValue(dr.GetOrdinal("id_grower")).ToString();
+                    vehicleDescription = dr.GetValue(dr.GetOrdinal("v_vehicleDescription")).ToString();
                 }
             }
             catch (Exception ex)
@@ -87,8 +81,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@idVehicleType", idVehicleType);
-                cmd.Parameters.AddWithValue("@active", active);
-                cmd.Parameters.AddWithValue("@prefix", prefix);
                 cmd.Parameters.AddWithValue("@ecoNumber", ecoNumber);
                 cmd.Parameters.AddWithValue("@serialNumber", IfEmptyToDBNull(serialNumber));
                 cmd.Parameters.AddWithValue("@plate", IfEmptyToDBNull(plate));
@@ -97,6 +89,7 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                 cmd.Parameters.AddWithValue("@year", IfEmptyToDBNull(year));
                 cmd.Parameters.AddWithValue("@comments", IfEmptyToDBNull(comments));
                 cmd.Parameters.AddWithValue("@idGrower", IfEmptyToDBNull(idGrower));
+                cmd.Parameters.AddWithValue("@vehicleDesc", IfEmptyToDBNull(vehicleDescription));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -129,8 +122,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
 
                 cmd.Parameters.AddWithValue("@idVehicle", idVehicle);
                 cmd.Parameters.AddWithValue("@idVehicleType", idVehicleType);
-                cmd.Parameters.AddWithValue("@active", active);
-                cmd.Parameters.AddWithValue("@prefix", prefix);
                 cmd.Parameters.AddWithValue("@ecoNumber", ecoNumber);
                 cmd.Parameters.AddWithValue("@serialNumber", IfEmptyToDBNull(serialNumber));
                 cmd.Parameters.AddWithValue("@plate", IfEmptyToDBNull(plate));
@@ -139,6 +130,7 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                 cmd.Parameters.AddWithValue("@year", IfEmptyToDBNull(year));
                 cmd.Parameters.AddWithValue("@comments", IfEmptyToDBNull(comments));
                 cmd.Parameters.AddWithValue("@idGrower", IfEmptyToDBNull(idGrower));
+                cmd.Parameters.AddWithValue("@vehicleDesc", IfEmptyToDBNull(vehicleDescription));
                 cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
                 SqlDataReader dr = cmd.ExecuteReader();

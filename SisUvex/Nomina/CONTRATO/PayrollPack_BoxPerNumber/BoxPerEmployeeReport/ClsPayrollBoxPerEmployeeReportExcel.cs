@@ -262,13 +262,8 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         internal static string BuildFiltersText(
             string season, string contractor, string workGroup, string user, string dateRange)
         {
-            var parts = new List<string>();
-            if (!string.IsNullOrWhiteSpace(dateRange))  parts.Add($"Fechas: {dateRange}");
-            if (!string.IsNullOrWhiteSpace(season))     parts.Add($"Temporada: {season}");
-            if (!string.IsNullOrWhiteSpace(contractor)) parts.Add($"Contratista: {contractor}");
-            if (!string.IsNullOrWhiteSpace(workGroup))  parts.Add($"Cuadrilla: {workGroup}");
-            if (!string.IsNullOrWhiteSpace(user))       parts.Add($"Anotador: {user}");
-            return string.Join(" | ", parts);
+            if (string.IsNullOrWhiteSpace(dateRange)) return string.Empty;
+            return $"Fechas: {dateRange}";
         }
 
         internal static string SanitizeSheetName(string name)

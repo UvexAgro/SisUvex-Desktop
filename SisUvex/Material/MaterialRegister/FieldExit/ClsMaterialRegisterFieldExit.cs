@@ -367,9 +367,9 @@ namespace SisUvex.Material.MaterialRegister.FieldExit
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, entity.idVariety);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVehicle, entity.idVehicle);
             string idLotVariety = entity.idLot + "|" + entity.idVariety;
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLot, idLotVariety);
-            ClsComboBoxes.CboSelectIndexWithTextInValueMemberKeepingFilter(_frmAdd.cboVehicle, entity.idVehicle);
 
             dtInboundMaterials.CopyDataFrom(entity.dtMaterials);
 
@@ -827,7 +827,7 @@ namespace SisUvex.Material.MaterialRegister.FieldExit
             vehicleAdd.ShowDialog();
             if (vehicleAdd.cls.IsAddUpdate)
             {
-                ClsComboBoxes.CboLoadActives(_frmAdd.cboVehicle, FreightContainer.Cbo);
+                ClsComboBoxes.CboLoadActives(_frmAdd.cboVehicle, Vehicle.Cbo);
                 _frmAdd.chbVehicleRemoved.Checked = false;
                 ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVehicle, vehicleAdd.cls.idAddModify);
             }
