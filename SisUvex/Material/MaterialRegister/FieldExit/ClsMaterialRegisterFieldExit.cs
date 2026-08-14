@@ -367,7 +367,6 @@ namespace SisUvex.Material.MaterialRegister.FieldExit
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboWarehouse, entity.idWarehouse);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboEmployee, entity.idEmployee);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, entity.idVariety);
-            MessageBox.Show("-" + entity.idVehicle + "-");
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVehicle, entity.idVehicle);
             string idLotVariety = entity.idLot + "|" + entity.idVariety;
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboLot, idLotVariety);
