@@ -693,9 +693,10 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Tipo de vehículo";
             public const string ColumnId = "idVehicleType";
             public const string ColumnActive = "ActiveVehicleType";
+            public const string ColumnPrefix = "Prefijo";
             public const string Cbo = "CboVehicleType";
             public const string DgvCatalog = "DgvCatalogVehicleType";
-            public const string QueryCbo = $" SELECT id_vehicleType AS [{Column.id}], CONCAT_WS(' | ', v_nameVehicleType, v_implements, id_vehicleType) AS [{Column.name}], COALESCE(NULLIF(v_nameVehicleType, ''), v_implements) AS [{ColumnName}] FROM Ast_VehicleType ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT CAST(id_vehicleType AS VARCHAR(20)) AS [{Column.id}], CONCAT_WS(' | ', v_prefix, v_nameVehicleType, v_implements, id_vehicleType) AS [{Column.name}], COALESCE(NULLIF(v_nameVehicleType, ''), v_implements) AS [{ColumnName}], c_active AS [{Column.active}], v_prefix AS [{ColumnPrefix}] FROM Ast_VehicleType ORDER BY [{Column.name}] ";
         }
 
         public static class Vehicle
@@ -706,7 +707,7 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnActive = "ActiveVehicle";
             public const string Cbo = "CboVehicle";
             public const string DgvCatalog = "DgvCatalogVehicle";
-            public const string QueryCbo = $" SELECT c_active AS [{Column.active}],id_vehicle AS [{Column.id}], CONCAT_WS(' | ', v_prefix + v_ecoNumber, id_vehicle, '('+c_active+')') AS [{Column.name}], CONCAT(v_prefix, v_ecoNumber) AS [{ColumnName}], id_vehicleType AS [{VehicleType.ColumnId}] FROM Ast_Vehicle ORDER BY [{Column.name}] ";
+            public const string QueryCbo = $" SELECT veh.c_active AS [{Column.active}], CAST(veh.id_vehicle AS VARCHAR(20)) AS [{Column.id}], CONCAT_WS(' | ', typ.v_prefix, veh.v_ecoNumber, veh.id_vehicle, '('+veh.c_active+')') AS [{Column.name}], veh.v_ecoNumber AS [{ColumnName}], CAST(veh.id_vehicleType AS VARCHAR(20)) AS [{VehicleType.ColumnId}] FROM Ast_Vehicle veh LEFT JOIN Ast_VehicleType typ ON typ.id_vehicleType = veh.id_vehicleType ORDER BY [{Column.name}] ";
         }
 
         public static class Market
@@ -775,6 +776,18 @@ namespace SisUvex.Catalogos.Metods
                                             d_endDate_per AS [{ColumnEndDate}], 
                                             id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
             public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+        }
+
+        public static class AttendanceType
+        {
+            public const string TableName = "Nom_AttendanceType";
+            public const string ColumnId = "idAttendanceType";
+            public const string ColumnName = "Tipo de asistencia";
+            public const string ColumnPrefix = "PrefijoAsistencia";
+            public const string ColumncIsAbsence = "isAbsence";
+            public const string ColumnColor = "ColumnColor";
+            public const string Cbo = "CboAttendanceType";
+            public const string QueryCbo = $"SELECT id_attendanceType AS [{Column.id}], v_name AS [{Column.name}], v_prefix AS [{ColumnPrefix}], c_isAbsence [{ColumncIsAbsence}], c_active AS [{Column.active}], v_color AS [{ColumnColor}] FROM Nom_attendanceType";
         }
 
         public static class Employee

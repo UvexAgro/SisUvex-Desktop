@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-using static SisUvex.Catalogos.Metods.ClsObject;
+﻿using System.Data;
+using System.Media;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Controls;
 using SisUvex.Catalogos.Metods.DataGridViews;
-using System.Media;
 using SisUvex.Catalogos.Metods.Querys;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Assets.Vehicle.VehicleType
 {
@@ -18,7 +14,7 @@ namespace SisUvex.Assets.Vehicle.VehicleType
         public FrmVehicleTypeAdd _frmAdd;
         public FrmVehicleTypeCat _frmCat;
         public EVehicleType entity;
-        private string queryCatalogo = $" SELECT id_vehicleType AS [{Column.id}], v_nameVehicleType AS [{Column.name}], v_implements AS [Implementos] FROM Ast_VehicleType ";
+        private string queryCatalogo = $" SELECT id_vehicleType AS [{Column.id}], v_nameVehicleType AS [{Column.name}], v_prefix AS [Prefijo], v_implements AS [Implementos], c_meterType AS [Tipo medidor] FROM Ast_VehicleType ";
         ClsDGVCatalog dgv;
         DataTable dtCatalog;
         public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
@@ -35,6 +31,7 @@ namespace SisUvex.Assets.Vehicle.VehicleType
         public void BeginFormAdd()
         {
             AddControlsToList();
+            LoadComboBoxes();
 
             _frmAdd.txbId.Text = EVehicleType.GetNextId();
 
@@ -49,7 +46,24 @@ namespace SisUvex.Assets.Vehicle.VehicleType
             controlList = new ClsControls();
 
             controlList.ChangeHeadMessage("Para dar de alta un tipo de vehículo debe:\n");
-            controlList.Add(_frmAdd.txbId, "Ingresar el código del vehículo.");
+            controlList.Add(_frmAdd.txbId, "Ingresar el código del tipo de vehículo.");
+            controlList.Add(_frmAdd.txbName, "Ingresar el nombre del tipo de vehículo.");
+            controlList.Add(_frmAdd.txbPrefix, "Ingresar el prefijo del tipo de vehículo.");
+        }
+
+        private void LoadComboBoxes()
+        {
+            DataTable dtMeter = new();
+            dtMeter.Columns.Add(Column.id);
+            dtMeter.Columns.Add(Column.name);
+            dtMeter.Rows.Add("", ClsComboBoxes.textSelect);
+            dtMeter.Rows.Add("H", "Horómetro");
+            dtMeter.Rows.Add("K", "Kilometraje");
+
+            _frmAdd.cboMeterType.DataSource = dtMeter;
+            _frmAdd.cboMeterType.DisplayMember = Column.name;
+            _frmAdd.cboMeterType.ValueMember = Column.id;
+            _frmAdd.cboMeterType.SelectedIndex = 0;
         }
 
         public void OpenFrmAdd()
@@ -89,7 +103,9 @@ namespace SisUvex.Assets.Vehicle.VehicleType
             _frmAdd.txbId.Enabled = false;
             _frmAdd.txbId.Text = entity.idVehicleType;
             _frmAdd.txbName.Text = entity.nameVehicleType;
+            _frmAdd.txbPrefix.Text = entity.prefix;
             _frmAdd.txbImplements.Text = entity.implements;
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboMeterType, entity.meterType);
         }
 
         private EVehicleType SetVehicleTypeEntity()
@@ -97,7 +113,9 @@ namespace SisUvex.Assets.Vehicle.VehicleType
             entity = new();
             entity.idVehicleType = _frmAdd.txbId.Text;
             entity.nameVehicleType = _frmAdd.txbName.Text;
+            entity.prefix = _frmAdd.txbPrefix.Text;
             entity.implements = _frmAdd.txbImplements.Text;
+            entity.meterType = _frmAdd.cboMeterType.SelectedValue?.ToString();
 
             return entity;
         }
@@ -122,15 +140,6 @@ namespace SisUvex.Assets.Vehicle.VehicleType
         {
             if (!controlList.ValidateControls())
                 return;
-
-            if (string.IsNullOrWhiteSpace(_frmAdd.txbName.Text) &&
-                string.IsNullOrWhiteSpace(_frmAdd.txbImplements.Text))
-            {
-                SystemSounds.Exclamation.Play();
-                MessageBox.Show("Debe ingresar al menos el nombre o los implementos del vehículo.",
-                              "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
             if (IsAddOrModify)
             {

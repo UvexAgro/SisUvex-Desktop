@@ -43,13 +43,10 @@
             label3 = new Label();
             lblTitle = new Label();
             txbId = new TextBox();
-            lblObliName = new Label();
             label6 = new Label();
             lblMarket = new Label();
             label2 = new Label();
-            lblName = new Label();
             lblId = new Label();
-            cboPrefix = new ComboBox();
             label7 = new Label();
             txbYear = new TextBox();
             txbModel = new TextBox();
@@ -63,13 +60,15 @@
             txbIdVehicleType = new TextBox();
             cboVehicleType = new ComboBox();
             label11 = new Label();
+            txbVehicleDescription = new TextBox();
+            label13 = new Label();
             SuspendLayout();
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F);
-            label4.Location = new Point(12, 151);
+            label4.Location = new Point(12, 116);
             label4.Name = "label4";
             label4.Size = new Size(111, 21);
             label4.TabIndex = 154;
@@ -79,17 +78,17 @@
             // txbEcoNumber
             // 
             txbEcoNumber.Font = new Font("Segoe UI", 12F);
-            txbEcoNumber.Location = new Point(129, 148);
+            txbEcoNumber.Location = new Point(129, 113);
             txbEcoNumber.MaxLength = 12;
             txbEcoNumber.Name = "txbEcoNumber";
             txbEcoNumber.Size = new Size(119, 29);
-            txbEcoNumber.TabIndex = 4;
+            txbEcoNumber.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.Crimson;
-            label1.Location = new Point(119, 148);
+            label1.Location = new Point(119, 115);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(12, 15);
@@ -130,17 +129,17 @@
             // txbComments
             // 
             txbComments.Font = new Font("Segoe UI", 12F);
-            txbComments.Location = new Point(129, 323);
+            txbComments.Location = new Point(129, 288);
             txbComments.MaxLength = 200;
             txbComments.Name = "txbComments";
             txbComments.Size = new Size(396, 29);
-            txbComments.TabIndex = 10;
+            txbComments.TabIndex = 9;
             // 
             // label8
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12F);
-            label8.Location = new Point(23, 326);
+            label8.Location = new Point(23, 291);
             label8.Name = "label8";
             label8.Size = new Size(102, 21);
             label8.TabIndex = 149;
@@ -150,17 +149,17 @@
             // txbMake
             // 
             txbMake.Font = new Font("Segoe UI", 12F);
-            txbMake.Location = new Point(129, 218);
+            txbMake.Location = new Point(129, 183);
             txbMake.MaxLength = 20;
             txbMake.Name = "txbMake";
             txbMake.Size = new Size(155, 29);
-            txbMake.TabIndex = 6;
+            txbMake.TabIndex = 5;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F);
-            label5.Location = new Point(68, 221);
+            label5.Location = new Point(68, 186);
             label5.Name = "label5";
             label5.Size = new Size(56, 21);
             label5.TabIndex = 147;
@@ -170,17 +169,17 @@
             // txbSerialNumber
             // 
             txbSerialNumber.Font = new Font("Segoe UI", 12F);
-            txbSerialNumber.Location = new Point(129, 288);
+            txbSerialNumber.Location = new Point(129, 253);
             txbSerialNumber.MaxLength = 50;
             txbSerialNumber.Name = "txbSerialNumber";
             txbSerialNumber.Size = new Size(396, 29);
-            txbSerialNumber.TabIndex = 9;
+            txbSerialNumber.TabIndex = 8;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(77, 291);
+            label3.Location = new Point(77, 256);
             label3.Name = "label3";
             label3.Size = new Size(48, 21);
             label3.TabIndex = 145;
@@ -206,17 +205,6 @@
             txbId.Size = new Size(43, 29);
             txbId.TabIndex = 0;
             txbId.TextAlign = HorizontalAlignment.Center;
-            // 
-            // lblObliName
-            // 
-            lblObliName.AutoSize = true;
-            lblObliName.ForeColor = Color.Crimson;
-            lblObliName.Location = new Point(119, 115);
-            lblObliName.Margin = new Padding(0);
-            lblObliName.Name = "lblObliName";
-            lblObliName.Size = new Size(12, 15);
-            lblObliName.TabIndex = 140;
-            lblObliName.Text = "*";
             // 
             // label6
             // 
@@ -251,18 +239,6 @@
             label2.TabIndex = 141;
             label2.Text = "*";
             // 
-            // lblName
-            // 
-            lblName.AutoSize = true;
-            lblName.Font = new Font("Segoe UI", 12F);
-            lblName.Location = new Point(65, 116);
-            lblName.Name = "lblName";
-            lblName.Size = new Size(58, 21);
-            lblName.TabIndex = 137;
-            lblName.Text = "Prefijo:";
-            lblName.TextAlign = ContentAlignment.TopRight;
-            lblName.Click += lblName_Click;
-            // 
             // lblId
             // 
             lblId.AutoSize = true;
@@ -274,21 +250,11 @@
             lblId.Text = "Id:";
             lblId.TextAlign = ContentAlignment.TopRight;
             // 
-            // cboPrefix
-            // 
-            cboPrefix.Font = new Font("Segoe UI", 12F);
-            cboPrefix.FormattingEnabled = true;
-            cboPrefix.Location = new Point(129, 113);
-            cboPrefix.MaxLength = 8;
-            cboPrefix.Name = "cboPrefix";
-            cboPrefix.Size = new Size(119, 29);
-            cboPrefix.TabIndex = 3;
-            // 
             // label7
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F);
-            label7.Location = new Point(290, 221);
+            label7.Location = new Point(290, 186);
             label7.Name = "label7";
             label7.Size = new Size(41, 21);
             label7.TabIndex = 157;
@@ -298,26 +264,26 @@
             // txbYear
             // 
             txbYear.Font = new Font("Segoe UI", 12F);
-            txbYear.Location = new Point(337, 218);
+            txbYear.Location = new Point(337, 183);
             txbYear.MaxLength = 4;
             txbYear.Name = "txbYear";
             txbYear.Size = new Size(54, 29);
-            txbYear.TabIndex = 7;
+            txbYear.TabIndex = 6;
             // 
             // txbModel
             // 
             txbModel.Font = new Font("Segoe UI", 12F);
-            txbModel.Location = new Point(129, 253);
+            txbModel.Location = new Point(129, 218);
             txbModel.MaxLength = 20;
             txbModel.Name = "txbModel";
             txbModel.Size = new Size(155, 29);
-            txbModel.TabIndex = 8;
+            txbModel.TabIndex = 7;
             // 
             // label9
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 12F);
-            label9.Location = new Point(57, 256);
+            label9.Location = new Point(57, 221);
             label9.Name = "label9";
             label9.Size = new Size(66, 21);
             label9.TabIndex = 160;
@@ -327,17 +293,17 @@
             // txbPlates
             // 
             txbPlates.Font = new Font("Segoe UI", 12F);
-            txbPlates.Location = new Point(129, 183);
+            txbPlates.Location = new Point(129, 148);
             txbPlates.MaxLength = 10;
             txbPlates.Name = "txbPlates";
             txbPlates.Size = new Size(155, 29);
-            txbPlates.TabIndex = 5;
+            txbPlates.TabIndex = 4;
             // 
             // label10
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 12F);
-            label10.Location = new Point(67, 186);
+            label10.Location = new Point(67, 151);
             label10.Name = "label10";
             label10.Size = new Size(56, 21);
             label10.TabIndex = 162;
@@ -421,11 +387,33 @@
             label11.Text = "Tipo:";
             label11.TextAlign = ContentAlignment.TopRight;
             // 
+            // txbVehicleDescription
+            // 
+            txbVehicleDescription.Font = new Font("Segoe UI", 12F);
+            txbVehicleDescription.Location = new Point(129, 323);
+            txbVehicleDescription.MaxLength = 200;
+            txbVehicleDescription.Name = "txbVehicleDescription";
+            txbVehicleDescription.Size = new Size(396, 29);
+            txbVehicleDescription.TabIndex = 10;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 12F);
+            label13.Location = new Point(25, 326);
+            label13.Name = "label13";
+            label13.Size = new Size(98, 21);
+            label13.TabIndex = 481;
+            label13.Text = "Descripción:";
+            label13.TextAlign = ContentAlignment.TopRight;
+            // 
             // FrmVehicleAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(536, 433);
+            Controls.Add(txbVehicleDescription);
+            Controls.Add(label13);
             Controls.Add(txbIdVehicleType);
             Controls.Add(cboVehicleType);
             Controls.Add(label11);
@@ -439,7 +427,6 @@
             Controls.Add(label9);
             Controls.Add(txbYear);
             Controls.Add(label7);
-            Controls.Add(cboPrefix);
             Controls.Add(label4);
             Controls.Add(txbEcoNumber);
             Controls.Add(label1);
@@ -454,11 +441,9 @@
             Controls.Add(label3);
             Controls.Add(lblTitle);
             Controls.Add(txbId);
-            Controls.Add(lblObliName);
             Controls.Add(label6);
             Controls.Add(lblMarket);
             Controls.Add(label2);
-            Controls.Add(lblName);
             Controls.Add(lblId);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -487,13 +472,10 @@
         private Label label3;
         public Label lblTitle;
         public TextBox txbId;
-        private Label lblObliName;
         private Label label6;
         private Label lblMarket;
         private Label label2;
-        private Label lblName;
         private Label lblId;
-        public ComboBox cboPrefix;
         private Label label7;
         public TextBox txbYear;
         public TextBox txbModel;
@@ -507,5 +489,7 @@
         public TextBox txbIdVehicleType;
         public ComboBox cboVehicleType;
         private Label label11;
+        public TextBox txbVehicleDescription;
+        private Label label13;
     }
 }

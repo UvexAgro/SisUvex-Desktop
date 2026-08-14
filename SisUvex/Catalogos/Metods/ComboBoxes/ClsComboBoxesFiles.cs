@@ -276,6 +276,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.LabelLegend.Cbo:
                     queryDataTable = ClsObject.LabelLegend.QueryCbo;
                     break;
+                case ClsObject.AttendanceType.Cbo:
+                    queryDataTable = ClsObject.AttendanceType.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -449,6 +452,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.TypeBox.TableName;
                 case ClsObject.LabelLegend.Cbo:
                     return ClsObject.LabelLegend.TableName;
+                case ClsObject.AttendanceType.Cbo:
+                    return ClsObject.AttendanceType.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }

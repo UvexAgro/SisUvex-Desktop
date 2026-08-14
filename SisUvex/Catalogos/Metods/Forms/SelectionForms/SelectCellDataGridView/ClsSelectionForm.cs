@@ -34,8 +34,8 @@ namespace SisUvex.Catalogos.Metods.Forms.SelectionForms
                 {"ForeignDest", (" SELECT * FROM vw_PackForeignDestCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Dirección], [Ciudad], [Estado], [C.P.])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
                 {"Variety", ("SELECT * FROM vw_PackVarietyCat WHERE CONCAT_WS(' ', [Código], [Nombre comercial], [Nombre cientifico], [Nombre corto]) LIKE @parameter", "@parameter")},
                 {"Lot", ("SELECT * FROM vw_PackLotCat WHERE CONCAT_WS(' ', [Código], [Nombre], [Variedad], [Campo]) LIKE @parameter", "@parameter")},
-                {"Vehicle", (" SELECT * FROM vw_AstVehicleCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [Prefijo], [N° económico], [Marca], [Modelo], [Año], [Placas], [Tipo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
-                {"VehicleType", ($"SELECT id_vehicleType AS [{ClsObject.Column.id}], v_nameVehicleType AS [{ClsObject.Column.name}], v_implements AS [Implementos] FROM Ast_VehicleType WHERE CONCAT_WS(' ', id_vehicleType, v_nameVehicleType, v_implements) LIKE @parameter", "@parameter")},
+                {"Vehicle", (" SELECT * FROM vw_AstVehicleCat WHERE dbo.fn_CleanSpecialCharacters(CONCAT_WS(' ', [Código], [N° económico], [Marca], [Modelo], [Año], [Placas], [Tipo])) LIKE '%' + dbo.fn_CleanSpecialCharacters(@parameter) + '%' ", "@parameter")},
+                {"VehicleType", ($"SELECT id_vehicleType AS [{ClsObject.Column.id}], v_nameVehicleType AS [{ClsObject.Column.name}], v_prefix AS [Prefijo], v_implements AS [Implementos] FROM Ast_VehicleType WHERE CONCAT_WS(' ', id_vehicleType, v_nameVehicleType, v_prefix, v_implements) LIKE @parameter", "@parameter")},
             // Add more predefined queries here
             };
 
