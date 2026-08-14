@@ -67,10 +67,10 @@
 			btnCerrar.ForeColor = SystemColors.ActiveCaptionText;
 			btnCerrar.Image = (Image)resources.GetObject("btnCerrar.Image");
 			btnCerrar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCerrar.Location = new Point(136, 360);
+			btnCerrar.Location = new Point(120, 350);
 			btnCerrar.Name = "btnCerrar";
-			btnCerrar.Padding = new Padding(8, 0, 4, 0);
-			btnCerrar.Size = new Size(140, 32);
+			btnCerrar.Padding = new Padding(10, 0, 10, 0);
+			btnCerrar.Size = new Size(182, 32);
 			btnCerrar.TabIndex = 10;
 			btnCerrar.Text = "Cerrar Semana";
 			btnCerrar.TextAlign = ContentAlignment.MiddleRight;
@@ -79,13 +79,13 @@
 			// 
 			// button2
 			// 
-			button2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			button2.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			button2.Image = (Image)resources.GetObject("button2.Image");
 			button2.ImageAlign = ContentAlignment.MiddleLeft;
-			button2.Location = new Point(136, 398);
+			button2.Location = new Point(120, 388);
 			button2.Name = "button2";
-			button2.Padding = new Padding(10, 0, 20, 0);
-			button2.Size = new Size(140, 29);
+			button2.Padding = new Padding(10, 0, 40, 0);
+			button2.Size = new Size(182, 29);
 			button2.TabIndex = 11;
 			button2.Text = "Cancelar";
 			button2.TextAlign = ContentAlignment.MiddleRight;

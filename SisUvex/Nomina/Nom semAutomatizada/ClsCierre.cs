@@ -130,6 +130,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				frmC.pnlLinea.BackColor = Color.FromArgb(42, 140, 65);
 			}
 		}
+		
 		public bool SemanaCerrada(string temporada, string semana, string tipoNomina)
 		{
 			string query = $@"
