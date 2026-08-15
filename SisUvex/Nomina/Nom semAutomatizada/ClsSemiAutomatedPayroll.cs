@@ -984,6 +984,55 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				frm.btncargar.Enabled = true;
 			}
+			MostrarEstadoNomina();
+		}
+		public void MostrarEstadoNomina()
+		{
+			string tipoNomina =
+				frm.rbtEsparrago.Checked ? "E" : "U";
+
+			DataTable dt =
+				clsC.ObtenerInfoCierreSemana(frm.dtpFecha.Value);
+
+			if (dt.Rows.Count == 0)
+			{
+				frm.lblEstado.Text = "SIN INFORMACIÓN";
+				frm.lblEstado.ForeColor = System.Drawing.Color.Gray;
+				frm.pbCirculo.Image = null;
+
+				return;
+			}
+
+			DataRow row = dt.Rows[0];
+
+			bool cerrada = clsC.SemanaCerrada(
+				row["id_season"].ToString(),
+				row["c_sequence_per"].ToString(),
+				tipoNomina);
+
+			ActualizarEstadoNomina(cerrada);
+		}
+
+		private void ActualizarEstadoNomina(bool cerrada)
+		{
+			if (cerrada)
+			{
+				frm.lblEstado.Text = "CERRADA";
+				frm.lblEstado.ForeColor =
+					System.Drawing.Color.FromArgb(190, 40, 40);
+
+				frm.pbCirculo.Image =
+					Properties.Resources.circuloRojo;
+			}
+			else
+			{
+				frm.lblEstado.Text = "ABIERTA";
+				frm.lblEstado.ForeColor =
+					System.Drawing.Color.FromArgb(34, 139, 34);
+
+				frm.pbCirculo.Image =
+					Properties.Resources.circuloVerde;
+			}
 		}
 	}
 }
