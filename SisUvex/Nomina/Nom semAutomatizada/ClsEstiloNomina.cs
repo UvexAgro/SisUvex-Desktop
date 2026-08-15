@@ -151,23 +151,27 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			TipoNomina = tipo; 
 
 			System.Drawing.Color color;
+			System.Drawing.Color colorOscuro;
 
 			switch (tipo)
 			{
 				case "E":
 					color = System.Drawing.Color.FromArgb(230, 245, 230);
+					colorOscuro = System.Drawing.Color.FromArgb(40, 120, 45);
 
 					frm.lblencabezado.Text = "Empaque Central - Espárrago";
 					break;
 
 				case "U":
 					color = System.Drawing.Color.FromArgb(240, 230, 250);
+					colorOscuro = System.Drawing.Color.FromArgb(106, 27, 154);
 
 					frm.lblencabezado.Text = "Empaque Central - Uva";
 					break;
 
 				default:
 					color = SystemColors.Control;
+					colorOscuro = SystemColors.ControlDark;
 
 					frm.lblencabezado.Text = "Reporte de Empaque Central";
 					break;
@@ -176,6 +180,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			frm.gbCsv.BackColor = color;
 			frm.gbLibras.BackColor = color;
 			frm.gbGenerar.BackColor = color;
+			frm.gbFecha.BackColor = color;
+			frm.gbSueldos.BackColor = color;
+			frm.plCerrar.BackColor = color;
+
+			frm.plTitulo.BackColor = colorOscuro;
+			frm.lblencabezado.ForeColor = System.Drawing.Color.White;
 
 			// Volver a pintar el DataGridView
 			if (frm.dgvEmployee != null)

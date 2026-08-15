@@ -105,7 +105,6 @@
 			// tableLayoutPanel1
 			// 
 			tableLayoutPanel1.BackColor = SystemColors.Control;
-			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 			tableLayoutPanel1.ColumnCount = 2;
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.9144258F));
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85.08557F));
@@ -129,7 +128,7 @@
 			pictureBox3.Anchor = AnchorStyles.None;
 			pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
 			pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox3.Location = new Point(6, 114);
+			pictureBox3.Location = new Point(5, 115);
 			pictureBox3.Name = "pictureBox3";
 			pictureBox3.Size = new Size(46, 35);
 			pictureBox3.TabIndex = 10;
@@ -139,7 +138,7 @@
 			// 
 			ptbGenero.Anchor = AnchorStyles.None;
 			ptbGenero.BackgroundImageLayout = ImageLayout.Zoom;
-			ptbGenero.Location = new Point(7, 8);
+			ptbGenero.Location = new Point(6, 8);
 			ptbGenero.Margin = new Padding(3, 2, 3, 2);
 			ptbGenero.Name = "ptbGenero";
 			ptbGenero.Size = new Size(44, 36);
@@ -150,7 +149,7 @@
 			// 
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(lblGenero);
-			panel1.Location = new Point(61, 4);
+			panel1.Location = new Point(59, 3);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(314, 45);
 			panel1.TabIndex = 3;
@@ -179,7 +178,7 @@
 			// 
 			panel3.Controls.Add(label4);
 			panel3.Controls.Add(lblFechaNomina);
-			panel3.Location = new Point(61, 56);
+			panel3.Location = new Point(59, 56);
 			panel3.Name = "panel3";
 			panel3.Size = new Size(314, 45);
 			panel3.TabIndex = 6;
@@ -208,7 +207,7 @@
 			// 
 			panel2.Controls.Add(label5);
 			panel2.Controls.Add(lblCantidadEmpleados);
-			panel2.Location = new Point(61, 108);
+			panel2.Location = new Point(59, 109);
 			panel2.Name = "panel2";
 			panel2.Size = new Size(314, 45);
 			panel2.TabIndex = 5;
@@ -238,7 +237,7 @@
 			pictureBox2.Anchor = AnchorStyles.None;
 			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
 			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(6, 60);
+			pictureBox2.Location = new Point(5, 61);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(45, 36);
 			pictureBox2.TabIndex = 9;
