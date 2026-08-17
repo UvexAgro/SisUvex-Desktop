@@ -263,6 +263,26 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EsparragoColor {
+            get {
+                object obj = ResourceManager.GetObject("EsparragoColor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EsparragoColor1 {
+            get {
+                object obj = ResourceManager.GetObject("EsparragoColor1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap esparragos {
             get {
                 object obj = ResourceManager.GetObject("esparragos", resourceCulture);
@@ -276,6 +296,16 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap esparragos_24__1_ {
             get {
                 object obj = ResourceManager.GetObject("esparragos 24 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap esparragoSinColor {
+            get {
+                object obj = ResourceManager.GetObject("esparragoSinColor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -623,9 +653,29 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap uvaColor {
+            get {
+                object obj = ResourceManager.GetObject("uvaColor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap uvas {
             get {
                 object obj = ResourceManager.GetObject("uvas", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap uvaSinColor {
+            get {
+                object obj = ResourceManager.GetObject("uvaSinColor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -49,35 +49,58 @@
 			pictureBox1 = new PictureBox();
 			rbtUva = new RadioButton();
 			pictureBox2 = new PictureBox();
-			groupBox1 = new GroupBox();
+			gbTipo = new GroupBox();
 			gbCsv = new GroupBox();
 			gbGenerar = new GroupBox();
+			label8 = new Label();
 			gbLibras = new GroupBox();
+			label7 = new Label();
 			btnGuardar = new Button();
 			lblTipoProceso = new Label();
 			btnCerrar = new Button();
 			lblAvisoCierre = new Label();
 			plTitulo = new Panel();
+			pbImagen = new PictureBox();
+			lblSubtitulo = new Label();
 			plCerrar = new Panel();
 			pnCerrar = new Panel();
 			lblEstado = new Label();
 			pbCirculo = new PictureBox();
-			label1 = new Label();
+			lblNomina = new Label();
 			gbFecha = new GroupBox();
+			pictureBox5 = new PictureBox();
+			label4 = new Label();
 			gbSueldos = new GroupBox();
+			label5 = new Label();
+			tableLayoutPanel1 = new TableLayoutPanel();
+			plCajas = new Panel();
+			lblCajas = new Label();
+			label3 = new Label();
+			pictureBox4 = new PictureBox();
+			plEmpleados = new Panel();
+			lblEmpleados = new Label();
+			label2 = new Label();
+			pictureBox3 = new PictureBox();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-			groupBox1.SuspendLayout();
+			gbTipo.SuspendLayout();
 			gbCsv.SuspendLayout();
 			gbGenerar.SuspendLayout();
 			gbLibras.SuspendLayout();
 			plTitulo.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pbImagen).BeginInit();
 			plCerrar.SuspendLayout();
 			pnCerrar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pbCirculo).BeginInit();
 			gbFecha.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
 			gbSueldos.SuspendLayout();
+			tableLayoutPanel1.SuspendLayout();
+			plCajas.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+			plEmpleados.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
 			SuspendLayout();
 			// 
 			// lblLote
@@ -102,7 +125,7 @@
 			// 
 			// dtpFecha
 			// 
-			dtpFecha.Location = new Point(42, 50);
+			dtpFecha.Location = new Point(65, 64);
 			dtpFecha.Name = "dtpFecha";
 			dtpFecha.Size = new Size(246, 23);
 			dtpFecha.TabIndex = 2;
@@ -173,7 +196,7 @@
 			btncargar.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			btncargar.Image = (Image)resources.GetObject("btncargar.Image");
 			btncargar.ImageAlign = ContentAlignment.MiddleLeft;
-			btncargar.Location = new Point(29, 40);
+			btncargar.Location = new Point(21, 57);
 			btncargar.Name = "btncargar";
 			btncargar.Padding = new Padding(15, 0, 15, 0);
 			btncargar.Size = new Size(159, 38);
@@ -213,7 +236,7 @@
 			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle2;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
-			dgvEmployee.Location = new Point(27, 439);
+			dgvEmployee.Location = new Point(27, 478);
 			dgvEmployee.Name = "dgvEmployee";
 			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = SystemColors.Control;
@@ -226,7 +249,7 @@
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEmployee.SelectionMode = DataGridViewSelectionMode.CellSelect;
-			dgvEmployee.Size = new Size(1149, 341);
+			dgvEmployee.Size = new Size(1149, 310);
 			dgvEmployee.TabIndex = 17;
 			dgvEmployee.CellValueChanged += dgvEmployee_CellValueChanged;
 			// 
@@ -235,7 +258,7 @@
 			btnCalcularLibra.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			btnCalcularLibra.Image = (Image)resources.GetObject("btnCalcularLibra.Image");
 			btnCalcularLibra.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCalcularLibra.Location = new Point(27, 40);
+			btnCalcularLibra.Location = new Point(34, 57);
 			btnCalcularLibra.Name = "btnCalcularLibra";
 			btnCalcularLibra.Padding = new Padding(15, 0, 15, 0);
 			btnCalcularLibra.Size = new Size(159, 38);
@@ -249,7 +272,7 @@
 			// 
 			cboLineas.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboLineas.FormattingEnabled = true;
-			cboLineas.Location = new Point(121, 410);
+			cboLineas.Location = new Point(123, 445);
 			cboLineas.Name = "cboLineas";
 			cboLineas.Size = new Size(135, 23);
 			cboLineas.TabIndex = 19;
@@ -258,7 +281,7 @@
 			// 
 			lblLineas.AutoSize = true;
 			lblLineas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblLineas.Location = new Point(27, 412);
+			lblLineas.Location = new Point(29, 447);
 			lblLineas.Name = "lblLineas";
 			lblLineas.Size = new Size(63, 21);
 			lblLineas.TabIndex = 20;
@@ -308,21 +331,21 @@
 			pictureBox2.TabIndex = 25;
 			pictureBox2.TabStop = false;
 			// 
-			// groupBox1
+			// gbTipo
 			// 
-			groupBox1.BackColor = SystemColors.Control;
-			groupBox1.Controls.Add(rbtUva);
-			groupBox1.Controls.Add(rbtEsparrago);
-			groupBox1.Controls.Add(pictureBox2);
-			groupBox1.Controls.Add(pictureBox1);
-			groupBox1.Location = new Point(27, 127);
-			groupBox1.Margin = new Padding(3, 2, 3, 2);
-			groupBox1.Name = "groupBox1";
-			groupBox1.Padding = new Padding(3, 2, 3, 2);
-			groupBox1.Size = new Size(251, 124);
-			groupBox1.TabIndex = 28;
-			groupBox1.TabStop = false;
-			groupBox1.Text = "Tipo de Nomina";
+			gbTipo.BackColor = SystemColors.Control;
+			gbTipo.Controls.Add(rbtUva);
+			gbTipo.Controls.Add(rbtEsparrago);
+			gbTipo.Controls.Add(pictureBox2);
+			gbTipo.Controls.Add(pictureBox1);
+			gbTipo.Location = new Point(27, 127);
+			gbTipo.Margin = new Padding(3, 2, 3, 2);
+			gbTipo.Name = "gbTipo";
+			gbTipo.Padding = new Padding(3, 2, 3, 2);
+			gbTipo.Size = new Size(251, 124);
+			gbTipo.TabIndex = 28;
+			gbTipo.TabStop = false;
+			gbTipo.Text = "Tipo de Nomina";
 			// 
 			// gbCsv
 			// 
@@ -345,6 +368,7 @@
 			// gbGenerar
 			// 
 			gbGenerar.BackColor = SystemColors.Control;
+			gbGenerar.Controls.Add(label8);
 			gbGenerar.Controls.Add(btncargar);
 			gbGenerar.Location = new Point(919, 127);
 			gbGenerar.Margin = new Padding(3, 2, 3, 2);
@@ -353,11 +377,21 @@
 			gbGenerar.Size = new Size(214, 124);
 			gbGenerar.TabIndex = 30;
 			gbGenerar.TabStop = false;
-			gbGenerar.Text = "Generar Nomina";
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label8.Location = new Point(28, 25);
+			label8.Name = "label8";
+			label8.Size = new Size(94, 15);
+			label8.TabIndex = 10;
+			label8.Text = "Generar Nomina";
 			// 
 			// gbLibras
 			// 
 			gbLibras.BackColor = SystemColors.Control;
+			gbLibras.Controls.Add(label7);
 			gbLibras.Controls.Add(btnCalcularLibra);
 			gbLibras.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			gbLibras.Location = new Point(674, 127);
@@ -367,7 +401,16 @@
 			gbLibras.Size = new Size(214, 124);
 			gbLibras.TabIndex = 31;
 			gbLibras.TabStop = false;
-			gbLibras.Text = "Procesar Libras del Día";
+			// 
+			// label7
+			// 
+			label7.AutoSize = true;
+			label7.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label7.Location = new Point(21, 26);
+			label7.Name = "label7";
+			label7.Size = new Size(122, 13);
+			label7.TabIndex = 19;
+			label7.Text = "Procesar Libras del Día";
 			// 
 			// btnGuardar
 			// 
@@ -375,7 +418,7 @@
 			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
 			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
 			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(82, 49);
+			btnGuardar.Location = new Point(88, 72);
 			btnGuardar.Name = "btnGuardar";
 			btnGuardar.Padding = new Padding(6, 0, 6, 0);
 			btnGuardar.Size = new Size(158, 41);
@@ -389,7 +432,7 @@
 			// 
 			lblTipoProceso.AutoSize = true;
 			lblTipoProceso.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblTipoProceso.Location = new Point(156, 45);
+			lblTipoProceso.Location = new Point(193, 41);
 			lblTipoProceso.Name = "lblTipoProceso";
 			lblTipoProceso.Size = new Size(0, 21);
 			lblTipoProceso.TabIndex = 33;
@@ -412,13 +455,16 @@
 			// lblAvisoCierre
 			// 
 			lblAvisoCierre.AutoSize = true;
-			lblAvisoCierre.Location = new Point(649, 236);
+			lblAvisoCierre.Location = new Point(17, 100);
 			lblAvisoCierre.Name = "lblAvisoCierre";
 			lblAvisoCierre.Size = new Size(0, 15);
 			lblAvisoCierre.TabIndex = 34;
 			// 
 			// plTitulo
 			// 
+			plTitulo.BackColor = SystemColors.ControlLight;
+			plTitulo.Controls.Add(pbImagen);
+			plTitulo.Controls.Add(lblSubtitulo);
 			plTitulo.Controls.Add(plCerrar);
 			plTitulo.Controls.Add(pnCerrar);
 			plTitulo.Controls.Add(lblencabezado);
@@ -429,9 +475,28 @@
 			plTitulo.TabIndex = 35;
 			plTitulo.Resize += plTitulo_Resize;
 			// 
+			// pbImagen
+			// 
+			pbImagen.BackgroundImageLayout = ImageLayout.Zoom;
+			pbImagen.Location = new Point(25, 11);
+			pbImagen.Name = "pbImagen";
+			pbImagen.Size = new Size(70, 76);
+			pbImagen.TabIndex = 35;
+			pbImagen.TabStop = false;
+			// 
+			// lblSubtitulo
+			// 
+			lblSubtitulo.AutoSize = true;
+			lblSubtitulo.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblSubtitulo.Location = new Point(116, 62);
+			lblSubtitulo.Name = "lblSubtitulo";
+			lblSubtitulo.Size = new Size(184, 25);
+			lblSubtitulo.TabIndex = 34;
+			lblSubtitulo.Text = "Sistema de Nomina ";
+			// 
 			// plCerrar
 			// 
-			plCerrar.BackColor = SystemColors.ControlLight;
+			plCerrar.BackColor = SystemColors.MenuBar;
 			plCerrar.Controls.Add(btnCerrar);
 			plCerrar.Location = new Point(928, 11);
 			plCerrar.Name = "plCerrar";
@@ -441,10 +506,10 @@
 			// 
 			// pnCerrar
 			// 
-			pnCerrar.BackColor = SystemColors.HighlightText;
+			pnCerrar.BackColor = SystemColors.MenuBar;
 			pnCerrar.Controls.Add(lblEstado);
 			pnCerrar.Controls.Add(pbCirculo);
-			pnCerrar.Controls.Add(label1);
+			pnCerrar.Controls.Add(lblNomina);
 			pnCerrar.Location = new Point(683, 11);
 			pnCerrar.Name = "pnCerrar";
 			pnCerrar.Size = new Size(200, 72);
@@ -454,10 +519,10 @@
 			// lblEstado
 			// 
 			lblEstado.AutoSize = true;
-			lblEstado.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblEstado.Font = new Font("Segoe UI Black", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblEstado.Location = new Point(81, 37);
 			lblEstado.Name = "lblEstado";
-			lblEstado.Size = new Size(71, 21);
+			lblEstado.Size = new Size(74, 21);
 			lblEstado.TabIndex = 2;
 			lblEstado.Text = "ESTADO";
 			// 
@@ -471,33 +536,56 @@
 			pbCirculo.TabIndex = 1;
 			pbCirculo.TabStop = false;
 			// 
-			// label1
+			// lblNomina
 			// 
-			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.ForeColor = SystemColors.ActiveCaptionText;
-			label1.Location = new Point(37, 10);
-			label1.Name = "label1";
-			label1.Size = new Size(135, 17);
-			label1.TabIndex = 0;
-			label1.Text = "ESTADO DE NÓMINA";
+			lblNomina.AutoSize = true;
+			lblNomina.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblNomina.ForeColor = SystemColors.ActiveCaptionText;
+			lblNomina.Location = new Point(37, 10);
+			lblNomina.Name = "lblNomina";
+			lblNomina.Size = new Size(135, 17);
+			lblNomina.TabIndex = 0;
+			lblNomina.Text = "ESTADO DE NÓMINA";
 			// 
 			// gbFecha
 			// 
 			gbFecha.BackColor = SystemColors.Control;
+			gbFecha.Controls.Add(pictureBox5);
+			gbFecha.Controls.Add(label4);
 			gbFecha.Controls.Add(dtpFecha);
+			gbFecha.Controls.Add(lblAvisoCierre);
 			gbFecha.Location = new Point(303, 127);
 			gbFecha.Margin = new Padding(3, 2, 3, 2);
 			gbFecha.Name = "gbFecha";
 			gbFecha.Padding = new Padding(3, 2, 3, 2);
-			gbFecha.Size = new Size(346, 124);
+			gbFecha.Size = new Size(337, 124);
 			gbFecha.TabIndex = 31;
 			gbFecha.TabStop = false;
-			gbFecha.Text = "Fecha de Trabajo ";
+			// 
+			// pictureBox5
+			// 
+			pictureBox5.BackgroundImage = (Image)resources.GetObject("pictureBox5.BackgroundImage");
+			pictureBox5.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox5.Location = new Point(24, 64);
+			pictureBox5.Name = "pictureBox5";
+			pictureBox5.Size = new Size(24, 23);
+			pictureBox5.TabIndex = 36;
+			pictureBox5.TabStop = false;
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label4.Location = new Point(17, 26);
+			label4.Name = "label4";
+			label4.Size = new Size(99, 15);
+			label4.TabIndex = 35;
+			label4.Text = "Fecha de Trabajo ";
 			// 
 			// gbSueldos
 			// 
 			gbSueldos.BackColor = SystemColors.Control;
+			gbSueldos.Controls.Add(label5);
 			gbSueldos.Controls.Add(btnGuardar);
 			gbSueldos.Location = new Point(816, 265);
 			gbSueldos.Margin = new Padding(3, 2, 3, 2);
@@ -506,23 +594,124 @@
 			gbSueldos.Size = new Size(317, 140);
 			gbSueldos.TabIndex = 31;
 			gbSueldos.TabStop = false;
-			gbSueldos.Text = "Actualizar Sueldo de Empleados";
+			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label5.Location = new Point(17, 31);
+			label5.Name = "label5";
+			label5.Size = new Size(177, 15);
+			label5.TabIndex = 22;
+			label5.Text = "Actualizar Sueldo de Empleados";
+			// 
+			// tableLayoutPanel1
+			// 
+			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+			tableLayoutPanel1.ColumnCount = 2;
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.Controls.Add(plCajas, 1, 0);
+			tableLayoutPanel1.Controls.Add(plEmpleados, 0, 0);
+			tableLayoutPanel1.Location = new Point(862, 428);
+			tableLayoutPanel1.Name = "tableLayoutPanel1";
+			tableLayoutPanel1.RowCount = 1;
+			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.Size = new Size(278, 48);
+			tableLayoutPanel1.TabIndex = 36;
+			// 
+			// plCajas
+			// 
+			plCajas.Controls.Add(lblCajas);
+			plCajas.Controls.Add(label3);
+			plCajas.Controls.Add(pictureBox4);
+			plCajas.Location = new Point(142, 4);
+			plCajas.Name = "plCajas";
+			plCajas.Size = new Size(132, 40);
+			plCajas.TabIndex = 1;
+			// 
+			// lblCajas
+			// 
+			lblCajas.AutoSize = true;
+			lblCajas.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCajas.Location = new Point(58, 22);
+			lblCajas.Name = "lblCajas";
+			lblCajas.Size = new Size(0, 17);
+			lblCajas.TabIndex = 4;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new Point(59, 5);
+			label3.Name = "label3";
+			label3.Size = new Size(35, 15);
+			label3.TabIndex = 2;
+			label3.Text = "Cajas";
+			// 
+			// pictureBox4
+			// 
+			pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
+			pictureBox4.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox4.Location = new Point(12, 16);
+			pictureBox4.Name = "pictureBox4";
+			pictureBox4.Size = new Size(25, 18);
+			pictureBox4.TabIndex = 1;
+			pictureBox4.TabStop = false;
+			// 
+			// plEmpleados
+			// 
+			plEmpleados.Controls.Add(lblEmpleados);
+			plEmpleados.Controls.Add(label2);
+			plEmpleados.Controls.Add(pictureBox3);
+			plEmpleados.Location = new Point(4, 4);
+			plEmpleados.Name = "plEmpleados";
+			plEmpleados.Size = new Size(131, 40);
+			plEmpleados.TabIndex = 0;
+			// 
+			// lblEmpleados
+			// 
+			lblEmpleados.AutoSize = true;
+			lblEmpleados.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblEmpleados.Location = new Point(66, 22);
+			lblEmpleados.Name = "lblEmpleados";
+			lblEmpleados.Size = new Size(0, 17);
+			lblEmpleados.TabIndex = 2;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new Point(50, 5);
+			label2.Name = "label2";
+			label2.Size = new Size(65, 15);
+			label2.TabIndex = 1;
+			label2.Text = "Empleados";
+			// 
+			// pictureBox3
+			// 
+			pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
+			pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox3.Location = new Point(10, 16);
+			pictureBox3.Name = "pictureBox3";
+			pictureBox3.Size = new Size(26, 18);
+			pictureBox3.TabIndex = 0;
+			pictureBox3.TabStop = false;
 			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AllowDrop = true;
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
+			BackColor = SystemColors.Control;
 			ClientSize = new Size(1201, 791);
+			Controls.Add(tableLayoutPanel1);
 			Controls.Add(gbSueldos);
 			Controls.Add(gbFecha);
 			Controls.Add(plTitulo);
-			Controls.Add(lblAvisoCierre);
 			Controls.Add(gbLibras);
 			Controls.Add(gbGenerar);
 			Controls.Add(gbCsv);
 			Controls.Add(lblLineas);
-			Controls.Add(groupBox1);
+			Controls.Add(gbTipo);
 			Controls.Add(dgvEmployee);
 			Controls.Add(cboLineas);
 			Icon = (Icon)resources.GetObject("$this.Icon");
@@ -532,20 +721,33 @@
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).EndInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-			groupBox1.ResumeLayout(false);
-			groupBox1.PerformLayout();
+			gbTipo.ResumeLayout(false);
+			gbTipo.PerformLayout();
 			gbCsv.ResumeLayout(false);
 			gbCsv.PerformLayout();
 			gbGenerar.ResumeLayout(false);
+			gbGenerar.PerformLayout();
 			gbLibras.ResumeLayout(false);
+			gbLibras.PerformLayout();
 			plTitulo.ResumeLayout(false);
 			plTitulo.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pbImagen).EndInit();
 			plCerrar.ResumeLayout(false);
 			pnCerrar.ResumeLayout(false);
 			pnCerrar.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pbCirculo).EndInit();
 			gbFecha.ResumeLayout(false);
+			gbFecha.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
 			gbSueldos.ResumeLayout(false);
+			gbSueldos.PerformLayout();
+			tableLayoutPanel1.ResumeLayout(false);
+			plCajas.ResumeLayout(false);
+			plCajas.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+			plEmpleados.ResumeLayout(false);
+			plEmpleados.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -564,7 +766,6 @@
 		private PictureBox pictureBox2;
 		public RadioButton rbtEsparrago;
 		public RadioButton rbtUva;
-		private GroupBox groupBox1;
 		public GroupBox gbCsv;
 		public Button btncargar;
 		public Button btnCalcularLibra;
@@ -581,11 +782,30 @@
 		public GroupBox gbSueldos;
 		public GroupBox gbFecha;
 		public Panel plTitulo;
-		private Label label2;
-		private Label label1;
 		public Label lblEstado;
 		public PictureBox pbCirculo;
 		public Panel pnCerrar;
 		public Panel plCerrar;
+		public GroupBox gbTipo;
+		public Label lblSubtitulo;
+		private TableLayoutPanel tableLayoutPanel1;
+		private Panel panel2;
+		private Label label3;
+		private PictureBox pictureBox4;
+		private Panel panel1;
+		private Label label2;
+		private PictureBox pictureBox3;
+		public Label label6;
+		public Label lblEmpleados;
+		public Panel plEmpleados;
+		public Panel plCajas;
+		public Label lblCajas;
+		private Label label8;
+		private Label label7;
+		private Label label4;
+		private Label label5;
+		private PictureBox pictureBox5;
+		public Label lblNomina;
+		public PictureBox pbImagen;
 	}
 }

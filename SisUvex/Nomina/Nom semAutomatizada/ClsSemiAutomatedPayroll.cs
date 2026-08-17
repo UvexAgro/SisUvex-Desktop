@@ -456,6 +456,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			clsEstilo.AplicarColores(TipoNomina);
 
+			ActualizarResumen();
+
 			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
 				col.ReadOnly = true;
 
@@ -1019,7 +1021,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				frm.lblEstado.Text = "CERRADA";
 				frm.lblEstado.ForeColor =
-					System.Drawing.Color.FromArgb(190, 40, 40);
+					System.Drawing.Color.FromArgb(255, 100, 100);
 
 				frm.pbCirculo.Image =
 					Properties.Resources.circuloRojo;
@@ -1028,11 +1030,44 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				frm.lblEstado.Text = "ABIERTA";
 				frm.lblEstado.ForeColor =
-					System.Drawing.Color.FromArgb(34, 139, 34);
+					System.Drawing.Color.FromArgb(110, 230, 130);
 
 				frm.pbCirculo.Image =
 					Properties.Resources.circuloVerde;
 			}
+		}
+		private void ActualizarResumen()
+		{
+			if (frm.dgvEmployee == null)
+				return;
+
+			int totalEmpleados = 0;
+			decimal totalCajas = 0;
+
+			foreach (DataGridViewRow fila in frm.dgvEmployee.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				totalEmpleados++;
+
+				decimal cajas = 0;
+
+				decimal.TryParse(
+					Convert.ToString(
+						fila.Cells["TotalCajas"].Value),
+					out cajas);
+
+				totalCajas += cajas;
+			}
+
+			// Mostrar empleados
+			frm.lblEmpleados.Text =
+				totalEmpleados.ToString("N0");
+
+			// Mostrar cajas
+			frm.lblCajas.Text =
+				totalCajas.ToString("N0");
 		}
 	}
 }
