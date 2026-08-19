@@ -26,6 +26,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public FrmSemiAutomatedPayroll()
 		{
 			InitializeComponent();
+			pnlInicio.Visible = true;
+			dgvEmployee.Visible = false;
+			tlpDatos.Visible = false;
 		}
 
 		private void FrmSemiAutomatedPayroll_Load(object sender, EventArgs e)

@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSemiAutomatedPayroll));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
 			lblLote = new Label();
 			lblReferencia = new Label();
 			dtpFecha = new DateTimePicker();
@@ -72,7 +72,7 @@
 			label4 = new Label();
 			gbSueldos = new GroupBox();
 			label5 = new Label();
-			tableLayoutPanel1 = new TableLayoutPanel();
+			tlpDatos = new TableLayoutPanel();
 			plCajas = new Panel();
 			lblCajas = new Label();
 			label3 = new Label();
@@ -81,6 +81,10 @@
 			lblEmpleados = new Label();
 			label2 = new Label();
 			pictureBox3 = new PictureBox();
+			pnlInicio = new Panel();
+			pictureBox6 = new PictureBox();
+			label6 = new Label();
+			label1 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvEmployee).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -96,11 +100,13 @@
 			gbFecha.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
 			gbSueldos.SuspendLayout();
-			tableLayoutPanel1.SuspendLayout();
+			tlpDatos.SuspendLayout();
 			plCajas.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
 			plEmpleados.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+			pnlInicio.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
 			SuspendLayout();
 			// 
 			// lblLote
@@ -152,7 +158,7 @@
 			// 
 			lblencabezado.AutoSize = true;
 			lblencabezado.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblencabezado.ForeColor = SystemColors.ActiveCaptionText;
+			lblencabezado.ForeColor = Color.FromArgb(35, 55, 50);
 			lblencabezado.Location = new Point(116, 4);
 			lblencabezado.Name = "lblencabezado";
 			lblencabezado.Size = new Size(386, 37);
@@ -216,40 +222,40 @@
 			dgvEmployee.BackgroundColor = SystemColors.ControlLightLight;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.BackColor = SystemColors.Control;
+			dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			dgvEmployee.ColumnHeadersHeight = 58;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Window;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = SystemColors.Window;
+			dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+			dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+			dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+			dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle8;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
 			dgvEmployee.Location = new Point(27, 478);
 			dgvEmployee.Name = "dgvEmployee";
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle9.BackColor = SystemColors.Control;
+			dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEmployee.SelectionMode = DataGridViewSelectionMode.CellSelect;
-			dgvEmployee.Size = new Size(1149, 310);
+			dgvEmployee.Size = new Size(1149, 343);
 			dgvEmployee.TabIndex = 17;
 			dgvEmployee.CellValueChanged += dgvEmployee_CellValueChanged;
 			// 
@@ -301,7 +307,8 @@
 			// 
 			// pictureBox1
 			// 
-			pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
 			pictureBox1.Location = new Point(17, 72);
 			pictureBox1.Name = "pictureBox1";
 			pictureBox1.Size = new Size(33, 32);
@@ -323,7 +330,8 @@
 			// 
 			// pictureBox2
 			// 
-			pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
+			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
 			pictureBox2.Location = new Point(17, 26);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(33, 27);
@@ -333,7 +341,7 @@
 			// 
 			// gbTipo
 			// 
-			gbTipo.BackColor = SystemColors.Control;
+			gbTipo.BackColor = Color.FromArgb(240, 244, 242);
 			gbTipo.Controls.Add(rbtUva);
 			gbTipo.Controls.Add(rbtEsparrago);
 			gbTipo.Controls.Add(pictureBox2);
@@ -349,7 +357,7 @@
 			// 
 			// gbCsv
 			// 
-			gbCsv.BackColor = SystemColors.Control;
+			gbCsv.BackColor = Color.FromArgb(240, 244, 242);
 			gbCsv.Controls.Add(lblLote);
 			gbCsv.Controls.Add(cboLote);
 			gbCsv.Controls.Add(lblReferencia);
@@ -367,10 +375,10 @@
 			// 
 			// gbGenerar
 			// 
-			gbGenerar.BackColor = SystemColors.Control;
+			gbGenerar.BackColor = Color.FromArgb(240, 244, 242);
 			gbGenerar.Controls.Add(label8);
 			gbGenerar.Controls.Add(btncargar);
-			gbGenerar.Location = new Point(919, 127);
+			gbGenerar.Location = new Point(965, 127);
 			gbGenerar.Margin = new Padding(3, 2, 3, 2);
 			gbGenerar.Name = "gbGenerar";
 			gbGenerar.Padding = new Padding(3, 2, 3, 2);
@@ -390,11 +398,11 @@
 			// 
 			// gbLibras
 			// 
-			gbLibras.BackColor = SystemColors.Control;
+			gbLibras.BackColor = Color.FromArgb(240, 244, 242);
 			gbLibras.Controls.Add(label7);
 			gbLibras.Controls.Add(btnCalcularLibra);
 			gbLibras.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			gbLibras.Location = new Point(674, 127);
+			gbLibras.Location = new Point(710, 127);
 			gbLibras.Margin = new Padding(3, 2, 3, 2);
 			gbLibras.Name = "gbLibras";
 			gbLibras.Padding = new Padding(3, 2, 3, 2);
@@ -462,7 +470,7 @@
 			// 
 			// plTitulo
 			// 
-			plTitulo.BackColor = SystemColors.ControlLight;
+			plTitulo.BackColor = Color.FromArgb(225, 229, 227);
 			plTitulo.Controls.Add(pbImagen);
 			plTitulo.Controls.Add(lblSubtitulo);
 			plTitulo.Controls.Add(plCerrar);
@@ -488,6 +496,7 @@
 			// 
 			lblSubtitulo.AutoSize = true;
 			lblSubtitulo.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblSubtitulo.ForeColor = Color.FromArgb(90, 105, 100);
 			lblSubtitulo.Location = new Point(116, 62);
 			lblSubtitulo.Name = "lblSubtitulo";
 			lblSubtitulo.Size = new Size(184, 25);
@@ -549,12 +558,12 @@
 			// 
 			// gbFecha
 			// 
-			gbFecha.BackColor = SystemColors.Control;
+			gbFecha.BackColor = Color.FromArgb(240, 244, 242);
 			gbFecha.Controls.Add(pictureBox5);
 			gbFecha.Controls.Add(label4);
 			gbFecha.Controls.Add(dtpFecha);
 			gbFecha.Controls.Add(lblAvisoCierre);
-			gbFecha.Location = new Point(303, 127);
+			gbFecha.Location = new Point(330, 127);
 			gbFecha.Margin = new Padding(3, 2, 3, 2);
 			gbFecha.Name = "gbFecha";
 			gbFecha.Padding = new Padding(3, 2, 3, 2);
@@ -584,10 +593,10 @@
 			// 
 			// gbSueldos
 			// 
-			gbSueldos.BackColor = SystemColors.Control;
+			gbSueldos.BackColor = Color.FromArgb(240, 244, 242);
 			gbSueldos.Controls.Add(label5);
 			gbSueldos.Controls.Add(btnGuardar);
-			gbSueldos.Location = new Point(816, 265);
+			gbSueldos.Location = new Point(862, 265);
 			gbSueldos.Margin = new Padding(3, 2, 3, 2);
 			gbSueldos.Name = "gbSueldos";
 			gbSueldos.Padding = new Padding(3, 2, 3, 2);
@@ -605,20 +614,20 @@
 			label5.TabIndex = 22;
 			label5.Text = "Actualizar Sueldo de Empleados";
 			// 
-			// tableLayoutPanel1
+			// tlpDatos
 			// 
-			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-			tableLayoutPanel1.ColumnCount = 2;
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Controls.Add(plCajas, 1, 0);
-			tableLayoutPanel1.Controls.Add(plEmpleados, 0, 0);
-			tableLayoutPanel1.Location = new Point(862, 428);
-			tableLayoutPanel1.Name = "tableLayoutPanel1";
-			tableLayoutPanel1.RowCount = 1;
-			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size = new Size(278, 48);
-			tableLayoutPanel1.TabIndex = 36;
+			tlpDatos.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+			tlpDatos.ColumnCount = 2;
+			tlpDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tlpDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tlpDatos.Controls.Add(plCajas, 1, 0);
+			tlpDatos.Controls.Add(plEmpleados, 0, 0);
+			tlpDatos.Location = new Point(905, 428);
+			tlpDatos.Name = "tlpDatos";
+			tlpDatos.RowCount = 1;
+			tlpDatos.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+			tlpDatos.Size = new Size(278, 48);
+			tlpDatos.TabIndex = 36;
 			// 
 			// plCajas
 			// 
@@ -634,7 +643,7 @@
 			// 
 			lblCajas.AutoSize = true;
 			lblCajas.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCajas.Location = new Point(58, 22);
+			lblCajas.Location = new Point(69, 22);
 			lblCajas.Name = "lblCajas";
 			lblCajas.Size = new Size(0, 17);
 			lblCajas.TabIndex = 4;
@@ -642,11 +651,11 @@
 			// label3
 			// 
 			label3.AutoSize = true;
-			label3.Location = new Point(59, 5);
+			label3.Location = new Point(54, 5);
 			label3.Name = "label3";
-			label3.Size = new Size(35, 15);
+			label3.Size = new Size(64, 15);
 			label3.TabIndex = 2;
-			label3.Text = "Cajas";
+			label3.Text = "Total Cajas";
 			// 
 			// pictureBox4
 			// 
@@ -696,14 +705,62 @@
 			pictureBox3.TabIndex = 0;
 			pictureBox3.TabStop = false;
 			// 
+			// pnlInicio
+			// 
+			pnlInicio.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			pnlInicio.BackColor = Color.FromArgb(248, 250, 249);
+			pnlInicio.Controls.Add(pictureBox6);
+			pnlInicio.Controls.Add(label6);
+			pnlInicio.Controls.Add(label1);
+			pnlInicio.Location = new Point(12, 478);
+			pnlInicio.Name = "pnlInicio";
+			pnlInicio.Size = new Size(1171, 343);
+			pnlInicio.TabIndex = 37;
+			// 
+			// pictureBox6
+			// 
+			pictureBox6.BackgroundImage = (Image)resources.GetObject("pictureBox6.BackgroundImage");
+			pictureBox6.BackgroundImageLayout = ImageLayout.Stretch;
+			pictureBox6.Location = new Point(480, 74);
+			pictureBox6.Name = "pictureBox6";
+			pictureBox6.Size = new Size(133, 126);
+			pictureBox6.SizeMode = PictureBoxSizeMode.Zoom;
+			pictureBox6.TabIndex = 2;
+			pictureBox6.TabStop = false;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label6.ForeColor = Color.FromArgb(95, 105, 100);
+			label6.Location = new Point(292, 279);
+			label6.Name = "label6";
+			label6.Size = new Size(511, 21);
+			label6.TabIndex = 1;
+			label6.Text = "Selecciona el tipo de nómina y la fecha para consultar la información.";
+			label6.TextAlign = ContentAlignment.MiddleCenter;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.ForeColor = Color.FromArgb(35, 55, 50);
+			label1.Location = new Point(399, 233);
+			label1.Name = "label1";
+			label1.Size = new Size(296, 32);
+			label1.TabIndex = 0;
+			label1.Text = " SIN NÓMINA CARGADA";
+			label1.TextAlign = ContentAlignment.MiddleCenter;
+			// 
 			// FrmSemiAutomatedPayroll
 			// 
 			AllowDrop = true;
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			BackColor = SystemColors.Control;
-			ClientSize = new Size(1201, 791);
-			Controls.Add(tableLayoutPanel1);
+			BackColor = Color.FromArgb(245, 247, 246);
+			ClientSize = new Size(1201, 824);
+			Controls.Add(pnlInicio);
+			Controls.Add(tlpDatos);
 			Controls.Add(gbSueldos);
 			Controls.Add(gbFecha);
 			Controls.Add(plTitulo);
@@ -741,13 +798,16 @@
 			((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
 			gbSueldos.ResumeLayout(false);
 			gbSueldos.PerformLayout();
-			tableLayoutPanel1.ResumeLayout(false);
+			tlpDatos.ResumeLayout(false);
 			plCajas.ResumeLayout(false);
 			plCajas.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
 			plEmpleados.ResumeLayout(false);
 			plEmpleados.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+			pnlInicio.ResumeLayout(false);
+			pnlInicio.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -788,7 +848,6 @@
 		public Panel plCerrar;
 		public GroupBox gbTipo;
 		public Label lblSubtitulo;
-		private TableLayoutPanel tableLayoutPanel1;
 		private Panel panel2;
 		private Label label3;
 		private PictureBox pictureBox4;
@@ -807,5 +866,9 @@
 		private PictureBox pictureBox5;
 		public Label lblNomina;
 		public PictureBox pbImagen;
+		public Label label1;
+		private PictureBox pictureBox6;
+		public Panel pnlInicio;
+		public TableLayoutPanel tlpDatos;
 	}
 }

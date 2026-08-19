@@ -451,6 +451,8 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 			}
 
+			frm.pnlInicio.Visible = false;
+
 			frm.dgvEmployee.Visible = false;
 			frm.dgvEmployee.DataSource = dtNomina;
 
@@ -473,6 +475,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			clsEstilo.ActivarEstiloGrid(frm.dgvEmployee);
 			frm.dgvEmployee.Visible = true;
+			frm.tlpDatos.Visible = true;
 			clsC.ValidarSemanaCerrada();
 		}
 		public bool ValidarTipoNomina(DateTime fecha, string tipoNomina)

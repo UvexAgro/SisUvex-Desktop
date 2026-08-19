@@ -20,12 +20,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			{
 				case "E":
 					frm.pbImagen.Image =
-						Properties.Resources.EsparragoColor;
+						Properties.Resources.esparragoss;
 					break;
 
 				case "U":
 					frm.pbImagen.Image =
-						Properties.Resources.uvaColor;
+						Properties.Resources.uvatres;
 					break;
 
 				default:
@@ -47,12 +47,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			System.Drawing.Color color;
 			System.Drawing.Color colorOscuro;
+			System.Drawing.Color fondoFormulario;
 
 			switch (tipo)
 			{
 				case "E":
 					color = System.Drawing.Color.FromArgb(228, 236, 231);
 					colorOscuro = System.Drawing.Color.FromArgb(0, 91, 45);
+					fondoFormulario = System.Drawing.Color.FromArgb(245, 249, 246);
+
 
 					frm.lblencabezado.Text = "Empaque Central - Espárrago";
 					break;
@@ -60,6 +63,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				case "U":
 					color = System.Drawing.Color.FromArgb(238, 231, 243);
 					colorOscuro = System.Drawing.Color.FromArgb(91, 45, 120);
+					fondoFormulario = System.Drawing.Color.FromArgb(249, 246, 250);
 
 					frm.lblencabezado.Text = "Empaque Central - Uva";
 					break;
@@ -67,11 +71,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				default:
 					color = SystemColors.Control;
 					colorOscuro = SystemColors.ControlDark;
+					fondoFormulario = System.Drawing.Color.FromArgb(245, 247, 246);
 
 					frm.lblencabezado.Text = "Reporte de Empaque Central";
 					break;
 			}
 
+			frm.BackColor = fondoFormulario;
 			frm.gbCsv.BackColor = color;
 			frm.gbLibras.BackColor = color;
 			frm.gbGenerar.BackColor = color;
@@ -145,9 +151,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					break;
 			}
 
-			// =====================================================
-			// GENERAL
-			// =====================================================
+
 
 			dgv.EnableHeadersVisualStyles = false;
 			dgv.RowHeadersVisible = false;
@@ -167,9 +171,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			dgv.ColumnHeadersBorderStyle =
 				DataGridViewHeaderBorderStyle.None;
 
-			// =====================================================
-			// ENCABEZADO
-			// =====================================================
+
 
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
 				colorPrincipal;
@@ -194,9 +196,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			dgv.ColumnHeadersHeight = 42;
 
-			// =====================================================
-			// CELDAS
-			// =====================================================
 
 			dgv.DefaultCellStyle.Font =
 				new Font(
@@ -222,17 +221,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					30);
 
 
-			// =====================================================
-			// FILAS ALTERNADAS
-			// =====================================================
-
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				colorAlterno;
 
-
-			// =====================================================
-			// TAMAÑO
-			// =====================================================
 
 			dgv.RowTemplate.Height = 34;
 
@@ -242,11 +233,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				DataGridViewSelectionMode.FullRowSelect;
 
 			dgv.MultiSelect = false;
-
-
-			// =====================================================
-			// SUELDO MODIFICADO
-			// =====================================================
 
 			dgv.CellFormatting -= Dgv_CellFormatting;
 			dgv.CellFormatting += Dgv_CellFormatting;

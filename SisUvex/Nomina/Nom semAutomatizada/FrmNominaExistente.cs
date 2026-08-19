@@ -14,7 +14,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 {
 	public partial class FrmNominaExistente : Form
 	{
-	    ClsSemiAutomatedPayroll cls;
+		ClsSemiAutomatedPayroll cls;
 		ClsCierre clsC;
 		private Color colorTema;
 		public FrmNominaExistente()
@@ -58,7 +58,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 
 		private void btnCancelar_Click(object sender, EventArgs e)
-		{ 
+		{
 			this.Close();
 		}
 		public void CargarDatos(string tipoNomina, DateTime fecha)
@@ -166,9 +166,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			ptbGenero.SizeMode = PictureBoxSizeMode.Zoom;
 
 			if (tipoNomina == "E")
-				ptbGenero.Image = Properties.Resources.esparragos;
+				ptbGenero.Image = Properties.Resources.esparragoss;
 			else
-				ptbGenero.Image = Properties.Resources.uvas;
+				ptbGenero.Image = Properties.Resources.uvatres;
 		}
 		private void FrmNominaExistente_Load(object sender, EventArgs e)
 		{
@@ -181,11 +181,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			switch (tipo)
 			{
 				case "E":
-					color = Color.FromArgb(76, 175, 80); // Espárrago
+					color = Color.FromArgb(0, 91, 45); // Espárrago
 					break;
 
 				case "U":
-					color = Color.FromArgb(106, 27, 154); // Uva
+					color = Color.FromArgb(91, 45, 120); // Uva
 					break;
 
 				default:
@@ -194,6 +194,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			plNomina.BackColor = color;
+			lblTitulo.ForeColor = color;
+
+			lbldatos.ForeColor = color;
+			lblAccion.ForeColor = color;
+			lblGeneracion.ForeColor = color;
 
 			// Mostrar Nómina
 			btnMostrar.BackColor = Color.White;
@@ -219,6 +224,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BloquearRecalculo()
 		{
 			btnRecalcular.Enabled = false;
+		}
+
+		private void gbDatos_Enter(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
