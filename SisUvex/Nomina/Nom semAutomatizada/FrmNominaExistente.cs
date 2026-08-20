@@ -17,9 +17,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		ClsSemiAutomatedPayroll cls;
 		ClsCierre clsC;
 		private Color colorTema;
+		public string TipoFestivo { get; private set; }
 		public FrmNominaExistente()
 		{
 			InitializeComponent();
+
+			this.StartPosition = FormStartPosition.CenterParent;
 			cls = new ClsSemiAutomatedPayroll();
 			clsC = new ClsCierre();
 			// Asignar eventos
@@ -63,6 +66,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 		public void CargarDatos(string tipoNomina, DateTime fecha)
 		{
+			TipoFestivo = "";
 			lblGenero.Text = tipoNomina == "E" ? "Espárrago" : "Uva";
 			lblFechaNomina.Text = $"{fecha:dd/MM/yyyy}";
 
@@ -71,8 +75,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			if (dt.Rows.Count > 0)
 			{
 				lblUsuario.Text = dt.Rows[0]["Usuario"].ToString();
+
 				lblFecha.Text = Convert.ToDateTime(dt.Rows[0]["Fecha"])
 					.ToString("dd/MM/yyyy HH:mm");
+
+				if (dt.Columns.Contains("TipoFestivo") &&
+					dt.Rows[0]["TipoFestivo"] != DBNull.Value)
+				{
+					TipoFestivo = dt.Rows[0]["TipoFestivo"].ToString();
+				}
 			}
 			else
 			{
@@ -224,6 +235,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BloquearRecalculo()
 		{
 			btnRecalcular.Enabled = false;
+
+		}
+		public void BloquearCancelar()
+		{
+			btnCancelar.Enabled = false;
 		}
 
 		private void gbDatos_Enter(object sender, EventArgs e)

@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSemiAutomatedPayroll));
-			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
 			lblLote = new Label();
 			lblReferencia = new Label();
 			dtpFecha = new DateTimePicker();
@@ -222,36 +222,36 @@
 			dgvEmployee.BackgroundColor = SystemColors.ControlLightLight;
 			dgvEmployee.BorderStyle = BorderStyle.Fixed3D;
 			dgvEmployee.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle7.BackColor = SystemColors.Control;
-			dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvEmployee.ColumnHeadersHeight = 58;
 			dgvEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-			dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle8.BackColor = SystemColors.Window;
-			dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-			dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-			dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-			dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = SystemColors.Window;
+			dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+			dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+			dgvEmployee.DefaultCellStyle = dataGridViewCellStyle5;
 			dgvEmployee.EnableHeadersVisualStyles = false;
 			dgvEmployee.ImeMode = ImeMode.NoControl;
 			dgvEmployee.Location = new Point(27, 478);
 			dgvEmployee.Name = "dgvEmployee";
-			dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle9.BackColor = SystemColors.Control;
-			dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = SystemColors.Control;
+			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+			dgvEmployee.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			dgvEmployee.RowHeadersVisible = false;
 			dgvEmployee.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEmployee.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -439,10 +439,11 @@
 			// lblTipoProceso
 			// 
 			lblTipoProceso.AutoSize = true;
-			lblTipoProceso.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblTipoProceso.Location = new Point(193, 41);
+			lblTipoProceso.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold);
+			lblTipoProceso.ForeColor = SystemColors.ControlLightLight;
+			lblTipoProceso.Location = new Point(116, 74);
 			lblTipoProceso.Name = "lblTipoProceso";
-			lblTipoProceso.Size = new Size(0, 21);
+			lblTipoProceso.Size = new Size(0, 25);
 			lblTipoProceso.TabIndex = 33;
 			// 
 			// btnCerrar
@@ -497,7 +498,7 @@
 			lblSubtitulo.AutoSize = true;
 			lblSubtitulo.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblSubtitulo.ForeColor = Color.FromArgb(90, 105, 100);
-			lblSubtitulo.Location = new Point(116, 62);
+			lblSubtitulo.Location = new Point(116, 46);
 			lblSubtitulo.Name = "lblSubtitulo";
 			lblSubtitulo.Size = new Size(184, 25);
 			lblSubtitulo.TabIndex = 34;

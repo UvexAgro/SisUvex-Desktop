@@ -237,43 +237,45 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			dgv.CellFormatting -= Dgv_CellFormatting;
 			dgv.CellFormatting += Dgv_CellFormatting;
 		}
-		private void Dgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+		private void Dgv_CellFormatting(
+		object sender,
+		DataGridViewCellFormattingEventArgs e)
 		{
-			DataGridView dgv =
-				sender as DataGridView;
+			DataGridView dgv = sender as DataGridView;
 
 			if (dgv == null)
 				return;
 
-			if (e.RowIndex < 0 ||
-				e.ColumnIndex < 0)
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			if (dgv.Columns[e.ColumnIndex].Name ==
-				"SueldoTotal")
+			if (dgv.Columns[e.ColumnIndex].Name == "SueldoTotal")
 			{
 				DataGridViewCell cell =
-					dgv.Rows[e.RowIndex]
-					.Cells[e.ColumnIndex];
+					dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-				decimal original = 0;
-				decimal nuevo = 0;
+				decimal original;
+				decimal nuevo;
 
-				decimal.TryParse(
+				if (decimal.TryParse(
 					Convert.ToString(cell.Tag),
-					out original);
-
-				decimal.TryParse(
+					out original) &&
+					decimal.TryParse(
 					Convert.ToString(cell.Value),
-					out nuevo);
-
-				if (original != nuevo)
+					out nuevo))
 				{
-					e.CellStyle.BackColor =
-						System.Drawing.Color.FromArgb(
-							255,
-							244,
-							204);
+					if (original != nuevo)
+					{
+						e.CellStyle.BackColor =
+							System.Drawing.Color.FromArgb(
+								255, 244, 204);
+					}
+					else
+					{
+						// Regresar al color normal
+						e.CellStyle.BackColor =
+							dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor;
+					}
 				}
 			}
 		}

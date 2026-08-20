@@ -313,6 +313,18 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				frmExiste.CargarDatos(TipoNomina, fecha);
 
+				if (esFestivo && !string.IsNullOrWhiteSpace(frmExiste.TipoFestivo))
+				{
+					frm.lblTipoProceso.Text =
+						clsF.ObtenerDescripcionFestivo(frmExiste.TipoFestivo);
+
+					frm.lblTipoProceso.Visible = true;
+				}
+				else
+				{
+					frm.lblTipoProceso.Visible = false;
+				}
+
 				// Verificar si la semana ACTUAL está cerrada
 				DataTable dt = clsC.ObtenerInfoCierreSemana(fecha);
 
@@ -325,8 +337,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 					if (cerrada)
 					{
-						// No permite recalcular
 						frmExiste.BloquearRecalculo();
+
+						if (esFestivo)
+						{
+							frmExiste.BloquearCancelar();
+						}
 					}
 				}
 
@@ -456,6 +472,31 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			frm.dgvEmployee.Visible = false;
 			frm.dgvEmployee.DataSource = dtNomina;
 
+			// Mostrar tipo de nómina
+			if (dtNomina.Columns.Contains("TipoFestivo") &&
+				dtNomina.Rows.Count > 0)
+			{
+				string tipoFestivo = dtNomina.Rows[0]["TipoFestivo"]?.ToString();
+
+				if (!string.IsNullOrWhiteSpace(tipoFestivo))
+				{
+					frm.lblTipoProceso.Text =
+						clsF.ObtenerDescripcionFestivo(tipoFestivo);
+				}
+				else
+				{
+					frm.lblTipoProceso.Text = "NÓMINA NORMAL";
+				}
+
+				frm.lblTipoProceso.Visible = true;
+			}
+			// Ocultar columnas de control interno
+			if (frm.dgvEmployee.Columns.Contains("IdFestivo"))
+				frm.dgvEmployee.Columns["IdFestivo"].Visible = false;
+
+			if (frm.dgvEmployee.Columns.Contains("TipoFestivo"))
+				frm.dgvEmployee.Columns["TipoFestivo"].Visible = false;
+
 			clsEstilo.AplicarColores(TipoNomina);
 
 			ActualizarResumen();
@@ -466,12 +507,6 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			frm.dgvEmployee.Columns["SueldoTotal"].ReadOnly = false;
 
 			GuardarSueldosOriginales();
-
-			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
-			{
-				if (!row.IsNewRow)
-					row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
-			}
 
 			clsEstilo.ActivarEstiloGrid(frm.dgvEmployee);
 			frm.dgvEmployee.Visible = true;

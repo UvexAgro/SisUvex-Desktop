@@ -19,6 +19,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public FrmCierre()
 		{
 			InitializeComponent();
+			this.StartPosition = FormStartPosition.CenterParent;
 		}
 
 		private void FrmCierre_Load(object sender, EventArgs e)

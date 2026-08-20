@@ -56,7 +56,6 @@
 			btnCancelar = new Button();
 			btnRecalcular = new Button();
 			btnMostrar = new Button();
-			lblMensaje = new Label();
 			gbGenerada = new GroupBox();
 			lblGeneracion = new Label();
 			gbDatos.SuspendLayout();
@@ -76,7 +75,7 @@
 			// 
 			lblTitulo.AutoSize = true;
 			lblTitulo.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-			lblTitulo.Location = new Point(156, 7);
+			lblTitulo.Location = new Point(137, 12);
 			lblTitulo.Name = "lblTitulo";
 			lblTitulo.Size = new Size(191, 25);
 			lblTitulo.TabIndex = 0;
@@ -97,7 +96,7 @@
 			gbDatos.Controls.Add(lbldatos);
 			gbDatos.Controls.Add(panel3);
 			gbDatos.Controls.Add(panel1);
-			gbDatos.Location = new Point(12, 86);
+			gbDatos.Location = new Point(12, 76);
 			gbDatos.Margin = new Padding(3, 2, 3, 2);
 			gbDatos.Name = "gbDatos";
 			gbDatos.Padding = new Padding(3, 2, 3, 2);
@@ -311,7 +310,7 @@
 			gbAccion.Controls.Add(btnCancelar);
 			gbAccion.Controls.Add(btnRecalcular);
 			gbAccion.Controls.Add(btnMostrar);
-			gbAccion.Location = new Point(12, 284);
+			gbAccion.Location = new Point(12, 279);
 			gbAccion.Margin = new Padding(3, 2, 3, 2);
 			gbAccion.Name = "gbAccion";
 			gbAccion.Padding = new Padding(3, 2, 3, 2);
@@ -372,14 +371,6 @@
 			btnMostrar.UseVisualStyleBackColor = false;
 			btnMostrar.Click += btnMostrar_Click;
 			// 
-			// lblMensaje
-			// 
-			lblMensaje.AutoSize = true;
-			lblMensaje.Location = new Point(167, 31);
-			lblMensaje.Name = "lblMensaje";
-			lblMensaje.Size = new Size(0, 15);
-			lblMensaje.TabIndex = 4;
-			// 
 			// gbGenerada
 			// 
 			gbGenerada.BackColor = SystemColors.Control;
@@ -390,11 +381,11 @@
 			gbGenerada.Controls.Add(label3);
 			gbGenerada.Controls.Add(lblUsuario);
 			gbGenerada.Controls.Add(lblFecha);
-			gbGenerada.Location = new Point(12, 195);
+			gbGenerada.Location = new Point(12, 185);
 			gbGenerada.Margin = new Padding(3, 2, 3, 2);
 			gbGenerada.Name = "gbGenerada";
 			gbGenerada.Padding = new Padding(3, 2, 3, 2);
-			gbGenerada.Size = new Size(463, 85);
+			gbGenerada.Size = new Size(463, 87);
 			gbGenerada.TabIndex = 9;
 			gbGenerada.TabStop = false;
 			// 
@@ -412,9 +403,8 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(486, 474);
+			ClientSize = new Size(486, 462);
 			Controls.Add(gbGenerada);
-			Controls.Add(lblMensaje);
 			Controls.Add(gbAccion);
 			Controls.Add(gbDatos);
 			Controls.Add(plNomina);
@@ -458,7 +448,6 @@
 		private PictureBox ptbGenero;
 		private Label lblFecha;
 		private Label lblGenero;
-		private Label lblMensaje;
 		private PictureBox pictureBox1;
 		public Label lblUsuario;
 		private Label label1;
