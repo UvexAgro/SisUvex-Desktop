@@ -73,6 +73,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap actividad {
+            get {
+                object obj = ResourceManager.GetObject("actividad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addFileIcon16 {
             get {
                 object obj = ResourceManager.GetObject("addFileIcon16", resourceCulture);
@@ -466,6 +476,16 @@ namespace SisUvex.Properties {
         internal static System.Drawing.Bitmap limpiarIcon16 {
             get {
                 object obj = ResourceManager.GetObject("limpiarIcon16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap lugarpago {
+            get {
+                object obj = ResourceManager.GetObject("lugarpago", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
