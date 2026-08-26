@@ -102,7 +102,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Int).Value = id_workGroup;
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3).Value = id_workGroup;
 					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar).Value = v_nameWorkGroup;
 					cmd.Parameters.Add("@c_active", SqlDbType.Bit).Value = c_active;
 					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar).Value = User.GetUserName();
@@ -134,7 +134,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Int).Value = id_workGroup;
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3).Value = id_workGroup;
 					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar).Value = User.GetUserName();
 
 					cmd.ExecuteNonQuery();
