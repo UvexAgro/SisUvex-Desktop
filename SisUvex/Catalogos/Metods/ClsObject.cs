@@ -785,9 +785,18 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnName = "Tipo de asistencia";
             public const string ColumnPrefix = "PrefijoAsistencia";
             public const string ColumncIsAbsence = "isAbsence";
-            public const string ColumnColor = "ColumnColor";
+            public const string ColumnColor = "Color";
             public const string Cbo = "CboAttendanceType";
             public const string QueryCbo = $"SELECT id_attendanceType AS [{Column.id}], v_name AS [{Column.name}], v_prefix AS [{ColumnPrefix}], c_isAbsence [{ColumncIsAbsence}], c_active AS [{Column.active}], v_color AS [{ColumnColor}] FROM Nom_attendanceType";
+
+            public const string DgvCatalog = "DgvCatalogAttendanceType";
+            public const string QueryDgvCatalog = $@" SELECT id_attendanceType AS [{Column.id}], 
+                                            v_name AS [{ColumnName}], 
+                                            v_prefix AS [{ColumnPrefix}], 
+                                            CASE WHEN c_isAbsence = '1' THEN 'Inasistencia' ELSE 'Asistencia' END AS [{ColumncIsAbsence}], 
+                                            v_color AS [{ColumnColor}], 
+                                            c_active AS [{Column.active}] 
+                                        FROM Nom_AttendanceType ";
         }
 
         public static class Employee
