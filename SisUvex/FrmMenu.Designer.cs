@@ -116,6 +116,8 @@ namespace SisUvex
 			actualizarDatosDeEmpleadosPorExcelAgrosmartToolStripMenuItem = new ToolStripMenuItem();
 			altaDeEmpleadosSinRegistroToolStripMenuItem = new ToolStripMenuItem();
 			sUAToolStripMenuItem = new ToolStripMenuItem();
+			nominaDeCampoToolStripMenuItem = new ToolStripMenuItem();
+			registroDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
 			desertGhostToolStripMenuItem = new ToolStripMenuItem();
 			cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
 			empaqueToolStripMenuItem = new ToolStripMenuItem();
@@ -182,8 +184,7 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			nominaDeCampoToolStripMenuItem = new ToolStripMenuItem();
-			registroDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
+			listasDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -780,6 +781,20 @@ namespace SisUvex
 			sUAToolStripMenuItem.Text = "SUA";
 			sUAToolStripMenuItem.Click += sUAToolStripMenuItem_Click;
 			// 
+			// nominaDeCampoToolStripMenuItem
+			// 
+			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroDeCuadrillasToolStripMenuItem, listasDeCuadrillasToolStripMenuItem });
+			nominaDeCampoToolStripMenuItem.Name = "nominaDeCampoToolStripMenuItem";
+			nominaDeCampoToolStripMenuItem.Size = new Size(189, 22);
+			nominaDeCampoToolStripMenuItem.Text = "Nomina de Campo";
+			// 
+			// registroDeCuadrillasToolStripMenuItem
+			// 
+			registroDeCuadrillasToolStripMenuItem.Name = "registroDeCuadrillasToolStripMenuItem";
+			registroDeCuadrillasToolStripMenuItem.Size = new Size(188, 22);
+			registroDeCuadrillasToolStripMenuItem.Text = "Registro de Cuadrillas";
+			registroDeCuadrillasToolStripMenuItem.Click += registroDeCuadrillasToolStripMenuItem_Click;
+			// 
 			// desertGhostToolStripMenuItem
 			// 
 			desertGhostToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cargarEmpleadosToolStripMenuItem });
@@ -790,7 +805,7 @@ namespace SisUvex
 			// cargarEmpleadosToolStripMenuItem
 			// 
 			cargarEmpleadosToolStripMenuItem.Name = "cargarEmpleadosToolStripMenuItem";
-			cargarEmpleadosToolStripMenuItem.Size = new Size(180, 22);
+			cargarEmpleadosToolStripMenuItem.Size = new Size(170, 22);
 			cargarEmpleadosToolStripMenuItem.Text = "Cargar empleados";
 			cargarEmpleadosToolStripMenuItem.Click += cargarEmpleadosToolStripMenuItem_Click;
 			// 
@@ -1106,14 +1121,14 @@ namespace SisUvex
 			// cajasAGranelToolStripMenuItem
 			// 
 			cajasAGranelToolStripMenuItem.Name = "cajasAGranelToolStripMenuItem";
-			cajasAGranelToolStripMenuItem.Size = new Size(180, 22);
+			cajasAGranelToolStripMenuItem.Size = new Size(178, 22);
 			cajasAGranelToolStripMenuItem.Text = "Cajas a granel";
 			cajasAGranelToolStripMenuItem.Click += cajasAGranelToolStripMenuItem_Click;
 			// 
 			// factorToolStripMenuItem
 			// 
 			factorToolStripMenuItem.Name = "factorToolStripMenuItem";
-			factorToolStripMenuItem.Size = new Size(180, 22);
+			factorToolStripMenuItem.Size = new Size(178, 22);
 			factorToolStripMenuItem.Text = "Factor de Esparrago";
 			factorToolStripMenuItem.Click += factorToolStripMenuItem_Click;
 			// 
@@ -1121,7 +1136,7 @@ namespace SisUvex
 			// 
 			materialesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem1, registrosToolStripMenuItem });
 			materialesToolStripMenuItem.Name = "materialesToolStripMenuItem";
-			materialesToolStripMenuItem.Size = new Size(180, 22);
+			materialesToolStripMenuItem.Size = new Size(178, 22);
 			materialesToolStripMenuItem.Text = "Material";
 			// 
 			// catálogosToolStripMenuItem1
@@ -1198,7 +1213,7 @@ namespace SisUvex
 			// 
 			vehículosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tipoDeVehículosToolStripMenuItem, vehículosToolStripMenuItem1 });
 			vehículosToolStripMenuItem.Name = "vehículosToolStripMenuItem";
-			vehículosToolStripMenuItem.Size = new Size(180, 22);
+			vehículosToolStripMenuItem.Size = new Size(178, 22);
 			vehículosToolStripMenuItem.Text = "Vehículos";
 			// 
 			// tipoDeVehículosToolStripMenuItem
@@ -1243,19 +1258,12 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// nominaDeCampoToolStripMenuItem
+			// listasDeCuadrillasToolStripMenuItem
 			// 
-			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroDeCuadrillasToolStripMenuItem });
-			nominaDeCampoToolStripMenuItem.Name = "nominaDeCampoToolStripMenuItem";
-			nominaDeCampoToolStripMenuItem.Size = new Size(189, 22);
-			nominaDeCampoToolStripMenuItem.Text = "Nomina de Campo";
-			// 
-			// registroDeCuadrillasToolStripMenuItem
-			// 
-			registroDeCuadrillasToolStripMenuItem.Name = "registroDeCuadrillasToolStripMenuItem";
-			registroDeCuadrillasToolStripMenuItem.Size = new Size(188, 22);
-			registroDeCuadrillasToolStripMenuItem.Text = "Registro de Cuadrillas";
-			registroDeCuadrillasToolStripMenuItem.Click += registroDeCuadrillasToolStripMenuItem_Click;
+			listasDeCuadrillasToolStripMenuItem.Name = "listasDeCuadrillasToolStripMenuItem";
+			listasDeCuadrillasToolStripMenuItem.Size = new Size(188, 22);
+			listasDeCuadrillasToolStripMenuItem.Text = "Listas de Cuadrillas";
+			listasDeCuadrillasToolStripMenuItem.Click += listasDeCuadrillasToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1441,5 +1449,6 @@ namespace SisUvex
 		private ToolStripMenuItem registroDeBajasDePersonalToolStripMenuItem;
 		private ToolStripMenuItem nominaDeCampoToolStripMenuItem;
 		private ToolStripMenuItem registroDeCuadrillasToolStripMenuItem;
+		private ToolStripMenuItem listasDeCuadrillasToolStripMenuItem;
 	}
 }
