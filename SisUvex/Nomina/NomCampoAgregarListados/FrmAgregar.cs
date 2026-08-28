@@ -22,13 +22,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			get { return dgvListadoAgregar; }
 		}
-		public int IdCuadrilla { get; set; }
+		public string IdCuadrilla { get; set; }
 		public DateTime Fecha { get; set; }
 		public bool ModoModificar { get; set; }
 		public int IndiceFilaModificar { get; set; }
 		public FrmAgregar()
 		{
 			InitializeComponent();
+			this.StartPosition = FormStartPosition.CenterScreen;
 			txbCodigo.Text = "Ej. 012365";
 			txbCodigo.ForeColor = Color.Gray;
 
@@ -90,13 +91,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				// El nombre y lugar de pago NO se pueden modificar
 				txbEmpleado.Enabled = false;
-				cboLugarPago.Enabled = false;
 			}
 			else
 			{
 				// En modificar sí se pueden cambiar
 				txbEmpleado.Enabled = false; // El nombre tampoco debería editarse
-				cboLugarPago.Enabled = true;
 				txbCodigo.Enabled = false;
 			}
 
@@ -106,16 +105,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvListadoAgregar.Columns.Add("Nombre", "Empleado");
 			dgvListadoAgregar.Columns.Add("LugarPago", "Lugar de Pago");
 			dgvListadoAgregar.Columns.Add("Actividad", "Actividad");
+			dgvListadoAgregar.Columns.Add("Lote", "Lote");
 
 			dgvListadoAgregar.Columns.Add("IdLugarPago", "IdLugarPago");
 			dgvListadoAgregar.Columns.Add("IdActividad", "IdActividad");
+			dgvListadoAgregar.Columns.Add("IdLote", "IdLote");
 
 			dgvListadoAgregar.Columns["IdLugarPago"].Visible = false;
 			dgvListadoAgregar.Columns["IdActividad"].Visible = false;
+			dgvListadoAgregar.Columns["IdLote"].Visible = false;
 			clsA.EstiloDgvListadoAgregar();
 
 			clsA.CargarComboActividades();
-			clsA.CargarComboLugaresPago();
+			clsA.CargarComboLotes();
 
 			if (ModoModificar)
 			{

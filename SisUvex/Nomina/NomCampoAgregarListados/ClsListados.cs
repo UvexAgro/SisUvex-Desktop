@@ -19,8 +19,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private int filaImprimir = 0;
 		public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
 		public string? idAddModify;
-		public int IdCuadrilla { get; set; }
+		public string IdCuadrilla { get; set; }
 		public DateTime Fecha { get; set; }
+		public string IdLote { get; set; }
 		public ClsListados()
 		{
 			// HOJA CARTA
@@ -84,15 +85,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.Columns.Add("Nombre", "Empleado");
 			dgv.Columns.Add("LugarPago", "Lugar de Pago");
 			dgv.Columns.Add("Actividad", "Actividad");
+			dgv.Columns.Add("Lote", "Lote");
 
 			// Códigos reales para guardar en BD
 			dgv.Columns.Add("IdLugarPago", "IdLugarPago");
 			dgv.Columns.Add("IdActividad", "IdActividad");
+			dgv.Columns.Add("IdLote", "IdLote");
 
 			dgv.Columns["IdLugarPago"].Visible = false;
 			dgv.Columns["IdActividad"].Visible = false;
+			dgv.Columns["IdLote"].Visible = false;
 		}
-		public void CargarEmpleadosCuadrilla(int idCuadrilla, DateTime fecha)
+		public void CargarEmpleadosCuadrilla(string idCuadrilla,DateTime fecha)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -100,52 +104,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-			SELECT
-				D.id_employee,
 
-				E.v_name + ' ' +
-				E.v_lastNamePat + ' ' +
-				E.v_lastNameMat AS Empleado,
-
-				D.id_paymentPlace,
-
-				CONVERT(varchar(20), D.id_paymentPlace) +
-				' - ' +
-				P.v_namePlace AS LugarPago,
-
-				D.id_activity,
-
-				T.c_codigo_tab + ' - ' +
-				T.v_descripcion_tab AS Actividad
-
-			FROM dbo.Nom_WorkGroupEmployeeDaily D
-
-			INNER JOIN dbo.Nom_Employees E
-				ON E.id_employee = D.id_employee
-
-			LEFT JOIN dbo.Nom_PlacePayment P
-				ON P.id_placePayment = D.id_paymentPlace
-
-			LEFT JOIN dbo.Nom_Tabulador T
-				ON T.c_codigo_tab = D.id_activity
-
-			WHERE D.d_date = @fecha
-			  AND D.id_workGroup = @idCuadrilla
-
-			ORDER BY
-				E.v_name,
-				E.v_lastNamePat;";
-
-				using (SqlCommand cmd =
-					new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+				"sp_GetEmpleadosCuadrilla",sql.cnn))
 				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
 					cmd.Parameters.AddWithValue(
 						"@fecha",
 						fecha.Date);
 
 					cmd.Parameters.AddWithValue(
-						"@idCuadrilla",
+						"@id_workGroup",
 						idCuadrilla);
 
 					using (SqlDataAdapter da =
@@ -159,21 +129,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 						foreach (DataRow row in dt.Rows)
 						{
-							int indice = frm.dgvListado.Rows.Add(
+							frm.dgvListado.Rows.Add(
 								row["id_employee"].ToString(),
+
 								row["Empleado"].ToString(),
+
 								row["LugarPago"] == DBNull.Value
 									? ""
 									: row["LugarPago"].ToString(),
+
 								row["Actividad"] == DBNull.Value
 									? ""
 									: row["Actividad"].ToString(),
+
+								row["Lote"] == DBNull.Value
+									? ""
+									: row["Lote"].ToString(),
+
 								row["id_paymentPlace"] == DBNull.Value
 									? ""
 									: row["id_paymentPlace"].ToString(),
+
 								row["id_activity"] == DBNull.Value
 									? ""
-									: row["id_activity"].ToString()
+									: row["id_activity"].ToString(),
+
+								row["id_lot"] == DBNull.Value
+									? ""
+									: row["id_lot"].ToString()
 							);
 						}
 					}
@@ -192,7 +175,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public bool EliminarEmpleadoCuadrilla(int idEmpleado, int idCuadrilla, DateTime fecha)
+		public bool EliminarEmpleadoCuadrilla(string idEmpleado,string idCuadrilla,DateTime fecha)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -201,10 +184,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
-			DELETE FROM dbo.Nom_WorkGroupEmployeeDaily
-			WHERE id_employee = @idEmpleado
-			  AND id_workGroup = @idCuadrilla
-			  AND d_date = @fecha;";
+					DELETE FROM dbo.Nom_WorkGroupEmployeeDaily
+					WHERE id_employee = @idEmpleado
+					  AND id_workGroup = @idCuadrilla
+					  AND d_date = @fecha;";
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
@@ -214,6 +197,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					cmd.Parameters.AddWithValue(
 						"@idCuadrilla",
+
 						idCuadrilla);
 
 					cmd.Parameters.AddWithValue(
@@ -291,42 +275,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-		SELECT
-			D.id_employee,
-
-			E.v_name + ' ' +
-			E.v_lastNamePat + ' ' +
-			E.v_lastNameMat AS Empleado,
-
-			D.id_paymentPlace,
-
-			CONVERT(varchar(20), D.id_paymentPlace)
-			+ ' - ' +
-			P.v_namePlace AS LugarPago,
-
-			D.id_activity,
-
-			T.c_codigo_tab + ' - ' +
-			T.v_descripcion_tab AS Actividad
-
-		FROM dbo.Nom_WorkGroupEmployeeDaily D
-
-		INNER JOIN dbo.Nom_Employees E
-			ON E.id_employee = D.id_employee
-
-		LEFT JOIN dbo.Nom_PlacePayment P
-			ON P.id_placePayment = D.id_paymentPlace
-
-		LEFT JOIN dbo.Nom_Tabulador T
-			ON T.c_codigo_tab = D.id_activity
-
-		WHERE D.id_employee = @idEmpleado
-		  AND D.id_workGroup = @idCuadrilla
-		  AND D.d_date = @fecha;";
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_GetEmpleadoCuadrillaModificar",
+					sql.cnn))
 				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
 					cmd.Parameters.AddWithValue(
 						"@idEmpleado",
 						idAddModify);
@@ -352,57 +306,22 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							return;
 						}
 
-						// =========================
-						// CÓDIGO
-						// =========================
-
 						frmA.txbCodigo.Text =
 							dr["id_employee"].ToString();
-
-
-						// =========================
-						// NOMBRE
-						// =========================
 
 						frmA.txbEmpleado.Text =
 							dr["Empleado"].ToString();
 
-
-						// =========================
-						// LUGAR DE PAGO
-						// =========================
-
-						if (dr["id_paymentPlace"] != DBNull.Value)
-						{
-							int idLugarPago =
-								Convert.ToInt32(dr["id_paymentPlace"]);
-
-							for (int i = 0; i < frmA.cboLugarPago.Items.Count; i++)
-							{
-								DataRowView item =
-									frmA.cboLugarPago.Items[i] as DataRowView;
-
-								if (item != null &&
-									Convert.ToInt32(item["IdLugarPago"]) == idLugarPago)
-								{
-									frmA.cboLugarPago.SelectedIndex = i;
-									break;
-								}
-							}
-						}
-
-
-						// =========================
-						// ACTIVIDAD
-						// =========================
-
 						if (dr["id_activity"] != DBNull.Value)
 						{
-							int idActividad =
-								Convert.ToInt32(dr["id_activity"]);
-
 							frmA.cboActividad.SelectedValue =
-								idActividad;
+								Convert.ToInt32(dr["id_activity"]);
+						}
+
+						if (dr["id_lot"] != DBNull.Value)
+						{
+							frmA.cboLote.SelectedValue =
+								Convert.ToInt32(dr["id_lot"]);
 						}
 					}
 				}
@@ -420,7 +339,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void ActualizarEmpleadosCuadrilla(int idCuadrilla, DateTime fecha, DataGridView dgvEmpleados)
+		public void ActualizarEmpleadosCuadrilla(string idCuadrilla,DateTime fecha,DataGridView dgvEmpleados)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -428,7 +347,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlTransaction transaction = sql.cnn.BeginTransaction())
+				using (SqlTransaction transaction =
+					sql.cnn.BeginTransaction())
 				{
 					try
 					{
@@ -443,52 +363,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							if (string.IsNullOrWhiteSpace(codigo))
 								continue;
 
-
-							// -----------------------------------------
-							// OBTENER IDs REALES DEL DGV
-							// -----------------------------------------
-
-							string idLugarPago =
-								fila.Cells["IdLugarPago"].Value?.ToString();
-
 							string idActividad =
 								fila.Cells["IdActividad"].Value?.ToString();
 
-
-							// -----------------------------------------
-							// FORMATO LUGAR DE PAGO
-							// -----------------------------------------
-
-							if (!string.IsNullOrWhiteSpace(idLugarPago))
-							{
-								idLugarPago =
-									idLugarPago.PadLeft(4, '0');
-							}
-
-
-							// -----------------------------------------
-							// VALIDAR
-							// -----------------------------------------
-
-							if (string.IsNullOrWhiteSpace(idLugarPago))
-							{
-								MessageBox.Show(
-									"El lugar de pago del empleado " +
-									codigo +
-									" no tiene un código válido.",
-									"Actualizar",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning);
-
-								transaction.Rollback();
-								return;
-							}
+							string idLote =
+								fila.Cells["IdLote"].Value?.ToString();
 
 							if (string.IsNullOrWhiteSpace(idActividad))
 							{
 								MessageBox.Show(
-									"La actividad del empleado " +
-									codigo +
+									"La actividad del empleado " + codigo +
 									" no tiene un código válido.",
 									"Actualizar",
 									MessageBoxButtons.OK,
@@ -498,133 +382,118 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 								return;
 							}
 
-
-							// -----------------------------------------
-							// BUSCAR AL EMPLEADO ESE DÍA
-							// SIN IMPORTAR LA CUADRILLA
-							// -----------------------------------------
-
-							string queryEmpleado = @"
-                        SELECT
-                            id_workGroup,
-                            id_paymentPlace,
-                            id_activity
-                        FROM dbo.Nom_WorkGroupEmployeeDaily
-                        WHERE d_date = @fecha
-                          AND id_employee = @id_employee";
-
-
-							int existeCuadrilla = 0;
-							string lugarPagoAnterior = "";
-							string actividadAnterior = "";
-
-							using (SqlCommand cmd =
-								new SqlCommand(
-									queryEmpleado,
-									sql.cnn,
-									transaction))
+							if (string.IsNullOrWhiteSpace(idLote))
 							{
-								cmd.Parameters.AddWithValue(
-									"@fecha",
-									fecha.Date);
+								MessageBox.Show(
+									"El lote del empleado " + codigo +
+									" no tiene un código válido.",
+									"Lote",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
+
+								transaction.Rollback();
+								return;
+							}
+
+							// =========================================
+							// CONSULTAR EMPLEADO
+							// =========================================
+
+							string cuadrillaAnterior = "";
+							string actividadAnterior = "";
+							string loteAnterior = "";
+
+							using (SqlCommand cmd = new SqlCommand(
+								"sp_GetEmpleadoWorkGroupDaily",
+								sql.cnn,
+								transaction))
+							{
+								cmd.CommandType =
+									CommandType.StoredProcedure;
 
 								cmd.Parameters.AddWithValue(
 									"@id_employee",
 									codigo);
+
+								cmd.Parameters.AddWithValue(
+									"@fecha",
+									fecha.Date);
 
 								using (SqlDataReader reader =
 									cmd.ExecuteReader())
 								{
 									if (reader.Read())
 									{
-										existeCuadrilla =
-											Convert.ToInt32(
-												reader["id_workGroup"]);
+										if (reader["id_workGroup"] != DBNull.Value)
+										{
+											cuadrillaAnterior =
+												reader["id_workGroup"].ToString();
+										}
 
-										lugarPagoAnterior =
-											reader["id_paymentPlace"] == DBNull.Value
-												? ""
-												: reader["id_paymentPlace"].ToString();
+										if (reader["id_activity"] != DBNull.Value)
+										{
+											actividadAnterior =
+												reader["id_activity"].ToString();
+										}
 
-										actividadAnterior =
-											reader["id_activity"] == DBNull.Value
-												? ""
-												: reader["id_activity"].ToString();
+										if (reader["id_lot"] != DBNull.Value)
+										{
+											loteAnterior =
+												reader["id_lot"].ToString();
+										}
 									}
 								}
 							}
-
 
 							// =========================================
 							// NO EXISTE → INSERTAR
 							// =========================================
 
-							if (existeCuadrilla == 0)
+							if (string.IsNullOrWhiteSpace(cuadrillaAnterior))
 							{
-								string queryInsert = @"
-                            INSERT INTO dbo.Nom_WorkGroupEmployeeDaily
-                            (
-                                d_date,
-                                id_employee,
-                                id_paymentPlace,
-                                id_workGroup,
-                                id_activity,
-                                d_create,
-                                userCreate
-                            )
-                            VALUES
-                            (
-                                @fecha,
-                                @id_employee,
-                                @id_paymentPlace,
-                                @id_workGroup,
-                                @id_activity,
-                                GETDATE(),
-                                @userCreate
-                            )";
-
-								using (SqlCommand cmdInsert =
-									new SqlCommand(
-										queryInsert,
-										sql.cnn,
-										transaction))
+								using (SqlCommand cmd = new SqlCommand(
+									"sp_AddEmpleadoWorkGroupDaily",
+									sql.cnn,
+									transaction))
 								{
-									cmdInsert.Parameters.AddWithValue(
+									cmd.CommandType =
+										CommandType.StoredProcedure;
+
+									cmd.Parameters.AddWithValue(
 										"@fecha",
 										fecha.Date);
 
-									cmdInsert.Parameters.AddWithValue(
+									cmd.Parameters.AddWithValue(
 										"@id_employee",
 										codigo);
 
-									cmdInsert.Parameters.AddWithValue(
-										"@id_paymentPlace",
-										idLugarPago);
-
-									cmdInsert.Parameters.AddWithValue(
+									cmd.Parameters.AddWithValue(
 										"@id_workGroup",
 										idCuadrilla);
 
-									cmdInsert.Parameters.AddWithValue(
+									cmd.Parameters.AddWithValue(
 										"@id_activity",
 										idActividad);
 
-									cmdInsert.Parameters.AddWithValue(
+									cmd.Parameters.AddWithValue(
+										"@id_lot",
+										idLote);
+
+									cmd.Parameters.AddWithValue(
 										"@userCreate",
 										User.GetUserName());
 
-									cmdInsert.ExecuteNonQuery();
+									cmd.ExecuteNonQuery();
 								}
 
 								continue;
 							}
 
-
 							// =========================================
-							// YA EXISTE EN OTRA CUADRILLA
+							// OTRA CUADRILLA
 							// =========================================
 
-							if (existeCuadrilla != idCuadrilla)
+							if (cuadrillaAnterior != idCuadrilla)
 							{
 								DialogResult respuesta =
 									MessageBox.Show(
@@ -640,50 +509,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Question);
 
-
 								if (respuesta == DialogResult.No)
-								{
 									continue;
-								}
 
-
-								// -------------------------------------
-								// CAMBIAR DE CUADRILLA
-								// -------------------------------------
-
-								string queryMover = @"
-                            UPDATE dbo.Nom_WorkGroupEmployeeDaily
-                            SET
-                                id_workGroup = @id_workGroup,
-                                id_paymentPlace = @id_paymentPlace,
-                                id_activity = @id_activity,
-                                d_update = GETDATE(),
-                                userUpdate = @userUpdate
-                            WHERE d_date = @fecha
-                              AND id_employee = @id_employee";
-
-
-								using (SqlCommand cmd =
-									new SqlCommand(
-										queryMover,
-										sql.cnn,
-										transaction))
+								using (SqlCommand cmd = new SqlCommand(
+									"sp_MoverEmpleadoWorkGroupDaily",
+									sql.cnn,
+									transaction))
 								{
-									cmd.Parameters.AddWithValue(
-										"@id_workGroup",
-										idCuadrilla);
-
-									cmd.Parameters.AddWithValue(
-										"@id_paymentPlace",
-										idLugarPago);
-
-									cmd.Parameters.AddWithValue(
-										"@id_activity",
-										idActividad);
-
-									cmd.Parameters.AddWithValue(
-										"@userUpdate",
-										User.GetUserName());
+									cmd.CommandType =
+										CommandType.StoredProcedure;
 
 									cmd.Parameters.AddWithValue(
 										"@fecha",
@@ -693,47 +528,43 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 										"@id_employee",
 										codigo);
 
+									cmd.Parameters.AddWithValue(
+										"@id_workGroup",
+										idCuadrilla);
+
+									cmd.Parameters.AddWithValue(
+										"@id_activity",
+										idActividad);
+
+									cmd.Parameters.AddWithValue(
+										"@id_lot",
+										idLote);
+
+									cmd.Parameters.AddWithValue(
+										"@userUpdate",
+										User.GetUserName());
+
 									cmd.ExecuteNonQuery();
 								}
 
 								continue;
 							}
 
-
 							// =========================================
 							// MISMA CUADRILLA
 							// =========================================
 
-							lugarPagoAnterior =
-								lugarPagoAnterior.PadLeft(4, '0');
-
-
-							bool cambioLugarPago =
-								lugarPagoAnterior != idLugarPago;
-
 							bool cambioActividad =
 								actividadAnterior != idActividad;
 
+							bool cambioLote =
+								loteAnterior != idLote;
 
-							// =========================================
-							// ¿CAMBIÓ INFORMACIÓN?
-							// =========================================
-
-							if (cambioLugarPago || cambioActividad)
+							if (cambioActividad || cambioLote)
 							{
 								string mensaje =
 									"El empleado " + codigo +
 									" ya pertenece a esta cuadrilla.\n\n";
-
-								if (cambioLugarPago)
-								{
-									mensaje +=
-										"Lugar de pago anterior: " +
-										lugarPagoAnterior +
-										"\nNuevo lugar de pago: " +
-										idLugarPago +
-										"\n\n";
-								}
 
 								if (cambioActividad)
 								{
@@ -745,9 +576,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 										"\n\n";
 								}
 
+								if (cambioLote)
+								{
+									mensaje +=
+										"Lote anterior: " +
+										loteAnterior +
+										"\nNuevo lote: " +
+										idLote +
+										"\n\n";
+								}
+
 								mensaje +=
 									"¿Desea actualizar los datos?";
-
 
 								DialogResult respuesta =
 									MessageBox.Show(
@@ -756,67 +596,51 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Question);
 
-
 								if (respuesta == DialogResult.No)
-								{
 									continue;
-								}
 							}
-
 
 							// =========================================
 							// ACTUALIZAR
 							// =========================================
 
-							string queryUpdate = @"
-                        UPDATE dbo.Nom_WorkGroupEmployeeDaily
-                        SET
-                            id_paymentPlace = @id_paymentPlace,
-                            id_activity = @id_activity,
-                            d_update = GETDATE(),
-                            userUpdate = @userUpdate
-                        WHERE d_date = @fecha
-                          AND id_employee = @id_employee
-                          AND id_workGroup = @id_workGroup";
-
-
-							using (SqlCommand cmdUpdate =
-								new SqlCommand(
-									queryUpdate,
-									sql.cnn,
-									transaction))
+							using (SqlCommand cmd = new SqlCommand(
+								"sp_UpdateEmpleadoWorkGroupDaily",
+								sql.cnn,
+								transaction))
 							{
-								cmdUpdate.Parameters.AddWithValue(
-									"@id_paymentPlace",
-									idLugarPago);
+								cmd.CommandType =
+									CommandType.StoredProcedure;
 
-								cmdUpdate.Parameters.AddWithValue(
-									"@id_activity",
-									idActividad);
-
-								cmdUpdate.Parameters.AddWithValue(
-									"@userUpdate",
-									User.GetUserName());
-
-								cmdUpdate.Parameters.AddWithValue(
+								cmd.Parameters.AddWithValue(
 									"@fecha",
 									fecha.Date);
 
-								cmdUpdate.Parameters.AddWithValue(
+								cmd.Parameters.AddWithValue(
 									"@id_employee",
 									codigo);
 
-								cmdUpdate.Parameters.AddWithValue(
+								cmd.Parameters.AddWithValue(
 									"@id_workGroup",
 									idCuadrilla);
 
-								cmdUpdate.ExecuteNonQuery();
+								cmd.Parameters.AddWithValue(
+									"@id_activity",
+									idActividad);
+
+								cmd.Parameters.AddWithValue(
+									"@id_lot",
+									idLote);
+
+								cmd.Parameters.AddWithValue(
+									"@userUpdate",
+									User.GetUserName());
+
+								cmd.ExecuteNonQuery();
 							}
 						}
 
-
 						transaction.Commit();
-
 
 						MessageBox.Show(
 							"Los empleados se guardaron correctamente.",
@@ -881,6 +705,80 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				// No hay empleados → mostrar panel
 				frm.pnlSinEmpleados.Visible = true;
+			}
+		}
+		public bool ActualizarCuadrillas(DateTime fechaActual)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_ActualizarCuadrillasDia",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.AddWithValue("@FechaActual", fechaActual.Date);
+					cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
+
+					cmd.ExecuteNonQuery();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al actualizar cuadrillas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public bool ExistenEmpleadosFecha(DateTime fecha)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+			SELECT COUNT(*)
+			FROM [SisUvex].[dbo].[Nom_WorkGroupEmployeeDaily]
+			WHERE d_date = @Fecha";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.AddWithValue("@Fecha", fecha.Date);
+
+					int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+
+					return cantidad > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
 			}
 		}
 		public void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -997,17 +895,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ANCHOS DE COLUMNAS
 			// -----------------------------------------
 
-			int anchoCodigo = 90;
-			int anchoEmpleado = 320;
-			int anchoLugarPago = 300;
-
-			// El resto se lo damos a actividad
-
-			int anchoActividad =
-				ancho -
+			int anchoCodigo = 70;
+			int anchoEmpleado = 280;
+			int anchoLugarPago = 220;
+			int anchoActividad = 220;
+			int anchoLote = ancho -
 				anchoCodigo -
 				anchoEmpleado -
-				anchoLugarPago;
+				anchoLugarPago -
+				anchoActividad;
 
 			// -----------------------------------------
 			// ENCABEZADO TABLA
@@ -1060,6 +956,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				anchoEmpleado +
 				anchoLugarPago + 12,
 				y + 8);
+			g.DrawString(
+				"Lote",
+				fuenteEncabezado,
+				brushBlanco,
+				x + anchoCodigo +
+				anchoEmpleado +
+				anchoLugarPago +
+				anchoActividad + 12,
+				y + 8);
 
 			y += altoEncabezado;
 
@@ -1091,6 +996,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				string actividad =
 					fila.Cells["Actividad"].Value?.ToString() ?? "";
+				string lote =
+					fila.Cells["Lote"].Value?.ToString() ?? "";
 
 				// -----------------------------------------
 				// CAMBIO DE PÁGINA
@@ -1168,6 +1075,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					x + anchoCodigo +
 					anchoEmpleado +
 					anchoLugarPago + 12,
+					textoY);
+				g.DrawString(
+					lote,
+					texto,
+					Brushes.Black,
+					x + anchoCodigo +
+					anchoEmpleado +
+					anchoLugarPago +
+					anchoActividad + 12,
 					textoY);
 
 				y += altoFila;
@@ -1352,10 +1268,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns["Codigo"].FillWeight = 15;
-			dgv.Columns["Nombre"].FillWeight = 40;
-			dgv.Columns["LugarPago"].FillWeight = 25;
-			dgv.Columns["Actividad"].FillWeight = 25;
+			dgv.Columns["Codigo"].FillWeight = 12;
+			dgv.Columns["Nombre"].FillWeight = 30;
+			dgv.Columns["LugarPago"].FillWeight = 22;
+			dgv.Columns["Actividad"].FillWeight = 18;
+			dgv.Columns["Lote"].FillWeight = 30;
 
 			dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
@@ -1367,6 +1284,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DataGridViewContentAlignment.MiddleLeft;
 
 			dgv.Columns["Actividad"].DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleLeft;
+
+			dgv.Columns["Lote"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 		}
 	}

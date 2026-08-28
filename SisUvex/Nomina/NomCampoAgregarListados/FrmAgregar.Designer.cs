@@ -39,10 +39,10 @@
 			label2 = new Label();
 			label3 = new Label();
 			cboActividad = new ComboBox();
-			cboLugarPago = new ComboBox();
-			label4 = new Label();
 			txbCodigo = new TextBox();
 			groupBox1 = new GroupBox();
+			cboLote = new ComboBox();
+			label5 = new Label();
 			btnAgregarListado = new Button();
 			lblTitulo = new Label();
 			pictureBox1 = new PictureBox();
@@ -91,7 +91,7 @@
 			dgvListadoAgregar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvListadoAgregar.EnableHeadersVisualStyles = false;
 			dgvListadoAgregar.ImeMode = ImeMode.NoControl;
-			dgvListadoAgregar.Location = new Point(12, 206);
+			dgvListadoAgregar.Location = new Point(12, 211);
 			dgvListadoAgregar.Name = "dgvListadoAgregar";
 			dgvListadoAgregar.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -105,7 +105,7 @@
 			dgvListadoAgregar.RowHeadersVisible = false;
 			dgvListadoAgregar.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListadoAgregar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListadoAgregar.Size = new Size(678, 251);
+			dgvListadoAgregar.Size = new Size(678, 246);
 			dgvListadoAgregar.TabIndex = 14;
 			// 
 			// btnContinuar
@@ -151,7 +151,7 @@
 			// 
 			label3.AutoSize = true;
 			label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label3.Location = new Point(370, 27);
+			label3.Location = new Point(329, 27);
 			label3.Name = "label3";
 			label3.Size = new Size(166, 15);
 			label3.TabIndex = 24;
@@ -160,28 +160,10 @@
 			// cboActividad
 			// 
 			cboActividad.FormattingEnabled = true;
-			cboActividad.Location = new Point(370, 45);
+			cboActividad.Location = new Point(329, 45);
 			cboActividad.Name = "cboActividad";
-			cboActividad.Size = new Size(252, 23);
+			cboActividad.Size = new Size(265, 23);
 			cboActividad.TabIndex = 26;
-			// 
-			// cboLugarPago
-			// 
-			cboLugarPago.FormattingEnabled = true;
-			cboLugarPago.Location = new Point(370, 98);
-			cboLugarPago.Name = "cboLugarPago";
-			cboLugarPago.Size = new Size(252, 23);
-			cboLugarPago.TabIndex = 28;
-			// 
-			// label4
-			// 
-			label4.AutoSize = true;
-			label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label4.Location = new Point(370, 80);
-			label4.Name = "label4";
-			label4.Size = new Size(89, 15);
-			label4.TabIndex = 27;
-			label4.Text = "Lugar de Pago :";
 			// 
 			// txbCodigo
 			// 
@@ -197,20 +179,38 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(cboLote);
+			groupBox1.Controls.Add(label5);
 			groupBox1.Controls.Add(btnAgregarListado);
 			groupBox1.Controls.Add(cboActividad);
 			groupBox1.Controls.Add(txbCodigo);
 			groupBox1.Controls.Add(label1);
 			groupBox1.Controls.Add(txbEmpleado);
-			groupBox1.Controls.Add(cboLugarPago);
 			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(label4);
 			groupBox1.Controls.Add(label3);
 			groupBox1.Location = new Point(12, 60);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(670, 140);
+			groupBox1.Size = new Size(670, 145);
 			groupBox1.TabIndex = 31;
 			groupBox1.TabStop = false;
+			// 
+			// cboLote
+			// 
+			cboLote.FormattingEnabled = true;
+			cboLote.Location = new Point(329, 98);
+			cboLote.Name = "cboLote";
+			cboLote.Size = new Size(323, 23);
+			cboLote.TabIndex = 33;
+			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label5.Location = new Point(329, 80);
+			label5.Name = "label5";
+			label5.Size = new Size(36, 15);
+			label5.TabIndex = 32;
+			label5.Text = "Lote :";
 			// 
 			// btnAgregarListado
 			// 
@@ -288,9 +288,7 @@
 		private Label label2;
 		private Label label3;
 		private ComboBox comboBox1;
-		private Label label4;
 		public ComboBox cboActividad;
-		public ComboBox cboLugarPago;
 		public TextBox txbEmpleado;
 		public TextBox txbCodigo;
 		private GroupBox groupBox1;
@@ -299,5 +297,7 @@
 		private PictureBox pictureBox1;
 		public Label lblSubtitulo;
 		private Label label6;
+		public ComboBox cboLote;
+		private Label label5;
 	}
 }

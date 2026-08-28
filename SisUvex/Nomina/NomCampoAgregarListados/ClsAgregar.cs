@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office.Word;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Reporte_de_Emp_UVA;
@@ -67,81 +68,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		public void CargarComboLugaresPago()
+		public void CargarComboLotes()
 		{
-			DataTable dt = ObtenerLugaresPago();
+			DataTable dtLotes = ObtenerLotes();
 
-			if (dt == null || dt.Rows.Count == 0)
-				return;
+			dtLotes.Columns.Add("LoteCompleto");
 
-			dt.Columns.Add("LugarPagoCompleto");
-
-			foreach (DataRow row in dt.Rows)
+			foreach (DataRow row in dtLotes.Rows)
 			{
-				row["LugarPagoCompleto"] =
-					row["IdLugarPago"].ToString()
-					+ " - " +
-					row["NombreLugarPago"].ToString();
+				row["LoteCompleto"] =
+					row["c_codigo_lot"] + " - " +
+					row["v_nameLot"] + " - " +
+					row["NombreVariedad"];
 			}
 
-			frmA.cboLugarPago.DataSource = dt;
+			frmA.cboLote.DataSource = dtLotes;
+			frmA.cboLote.DisplayMember = "LoteCompleto";
+			frmA.cboLote.ValueMember = "id_lot";
 
-			frmA.cboLugarPago.DisplayMember =
-				"LugarPagoCompleto";
+			frmA.cboLote.DropDownStyle = ComboBoxStyle.DropDown;
+			frmA.cboLote.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			frmA.cboLote.AutoCompleteSource = AutoCompleteSource.ListItems;
 
-			frmA.cboLugarPago.ValueMember =
-				"IdLugarPago";
-
-			frmA.cboLugarPago.DropDownStyle =
-				ComboBoxStyle.DropDown;
-
-			frmA.cboLugarPago.AutoCompleteMode =
-				AutoCompleteMode.SuggestAppend;
-
-			frmA.cboLugarPago.AutoCompleteSource =
-				AutoCompleteSource.ListItems;
-
-			frmA.cboLugarPago.SelectedIndex = -1;
-			frmA.cboLugarPago.Text = "";
+			frmA.cboLote.SelectedIndex = -1;
+			frmA.cboLote.Text = "";
 		}
-		public DataTable ObtenerLugaresPago()
+		public DataTable ObtenerLotes()
 		{
 			SQLControl sql = new SQLControl();
 			DataTable dt = new DataTable();
-
 			try
 			{
 				sql.OpenConectionWrite();
+					string query = @"
+				SELECT 
+					L.id_lot,
+					L.c_codigo_lot,
+					L.v_nameLot,
+					L.id_variety,
+					V.v_nameComercial AS NombreVariedad
+				FROM Pack_Lot L
+				INNER JOIN Pack_Variety V
+					ON L.id_variety = V.id_variety
+				WHERE L.c_active = '1'
+				  AND V.c_active = '1'
+				  AND NULLIF(LTRIM(RTRIM(L.c_codigo_lot)), '') IS NOT NULL
+				ORDER BY L.c_codigo_lot; ";
 
-				string query = @"
-            SELECT
-                id_placePayment AS IdLugarPago,
-                v_namePlace AS NombreLugarPago
-            FROM Nom_PlacePayment
-            WHERE c_activePlace = 1
-            ORDER BY v_namePlace";
+			sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				{
-					SqlDataAdapter da = new SqlDataAdapter(cmd);
-					da.Fill(dt);
-				}
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			da.Fill(dt);
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(
-					ex.Message,
-					"Error al cargar lugares de pago",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message);
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			return dt;
+				return dt;
 		}
+
 		public void btnAgregarVariosEmpleados()
 		{
 			string textoCodigos = frmA.txbCodigo.Text.Trim();
@@ -177,6 +169,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				frmA.cboActividad.Focus();
 				return;
 			}
+			// -----------------------------------------
+			// VALIDAR LOTE
+			// -----------------------------------------
+
+			if (frmA.cboLote.SelectedIndex < 0)
+			{
+				MessageBox.Show(
+					"Seleccione un lote.",
+					"Lote",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				frmA.cboLote.Focus();
+				return;
+			}
 
 			// -----------------------------------------
 			// OBTENER ACTIVIDAD
@@ -187,6 +194,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string idActividad =
 				frmA.cboActividad.SelectedValue?.ToString();
+
+			string lote =
+				frmA.cboLote.Text.Trim();
+
+			string idLote =
+				frmA.cboLote.SelectedValue?.ToString();
 
 			// -----------------------------------------
 			// SEPARAR CÓDIGOS
@@ -266,23 +279,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					row["IdLugarPago"].ToString() + " - " +
 					row["LugarPago"].ToString(),
 					actividad,
+					lote,
 					row["IdLugarPago"].ToString(),
-					idActividad
+					idActividad,
+					idLote
 				);
 			}
-
-			// -----------------------------------------
-			// LIMPIAR CÓDIGOS
-			// -----------------------------------------
 
 			frmA.txbCodigo.Clear();
 			frmA.txbCodigo.Focus();
 		}
 		public void ModificarEmpleado()
 		{
-			// =========================
-			// VALIDAR CÓDIGO
-			// =========================
 
 			if (string.IsNullOrWhiteSpace(frmA.txbCodigo.Text))
 			{
@@ -293,22 +301,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					MessageBoxIcon.Information);
 
 				frmA.txbCodigo.Focus();
-				return;
-			}
-
-			// =========================
-			// VALIDAR LUGAR DE PAGO
-			// =========================
-
-			if (frmA.cboLugarPago.SelectedIndex < 0)
-			{
-				MessageBox.Show(
-					"Seleccione un lugar de pago.",
-					"Lugar de pago",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				frmA.cboLugarPago.Focus();
 				return;
 			}
 
@@ -327,6 +319,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				frmA.cboActividad.Focus();
 				return;
 			}
+			if (frmA.cboLote.SelectedIndex < 0)
+			{
+				MessageBox.Show(
+					"Seleccione un lote.",
+					"Lote",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				frmA.cboLote.Focus();
+				return;
+			}
 
 			// =========================
 			// OBTENER DATOS
@@ -338,17 +341,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			string empleado =
 				frmA.txbEmpleado.Text.Trim();
 
-			string lugarPago =
-				frmA.cboLugarPago.Text.Trim();
 
 			string actividad =
 				frmA.cboActividad.Text.Trim();
 
-			string idLugarPago =
-				frmA.cboLugarPago.SelectedValue?.ToString();
-
 			string idActividad =
 				frmA.cboActividad.SelectedValue?.ToString();
+
+			string lote =
+				frmA.cboLote.Text.Trim();
+
+			string idLote =
+				frmA.cboLote.SelectedValue?.ToString();
 
 			// =========================
 			// MOSTRAR EN EL DGV
@@ -359,10 +363,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			frmA.dgvListadoAgregar.Rows.Add(
 				codigo,
 				empleado,
-				lugarPago,
+				"",              // Lugar de pago
 				actividad,
-				idLugarPago,
-				idActividad
+				lote,
+				"",              // IdLugarPago
+				idActividad,
+				idLote
 			);
 		}
 		private DataTable BuscarEmpleadoPorCodigo(string codigo)
@@ -379,9 +385,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			SELECT
 				E.id_employee,
 
-				E.v_name + ' ' +
 				E.v_lastNamePat + ' ' +
-				E.v_lastNameMat AS Empleado,
+				E.v_lastNameMat + ' ' +
+				E.v_name AS Empleado,
 
 				RIGHT(
 					'0000' + CAST(E.id_paymentPlace AS VARCHAR(4)),
@@ -517,10 +523,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns[0].FillWeight = 15; // Código
-			dgv.Columns[1].FillWeight = 50; // Empleado
-			dgv.Columns[2].FillWeight = 25; // Lugar de pago
-			dgv.Columns[3].FillWeight = 25; // Actividad
+			dgv.Columns[0].FillWeight = 12; // Código
+			dgv.Columns[1].FillWeight = 30; // Empleado
+			dgv.Columns[2].FillWeight = 20; // Lugar de pago
+			dgv.Columns[3].FillWeight = 18; // Actividad
+			dgv.Columns[4].FillWeight = 20; // Lote
 
 
 			// -----------------------------
@@ -536,6 +543,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DataGridViewContentAlignment.MiddleLeft;
 
 			dgv.Columns[3].DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleLeft;
+
+			dgv.Columns[4].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 		}
 	}

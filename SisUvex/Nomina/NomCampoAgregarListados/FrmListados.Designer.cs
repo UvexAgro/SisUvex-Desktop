@@ -54,12 +54,13 @@
 			lblCuadrilla = new Label();
 			label4 = new Label();
 			dgvListado = new DataGridView();
-			label5 = new Label();
 			dtpFecha = new DateTimePicker();
 			label1 = new Label();
 			label2 = new Label();
 			pictureBox1 = new PictureBox();
 			panel3 = new Panel();
+			button1 = new Button();
+			btnActulizar = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvCuadrilla).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -78,19 +79,20 @@
 			panel1.Controls.Add(btnMostrar);
 			panel1.Controls.Add(label3);
 			panel1.Controls.Add(dgvCuadrilla);
-			panel1.Location = new Point(12, 98);
+			panel1.Location = new Point(12, 110);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(306, 713);
+			panel1.Size = new Size(306, 701);
 			panel1.TabIndex = 0;
 			// 
 			// btnMostrar
 			// 
+			btnMostrar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnMostrar.Image = (Image)resources.GetObject("btnMostrar.Image");
 			btnMostrar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnMostrar.Location = new Point(171, 58);
+			btnMostrar.Location = new Point(135, 58);
 			btnMostrar.Name = "btnMostrar";
-			btnMostrar.Padding = new Padding(20, 0, 20, 0);
-			btnMostrar.Size = new Size(130, 27);
+			btnMostrar.Padding = new Padding(20, 0, 30, 0);
+			btnMostrar.Size = new Size(166, 39);
 			btnMostrar.TabIndex = 16;
 			btnMostrar.Text = "Mostrar";
 			btnMostrar.TextAlign = ContentAlignment.MiddleRight;
@@ -143,7 +145,7 @@
 			dgvCuadrilla.RowHeadersVisible = false;
 			dgvCuadrilla.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadrilla.Size = new Size(298, 607);
+			dgvCuadrilla.Size = new Size(298, 595);
 			dgvCuadrilla.TabIndex = 14;
 			// 
 			// pictureBox2
@@ -170,16 +172,17 @@
 			panel2.Controls.Add(lblCuadrilla);
 			panel2.Controls.Add(label4);
 			panel2.Controls.Add(dgvListado);
-			panel2.Location = new Point(324, 98);
+			panel2.Location = new Point(324, 110);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(945, 713);
+			panel2.Size = new Size(1136, 701);
 			panel2.TabIndex = 1;
 			// 
 			// btnModificar
 			// 
+			btnModificar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnModificar.Image = (Image)resources.GetObject("btnModificar.Image");
 			btnModificar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModificar.Location = new Point(177, 137);
+			btnModificar.Location = new Point(177, 125);
 			btnModificar.Name = "btnModificar";
 			btnModificar.Padding = new Padding(16, 0, 40, 0);
 			btnModificar.Size = new Size(166, 44);
@@ -197,7 +200,7 @@
 			pnlSinEmpleados.Controls.Add(label7);
 			pnlSinEmpleados.Location = new Point(5, 239);
 			pnlSinEmpleados.Name = "pnlSinEmpleados";
-			pnlSinEmpleados.Size = new Size(937, 443);
+			pnlSinEmpleados.Size = new Size(1128, 431);
 			pnlSinEmpleados.TabIndex = 41;
 			// 
 			// label8
@@ -231,7 +234,7 @@
 			panel5.Controls.Add(label6);
 			panel5.Controls.Add(lblNumeroTotal);
 			panel5.Controls.Add(lblTotalEmpleados);
-			panel5.Location = new Point(736, 14);
+			panel5.Location = new Point(892, 10);
 			panel5.Name = "panel5";
 			panel5.Size = new Size(200, 84);
 			panel5.TabIndex = 40;
@@ -269,17 +272,18 @@
 			// 
 			panel4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel4.BackColor = Color.Silver;
-			panel4.Location = new Point(21, 117);
+			panel4.Location = new Point(21, 110);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(905, 1);
+			panel4.Size = new Size(1096, 1);
 			panel4.TabIndex = 39;
 			// 
 			// btnImprimir
 			// 
 			btnImprimir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(735, 137);
+			btnImprimir.Location = new Point(926, 125);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(16, 0, 25, 0);
 			btnImprimir.Size = new Size(166, 44);
@@ -291,9 +295,10 @@
 			// 
 			// btnQuitar
 			// 
+			btnQuitar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnQuitar.Image = (Image)resources.GetObject("btnQuitar.Image");
 			btnQuitar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnQuitar.Location = new Point(349, 137);
+			btnQuitar.Location = new Point(349, 125);
 			btnQuitar.Name = "btnQuitar";
 			btnQuitar.Padding = new Padding(15, 0, 15, 0);
 			btnQuitar.Size = new Size(166, 44);
@@ -305,9 +310,10 @@
 			// 
 			// btnAgregar
 			// 
+			btnAgregar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnAgregar.Image = (Image)resources.GetObject("btnAgregar.Image");
 			btnAgregar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAgregar.Location = new Point(5, 137);
+			btnAgregar.Location = new Point(5, 125);
 			btnAgregar.Name = "btnAgregar";
 			btnAgregar.Padding = new Padding(15, 0, 10, 0);
 			btnAgregar.Size = new Size(166, 44);
@@ -322,7 +328,7 @@
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblCuadrilla.ForeColor = SystemColors.HotTrack;
-			lblCuadrilla.Location = new Point(192, 21);
+			lblCuadrilla.Location = new Point(192, 36);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(0, 25);
 			lblCuadrilla.TabIndex = 15;
@@ -331,7 +337,7 @@
 			// 
 			label4.AutoSize = true;
 			label4.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label4.Location = new Point(35, 24);
+			label4.Location = new Point(35, 39);
 			label4.Name = "label4";
 			label4.Size = new Size(150, 25);
 			label4.TabIndex = 14;
@@ -359,7 +365,7 @@
 			dgvListado.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvListado.EnableHeadersVisualStyles = false;
 			dgvListado.ImeMode = ImeMode.NoControl;
-			dgvListado.Location = new Point(3, 187);
+			dgvListado.Location = new Point(3, 175);
 			dgvListado.Name = "dgvListado";
 			dgvListado.ReadOnly = true;
 			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -373,22 +379,13 @@
 			dgvListado.RowHeadersVisible = false;
 			dgvListado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListado.Size = new Size(939, 515);
+			dgvListado.Size = new Size(1130, 515);
 			dgvListado.TabIndex = 13;
-			// 
-			// label5
-			// 
-			label5.AutoSize = true;
-			label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(903, 10);
-			label5.Name = "label5";
-			label5.Size = new Size(38, 15);
-			label5.TabIndex = 38;
-			label5.Text = "Fecha";
 			// 
 			// dtpFecha
 			// 
-			dtpFecha.Location = new Point(903, 28);
+			dtpFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			dtpFecha.Location = new Point(818, 32);
 			dtpFecha.Name = "dtpFecha";
 			dtpFecha.Size = new Size(246, 23);
 			dtpFecha.TabIndex = 37;
@@ -396,21 +393,21 @@
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label1.Location = new Point(75, 8);
 			label1.Name = "label1";
-			label1.Size = new Size(359, 30);
+			label1.Size = new Size(471, 37);
 			label1.TabIndex = 0;
 			label1.Text = "Listado de Empleados por Cuadrilla";
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label2.ForeColor = Color.DimGray;
-			label2.Location = new Point(75, 38);
+			label2.Location = new Point(75, 48);
 			label2.Name = "label2";
-			label2.Size = new Size(312, 13);
+			label2.Size = new Size(356, 17);
 			label2.TabIndex = 1;
 			label2.Text = "Consulta y administra el personal asignado a cada cuadrilla";
 			// 
@@ -418,7 +415,7 @@
 			// 
 			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
 			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(5, 3);
+			pictureBox1.Location = new Point(5, 9);
 			pictureBox1.Name = "pictureBox1";
 			pictureBox1.Size = new Size(64, 66);
 			pictureBox1.TabIndex = 2;
@@ -426,28 +423,62 @@
 			// 
 			// panel3
 			// 
+			panel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel3.BackColor = Color.FromArgb(245, 247, 250);
+			panel3.Controls.Add(button1);
+			panel3.Controls.Add(btnActulizar);
 			panel3.Controls.Add(pictureBox1);
 			panel3.Controls.Add(label2);
 			panel3.Controls.Add(label1);
-			panel3.Controls.Add(label5);
 			panel3.Controls.Add(dtpFecha);
 			panel3.Location = new Point(12, 3);
 			panel3.Name = "panel3";
-			panel3.Size = new Size(1158, 72);
+			panel3.Size = new Size(1448, 89);
 			panel3.TabIndex = 2;
+			// 
+			// button1
+			// 
+			button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			button1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button1.Image = (Image)resources.GetObject("button1.Image");
+			button1.ImageAlign = ContentAlignment.MiddleLeft;
+			button1.Location = new Point(1266, 21);
+			button1.Name = "button1";
+			button1.Padding = new Padding(30, 0, 30, 0);
+			button1.Size = new Size(166, 44);
+			button1.TabIndex = 44;
+			button1.Text = "Asistencia";
+			button1.TextAlign = ContentAlignment.MiddleRight;
+			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click;
+			// 
+			// btnActulizar
+			// 
+			btnActulizar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnActulizar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnActulizar.Image = (Image)resources.GetObject("btnActulizar.Image");
+			btnActulizar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnActulizar.Location = new Point(1094, 21);
+			btnActulizar.Name = "btnActulizar";
+			btnActulizar.Padding = new Padding(30, 0, 30, 0);
+			btnActulizar.Size = new Size(166, 44);
+			btnActulizar.TabIndex = 43;
+			btnActulizar.Text = "Actualizar";
+			btnActulizar.TextAlign = ContentAlignment.MiddleRight;
+			btnActulizar.UseVisualStyleBackColor = true;
+			btnActulizar.Click += btnActulizar_Click;
 			// 
 			// FrmListados
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1281, 812);
+			ClientSize = new Size(1472, 812);
 			Controls.Add(panel3);
 			Controls.Add(panel2);
 			Controls.Add(panel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmListados";
-			Text = "FrmListados";
+			Text = "Listados de Empleados por Cuadrilla ";
 			Load += FrmListados_Load;
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
@@ -481,7 +512,6 @@
 		private Label label2;
 		private PictureBox pictureBox1;
 		private Panel panel3;
-		private Label label5;
 		public DateTimePicker dtpFecha;
 		public Label lblTotalEmpleados;
 		public Button btnImprimir;
@@ -496,6 +526,7 @@
 		private Label label7;
 		public Panel pnlSinEmpleados;
 		public Button btnModificar;
-		private Button button1;
+		public Button btnActulizar;
+		public Button button1;
 	}
 }

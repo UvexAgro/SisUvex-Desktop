@@ -49,9 +49,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			int idCuadrilla = Convert.ToInt32(
-				dgvCuadrilla.CurrentRow.Cells[0].Value
-			);
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells[0].Value?.ToString();
 
 			string nombreCuadrilla =
 				dgvCuadrilla.CurrentRow.Cells[1].Value.ToString();
@@ -80,9 +79,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			int idCuadrilla = Convert.ToInt32(
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value
-			);
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
 			DateTime fecha = dtpFecha.Value.Date;
 
@@ -102,9 +100,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				// Cargar nuevamente los empleados
 				cls.CargarEmpleadosCuadrilla(
-					Convert.ToInt32(
-						dgvCuadrilla.CurrentRow.Cells["Codigo"].Value),
-					dtpFecha.Value.Date);
+					idCuadrilla,
+					fecha);
 
 				// Actualizar total
 				cls.ActualizarTotalEmpleados();
@@ -140,9 +137,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			int idCuadrilla = Convert.ToInt32(
-				dgvCuadrilla.CurrentRow.Cells[0].Value
-			);
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells[0].Value?.ToString();
 
 			int cantidad = dgvListado.SelectedRows.Count;
 
@@ -162,9 +158,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (fila.IsNewRow)
 					continue;
 
-				int idEmpleado = Convert.ToInt32(
-					fila.Cells[0].Value
-				);
+				string idEmpleado =
+					fila.Cells[0].Value?.ToString();
 
 				cls.EliminarEmpleadoCuadrilla(
 					idEmpleado,
@@ -173,7 +168,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				);
 			}
 
-			// Volver a cargar desde la base de datos
 			cls.CargarEmpleadosCuadrilla(
 				idCuadrilla,
 				fecha
@@ -211,9 +205,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// Guardar los datos necesarios para la consulta
-			cls.IdCuadrilla = Convert.ToInt32(
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value
-			);
+			cls.IdCuadrilla =
+		dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
 			cls.Fecha = dtpFecha.Value.Date;
 
@@ -230,6 +223,45 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				cls.ActualizarTotalEmpleados();
 			}
+		}
+
+		private void btnActulizar_Click(object sender, EventArgs e)
+		{
+			DateTime fechaActual = dtpFecha.Value.Date;
+
+			if (cls.ExistenEmpleadosFecha(fechaActual))
+			{
+				DialogResult resultado = MessageBox.Show(
+					"Ya existen empleados registrados para este día.\n\n" +
+					"¿Estás seguro de actualizar nuevamente?",
+					"Actualizar nuevamente",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning);
+
+				if (resultado != DialogResult.Yes)
+					return;
+			}
+
+			if (cls.ActualizarCuadrillas(fechaActual))
+			{
+				string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+				cls.CargarEmpleadosCuadrilla(
+					idCuadrilla,
+					fechaActual
+				);
+
+				cls.ActualizarTotalEmpleados();
+				cls.MostrarEmpleados();
+			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			FrmAsistencia frm = new FrmAsistencia();
+
+			frm.ShowDialog();
 		}
 	}
 }

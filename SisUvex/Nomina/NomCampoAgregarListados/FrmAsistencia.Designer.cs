@@ -1,0 +1,595 @@
+﻿namespace SisUvex.Nomina.NomCampoAgregarListados
+{
+	partial class FrmAsistencia
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistencia));
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			tableLayoutPanel1 = new TableLayoutPanel();
+			panel2 = new Panel();
+			pictureBox5 = new PictureBox();
+			label12 = new Label();
+			label11 = new Label();
+			tableLayoutPanel2 = new TableLayoutPanel();
+			panel8 = new Panel();
+			pictureBox4 = new PictureBox();
+			label10 = new Label();
+			panel7 = new Panel();
+			pictureBox3 = new PictureBox();
+			label9 = new Label();
+			panel6 = new Panel();
+			pictureBox2 = new PictureBox();
+			label8 = new Label();
+			panel5 = new Panel();
+			pictureBox1 = new PictureBox();
+			label7 = new Label();
+			panel4 = new Panel();
+			dgvChecador = new DataGridView();
+			label2 = new Label();
+			panel1 = new Panel();
+			label13 = new Label();
+			pictureBox6 = new PictureBox();
+			panel3 = new Panel();
+			btnImprimir = new Button();
+			btnGuardar = new Button();
+			dgvAsistencia = new DataGridView();
+			cboSemana = new ComboBox();
+			label4 = new Label();
+			label3 = new Label();
+			cboCuadrilla = new ComboBox();
+			label1 = new Label();
+			tableLayoutPanel1.SuspendLayout();
+			panel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+			tableLayoutPanel2.SuspendLayout();
+			panel8.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+			panel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+			panel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+			panel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+			((System.ComponentModel.ISupportInitialize)dgvChecador).BeginInit();
+			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
+			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
+			SuspendLayout();
+			// 
+			// tableLayoutPanel1
+			// 
+			tableLayoutPanel1.BackColor = SystemColors.Control;
+			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+			tableLayoutPanel1.ColumnCount = 2;
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.Controls.Add(panel2, 1, 0);
+			tableLayoutPanel1.Controls.Add(panel1, 0, 0);
+			tableLayoutPanel1.Dock = DockStyle.Fill;
+			tableLayoutPanel1.Location = new Point(0, 0);
+			tableLayoutPanel1.Name = "tableLayoutPanel1";
+			tableLayoutPanel1.RowCount = 1;
+			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+			tableLayoutPanel1.Size = new Size(1287, 810);
+			tableLayoutPanel1.TabIndex = 0;
+			// 
+			// panel2
+			// 
+			panel2.Controls.Add(pictureBox5);
+			panel2.Controls.Add(label12);
+			panel2.Controls.Add(label11);
+			panel2.Controls.Add(tableLayoutPanel2);
+			panel2.Controls.Add(panel4);
+			panel2.Controls.Add(dgvChecador);
+			panel2.Controls.Add(label2);
+			panel2.Dock = DockStyle.Fill;
+			panel2.Location = new Point(647, 4);
+			panel2.Name = "panel2";
+			panel2.Size = new Size(636, 802);
+			panel2.TabIndex = 1;
+			// 
+			// pictureBox5
+			// 
+			pictureBox5.BackgroundImage = (Image)resources.GetObject("pictureBox5.BackgroundImage");
+			pictureBox5.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox5.Location = new Point(9, 8);
+			pictureBox5.Name = "pictureBox5";
+			pictureBox5.Size = new Size(54, 53);
+			pictureBox5.TabIndex = 28;
+			pictureBox5.TabStop = false;
+			// 
+			// label12
+			// 
+			label12.AutoSize = true;
+			label12.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label12.ForeColor = Color.DimGray;
+			label12.Location = new Point(75, 44);
+			label12.Name = "label12";
+			label12.Size = new Size(326, 13);
+			label12.TabIndex = 27;
+			label12.Text = "Los registros se obtienen automáticamente del reloj checador.";
+			// 
+			// label11
+			// 
+			label11.AutoSize = true;
+			label11.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label11.Location = new Point(15, 122);
+			label11.Name = "label11";
+			label11.Size = new Size(184, 17);
+			label11.TabIndex = 26;
+			label11.Text = "Leyenda de estados del reloj ";
+			// 
+			// tableLayoutPanel2
+			// 
+			tableLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+			tableLayoutPanel2.ColumnCount = 4;
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+			tableLayoutPanel2.Controls.Add(panel8, 3, 0);
+			tableLayoutPanel2.Controls.Add(panel7, 2, 0);
+			tableLayoutPanel2.Controls.Add(panel6, 1, 0);
+			tableLayoutPanel2.Controls.Add(panel5, 0, 0);
+			tableLayoutPanel2.Location = new Point(4, 138);
+			tableLayoutPanel2.Name = "tableLayoutPanel2";
+			tableLayoutPanel2.RowCount = 1;
+			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel2.Size = new Size(629, 89);
+			tableLayoutPanel2.TabIndex = 25;
+			// 
+			// panel8
+			// 
+			panel8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel8.Controls.Add(pictureBox4);
+			panel8.Controls.Add(label10);
+			panel8.Location = new Point(475, 4);
+			panel8.Name = "panel8";
+			panel8.Size = new Size(150, 81);
+			panel8.TabIndex = 3;
+			// 
+			// pictureBox4
+			// 
+			pictureBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
+			pictureBox4.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox4.Location = new Point(48, 14);
+			pictureBox4.Name = "pictureBox4";
+			pictureBox4.Size = new Size(48, 32);
+			pictureBox4.TabIndex = 7;
+			pictureBox4.TabStop = false;
+			// 
+			// label10
+			// 
+			label10.Anchor = AnchorStyles.None;
+			label10.AutoSize = true;
+			label10.Location = new Point(48, 50);
+			label10.Name = "label10";
+			label10.Size = new Size(55, 15);
+			label10.TabIndex = 4;
+			label10.Text = "F = Falta ";
+			// 
+			// panel7
+			// 
+			panel7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel7.Controls.Add(pictureBox3);
+			panel7.Controls.Add(label9);
+			panel7.Location = new Point(318, 4);
+			panel7.Name = "panel7";
+			panel7.Size = new Size(150, 81);
+			panel7.TabIndex = 2;
+			// 
+			// pictureBox3
+			// 
+			pictureBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
+			pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox3.Location = new Point(49, 9);
+			pictureBox3.Name = "pictureBox3";
+			pictureBox3.Size = new Size(54, 39);
+			pictureBox3.TabIndex = 6;
+			pictureBox3.TabStop = false;
+			// 
+			// label9
+			// 
+			label9.Anchor = AnchorStyles.None;
+			label9.AutoSize = true;
+			label9.Location = new Point(36, 52);
+			label9.Name = "label9";
+			label9.Size = new Size(84, 15);
+			label9.TabIndex = 3;
+			label9.Text = "S = Solo Salida";
+			// 
+			// panel6
+			// 
+			panel6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel6.Controls.Add(pictureBox2);
+			panel6.Controls.Add(label8);
+			panel6.Location = new Point(161, 4);
+			panel6.Name = "panel6";
+			panel6.Size = new Size(150, 81);
+			panel6.TabIndex = 1;
+			// 
+			// pictureBox2
+			// 
+			pictureBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
+			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox2.Location = new Point(49, 14);
+			pictureBox2.Name = "pictureBox2";
+			pictureBox2.Size = new Size(50, 32);
+			pictureBox2.TabIndex = 5;
+			pictureBox2.TabStop = false;
+			// 
+			// label8
+			// 
+			label8.Anchor = AnchorStyles.None;
+			label8.AutoSize = true;
+			label8.Location = new Point(30, 52);
+			label8.Name = "label8";
+			label8.Size = new Size(93, 15);
+			label8.TabIndex = 2;
+			label8.Text = "E = Solo Entrada";
+			// 
+			// panel5
+			// 
+			panel5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel5.Controls.Add(pictureBox1);
+			panel5.Controls.Add(label7);
+			panel5.Location = new Point(4, 4);
+			panel5.Name = "panel5";
+			panel5.Size = new Size(150, 81);
+			panel5.TabIndex = 0;
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(41, 9);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(57, 39);
+			pictureBox1.TabIndex = 1;
+			pictureBox1.TabStop = false;
+			// 
+			// label7
+			// 
+			label7.Anchor = AnchorStyles.None;
+			label7.AutoSize = true;
+			label7.Location = new Point(14, 50);
+			label7.Name = "label7";
+			label7.Size = new Size(121, 15);
+			label7.TabIndex = 0;
+			label7.Text = "E/S = Entrada y Salida";
+			// 
+			// panel4
+			// 
+			panel4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel4.BackColor = Color.Silver;
+			panel4.Location = new Point(15, 67);
+			panel4.Name = "panel4";
+			panel4.Size = new Size(608, 1);
+			panel4.TabIndex = 24;
+			// 
+			// dgvChecador
+			// 
+			dgvChecador.AllowUserToAddRows = false;
+			dgvChecador.AllowUserToDeleteRows = false;
+			dgvChecador.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvChecador.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			dgvChecador.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgvChecador.BackgroundColor = SystemColors.ControlLightLight;
+			dgvChecador.BorderStyle = BorderStyle.Fixed3D;
+			dgvChecador.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvChecador.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dgvChecador.ColumnHeadersHeight = 29;
+			dgvChecador.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dgvChecador.EnableHeadersVisualStyles = false;
+			dgvChecador.ImeMode = ImeMode.NoControl;
+			dgvChecador.Location = new Point(4, 263);
+			dgvChecador.Name = "dgvChecador";
+			dgvChecador.ReadOnly = true;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvChecador.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dgvChecador.RowHeadersVisible = false;
+			dgvChecador.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+			dgvChecador.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgvChecador.Size = new Size(630, 531);
+			dgvChecador.TabIndex = 15;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label2.ForeColor = Color.FromArgb(0, 0, 64);
+			label2.Location = new Point(70, 5);
+			label2.Name = "label2";
+			label2.Size = new Size(261, 30);
+			label2.TabIndex = 1;
+			label2.Text = "2. Origen: Reloj Checador ";
+			// 
+			// panel1
+			// 
+			panel1.Controls.Add(label13);
+			panel1.Controls.Add(pictureBox6);
+			panel1.Controls.Add(panel3);
+			panel1.Controls.Add(btnImprimir);
+			panel1.Controls.Add(btnGuardar);
+			panel1.Controls.Add(dgvAsistencia);
+			panel1.Controls.Add(cboSemana);
+			panel1.Controls.Add(label4);
+			panel1.Controls.Add(label3);
+			panel1.Controls.Add(cboCuadrilla);
+			panel1.Controls.Add(label1);
+			panel1.Dock = DockStyle.Fill;
+			panel1.Location = new Point(4, 4);
+			panel1.Name = "panel1";
+			panel1.Size = new Size(636, 802);
+			panel1.TabIndex = 0;
+			// 
+			// label13
+			// 
+			label13.AutoSize = true;
+			label13.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label13.ForeColor = Color.DimGray;
+			label13.Location = new Point(84, 44);
+			label13.Name = "label13";
+			label13.Size = new Size(163, 13);
+			label13.TabIndex = 29;
+			label13.Text = "Captura Manual de Asistencia.";
+			// 
+			// pictureBox6
+			// 
+			pictureBox6.BackgroundImage = (Image)resources.GetObject("pictureBox6.BackgroundImage");
+			pictureBox6.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox6.Location = new Point(11, 8);
+			pictureBox6.Name = "pictureBox6";
+			pictureBox6.Size = new Size(54, 53);
+			pictureBox6.TabIndex = 29;
+			pictureBox6.TabStop = false;
+			// 
+			// panel3
+			// 
+			panel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			panel3.BackColor = Color.Silver;
+			panel3.Location = new Point(8, 67);
+			panel3.Name = "panel3";
+			panel3.Size = new Size(608, 1);
+			panel3.TabIndex = 23;
+			// 
+			// btnImprimir
+			// 
+			btnImprimir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
+			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
+			btnImprimir.Location = new Point(467, 87);
+			btnImprimir.Name = "btnImprimir";
+			btnImprimir.Padding = new Padding(16, 0, 25, 0);
+			btnImprimir.Size = new Size(166, 39);
+			btnImprimir.TabIndex = 22;
+			btnImprimir.Text = "Imprimir Listas";
+			btnImprimir.TextAlign = ContentAlignment.MiddleRight;
+			btnImprimir.UseVisualStyleBackColor = true;
+			btnImprimir.Click += btnImprimir_Click;
+			// 
+			// btnGuardar
+			// 
+			btnGuardar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
+			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnGuardar.Location = new Point(467, 179);
+			btnGuardar.Name = "btnGuardar";
+			btnGuardar.Padding = new Padding(20, 0, 30, 0);
+			btnGuardar.Size = new Size(166, 39);
+			btnGuardar.TabIndex = 17;
+			btnGuardar.Text = "Guardar";
+			btnGuardar.TextAlign = ContentAlignment.MiddleRight;
+			btnGuardar.UseVisualStyleBackColor = true;
+			btnGuardar.Click += btnGuardar_Click;
+			// 
+			// dgvAsistencia
+			// 
+			dgvAsistencia.AllowUserToAddRows = false;
+			dgvAsistencia.AllowUserToDeleteRows = false;
+			dgvAsistencia.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvAsistencia.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			dgvAsistencia.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
+			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
+			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dgvAsistencia.ColumnHeadersHeight = 29;
+			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dgvAsistencia.EnableHeadersVisualStyles = false;
+			dgvAsistencia.ImeMode = ImeMode.NoControl;
+			dgvAsistencia.Location = new Point(3, 263);
+			dgvAsistencia.Name = "dgvAsistencia";
+			dgvAsistencia.ReadOnly = true;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dgvAsistencia.RowHeadersVisible = false;
+			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgvAsistencia.Size = new Size(630, 531);
+			dgvAsistencia.TabIndex = 14;
+			dgvAsistencia.CellClick += dgvAsistencia_CellClick;
+			dgvAsistencia.CellContentClick += dgvAsistencia_CellContentClick;
+			// 
+			// cboSemana
+			// 
+			cboSemana.FormattingEnabled = true;
+			cboSemana.Location = new Point(8, 195);
+			cboSemana.Name = "cboSemana";
+			cboSemana.Size = new Size(288, 23);
+			cboSemana.TabIndex = 4;
+			cboSemana.SelectedIndexChanged += cboSemana_SelectedIndexChanged;
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label4.Location = new Point(8, 175);
+			label4.Name = "label4";
+			label4.Size = new Size(53, 13);
+			label4.TabIndex = 3;
+			label4.Text = "Semana :";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label3.Location = new Point(8, 87);
+			label3.Name = "label3";
+			label3.Size = new Size(59, 13);
+			label3.TabIndex = 2;
+			label3.Text = "Cuadrilla :";
+			// 
+			// cboCuadrilla
+			// 
+			cboCuadrilla.FormattingEnabled = true;
+			cboCuadrilla.Location = new Point(8, 107);
+			cboCuadrilla.Name = "cboCuadrilla";
+			cboCuadrilla.Size = new Size(191, 23);
+			cboCuadrilla.TabIndex = 1;
+			cboCuadrilla.SelectedIndexChanged += cboCuadrilla_SelectedIndexChanged;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.ForeColor = Color.FromArgb(0, 0, 64);
+			label1.Location = new Point(75, 5);
+			label1.Name = "label1";
+			label1.Size = new Size(257, 30);
+			label1.TabIndex = 0;
+			label1.Text = "1. Asistencia Para Revision";
+			// 
+			// FrmAsistencia
+			// 
+			AutoScaleDimensions = new SizeF(7F, 15F);
+			AutoScaleMode = AutoScaleMode.Font;
+			ClientSize = new Size(1287, 810);
+			Controls.Add(tableLayoutPanel1);
+			Icon = (Icon)resources.GetObject("$this.Icon");
+			Name = "FrmAsistencia";
+			Text = "Lista de Asistencia ";
+			Load += FrmAsistencia_Load;
+			tableLayoutPanel1.ResumeLayout(false);
+			panel2.ResumeLayout(false);
+			panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+			tableLayoutPanel2.ResumeLayout(false);
+			panel8.ResumeLayout(false);
+			panel8.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+			panel7.ResumeLayout(false);
+			panel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+			panel6.ResumeLayout(false);
+			panel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+			panel5.ResumeLayout(false);
+			panel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+			((System.ComponentModel.ISupportInitialize)dgvChecador).EndInit();
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
+			((System.ComponentModel.ISupportInitialize)dgvAsistencia).EndInit();
+			ResumeLayout(false);
+		}
+
+		#endregion
+
+		private TableLayoutPanel tableLayoutPanel1;
+		private Panel panel2;
+		private Panel panel1;
+		private Label label2;
+		private Label label1;
+		private Label label4;
+		private Label label3;
+		public DataGridView dgvChecador;
+		public DataGridView dgvAsistencia;
+		public ComboBox cboCuadrilla;
+		public ComboBox cboSemana;
+		private Button btnGuardar;
+		public Button btnImprimir;
+		private Label label7;
+		private PictureBox pictureBox3;
+		private PictureBox pictureBox2;
+		private Label label10;
+		private Label label9;
+		private Label label8;
+		private PictureBox pictureBox1;
+		private PictureBox pictureBox4;
+		private Panel panel4;
+		private Panel panel3;
+		private TableLayoutPanel tableLayoutPanel2;
+		private Panel panel8;
+		private Panel panel7;
+		private Panel panel6;
+		private Panel panel5;
+		private Label label11;
+		private PictureBox pictureBox5;
+		private Label label12;
+		private PictureBox pictureBox6;
+		private Label label13;
+	}
+}
