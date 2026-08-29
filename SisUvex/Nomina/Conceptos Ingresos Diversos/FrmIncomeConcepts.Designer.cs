@@ -49,8 +49,8 @@
 			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
 			btnAdd.Location = new Point(13, 74);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Padding = new Padding(8, 0, 8, 0);
-			btnAdd.Size = new Size(97, 23);
+			btnAdd.Padding = new Padding(15, 0, 15, 0);
+			btnAdd.Size = new Size(121, 38);
 			btnAdd.TabIndex = 1;
 			btnAdd.Text = "Añadir";
 			btnAdd.TextAlign = ContentAlignment.MiddleRight;
@@ -61,10 +61,10 @@
 			// 
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(116, 74);
+			btnModify.Location = new Point(140, 74);
 			btnModify.Name = "btnModify";
-			btnModify.Padding = new Padding(5, 0, 5, 0);
-			btnModify.Size = new Size(97, 23);
+			btnModify.Padding = new Padding(10, 0, 10, 0);
+			btnModify.Size = new Size(121, 38);
 			btnModify.TabIndex = 2;
 			btnModify.Text = "Modificar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -75,10 +75,10 @@
 			// 
 			btnRemove.Image = (Image)resources.GetObject("btnRemove.Image");
 			btnRemove.ImageAlign = ContentAlignment.MiddleLeft;
-			btnRemove.Location = new Point(218, 74);
+			btnRemove.Location = new Point(267, 74);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Padding = new Padding(5, 0, 5, 0);
-			btnRemove.Size = new Size(97, 23);
+			btnRemove.Padding = new Padding(15, 0, 15, 0);
+			btnRemove.Size = new Size(121, 38);
 			btnRemove.TabIndex = 4;
 			btnRemove.Text = "Eliminar";
 			btnRemove.TextAlign = ContentAlignment.MiddleRight;
@@ -107,7 +107,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(12, 103);
+			dgvCatalog.Location = new Point(10, 118);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -121,7 +121,7 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(717, 326);
+			dgvCatalog.Size = new Size(717, 749);
 			dgvCatalog.TabIndex = 11;
 			// 
 			// panel1
@@ -158,7 +158,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(739, 454);
+			ClientSize = new Size(739, 848);
 			Controls.Add(panel1);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
