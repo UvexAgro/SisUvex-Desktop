@@ -328,7 +328,7 @@
 			lblCuadrilla.AutoSize = true;
 			lblCuadrilla.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblCuadrilla.ForeColor = SystemColors.HotTrack;
-			lblCuadrilla.Location = new Point(192, 36);
+			lblCuadrilla.Location = new Point(191, 39);
 			lblCuadrilla.Name = "lblCuadrilla";
 			lblCuadrilla.Size = new Size(0, 25);
 			lblCuadrilla.TabIndex = 15;

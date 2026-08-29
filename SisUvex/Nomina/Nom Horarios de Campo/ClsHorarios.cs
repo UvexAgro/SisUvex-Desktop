@@ -456,33 +456,50 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 
 			string idsCuadrillas = string.Join(",", cuadrillas);
 
+			// ========================================
+			// VALIDAR HORARIO ABIERTO
+			// ========================================
+
 			string cuadrillasBloqueadas;
 
-			if (!ValidarHorarioAbierto(
+			if (frmA.IsAddOrModify)
+			{
+				// SOLO AL AGREGAR
+				if (!ValidarHorarioAbierto(
 					cuadrillas,
 					out cuadrillasBloqueadas))
-			{
-				MessageBox.Show(
-					"Las siguientes cuadrillas ya tienen un horario abierto:\n\n" +
-					cuadrillasBloqueadas +
-					"\n\nDebe cerrar el horario actual antes de agregar uno nuevo.",
-					"Horario existente",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
+				{
+					MessageBox.Show(
+						"Las siguientes cuadrillas ya tienen un horario abierto:\n\n" +
+						cuadrillasBloqueadas +
+						"\n\nDebe cerrar el horario actual antes de agregar uno nuevo.",
+						"Horario existente",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
 
-				return;
+					return;
+				}
+			}
+			else
+			{
+				// AL MODIFICAR NO VALIDAMOS AQUÍ,
+				// porque el horario actual ya está abierto.
 			}
 
+			// ========================================
+			// FECHA DE INICIO
+			// ========================================
 
-			// Fecha de inicio
 			DateTime fechaInicio =
 				frmA.dtpFechaInicio.Value.Date;
 
-			// Fecha de fin
+			// ========================================
+			// FECHA DE FIN
+			// ========================================
+
 			DateTime? fechaFin = null;
 
-			// El CheckBox pertenece al mismo DateTimePicker
 			if (frmA.dtpFechaFin.Checked)
 			{
 				fechaFin = frmA.dtpFechaFin.Value.Date;
@@ -500,18 +517,27 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 			}
 
-			// Horas
+			// ========================================
+			// HORAS
+			// ========================================
+
 			TimeSpan horaEntrada =
 				frmA.dtpEntrada.Value.TimeOfDay;
 
 			TimeSpan horaSalida =
 				frmA.dtpSalida.Value.TimeOfDay;
 
-			// Cruza medianoche
+			// ========================================
+			// CRUZA MEDIANOCHE
+			// ========================================
+
 			bool cruzaMedianoche =
 				frmA.chkCruce.Checked;
 
-			// Usuario
+			// ========================================
+			// USUARIO
+			// ========================================
+
 			string usuario =
 				User.GetUserName();
 
