@@ -58,29 +58,35 @@ internal class ClsModifyAttendanceEmployees
     /// <summary>Cambios pendientes de guardar, clave (código empleado, día).</summary>
     private readonly Dictionary<(string Code, DateTime Date), EAttendanceEdit> _pendingEdits = new();
 
-    /// <summary>true si se guardó al menos un cambio (uno o más "Guardar" exitosos) durante esta sesión del formulario.</summary>
-    private bool _hasSavedChanges;
+    /// <summary>Se dispara cada vez que se guarda uno o más cambios exitosamente (ver <see cref="BtnSave"/>).</summary>
+    public event Action? ChangesSaved;
 
-    // ── Punto de entrada desde FrmAbsenceReport ───────────────────────────
+    // ── Punto de entrada desde FrmAbsenceReport / FrmAsistenciaASConsulta ─
 
     /// <param name="defaultAttendanceTypeId">
     /// id_attendanceType con el que debe iniciar seleccionado cboDefaultType (por ejemplo, el que esté
     /// elegido en cboAttendenceType del reporte que abre este formulario). Si es null, se selecciona el
     /// primero de la lista.
     /// </param>
-    /// <returns>true si se guardó al menos un cambio antes de cerrar el formulario (para que quien lo abrió pueda refrescar su vista).</returns>
-    public static bool Open(
+    /// <returns>
+    /// La instancia de <see cref="ClsModifyAttendanceEmployees"/> recién creada (para poder suscribirse a
+    /// <see cref="ChangesSaved"/>), o null si no se abrió el formulario (sin permiso o sin empleados).
+    /// </returns>
+    public static ClsModifyAttendanceEmployees? Open(
         List<(string Code, string FullName, string Lp)> employees,
         DateTime date1,
         DateTime date2,
         string? defaultAttendanceTypeId = null)
     {
+        if (!User.HasCreateRecordsPermission())
+            return null;
+
         if (employees == null || employees.Count == 0)
         {
             SystemSounds.Exclamation.Play();
             MessageBox.Show("No hay empleados para modificar.", "Modificar asistencias",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return false;
+            return null;
         }
 
         FrmModifyAttendanceEmployees frm = new();
@@ -93,9 +99,10 @@ internal class ClsModifyAttendanceEmployees
             _initialDefaultTypeId = defaultAttendanceTypeId,
         };
         frm.cls = cls;
-        frm.ShowDialog();
 
-        return cls._hasSavedChanges;
+        FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
+
+        return cls;
     }
 
     // ── Inicio del formulario ──────────────────────────────────────────────
@@ -724,12 +731,16 @@ internal class ClsModifyAttendanceEmployees
             int count = _pendingEdits.Count;
             _pendingEdits.Clear();
             _dtOriginalSnapshot = _dtPivot.Copy();
-            _hasSavedChanges = true;
             frm.dgvPivot.Refresh();
             UpdatePendingSummary();
 
             MessageBox.Show($"Se guardaron {count} cambio(s) correctamente.", "Guardar cambios",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Como el formulario ya no es modal (se abre como ventana hija de FrmMenu), se notifica aquí
+            // para que quien lo abrió (p. ej. el reporte de FrmAsistenciaASConsulta) pueda refrescarse
+            // de inmediato, sin tener que esperar a que esta ventana se cierre.
+            ChangesSaved?.Invoke();
         }
         catch (Exception ex)
         {

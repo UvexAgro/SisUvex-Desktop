@@ -505,12 +505,13 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 string? selectedTypeId = frm.cboAttendenceType.SelectedValue?.ToString();
-                bool savedChanges = ClsModifyAttendanceEmployees.Open(employees, date1, date2, selectedTypeId);
 
-                // Si se guardó al menos un cambio en el formulario de modificar, se vuelve a cargar el
-                // reporte (mismos empleados marcados y mismo rango de fechas) para reflejarlos de inmediato.
-                if (savedChanges)
-                    BtnLoadReport();
+                // El formulario de modificar se abre como ventana hija de FrmMenu (no modal), por lo que
+                // en vez de esperar a que se cierre, se escucha su evento ChangesSaved para volver a cargar
+                // el reporte (mismos empleados marcados y mismo rango de fechas) en cuanto se guarde algo.
+                ClsModifyAttendanceEmployees? modifyCls = ClsModifyAttendanceEmployees.Open(employees, date1, date2, selectedTypeId);
+                if (modifyCls != null)
+                    modifyCls.ChangesSaved += BtnLoadReport;
             }
             catch (Exception ex)
             {
