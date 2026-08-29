@@ -786,8 +786,13 @@ namespace SisUvex.Catalogos.Metods
             public const string ColumnPrefix = "PrefijoAsistencia";
             public const string ColumncIsAbsence = "isAbsence";
             public const string ColumnColor = "Color";
+            /// <summary>
+            /// Estilo de letra del prefijo, guardado como el bitmask de <see cref="System.Drawing.FontStyle"/>
+            /// (Regular=0, Bold=1, Italic=2, Underline=4, Strikeout=8; combinable por suma/OR).
+            /// </summary>
+            public const string ColumnFontStyle = "EstiloFuente";
             public const string Cbo = "CboAttendanceType";
-            public const string QueryCbo = $"SELECT id_attendanceType AS [{Column.id}], v_name AS [{Column.name}], v_prefix AS [{ColumnPrefix}], c_isAbsence [{ColumncIsAbsence}], c_active AS [{Column.active}], v_color AS [{ColumnColor}] FROM Nom_attendanceType";
+            public const string QueryCbo = $"SELECT id_attendanceType AS [{Column.id}], CONCAT_WS(' | ', v_prefix, v_name) AS [{Column.name}], v_prefix AS [{ColumnPrefix}], c_isAbsence [{ColumncIsAbsence}], c_active AS [{Column.active}], v_color AS [{ColumnColor}], n_fontStyle AS [{ColumnFontStyle}] FROM Nom_attendanceType ORDER BY v_name";
 
             public const string DgvCatalog = "DgvCatalogAttendanceType";
             public const string QueryDgvCatalog = $@" SELECT id_attendanceType AS [{Column.id}], 
@@ -795,6 +800,7 @@ namespace SisUvex.Catalogos.Metods
                                             v_prefix AS [{ColumnPrefix}], 
                                             CASE WHEN c_isAbsence = '1' THEN 'Inasistencia' ELSE 'Asistencia' END AS [{ColumncIsAbsence}], 
                                             v_color AS [{ColumnColor}], 
+                                            n_fontStyle AS [{ColumnFontStyle}],
                                             c_active AS [{Column.active}] 
                                         FROM Nom_AttendanceType ";
         }

@@ -30,5 +30,15 @@
         {
             cls.BtnSelectColor();
         }
+
+        private void chbStyle_CheckedChanged(object sender, EventArgs e)
+        {
+            cls.RefreshStylePreview();
+        }
+
+        private void txbPrefix_TextChanged(object sender, EventArgs e)
+        {
+            cls.RefreshStylePreview();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace SisUvex.Nomina.Asistencia_AS
@@ -14,34 +14,69 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         private void FrmAsistenciaASConsulta_Load(object sender, EventArgs e)
-            => cls.BeginFormCat();
+        {
+            cls.BeginFormCat();
+        }
 
         private void btnSearchEmployee_Click(object sender, EventArgs e)
-            => cls.BtnSearchEmployee();
+        {
+            cls.BtnSearchEmployee();
+        }
 
         private void btnAddEmployee_Click(object sender, EventArgs e)
-            => cls.BtnAddEmployee();
+        {
+            cls.BtnAddEmployee();
+        }
 
         private void btnAddList_Click(object sender, EventArgs e)
-            => cls.BtnAddList();
+        {
+            cls.BtnAddList();
+        }
 
         private void btnClearList_Click(object sender, EventArgs e)
-            => cls.BtnClearList();
+        {
+            cls.BtnClearList();
+        }
 
         private void chbShowEmployees_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowEmployees_CheckedChanged();
+        {
+            cls.ChbShowEmployees_CheckedChanged();
+        }
 
         private void chbShowReport_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowReport_CheckedChanged();
+        {
+            cls.ChbShowReport_CheckedChanged();
+        }
 
         private void btnLoadReport_Click(object sender, EventArgs e)
-            => cls.BtnLoadReport();
+        {
+            cls.BtnLoadReport();
+        }
 
         private void btnExcel_Click(object sender, EventArgs e)
-            => cls.BtnGenerateExcelReport();
+        {
+            cls.BtnGenerateExcelReport();
+        }
+
+        private void btnModifyAttendance_Click(object sender, EventArgs e)
+        {
+            cls.BtnModifyAttendance();
+        }
 
         private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-            => cls.DgvReport_CellFormatting(sender, e);
+        {
+            cls.DgvReport_CellFormatting(sender, e);
+        }
+
+        private void dgvReport_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            cls.DgvReport_CellToolTipTextNeeded(sender, e);
+        }
+
+        private void dgvReport_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            cls.DgvReport_CellPainting(sender, e);
+        }
 
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {

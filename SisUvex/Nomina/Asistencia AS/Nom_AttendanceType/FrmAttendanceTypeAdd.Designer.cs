@@ -46,6 +46,13 @@
             pnlColor = new Panel();
             btnSelectColor = new Button();
             txbColor = new TextBox();
+            lblStyle = new Label();
+            chbBold = new CheckBox();
+            chbItalic = new CheckBox();
+            chbUnderline = new CheckBox();
+            chbStrikeout = new CheckBox();
+            lblPreviewCaption = new Label();
+            lblPreview = new Label();
             btnAceptar = new Button();
             btnCancelar = new Button();
             SuspendLayout();
@@ -158,6 +165,7 @@
             txbPrefix.Name = "txbPrefix";
             txbPrefix.Size = new Size(80, 29);
             txbPrefix.TabIndex = 10;
+            txbPrefix.TextChanged += txbPrefix_TextChanged;
             // 
             // lblTipo
             // 
@@ -219,22 +227,101 @@
             txbColor.TabIndex = 16;
             txbColor.TextAlign = HorizontalAlignment.Center;
             // 
+            // lblStyle
+            // 
+            lblStyle.AutoSize = true;
+            lblStyle.Font = new Font("Segoe UI", 12F);
+            lblStyle.Location = new Point(19, 233);
+            lblStyle.Name = "lblStyle";
+            lblStyle.Size = new Size(64, 21);
+            lblStyle.TabIndex = 17;
+            lblStyle.Text = "Estilo:";
+            // 
+            // chbBold
+            // 
+            chbBold.AutoSize = true;
+            chbBold.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            chbBold.Location = new Point(92, 232);
+            chbBold.Name = "chbBold";
+            chbBold.Size = new Size(70, 24);
+            chbBold.TabIndex = 18;
+            chbBold.Text = "Negrita";
+            chbBold.UseVisualStyleBackColor = true;
+            chbBold.CheckedChanged += chbStyle_CheckedChanged;
+            // 
+            // chbItalic
+            // 
+            chbItalic.AutoSize = true;
+            chbItalic.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            chbItalic.Location = new Point(168, 232);
+            chbItalic.Name = "chbItalic";
+            chbItalic.Size = new Size(66, 24);
+            chbItalic.TabIndex = 19;
+            chbItalic.Text = "Cursiva";
+            chbItalic.UseVisualStyleBackColor = true;
+            chbItalic.CheckedChanged += chbStyle_CheckedChanged;
+            // 
+            // chbUnderline
+            // 
+            chbUnderline.AutoSize = true;
+            chbUnderline.Font = new Font("Segoe UI", 9F, FontStyle.Underline);
+            chbUnderline.Location = new Point(240, 232);
+            chbUnderline.Name = "chbUnderline";
+            chbUnderline.Size = new Size(93, 24);
+            chbUnderline.TabIndex = 20;
+            chbUnderline.Text = "Subrayado";
+            chbUnderline.UseVisualStyleBackColor = true;
+            chbUnderline.CheckedChanged += chbStyle_CheckedChanged;
+            // 
+            // chbStrikeout
+            // 
+            chbStrikeout.AutoSize = true;
+            chbStrikeout.Font = new Font("Segoe UI", 9F, FontStyle.Strikeout);
+            chbStrikeout.Location = new Point(339, 232);
+            chbStrikeout.Name = "chbStrikeout";
+            chbStrikeout.Size = new Size(76, 24);
+            chbStrikeout.TabIndex = 21;
+            chbStrikeout.Text = "Tachado";
+            chbStrikeout.UseVisualStyleBackColor = true;
+            chbStrikeout.CheckedChanged += chbStyle_CheckedChanged;
+            // 
+            // lblPreviewCaption
+            // 
+            lblPreviewCaption.AutoSize = true;
+            lblPreviewCaption.Font = new Font("Segoe UI", 12F);
+            lblPreviewCaption.Location = new Point(12, 271);
+            lblPreviewCaption.Name = "lblPreviewCaption";
+            lblPreviewCaption.Size = new Size(103, 21);
+            lblPreviewCaption.TabIndex = 22;
+            lblPreviewCaption.Text = "Vista previa:";
+            // 
+            // lblPreview
+            // 
+            lblPreview.BorderStyle = BorderStyle.Fixed3D;
+            lblPreview.Font = new Font("Segoe UI", 12F);
+            lblPreview.Location = new Point(121, 268);
+            lblPreview.Name = "lblPreview";
+            lblPreview.Size = new Size(150, 29);
+            lblPreview.TabIndex = 23;
+            lblPreview.Text = "Abc";
+            lblPreview.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(297, 240);
+            btnAceptar.Location = new Point(297, 312);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 29);
-            btnAceptar.TabIndex = 17;
+            btnAceptar.TabIndex = 24;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(378, 240);
+            btnCancelar.Location = new Point(378, 312);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 29);
-            btnCancelar.TabIndex = 18;
+            btnCancelar.TabIndex = 25;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -243,7 +330,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(465, 285);
+            ClientSize = new Size(465, 355);
             Controls.Add(lblTitulo);
             Controls.Add(lblId);
             Controls.Add(txbId);
@@ -259,6 +346,13 @@
             Controls.Add(pnlColor);
             Controls.Add(btnSelectColor);
             Controls.Add(txbColor);
+            Controls.Add(lblStyle);
+            Controls.Add(chbBold);
+            Controls.Add(chbItalic);
+            Controls.Add(chbUnderline);
+            Controls.Add(chbStrikeout);
+            Controls.Add(lblPreviewCaption);
+            Controls.Add(lblPreview);
             Controls.Add(btnAceptar);
             Controls.Add(btnCancelar);
             Controls.Add(lblReqNombre);
@@ -294,6 +388,13 @@
         public Panel pnlColor;
         private Button btnSelectColor;
         public TextBox txbColor;
+        private Label lblStyle;
+        public CheckBox chbBold;
+        public CheckBox chbItalic;
+        public CheckBox chbUnderline;
+        public CheckBox chbStrikeout;
+        private Label lblPreviewCaption;
+        public Label lblPreview;
         private Button btnAceptar;
         private Button btnCancelar;
     }

@@ -33,7 +33,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         public void GenerateExcelReport(
             DataTable reportData,
             List<DateTime> days,
-            Dictionary<string, Color> attendanceColorsByPrefix,
+            Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
             string dateRange)
         {
@@ -71,7 +71,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             using var wb = new XLWorkbook();
 
-            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceColorsByPrefix, colorAsistencia, dateRange);
+            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange);
 
             AddRawDataSheet(wb, reportData);
 
@@ -95,7 +95,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             IXLWorkbook wb,
             DataTable reportData,
             List<DateTime> days,
-            Dictionary<string, Color> attendanceColorsByPrefix,
+            Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
             string dateRange)
         {
@@ -194,13 +194,26 @@ namespace SisUvex.Nomina.Asistencia_AS
                         cell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                         Color? bg = null;
+                        FontStyle fontStyle = FontStyle.Regular;
                         if (string.Equals(value, ClsAsistenciaASConsulta.ValueAsistencia, StringComparison.OrdinalIgnoreCase))
                             bg = colorAsistencia;
-                        else if (attendanceColorsByPrefix.TryGetValue(value, out Color prefixColor))
-                            bg = prefixColor;
+                        else if (attendanceStylesByPrefix.TryGetValue(value, out AttendanceStyle style))
+                        {
+                            bg = style.Color;
+                            fontStyle = style.FontStyle;
+                        }
 
                         if (bg.HasValue)
                             cell.Style.Fill.SetBackgroundColor(XLColor.FromColor(bg.Value));
+
+                        if (fontStyle != FontStyle.Regular)
+                        {
+                            cell.Style.Font.Bold          = fontStyle.HasFlag(FontStyle.Bold);
+                            cell.Style.Font.Italic        = fontStyle.HasFlag(FontStyle.Italic);
+                            cell.Style.Font.Strikethrough = fontStyle.HasFlag(FontStyle.Strikeout);
+                            if (fontStyle.HasFlag(FontStyle.Underline))
+                                cell.Style.Font.Underline = XLFontUnderlineValues.Single;
+                        }
                     }
 
                     col++;

@@ -1,7 +1,8 @@
-﻿using System.Media;
+using System.Media;
 using System.Data;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Controls;
+using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.DataGridViews;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -37,6 +38,10 @@ internal class ClsAttendanceType
         dgv.SetColumnWidth(AttendanceType.ColumnColor, 70);
 
         ApplyColorColumnFormatting(dgvCatalog);
+        ApplyPrefixStyleFormatting(dgvCatalog);
+
+        if (dgvCatalog.Columns.Contains(AttendanceType.ColumnFontStyle))
+            dgvCatalog.Columns[AttendanceType.ColumnFontStyle].Visible = false; // dato crudo, se refleja en la columna de prefijo
     }
 
     /// <summary>Muestra el color guardado como una celda coloreada en lugar de su código hexadecimal.</summary>
@@ -55,6 +60,38 @@ internal class ClsAttendanceType
             e.CellStyle.SelectionBackColor = color;
             e.Value = string.Empty;
             e.FormattingApplied = true;
+        };
+    }
+
+    /// <summary>
+    /// Aplica al prefijo del catálogo el mismo color de fondo y estilo de letra (negrita/cursiva/subrayado/
+    /// tachado) con el que se verá en el reporte, para que el catálogo funcione también como vista previa.
+    /// </summary>
+    private static void ApplyPrefixStyleFormatting(DataGridView dgvCatalog)
+    {
+        if (!dgvCatalog.Columns.Contains(AttendanceType.ColumnPrefix))
+            return;
+
+        dgvCatalog.CellFormatting += (sender, e) =>
+        {
+            if (dgvCatalog.Columns[e.ColumnIndex].Name != AttendanceType.ColumnPrefix || e.RowIndex < 0)
+                return;
+
+            DataGridViewRow row = dgvCatalog.Rows[e.RowIndex];
+
+            if (dgvCatalog.Columns.Contains(AttendanceType.ColumnColor))
+            {
+                Color color = TryParseColor(row.Cells[AttendanceType.ColumnColor].Value?.ToString(), Color.White);
+                e.CellStyle.BackColor = color;
+                e.CellStyle.SelectionBackColor = color;
+            }
+
+            if (dgvCatalog.Columns.Contains(AttendanceType.ColumnFontStyle))
+            {
+                FontStyle style = ParseFontStyle(row.Cells[AttendanceType.ColumnFontStyle].Value);
+                if (style != FontStyle.Regular)
+                    e.CellStyle.Font = new Font(dgvCatalog.Font, style);
+            }
         };
     }
 
@@ -107,6 +144,11 @@ internal class ClsAttendanceType
         _frmAdd.cboActive.SelectedIndex = entity.Active;
         _frmAdd.cboIsAbsence.SelectedIndex = entity.IsAbsence ? 1 : 0;
 
+        _frmAdd.chbBold.Checked = entity.FontStyle.HasFlag(FontStyle.Bold);
+        _frmAdd.chbItalic.Checked = entity.FontStyle.HasFlag(FontStyle.Italic);
+        _frmAdd.chbUnderline.Checked = entity.FontStyle.HasFlag(FontStyle.Underline);
+        _frmAdd.chbStrikeout.Checked = entity.FontStyle.HasFlag(FontStyle.Strikeout);
+
         SetColorPreview(TryParseColor(entity.Color, DefaultColor));
     }
 
@@ -121,6 +163,7 @@ internal class ClsAttendanceType
         entity.Color = string.IsNullOrWhiteSpace(_frmAdd.txbColor.Text)
             ? ColorTranslator.ToHtml(DefaultColor)
             : _frmAdd.txbColor.Text.Trim();
+        entity.FontStyle = GetSelectedFontStyle();
 
         return entity;
     }
@@ -170,6 +213,7 @@ internal class ClsAttendanceType
 
             if (IsAddUpdate)
             {
+                ClsComboBoxFiles.InvalidateCache(AttendanceType.Cbo);
                 string nombre = string.IsNullOrWhiteSpace(addEntity.Name) ? idAddModify ?? "" : addEntity.Name;
                 MessageBox.Show($"Se ha agregado el tipo de asistencia {nombre} con código: {idAddModify}.", "Añadir tipo de asistencia");
                 _frmAdd.Close();
@@ -189,6 +233,7 @@ internal class ClsAttendanceType
 
             if (IsModifyUpdate)
             {
+                ClsComboBoxFiles.InvalidateCache(AttendanceType.Cbo);
                 string nombre = string.IsNullOrWhiteSpace(modifyEntity.Name) ? idAddModify ?? "" : modifyEntity.Name;
                 MessageBox.Show($"Se ha modificado el tipo de asistencia {nombre} con código: {idAddModify}.", "Modificar tipo de asistencia");
                 _frmAdd.Close();
@@ -205,7 +250,10 @@ internal class ClsAttendanceType
     {
         bool ok = EAttendanceType.ActiveProcedure(id, activeValue);
         if (ok)
+        {
+            ClsComboBoxFiles.InvalidateCache(AttendanceType.Cbo);
             dgv!.ChangeActiveCell(_frmCat.dgvCatalog, activeValue);
+        }
     }
 
     public void AddNewRowByIdInDGVCatalog()
@@ -244,6 +292,42 @@ internal class ClsAttendanceType
     {
         _frmAdd.pnlColor.BackColor = color;
         _frmAdd.txbColor.Text = ColorTranslator.ToHtml(color).ToUpperInvariant();
+        RefreshStylePreview();
+    }
+
+    /// <summary>
+    /// Actualiza <c>lblPreview</c> combinando el color seleccionado (<c>pnlColor</c>) y el estilo de letra
+    /// elegido en los checkboxes, mostrando el prefijo capturado (o "Abc" si aún no se ha escrito ninguno).
+    /// </summary>
+    public void RefreshStylePreview()
+    {
+        if (_frmAdd == null) return;
+
+        Color color = _frmAdd.pnlColor.BackColor;
+        FontStyle style = GetSelectedFontStyle();
+
+        _frmAdd.lblPreview.BackColor = color;
+        _frmAdd.lblPreview.ForeColor = GetReadableForeColor(color);
+        _frmAdd.lblPreview.Font = new Font(_frmAdd.lblPreview.Font, style);
+        _frmAdd.lblPreview.Text = string.IsNullOrWhiteSpace(_frmAdd.txbPrefix.Text) ? "Abc" : _frmAdd.txbPrefix.Text.Trim();
+    }
+
+    /// <summary>Combina (OR) los checkboxes de estilo marcados en el bitmask de <see cref="FontStyle"/> correspondiente.</summary>
+    private FontStyle GetSelectedFontStyle()
+    {
+        FontStyle style = FontStyle.Regular;
+        if (_frmAdd.chbBold.Checked) style |= FontStyle.Bold;
+        if (_frmAdd.chbItalic.Checked) style |= FontStyle.Italic;
+        if (_frmAdd.chbUnderline.Checked) style |= FontStyle.Underline;
+        if (_frmAdd.chbStrikeout.Checked) style |= FontStyle.Strikeout;
+        return style;
+    }
+
+    /// <summary>Negro o blanco, según cuál se lea mejor sobre el color de fondo dado (luminancia relativa).</summary>
+    private static Color GetReadableForeColor(Color background)
+    {
+        double luminance = (0.299 * background.R + 0.587 * background.G + 0.114 * background.B) / 255;
+        return luminance > 0.6 ? Color.Black : Color.White;
     }
 
     private static Color TryParseColor(string? raw, Color fallback)
@@ -259,5 +343,12 @@ internal class ClsAttendanceType
         {
             return fallback;
         }
+    }
+
+    /// <summary>Convierte el bitmask numérico guardado en <c>n_fontStyle</c> a <see cref="FontStyle"/>.</summary>
+    private static FontStyle ParseFontStyle(object? raw)
+    {
+        if (raw == null || raw == DBNull.Value) return FontStyle.Regular;
+        return byte.TryParse(raw.ToString(), out byte value) ? (FontStyle)value : FontStyle.Regular;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
@@ -18,6 +19,11 @@ internal class EAttendanceType
     public bool IsAbsence { get; set; }
     /// <summary>Color en formato "#RRGGBB" (<c>v_color</c>).</summary>
     public string? Color { get; set; }
+    /// <summary>
+    /// Estilo de letra (negrita/cursiva/subrayado/tachado) del prefijo, guardado como el bitmask de
+    /// <see cref="FontStyle"/> en <c>n_fontStyle</c>.
+    /// </summary>
+    public FontStyle FontStyle { get; set; } = FontStyle.Regular;
 
     public static string GetNextId()
     {
@@ -65,6 +71,9 @@ internal class EAttendanceType
             IsAbsence = ReadField(dr, "c_isAbsence") == "1";
             Color = ReadField(dr, "v_color");
             Active = CharActiveToInt(dr["c_active"]);
+            FontStyle = byte.TryParse(ReadField(dr, "n_fontStyle"), out byte fontStyleValue)
+                ? (FontStyle)fontStyleValue
+                : FontStyle.Regular;
         }
         catch (Exception ex)
         {
@@ -93,6 +102,7 @@ internal class EAttendanceType
             cmd.Parameters.AddWithValue("@prefix", ClsValues.IfEmptyToDBNull(Prefix));
             cmd.Parameters.AddWithValue("@isAbsence", IsAbsence ? "1" : "0");
             cmd.Parameters.AddWithValue("@color", ClsValues.IfEmptyToDBNull(Color));
+            cmd.Parameters.AddWithValue("@fontStyle", (byte)FontStyle);
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();
@@ -132,6 +142,7 @@ internal class EAttendanceType
             cmd.Parameters.AddWithValue("@prefix", ClsValues.IfEmptyToDBNull(Prefix));
             cmd.Parameters.AddWithValue("@isAbsence", IsAbsence ? "1" : "0");
             cmd.Parameters.AddWithValue("@color", ClsValues.IfEmptyToDBNull(Color));
+            cmd.Parameters.AddWithValue("@fontStyle", (byte)FontStyle);
             cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
             using SqlDataReader dr = cmd.ExecuteReader();

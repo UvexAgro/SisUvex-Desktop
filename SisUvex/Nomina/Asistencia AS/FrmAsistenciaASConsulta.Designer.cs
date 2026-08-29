@@ -1,4 +1,4 @@
-﻿namespace SisUvex.Nomina.Asistencia_AS
+namespace SisUvex.Nomina.Asistencia_AS
 {
     partial class FrmAsistenciaASConsulta
     {
@@ -30,17 +30,21 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaASConsulta));
             btnClearList = new Button();
             chbShowReport = new CheckBox();
             chbShowEmployees = new CheckBox();
             bgpInfo = new GroupBox();
+            cboAttendenceType = new ComboBox();
             lblSobrantesInfo = new Label();
+            label2 = new Label();
             dtpDate1 = new DateTimePicker();
-            btnExcel = new Button();
             labelDate = new Label();
             labelDateTo = new Label();
             dtpDate2 = new DateTimePicker();
             btnLoadReport = new Button();
+            btnModifyAttendance = new Button();
+            btnExcel = new Button();
             gpbFilters = new GroupBox();
             lblEmployeeAdvice = new Label();
             btnAddList = new Button();
@@ -54,8 +58,7 @@
             labelSeason = new Label();
             dgvReport = new DataGridView();
             lblTitle = new Label();
-            cboAttendenceType = new ComboBox();
-            label2 = new Label();
+            btnOpenFrmAttendanceType = new Button();
             bgpInfo.SuspendLayout();
             gpbFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
@@ -66,7 +69,7 @@
             btnClearList.Font = new Font("Segoe UI", 12F);
             btnClearList.Image = Properties.Resources.limpiarIcon16;
             btnClearList.ImageAlign = ContentAlignment.MiddleLeft;
-            btnClearList.Location = new Point(12, 216);
+            btnClearList.Location = new Point(11, 252);
             btnClearList.Name = "btnClearList";
             btnClearList.Padding = new Padding(5, 0, 0, 0);
             btnClearList.Size = new Size(96, 31);
@@ -82,7 +85,7 @@
             chbShowReport.Font = new Font("Segoe UI", 12F);
             chbShowReport.Image = Properties.Resources.verIcon16;
             chbShowReport.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowReport.Location = new Point(211, 216);
+            chbShowReport.Location = new Point(210, 252);
             chbShowReport.Name = "chbShowReport";
             chbShowReport.Padding = new Padding(4, 0, 0, 0);
             chbShowReport.Size = new Size(95, 31);
@@ -98,7 +101,7 @@
             chbShowEmployees.Font = new Font("Segoe UI", 12F);
             chbShowEmployees.Image = Properties.Resources.verIcon16;
             chbShowEmployees.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowEmployees.Location = new Point(114, 216);
+            chbShowEmployees.Location = new Point(113, 252);
             chbShowEmployees.Name = "chbShowEmployees";
             chbShowEmployees.Padding = new Padding(4, 0, 0, 0);
             chbShowEmployees.Size = new Size(91, 31);
@@ -110,21 +113,32 @@
             // 
             // bgpInfo
             // 
-            bgpInfo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            bgpInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            bgpInfo.Controls.Add(cboAttendenceType);
             bgpInfo.Controls.Add(lblSobrantesInfo);
+            bgpInfo.Controls.Add(label2);
             bgpInfo.Controls.Add(dtpDate1);
-            bgpInfo.Controls.Add(btnExcel);
             bgpInfo.Controls.Add(labelDate);
             bgpInfo.Controls.Add(labelDateTo);
             bgpInfo.Controls.Add(dtpDate2);
             bgpInfo.Controls.Add(btnLoadReport);
             bgpInfo.Font = new Font("Segoe UI", 12F);
-            bgpInfo.Location = new Point(12, 499);
+            bgpInfo.Location = new Point(12, 168);
             bgpInfo.Name = "bgpInfo";
-            bgpInfo.Size = new Size(858, 78);
+            bgpInfo.Size = new Size(909, 78);
             bgpInfo.TabIndex = 87;
             bgpInfo.TabStop = false;
             bgpInfo.Text = "Reporte";
+            // 
+            // cboAttendenceType
+            // 
+            cboAttendenceType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboAttendenceType.FormattingEnabled = true;
+            cboAttendenceType.Location = new Point(662, 23);
+            cboAttendenceType.Margin = new Padding(0, 3, 3, 3);
+            cboAttendenceType.Name = "cboAttendenceType";
+            cboAttendenceType.Size = new Size(241, 29);
+            cboAttendenceType.TabIndex = 92;
             // 
             // lblSobrantesInfo
             // 
@@ -137,6 +151,16 @@
             lblSobrantesInfo.TabIndex = 72;
             lblSobrantesInfo.Text = "ℹ Si no hay empleados en el listado se generará de todos los empleados en la temporada seleccionada";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(662, 52);
+            label2.Margin = new Padding(0);
+            label2.Name = "label2";
+            label2.Size = new Size(173, 21);
+            label2.TabIndex = 91;
+            label2.Text = "Inasistencia por defecto";
+            // 
             // dtpDate1
             // 
             dtpDate1.Format = DateTimePickerFormat.Short;
@@ -144,21 +168,6 @@
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(120, 29);
             dtpDate1.TabIndex = 52;
-            // 
-            // btnExcel
-            // 
-            btnExcel.Font = new Font("Segoe UI", 12F);
-            btnExcel.Image = Properties.Resources.excelIcon;
-            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(753, 19);
-            btnExcel.Name = "btnExcel";
-            btnExcel.Padding = new Padding(0, 0, 4, 0);
-            btnExcel.Size = new Size(97, 31);
-            btnExcel.TabIndex = 71;
-            btnExcel.Text = "Excel";
-            btnExcel.TextAlign = ContentAlignment.TopLeft;
-            btnExcel.UseVisualStyleBackColor = true;
-            btnExcel.Click += btnExcel_Click;
             // 
             // labelDate
             // 
@@ -203,6 +212,36 @@
             btnLoadReport.UseVisualStyleBackColor = true;
             btnLoadReport.Click += btnLoadReport_Click;
             // 
+            // btnModifyAttendance
+            // 
+            btnModifyAttendance.Font = new Font("Segoe UI", 12F);
+            btnModifyAttendance.Image = Properties.Resources.editPencilIcon16;
+            btnModifyAttendance.ImageAlign = ContentAlignment.MiddleLeft;
+            btnModifyAttendance.Location = new Point(414, 252);
+            btnModifyAttendance.Name = "btnModifyAttendance";
+            btnModifyAttendance.Padding = new Padding(4, 0, 0, 0);
+            btnModifyAttendance.Size = new Size(183, 31);
+            btnModifyAttendance.TabIndex = 93;
+            btnModifyAttendance.Text = "Modificar asistencias";
+            btnModifyAttendance.TextAlign = ContentAlignment.MiddleRight;
+            btnModifyAttendance.UseVisualStyleBackColor = true;
+            btnModifyAttendance.Click += btnModifyAttendance_Click;
+            // 
+            // btnExcel
+            // 
+            btnExcel.Font = new Font("Segoe UI", 12F);
+            btnExcel.Image = Properties.Resources.excelIcon;
+            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+            btnExcel.Location = new Point(311, 252);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Padding = new Padding(0, 0, 4, 0);
+            btnExcel.Size = new Size(97, 31);
+            btnExcel.TabIndex = 71;
+            btnExcel.Text = "Excel";
+            btnExcel.TextAlign = ContentAlignment.TopLeft;
+            btnExcel.UseVisualStyleBackColor = true;
+            btnExcel.Click += btnExcel_Click;
+            // 
             // gpbFilters
             // 
             gpbFilters.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -219,7 +258,7 @@
             gpbFilters.Font = new Font("Segoe UI", 12F);
             gpbFilters.Location = new Point(12, 33);
             gpbFilters.Name = "gpbFilters";
-            gpbFilters.Size = new Size(858, 177);
+            gpbFilters.Size = new Size(909, 129);
             gpbFilters.TabIndex = 85;
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
@@ -229,7 +268,7 @@
             lblEmployeeAdvice.AutoSize = true;
             lblEmployeeAdvice.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblEmployeeAdvice.ForeColor = Color.Gray;
-            lblEmployeeAdvice.Location = new Point(244, 153);
+            lblEmployeeAdvice.Location = new Point(230, 102);
             lblEmployeeAdvice.Name = "lblEmployeeAdvice";
             lblEmployeeAdvice.Size = new Size(105, 15);
             lblEmployeeAdvice.TabIndex = 84;
@@ -240,7 +279,7 @@
             btnAddList.Font = new Font("Segoe UI", 12F);
             btnAddList.Image = Properties.Resources.mas_16;
             btnAddList.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddList.Location = new Point(422, 52);
+            btnAddList.Location = new Point(756, 21);
             btnAddList.Name = "btnAddList";
             btnAddList.Padding = new Padding(5, 0, 0, 0);
             btnAddList.Size = new Size(147, 31);
@@ -255,7 +294,7 @@
             btnAddEmployee.Font = new Font("Segoe UI", 12F);
             btnAddEmployee.Image = Properties.Resources.mas_16;
             btnAddEmployee.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddEmployee.Location = new Point(244, 119);
+            btnAddEmployee.Location = new Point(230, 68);
             btnAddEmployee.Name = "btnAddEmployee";
             btnAddEmployee.Padding = new Padding(5, 0, 0, 0);
             btnAddEmployee.Size = new Size(168, 31);
@@ -270,7 +309,7 @@
             btnSearchEmployee.Font = new Font("Segoe UI", 12F);
             btnSearchEmployee.Image = Properties.Resources.BuscarLupa1;
             btnSearchEmployee.ImageAlign = ContentAlignment.MiddleRight;
-            btnSearchEmployee.Location = new Point(116, 120);
+            btnSearchEmployee.Location = new Point(102, 69);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Padding = new Padding(0, 0, 4, 0);
             btnSearchEmployee.Size = new Size(33, 31);
@@ -282,7 +321,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(17, 124);
+            label1.Location = new Point(3, 73);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(96, 42);
@@ -292,7 +331,7 @@
             // txbIdEmployee
             // 
             txbIdEmployee.Font = new Font("Segoe UI", 10F);
-            txbIdEmployee.Location = new Point(155, 120);
+            txbIdEmployee.Location = new Point(141, 69);
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.ScrollBars = RichTextBoxScrollBars.Vertical;
             txbIdEmployee.Size = new Size(83, 48);
@@ -314,7 +353,7 @@
             // 
             cboLP.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLP.FormattingEnabled = true;
-            cboLP.Location = new Point(423, 22);
+            cboLP.Location = new Point(395, 22);
             cboLP.Margin = new Padding(0, 3, 3, 3);
             cboLP.Name = "cboLP";
             cboLP.Size = new Size(360, 29);
@@ -323,7 +362,7 @@
             // labelLP
             // 
             labelLP.AutoSize = true;
-            labelLP.Location = new Point(315, 25);
+            labelLP.Location = new Point(287, 25);
             labelLP.Margin = new Padding(0);
             labelLP.Name = "labelLP";
             labelLP.Size = new Size(110, 21);
@@ -361,7 +400,7 @@
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 253);
+            dgvReport.Location = new Point(12, 289);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -375,9 +414,11 @@
             dgvReport.RowHeadersVisible = false;
             dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(858, 240);
+            dgvReport.Size = new Size(909, 342);
             dgvReport.TabIndex = 86;
             dgvReport.CellFormatting += dgvReport_CellFormatting;
+            dgvReport.CellPainting += dgvReport_CellPainting;
+            dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
             // 
             // lblTitle
             // 
@@ -391,33 +432,26 @@
             lblTitle.Tag = "lotData";
             lblTitle.Text = "Reporte asistencia";
             // 
-            // cboAttendenceType
+            // btnOpenFrmAttendanceType
             // 
-            cboAttendenceType.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboAttendenceType.FormattingEnabled = true;
-            cboAttendenceType.Location = new Point(680, 224);
-            cboAttendenceType.Margin = new Padding(0, 3, 3, 3);
-            cboAttendenceType.Name = "cboAttendenceType";
-            cboAttendenceType.Size = new Size(190, 23);
-            cboAttendenceType.TabIndex = 92;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(541, 227);
-            label2.Margin = new Padding(0);
-            label2.Name = "label2";
-            label2.Size = new Size(139, 15);
-            label2.TabIndex = 91;
-            label2.Text = "Innasistencia por defecto";
+            btnOpenFrmAttendanceType.Font = new Font("Segoe UI", 12F);
+            btnOpenFrmAttendanceType.ImageAlign = ContentAlignment.MiddleLeft;
+            btnOpenFrmAttendanceType.Location = new Point(768, 9);
+            btnOpenFrmAttendanceType.Name = "btnOpenFrmAttendanceType";
+            btnOpenFrmAttendanceType.Padding = new Padding(5, 0, 0, 0);
+            btnOpenFrmAttendanceType.Size = new Size(147, 31);
+            btnOpenFrmAttendanceType.TabIndex = 85;
+            btnOpenFrmAttendanceType.Text = "Tipo de asistencia";
+            btnOpenFrmAttendanceType.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenFrmAttendanceType.UseVisualStyleBackColor = true;
             // 
             // FrmAsistenciaASConsulta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(882, 589);
-            Controls.Add(cboAttendenceType);
-            Controls.Add(label2);
+            ClientSize = new Size(933, 643);
+            Controls.Add(btnOpenFrmAttendanceType);
+            Controls.Add(btnExcel);
             Controls.Add(btnClearList);
             Controls.Add(chbShowReport);
             Controls.Add(chbShowEmployees);
@@ -425,8 +459,10 @@
             Controls.Add(gpbFilters);
             Controls.Add(dgvReport);
             Controls.Add(lblTitle);
+            Controls.Add(btnModifyAttendance);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaASConsulta";
-            Text = "FrmAsistenciaASConsulta";
+            Text = "Reporte de asistencias";
             Load += FrmAsistenciaASConsulta_Load;
             bgpInfo.ResumeLayout(false);
             bgpInfo.PerformLayout();
@@ -450,6 +486,7 @@
         private Label labelDateTo;
         public DateTimePicker dtpDate2;
         private Button btnLoadReport;
+        private Button btnModifyAttendance;
         private GroupBox gpbFilters;
         public Label lblEmployeeAdvice;
         private Button btnAddList;
@@ -465,5 +502,6 @@
         public Label lblTitle;
         public ComboBox cboAttendenceType;
         private Label label2;
+        private Button btnOpenFrmAttendanceType;
     }
 }

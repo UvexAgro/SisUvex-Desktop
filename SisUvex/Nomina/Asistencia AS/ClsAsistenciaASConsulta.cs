@@ -1,7 +1,9 @@
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Extentions;
+using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Configuracion;
+using SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -51,7 +53,10 @@ namespace SisUvex.Nomina.Asistencia_AS
         /// <summary>Tabla del reporte de asistencias/inasistencias generada por <see cref="BtnLoadReport"/>.</summary>
         private DataTable? _dtReportPreview;
         private List<DateTime> _reportDays = new();
-        private Dictionary<string, Color> _attendanceColorsByPrefix = new(StringComparer.OrdinalIgnoreCase);
+        /// <summary>Mapa prefijo → apariencia (color + estilo de letra), tomado del catálogo de tipos de asistencia.</summary>
+        private Dictionary<string, AttendanceStyle> _attendanceStylesByPrefix = new(StringComparer.OrdinalIgnoreCase);
+        /// <summary>Comentario (v_comments) de la inasistencia explícita, clave (código, día).</summary>
+        private Dictionary<(string Codigo, DateTime Fecha), string> _commentsByCodeAndDay = new();
         private bool _showingReport;
 
         // ── Inicio del formulario ─────────────────────────────────────────────
@@ -69,6 +74,11 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null) return;
 
+            // Carga cboAttendenceType a través de la caché estándar de catálogos (ClsComboBoxFiles),
+            // usando la consulta centralizada AttendanceType.QueryCbo y mostrando sólo los activos.
+            // Nom_AttendanceType no tiene registro en Pack_TablesUpdates, por lo que ClsAttendanceType
+            // invalida manualmente esa caché (ClsComboBoxFiles.InvalidateCache) tras cualquier alta,
+            // modificación o cambio de estatus, para que aquí siempre se refleje el dato más reciente.
             ClsComboBoxes.CboLoadActives(frm.cboAttendenceType, AttendanceType.Cbo);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAttendenceType, "04"); //<-- falta injustificada
 
@@ -108,32 +118,37 @@ namespace SisUvex.Nomina.Asistencia_AS
             frm.dtpDate2.Value = today <= seasonEnd ? today : seasonEnd;
         }
 
-        // ── Buscar empleado ───────────────────────────────────────────────────
+        // ── Buscar empleado (formulario de selección visual) ──────────────────
 
+        /// <summary>
+        /// Abre el formulario de selección de empleados (igual que <c>button1_Click</c> de
+        /// <see cref="Archivo.Etiquetas.CajaEmpleado.FrmCajaEmpleado"/>) y, si se selecciona uno,
+        /// agrega su código a <c>txbIdEmployee</c>: si ya había texto, lo agrega en una línea nueva.
+        /// </summary>
         public void BtnSearchEmployee()
         {
             if (frm == null) return;
 
-            string id = ParseEmployeeCodes(frm.txbIdEmployee.Text).FirstOrDefault() ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(id)) return;
+            ClsSelectionForm sel = new();
+            sel.OpenSelectionForm("EmployeeBasic", ColCodigo);
 
-            try
-            {
-                DataTable dt = FetchEmployeeByCode(id);
+            if (string.IsNullOrWhiteSpace(sel.SelectedValue)) return;
 
-                if (dt.Rows.Count == 0)
-                {
-                    SetAdvice($"No se encontró el empleado {id}.", isError: true);
-                    return;
-                }
+            AppendEmployeeCodeToTextBox(NormalizeEmployeeCode(sel.SelectedValue.Trim()));
+        }
 
-                string nombre = dt.Rows[0]["Nombre"]?.ToString()?.Trim() ?? string.Empty;
-                SetAdvice($"Empleado: {id} – {nombre}", isError: false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error al buscar empleado", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        /// <summary>Agrega un código de empleado al final de txbIdEmployee, en una línea nueva si ya había texto.</summary>
+        private void AppendEmployeeCodeToTextBox(string code)
+        {
+            if (frm == null) return;
+
+            string current = frm.txbIdEmployee.Text;
+            frm.txbIdEmployee.Text = string.IsNullOrWhiteSpace(current)
+                ? code
+                : current.TrimEnd('\r', '\n', '\v') + Environment.NewLine + code;
+
+            frm.txbIdEmployee.SelectionStart = frm.txbIdEmployee.Text.Length;
+            frm.txbIdEmployee.ScrollToCaret();
         }
 
         // ── Agregar empleado(s) — soporta pegar múltiples códigos ────────────
@@ -426,7 +441,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
                 DataTable dtEmployeeInfo = FetchEmployeeInfoQuery(employeeCodes);
 
-                _attendanceColorsByPrefix = GetAttendanceTypeColorsByPrefix();
+                _attendanceStylesByPrefix = GetAttendanceTypeStylesByPrefix();
                 _reportDays = EachDayInclusive(date1, date2).ToList();
                 _dtReportPreview = BuildReportTable(
                     employeeCodes, dtEmployeeInfo, dtAsistencias, dtInasistencias, defaultPrefix);
@@ -440,23 +455,89 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
         }
 
+        // ── Abrir modificación de asistencias con los empleados marcados ──────
+
+        public void BtnModifyAttendance()
+        {
+            if (frm == null) return;
+
+            DateTime date1 = frm.dtpDate1.Value.Date;
+            DateTime date2 = frm.dtpDate2.Value.Date;
+
+            if (date2 < date1)
+            {
+                MessageBox.Show("La fecha final no puede ser menor a la fecha inicial.", "Atención",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            List<string> employeeCodes = GetCheckedEmployeeCodes();
+            if (employeeCodes.Count == 0)
+            {
+                SetAdvice("Marca (check) al menos un empleado en el listado antes de modificar asistencias.", isError: true);
+                return;
+            }
+
+            if (!ValidateConnectionSettings()) return;
+
+            try
+            {
+                DataTable dtEmployeeInfo = FetchEmployeeInfoQuery(employeeCodes);
+                var infoByCode = dtEmployeeInfo.AsEnumerable()
+                    .GroupBy(r => r["id_employee"]?.ToString()?.Trim() ?? string.Empty)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                var employees = new List<(string Code, string FullName, string Lp)>();
+                foreach (string codigo in employeeCodes)
+                {
+                    string fullName = codigo;
+                    string lp = string.Empty;
+                    if (infoByCode.TryGetValue(codigo, out DataRow? infoRow) && infoRow != null)
+                    {
+                        string nombre = infoRow["v_name"]?.ToString()?.Trim() ?? string.Empty;
+                        string apPat  = infoRow["v_lastNamePat"]?.ToString()?.Trim() ?? string.Empty;
+                        string apMat  = infoRow["v_lastNameMat"]?.ToString()?.Trim() ?? string.Empty;
+                        string full   = string.Join(" ", new[] { apPat, apMat, nombre }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                        if (!string.IsNullOrWhiteSpace(full)) fullName = full;
+                        lp = infoRow["id_paymentPlace"]?.ToString()?.Trim() ?? string.Empty;
+                    }
+                    employees.Add((codigo, fullName, lp));
+                }
+
+                string? selectedTypeId = frm.cboAttendenceType.SelectedValue?.ToString();
+                bool savedChanges = ClsModifyAttendanceEmployees.Open(employees, date1, date2, selectedTypeId);
+
+                // Si se guardó al menos un cambio en el formulario de modificar, se vuelve a cargar el
+                // reporte (mismos empleados marcados y mismo rango de fechas) para reflejarlos de inmediato.
+                if (savedChanges)
+                    BtnLoadReport();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error al abrir modificación de asistencias",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         // ── Generar reporte en Excel ───────────────────────────────────────────
 
         public void BtnGenerateExcelReport()
         {
+            if (frm == null) return;
+
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
-                MessageBox.Show("No hay datos para generar el reporte (usa \"Cargar reporte\" antes).",
-                    "Reporte de inasistencias", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SystemSounds.Exclamation.Play();
+                SetAdvice("No hay datos para generar el reporte. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
 
-            string dateRange = $"{frm!.dtpDate1.Value:dd/MM/yyyy} al {frm.dtpDate2.Value:dd/MM/yyyy}";
+            string dateRange = $"{frm.dtpDate1.Value:dd/MM/yyyy} al {frm.dtpDate2.Value:dd/MM/yyyy}";
 
             new ClsExcelAsistenciaASConsulta().GenerateExcelReport(
                 _dtReportPreview,
                 _reportDays,
-                _attendanceColorsByPrefix,
+                _attendanceStylesByPrefix,
                 ColorAsistencia,
                 dateRange);
         }
@@ -475,13 +556,79 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (string.IsNullOrWhiteSpace(value)) return;
 
             Color color;
+            FontStyle fontStyle = FontStyle.Regular;
             if (string.Equals(value, ValueAsistencia, StringComparison.OrdinalIgnoreCase))
                 color = ColorAsistencia;
-            else if (!_attendanceColorsByPrefix.TryGetValue(value, out color))
+            else if (_attendanceStylesByPrefix.TryGetValue(value, out AttendanceStyle style))
+            {
+                color = style.Color;
+                fontStyle = style.FontStyle;
+            }
+            else
                 return;
 
             e.CellStyle.BackColor          = color;
             e.CellStyle.SelectionBackColor = ControlPaint.Dark(color, 0.1f);
+            if (fontStyle != FontStyle.Regular)
+                e.CellStyle.Font = new Font(frm.dgvReport.Font, fontStyle);
+        }
+
+        // ── Comentarios de las faltas (tooltip + marcador visual) ─────────────
+
+        /// <summary>Muestra el comentario de la falta (si existe) como tooltip al pasar el mouse por la celda.</summary>
+        public void DgvReport_CellToolTipTextNeeded(object? sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            if (!_showingReport || frm == null) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            string colName = frm.dgvReport.Columns[e.ColumnIndex].Name;
+            if (!TryParseDayColumn(colName, out DateTime day)) return;
+
+            string? comment = GetCellComment(e.RowIndex, day);
+            if (!string.IsNullOrWhiteSpace(comment))
+                e.ToolTipText = comment;
+        }
+
+        /// <summary>Dibuja un pequeño marcador (triángulo, como en Excel) en la esquina de las celdas que tienen comentario.</summary>
+        public void DgvReport_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (!_showingReport || frm == null) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            string colName = frm.dgvReport.Columns[e.ColumnIndex].Name;
+            if (!TryParseDayColumn(colName, out DateTime day)) return;
+
+            string? comment = GetCellComment(e.RowIndex, day);
+            if (string.IsNullOrWhiteSpace(comment)) return;
+
+            e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+            DrawCommentMarker(e.Graphics!, e.CellBounds);
+            e.Handled = true;
+        }
+
+        /// <summary>Comentario (v_comments) registrado para el empleado de la fila y el día indicados, si existe.</summary>
+        private string? GetCellComment(int rowIndex, DateTime day)
+        {
+            if (frm == null) return null;
+            if (frm.dgvReport.Rows[rowIndex].DataBoundItem is not DataRowView drv) return null;
+
+            string codigo = drv[ReportColCodigo]?.ToString()?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(codigo)) return null;
+
+            return _commentsByCodeAndDay.TryGetValue((codigo, day), out string? comment) && !string.IsNullOrWhiteSpace(comment)
+                ? comment
+                : null;
+        }
+
+        /// <summary>Dibuja un triángulo pequeño en la esquina superior derecha de la celda, similar al indicador de comentarios de Excel.</summary>
+        private static void DrawCommentMarker(Graphics g, Rectangle bounds)
+        {
+            const int size = 6;
+            Point p1 = new(bounds.Right - size, bounds.Top);
+            Point p2 = new(bounds.Right, bounds.Top);
+            Point p3 = new(bounds.Right, bounds.Top + size);
+            using SolidBrush brush = new(Color.FromArgb(220, 40, 40, 40));
+            g.FillPolygon(brush, new[] { p1, p2, p3 });
         }
 
         // ── Validaciones y datos auxiliares ────────────────────────────────────
@@ -532,12 +679,12 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         /// <summary>
-        /// Mapa prefijo → color, construido desde la misma tabla que llena cboAttendenceType
-        /// (columna <see cref="AttendanceType.ColumnColor"/>).
+        /// Mapa prefijo → apariencia (color + estilo de letra), construido desde la misma tabla que llena
+        /// cboAttendenceType (columnas <see cref="AttendanceType.ColumnColor"/> y <see cref="AttendanceType.ColumnFontStyle"/>).
         /// </summary>
-        private Dictionary<string, Color> GetAttendanceTypeColorsByPrefix()
+        private Dictionary<string, AttendanceStyle> GetAttendanceTypeStylesByPrefix()
         {
-            var map = new Dictionary<string, Color>(StringComparer.OrdinalIgnoreCase);
+            var map = new Dictionary<string, AttendanceStyle>(StringComparer.OrdinalIgnoreCase);
             if (frm?.cboAttendenceType.DataSource is not DataTable dt) return map;
             if (!dt.Columns.Contains(AttendanceType.ColumnPrefix) || !dt.Columns.Contains(AttendanceType.ColumnColor))
                 return map;
@@ -548,7 +695,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                 if (string.IsNullOrWhiteSpace(prefix) || map.ContainsKey(prefix)) continue;
 
                 string rawColor = row[AttendanceType.ColumnColor]?.ToString()?.Trim() ?? string.Empty;
-                map[prefix] = ParseDbColor(rawColor, Color.LightPink);
+                Color color = ParseDbColor(rawColor, Color.LightPink);
+                FontStyle fontStyle = dt.Columns.Contains(AttendanceType.ColumnFontStyle)
+                    ? ParseFontStyle(row[AttendanceType.ColumnFontStyle])
+                    : FontStyle.Regular;
+
+                map[prefix] = new AttendanceStyle(color, fontStyle);
             }
 
             return map;
@@ -569,6 +721,13 @@ namespace SisUvex.Nomina.Asistencia_AS
             {
                 return fallback;
             }
+        }
+
+        /// <summary>Convierte el bitmask numérico guardado en <c>n_fontStyle</c> a <see cref="FontStyle"/>.</summary>
+        private static FontStyle ParseFontStyle(object? raw)
+        {
+            if (raw == null || raw == DBNull.Value) return FontStyle.Regular;
+            return byte.TryParse(raw.ToString(), out byte value) ? (FontStyle)value : FontStyle.Regular;
         }
 
         // ── Consultas del reporte ──────────────────────────────────────────────
@@ -679,6 +838,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                     Codigo: r["id_employee"]?.ToString()?.Trim() ?? string.Empty,
                     Fecha: NormalizeDate(r["d_attendance"])))
                 .ToDictionary(g => g.Key, g => g.First()["v_prefix"]?.ToString()?.Trim() ?? string.Empty);
+
+            _commentsByCodeAndDay = dtInasistencias.AsEnumerable()
+                .GroupBy(r => (
+                    Codigo: r["id_employee"]?.ToString()?.Trim() ?? string.Empty,
+                    Fecha: NormalizeDate(r["d_attendance"])))
+                .ToDictionary(g => g.Key, g => g.First()["v_comments"]?.ToString()?.Trim() ?? string.Empty);
 
             foreach (string codigo in employeeCodes)
             {
