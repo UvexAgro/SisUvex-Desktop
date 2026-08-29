@@ -29,13 +29,24 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		ClsControls controlList;
 		DataTable dtNomina;
 		public string TipoNomina = "E";
-		public string TemaActual = "E";
 		ClsFestivo clsF;
+		ClsCierre clsC;
+		ClsEstiloNomina clsEstilo;
+	
 		public void BeginForm()
 		{
 			clsF = new ClsFestivo();
 			clsF.frm = frm;
 			clsF.cls = this;
+
+			clsC = new ClsCierre(); 
+			clsC.frm = frm; 
+			clsC.cls = this;
+
+			clsEstilo = new ClsEstiloNomina();
+			clsEstilo.frm = frm;
+			clsEstilo.TipoNomina = TipoNomina;
+
 
 			SetTxbReferencia();
 			ClsComboBoxes.CboLoadActives(frm.cboLote, ClsObject.Lot.CboOnlyNameLotFacility);
@@ -247,45 +258,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 		}
 
-		public void AplicarColores(string tipo)
-		{
-			// Guardar el tema actual
-			TemaActual = tipo;
-
-			System.Drawing.Color color;
-
-			switch (tipo)
-			{
-				case "E":
-					color = System.Drawing.Color.FromArgb(230, 245, 230);
-
-					frm.lblencabezado.Text = "Empaque Central - Espárrago";
-					break;
-
-				case "U":
-					color = System.Drawing.Color.FromArgb(240, 230, 250);
-
-					frm.lblencabezado.Text = "Empaque Central - Uva";
-					break;
-
-				default:
-					color = SystemColors.Control;
-
-					frm.lblencabezado.Text = "Reporte de Empaque Central";
-					break;
-			}
-
-			frm.gbCsv.BackColor = color;
-			frm.gbLibras.BackColor = color;
-			frm.gbGenerar.BackColor = color;
-
-			// Volver a pintar el DataGridView
-			if (frm.dgvEmployee != null)
-			{
-				frm.dgvEmployee.Invalidate();
-				frm.dgvEmployee.Refresh();
-			}
-		}
+		
 		private string GetQueryNom()
 		{
 			string fecha = frm.dtpFecha.Value.ToString("yyyy-MM-dd");
@@ -321,6 +294,9 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void BtnCargarDatos()
 		{
 			TipoNomina = frm.rbtEsparrago.Checked ? "E" : "U";
+
+			if (!ValidarTipoNomina(frm.dtpFecha.Value, TipoNomina))
+				return;
 			DateTime fecha = frm.dtpFecha.Value;
 
 			bool existeNomina = ExisteNominaDiaria(fecha);
@@ -336,6 +312,39 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 					frmExiste.ConfigurarModo(ModoNomina.NominaExistente);
 
 				frmExiste.CargarDatos(TipoNomina, fecha);
+
+				if (esFestivo && !string.IsNullOrWhiteSpace(frmExiste.TipoFestivo))
+				{
+					frm.lblTipoProceso.Text =
+						clsF.ObtenerDescripcionFestivo(frmExiste.TipoFestivo);
+
+					frm.lblTipoProceso.Visible = true;
+				}
+				else
+				{
+					frm.lblTipoProceso.Visible = false;
+				}
+
+				// Verificar si la semana ACTUAL está cerrada
+				DataTable dt = clsC.ObtenerInfoCierreSemana(fecha);
+
+				if (dt.Rows.Count > 0)
+				{
+					bool cerrada = clsC.SemanaCerrada(
+						dt.Rows[0]["id_season"].ToString(),
+						dt.Rows[0]["c_sequence_per"].ToString(),
+						TipoNomina);
+
+					if (cerrada)
+					{
+						frmExiste.BloquearRecalculo();
+
+						if (esFestivo)
+						{
+							frmExiste.BloquearCancelar();
+						}
+					}
+				}
 
 				DialogResult r = frmExiste.ShowDialog();
 
@@ -458,10 +467,39 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return;
 			}
 
+			frm.pnlInicio.Visible = false;
+
 			frm.dgvEmployee.Visible = false;
 			frm.dgvEmployee.DataSource = dtNomina;
 
-			AplicarColores(TipoNomina);
+			// Mostrar tipo de nómina
+			if (dtNomina.Columns.Contains("TipoFestivo") &&
+				dtNomina.Rows.Count > 0)
+			{
+				string tipoFestivo = dtNomina.Rows[0]["TipoFestivo"]?.ToString();
+
+				if (!string.IsNullOrWhiteSpace(tipoFestivo))
+				{
+					frm.lblTipoProceso.Text =
+						clsF.ObtenerDescripcionFestivo(tipoFestivo);
+				}
+				else
+				{
+					frm.lblTipoProceso.Text = "NÓMINA NORMAL";
+				}
+
+				frm.lblTipoProceso.Visible = true;
+			}
+			// Ocultar columnas de control interno
+			if (frm.dgvEmployee.Columns.Contains("IdFestivo"))
+				frm.dgvEmployee.Columns["IdFestivo"].Visible = false;
+
+			if (frm.dgvEmployee.Columns.Contains("TipoFestivo"))
+				frm.dgvEmployee.Columns["TipoFestivo"].Visible = false;
+
+			clsEstilo.AplicarColores(TipoNomina);
+
+			ActualizarResumen();
 
 			foreach (DataGridViewColumn col in frm.dgvEmployee.Columns)
 				col.ReadOnly = true;
@@ -470,14 +508,43 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			GuardarSueldosOriginales();
 
-			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
+			clsEstilo.ActivarEstiloGrid(frm.dgvEmployee);
+			frm.dgvEmployee.Visible = true;
+			frm.tlpDatos.Visible = true;
+			clsC.ValidarSemanaCerrada();
+		}
+		public bool ValidarTipoNomina(DateTime fecha, string tipoNomina)
+		{
+			SQLControl sql = new SQLControl();
+
+			sql.OpenConectionWrite();
+
+			string query = @"
+			SELECT COUNT(*)
+			FROM Nom_AttendenceList
+			WHERE CAST(d_attendence AS DATE) = @Fecha
+			AND c_payrollType = @TipoNomina";
+
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+			cmd.Parameters.AddWithValue("@Fecha", fecha.Date);
+			cmd.Parameters.AddWithValue("@TipoNomina", tipoNomina);
+
+			int total = Convert.ToInt32(cmd.ExecuteScalar());
+
+			sql.CloseConectionWrite();
+
+			if (total == 0)
 			{
-				if (!row.IsNewRow)
-					row.Cells["SueldoTotal"].Tag = row.Cells["SueldoTotal"].Value;
+				MessageBox.Show(
+					$"No existe asistencia de {(tipoNomina == "E" ? "Espárrago" : "Uva")} para la fecha seleccionada.",
+					"Sistema",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return false;
 			}
 
-			ActivarEstiloGrid(frm.dgvEmployee);
-			frm.dgvEmployee.Visible = true;
+			return true;
 		}
 		public DataTable ObtenerInfoNomina(DateTime fecha, string tipo)
 		{
@@ -799,136 +866,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 			return false;
 		}
-		private void PintarCeldaGrid(object sender, DataGridViewCellPaintingEventArgs e)
-		{
-			DataGridView dgv = sender as DataGridView;
-			if (dgv == null) return;
-
-			System.Drawing.Color colorHeader;
-			System.Drawing.Color fondoBase;
-			System.Drawing.Color colorLinea;
-
-			switch (TipoNomina)
-			{
-				case "E":
-					// Espárrago
-					colorHeader = System.Drawing.Color.FromArgb(34, 139, 34);
-					fondoBase = System.Drawing.Color.FromArgb(240, 255, 240);
-					colorLinea = System.Drawing.Color.FromArgb(180, 220, 180);
-					break;
-
-				case "U":
-					// Uva
-					colorHeader = System.Drawing.Color.FromArgb(102, 0, 153);
-					fondoBase = System.Drawing.Color.FromArgb(245, 240, 255);
-					colorLinea = System.Drawing.Color.FromArgb(210, 180, 230);
-					break;
-
-				default:
-					colorHeader = SystemColors.ControlDark;
-					fondoBase = System.Drawing.Color.White;
-					colorLinea = SystemColors.ControlLight;
-					break;
-			}
-			// HEADER
-			if (e.RowIndex == -1 && e.ColumnIndex >= 0)
-			{
-				using (SolidBrush brush = new SolidBrush(colorHeader))
-				{
-					e.Graphics.FillRectangle(brush, e.CellBounds);
-				}
-
-				TextRenderer.DrawText(
-					e.Graphics,
-					e.FormattedValue?.ToString() ?? "",
-					new Font("Segoe UI", 10, FontStyle.Bold),
-					e.CellBounds,
-					System.Drawing.Color.White,
-					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-				using (Pen pen = new Pen(colorLinea))
-				{
-					e.Graphics.DrawRectangle(
-						pen,
-						e.CellBounds.X,
-						e.CellBounds.Y,
-						e.CellBounds.Width - 1,
-						e.CellBounds.Height - 1);
-				}
-
-				e.Handled = true;
-				return;
-			}
-			// CELDAS
-			if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-			{
-				System.Drawing.Color fondo = (e.RowIndex % 2 == 0)
-					? fondoBase
-					: System.Drawing.Color.White;
-
-				// Resaltar cambios en SueldoTotal
-				if (dgv.Columns[e.ColumnIndex].Name == "SueldoTotal")
-				{
-					DataGridViewCell cell = dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
-
-					decimal original = 0;
-					decimal nuevo = 0;
-
-					decimal.TryParse(Convert.ToString(cell.Tag), out original);
-					decimal.TryParse(Convert.ToString(cell.Value), out nuevo);
-
-					if (original != nuevo)
-						fondo = System.Drawing.Color.FromArgb(255, 236, 179);
-				}
-
-				using (SolidBrush brush = new SolidBrush(fondo))
-				{
-					e.Graphics.FillRectangle(brush, e.CellBounds);
-				}
-
-				TextRenderer.DrawText(
-					e.Graphics,
-					e.FormattedValue?.ToString() ?? "",
-					new Font("Segoe UI", 10),
-					e.CellBounds,
-					System.Drawing.Color.Black,
-					TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-
-				using (Pen pen = new Pen(colorLinea))
-				{
-					e.Graphics.DrawRectangle(
-						pen,
-						e.CellBounds.X,
-						e.CellBounds.Y,
-						e.CellBounds.Width - 1,
-						e.CellBounds.Height - 1);
-				}
-
-				e.Handled = true;
-			}
-		}
-		public void ActivarEstiloGrid(DataGridView dgv)
-		{
-			if (dgv == null) return;
-
-			dgv.EnableHeadersVisualStyles = false;
-			dgv.RowHeadersVisible = false;
-			dgv.BorderStyle = BorderStyle.None;
-			dgv.BackgroundColor = System.Drawing.Color.White;
-			dgv.ColumnHeadersHeight = 40;
-
-			dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-
-			dgv.DefaultCellStyle.SelectionBackColor = dgv.DefaultCellStyle.BackColor;
-			dgv.DefaultCellStyle.SelectionForeColor = dgv.DefaultCellStyle.ForeColor;
-
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.None;
-
-			dgv.CellPainting -= PintarCeldaGrid;
-			dgv.CellPainting += PintarCeldaGrid;
-
-			dgv.SelectionChanged += (s, e) => dgv.ClearSelection();
-		}
+		
 		public bool HayCambiosSueldos()
 		{
 			foreach (DataGridViewRow row in frm.dgvEmployee.Rows)
@@ -1037,7 +975,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 				return false;
 			}
 		}
-		private bool ExisteNominaDiaria(DateTime fecha)
+		public bool ExisteNominaDiaria(DateTime fecha)
 		{
 			string tabla = TipoNomina == "E"
 				? "HistNom_ReporteDiarioEsparrago"
@@ -1051,6 +989,123 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			int registros = Convert.ToInt32(ClsQuerysDB.GetData(query));
 
 			return registros > 0;
+		}
+		public void MostrarEstadoCierre()
+		{
+			string tipoNomina =
+				frm.rbtEsparrago.Checked ? "E" : "U";
+
+			DataRow semana =
+				clsC.ObtenerSemanaPendiente(
+					frm.dtpFecha.Value,
+					tipoNomina);
+
+			if (semana != null)
+			{
+				DateTime inicio =
+					Convert.ToDateTime(
+						semana["d_startDate_per"]);
+
+				DateTime fin =
+					Convert.ToDateTime(
+						semana["d_endDate_per"]);
+
+				frm.lblAvisoCierre.Text =
+					$"⚠ Debe cerrar la semana del " +
+					$"{inicio:dd/MM/yyyy} al {fin:dd/MM/yyyy}";
+
+				frm.lblAvisoCierre.Visible = true;
+
+				frm.btncargar.Enabled = false;
+			}
+			else
+			{
+				frm.lblAvisoCierre.Visible = false;
+
+				frm.btncargar.Enabled = true;
+			}
+			MostrarEstadoNomina();
+		}
+		public void MostrarEstadoNomina()
+		{
+			string tipoNomina =
+				frm.rbtEsparrago.Checked ? "E" : "U";
+
+			DataTable dt =
+				clsC.ObtenerInfoCierreSemana(frm.dtpFecha.Value);
+
+			if (dt.Rows.Count == 0)
+			{
+				frm.lblEstado.Text = "SIN INFORMACIÓN";
+				frm.lblEstado.ForeColor = System.Drawing.Color.Gray;
+				frm.pbCirculo.Image = null;
+
+				return;
+			}
+
+			DataRow row = dt.Rows[0];
+
+			bool cerrada = clsC.SemanaCerrada(
+				row["id_season"].ToString(),
+				row["c_sequence_per"].ToString(),
+				tipoNomina);
+
+			ActualizarEstadoNomina(cerrada);
+		}
+
+		private void ActualizarEstadoNomina(bool cerrada)
+		{
+			if (cerrada)
+			{
+				frm.lblEstado.Text = "CERRADA";
+				frm.lblEstado.ForeColor =
+					System.Drawing.Color.FromArgb(255, 100, 100);
+
+				frm.pbCirculo.Image =
+					Properties.Resources.circuloRojo;
+			}
+			else
+			{
+				frm.lblEstado.Text = "ABIERTA";
+				frm.lblEstado.ForeColor =
+					System.Drawing.Color.FromArgb(110, 230, 130);
+
+				frm.pbCirculo.Image =
+					Properties.Resources.circuloVerde;
+			}
+		}
+		private void ActualizarResumen()
+		{
+			if (frm.dgvEmployee == null)
+				return;
+
+			int totalEmpleados = 0;
+			decimal totalCajas = 0;
+
+			foreach (DataGridViewRow fila in frm.dgvEmployee.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				totalEmpleados++;
+
+				decimal cajas = 0;
+
+				decimal.TryParse(
+					Convert.ToString(
+						fila.Cells["TotalCajas"].Value),
+					out cajas);
+
+				totalCajas += cajas;
+			}
+
+			// Mostrar empleados
+			frm.lblEmpleados.Text =
+				totalEmpleados.ToString("N0");
+
+			// Mostrar cajas
+			frm.lblCajas.Text =
+				totalCajas.ToString("N0");
 		}
 	}
 }

@@ -66,8 +66,14 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			cmd.CommandType = CommandType.StoredProcedure;
 
 			cmd.Parameters.AddWithValue("@Fecha", frm.dtpFecha.Value);
-			cmd.Parameters.AddWithValue("@TipoFestivo", frm.TipoFestivoSeleccionado);
+
+			string descripcionFestivo =
+				ObtenerDescripcionFestivo(frm.TipoFestivoSeleccionado);
+
+			cmd.Parameters.AddWithValue("@TipoFestivo", descripcionFestivo);
+
 			cmd.Parameters.AddWithValue("@TipoNomina", cls.TipoNomina);
+
 			cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
 
 			DataTable dt = new DataTable();
@@ -82,20 +88,20 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		{
 			switch (tipo)
 			{
+				case "DESCANSO":
 				case "DESCANSO_TRABAJADO":
-					return "Descanso trabajado (Festivo)";
-					frm.lblTipoProceso.Visible = false;
+					return "DESCANSO TRABAJADO FESTIVO";
 
 				case "TRABAJADO":
-					return "Festivo trabajado";
-					frm.lblTipoProceso.Visible = false;
+				case "FESTIVO_TRABAJADO":
+					return "FESTIVO TRABAJADO";
 
 				case "NO_TRABAJADO":
-					return "Festivo no trabajado";
-					frm.lblTipoProceso.Visible = false;
+				case "FESTIVO_NO_TRABAJADO":
+					return "FESTIVO NO TRABAJADO";
 
 				default:
-					return "";
+					return tipo.Replace("_", " ");
 			}
 		}
 	}

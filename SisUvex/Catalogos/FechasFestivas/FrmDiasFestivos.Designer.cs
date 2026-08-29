@@ -48,9 +48,9 @@
 			// 
 			lblAdd.AutoSize = true;
 			lblAdd.Font = new Font("Arial Black", 16F);
-			lblAdd.Location = new Point(157, 26);
+			lblAdd.Location = new Point(137, 20);
 			lblAdd.Name = "lblAdd";
-			lblAdd.Size = new Size(211, 38);
+			lblAdd.Size = new Size(174, 31);
 			lblAdd.TabIndex = 71;
 			lblAdd.Text = "Añadir Fecha";
 			// 
@@ -58,29 +58,28 @@
 			// 
 			lblConcepto.AutoSize = true;
 			lblConcepto.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblConcepto.Location = new Point(12, 258);
+			lblConcepto.Location = new Point(10, 194);
 			lblConcepto.Name = "lblConcepto";
-			lblConcepto.Size = new Size(110, 23);
+			lblConcepto.Size = new Size(88, 19);
 			lblConcepto.TabIndex = 95;
 			lblConcepto.Text = "Descripccion:";
 			// 
 			// txbDescripccion
 			// 
 			txbDescripccion.Font = new Font("Segoe UI", 12F);
-			txbDescripccion.Location = new Point(12, 285);
-			txbDescripccion.Margin = new Padding(3, 4, 3, 4);
+			txbDescripccion.Location = new Point(10, 214);
 			txbDescripccion.MaxLength = 300;
 			txbDescripccion.Name = "txbDescripccion";
-			txbDescripccion.Size = new Size(418, 34);
+			txbDescripccion.Size = new Size(366, 29);
 			txbDescripccion.TabIndex = 98;
 			// 
 			// lblId
 			// 
 			lblId.AutoSize = true;
 			lblId.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblId.Location = new Point(12, 115);
+			lblId.Location = new Point(10, 86);
 			lblId.Name = "lblId";
-			lblId.Size = new Size(29, 23);
+			lblId.Size = new Size(24, 19);
 			lblId.TabIndex = 99;
 			lblId.Text = "Id:";
 			// 
@@ -88,19 +87,17 @@
 			// 
 			txbId.Enabled = false;
 			txbId.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-			txbId.Location = new Point(12, 142);
-			txbId.Margin = new Padding(3, 4, 3, 4);
+			txbId.Location = new Point(10, 106);
 			txbId.Name = "txbId";
-			txbId.Size = new Size(77, 34);
+			txbId.Size = new Size(68, 29);
 			txbId.TabIndex = 100;
 			txbId.TextAlign = HorizontalAlignment.Center;
 			// 
 			// btnAccept
 			// 
-			btnAccept.Location = new Point(235, 347);
-			btnAccept.Margin = new Padding(3, 4, 3, 4);
+			btnAccept.Location = new Point(206, 260);
 			btnAccept.Name = "btnAccept";
-			btnAccept.Size = new Size(86, 39);
+			btnAccept.Size = new Size(75, 29);
 			btnAccept.TabIndex = 101;
 			btnAccept.Text = "Aceptar";
 			btnAccept.UseVisualStyleBackColor = true;
@@ -108,10 +105,9 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new Point(346, 347);
-			btnCancel.Margin = new Padding(3, 4, 3, 4);
+			btnCancel.Location = new Point(303, 260);
 			btnCancel.Name = "btnCancel";
-			btnCancel.Size = new Size(86, 39);
+			btnCancel.Size = new Size(75, 29);
 			btnCancel.TabIndex = 102;
 			btnCancel.Text = "Cancelar";
 			btnCancel.UseVisualStyleBackColor = true;
@@ -121,18 +117,17 @@
 			// 
 			lblFecha.AutoSize = true;
 			lblFecha.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			lblFecha.Location = new Point(12, 191);
+			lblFecha.Location = new Point(10, 143);
 			lblFecha.Name = "lblFecha";
-			lblFecha.Size = new Size(58, 23);
+			lblFecha.Size = new Size(47, 19);
 			lblFecha.TabIndex = 103;
 			lblFecha.Text = "Fecha:";
 			// 
 			// dtpDay
 			// 
-			dtpDay.Location = new Point(12, 218);
-			dtpDay.Margin = new Padding(3, 4, 3, 4);
+			dtpDay.Location = new Point(10, 164);
 			dtpDay.Name = "dtpDay";
-			dtpDay.Size = new Size(281, 27);
+			dtpDay.Size = new Size(246, 23);
 			dtpDay.TabIndex = 150;
 			// 
 			// panel1
@@ -140,26 +135,28 @@
 			panel1.BackColor = SystemColors.ControlLightLight;
 			panel1.Controls.Add(pictureBox1);
 			panel1.Controls.Add(lblAdd);
-			panel1.Location = new Point(12, 12);
+			panel1.Location = new Point(10, 9);
+			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(429, 87);
+			panel1.Size = new Size(375, 65);
 			panel1.TabIndex = 151;
 			// 
 			// pictureBox1
 			// 
 			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
 			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(4, 3);
+			pictureBox1.Location = new Point(12, 8);
+			pictureBox1.Margin = new Padding(3, 2, 3, 2);
 			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(96, 81);
+			pictureBox1.Size = new Size(76, 43);
 			pictureBox1.TabIndex = 152;
 			pictureBox1.TabStop = false;
 			// 
 			// FrmDiasFestivos
 			// 
-			AutoScaleDimensions = new SizeF(8F, 20F);
+			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(457, 395);
+			ClientSize = new Size(400, 296);
 			Controls.Add(panel1);
 			Controls.Add(dtpDay);
 			Controls.Add(lblFecha);
@@ -170,7 +167,6 @@
 			Controls.Add(txbDescripccion);
 			Controls.Add(lblConcepto);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmDiasFestivos";
 			Text = "Dias Festivos";
 			Load += FrmDiasFestivos_Load;

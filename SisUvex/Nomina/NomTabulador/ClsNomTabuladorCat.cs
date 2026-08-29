@@ -21,7 +21,7 @@ namespace SisUvex.Nomina.NomTabulador
 		public FrmNomTabulador frm;
 		public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
 		public string? idAddModify;
-		public FrmAddTabulador frmAdd;
+		public FrmAddTabulador frmAdd;   
 		ClsDGVCatalog? dgv;
 		ClsControls controlList;
 		DataTable dtCatalog;

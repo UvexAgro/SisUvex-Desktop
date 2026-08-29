@@ -26,41 +26,68 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		public FrmListaAsitencia frmDia;
 		public FrmAddIngresos frmAdd;
 		public FrmDeducciones frmDeu;
+		bool cargando = false;
 		public List<string> IdsAttendence { get; set; }
 		string query = @"SELECT  
-						lst.id_attendence,      
-						CONVERT(DATE, lst.d_attendence) AS Fecha,
-						lst.id_employee AS Empleado,
-						emp.v_lastNamePat AS 'Apellido paterno',
-						emp.v_lastNameMat AS 'Apellido materno',
-						emp.v_name AS Nombre,
-						lst.c_codigo_tab AS Actividad,
-						tab.v_descripcion_tab AS 'Descripción actividad',
-						con.id_concept AS id_concept,
-						con.v_concept AS Concepto,
-						con.n_unit AS Horas,
-						mi.n_amount AS Monto,
-						mi.id_Deductions,
-						ded.v_descripcion_ded AS 'Descripción Deducción',
-						mi.n_importefijo_ded AS 'Descuento'
-						FROM Nom_AttendenceList lst
-						JOIN Nom_Employees emp 
-						ON emp.id_employee = lst.id_employee
-						JOIN Nom_Tabulador tab 
-						ON tab.c_codigo_tab = lst.c_codigo_tab
-						LEFT JOIN Nom_MiscellaneousIncome mi 
-						ON mi.id_attendence = lst.id_attendence
-						LEFT JOIN Nom_concept con 
-						ON con.id_concept = mi.id_concept
-						LEFT JOIN Nom_Deductions ded 
-						ON ded.id_Deductions = mi.id_Deductions ";
+                lst.id_attendence,      
+                CONVERT(DATE, lst.d_attendence) AS Fecha,
+                lst.id_employee AS Empleado,
+                emp.v_lastNamePat AS 'Apellido paterno',
+                emp.v_lastNameMat AS 'Apellido materno',
+                emp.v_name AS Nombre,
+                lst.c_codigo_tab AS Actividad,
+                tab.v_descripcion_tab AS 'Descripción actividad',
+                lst.id_workGroup AS id_workGroup,
+                con.id_concept AS id_concept,
+                con.v_concept AS Concepto,
+                con.n_unit AS Horas,
+                mi.n_amount AS Monto,
+                mi.id_Deductions,
+                ded.v_descripcion_ded AS 'Descripción Deducción',
+                mi.n_importefijo_ded AS 'Descuento'
+                FROM Nom_AttendenceList lst
+                JOIN Nom_Employees emp 
+                    ON emp.id_employee = lst.id_employee
+                JOIN Nom_Tabulador tab 
+                    ON tab.c_codigo_tab = lst.c_codigo_tab
+                LEFT JOIN Nom_MiscellaneousIncome mi 
+                    ON mi.id_attendence = lst.id_attendence
+                LEFT JOIN Nom_concept con 
+                    ON con.id_concept = mi.id_concept
+                LEFT JOIN Nom_Deductions ded 
+                    ON ded.id_Deductions = mi.id_Deductions ";
+
 		string queryOrder = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
 
+		string queryCampo = @"SELECT
+        wg.id_workGroupEmployeeDaily,
+        wg.id_employee AS Empleado,
+        CONVERT(DATE, wg.d_date) AS Fecha,
+        emp.v_lastNamePat AS 'Apellido paterno',
+        emp.v_lastNameMat AS 'Apellido materno',
+        emp.v_name AS Nombre,
+        wg.id_activity AS Actividad,
+        tab.v_descripcion_tab AS 'Descripción actividad',
+        wg.id_workGroup AS id_workGroup,
+        NULL AS id_concept,
+        NULL AS Concepto,
+        NULL AS Horas,
+        NULL AS Monto,
+        NULL AS id_Deductions,
+        NULL AS 'Descripción Deducción',
+        NULL AS 'Descuento'
+        FROM Nom_WorkGroupEmployeeDaily wg
+        JOIN Nom_Employees emp
+            ON emp.id_employee = wg.id_employee
+        LEFT JOIN Nom_Tabulador tab
+            ON tab.c_codigo_tab = wg.id_activity ";
+
+		string queryOrderCampo = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
 		public void ObtenerAsistenciaEmpaqueDia()
 		{
 			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
 
-			// 🔹 OBTENER ACTIVIDAD DEL COMBO
+			// OBTENER ACTIVIDAD
 			string actividad = "";
 
 			if (frmDia.cboActividad.SelectedValue != null
@@ -69,7 +96,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				actividad = frmDia.cboActividad.SelectedValue.ToString();
 			}
 
-			// 🔹 CREAR FILTRO
+			// FILTRO ACTIVIDAD
 			string filtroActividad = "";
 
 			if (!string.IsNullOrEmpty(actividad))
@@ -77,11 +104,34 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				filtroActividad = $" AND lst.c_codigo_tab = '{actividad}'";
 			}
 
-			// 🔹 QUERY FINAL
-			string queryFinal = $@" {query} WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}'{filtroActividad} {queryOrder}";
+			// OBTENER CUADRILLA
+			string idCuadrilla = "";
+
+			if (frmDia.cboCuadrillaEmpaque.SelectedValue != null
+				&& frmDia.cboCuadrillaEmpaque.SelectedValue != DBNull.Value)
+			{
+				idCuadrilla = frmDia.cboCuadrillaEmpaque.SelectedValue.ToString();
+			}
+
+			// FILTRO CUADRILLA
+			string filtroCuadrilla = "";
+
+			if (!string.IsNullOrEmpty(idCuadrilla))
+			{
+				filtroCuadrilla = $" AND lst.id_workGroup = '{idCuadrilla}'";
+			}
+
+			// QUERY FINAL
+			string queryFinal = $@"
+			{query}
+			WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}'
+			{filtroActividad}
+			{filtroCuadrilla}
+			{queryOrder}";
 
 			frmDia.dgvLista.DataSource = ClsQuerysDB.GetDataTable(queryFinal);
 
+			// OCULTAR COLUMNAS
 			if (frmDia.dgvLista.Columns.Contains("id_attendence"))
 				frmDia.dgvLista.Columns["id_attendence"].Visible = false;
 
@@ -91,9 +141,76 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
 				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
 
+			if (frmDia.dgvLista.Columns.Contains("id_workGroup"))
+				frmDia.dgvLista.Columns["id_workGroup"].Visible = false;
+
+			// CHECKBOX
 			if (!frmDia.dgvLista.Columns.Contains("Seleccionar"))
 			{
 				DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
+
+				chk.Name = "Seleccionar";
+				chk.HeaderText = "✔";
+				chk.Width = 40;
+
+				frmDia.dgvLista.Columns.Insert(0, chk);
+			}
+		}
+		public void ObtenerEmpleadosCampoDia()
+		{
+			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
+
+			string idCuadrilla = "";
+
+			if (frmDia.cboCuadrillaCampo.SelectedValue != null &&
+				frmDia.cboCuadrillaCampo.SelectedValue != DBNull.Value)
+			{
+				idCuadrilla = frmDia.cboCuadrillaCampo.SelectedValue.ToString();
+			}
+
+			string filtroCuadrilla = "";
+
+			if (!string.IsNullOrEmpty(idCuadrilla))
+			{
+				filtroCuadrilla =
+					$" AND wg.id_workGroup = '{idCuadrilla}'";
+			}
+
+			string queryFinal = $@"
+			{queryCampo}
+			WHERE CONVERT(DATE, wg.d_date) = '{fecha}'
+			{filtroCuadrilla}
+			ORDER BY
+				emp.v_lastNamePat,
+				emp.v_lastNameMat,
+				emp.v_name";
+
+			frmDia.dgvLista.DataSource =
+				ClsQuerysDB.GetDataTable(queryFinal);
+
+			if (frmDia.dgvLista.Columns.Contains("id_workGroup"))
+				frmDia.dgvLista.Columns["id_workGroup"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("id_workGroupEmployeeDaily"))
+				frmDia.dgvLista.Columns["id_workGroupEmployeeDaily"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("Fecha"))
+				frmDia.dgvLista.Columns["Fecha"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("Actividad"))
+				frmDia.dgvLista.Columns["Actividad"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("id_concept"))
+				frmDia.dgvLista.Columns["id_concept"].Visible = false;
+
+			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
+				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
+
+			if (!frmDia.dgvLista.Columns.Contains("Seleccionar"))
+			{
+				DataGridViewCheckBoxColumn chk =
+					new DataGridViewCheckBoxColumn();
+
 				chk.Name = "Seleccionar";
 				chk.HeaderText = "✔";
 				chk.Width = 40;
@@ -349,6 +466,94 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			{
 				sql.CloseConectionWrite();
 			}
+
+			return dt;
+		}
+		public void CargarCuadrillaCampo(ComboBox combo)
+		{
+			cargando = true;
+
+			DataTable dt = CboCuadrillaCampo();
+
+			DataRow dr = dt.NewRow();
+			dr["Código"] = DBNull.Value;
+			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dt.Rows.InsertAt(dr, 0);
+
+			combo.DataSource = dt.Copy();
+			combo.DisplayMember = "Nombre";
+			combo.ValueMember = "Código";
+			combo.SelectedIndex = 0;
+
+			cargando = false;
+		}
+		public DataTable CboCuadrillaCampo()
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			sql.OpenConectionWrite();
+
+			string query = @"
+			SELECT 
+				g.id_workGroup AS Código,
+				g.id_workGroup + ' - ' + g.v_nameWorkGroup AS Nombre
+			FROM Nom_WorkGroup g
+			WHERE g.c_active = 1
+			ORDER BY g.id_workGroup";
+
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			da.Fill(dt);
+
+			sql.CloseConectionWrite();
+
+			return dt;
+		}
+		
+		public void CargarCuadrillaEmpaque(ComboBox combo)
+		{
+			cargando = true;
+
+
+			SQLControl sql = new SQLControl();
+			DataTable dt = CboCuadrillaEmpaque();
+
+			DataRow dr = dt.NewRow();
+			dr["Código"] = DBNull.Value;
+			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dt.Rows.InsertAt(dr, 0);
+
+			combo.DataSource = dt.Copy();
+			combo.DisplayMember = "Nombre";
+			combo.ValueMember = "Código";
+			combo.SelectedIndex = 0;
+
+			cargando = false;
+		}
+		public DataTable CboCuadrillaEmpaque()
+		{
+
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			sql.OpenConectionWrite();
+
+			string query = @"
+        SELECT 
+            g.id_workGroup AS Código,
+            g.id_workGroup + ' - ' + g.v_nameWorkGroup AS Nombre
+        FROM Pack_WorkGroup g
+        WHERE g.c_active = 1
+          AND g.id_contractor IN ('09', '15')
+        ORDER BY g.id_workGroup";
+			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			da.Fill(dt);
+
+			sql.CloseConectionWrite();
 
 			return dt;
 		}

@@ -7,18 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Nomina.LOAD;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
 {
 	public partial class FrmNominaExistente : Form
 	{
-	    ClsSemiAutomatedPayroll cls;
+		ClsSemiAutomatedPayroll cls;
+		ClsCierre clsC;
 		private Color colorTema;
+		public string TipoFestivo { get; private set; }
 		public FrmNominaExistente()
 		{
 			InitializeComponent();
+
+			this.StartPosition = FormStartPosition.CenterParent;
 			cls = new ClsSemiAutomatedPayroll();
+			clsC = new ClsCierre();
 			// Asignar eventos
 			btnMostrar.MouseEnter += Boton_MouseEnter;
 			btnMostrar.MouseLeave += Boton_MouseLeave;
@@ -55,26 +61,52 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		}
 
 		private void btnCancelar_Click(object sender, EventArgs e)
-		{ 
+		{
 			this.Close();
 		}
 		public void CargarDatos(string tipoNomina, DateTime fecha)
 		{
+			TipoFestivo = "";
 			lblGenero.Text = tipoNomina == "E" ? "Espárrago" : "Uva";
+			lblFechaNomina.Text = $"{fecha:dd/MM/yyyy}";
 
 			DataTable dt = cls.ObtenerInfoNomina(fecha, tipoNomina);
 
 			if (dt.Rows.Count > 0)
 			{
 				lblUsuario.Text = dt.Rows[0]["Usuario"].ToString();
+
 				lblFecha.Text = Convert.ToDateTime(dt.Rows[0]["Fecha"])
 					.ToString("dd/MM/yyyy HH:mm");
+
+				if (dt.Columns.Contains("TipoFestivo") &&
+					dt.Rows[0]["TipoFestivo"] != DBNull.Value)
+				{
+					TipoFestivo = dt.Rows[0]["TipoFestivo"].ToString();
+				}
 			}
 			else
 			{
 				lblUsuario.Text = "";
 				lblFecha.Text = fecha.ToString("dd/MM/yyyy HH:mm");
 			}
+
+			// Obtener empleados de la nómina
+			string fechaTexto =
+				fecha.ToString("yyyy-MM-dd");
+
+			string query = tipoNomina == "E"
+				? $"EXEC sp_GetReporteNominaDiaria_Esparrago '{fechaTexto}'"
+				: $"EXEC sp_GetReporteNominaDiaria_Uva '{fechaTexto}'";
+
+			DataTable dtNomina =
+				ClsQuerysDB.GetDataTable(query);
+
+			int cantidadEmpleados =
+				dtNomina.Rows.Count;
+
+			lblCantidadEmpleados.Text =
+				$"{cantidadEmpleados}";
 
 			CargarImagenTipoNomina(tipoNomina);
 			AplicarColores(tipoNomina);
@@ -142,24 +174,12 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 		private void CargarImagenTipoNomina(string tipoNomina)
 		{
-			string nombreImagen = tipoNomina == "E"
-				? "esparragos1.png"
-				: "uvas1.png";
+			ptbGenero.SizeMode = PictureBoxSizeMode.Zoom;
 
-			string ruta = Path.Combine(
-				@"C:\SisUvex\SisUvex-Desktop\SisUvex\Resources",
-				nombreImagen);
-
-			if (File.Exists(ruta))
-			{
-				ptbGenero.SizeMode = PictureBoxSizeMode.Zoom;
-				ptbGenero.Image = Image.FromFile(ruta);
-			}
+			if (tipoNomina == "E")
+				ptbGenero.Image = Properties.Resources.esparragoss;
 			else
-			{
-				MessageBox.Show("No se encontró la imagen:\n" + ruta);
-				ptbGenero.Image = null;
-			}
+				ptbGenero.Image = Properties.Resources.uvatres;
 		}
 		private void FrmNominaExistente_Load(object sender, EventArgs e)
 		{
@@ -172,11 +192,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			switch (tipo)
 			{
 				case "E":
-					color = Color.FromArgb(76, 175, 80); // Espárrago
+					color = Color.FromArgb(0, 91, 45); // Espárrago
 					break;
 
 				case "U":
-					color = Color.FromArgb(106, 27, 154); // Uva
+					color = Color.FromArgb(91, 45, 120); // Uva
 					break;
 
 				default:
@@ -185,6 +205,11 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			}
 
 			plNomina.BackColor = color;
+			lblTitulo.ForeColor = color;
+
+			lbldatos.ForeColor = color;
+			lblAccion.ForeColor = color;
+			lblGeneracion.ForeColor = color;
 
 			// Mostrar Nómina
 			btnMostrar.BackColor = Color.White;
@@ -206,6 +231,20 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			btnCancelar.FlatStyle = FlatStyle.Flat;
 			btnCancelar.FlatAppearance.BorderColor = Color.Gray;
 			btnCancelar.FlatAppearance.BorderSize = 1;
+		}
+		public void BloquearRecalculo()
+		{
+			btnRecalcular.Enabled = false;
+
+		}
+		public void BloquearCancelar()
+		{
+			btnCancelar.Enabled = false;
+		}
+
+		private void gbDatos_Enter(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

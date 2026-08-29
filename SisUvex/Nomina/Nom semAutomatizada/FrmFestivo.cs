@@ -17,6 +17,7 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public FrmFestivo()
 		{
 			InitializeComponent();
+			this.StartPosition = FormStartPosition.CenterParent;
 		}
 
 		private void FrmFestivo_Load(object sender, EventArgs e)

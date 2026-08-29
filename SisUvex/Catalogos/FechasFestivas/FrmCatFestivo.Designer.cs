@@ -51,10 +51,10 @@
 			btnAdd.ForeColor = SystemColors.ActiveCaptionText;
 			btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
 			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAdd.Location = new Point(13, 112);
-			btnAdd.Margin = new Padding(3, 4, 3, 4);
+			btnAdd.Location = new Point(11, 84);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Size = new Size(96, 40);
+			btnAdd.Padding = new Padding(5, 0, 5, 0);
+			btnAdd.Size = new Size(84, 30);
 			btnAdd.TabIndex = 2;
 			btnAdd.Text = "Nuevo";
 			btnAdd.TextAlign = ContentAlignment.MiddleRight;
@@ -65,10 +65,10 @@
 			// 
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(115, 112);
-			btnModify.Margin = new Padding(3, 4, 3, 4);
+			btnModify.Location = new Point(101, 84);
 			btnModify.Name = "btnModify";
-			btnModify.Size = new Size(96, 40);
+			btnModify.Padding = new Padding(5, 0, 5, 0);
+			btnModify.Size = new Size(84, 30);
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Editar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -80,10 +80,10 @@
 			btnRemove.ForeColor = Color.Red;
 			btnRemove.Image = (Image)resources.GetObject("btnRemove.Image");
 			btnRemove.ImageAlign = ContentAlignment.MiddleLeft;
-			btnRemove.Location = new Point(217, 112);
-			btnRemove.Margin = new Padding(3, 4, 3, 4);
+			btnRemove.Location = new Point(190, 84);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new Size(96, 40);
+			btnRemove.Padding = new Padding(5, 0, 5, 0);
+			btnRemove.Size = new Size(84, 30);
 			btnRemove.TabIndex = 5;
 			btnRemove.Text = "Eliminar";
 			btnRemove.TextAlign = ContentAlignment.MiddleRight;
@@ -112,8 +112,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(14, 160);
-			dgvCatalog.Margin = new Padding(3, 4, 3, 4);
+			dgvCatalog.Location = new Point(12, 120);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -127,7 +126,7 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(887, 424);
+			dgvCatalog.Size = new Size(776, 318);
 			dgvCatalog.TabIndex = 12;
 			// 
 			// panel1
@@ -136,17 +135,18 @@
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
 			panel1.Controls.Add(pictureBox1);
-			panel1.Location = new Point(15, 12);
+			panel1.Location = new Point(13, 9);
+			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(886, 89);
+			panel1.Size = new Size(775, 67);
 			panel1.TabIndex = 13;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(128, 62);
+			label2.Location = new Point(93, 46);
 			label2.Name = "label2";
-			label2.Size = new Size(360, 20);
+			label2.Size = new Size(285, 15);
 			label2.TabIndex = 2;
 			label2.Text = "Administra los días festivos registrados en el sistema.";
 			// 
@@ -154,34 +154,34 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(121, 3);
+			label1.Location = new Point(87, 2);
 			label1.Name = "label1";
-			label1.Size = new Size(276, 50);
+			label1.Size = new Size(224, 41);
 			label1.TabIndex = 1;
 			label1.Text = "Fechas Festivas";
 			// 
 			// pictureBox1
 			// 
 			pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-			pictureBox1.Location = new Point(3, 11);
+			pictureBox1.Location = new Point(3, 8);
+			pictureBox1.Margin = new Padding(3, 2, 3, 2);
 			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(83, 61);
+			pictureBox1.Size = new Size(73, 46);
 			pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 			pictureBox1.TabIndex = 0;
 			pictureBox1.TabStop = false;
 			// 
 			// FrmCatFestivo
 			// 
-			AutoScaleDimensions = new SizeF(8F, 20F);
+			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(914, 600);
+			ClientSize = new Size(800, 450);
 			Controls.Add(panel1);
 			Controls.Add(dgvCatalog);
 			Controls.Add(btnRemove);
 			Controls.Add(btnModify);
 			Controls.Add(btnAdd);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmCatFestivo";
 			Text = "Catalago Fechas Festivas";
 			Load += FrmCatFestivo_Load;
@@ -199,8 +199,8 @@
 		private Button btnRemove;
 		public DataGridView dgvCatalog;
 		private Panel panel1;
-		private PictureBox pictureBox1;
 		private Label label2;
 		private Label label1;
+		private PictureBox pictureBox1;
 	}
 }

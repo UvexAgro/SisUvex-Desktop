@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -31,6 +32,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		
 		public void OpenFrmAdd()
 		{
+
 			frmA = new FrmAñadir(frmPacki, this);
 			frmA.Text = "Añadir horario de empaque";
 			frmA.lblTitle.Text = "Añadir horario de empaque";
@@ -212,7 +214,7 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				frmA.dtpCenaFinal
 			);
 
-			// 🔥 ACTUALIZA UI
+			//  ACTUALIZA UI
 			ActualizarControles();
 		}
 		public void ActualizarControles()
@@ -277,15 +279,16 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		{
 			try
 			{
-				if (frmPacki.cboTemporada.SelectedValue == null ||
-					frmPacki.cboSemana.SelectedItem == null ||
+				if (!int.TryParse(frmPacki.cboTemporada.SelectedValue?.ToString(), out int temporada))
+					return;
+
+				if (frmPacki.cboSemana.SelectedItem == null ||
 					frmPacki.cboFinal.SelectedItem == null)
 					return;
 
 				DataRowView rowInicio = (DataRowView)frmPacki.cboSemana.SelectedItem;
 				DataRowView rowFin = (DataRowView)frmPacki.cboFinal.SelectedItem;
 
-				int temporada = Convert.ToInt32(frmPacki.cboTemporada.SelectedValue);
 				int periodo = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnId]);
 				int semanaInicio = Convert.ToInt32(rowInicio[Payroll_AttendancePeriod.ColumnSequence]);
 				int semanaFin = Convert.ToInt32(rowFin[Payroll_AttendancePeriod.ColumnSequence]);
@@ -518,8 +521,12 @@ namespace SisUvex.Nomina.Reporte_de_horas
 				}
 			}
 		}
+
 		public void AjustarEncabezados()
 		{
+			if (frmPacki.dgvHoras.Columns.Count == 0)
+				return;
+
 			frmPacki.dgvHoras.Columns["InicioComida"].HeaderText = "Inicio";
 			frmPacki.dgvHoras.Columns["FinComida"].HeaderText = "Fin";
 			frmPacki.dgvHoras.Columns["HorasComida"].HeaderText = "Horas";
@@ -881,7 +888,11 @@ namespace SisUvex.Nomina.Reporte_de_horas
 		}
 		public void CargarCuadrillasCheckList()
 		{
-			int temporada = Convert.ToInt32(frmPacki.cboTemporada.SelectedValue);
+			if (!int.TryParse(frmPacki.cboTemporada.SelectedValue?.ToString(), out int temporada))
+			{
+				frmA.clbCuadrilla.Items.Clear();
+				return;
+			}
 
 			DataTable dt = ClbCuadrilla(temporada);
 
