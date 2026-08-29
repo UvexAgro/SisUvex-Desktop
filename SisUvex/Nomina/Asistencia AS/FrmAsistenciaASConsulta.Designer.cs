@@ -444,6 +444,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnOpenFrmAttendanceType.Text = "Tipo de asistencia";
             btnOpenFrmAttendanceType.TextAlign = ContentAlignment.MiddleRight;
             btnOpenFrmAttendanceType.UseVisualStyleBackColor = true;
+            btnOpenFrmAttendanceType.Click += btnOpenFrmAttendanceType_Click;
             // 
             // FrmAsistenciaASConsulta
             // 

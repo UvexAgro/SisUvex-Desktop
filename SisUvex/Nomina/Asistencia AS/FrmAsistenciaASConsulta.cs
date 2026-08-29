@@ -1,3 +1,4 @@
+using SisUvex.Archivo.MixtearPallets;
 using System;
 using System.Windows.Forms;
 
@@ -93,6 +94,15 @@ namespace SisUvex.Nomina.Asistencia_AS
                 e.SuppressKeyPress = true;
                 cls.PasteEmployeeCodesAsPlainText();
             }
+        }
+
+        private void btnOpenFrmAttendanceType_Click(object sender, EventArgs e)
+        {
+            if (!User.HasViewCatalogsPermission())
+                return;
+
+            Nom_AttendanceType.FrmAttendanceTypeCat frm = new();
+            FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
         }
     }
 }
