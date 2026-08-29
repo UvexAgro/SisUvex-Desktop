@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmListaAsitencia));
 			dtpDia = new DateTimePicker();
 			dgvLista = new DataGridView();
@@ -51,6 +51,10 @@
 			panel1 = new Panel();
 			label2 = new Label();
 			label1 = new Label();
+			label3 = new Label();
+			cboCuadrillaCampo = new ComboBox();
+			label4 = new Label();
+			cboCuadrillaEmpaque = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -59,10 +63,9 @@
 			// 
 			// dtpDia
 			// 
-			dtpDia.Location = new Point(13, 112);
-			dtpDia.Margin = new Padding(3, 4, 3, 4);
+			dtpDia.Location = new Point(12, 112);
 			dtpDia.Name = "dtpDia";
-			dtpDia.Size = new Size(290, 27);
+			dtpDia.Size = new Size(254, 23);
 			dtpDia.TabIndex = 1;
 			// 
 			// dgvLista
@@ -75,41 +78,39 @@
 			dgvLista.BackgroundColor = SystemColors.ControlLightLight;
 			dgvLista.BorderStyle = BorderStyle.Fixed3D;
 			dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvLista.ColumnHeadersHeight = 29;
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
-			dgvLista.Location = new Point(14, 244);
-			dgvLista.Margin = new Padding(3, 4, 3, 4);
+			dgvLista.Location = new Point(12, 234);
 			dgvLista.Name = "dgvLista";
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvLista.Size = new Size(1194, 671);
+			dgvLista.Size = new Size(1230, 551);
 			dgvLista.TabIndex = 3;
 			// 
 			// btnBuscar
 			// 
-			btnBuscar.Location = new Point(320, 109);
-			btnBuscar.Margin = new Padding(3, 4, 3, 4);
+			btnBuscar.Location = new Point(281, 110);
 			btnBuscar.Name = "btnBuscar";
-			btnBuscar.Size = new Size(86, 31);
+			btnBuscar.Size = new Size(75, 23);
 			btnBuscar.TabIndex = 4;
 			btnBuscar.Text = "Buscar";
 			btnBuscar.UseVisualStyleBackColor = true;
@@ -120,11 +121,10 @@
 			btnAdd.BackgroundImageLayout = ImageLayout.Zoom;
 			btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
 			btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAdd.Location = new Point(6, 29);
-			btnAdd.Margin = new Padding(3, 4, 3, 4);
+			btnAdd.Location = new Point(5, 22);
 			btnAdd.Name = "btnAdd";
-			btnAdd.Padding = new Padding(9, 0, 9, 0);
-			btnAdd.Size = new Size(106, 31);
+			btnAdd.Padding = new Padding(8, 0, 8, 0);
+			btnAdd.Size = new Size(93, 31);
 			btnAdd.TabIndex = 5;
 			btnAdd.Text = "Añadir";
 			btnAdd.TextAlign = ContentAlignment.MiddleRight;
@@ -135,11 +135,10 @@
 			// 
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(134, 29);
-			btnModify.Margin = new Padding(3, 4, 3, 4);
+			btnModify.Location = new Point(117, 22);
 			btnModify.Name = "btnModify";
-			btnModify.Padding = new Padding(6, 0, 6, 0);
-			btnModify.Size = new Size(116, 31);
+			btnModify.Padding = new Padding(7, 0, 7, 0);
+			btnModify.Size = new Size(102, 31);
 			btnModify.TabIndex = 6;
 			btnModify.Text = "Modificar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -150,11 +149,10 @@
 			// 
 			btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
 			btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnEliminar.Location = new Point(270, 29);
-			btnEliminar.Margin = new Padding(3, 4, 3, 4);
+			btnEliminar.Location = new Point(236, 22);
 			btnEliminar.Name = "btnEliminar";
-			btnEliminar.Padding = new Padding(9, 0, 9, 0);
-			btnEliminar.Size = new Size(116, 31);
+			btnEliminar.Padding = new Padding(8, 0, 8, 0);
+			btnEliminar.Size = new Size(102, 31);
 			btnEliminar.TabIndex = 7;
 			btnEliminar.Text = "Eliminar";
 			btnEliminar.TextAlign = ContentAlignment.MiddleRight;
@@ -166,11 +164,9 @@
 			groupBox1.Controls.Add(btnAdd);
 			groupBox1.Controls.Add(btnEliminar);
 			groupBox1.Controls.Add(btnModify);
-			groupBox1.Location = new Point(14, 165);
-			groupBox1.Margin = new Padding(3, 4, 3, 4);
+			groupBox1.Location = new Point(428, 88);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Padding = new Padding(3, 4, 3, 4);
-			groupBox1.Size = new Size(392, 71);
+			groupBox1.Size = new Size(343, 65);
 			groupBox1.TabIndex = 8;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Ingresos";
@@ -180,11 +176,9 @@
 			groupBox2.Controls.Add(btnAñadirD);
 			groupBox2.Controls.Add(button2);
 			groupBox2.Controls.Add(btnModificarDed);
-			groupBox2.Location = new Point(458, 165);
-			groupBox2.Margin = new Padding(3, 4, 3, 4);
+			groupBox2.Location = new Point(818, 88);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Padding = new Padding(3, 4, 3, 4);
-			groupBox2.Size = new Size(393, 71);
+			groupBox2.Size = new Size(344, 65);
 			groupBox2.TabIndex = 9;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Deducciones";
@@ -193,11 +187,10 @@
 			// 
 			btnAñadirD.Image = (Image)resources.GetObject("btnAñadirD.Image");
 			btnAñadirD.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAñadirD.Location = new Point(6, 28);
-			btnAñadirD.Margin = new Padding(3, 4, 3, 4);
+			btnAñadirD.Location = new Point(5, 21);
 			btnAñadirD.Name = "btnAñadirD";
-			btnAñadirD.Padding = new Padding(9, 0, 9, 0);
-			btnAñadirD.Size = new Size(106, 31);
+			btnAñadirD.Padding = new Padding(8, 0, 8, 0);
+			btnAñadirD.Size = new Size(93, 32);
 			btnAñadirD.TabIndex = 5;
 			btnAñadirD.Text = "Añadir";
 			btnAñadirD.TextAlign = ContentAlignment.MiddleRight;
@@ -208,11 +201,10 @@
 			// 
 			button2.Image = (Image)resources.GetObject("button2.Image");
 			button2.ImageAlign = ContentAlignment.MiddleLeft;
-			button2.Location = new Point(271, 28);
-			button2.Margin = new Padding(3, 4, 3, 4);
+			button2.Location = new Point(237, 21);
 			button2.Name = "button2";
-			button2.Padding = new Padding(9, 0, 9, 0);
-			button2.Size = new Size(116, 31);
+			button2.Padding = new Padding(8, 0, 8, 0);
+			button2.Size = new Size(102, 32);
 			button2.TabIndex = 7;
 			button2.Text = "Eliminar";
 			button2.TextAlign = ContentAlignment.MiddleRight;
@@ -223,11 +215,10 @@
 			// 
 			btnModificarDed.Image = (Image)resources.GetObject("btnModificarDed.Image");
 			btnModificarDed.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModificarDed.Location = new Point(135, 28);
-			btnModificarDed.Margin = new Padding(3, 4, 3, 4);
+			btnModificarDed.Location = new Point(118, 21);
 			btnModificarDed.Name = "btnModificarDed";
-			btnModificarDed.Padding = new Padding(6, 0, 6, 0);
-			btnModificarDed.Size = new Size(116, 31);
+			btnModificarDed.Padding = new Padding(7, 0, 7, 0);
+			btnModificarDed.Size = new Size(102, 32);
 			btnModificarDed.TabIndex = 6;
 			btnModificarDed.Text = "Modificar";
 			btnModificarDed.TextAlign = ContentAlignment.MiddleRight;
@@ -238,28 +229,26 @@
 			// 
 			lblEmpleado.AutoSize = true;
 			lblEmpleado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblEmpleado.Location = new Point(458, 117);
+			lblEmpleado.Location = new Point(616, 185);
 			lblEmpleado.Name = "lblEmpleado";
-			lblEmpleado.Size = new Size(81, 20);
+			lblEmpleado.Size = new Size(51, 15);
 			lblEmpleado.TabIndex = 11;
-			lblEmpleado.Text = "Empleado:";
+			lblEmpleado.Text = "Codigo :";
 			// 
 			// txbEmpleado
 			// 
-			txbEmpleado.Location = new Point(545, 109);
-			txbEmpleado.Margin = new Padding(3, 4, 3, 4);
+			txbEmpleado.Location = new Point(673, 180);
 			txbEmpleado.Name = "txbEmpleado";
-			txbEmpleado.Size = new Size(212, 27);
+			txbEmpleado.Size = new Size(93, 23);
 			txbEmpleado.TabIndex = 13;
 			// 
 			// btnEmpleado
 			// 
 			btnEmpleado.BackgroundImage = Properties.Resources.BuscarLupa1;
 			btnEmpleado.BackgroundImageLayout = ImageLayout.Stretch;
-			btnEmpleado.Location = new Point(764, 109);
-			btnEmpleado.Margin = new Padding(3, 4, 3, 4);
+			btnEmpleado.Location = new Point(772, 180);
 			btnEmpleado.Name = "btnEmpleado";
-			btnEmpleado.Size = new Size(26, 31);
+			btnEmpleado.Size = new Size(23, 23);
 			btnEmpleado.TabIndex = 14;
 			btnEmpleado.UseVisualStyleBackColor = true;
 			btnEmpleado.Click += btnEmpleado_Click;
@@ -267,10 +256,9 @@
 			// btnFrmSearchEmployeeId
 			// 
 			btnFrmSearchEmployeeId.BackgroundImageLayout = ImageLayout.Stretch;
-			btnFrmSearchEmployeeId.Location = new Point(797, 109);
-			btnFrmSearchEmployeeId.Margin = new Padding(3, 4, 3, 4);
+			btnFrmSearchEmployeeId.Location = new Point(799, 181);
 			btnFrmSearchEmployeeId.Name = "btnFrmSearchEmployeeId";
-			btnFrmSearchEmployeeId.Size = new Size(30, 31);
+			btnFrmSearchEmployeeId.Size = new Size(23, 22);
 			btnFrmSearchEmployeeId.TabIndex = 68;
 			btnFrmSearchEmployeeId.Text = "...";
 			btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
@@ -279,10 +267,9 @@
 			// cboActividad
 			// 
 			cboActividad.FormattingEnabled = true;
-			cboActividad.Location = new Point(941, 111);
-			cboActividad.Margin = new Padding(3, 4, 3, 4);
+			cboActividad.Location = new Point(922, 177);
 			cboActividad.Name = "cboActividad";
-			cboActividad.Size = new Size(267, 28);
+			cboActividad.Size = new Size(234, 23);
 			cboActividad.TabIndex = 108;
 			cboActividad.SelectedIndexChanged += cboActividad_SelectedIndexChanged;
 			// 
@@ -290,9 +277,9 @@
 			// 
 			lblActividad.AutoSize = true;
 			lblActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			lblActividad.Location = new Point(858, 116);
+			lblActividad.Location = new Point(856, 183);
 			lblActividad.Name = "lblActividad";
-			lblActividad.Size = new Size(77, 20);
+			lblActividad.Size = new Size(60, 15);
 			lblActividad.TabIndex = 109;
 			lblActividad.Text = "Actividad:";
 			// 
@@ -302,17 +289,18 @@
 			panel1.BackColor = SystemColors.GradientInactiveCaption;
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
-			panel1.Location = new Point(14, 12);
+			panel1.Location = new Point(12, 9);
+			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(1194, 80);
+			panel1.Size = new Size(1230, 74);
 			panel1.TabIndex = 110;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(13, 47);
+			label2.Location = new Point(11, 35);
 			label2.Name = "label2";
-			label2.Size = new Size(445, 20);
+			label2.Size = new Size(353, 15);
 			label2.TabIndex = 1;
 			label2.Text = "Administra los ingresos y deducciones aplicados a los empleados.";
 			// 
@@ -320,17 +308,59 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(13, 11);
+			label1.Location = new Point(11, 8);
 			label1.Name = "label1";
-			label1.Size = new Size(198, 28);
+			label1.Size = new Size(159, 21);
 			label1.TabIndex = 0;
 			label1.Text = "AJUSTE DE NÓMINA";
 			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			label3.Location = new Point(10, 164);
+			label3.Name = "label3";
+			label3.Size = new Size(100, 15);
+			label3.TabIndex = 112;
+			label3.Text = "Cuadrilla Campo :";
+			// 
+			// cboCuadrillaCampo
+			// 
+			cboCuadrillaCampo.FormattingEnabled = true;
+			cboCuadrillaCampo.Location = new Point(9, 182);
+			cboCuadrillaCampo.Name = "cboCuadrillaCampo";
+			cboCuadrillaCampo.Size = new Size(234, 23);
+			cboCuadrillaCampo.TabIndex = 111;
+			cboCuadrillaCampo.SelectedIndexChanged += cboCuadrillaCampo_SelectedIndexChanged;
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			label4.Location = new Point(310, 164);
+			label4.Name = "label4";
+			label4.Size = new Size(112, 15);
+			label4.TabIndex = 114;
+			label4.Text = "Cuadrilla Empaque :";
+			// 
+			// cboCuadrillaEmpaque
+			// 
+			cboCuadrillaEmpaque.FormattingEnabled = true;
+			cboCuadrillaEmpaque.Location = new Point(309, 182);
+			cboCuadrillaEmpaque.Name = "cboCuadrillaEmpaque";
+			cboCuadrillaEmpaque.Size = new Size(234, 23);
+			cboCuadrillaEmpaque.TabIndex = 113;
+			cboCuadrillaEmpaque.SelectedIndexChanged += cboCuadrillaEmpaque_SelectedIndexChanged;
+			// 
 			// FrmListaAsitencia
 			// 
-			AutoScaleDimensions = new SizeF(8F, 20F);
+			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1222, 931);
+			ClientSize = new Size(1254, 797);
+			Controls.Add(label4);
+			Controls.Add(cboCuadrillaEmpaque);
+			Controls.Add(label3);
+			Controls.Add(cboCuadrillaCampo);
 			Controls.Add(panel1);
 			Controls.Add(lblActividad);
 			Controls.Add(cboActividad);
@@ -344,7 +374,6 @@
 			Controls.Add(dgvLista);
 			Controls.Add(dtpDia);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			Margin = new Padding(3, 4, 3, 4);
 			Name = "FrmListaAsitencia";
 			Text = "Ajuste de Nomina ";
 			WindowState = FormWindowState.Maximized;
@@ -380,5 +409,9 @@
 		private Panel panel1;
 		private Label label2;
 		private Label label1;
+		private Label label3;
+		public ComboBox cboCuadrillaCampo;
+		private Label label4;
+		public ComboBox cboCuadrillaEmpaque;
 	}
 }

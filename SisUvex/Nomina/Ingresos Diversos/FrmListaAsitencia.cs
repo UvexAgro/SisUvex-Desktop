@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.IdentityModel.Tokens;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Nomina.Asistencia_de_empaque;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
-using Microsoft.IdentityModel.Tokens;
+using SisUvex.Nomina.Reporte_de_Emp_UVA;
 
 
 namespace SisUvex.Nomina.Ingresos_Diversos
@@ -18,7 +19,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	public partial class FrmListaAsitencia : Form
 	{
 		public FrmMenu frmMenu;
-
+		private bool cargando = false;
 		ClsIngresosDiversos cls;
 		ClsDeducciones clsDeu;
 
@@ -44,6 +45,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			cls.CargarComboActividades();
 			cls.ObtenerAsistenciaEmpaqueDia();
+			cls.CargarCuadrillaCampo(cboCuadrillaCampo);
+			cls.CargarCuadrillaEmpaque(cboCuadrillaEmpaque);
 
 			dgvLista.CurrentCellDirtyStateChanged += (s, ev) =>
 			{
@@ -54,7 +57,24 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 		private void btnBuscar_Click(object sender, EventArgs e)
 		{
-			cls.ObtenerAsistenciaEmpaqueDia();
+			// CAMPO
+			if (cboCuadrillaCampo.SelectedIndex > 0)
+			{
+				cls.ObtenerEmpleadosCampoDia();
+			}
+			// EMPAQUE
+			else if (cboCuadrillaEmpaque.SelectedIndex > 0)
+			{
+				cls.ObtenerAsistenciaEmpaqueDia();
+			}
+			else
+			{
+				MessageBox.Show(
+					"Seleccione una cuadrilla.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+			}
 		}
 
 		private void btnAdd_Click(object sender, EventArgs e)
@@ -195,6 +215,28 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		{
 			cls.ObtenerAsistenciaEmpaqueDia();
 
+		}
+
+		private void cboCuadrillaCampo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cargando)
+				return;
+
+			if (cboCuadrillaCampo.SelectedIndex > 0)
+			{
+				cboCuadrillaEmpaque.SelectedIndex = 0;
+			}
+		}
+
+		private void cboCuadrillaEmpaque_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cargando)
+				return;
+
+			if (cboCuadrillaEmpaque.SelectedIndex > 0)
+			{
+				cboCuadrillaCampo.SelectedIndex = 0;
+			}
 		}
 	}
 

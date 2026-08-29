@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -11,18 +12,23 @@ using System.Windows.Forms;
 using ClosedXML.Excel;
 using SisUvex.Catalogos.Metods.Querys;
 using static SisUvex.Catalogos.Metods.ClsObject;
+using System.Drawing.Drawing2D;
 
 namespace SisUvex.Nomina.Nom_semAutomatizada
 {
 	public partial class FrmSemiAutomatedPayroll : Form
 	{
 		ClsSemiAutomatedPayroll cls;
+		ClsCierre clsC;
 		ClsFestivo clsF;
 		public string TipoFestivoSeleccionado = "";
 
 		public FrmSemiAutomatedPayroll()
 		{
 			InitializeComponent();
+			pnlInicio.Visible = true;
+			dgvEmployee.Visible = false;
+			tlpDatos.Visible = false;
 		}
 
 		private void FrmSemiAutomatedPayroll_Load(object sender, EventArgs e)
@@ -31,8 +37,15 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 			cls.frm ??= this;
 			clsF ??= new ClsFestivo();
 			clsF.frm = this;
+			clsC ??= new ClsCierre();
+			clsC.frm = this;
 			cls.BeginForm();
 
+			cls.MostrarEstadoCierre();
+
+			RedondearPanel(pnCerrar, 30);
+			RedondearPanel(plCerrar, 30);
+			RedondearPanel(plTitulo, 30);
 		}
 
 		private void btnCVS_Click(object sender, EventArgs e)
@@ -45,12 +58,13 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 		public void dtpFecha_ValueChanged(object sender, EventArgs e)
 		{
 			cls.SetTxbReferencia();
+			cls.MostrarEstadoCierre();
 		}
 
 		private void btncargar_Click(object sender, EventArgs e)
 		{
-			cls.BtnCargarDatos();
 
+			cls.BtnCargarDatos();
 		}
 
 		private void btnExcel_Click(object sender, EventArgs e)
@@ -106,6 +120,73 @@ namespace SisUvex.Nomina.Nom_semAutomatizada
 
 				cell.Style.Font = dgvEmployee.Font;
 			}
+		}
+
+		private void btnCerrar_Click(object sender, EventArgs e)
+		{
+			cls.TipoNomina = rbtEsparrago.Checked ? "E" : "U";
+
+			FrmCierre frmCerrar = new FrmCierre();
+
+			frmCerrar.clsC = clsC;
+
+			frmCerrar.clsC.cls = cls;
+
+			frmCerrar.FechaCierre = dtpFecha.Value;
+
+			frmCerrar.ShowDialog();
+		}
+
+		private void rbtEsparrago_CheckedChanged(object sender, EventArgs e)
+		{
+			cls.MostrarEstadoCierre();
+		}
+
+		private void rbtUva_CheckedChanged(object sender, EventArgs e)
+		{
+			cls.MostrarEstadoCierre();
+		}
+
+		private void RedondearPanel(Panel panel, int radio)
+		{
+			GraphicsPath path = new GraphicsPath();
+
+			path.AddArc(0, 0, radio, radio, 180, 90);
+			path.AddArc(panel.Width - radio, 0, radio, radio, 270, 90);
+			path.AddArc(
+				panel.Width - radio,
+				panel.Height - radio,
+				radio,
+				radio,
+				0,
+				90);
+
+			path.AddArc(
+				0,
+				panel.Height - radio,
+				radio,
+				radio,
+				90,
+				90);
+
+			path.CloseFigure();
+
+			panel.Region = new Region(path);
+		}
+
+		private void plCerrar_Resize(object sender, EventArgs e)
+		{
+			RedondearPanel(plCerrar, 30);
+		}
+
+		private void pnCerrar_Resize(object sender, EventArgs e)
+		{
+			RedondearPanel(pnCerrar, 30);
+		}
+
+		private void plTitulo_Resize(object sender, EventArgs e)
+		{
+			RedondearPanel(plTitulo, 30);
 		}
 	}
 }
