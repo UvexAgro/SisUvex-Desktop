@@ -540,7 +540,28 @@ namespace SisUvex.Nomina.Asistencia_AS
                 _reportDays,
                 _attendanceStylesByPrefix,
                 ColorAsistencia,
-                dateRange);
+                dateRange,
+                BuildAttendanceTypesLegend());
+        }
+
+        /// <summary>
+        /// Construye la leyenda "PREFIJO Nombre | PREFIJO Nombre | ..." con los tipos de asistencia activos
+        /// (c_active = '1') de Nom_AttendanceType, en el orden del catálogo (id_attendanceType), para
+        /// mostrarla como referencia en el reporte de Excel.
+        /// </summary>
+        private static string BuildAttendanceTypesLegend()
+        {
+            DataTable dt = ClsQuerysDB.GetDataTable(
+                "SELECT v_prefix, v_name FROM Nom_AttendanceType WHERE c_active = '1' ORDER BY id_attendanceType;");
+
+            var parts = dt.AsEnumerable()
+                .Select(r => (
+                    Prefix: r["v_prefix"]?.ToString()?.Trim() ?? string.Empty,
+                    Name: r["v_name"]?.ToString()?.Trim() ?? string.Empty))
+                .Where(t => !string.IsNullOrWhiteSpace(t.Prefix))
+                .Select(t => string.IsNullOrWhiteSpace(t.Name) ? t.Prefix : $"{t.Prefix} {t.Name}");
+
+            return string.Join(" | ", parts);
         }
 
         // ── Coloreado de celdas del reporte (evento CellFormatting) ───────────

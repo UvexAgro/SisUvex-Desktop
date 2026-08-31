@@ -35,7 +35,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             List<DateTime> days,
             Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
-            string dateRange)
+            string dateRange,
+            string legend)
         {
             if (reportData == null || reportData.Rows.Count == 0)
             {
@@ -71,7 +72,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             using var wb = new XLWorkbook();
 
-            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange);
+            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
 
             AddRawDataSheet(wb, reportData);
 
@@ -97,7 +98,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             List<DateTime> days,
             Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
-            string dateRange)
+            string dateRange,
+            string legend)
         {
             var ws = wb.Worksheets.Add("Reporte Asistencias");
             ws.TabColor = TabColorReport;
@@ -114,7 +116,17 @@ namespace SisUvex.Nomina.Asistencia_AS
             filtersStyle.Font.FontColor = XLColor.White;
             filtersStyle.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
 
-            int monthRow      = filtersRow + 2;
+            // Fila de leyenda: "PREFIJO Nombre | PREFIJO Nombre | ..." con los tipos de asistencia activos.
+            int legendRow = filtersRow + 2;
+            if (!string.IsNullOrWhiteSpace(legend))
+            {
+                ws.Cell(legendRow, StartCol).Value = legend;
+                var legendStyle = ws.Cell(legendRow, StartCol).Style;
+                legendStyle.Font.SetFontSize(9);
+                legendStyle.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            }
+
+            int monthRow      = legendRow + 2;
             int dayRow        = monthRow + 1;
             int dataStartRow  = dayRow + 1;
             int dayColStart   = StartCol + FixedCols;

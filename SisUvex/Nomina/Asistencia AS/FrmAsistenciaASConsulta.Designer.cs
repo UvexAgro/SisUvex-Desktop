@@ -28,6 +28,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaASConsulta));
@@ -59,6 +60,16 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport = new DataGridView();
             lblTitle = new Label();
             btnOpenFrmAttendanceType = new Button();
+            cmsIdEmployee = new ContextMenuStrip(components);
+            tsmiUndo = new ToolStripMenuItem();
+            tssIdEmployee1 = new ToolStripSeparator();
+            tsmiCut = new ToolStripMenuItem();
+            tsmiCopy = new ToolStripMenuItem();
+            tsmiPaste = new ToolStripMenuItem();
+            tsmiDelete = new ToolStripMenuItem();
+            tssIdEmployee2 = new ToolStripSeparator();
+            tsmiSelectAll = new ToolStripMenuItem();
+            cmsIdEmployee.SuspendLayout();
             bgpInfo.SuspendLayout();
             gpbFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
@@ -330,6 +341,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             // txbIdEmployee
             // 
+            txbIdEmployee.ContextMenuStrip = cmsIdEmployee;
             txbIdEmployee.Font = new Font("Segoe UI", 10F);
             txbIdEmployee.Location = new Point(141, 69);
             txbIdEmployee.Name = "txbIdEmployee";
@@ -338,6 +350,65 @@ namespace SisUvex.Nomina.Asistencia_AS
             txbIdEmployee.TabIndex = 79;
             txbIdEmployee.Text = "";
             txbIdEmployee.KeyDown += txbIdEmployee_KeyDown;
+            // 
+            // cmsIdEmployee
+            // 
+            cmsIdEmployee.Items.AddRange(new ToolStripItem[] { tsmiUndo, tssIdEmployee1, tsmiCut, tsmiCopy, tsmiPaste, tsmiDelete, tssIdEmployee2, tsmiSelectAll });
+            cmsIdEmployee.Name = "cmsIdEmployee";
+            cmsIdEmployee.Size = new Size(181, 164);
+            cmsIdEmployee.Opening += cmsIdEmployee_Opening;
+            // 
+            // tsmiUndo
+            // 
+            tsmiUndo.Name = "tsmiUndo";
+            tsmiUndo.Size = new Size(180, 22);
+            tsmiUndo.Text = "Deshacer";
+            tsmiUndo.Click += tsmiUndo_Click;
+            // 
+            // tssIdEmployee1
+            // 
+            tssIdEmployee1.Name = "tssIdEmployee1";
+            tssIdEmployee1.Size = new Size(177, 6);
+            // 
+            // tsmiCut
+            // 
+            tsmiCut.Name = "tsmiCut";
+            tsmiCut.Size = new Size(180, 22);
+            tsmiCut.Text = "Cortar";
+            tsmiCut.Click += tsmiCut_Click;
+            // 
+            // tsmiCopy
+            // 
+            tsmiCopy.Name = "tsmiCopy";
+            tsmiCopy.Size = new Size(180, 22);
+            tsmiCopy.Text = "Copiar";
+            tsmiCopy.Click += tsmiCopy_Click;
+            // 
+            // tsmiPaste
+            // 
+            tsmiPaste.Name = "tsmiPaste";
+            tsmiPaste.Size = new Size(180, 22);
+            tsmiPaste.Text = "Pegar";
+            tsmiPaste.Click += tsmiPaste_Click;
+            // 
+            // tsmiDelete
+            // 
+            tsmiDelete.Name = "tsmiDelete";
+            tsmiDelete.Size = new Size(180, 22);
+            tsmiDelete.Text = "Eliminar";
+            tsmiDelete.Click += tsmiDelete_Click;
+            // 
+            // tssIdEmployee2
+            // 
+            tssIdEmployee2.Name = "tssIdEmployee2";
+            tssIdEmployee2.Size = new Size(177, 6);
+            // 
+            // tsmiSelectAll
+            // 
+            tsmiSelectAll.Name = "tsmiSelectAll";
+            tsmiSelectAll.Size = new Size(180, 22);
+            tsmiSelectAll.Text = "Seleccionar todo";
+            tsmiSelectAll.Click += tsmiSelectAll_Click;
             // 
             // cboSeason
             // 
@@ -470,6 +541,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             gpbFilters.ResumeLayout(false);
             gpbFilters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
+            cmsIdEmployee.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -504,5 +576,14 @@ namespace SisUvex.Nomina.Asistencia_AS
         public ComboBox cboAttendenceType;
         private Label label2;
         private Button btnOpenFrmAttendanceType;
+        private ContextMenuStrip cmsIdEmployee;
+        private ToolStripMenuItem tsmiUndo;
+        private ToolStripSeparator tssIdEmployee1;
+        private ToolStripMenuItem tsmiCut;
+        private ToolStripMenuItem tsmiCopy;
+        private ToolStripMenuItem tsmiPaste;
+        private ToolStripMenuItem tsmiDelete;
+        private ToolStripSeparator tssIdEmployee2;
+        private ToolStripMenuItem tsmiSelectAll;
     }
 }

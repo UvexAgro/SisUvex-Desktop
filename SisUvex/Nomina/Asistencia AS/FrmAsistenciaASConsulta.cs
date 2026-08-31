@@ -104,5 +104,45 @@ namespace SisUvex.Nomina.Asistencia_AS
             Nom_AttendanceType.FrmAttendanceTypeCat frm = new();
             FrmMenu.FrmMenuInstance.AbrirVentanaHijo(frm);
         }
+
+        private void cmsIdEmployee_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            tsmiUndo.Enabled = txbIdEmployee.CanUndo;
+            tsmiCut.Enabled = txbIdEmployee.SelectionLength > 0;
+            tsmiCopy.Enabled = txbIdEmployee.SelectionLength > 0;
+            tsmiPaste.Enabled = Clipboard.ContainsText();
+            tsmiDelete.Enabled = txbIdEmployee.SelectionLength > 0;
+            tsmiSelectAll.Enabled = txbIdEmployee.TextLength > 0;
+        }
+
+        private void tsmiUndo_Click(object sender, EventArgs e)
+        {
+            txbIdEmployee.Undo();
+        }
+
+        private void tsmiCut_Click(object sender, EventArgs e)
+        {
+            txbIdEmployee.Cut();
+        }
+
+        private void tsmiCopy_Click(object sender, EventArgs e)
+        {
+            txbIdEmployee.Copy();
+        }
+
+        private void tsmiPaste_Click(object sender, EventArgs e)
+        {
+            cls.PasteEmployeeCodesAsPlainText();
+        }
+
+        private void tsmiDelete_Click(object sender, EventArgs e)
+        {
+            txbIdEmployee.SelectedText = string.Empty;
+        }
+
+        private void tsmiSelectAll_Click(object sender, EventArgs e)
+        {
+            txbIdEmployee.SelectAll();
+        }
     }
 }
