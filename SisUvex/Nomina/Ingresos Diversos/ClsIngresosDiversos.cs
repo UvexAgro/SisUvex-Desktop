@@ -59,28 +59,43 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 		string queryOrder = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
 
-		string queryCampo = @"SELECT
-        wg.id_workGroupEmployeeDaily,
-        wg.id_employee AS Empleado,
-        CONVERT(DATE, wg.d_date) AS Fecha,
-        emp.v_lastNamePat AS 'Apellido paterno',
-        emp.v_lastNameMat AS 'Apellido materno',
-        emp.v_name AS Nombre,
-        wg.id_activity AS Actividad,
-        tab.v_descripcion_tab AS 'Descripción actividad',
-        wg.id_workGroup AS id_workGroup,
-        NULL AS id_concept,
-        NULL AS Concepto,
-        NULL AS Horas,
-        NULL AS Monto,
-        NULL AS id_Deductions,
-        NULL AS 'Descripción Deducción',
-        NULL AS 'Descuento'
-        FROM Nom_WorkGroupEmployeeDaily wg
-        JOIN Nom_Employees emp
-            ON emp.id_employee = wg.id_employee
-        LEFT JOIN Nom_Tabulador tab
-            ON tab.c_codigo_tab = wg.id_activity ";
+		string queryCampo = @"
+			SELECT
+				wg.id_workGroupEmployeeDaily,
+				wg.id_employee AS Empleado,
+				CONVERT(DATE, wg.d_date) AS Fecha,
+				emp.v_lastNamePat AS 'Apellido paterno',
+				emp.v_lastNameMat AS 'Apellido materno',
+				emp.v_name AS Nombre,
+				wg.id_activity AS Actividad,
+				tab.v_descripcion_tab AS 'Descripción actividad',
+				wg.id_workGroup AS id_workGroup,
+
+				con.id_concept AS id_concept,
+				con.v_concept AS Concepto,
+				con.n_unit AS Horas,
+				mi.n_amount AS Monto,
+
+				mi.id_Deductions,
+				ded.v_descripcion_ded AS 'Descripción Deducción',
+				mi.n_importefijo_ded AS 'Descuento'
+
+			FROM Nom_WorkGroupEmployeeDaily wg
+
+			JOIN Nom_Employees emp
+				ON emp.id_employee = wg.id_employee
+
+			LEFT JOIN Nom_Tabulador tab
+				ON tab.c_codigo_tab = wg.id_activity
+
+			LEFT JOIN Nom_MiscellaneousIncome mi
+				ON mi.id_workGroupEmployeeDaily = wg.id_workGroupEmployeeDaily
+
+			LEFT JOIN Nom_concept con
+				ON con.id_concept = mi.id_concept
+
+			LEFT JOIN Nom_Deductions ded
+				ON ded.id_Deductions = mi.id_Deductions";
 
 		string queryOrderCampo = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
 		public void ObtenerAsistenciaEmpaqueDia()
@@ -90,8 +105,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			// OBTENER ACTIVIDAD
 			string actividad = "";
 
-			if (frmDia.cboActividad.SelectedValue != null
-				&& frmDia.cboActividad.SelectedValue is string)
+			if (frmDia.cboActividad.SelectedValue != null &&
+				frmDia.cboActividad.SelectedValue != DBNull.Value)
 			{
 				actividad = frmDia.cboActividad.SelectedValue.ToString();
 			}
@@ -101,16 +116,18 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			if (!string.IsNullOrEmpty(actividad))
 			{
-				filtroActividad = $" AND lst.c_codigo_tab = '{actividad}'";
+				filtroActividad =
+					$" AND lst.c_codigo_tab = '{actividad}'";
 			}
 
 			// OBTENER CUADRILLA
 			string idCuadrilla = "";
 
-			if (frmDia.cboCuadrillaEmpaque.SelectedValue != null
-				&& frmDia.cboCuadrillaEmpaque.SelectedValue != DBNull.Value)
+			if (frmDia.cboCuadrillaEmpaque.SelectedValue != null &&
+				frmDia.cboCuadrillaEmpaque.SelectedValue != DBNull.Value)
 			{
-				idCuadrilla = frmDia.cboCuadrillaEmpaque.SelectedValue.ToString();
+				idCuadrilla =
+					frmDia.cboCuadrillaEmpaque.SelectedValue.ToString();
 			}
 
 			// FILTRO CUADRILLA
@@ -118,7 +135,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			if (!string.IsNullOrEmpty(idCuadrilla))
 			{
-				filtroCuadrilla = $" AND lst.id_workGroup = '{idCuadrilla}'";
+				filtroCuadrilla =
+					$" AND lst.id_workGroup = '{idCuadrilla}'";
 			}
 
 			// QUERY FINAL
@@ -129,7 +147,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			{filtroCuadrilla}
 			{queryOrder}";
 
-			frmDia.dgvLista.DataSource = ClsQuerysDB.GetDataTable(queryFinal);
+			frmDia.dgvLista.DataSource =
+				ClsQuerysDB.GetDataTable(queryFinal);
 
 			// OCULTAR COLUMNAS
 			if (frmDia.dgvLista.Columns.Contains("id_attendence"))
@@ -147,7 +166,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			// CHECKBOX
 			if (!frmDia.dgvLista.Columns.Contains("Seleccionar"))
 			{
-				DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
+				DataGridViewCheckBoxColumn chk =
+					new DataGridViewCheckBoxColumn();
 
 				chk.Name = "Seleccionar";
 				chk.HeaderText = "✔";
@@ -162,14 +182,14 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			string idCuadrilla = "";
 
-			if (frmDia.cboCuadrillaCampo.SelectedValue != null &&
-				frmDia.cboCuadrillaCampo.SelectedValue != DBNull.Value)
+			if (frmDia.cboCuadrillaCampo.SelectedValue != null)
 			{
 				idCuadrilla = frmDia.cboCuadrillaCampo.SelectedValue.ToString();
 			}
 
 			string filtroCuadrilla = "";
 
+			// Solo filtrar si NO está seleccionada TODAS
 			if (!string.IsNullOrEmpty(idCuadrilla))
 			{
 				filtroCuadrilla =
@@ -181,42 +201,16 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			WHERE CONVERT(DATE, wg.d_date) = '{fecha}'
 			{filtroCuadrilla}
 			ORDER BY
-				emp.v_lastNamePat,
-				emp.v_lastNameMat,
-				emp.v_name";
+            emp.v_lastNamePat,
+            emp.v_lastNameMat,
+            emp.v_name";
 
 			frmDia.dgvLista.DataSource =
 				ClsQuerysDB.GetDataTable(queryFinal);
 
-			if (frmDia.dgvLista.Columns.Contains("id_workGroup"))
-				frmDia.dgvLista.Columns["id_workGroup"].Visible = false;
 
 			if (frmDia.dgvLista.Columns.Contains("id_workGroupEmployeeDaily"))
 				frmDia.dgvLista.Columns["id_workGroupEmployeeDaily"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("Fecha"))
-				frmDia.dgvLista.Columns["Fecha"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("Actividad"))
-				frmDia.dgvLista.Columns["Actividad"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("id_concept"))
-				frmDia.dgvLista.Columns["id_concept"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
-				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
-
-			if (!frmDia.dgvLista.Columns.Contains("Seleccionar"))
-			{
-				DataGridViewCheckBoxColumn chk =
-					new DataGridViewCheckBoxColumn();
-
-				chk.Name = "Seleccionar";
-				chk.HeaderText = "✔";
-				chk.Width = 40;
-
-				frmDia.dgvLista.Columns.Insert(0, chk);
-			}
 		}
 		public void ObtenerAsistenciaEmpaquePorEmpleadoYFecha()
 		{
@@ -283,40 +277,62 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				}
 			}
 
-		
-			var lista = frmAdd.IdsAttendence ?? new List<string> { frmAdd.IdAttendence };
+			var lista = frmAdd.IdsAttendence ??
+				new List<string>
+				{
+			frmAdd.EsCampo
+				? frmAdd.IdWorkGroupEmployeeDaily
+				: frmAdd.IdAttendence
+				};
 
 			int insertados = 0;
 			int omitidos = 0;
 
-			foreach (var idAttendence in lista)
+			foreach (var idRegistro in lista)
 			{
-				if (string.IsNullOrEmpty(idAttendence))
+				if (string.IsNullOrWhiteSpace(idRegistro))
 					continue;
 
-				if (ExisteConceptoEnAsistencia(idAttendence))
+				if (ExisteConceptoEnAsistencia(idRegistro, frmAdd.EsCampo))
 				{
 					omitidos++;
 					continue;
 				}
 
-				string query = $@"
+				string query;
+
+				if (frmAdd.EsCampo)
+				{
+				query = $@"
 				EXEC sp_Nom_MiscellaneousIncome_Insert
-				'{idAttendence}',
-				'{idConcepto}',
-				{monto},
-				'SYSTEM'";
+					NULL,
+					'{idRegistro}',
+					'{idConcepto}',
+					{monto},
+					'SYSTEM'";
+				}
+				else
+				{
+					query = $@"
+					EXEC sp_Nom_MiscellaneousIncome_Insert
+						'{idRegistro}',
+						NULL,
+						'{idConcepto}',
+						{monto},
+						'SYSTEM'";
+				}
 
 				ClsQuerysDB.ExecuteQuery(query);
 				insertados++;
 			}
 
-			MessageBox.Show($"Insertados: {insertados}\nOmitidos (ya existían): {omitidos}");
+			MessageBox.Show(
+				$"Insertados: {insertados}\n" +
+				$"Omitidos (ya existían): {omitidos}");
 		}
 
 		public void ActualizarIngreso()
 		{
-
 			string idConceptoNuevo = frmAdd.cboConceptos.SelectedValue?.ToString();
 
 			if (string.IsNullOrWhiteSpace(idConceptoNuevo))
@@ -324,7 +340,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				MessageBox.Show("Debe seleccionar un concepto válido");
 				return;
 			}
-
 
 			DataTable dt = ClsQuerysDB.GetDataTable(
 				$"SELECT 1 FROM Nom_Concept WHERE id_concept = '{idConceptoNuevo}'");
@@ -334,7 +349,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				MessageBox.Show("Seleccione un concepto válido");
 				return;
 			}
-
 
 			decimal monto;
 
@@ -355,23 +369,32 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				}
 			}
 
+			string query;
 
-			string query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Update
-			'{frmAdd.IdAttendence}',
-			'{frmAdd.IdConcepto}',
-			'{idConceptoNuevo}',
-			{monto},
-			'SYSTEM'";
-
-			ClsQuerysDB.ExecuteQuery(query);
-		}
-		public void EliminarIngreso(string idAttendence, string idConcepto)
-		{
-			string query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Delete
-			'{idAttendence}',
-			'{idConcepto}'";
+			if (frmAdd.EsCampo)
+			{
+				// CAMPO
+				query = $@"
+				EXEC sp_Nom_MiscellaneousIncome_Update
+					NULL,
+					'{frmAdd.IdWorkGroupEmployeeDaily}',
+					'{frmAdd.IdConcepto}',
+					'{idConceptoNuevo}',
+					{monto},
+					'SYSTEM'";
+			}
+			else
+			{
+				// EMPAQUE
+				query = $@"
+				EXEC sp_Nom_MiscellaneousIncome_Update
+					'{frmAdd.IdAttendence}',
+					NULL,
+					'{frmAdd.IdConcepto}',
+					'{idConceptoNuevo}',
+					{monto},
+					'SYSTEM'";
+			}
 
 			ClsQuerysDB.ExecuteQuery(query);
 		}
@@ -383,36 +406,100 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-			if (dgv.CurrentRow.Cells["id_concept"].Value == DBNull.Value)
+			if (dgv.CurrentRow.Cells["id_concept"].Value == DBNull.Value ||
+				dgv.CurrentRow.Cells["id_concept"].Value == null)
 			{
-				MessageBox.Show("Esta asistencia no tiene ingreso para eliminar");
+				MessageBox.Show("Este registro no tiene ingreso para eliminar");
 				return;
 			}
 
-			string idAttendence = dgv.CurrentRow.Cells["id_attendence"].Value.ToString();
-			string idConcepto = dgv.CurrentRow.Cells["id_concept"].Value.ToString();
+			string idConcepto =
+				dgv.CurrentRow.Cells["id_concept"].Value.ToString();
 
-			if (MessageBox.Show("¿Desea eliminar el ingreso seleccionado?",
-				"Confirmar",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question) == DialogResult.No)
+			string query;
+
+
+			// CAMPO
+
+			if (dgv.Columns.Contains("id_workGroupEmployeeDaily"))
+			{
+				string idWorkGroupEmployeeDaily =
+					dgv.CurrentRow.Cells["id_workGroupEmployeeDaily"].Value.ToString();
+
+				if (MessageBox.Show(
+					"¿Desea eliminar el ingreso seleccionado?",
+					"Confirmar",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question) == DialogResult.No)
+					return;
+
+				query = $@"
+				EXEC sp_Nom_MiscellaneousIncome_Delete
+					NULL,
+					'{idWorkGroupEmployeeDaily}',
+					'{idConcepto}'";
+			}
+
+			// EMPAQUE
+
+			else if (dgv.Columns.Contains("id_attendence"))
+			{
+				string idAttendence =
+					dgv.CurrentRow.Cells["id_attendence"].Value.ToString();
+
+				if (MessageBox.Show(
+					"¿Desea eliminar el ingreso seleccionado?",
+					"Confirmar",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question) == DialogResult.No)
+					return;
+
+			    query = $@"
+				EXEC sp_Nom_MiscellaneousIncome_Delete
+					'{idAttendence}',
+					NULL,
+					'{idConcepto}'";
+			}
+			else
+			{
+				MessageBox.Show("No se encontró el identificador del registro.");
 				return;
-
-			string query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Delete
-			'{idAttendence}',
-			'{idConcepto}'";
+			}
 
 			ClsQuerysDB.ExecuteQuery(query);
 
-			ObtenerAsistenciaEmpaqueDia();
+			// Recargar según el tipo de nómina
+			if (dgv.Columns.Contains("id_workGroupEmployeeDaily"))
+			{
+				ObtenerEmpleadosCampoDia();
+			}
+			else
+			{
+				ObtenerAsistenciaEmpaqueDia();
+			}
 		}
-		private bool ExisteConceptoEnAsistencia(string idAttendence)
+		private bool ExisteConceptoEnAsistencia(string idRegistro, bool esCampo)
 		{
-			string query = $@"
-			SELECT COUNT(*) 
+			string query;
+
+			if (esCampo)
+			{
+				// CAMPO
+				query = $@"
+			SELECT COUNT(*)
 			FROM Nom_MiscellaneousIncome
-			WHERE id_attendence = '{idAttendence}' and id_concept is not null ";
+			WHERE id_workGroupEmployeeDaily = '{idRegistro}'
+			  AND id_concept IS NOT NULL";
+			}
+			else
+			{
+				// EMPAQUE
+				query = $@"
+			SELECT COUNT(*)
+			FROM Nom_MiscellaneousIncome
+			WHERE id_attendence = '{idRegistro}'
+			  AND id_concept IS NOT NULL";
+			}
 
 			object result = ClsQuerysDB.GetData(query);
 
@@ -476,8 +563,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			DataTable dt = CboCuadrillaCampo();
 
 			DataRow dr = dt.NewRow();
-			dr["Código"] = DBNull.Value;
-			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dr["Código"] = "";
+			dr["Nombre"] = " ------ TODAS ------ ";
 			dt.Rows.InsertAt(dr, 0);
 
 			combo.DataSource = dt.Copy();
@@ -511,18 +598,16 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			return dt;
 		}
-		
+
 		public void CargarCuadrillaEmpaque(ComboBox combo)
 		{
 			cargando = true;
 
-
-			SQLControl sql = new SQLControl();
 			DataTable dt = CboCuadrillaEmpaque();
 
 			DataRow dr = dt.NewRow();
-			dr["Código"] = DBNull.Value;
-			dr["Nombre"] = " ------ Seleccionar ------ ";
+			dr["Código"] = "";
+			dr["Nombre"] = " ------ TODAS ------ ";
 			dt.Rows.InsertAt(dr, 0);
 
 			combo.DataSource = dt.Copy();

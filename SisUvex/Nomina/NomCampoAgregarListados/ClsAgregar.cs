@@ -100,20 +100,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			try
 			{
 				sql.OpenConectionWrite();
-					string query = @"
+				string query = @"
 				SELECT 
-					L.id_lot,
-					L.c_codigo_lot,
-					L.v_nameLot,
-					L.id_variety,
-					V.v_nameComercial AS NombreVariedad
-				FROM Pack_Lot L
-				INNER JOIN Pack_Variety V
-					ON L.id_variety = V.id_variety
-				WHERE L.c_active = '1'
-				  AND V.c_active = '1'
-				  AND NULLIF(LTRIM(RTRIM(L.c_codigo_lot)), '') IS NOT NULL
-				ORDER BY L.c_codigo_lot; ";
+				L.id_lot,
+				L.c_codigo_lot,
+				L.v_nameLot,
+				L.id_variety,
+				V.v_nameComercial AS NombreVariedad
+			FROM Pack_Lot L
+			LEFT JOIN Pack_Variety V
+				ON L.id_variety = V.id_variety
+			WHERE L.c_active = '1'
+			  AND NULLIF(LTRIM(RTRIM(L.c_codigo_lot)), '') IS NOT NULL
+			ORDER BY L.c_codigo_lot ";
 
 			sql.OpenConectionWrite();
 

@@ -14,23 +14,28 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	public partial class FrmAddIngresos : Form
 	{
 		public string IdAttendence;
+		public string IdWorkGroupEmployeeDaily;
+
 		public string IdConcepto = null;
 		public decimal? MontoActual = null;
 		public bool EsEdicion = false;
 		public List<string> IdsAttendence;
 
+		public bool EsCampo { get; set; }
+
 		ClsIngresosDiversos cls;
-		bool cargando = true;
 
 
-		public FrmAddIngresos(string idAttendence, string idConcepto, decimal monto)
+		public FrmAddIngresos(string idAttendence, string idWorkGroupEmployeeDaily, string idConcepto, decimal monto, bool esCampo)
 		{
 			InitializeComponent();
 
 			IdAttendence = idAttendence;
+			IdWorkGroupEmployeeDaily = idWorkGroupEmployeeDaily;
 			IdConcepto = idConcepto;
 			MontoActual = monto;
 			EsEdicion = true;
+			EsCampo = esCampo;
 
 			cls = new ClsIngresosDiversos();
 			cls.frmAdd = this;
@@ -38,11 +43,12 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			cls.CboConceptos();
 
 		}
-		public FrmAddIngresos(List<string> ids)
+		public FrmAddIngresos(List<string> ids, bool esCampo)
 		{
 			InitializeComponent();
 
 			IdsAttendence = ids;
+			EsCampo = esCampo;
 			EsEdicion = false;
 
 			cls = new ClsIngresosDiversos();
