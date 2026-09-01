@@ -412,7 +412,8 @@ namespace SisUvex.Nomina.Asistencia_AS
 
                     ws.Range(monthHeaderRow, blockStart, monthHeaderRow, blockEnd).Merge();
                     var monthCell = ws.Cell(monthHeaderRow, blockStart);
-                    monthCell.Value = MonthLabel(block, "MMMM").ToUpper(ClsAsistenciaASConsulta.CultureEs);
+                    string monthName = new DateTime(block.Year, block.Month, 1).ToString("MMMM", ClsAsistenciaASConsulta.CultureEs);
+                    monthCell.Value = $"{monthName} {block.Year}".ToUpper(ClsAsistenciaASConsulta.CultureEs); // siempre con el año, en todos los meses
                     monthCell.Style.Font.SetFontName(FontHeader);
                     monthCell.Style.Font.SetFontSize(12);
                     monthCell.Style.Font.SetBold();
