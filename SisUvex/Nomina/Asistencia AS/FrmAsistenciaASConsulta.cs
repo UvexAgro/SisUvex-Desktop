@@ -49,6 +49,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.ChbShowReport_CheckedChanged();
         }
 
+        private void chbShowReportCalendar_CheckedChanged(object sender, EventArgs e)
+        {
+            cls.ChbShowReportCalendar_CheckedChanged();
+        }
+
         private void btnLoadReport_Click(object sender, EventArgs e)
         {
             cls.BtnLoadReport();

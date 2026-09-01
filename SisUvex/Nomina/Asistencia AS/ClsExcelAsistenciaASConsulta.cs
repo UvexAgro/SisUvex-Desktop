@@ -74,6 +74,8 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
 
+            ClsAsistenciaASCalendario.AddCalendarSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
+
             AddRawDataSheet(wb, reportData);
 
             wsReport.SetTabActive();

@@ -34,6 +34,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaASConsulta));
             btnClearList = new Button();
             chbShowReport = new CheckBox();
+            chbShowReportCalendar = new CheckBox();
             chbShowEmployees = new CheckBox();
             bgpInfo = new GroupBox();
             cboAttendenceType = new ComboBox();
@@ -53,13 +54,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnSearchEmployee = new Button();
             label1 = new Label();
             txbIdEmployee = new RichTextBox();
-            cboSeason = new ComboBox();
-            cboLP = new ComboBox();
-            labelLP = new Label();
-            labelSeason = new Label();
-            dgvReport = new DataGridView();
-            lblTitle = new Label();
-            btnOpenFrmAttendanceType = new Button();
             cmsIdEmployee = new ContextMenuStrip(components);
             tsmiUndo = new ToolStripMenuItem();
             tssIdEmployee1 = new ToolStripSeparator();
@@ -69,9 +63,16 @@ namespace SisUvex.Nomina.Asistencia_AS
             tsmiDelete = new ToolStripMenuItem();
             tssIdEmployee2 = new ToolStripSeparator();
             tsmiSelectAll = new ToolStripMenuItem();
-            cmsIdEmployee.SuspendLayout();
+            cboSeason = new ComboBox();
+            cboLP = new ComboBox();
+            labelLP = new Label();
+            labelSeason = new Label();
+            dgvReport = new DataGridView();
+            lblTitle = new Label();
+            btnOpenFrmAttendanceType = new Button();
             bgpInfo.SuspendLayout();
             gpbFilters.SuspendLayout();
+            cmsIdEmployee.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
             SuspendLayout();
             // 
@@ -105,6 +106,22 @@ namespace SisUvex.Nomina.Asistencia_AS
             chbShowReport.TextAlign = ContentAlignment.MiddleRight;
             chbShowReport.UseVisualStyleBackColor = true;
             chbShowReport.CheckedChanged += chbShowReport_CheckedChanged;
+            // 
+            // chbShowReportCalendar
+            // 
+            chbShowReportCalendar.Appearance = Appearance.Button;
+            chbShowReportCalendar.Font = new Font("Segoe UI", 12F);
+            chbShowReportCalendar.Image = Properties.Resources.verIcon16;
+            chbShowReportCalendar.ImageAlign = ContentAlignment.MiddleLeft;
+            chbShowReportCalendar.Location = new Point(311, 252);
+            chbShowReportCalendar.Name = "chbShowReportCalendar";
+            chbShowReportCalendar.Padding = new Padding(4, 0, 0, 0);
+            chbShowReportCalendar.Size = new Size(115, 31);
+            chbShowReportCalendar.TabIndex = 94;
+            chbShowReportCalendar.Text = "Calendario";
+            chbShowReportCalendar.TextAlign = ContentAlignment.MiddleRight;
+            chbShowReportCalendar.UseVisualStyleBackColor = true;
+            chbShowReportCalendar.CheckedChanged += chbShowReportCalendar_CheckedChanged;
             // 
             // chbShowEmployees
             // 
@@ -228,7 +245,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnModifyAttendance.Font = new Font("Segoe UI", 12F);
             btnModifyAttendance.Image = Properties.Resources.editPencilIcon16;
             btnModifyAttendance.ImageAlign = ContentAlignment.MiddleLeft;
-            btnModifyAttendance.Location = new Point(414, 252);
+            btnModifyAttendance.Location = new Point(535, 252);
             btnModifyAttendance.Name = "btnModifyAttendance";
             btnModifyAttendance.Padding = new Padding(4, 0, 0, 0);
             btnModifyAttendance.Size = new Size(183, 31);
@@ -243,7 +260,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon;
             btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(311, 252);
+            btnExcel.Location = new Point(432, 252);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 4, 0);
             btnExcel.Size = new Size(97, 31);
@@ -355,58 +372,58 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             cmsIdEmployee.Items.AddRange(new ToolStripItem[] { tsmiUndo, tssIdEmployee1, tsmiCut, tsmiCopy, tsmiPaste, tsmiDelete, tssIdEmployee2, tsmiSelectAll });
             cmsIdEmployee.Name = "cmsIdEmployee";
-            cmsIdEmployee.Size = new Size(181, 164);
+            cmsIdEmployee.Size = new Size(163, 148);
             cmsIdEmployee.Opening += cmsIdEmployee_Opening;
             // 
             // tsmiUndo
             // 
             tsmiUndo.Name = "tsmiUndo";
-            tsmiUndo.Size = new Size(180, 22);
+            tsmiUndo.Size = new Size(162, 22);
             tsmiUndo.Text = "Deshacer";
             tsmiUndo.Click += tsmiUndo_Click;
             // 
             // tssIdEmployee1
             // 
             tssIdEmployee1.Name = "tssIdEmployee1";
-            tssIdEmployee1.Size = new Size(177, 6);
+            tssIdEmployee1.Size = new Size(159, 6);
             // 
             // tsmiCut
             // 
             tsmiCut.Name = "tsmiCut";
-            tsmiCut.Size = new Size(180, 22);
+            tsmiCut.Size = new Size(162, 22);
             tsmiCut.Text = "Cortar";
             tsmiCut.Click += tsmiCut_Click;
             // 
             // tsmiCopy
             // 
             tsmiCopy.Name = "tsmiCopy";
-            tsmiCopy.Size = new Size(180, 22);
+            tsmiCopy.Size = new Size(162, 22);
             tsmiCopy.Text = "Copiar";
             tsmiCopy.Click += tsmiCopy_Click;
             // 
             // tsmiPaste
             // 
             tsmiPaste.Name = "tsmiPaste";
-            tsmiPaste.Size = new Size(180, 22);
+            tsmiPaste.Size = new Size(162, 22);
             tsmiPaste.Text = "Pegar";
             tsmiPaste.Click += tsmiPaste_Click;
             // 
             // tsmiDelete
             // 
             tsmiDelete.Name = "tsmiDelete";
-            tsmiDelete.Size = new Size(180, 22);
+            tsmiDelete.Size = new Size(162, 22);
             tsmiDelete.Text = "Eliminar";
             tsmiDelete.Click += tsmiDelete_Click;
             // 
             // tssIdEmployee2
             // 
             tssIdEmployee2.Name = "tssIdEmployee2";
-            tssIdEmployee2.Size = new Size(177, 6);
+            tssIdEmployee2.Size = new Size(159, 6);
             // 
             // tsmiSelectAll
             // 
             tsmiSelectAll.Name = "tsmiSelectAll";
-            tsmiSelectAll.Size = new Size(180, 22);
+            tsmiSelectAll.Size = new Size(162, 22);
             tsmiSelectAll.Text = "Seleccionar todo";
             tsmiSelectAll.Click += tsmiSelectAll_Click;
             // 
@@ -526,6 +543,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             Controls.Add(btnExcel);
             Controls.Add(btnClearList);
             Controls.Add(chbShowReport);
+            Controls.Add(chbShowReportCalendar);
             Controls.Add(chbShowEmployees);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
@@ -540,8 +558,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             bgpInfo.PerformLayout();
             gpbFilters.ResumeLayout(false);
             gpbFilters.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
             cmsIdEmployee.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -550,6 +568,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         private Button btnClearList;
         public CheckBox chbShowReport;
+        public CheckBox chbShowReportCalendar;
         public CheckBox chbShowEmployees;
         private GroupBox bgpInfo;
         private Label lblSobrantesInfo;

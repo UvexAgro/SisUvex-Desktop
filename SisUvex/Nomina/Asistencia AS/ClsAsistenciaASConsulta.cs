@@ -58,6 +58,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         /// <summary>Comentario (v_comments) de la inasistencia explícita, clave (código, día).</summary>
         private Dictionary<(string Codigo, DateTime Fecha), string> _commentsByCodeAndDay = new();
         private bool _showingReport;
+        private bool _showingCalendar;
+        private readonly ClsAsistenciaASCalendario _calendarCls = new();
 
         // ── Inicio del formulario ─────────────────────────────────────────────
 
@@ -395,6 +397,23 @@ namespace SisUvex.Nomina.Asistencia_AS
             ShowReport();
         }
 
+        public void ChbShowReportCalendar_CheckedChanged()
+        {
+            if (frm == null) return;
+            if (!frm.chbShowReportCalendar.Checked) return;
+
+            if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                frm.chbShowReportCalendar.Checked = false;
+                frm.chbShowEmployees.Checked = true;
+                SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
+                return;
+            }
+
+            ShowReportCalendar();
+        }
+
         // ── Cargar reporte de asistencias/inasistencias ────────────────────────
 
         public void BtnLoadReport()
@@ -568,7 +587,15 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         public void DgvReport_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (!_showingReport || frm == null) return;
+            if (frm == null) return;
+
+            if (_showingCalendar)
+            {
+                _calendarCls.CellFormatting(e, frm.dgvReport, _attendanceStylesByPrefix, ColorAsistencia);
+                return;
+            }
+
+            if (!_showingReport) return;
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
             string colName = frm.dgvReport.Columns[e.ColumnIndex].Name;
@@ -949,7 +976,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || _dtReportPreview == null) return;
 
-            _showingReport = true;
+            _showingReport   = true;
+            _showingCalendar = false;
 
             frm.dgvReport.ReadOnly = true;
             frm.dgvReport.AutoGenerateColumns = true;
@@ -963,6 +991,33 @@ namespace SisUvex.Nomina.Asistencia_AS
             frm.dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
             frm.chbShowReport.Checked = true;
+            frm.chbShowEmployees.Checked = false;
+            frm.chbShowReportCalendar.Checked = false;
+        }
+
+        /// <summary>
+        /// Muestra el mismo reporte cargado, pero en formato calendario (un bloque por mes, con los días
+        /// acomodados por semana/día de la semana), delegando la construcción de la tabla y el formato a
+        /// <see cref="ClsAsistenciaASCalendario"/> para no mezclar ese código con el de esta clase.
+        /// </summary>
+        private void ShowReportCalendar()
+        {
+            if (frm == null || _dtReportPreview == null) return;
+
+            _showingReport   = false;
+            _showingCalendar = true;
+
+            DataTable dtCalendar = _calendarCls.BuildCalendarTable(_dtReportPreview, _reportDays);
+
+            frm.dgvReport.ReadOnly = true;
+            frm.dgvReport.AutoGenerateColumns = true;
+            frm.dgvReport.DataSource = null;
+            frm.dgvReport.DataSource = dtCalendar;
+
+            _calendarCls.ApplyHeadersAndFormatting(frm.dgvReport);
+
+            frm.chbShowReportCalendar.Checked = true;
+            frm.chbShowReport.Checked = false;
             frm.chbShowEmployees.Checked = false;
         }
 
@@ -1006,7 +1061,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null) return;
 
-            _showingReport = false;
+            _showingReport   = false;
+            _showingCalendar = false;
 
             frm.dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             frm.dgvReport.ReadOnly = false;
@@ -1018,6 +1074,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             frm.chbShowEmployees.Checked = true;
             frm.chbShowReport.Checked = false;
+            frm.chbShowReportCalendar.Checked = false;
         }
 
         /// <summary>
