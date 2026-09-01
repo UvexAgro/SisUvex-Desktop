@@ -67,7 +67,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         private const string FontLegend   = "Calibri";
         private const string FontValue    = "Arial";         // prefijo de asistencia (celda grande)
 
-        private static readonly XLColor BorderWhite = XLColor.White;
+        private static readonly XLColor BorderBlack = XLColor.Black;
 
         /// <summary>Convierte un ancho en píxeles al ancho de columna de Excel (unidades de carácter).</summary>
         private static double PxToColumnWidth(double pixels) => Math.Round((pixels - 5.0) / 7.0, 2);
@@ -353,11 +353,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             int totalCols   = (dayColStart - startCol) + blocks.Count * 8 - 1; // 7 días + 1 separador por mes (sin el último)
             int lastDayCol  = dayColStart + blocks.Count * 8 - 2;
 
-            // ── Anchos de columna, iguales a los del Excel de referencia (columna B = 55px, por pedido explícito) ──
+            // ── Anchos de columna ──
             ws.Column(1).Width               = 2;
-            ws.Column(startCol).Width        = PxToColumnWidth(55);      // CÓDIGO
-            ws.Column(startCol + 1).Width    = 32.664375;                // NOMBRE COMPLETO
-            ws.Column(startCol + 2).Width    = 3.664375;                 // LP
+            ws.Column(startCol).Width        = PxToColumnWidth(66);      // CÓDIGO
+            ws.Column(startCol + 2).Width    = PxToColumnWidth(40);      // LP
             ws.Column(startCol + 3).Width    = 7.664375;                 // ASIST.
             ws.Column(startCol + 4).Width    = 10.38;                    // FALTAS
             ws.Column(startCol + 5).Width    = 1.4143750000000002;       // separador antes de los meses
@@ -428,13 +427,23 @@ namespace SisUvex.Nomina.Asistencia_AS
                     col = blockEnd + 2; // 7 días + 1 columna de separación
                 }
 
+                // Encabezados fijos (CÓDIGO/.../FALTAS) e iniciales de día de cada mes: fondo gris oscuro.
+                // Las columnas separadoras (antes del primer mes y entre un mes y otro) se dejan sin color.
                 ws.Range(weekdayRow, startCol, weekdayRow, lastDayCol).Style
                     .Font.SetFontName(FontHeader)
                     .Font.SetFontSize(12)
                     .Font.SetFontColor(XLColor.White)
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
-                    .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+                    .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+
+                ws.Range(weekdayRow, startCol, weekdayRow, startCol + fixedCols - 1).Style
                     .Fill.SetBackgroundColor(XLColor.FromColor(ColorHeaderDark));
+                for (int bi = 0; bi < blocks.Count; bi++)
+                {
+                    int blockStart = dayColStart + bi * 8;
+                    ws.Range(weekdayRow, blockStart, weekdayRow, blockStart + 6).Style
+                        .Fill.SetBackgroundColor(XLColor.FromColor(ColorHeaderDark));
+                }
 
                 string codigo = SafeStr(empRow, ClsAsistenciaASConsulta.ReportColCodigo);
                 (int asistencias, int faltas) = CountAsistenciasYFaltas(empRow, days);
@@ -459,11 +468,16 @@ namespace SisUvex.Nomina.Asistencia_AS
                         ws.Cell(numRow, startCol + 4).Value = faltas;
                         ws.Range(numRow, startCol + 2, numRow, startCol + 4).Style
                             .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                        ws.Range(numRow, startCol, numRow, startCol + 4).Style
-                            .Border.SetTopBorder(XLBorderStyleValues.Thin).Border.SetTopBorderColor(BorderWhite)
-                            .Border.SetBottomBorder(XLBorderStyleValues.Thin).Border.SetBottomBorderColor(BorderWhite)
-                            .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderWhite)
-                            .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderWhite);
+
+                        // Contorno negro (línea simple) en cada celda de datos del empleado (Código/Nombre/LP/Asist./Faltas).
+                        for (int i = 0; i <= 4; i++)
+                        {
+                            ws.Cell(numRow, startCol + i).Style
+                                .Border.SetTopBorder(XLBorderStyleValues.Thin).Border.SetTopBorderColor(BorderBlack)
+                                .Border.SetBottomBorder(XLBorderStyleValues.Thin).Border.SetBottomBorderColor(BorderBlack)
+                                .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderBlack)
+                                .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderBlack);
+                        }
                     }
 
                     col = dayColStart;
@@ -476,15 +490,19 @@ namespace SisUvex.Nomina.Asistencia_AS
                             var numCell = ws.Cell(numRow, col + wd);
                             var valCell = ws.Cell(valRow, col + wd);
 
-                            // Borde blanco fino (invisible salvo sobre celdas coloreadas): separa visualmente cada
-                            // "día" (número + valor, unidos entre sí) del resto de la cuadrícula, igual que el Excel de referencia.
-                            numCell.Style.Border.SetTopBorder(XLBorderStyleValues.Thin).Border.SetTopBorderColor(BorderWhite)
-                                .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderWhite)
-                                .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderWhite);
-                            valCell.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin).Border.SetBottomBorderColor(BorderWhite)
-                                .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderWhite)
-                                .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderWhite);
+                            // Contorno negro (línea simple) alrededor de cada "día" completo: la celda del número
+                            // (arriba) y la del prefijo (abajo) se tratan como una sola, sin borde entre ambas.
+                            // Se aplica a toda la cuadrícula del mes, incluyendo los días en blanco del inicio/fin
+                            // de semana que no pertenecen al mes, para que se perciban como parte del calendario.
+                            numCell.Style.Border.SetTopBorder(XLBorderStyleValues.Thin).Border.SetTopBorderColor(BorderBlack)
+                                .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderBlack)
+                                .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderBlack);
+                            valCell.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin).Border.SetBottomBorderColor(BorderBlack)
+                                .Border.SetLeftBorder(XLBorderStyleValues.Thin).Border.SetLeftBorderColor(BorderBlack)
+                                .Border.SetRightBorder(XLBorderStyleValues.Thin).Border.SetRightBorderColor(BorderBlack);
 
+                            Color? bg = null;
+                            FontStyle fontStyle = FontStyle.Regular;
                             if (date.HasValue)
                             {
                                 numCell.Value = date.Value.Day;
@@ -495,21 +513,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                                     valCell.Value = value;
                                     valCell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-                                    Color? bg = null;
-                                    FontStyle fontStyle = FontStyle.Regular;
                                     if (string.Equals(value, ClsAsistenciaASConsulta.ValueAsistencia, StringComparison.OrdinalIgnoreCase))
                                         bg = colorAsistencia;
                                     else if (stylesByPrefix.TryGetValue(value, out AttendanceStyle style))
                                     {
                                         bg = style.Color;
                                         fontStyle = style.FontStyle;
-                                    }
-
-                                    if (bg.HasValue)
-                                    {
-                                        var xlBg = XLColor.FromColor(bg.Value);
-                                        numCell.Style.Fill.SetBackgroundColor(xlBg);
-                                        valCell.Style.Fill.SetBackgroundColor(xlBg);
                                     }
 
                                     if (fontStyle != FontStyle.Regular)
@@ -522,6 +531,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                                     }
                                 }
                             }
+
+                            // Días del mes sin valor de asistencia/inasistencia, y días en blanco que no
+                            // pertenecen al mes: fondo blanco explícito.
+                            var xlBg = bg.HasValue ? XLColor.FromColor(bg.Value) : XLColor.White;
+                            numCell.Style.Fill.SetBackgroundColor(xlBg);
+                            valCell.Style.Fill.SetBackgroundColor(xlBg);
                         }
 
                         col += 8;
@@ -532,7 +547,13 @@ namespace SisUvex.Nomina.Asistencia_AS
                 row = lastRowOfBlock + 2; // fila en blanco de separación antes del siguiente empleado
             }
 
-            ws.SheetView.FreezeColumns(startCol + fixedCols - 1);
+            // NOMBRE COMPLETO: se ajusta al texto más largo, con 300px como ancho mínimo por defecto.
+            ws.Column(startCol + 1).AdjustToContents();
+            double minNameWidth = PxToColumnWidth(300);
+            if (ws.Column(startCol + 1).Width < minNameWidth)
+                ws.Column(startCol + 1).Width = minNameWidth;
+
+            ws.SheetView.FreezeColumns(startCol + 2); // Código, Nombre completo y LP
         }
     }
 }

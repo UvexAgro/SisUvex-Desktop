@@ -248,6 +248,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             ws.Columns().AdjustToContents();
             ws.Column(1).Width = 2;
+            ws.Column(StartCol).Width = (60 - 5) / 7.0; // CÓDIGO: 60 px, por pedido explícito
 
             return ws;
         }
