@@ -169,7 +169,7 @@ internal class ClsModifyAttendanceEmployees
         dtTypes = dtTypes.DefaultView.ToTable();
 
         _stylesByPrefix.Clear();
-        _stylesByPrefix[ValueAsistencia] = new AttendanceStyle(ColorAsistencia, FontStyle.Regular);
+        _stylesByPrefix[ValueAsistencia] = new AttendanceStyle(ColorAsistencia, FontStyle.Regular, isAbsence: false);
         foreach (DataRow row in dtTypes.Rows)
         {
             string prefix = row[AttendanceType.ColumnPrefix]?.ToString()?.Trim() ?? string.Empty;
@@ -179,7 +179,9 @@ internal class ClsModifyAttendanceEmployees
             FontStyle fontStyle = dtTypes.Columns.Contains(AttendanceType.ColumnFontStyle)
                 ? ParseFontStyle(row[AttendanceType.ColumnFontStyle])
                 : FontStyle.Regular;
-            _stylesByPrefix[prefix] = new AttendanceStyle(color, fontStyle);
+            bool isAbsence = dtTypes.Columns.Contains(AttendanceType.ColumncIsAbsence)
+                && (row[AttendanceType.ColumncIsAbsence]?.ToString()?.Trim() ?? string.Empty) == "1";
+            _stylesByPrefix[prefix] = new AttendanceStyle(color, fontStyle, isAbsence);
         }
 
         DataTable dtApply = dtTypes.Copy();

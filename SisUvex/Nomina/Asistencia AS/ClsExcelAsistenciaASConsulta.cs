@@ -26,7 +26,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         private static readonly XLColor ColorMonthBand   = XLColor.FromHtml("#D9E1F2");
 
         private const int StartCol  = 2;
-        private const int FixedCols = 4; // CÓDIGO | NOMBRE COMPLETO | LP | TOTAL
+        private const int FixedCols = 6; // CÓDIGO | NOMBRE COMPLETO | LP | TOTAL | FALTAS | FALTAS 30D
 
         // ── Punto de entrada ──────────────────────────────────────────────────
 
@@ -134,7 +134,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             int dayColStart   = StartCol + FixedCols;
 
             // Encabezados fijos, fusionados verticalmente (monthRow:dayRow) al no tener banda de mes
-            string[] fixedHeaders = { "CÓDIGO", "NOMBRE COMPLETO", "LP", "TOTAL" };
+            string[] fixedHeaders = { "CÓDIGO", "NOMBRE COMPLETO", "LP", "TOTAL", "FALTAS", "FALTAS 30D" };
             for (int i = 0; i < fixedHeaders.Length; i++)
             {
                 int col = StartCol + i;
@@ -195,6 +195,14 @@ namespace SisUvex.Nomina.Asistencia_AS
                 totalCell.Value = ToInt(r[ClsAsistenciaASConsulta.ReportColTotal]);
                 totalCell.Style.Font.SetBold();
                 totalCell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                var faltasCell = ws.Cell(row, StartCol + 4);
+                faltasCell.Value = ToInt(r[ClsAsistenciaASConsulta.ReportColFaltas]);
+                faltasCell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                var faltas30Cell = ws.Cell(row, StartCol + 5);
+                faltas30Cell.Value = ToInt(r[ClsAsistenciaASConsulta.ReportColFaltas30]);
+                faltas30Cell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                 int col = dayColStart;
                 foreach (DateTime day in days)

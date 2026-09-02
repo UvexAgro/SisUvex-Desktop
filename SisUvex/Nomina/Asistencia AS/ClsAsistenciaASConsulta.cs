@@ -40,7 +40,11 @@ namespace SisUvex.Nomina.Asistencia_AS
         internal const string ReportColNombre  = "Nombre completo";
         internal const string ReportColLp      = "LP";
         internal const string ReportColTotal   = "Total";
+        internal const string ReportColFaltas   = "Faltas";
+        internal const string ReportColFaltas30 = "Faltas 30 días";
         internal const string ValueAsistencia  = "A";
+        /// <summary>Tamaño de la ventana de "últimos N días" usada por <see cref="ReportColFaltas30"/>.</summary>
+        internal const int Faltas30Dias = 30;
         internal const string DayColumnPrefix  = "D_";
 
         internal static readonly CultureInfo CultureEs = CultureInfo.GetCultureInfo("es-MX");
@@ -641,7 +645,15 @@ namespace SisUvex.Nomina.Asistencia_AS
         /// <summary>Dibuja un pequeño marcador (triángulo, como en Excel) en la esquina de las celdas que tienen comentario.</summary>
         public void DgvReport_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (!_showingReport || frm == null) return;
+            if (frm == null) return;
+
+            if (_showingCalendar)
+            {
+                _calendarCls.CellPainting(e, frm.dgvReport);
+                return;
+            }
+
+            if (!_showingReport) return;
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
             string colName = frm.dgvReport.Columns[e.ColumnIndex].Name;
@@ -748,8 +760,10 @@ namespace SisUvex.Nomina.Asistencia_AS
                 FontStyle fontStyle = dt.Columns.Contains(AttendanceType.ColumnFontStyle)
                     ? ParseFontStyle(row[AttendanceType.ColumnFontStyle])
                     : FontStyle.Regular;
+                bool isAbsence = dt.Columns.Contains(AttendanceType.ColumncIsAbsence)
+                    && (row[AttendanceType.ColumncIsAbsence]?.ToString()?.Trim() ?? string.Empty) == "1";
 
-                map[prefix] = new AttendanceStyle(color, fontStyle);
+                map[prefix] = new AttendanceStyle(color, fontStyle, isAbsence);
             }
 
             return map;
@@ -777,6 +791,28 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (raw == null || raw == DBNull.Value) return FontStyle.Regular;
             return byte.TryParse(raw.ToString(), out byte value) ? (FontStyle)value : FontStyle.Regular;
+        }
+
+        /// <summary>
+        /// Determina si el valor mostrado en la celda de un día cuenta como asistencia (para las columnas
+        /// "Total"/"Asist." y su complemento "Faltas"), usado tanto por el reporte lineal como por el de
+        /// calendario para que ambos calculen exactamente lo mismo:
+        /// <list type="bullet">
+        /// <item>Asistencia real ("A") siempre cuenta.</item>
+        /// <item>Un tipo de asistencia explícito (<c>Nom_Attendance_AS</c>) cuenta según su <c>c_isAbsence</c>:
+        /// si NO es inasistencia, cuenta como asistencia aunque no sea "A".</item>
+        /// <item>Domingo sin ningún registro (célula en blanco) cuenta como asistencia por defecto, ya que
+        /// normalmente no se paga sueldo ese día pero sí se considera que el empleado está presente, salvo
+        /// que se le haya marcado explícitamente un tipo de inasistencia.</item>
+        /// <item>Cualquier otro caso (día entre semana sin dato, marcado con el prefijo por defecto, o un
+        /// tipo explícito marcado como inasistencia) cuenta como falta.</item>
+        /// </list>
+        /// </summary>
+        internal static bool CountsAsAsistencia(string value, DayOfWeek dayOfWeek, Dictionary<string, AttendanceStyle> stylesByPrefix)
+        {
+            if (string.Equals(value, ValueAsistencia, StringComparison.OrdinalIgnoreCase)) return true;
+            if (string.IsNullOrWhiteSpace(value)) return dayOfWeek == DayOfWeek.Sunday;
+            return stylesByPrefix.TryGetValue(value, out AttendanceStyle style) && !style.IsAbsence;
         }
 
         // ── Consultas del reporte ──────────────────────────────────────────────
@@ -869,8 +905,14 @@ namespace SisUvex.Nomina.Asistencia_AS
             table.Columns.Add(ReportColNombre, typeof(string));
             table.Columns.Add(ReportColLp, typeof(string));
             table.Columns.Add(ReportColTotal, typeof(int));
+            table.Columns.Add(ReportColFaltas, typeof(int));
+            table.Columns.Add(ReportColFaltas30, typeof(int));
             foreach (DateTime day in _reportDays)
                 table.Columns.Add(BuildDayColumnName(day), typeof(string));
+
+            // Ventana de "últimos 30 días" para ReportColFaltas30: termina en el último día del reporte;
+            // si el rango elegido tiene menos de 30 días, la ventana queda acotada a esos mismos días.
+            var last30Days = new HashSet<DateTime>(_reportDays.TakeLast(Faltas30Dias));
 
             var infoByCode = dtEmployeeInfo.AsEnumerable()
                 .GroupBy(r => r["id_employee"]?.ToString()?.Trim() ?? string.Empty)
@@ -915,6 +957,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                 newRow[ReportColLp]     = lp;
 
                 int totalAsistencias = 0;
+                int totalFaltas = 0;
+                int totalFaltas30 = 0;
                 foreach (DateTime day in _reportDays)
                 {
                     // Por defecto, todo día se marca con el prefijo seleccionado (haya o no dato en las
@@ -927,13 +971,20 @@ namespace SisUvex.Nomina.Asistencia_AS
                     if (inasistenciaLookup.TryGetValue((codigo, day), out string? prefijo) && !string.IsNullOrWhiteSpace(prefijo))
                         value = prefijo; // la inasistencia explícita siempre sobreescribe
 
-                    if (string.Equals(value, ValueAsistencia, StringComparison.OrdinalIgnoreCase))
+                    if (CountsAsAsistencia(value, day.DayOfWeek, _attendanceStylesByPrefix))
                         totalAsistencias++;
+                    else
+                    {
+                        totalFaltas++;
+                        if (last30Days.Contains(day)) totalFaltas30++;
+                    }
 
                     newRow[BuildDayColumnName(day)] = value;
                 }
 
                 newRow[ReportColTotal] = totalAsistencias;
+                newRow[ReportColFaltas] = totalFaltas;
+                newRow[ReportColFaltas30] = totalFaltas30;
                 table.Rows.Add(newRow);
             }
 
@@ -979,6 +1030,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             _showingReport   = true;
             _showingCalendar = false;
 
+            frm.dgvReport.ColumnHeadersVisible = true;
+            frm.dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             frm.dgvReport.ReadOnly = true;
             frm.dgvReport.AutoGenerateColumns = true;
             frm.dgvReport.DataSource = null;
@@ -1004,16 +1057,20 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || _dtReportPreview == null) return;
 
+            // _showingCalendar se activa hasta después de cambiar el DataSource: mientras se reemplaza,
+            // el DGV puede seguir disparando eventos de formato/pintado para la tabla anterior (empleados
+            // o reporte lineal), que no tiene las columnas del calendario.
             _showingReport   = false;
-            _showingCalendar = true;
+            _showingCalendar = false;
 
-            DataTable dtCalendar = _calendarCls.BuildCalendarTable(_dtReportPreview, _reportDays);
+            DataTable dtCalendar = _calendarCls.BuildCalendarTable(_dtReportPreview, _reportDays, _attendanceStylesByPrefix);
 
             frm.dgvReport.ReadOnly = true;
             frm.dgvReport.AutoGenerateColumns = true;
             frm.dgvReport.DataSource = null;
             frm.dgvReport.DataSource = dtCalendar;
 
+            _showingCalendar = true;
             _calendarCls.ApplyHeadersAndFormatting(frm.dgvReport);
 
             frm.chbShowReportCalendar.Checked = true;
@@ -1064,6 +1121,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             _showingReport   = false;
             _showingCalendar = false;
 
+            frm.dgvReport.ColumnHeadersVisible = true;
+            frm.dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             frm.dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             frm.dgvReport.ReadOnly = false;
             frm.dgvReport.AutoGenerateColumns = true;
