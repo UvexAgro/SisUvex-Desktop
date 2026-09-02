@@ -16,6 +16,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	public class ClsAgregar
 	{
 		public FrmAgregar frmA;
+		public string LugarPago { get; set; }
+		public string IdLugarPago { get; set; }
 
 		public void CargarComboActividades()
 		{
@@ -132,7 +134,99 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				return dt;
 		}
+		public void ActualizarEmpleadoModificar(string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin,string idCuadrilla,DataGridView dgvEmpleados)
+		{
+			SQLControl sql = new SQLControl();
 
+			try
+			{
+				sql.OpenConectionWrite();
+
+				if (dgvEmpleados.Rows.Count == 0)
+					return;
+
+				DataGridViewRow row = dgvEmpleados.Rows[0];
+
+				string idEmpleado =
+					row.Cells["Codigo"].Value?.ToString();
+
+				string idActividad =
+					row.Cells["IdActividad"].Value?.ToString();
+
+				string idLote =
+					row.Cells["IdLote"].Value?.ToString();
+
+				if (string.IsNullOrWhiteSpace(idEmpleado))
+				{
+					MessageBox.Show(
+						"No se encontró el código del empleado.",
+						"Modificar empleado",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_UpdateEmployeeWeeklyList",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per",
+						secuenciaSemana);
+
+					cmd.Parameters.AddWithValue(
+						"@d_startDate_per",
+						fechaInicio.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@d_endDate_per",
+						fechaFin.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@id_employee",
+						idEmpleado);
+
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						idCuadrilla);
+
+					cmd.Parameters.AddWithValue(
+						"@id_activity",
+						idActividad);
+
+					cmd.Parameters.AddWithValue(
+						"@id_lot",
+						idLote);
+
+					cmd.Parameters.AddWithValue(
+						"@userUpdate",
+						User.GetUserName());
+
+					cmd.ExecuteNonQuery();
+				}
+
+				MessageBox.Show(
+					"Empleado actualizado correctamente.",
+					"Modificar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al actualizar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 		public void btnAgregarVariosEmpleados()
 		{
 			string textoCodigos = frmA.txbCodigo.Text.Trim();
@@ -288,9 +382,106 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			frmA.txbCodigo.Clear();
 			frmA.txbCodigo.Focus();
 		}
+		public void CargarDatosEmpleadoModificar(string idEmpleado)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_ModifyEmployeeWeeklyList",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per",
+						frmA.SecuenciaSemana);
+
+					cmd.Parameters.AddWithValue(
+						"@d_startDate_per",
+						frmA.FechaInicio.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@d_endDate_per",
+						frmA.FechaFin.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@id_employee",
+						idEmpleado);
+
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						frmA.IdCuadrilla);
+
+					using (SqlDataReader dr = cmd.ExecuteReader())
+					{
+						if (!dr.Read())
+						{
+							MessageBox.Show(
+								"No se encontró el empleado en la lista semanal.",
+								"Empleado",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information);
+
+							return;
+						}
+
+						// CÓDIGO
+						frmA.txbCodigo.Text =
+							dr["id_employee"].ToString();
+
+						// NOMBRE
+						frmA.txbEmpleado.Text =
+							dr["Empleado"] == DBNull.Value
+								? ""
+								: dr["Empleado"].ToString();
+
+						// LUGAR DE PAGO
+						LugarPago =
+							dr["LugarPago"] == DBNull.Value
+								? ""
+								: dr["LugarPago"].ToString();
+
+						// ID LUGAR DE PAGO
+						IdLugarPago =
+							dr["id_paymentPlace"] == DBNull.Value
+								? ""
+								: dr["id_paymentPlace"].ToString();
+
+						// ACTIVIDAD
+						if (dr["id_activity"] != DBNull.Value)
+						{
+							frmA.cboActividad.SelectedValue =
+								dr["id_activity"].ToString();
+						}
+
+						// LOTE
+						if (dr["id_lot"] != DBNull.Value)
+						{
+							frmA.cboLote.SelectedValue =
+								dr["id_lot"].ToString();
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al cargar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 		public void ModificarEmpleado()
 		{
-
 			if (string.IsNullOrWhiteSpace(frmA.txbCodigo.Text))
 			{
 				MessageBox.Show(
@@ -303,10 +494,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// =========================
 			// VALIDAR ACTIVIDAD
-			// =========================
-
 			if (frmA.cboActividad.SelectedIndex < 0)
 			{
 				MessageBox.Show(
@@ -318,6 +506,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				frmA.cboActividad.Focus();
 				return;
 			}
+
+			// VALIDAR LOTE
 			if (frmA.cboLote.SelectedIndex < 0)
 			{
 				MessageBox.Show(
@@ -330,16 +520,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// =========================
 			// OBTENER DATOS
-			// =========================
-
 			string codigo =
 				frmA.txbCodigo.Text.Trim();
 
 			string empleado =
 				frmA.txbEmpleado.Text.Trim();
-
 
 			string actividad =
 				frmA.cboActividad.Text.Trim();
@@ -353,19 +539,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			string idLote =
 				frmA.cboLote.SelectedValue?.ToString();
 
-			// =========================
 			// MOSTRAR EN EL DGV
-			// =========================
-
 			frmA.dgvListadoAgregar.Rows.Clear();
 
 			frmA.dgvListadoAgregar.Rows.Add(
 				codigo,
 				empleado,
-				"",              // Lugar de pago
+				LugarPago,
 				actividad,
 				lote,
-				"",              // IdLugarPago
+				IdLugarPago,
 				idActividad,
 				idLote
 			);

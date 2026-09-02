@@ -29,10 +29,10 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmListados));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
 			panel1 = new Panel();
 			btnMostrar = new Button();
 			label3 = new Label();
@@ -54,11 +54,12 @@
 			lblCuadrilla = new Label();
 			label4 = new Label();
 			dgvListado = new DataGridView();
-			dtpFecha = new DateTimePicker();
 			label1 = new Label();
 			label2 = new Label();
 			pictureBox1 = new PictureBox();
 			panel3 = new Panel();
+			cboSemana = new ComboBox();
+			label5 = new Label();
 			button1 = new Button();
 			btnActulizar = new Button();
 			panel1.SuspendLayout();
@@ -119,14 +120,14 @@
 			dgvCuadrilla.BackgroundColor = SystemColors.Control;
 			dgvCuadrilla.BorderStyle = BorderStyle.Fixed3D;
 			dgvCuadrilla.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvCuadrilla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.BackColor = SystemColors.Control;
+			dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+			dgvCuadrilla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			dgvCuadrilla.ColumnHeadersHeight = 29;
 			dgvCuadrilla.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCuadrilla.EnableHeadersVisualStyles = false;
@@ -134,14 +135,14 @@
 			dgvCuadrilla.Location = new Point(3, 103);
 			dgvCuadrilla.Name = "dgvCuadrilla";
 			dgvCuadrilla.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvCuadrilla.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = SystemColors.Control;
+			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+			dgvCuadrilla.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			dgvCuadrilla.RowHeadersVisible = false;
 			dgvCuadrilla.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -353,14 +354,14 @@
 			dgvListado.BackgroundColor = SystemColors.Control;
 			dgvListado.BorderStyle = BorderStyle.Fixed3D;
 			dgvListado.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle7.BackColor = SystemColors.Control;
+			dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+			dgvListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			dgvListado.ColumnHeadersHeight = 29;
 			dgvListado.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvListado.EnableHeadersVisualStyles = false;
@@ -368,27 +369,19 @@
 			dgvListado.Location = new Point(3, 175);
 			dgvListado.Name = "dgvListado";
 			dgvListado.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = SystemColors.Control;
+			dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle8.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle8.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+			dgvListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
 			dgvListado.RowHeadersVisible = false;
 			dgvListado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvListado.Size = new Size(1130, 515);
 			dgvListado.TabIndex = 13;
-			// 
-			// dtpFecha
-			// 
-			dtpFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			dtpFecha.Location = new Point(818, 32);
-			dtpFecha.Name = "dtpFecha";
-			dtpFecha.Size = new Size(246, 23);
-			dtpFecha.TabIndex = 37;
 			// 
 			// label1
 			// 
@@ -425,16 +418,36 @@
 			// 
 			panel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel3.BackColor = Color.FromArgb(245, 247, 250);
+			panel3.Controls.Add(cboSemana);
+			panel3.Controls.Add(label5);
 			panel3.Controls.Add(button1);
 			panel3.Controls.Add(btnActulizar);
 			panel3.Controls.Add(pictureBox1);
 			panel3.Controls.Add(label2);
 			panel3.Controls.Add(label1);
-			panel3.Controls.Add(dtpFecha);
 			panel3.Location = new Point(12, 3);
 			panel3.Name = "panel3";
 			panel3.Size = new Size(1448, 89);
 			panel3.TabIndex = 2;
+			// 
+			// cboSemana
+			// 
+			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboSemana.FormattingEnabled = true;
+			cboSemana.Location = new Point(614, 42);
+			cboSemana.Name = "cboSemana";
+			cboSemana.Size = new Size(288, 25);
+			cboSemana.TabIndex = 46;
+			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label5.Location = new Point(614, 21);
+			label5.Name = "label5";
+			label5.Size = new Size(63, 17);
+			label5.TabIndex = 45;
+			label5.Text = "Semana :";
 			// 
 			// button1
 			// 
@@ -458,12 +471,12 @@
 			btnActulizar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnActulizar.Image = (Image)resources.GetObject("btnActulizar.Image");
 			btnActulizar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnActulizar.Location = new Point(1094, 21);
+			btnActulizar.Location = new Point(984, 21);
 			btnActulizar.Name = "btnActulizar";
 			btnActulizar.Padding = new Padding(30, 0, 30, 0);
-			btnActulizar.Size = new Size(166, 44);
+			btnActulizar.Size = new Size(276, 44);
 			btnActulizar.TabIndex = 43;
-			btnActulizar.Text = "Actualizar";
+			btnActulizar.Text = "Reutilizar semana anterior";
 			btnActulizar.TextAlign = ContentAlignment.MiddleRight;
 			btnActulizar.UseVisualStyleBackColor = true;
 			btnActulizar.Click += btnActulizar_Click;
@@ -512,7 +525,6 @@
 		private Label label2;
 		private PictureBox pictureBox1;
 		private Panel panel3;
-		public DateTimePicker dtpFecha;
 		public Label lblTotalEmpleados;
 		public Button btnImprimir;
 		public Label lblCuadrilla;
@@ -528,5 +540,7 @@
 		public Button btnModificar;
 		public Button btnActulizar;
 		public Button button1;
+		public ComboBox cboSemana;
+		private Label label5;
 	}
 }

@@ -82,6 +82,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				fechaInicio,
 				fechaFin);
 
+
+			// ORDENAR IGUAL QUE dgvAsistencia
+			dt = OrdenarChecadorIgualAsistencia(dt);
+
+
 			_frmA.dgvChecador.DataSource = dt;
 
 			ConfigurarGridChecador();
@@ -122,6 +127,69 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						DataGridViewContentAlignment.MiddleCenter;
 				}
 			}
+		}
+		public void MarcarPorEstado(string estado)
+		{
+			estado = estado.Trim().ToUpper();
+
+			DataTable dt =
+				_frmA.dgvAsistencia.DataSource as DataTable;
+
+			if (dt == null)
+				return;
+
+			string[] dias =
+			{
+		"Vie",
+		"Sab",
+		"Dom",
+		"Lun",
+		"Mar",
+		"Mie",
+		"Jue"
+	};
+
+			foreach (DataGridViewRow filaReloj in _frmA.dgvChecador.Rows)
+			{
+				if (filaReloj.IsNewRow)
+					continue;
+
+				string codigo =
+					filaReloj.Cells[0].Value?
+						.ToString()
+						.Trim();
+
+				if (string.IsNullOrWhiteSpace(codigo))
+					continue;
+
+				// Buscar empleado en el DataTable
+				DataRow[] empleados =
+					dt.Select(
+						$"Codigo = '{codigo.Replace("'", "''")}'");
+
+				if (empleados.Length == 0)
+					continue;
+
+				DataRow empleado = empleados[0];
+
+				// Revisar los 7 días
+				for (int dia = 0; dia < 7; dia++)
+				{
+					string valor =
+						filaReloj.Cells[dia + 1].Value?
+							.ToString()
+							.Trim()
+							.ToUpper();
+
+					if (valor == estado)
+					{
+						// Guardar directamente en el DataTable
+						empleado[dias[dia]] = true;
+					}
+				}
+			}
+
+			_frmA.dgvAsistencia.Refresh();
 		}
 		public void DgvChecador_CellPainting(
 	object sender,
@@ -433,6 +501,43 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ClearSelection();
 			dgv.CurrentCell = null;
+		}
+		private DataTable OrdenarChecadorIgualAsistencia(DataTable dt)
+		{
+			if (dt == null)
+				return dt;
+
+			DataTable dtOrdenado = dt.Clone();
+
+			// Recorrer dgvAsistencia en el orden actual
+			foreach (DataGridViewRow fila in _frmA.dgvAsistencia.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string codigo =
+					fila.Cells["Codigo"].Value?.ToString()?.Trim();
+
+				if (string.IsNullOrWhiteSpace(codigo))
+					continue;
+
+
+				// Buscar el código en la PRIMERA columna
+				// del DataTable de checador
+				foreach (DataRow row in dt.Rows)
+				{
+					string codigoChecador =
+						row[0]?.ToString()?.Trim();
+
+					if (codigoChecador == codigo)
+					{
+						dtOrdenado.ImportRow(row);
+						break;
+					}
+				}
+			}
+
+			return dtOrdenado;
 		}
 	}
 }

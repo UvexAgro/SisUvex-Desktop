@@ -29,9 +29,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvAsistencia.ColumnHeaderMouseClick +=
 					_clsA.DgvAsistencia_ColumnHeaderMouseClick;
 
-			dgvChecador.CellPainting +=clsJ.DgvChecador_CellPainting;
+			dgvChecador.CellPainting += clsJ.DgvChecador_CellPainting;
 
-			dgvAsistencia.CellPainting +=_clsA.DgvAsistencia_CellPainting;
+			dgvAsistencia.CellPainting += _clsA.DgvAsistencia_CellPainting;
 		}
 
 		private void FrmAsistencia_Load(object sender, EventArgs e)
@@ -238,6 +238,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private void btnGuardar_Click(object sender, EventArgs e)
 		{
 			_clsA.GuardarAsistencia();
+		}
+
+		private void btnES_Click(object sender, EventArgs e)
+		{
+			clsJ.MarcarPorEstado("E/S");
+		}
+
+		private void btnE_Click(object sender, EventArgs e)
+		{
+			clsJ.MarcarPorEstado("E");
+		}
+
+		private void btnS_Click(object sender, EventArgs e)
+		{
+			clsJ.MarcarPorEstado("S");
 		}
 	}
 }

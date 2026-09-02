@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing.Printing;
@@ -24,6 +25,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	{
 		private SQLControl sql = new SQLControl();
 		public FrmAsistencia _frmA;
+		public FrmListados frm;
 		private HashSet<string> celdasBloqueadas = new HashSet<string>();
 		public void CargarCuadrillas()
 		{
@@ -87,15 +89,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public void CargarSemanas()
 		{
 			string query = @"
-		SELECT
-			id_period,
-			c_sequence_per,
-			d_startDate_per,
-			d_endDate_per,
-			v_name_per
-		FROM dbo.Payroll_AttendancePeriod
-		WHERE c_active = '1'
-		ORDER BY d_startDate_per ASC";
+        SELECT
+            id_period,
+            c_sequence_per,
+            d_startDate_per,
+            d_endDate_per,
+            v_name_per
+        FROM dbo.Payroll_AttendancePeriod
+        WHERE c_active = '1'
+        ORDER BY d_startDate_per DESC";
 
 			DataTable dt = new DataTable();
 
@@ -128,6 +130,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			SeleccionarSemanaActual(dt);
 		}
+
 		private void SeleccionarSemanaActual(DataTable dt)
 		{
 			DateTime fechaActual = DateTime.Today;
@@ -145,7 +148,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (fechaActual >= fechaInicio &&
 					fechaActual <= fechaFin)
 				{
-					// Semana revisión manual
 					_frmA.cboSemana.SelectedValue =
 						row["c_sequence_per"];
 
@@ -155,8 +157,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_frmA.cboSemana.SelectedIndex = -1;
 		}
-
-		public DataTable CargarEmpleadosCuadrillaSemana(string idCuadrilla, DateTime fechaInicio, DateTime fechaFin)
+		public DataTable CargarEmpleadosCuadrillaSemana(
+	string idCuadrilla,
+	string secuenciaSemana,
+	DateTime fechaInicio,
+	DateTime fechaFin)
 		{
 			DataTable dt = new DataTable();
 
@@ -165,21 +170,29 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(
-					"sp_GetEmpleadosCuadrillaSemana",
+					"sp_GetEmployeesWorkGroupByWeek",
 					sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3).Value =
-						idCuadrilla;
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per",
+						secuenciaSemana);
 
-					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date).Value =
-						fechaInicio.Date;
+					cmd.Parameters.AddWithValue(
+						"@d_startDate_per",
+						fechaInicio.Date);
 
-					cmd.Parameters.Add("@fechaFin", SqlDbType.Date).Value =
-						fechaFin.Date;
+					cmd.Parameters.AddWithValue(
+						"@d_endDate_per",
+						fechaFin.Date);
 
-					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						idCuadrilla);
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
 					{
 						da.Fill(dt);
 					}
@@ -188,7 +201,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al cargar los empleados de la cuadrilla:\n" + ex.Message,
+					"Error al cargar empleados:\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -229,40 +242,152 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (semana == null)
 				return;
 
+			string secuenciaSemana =
+				semana["c_sequence_per"].ToString();
+
 			DateTime fechaInicio =
-				Convert.ToDateTime(semana["d_startDate_per"]);
+				Convert.ToDateTime(
+					semana["d_startDate_per"]).Date;
 
 			DateTime fechaFin =
-				Convert.ToDateTime(semana["d_endDate_per"]);
+				Convert.ToDateTime(
+					semana["d_endDate_per"]).Date;
+
+
+			// ==========================================
+			// CARGAR EMPLEADOS
+			// ==========================================
 
 			DataTable dt =
 				CargarEmpleadosCuadrillaSemana(
 					idCuadrilla,
+					secuenciaSemana,
 					fechaInicio,
 					fechaFin);
+
+
+			// ==========================================
+			// AGREGAR COLUMNAS DE ASISTENCIA AL DATATABLE
+			// ==========================================
+
+			string[] dias =
+			{
+		"Vie",
+		"Sab",
+		"Dom",
+		"Lun",
+		"Mar",
+		"Mie",
+		"Jue"
+	};
+
+			foreach (string dia in dias)
+			{
+				if (!dt.Columns.Contains(dia))
+				{
+					dt.Columns.Add(dia, typeof(bool));
+				}
+			}
+
+
+			// ==========================================
+			// INICIALIZAR TODOS LOS DÍAS EN FALSE
+			// ==========================================
+
+			foreach (DataRow row in dt.Rows)
+			{
+				foreach (string dia in dias)
+				{
+					row[dia] = false;
+				}
+			}
+
+
+			// ==========================================
+			// MOSTRAR DATATABLE EN EL GRID
+			// ==========================================
 
 			_frmA.dgvAsistencia.DataSource = dt;
 
-			// Cargar registros reales de Nom_WorkGroupEmployeeDaily
-			DataTable dtRegistros =
-				CargarRegistrosSemana(
-					idCuadrilla,
+
+			// ==========================================
+			// CARGAR ASISTENCIA YA GUARDADA
+			// ==========================================
+
+			DataTable dtAsistencia =
+				CargarAsistenciaSemanal(
+					secuenciaSemana,
 					fechaInicio,
 					fechaFin);
 
-			// Bloquear/desbloquear días según exista registro
-			BloquearDiasSinRegistro(
-				dtRegistros,
-				fechaInicio);
 
-			MarcarEmpleadosEnOtraCuadrilla(dt);
+			// ==========================================
+			// MARCAR LOS DÍAS GUARDADOS
+			// ==========================================
+
+			foreach (DataRow empleado in dt.Rows)
+			{
+				string idEmployee =
+					empleado["Codigo"]?.ToString()?.Trim();
+
+				if (string.IsNullOrWhiteSpace(idEmployee))
+					continue;
+
+
+				// Buscar asistencia guardada
+				DataRow[] registros =
+					dtAsistencia.Select(
+						$"id_employee = '{idEmployee.Replace("'", "''")}'");
+
+
+				if (registros.Length == 0)
+					continue;
+
+
+				DataRow asistencia =
+					registros[0];
+
+
+				// ==========================================
+				// CARGAR LOS VALORES GUARDADOS
+				// ==========================================
+
+				empleado["Vie"] =
+					Convert.ToBoolean(asistencia["b_vie"]);
+
+				empleado["Sab"] =
+					Convert.ToBoolean(asistencia["b_sab"]);
+
+				empleado["Dom"] =
+					Convert.ToBoolean(asistencia["b_dom"]);
+
+				empleado["Lun"] =
+					Convert.ToBoolean(asistencia["b_lun"]);
+
+				empleado["Mar"] =
+					Convert.ToBoolean(asistencia["b_mar"]);
+
+				empleado["Mie"] =
+					Convert.ToBoolean(asistencia["b_mie"]);
+
+				empleado["Jue"] =
+					Convert.ToBoolean(asistencia["b_jue"]);
+			}
+
+
+			// ==========================================
+			// ACTUALIZAR GRID
+			// ==========================================
+
+			_frmA.dgvAsistencia.Refresh();
 
 			_frmA.dgvAsistencia.Visible = true;
+
 			_frmA.dgvAsistencia.BringToFront();
 
 			_frmA.dgvAsistencia.ClearSelection();
-			_frmA.dgvAsistencia.CurrentCell = null;
 
+			_frmA.dgvAsistencia.CurrentCell = null;
 		}
 		public void ConfigurarGrid()
 		{
@@ -484,8 +609,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_frmA.dgvAsistencia.Columns.Add(columna);
 		}
-		private void MarcarEmpleadosEnOtraCuadrilla(DataTable dt)
+
+		public void DgvAsistencia_ColumnHeaderMouseClick(
+	object sender,
+	DataGridViewCellMouseEventArgs e)
 		{
+			DataGridView dgv = _frmA.dgvAsistencia;
+
+			string nombreColumna =
+				dgv.Columns[e.ColumnIndex].Name;
+
 			string[] dias =
 			{
 		"Vie",
@@ -495,122 +628,78 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		"Mar",
 		"Mie",
 		"Jue"
-			};
+	};
 
-			foreach (DataGridViewRow row in _frmA.dgvAsistencia.Rows)
+			// ==========================================
+			// SI ES UN DÍA
+			// ==========================================
+
+			if (dias.Contains(nombreColumna))
 			{
-				if (row.IsNewRow)
-					continue;
+				bool marcarTodos = false;
 
-				int indice = row.Index;
-
-				if (indice >= dt.Rows.Count)
-					continue;
-
-				DataRow datos = dt.Rows[indice];
-
-				foreach (string dia in dias)
+				foreach (DataGridViewRow row in dgv.Rows)
 				{
-					string columnaOtra = dia + "OtraCuadrilla";
-
-					if (!dt.Columns.Contains(columnaOtra))
+					if (row.IsNewRow)
 						continue;
 
-					object valor = datos[columnaOtra];
+					DataGridViewCell celda =
+						row.Cells[nombreColumna];
 
-					if (valor != null &&
-					valor != DBNull.Value &&
-					!string.IsNullOrWhiteSpace(valor.ToString()))
+					if (celda.ReadOnly)
+						continue;
+
+					bool marcado =
+						celda.Value != null &&
+						celda.Value != DBNull.Value &&
+						Convert.ToBoolean(celda.Value);
+
+					if (!marcado)
 					{
-						if (!_frmA.dgvAsistencia.Columns.Contains(dia))
-							continue;
-
-						DataGridViewCell celda = row.Cells[dia];
-
-						// Bloquear
-						celda.ReadOnly = true;
-
-						// Apariencia
-						celda.Style.BackColor = Color.FromArgb(255, 152, 0);
-						celda.Style.ForeColor = Color.DarkOrange;
-						celda.Style.SelectionBackColor = Color.FromArgb(255, 152, 0);
-						celda.Style.SelectionForeColor = Color.DarkOrange;
-
-						// Mensaje al pasar el mouse
-						celda.ToolTipText =
-							"⚠ Este empleado está asignado a la cuadrilla: "
-							+ valor.ToString();
+						marcarTodos = true;
+						break;
 					}
 				}
-			}
-		}
 
-		public void DgvAsistencia_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-		{
-			DataGridView dgv = _frmA.dgvAsistencia;
-
-			string nombreColumna =
-				dgv.Columns[e.ColumnIndex].Name;
-
-			string[] dias =
-			{
-				"Vie",
-				"Sab",
-				"Dom",
-				"Lun",
-				"Mar",
-				"Mie",
-				"Jue"
-			};
-
-			// Solo actuar si es una columna de día
-			if (!dias.Contains(nombreColumna))
-				return;
-
-			// Verificar si hay algún empleado disponible sin marcar
-			bool marcarTodos = false;
-
-			foreach (DataGridViewRow row in dgv.Rows)
-			{
-				if (row.IsNewRow)
-					continue;
-
-				DataGridViewCell celda =
-					row.Cells[nombreColumna];
-
-				// Si está bloqueado, ignorarlo
-				if (celda.ReadOnly)
-					continue;
-
-				bool marcado =
-					celda.Value != null &&
-					celda.Value != DBNull.Value &&
-					Convert.ToBoolean(celda.Value);
-
-				if (!marcado)
+				foreach (DataGridViewRow row in dgv.Rows)
 				{
-					marcarTodos = true;
-					break;
+					if (row.IsNewRow)
+						continue;
+
+					DataGridViewCell celda =
+						row.Cells[nombreColumna];
+
+					if (celda.ReadOnly)
+						continue;
+
+					// Cambiar visualmente
+					celda.Value = marcarTodos;
+
+					// Cambiar también el DataTable
+					DataRowView drv =
+						row.DataBoundItem as DataRowView;
+
+					if (drv != null)
+					{
+						drv.Row[nombreColumna] = marcarTodos;
+					}
 				}
+
+				dgv.EndEdit();
+				dgv.Refresh();
+
+				return;
 			}
 
-			// Marcar o desmarcar todos
-			foreach (DataGridViewRow row in dgv.Rows)
-			{
-				if (row.IsNewRow)
-					continue;
-
-				DataGridViewCell celda =
-					row.Cells[nombreColumna];
-
-				// No tocar empleados bloqueados
-				if (celda.ReadOnly)
-					continue;
-
-				celda.Value = marcarTodos;
-			}
-
-			dgv.EndEdit();
+			// ==========================================
+			// CÓDIGO / EMPLEADO
+			// ==========================================
+			//
+			// NO HACEMOS NADA.
+			//
+			// El DataGridView realizará su ordenamiento
+			// normal y los CheckBox permanecerán ligados
+			// al empleado mediante el DataTable.
 		}
 		public MemoryStream GenerarPdfAsistenciaCuadrilla(DataGridView dgv)
 		{
@@ -945,11 +1034,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			ms.Dispose();
 		}
 
-		public void GuardarAsistenciaManual(
-	DateTime fecha,
+		public void GuardarAsistenciaSemanal(
+	string cSequencePer,
+	DateTime fechaInicio,
+	DateTime fechaFin,
 	string idEmployee,
-	string idWorkGroup,
-	bool asistencia,
+
+	bool asistenciaVie,
+	string cuadrillaVie,
+
+	bool asistenciaSab,
+	string cuadrillaSab,
+
+	bool asistenciaDom,
+	string cuadrillaDom,
+
+	bool asistenciaLun,
+	string cuadrillaLun,
+
+	bool asistenciaMar,
+	string cuadrillaMar,
+
+	bool asistenciaMie,
+	string cuadrillaMie,
+
+	bool asistenciaJue,
+	string cuadrillaJue,
+
 	string usuario)
 		{
 			try
@@ -962,20 +1073,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@fecha", SqlDbType.Date).Value =
-						fecha.Date;
+					// SEMANA
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = cSequencePer;
 
-					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6).Value =
-						idEmployee;
+					cmd.Parameters.Add("@d_startDate_per", SqlDbType.Date)
+						.Value = fechaInicio.Date;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 4).Value =
-						idWorkGroup;
+					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
+						.Value = fechaFin.Date;
 
-					cmd.Parameters.Add("@b_attendance", SqlDbType.Bit).Value =
-						asistencia;
+					// EMPLEADO
+					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6)
+						.Value = idEmployee;
 
-					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar, 100).Value =
-						usuario;
+					// VIERNES
+					cmd.Parameters.Add("@b_vie", SqlDbType.Bit)
+						.Value = asistenciaVie;
+
+					cmd.Parameters.Add("@id_workGroup_vie", SqlDbType.Char, 4)
+						.Value = cuadrillaVie;
+
+					// SÁBADO
+					cmd.Parameters.Add("@b_sab", SqlDbType.Bit)
+						.Value = asistenciaSab;
+
+					cmd.Parameters.Add("@id_workGroup_sab", SqlDbType.Char, 4)
+						.Value = cuadrillaSab;
+
+					// DOMINGO
+					cmd.Parameters.Add("@b_dom", SqlDbType.Bit)
+						.Value = asistenciaDom;
+
+					cmd.Parameters.Add("@id_workGroup_dom", SqlDbType.Char, 4)
+						.Value = cuadrillaDom;
+
+					// LUNES
+					cmd.Parameters.Add("@b_lun", SqlDbType.Bit)
+						.Value = asistenciaLun;
+
+					cmd.Parameters.Add("@id_workGroup_lun", SqlDbType.Char, 4)
+						.Value = cuadrillaLun;
+
+					// MARTES
+					cmd.Parameters.Add("@b_mar", SqlDbType.Bit)
+						.Value = asistenciaMar;
+
+					cmd.Parameters.Add("@id_workGroup_mar", SqlDbType.Char, 4)
+						.Value = cuadrillaMar;
+
+					// MIÉRCOLES
+					cmd.Parameters.Add("@b_mie", SqlDbType.Bit)
+						.Value = asistenciaMie;
+
+					cmd.Parameters.Add("@id_workGroup_mie", SqlDbType.Char, 4)
+						.Value = cuadrillaMie;
+
+					// JUEVES
+					cmd.Parameters.Add("@b_jue", SqlDbType.Bit)
+						.Value = asistenciaJue;
+
+					cmd.Parameters.Add("@id_workGroup_jue", SqlDbType.Char, 4)
+						.Value = cuadrillaJue;
+
+					// USUARIO
+					cmd.Parameters.Add("@user", SqlDbType.VarChar, 100)
+						.Value = usuario;
 
 					cmd.ExecuteNonQuery();
 				}
@@ -983,7 +1146,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al guardar la asistencia:\n" + ex.Message,
+					"Error al guardar la asistencia semanal:\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -1001,30 +1164,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (_frmA.cboSemana.SelectedIndex == -1)
 				return;
 
-			string idWorkGroup =
-				_frmA.cboCuadrilla.SelectedValue.ToString();
-
 			DataRow semana = ObtenerSemanaSeleccionada();
 
 			if (semana == null)
 				return;
 
+			string cSequencePer =
+				semana["c_sequence_per"].ToString();
+
 			DateTime fechaInicio =
 				Convert.ToDateTime(
 					semana["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semana["d_endDate_per"]).Date;
 
 			string usuario = User.GetUserName();
 
 			string[] dias =
 			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
-	};
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
 
 			for (int i = 0; i < _frmA.dgvAsistencia.Rows.Count; i++)
 			{
@@ -1040,29 +1207,95 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (string.IsNullOrWhiteSpace(idEmployee))
 					continue;
 
+				// =========================
+				// ASISTENCIAS
+				// =========================
+
+				bool[] asistencias = new bool[7];
+
 				for (int d = 0; d < dias.Length; d++)
 				{
-					bool asistencia = false;
-
 					object valor =
 						fila.Cells[dias[d]].Value;
 
 					if (valor != null &&
 						valor != DBNull.Value)
 					{
-						asistencia = Convert.ToBoolean(valor);
+						asistencias[d] =
+							Convert.ToBoolean(valor);
 					}
-
-					DateTime fecha =
-						fechaInicio.AddDays(d);
-
-					GuardarAsistenciaManual(
-						fecha,
-						idEmployee,
-						idWorkGroup,
-						asistencia,
-						usuario);
+					else
+					{
+						asistencias[d] = false;
+					}
 				}
+
+				// =========================
+				// AQUÍ OBTENDREMOS
+				// LA CUADRILLA DE CADA DÍA
+				// =========================
+
+				string cuadrillaVie = ObtenerCuadrillaEmpleadoDia(
+				idEmployee,
+				fechaInicio,
+				cSequencePer,
+				fechaInicio);
+
+				string cuadrillaSab = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(1),
+					cSequencePer,
+					fechaInicio);
+
+				string cuadrillaDom = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(2),
+					cSequencePer,
+					fechaInicio);
+
+				string cuadrillaLun = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(3),
+					cSequencePer,
+					fechaInicio);
+
+				string cuadrillaMar = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(4),
+					cSequencePer,
+					fechaInicio);
+
+				string cuadrillaMie = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(5),
+					cSequencePer,
+					fechaInicio);
+
+				string cuadrillaJue = ObtenerCuadrillaEmpleadoDia(
+					idEmployee,
+					fechaInicio.AddDays(6),
+					cSequencePer,
+					fechaInicio);
+
+				// =========================
+				// GUARDAR SEMANA
+				// =========================
+
+				GuardarAsistenciaSemanal(
+					cSequencePer,
+					fechaInicio,
+					fechaFin,
+					idEmployee,
+
+					asistencias[0], cuadrillaVie,
+					asistencias[1], cuadrillaSab,
+					asistencias[2], cuadrillaDom,
+					asistencias[3], cuadrillaLun,
+					asistencias[4], cuadrillaMar,
+					asistencias[5], cuadrillaMie,
+					asistencias[6], cuadrillaJue,
+
+					usuario);
 			}
 
 			MessageBox.Show(
@@ -1071,35 +1304,120 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
 		}
-		private DataTable CargarRegistrosSemana(
-	string idCuadrilla,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+		private string ObtenerCuadrillaEmpleadoDia(
+	string idEmployee,
+	DateTime fecha,
+	string cSequencePer,
+	DateTime fechaInicio)
 		{
-			DataTable dt = new DataTable();
-
-			string query = @"
-        SELECT
-            d_date,
-            id_employee
-        FROM dbo.Nom_WorkGroupEmployeeDaily
-        WHERE id_workGroup = @id_workGroup
-          AND d_date BETWEEN @fechaInicio AND @fechaFin;";
+			string idWorkGroup = "";
 
 			try
 			{
 				sql.OpenConectionWrite();
 
+				string columna;
+
+				switch (fecha.DayOfWeek)
+				{
+					case DayOfWeek.Friday:
+						columna = "id_workGroup_vie";
+						break;
+
+					case DayOfWeek.Saturday:
+						columna = "id_workGroup_sab";
+						break;
+
+					case DayOfWeek.Sunday:
+						columna = "id_workGroup_dom";
+						break;
+
+					case DayOfWeek.Monday:
+						columna = "id_workGroup_lun";
+						break;
+
+					case DayOfWeek.Tuesday:
+						columna = "id_workGroup_mar";
+						break;
+
+					case DayOfWeek.Wednesday:
+						columna = "id_workGroup_mie";
+						break;
+
+					case DayOfWeek.Thursday:
+						columna = "id_workGroup_jue";
+						break;
+
+					default:
+						return "";
+				}
+
+				string query = $@"
+            SELECT {columna}
+            FROM dbo.Nom_EmployeeAttendanceWeekly
+            WHERE c_sequence_per = @c_sequence_per
+              AND d_startDate_per = @fechaInicio
+              AND id_employee = @id_employee";
+
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 4).Value =
-						idCuadrilla;
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = cSequencePer;
 
-					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date).Value =
-						fechaInicio.Date;
+					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date)
+						.Value = fechaInicio.Date;
 
-					cmd.Parameters.Add("@fechaFin", SqlDbType.Date).Value =
-						fechaFin.Date;
+					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6)
+						.Value = idEmployee;
+
+					object resultado = cmd.ExecuteScalar();
+
+					if (resultado != null && resultado != DBNull.Value)
+					{
+						idWorkGroup = resultado.ToString().Trim();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al obtener la cuadrilla del empleado:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return idWorkGroup;
+		}
+		public DataTable CargarAsistenciaSemanal(
+	string cSequencePer,
+	DateTime fechaInicio,
+	DateTime fechaFin)
+		{
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_GetAsistenciaSemanal",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = cSequencePer;
+
+					cmd.Parameters.Add("@d_startDate_per", SqlDbType.Date)
+						.Value = fechaInicio.Date;
+
+					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
+						.Value = fechaFin.Date;
 
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
@@ -1110,7 +1428,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al cargar los registros de la semana:\n" + ex.Message,
+					"Error al cargar la asistencia:\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -1122,66 +1440,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		private void BloquearDiasSinRegistro(
-	DataTable dtRegistros,
-	DateTime fechaInicio)
-		{
-			string[] dias =
-			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
-	};
 
-			foreach (DataGridViewRow fila in _frmA.dgvAsistencia.Rows)
-			{
-				if (fila.IsNewRow)
-					continue;
-
-				string idEmpleado =
-					fila.Cells["Codigo"].Value?.ToString()?.Trim();
-
-				if (string.IsNullOrEmpty(idEmpleado))
-					continue;
-
-				for (int i = 0; i < dias.Length; i++)
-				{
-					DateTime fecha =
-						fechaInicio.Date.AddDays(i);
-
-					bool existeRegistro =
-						dtRegistros.AsEnumerable().Any(r =>
-							r["id_employee"].ToString().Trim() == idEmpleado &&
-							Convert.ToDateTime(r["d_date"]).Date == fecha.Date
-						);
-
-					DataGridViewCheckBoxCell checkbox =
-						fila.Cells[dias[i]]
-						as DataGridViewCheckBoxCell;
-
-					if (checkbox == null)
-						continue;
-
-					if (existeRegistro)
-					{
-						// EXISTE REGISTRO
-						// → CHECKBOX DISPONIBLE
-						checkbox.ReadOnly = false;
-					}
-					else
-					{
-						// NO EXISTE REGISTRO
-						// → CHECKBOX BLOQUEADO
-						checkbox.ReadOnly = true;
-						checkbox.Value = false;
-					}
-				}
-			}
-		}
 		public void DgvAsistencia_CellPainting(
 	object sender,
 	DataGridViewCellPaintingEventArgs e)

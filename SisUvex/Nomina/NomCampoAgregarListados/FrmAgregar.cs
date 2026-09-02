@@ -23,7 +23,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			get { return dgvListadoAgregar; }
 		}
 		public string IdCuadrilla { get; set; }
-		public DateTime Fecha { get; set; }
+		public string SecuenciaSemana { get; set; }
+
+		public DateTime FechaInicio { get; set; }
+		public DateTime FechaFin { get; set; }
+
 		public bool ModoModificar { get; set; }
 		public int IndiceFilaModificar { get; set; }
 		public FrmAgregar()
@@ -53,7 +57,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (e.RowIndex < 0)
 				return;
 
-			string empleado = dgvListadoAgregar.Rows[e.RowIndex].Cells["colEmpleado"].Value?.ToString();
+			string empleado = dgvListadoAgregar.Rows[e.RowIndex].Cells["Nombre"].Value?.ToString();
 
 			DialogResult respuesta = MessageBox.Show(
 				$"¿Desea quitar a {empleado} de la lista?",
@@ -144,7 +148,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			cls.ActualizarEmpleadosCuadrilla(IdCuadrilla, Fecha, dgvListadoAgregar);
+			if (ModoModificar)
+			{
+				// MODIFICAR EMPLEADO EXISTENTE
+				clsA.ActualizarEmpleadoModificar(
+					SecuenciaSemana,
+					FechaInicio,
+					FechaFin,
+					IdCuadrilla,
+					dgvListadoAgregar);
+			}
+			else
+			{
+				// AGREGAR EMPLEADO NUEVO
+				cls.ActualizarEmpleadosCuadrilla(
+					IdCuadrilla,
+					SecuenciaSemana,
+					FechaInicio,
+					FechaFin,
+					dgvListadoAgregar);
+			}
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();

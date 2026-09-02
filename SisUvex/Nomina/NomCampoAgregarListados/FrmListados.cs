@@ -14,11 +14,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	public partial class FrmListados : Form
 	{
 		public ClsListados cls;
+		public ClsAsistencia _clsA;
 		public FrmListados()
 		{
 			InitializeComponent();
 			cls = new ClsListados();
 			cls.frm = this;
+
+			_clsA = new ClsAsistencia();
+			_clsA.frm = this;
 			cls.CrearColumnasListado();
 			cls.EstiloDgvListado();
 
@@ -33,6 +37,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			cls.CargarCuadrillas();
 			cls.EstiloDgvCuadrilla();
+			cls.CargarSemanas();
 			HasEditCatalogsPermission();
 		}
 
@@ -49,18 +54,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			if (!ObtenerSemanaSeleccionada(
+				out string secuenciaSemana,
+				out DateTime fechaInicio,
+				out DateTime fechaFin))
+			{
+				return;
+			}
+
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[0].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
 			string nombreCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[1].Value.ToString();
+				dgvCuadrilla.CurrentRow.Cells[1].Value?.ToString();
 
 			lblCuadrilla.Text = nombreCuadrilla;
 
 			cls.CargarEmpleadosCuadrilla(
 				idCuadrilla,
-				dtpFecha.Value.Date
-			);
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
+
 			cls.ActualizarTotalEmpleados();
 			cls.MostrarEmpleados();
 		}
@@ -79,31 +94,35 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			if (!ObtenerSemanaSeleccionada(
+			out string secuenciaSemana,
+			out DateTime fechaInicio,
+			out DateTime fechaFin))
+			{
+				return;
+			}
+
 			string idCuadrilla =
 				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
-			DateTime fecha = dtpFecha.Value.Date;
-
 			FrmAgregar frmAgregar = new FrmAgregar();
 
-			// Enviar cuadrilla y fecha a FrmAgregar
 			frmAgregar.IdCuadrilla = idCuadrilla;
-			frmAgregar.Fecha = fecha;
+			frmAgregar.FechaInicio = fechaInicio;
+			frmAgregar.FechaFin = fechaFin;
+			frmAgregar.SecuenciaSemana = secuenciaSemana;
 
 			if (frmAgregar.ShowDialog() == DialogResult.OK)
 			{
-				// Quitar el panel
 				pnlSinEmpleados.Visible = false;
-
-				// Mostrar la DGV
 				dgvListado.Visible = true;
 
-				// Cargar nuevamente los empleados
 				cls.CargarEmpleadosCuadrilla(
 					idCuadrilla,
-					fecha);
+					secuenciaSemana,
+					fechaInicio,
+					fechaFin);
 
-				// Actualizar total
 				cls.ActualizarTotalEmpleados();
 			}
 		}
@@ -115,21 +134,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnQuitar_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrWhiteSpace(lblCuadrilla.Text))
+			if (dgvListado.CurrentRow == null)
 			{
 				MessageBox.Show(
-					"Primero seleccione una cuadrilla.",
-					"Cuadrilla",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return;
-			}
-
-			if (dgvListado.SelectedRows.Count == 0)
-			{
-				MessageBox.Show(
-					"Seleccione al menos un empleado para quitar.",
+					"Seleccione un empleado.",
 					"Quitar empleado",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
@@ -137,48 +145,58 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[0].Value?.ToString();
-
-			int cantidad = dgvListado.SelectedRows.Count;
-
-			DialogResult respuesta = MessageBox.Show(
-				$"¿Está seguro de quitar {cantidad} empleado(s) de la cuadrilla?",
-				"Quitar empleados",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question);
-
-			if (respuesta != DialogResult.Yes)
-				return;
-
-			DateTime fecha = dtpFecha.Value.Date;
-
-			foreach (DataGridViewRow fila in dgvListado.SelectedRows)
+			if (!ObtenerSemanaSeleccionada(
+				out string secuenciaSemana,
+				out DateTime fechaInicio,
+				out DateTime fechaFin))
 			{
-				if (fila.IsNewRow)
-					continue;
-
-				string idEmpleado =
-					fila.Cells[0].Value?.ToString();
-
-				cls.EliminarEmpleadoCuadrilla(
-					idEmpleado,
-					idCuadrilla,
-					fecha
-				);
+				return;
 			}
 
-			cls.CargarEmpleadosCuadrilla(
+			string idEmpleado =
+				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+			if (string.IsNullOrWhiteSpace(idEmpleado) ||
+				string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se pudo obtener el empleado o la cuadrilla.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			bool eliminado = cls.EliminarEmpleadoCuadrilla(
+				idEmpleado,
 				idCuadrilla,
-				fecha
-			);
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
+			if (eliminado)
+			{
+				MessageBox.Show(
+					"Empleado quitado correctamente.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 
-			cls.ActualizarTotalEmpleados();
+				cls.CargarEmpleadosCuadrilla(
+					idCuadrilla,
+					secuenciaSemana,
+					fechaInicio,
+					fechaFin);
 
+				cls.ActualizarTotalEmpleados();
+			}
 		}
-
 		private void btnModificar_Click(object sender, EventArgs e)
 		{
+		
 			if (dgvListado.CurrentRow == null)
 			{
 				MessageBox.Show(
@@ -189,6 +207,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				return;
 			}
+
+			if (!ObtenerSemanaSeleccionada(
+				out string secuenciaSemana,
+				out DateTime fechaInicio,
+				out DateTime fechaFin))
+			{
+				return;
+			}
+
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
 			string idEmpleado =
 				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
@@ -204,57 +233,32 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// Guardar los datos necesarios para la consulta
-			cls.IdCuadrilla =
-		dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-			cls.Fecha = dtpFecha.Value.Date;
-
 			// Abrir formulario en modo modificar
-			cls.OpenFrmModify(idEmpleado);
+			cls.OpenFrmModify(
+				idEmpleado,
+				idCuadrilla,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
 
 			// Si se modificó correctamente, recargar la lista
-			if (cls.frmA.DialogResult == DialogResult.OK)
+			if (cls.frmA != null &&
+				cls.frmA.DialogResult == DialogResult.OK)
 			{
 				cls.CargarEmpleadosCuadrilla(
-					cls.IdCuadrilla,
-					cls.Fecha
-				);
+					idCuadrilla,
+					secuenciaSemana,
+					fechaInicio,
+					fechaFin);
 
 				cls.ActualizarTotalEmpleados();
 			}
 		}
+		
 
 		private void btnActulizar_Click(object sender, EventArgs e)
 		{
-			DateTime fechaActual = dtpFecha.Value.Date;
-
-			if (cls.ExistenEmpleadosFecha(fechaActual))
-			{
-				DialogResult resultado = MessageBox.Show(
-					"Ya existen empleados registrados para este día.\n\n" +
-					"¿Estás seguro de actualizar nuevamente?",
-					"Actualizar nuevamente",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Warning);
-
-				if (resultado != DialogResult.Yes)
-					return;
-			}
-
-			if (cls.ActualizarCuadrillas(fechaActual))
-			{
-				string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-				cls.CargarEmpleadosCuadrilla(
-					idCuadrilla,
-					fechaActual
-				);
-
-				cls.ActualizarTotalEmpleados();
-				cls.MostrarEmpleados();
-			}
+			cls.btnCopiarDatosDeLaSemanaAnterior();
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -262,6 +266,36 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			FrmAsistencia frm = new FrmAsistencia();
 
 			frm.ShowDialog();
+		}
+		public bool ObtenerSemanaSeleccionada(out string secuenciaSemana, out DateTime fechaInicio, out DateTime fechaFin)
+		{
+			secuenciaSemana = "";
+			fechaInicio = DateTime.MinValue;
+			fechaFin = DateTime.MinValue;
+
+			DataRowView semana = cboSemana.SelectedItem as DataRowView;
+
+			if (semana == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return false;
+			}
+
+			secuenciaSemana =
+				semana["c_sequence_per"]?.ToString();
+
+			fechaInicio =
+				Convert.ToDateTime(semana["d_startDate_per"]);
+
+			fechaFin =
+				Convert.ToDateTime(semana["d_endDate_per"]);
+
+			return true;
 		}
 	}
 }

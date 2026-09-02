@@ -40,16 +40,16 @@
 			label11 = new Label();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			panel8 = new Panel();
-			pictureBox4 = new PictureBox();
+			btnF = new Button();
 			label10 = new Label();
 			panel7 = new Panel();
-			pictureBox3 = new PictureBox();
+			btnS = new Button();
 			label9 = new Label();
 			panel6 = new Panel();
-			pictureBox2 = new PictureBox();
+			btnE = new Button();
 			label8 = new Label();
 			panel5 = new Panel();
-			pictureBox1 = new PictureBox();
+			btnES = new Button();
 			label7 = new Label();
 			panel4 = new Panel();
 			dgvChecador = new DataGridView();
@@ -71,13 +71,9 @@
 			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
 			tableLayoutPanel2.SuspendLayout();
 			panel8.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
 			panel7.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
 			panel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
 			panel5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvChecador).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
@@ -98,7 +94,7 @@
 			tableLayoutPanel1.Name = "tableLayoutPanel1";
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size = new Size(1287, 810);
+			tableLayoutPanel1.Size = new Size(1572, 1096);
 			tableLayoutPanel1.TabIndex = 0;
 			// 
 			// panel2
@@ -111,9 +107,9 @@
 			panel2.Controls.Add(dgvChecador);
 			panel2.Controls.Add(label2);
 			panel2.Dock = DockStyle.Fill;
-			panel2.Location = new Point(647, 4);
+			panel2.Location = new Point(789, 4);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(636, 802);
+			panel2.Size = new Size(779, 1088);
 			panel2.TabIndex = 1;
 			// 
 			// pictureBox5
@@ -164,35 +160,34 @@
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
 			tableLayoutPanel2.RowCount = 1;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.Size = new Size(629, 89);
+			tableLayoutPanel2.Size = new Size(772, 89);
 			tableLayoutPanel2.TabIndex = 25;
 			// 
 			// panel8
 			// 
 			panel8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel8.Controls.Add(pictureBox4);
+			panel8.Controls.Add(btnF);
 			panel8.Controls.Add(label10);
-			panel8.Location = new Point(475, 4);
+			panel8.Location = new Point(580, 4);
 			panel8.Name = "panel8";
-			panel8.Size = new Size(150, 81);
+			panel8.Size = new Size(188, 81);
 			panel8.TabIndex = 3;
 			// 
-			// pictureBox4
+			// btnF
 			// 
-			pictureBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
-			pictureBox4.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox4.Location = new Point(48, 14);
-			pictureBox4.Name = "pictureBox4";
-			pictureBox4.Size = new Size(48, 32);
-			pictureBox4.TabIndex = 7;
-			pictureBox4.TabStop = false;
+			btnF.BackgroundImage = (Image)resources.GetObject("btnF.BackgroundImage");
+			btnF.BackgroundImageLayout = ImageLayout.Zoom;
+			btnF.Location = new Point(67, 3);
+			btnF.Name = "btnF";
+			btnF.Size = new Size(46, 41);
+			btnF.TabIndex = 3;
+			btnF.UseVisualStyleBackColor = true;
 			// 
 			// label10
 			// 
 			label10.Anchor = AnchorStyles.None;
 			label10.AutoSize = true;
-			label10.Location = new Point(48, 50);
+			label10.Location = new Point(67, 50);
 			label10.Name = "label10";
 			label10.Size = new Size(55, 15);
 			label10.TabIndex = 4;
@@ -201,29 +196,29 @@
 			// panel7
 			// 
 			panel7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel7.Controls.Add(pictureBox3);
+			panel7.Controls.Add(btnS);
 			panel7.Controls.Add(label9);
-			panel7.Location = new Point(318, 4);
+			panel7.Location = new Point(388, 4);
 			panel7.Name = "panel7";
-			panel7.Size = new Size(150, 81);
+			panel7.Size = new Size(185, 81);
 			panel7.TabIndex = 2;
 			// 
-			// pictureBox3
+			// btnS
 			// 
-			pictureBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
-			pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox3.Location = new Point(49, 9);
-			pictureBox3.Name = "pictureBox3";
-			pictureBox3.Size = new Size(54, 39);
-			pictureBox3.TabIndex = 6;
-			pictureBox3.TabStop = false;
+			btnS.BackgroundImage = (Image)resources.GetObject("btnS.BackgroundImage");
+			btnS.BackgroundImageLayout = ImageLayout.Zoom;
+			btnS.Location = new Point(66, 4);
+			btnS.Name = "btnS";
+			btnS.Size = new Size(46, 43);
+			btnS.TabIndex = 4;
+			btnS.UseVisualStyleBackColor = true;
+			btnS.Click += btnS_Click;
 			// 
 			// label9
 			// 
 			label9.Anchor = AnchorStyles.None;
 			label9.AutoSize = true;
-			label9.Location = new Point(36, 52);
+			label9.Location = new Point(47, 52);
 			label9.Name = "label9";
 			label9.Size = new Size(84, 15);
 			label9.TabIndex = 3;
@@ -232,29 +227,29 @@
 			// panel6
 			// 
 			panel6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel6.Controls.Add(pictureBox2);
+			panel6.Controls.Add(btnE);
 			panel6.Controls.Add(label8);
-			panel6.Location = new Point(161, 4);
+			panel6.Location = new Point(196, 4);
 			panel6.Name = "panel6";
-			panel6.Size = new Size(150, 81);
+			panel6.Size = new Size(185, 81);
 			panel6.TabIndex = 1;
 			// 
-			// pictureBox2
+			// btnE
 			// 
-			pictureBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
-			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(49, 14);
-			pictureBox2.Name = "pictureBox2";
-			pictureBox2.Size = new Size(50, 32);
-			pictureBox2.TabIndex = 5;
-			pictureBox2.TabStop = false;
+			btnE.BackgroundImage = (Image)resources.GetObject("btnE.BackgroundImage");
+			btnE.BackgroundImageLayout = ImageLayout.Zoom;
+			btnE.Location = new Point(66, 4);
+			btnE.Name = "btnE";
+			btnE.Size = new Size(46, 41);
+			btnE.TabIndex = 2;
+			btnE.UseVisualStyleBackColor = true;
+			btnE.Click += btnE_Click;
 			// 
 			// label8
 			// 
 			label8.Anchor = AnchorStyles.None;
 			label8.AutoSize = true;
-			label8.Location = new Point(30, 52);
+			label8.Location = new Point(43, 54);
 			label8.Name = "label8";
 			label8.Size = new Size(93, 15);
 			label8.TabIndex = 2;
@@ -263,29 +258,29 @@
 			// panel5
 			// 
 			panel5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel5.Controls.Add(pictureBox1);
+			panel5.Controls.Add(btnES);
 			panel5.Controls.Add(label7);
 			panel5.Location = new Point(4, 4);
 			panel5.Name = "panel5";
-			panel5.Size = new Size(150, 81);
+			panel5.Size = new Size(185, 81);
 			panel5.TabIndex = 0;
 			// 
-			// pictureBox1
+			// btnES
 			// 
-			pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(41, 9);
-			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(57, 39);
-			pictureBox1.TabIndex = 1;
-			pictureBox1.TabStop = false;
+			btnES.BackgroundImage = (Image)resources.GetObject("btnES.BackgroundImage");
+			btnES.BackgroundImageLayout = ImageLayout.Zoom;
+			btnES.Location = new Point(62, 3);
+			btnES.Name = "btnES";
+			btnES.Size = new Size(47, 41);
+			btnES.TabIndex = 1;
+			btnES.UseVisualStyleBackColor = true;
+			btnES.Click += btnES_Click;
 			// 
 			// label7
 			// 
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
-			label7.Location = new Point(14, 50);
+			label7.Location = new Point(31, 50);
 			label7.Name = "label7";
 			label7.Size = new Size(121, 15);
 			label7.TabIndex = 0;
@@ -297,7 +292,7 @@
 			panel4.BackColor = Color.Silver;
 			panel4.Location = new Point(15, 67);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(608, 1);
+			panel4.Size = new Size(751, 1);
 			panel4.TabIndex = 24;
 			// 
 			// dgvChecador
@@ -336,7 +331,7 @@
 			dgvChecador.RowHeadersVisible = false;
 			dgvChecador.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvChecador.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvChecador.Size = new Size(630, 531);
+			dgvChecador.Size = new Size(773, 817);
 			dgvChecador.TabIndex = 15;
 			// 
 			// label2
@@ -366,7 +361,7 @@
 			panel1.Dock = DockStyle.Fill;
 			panel1.Location = new Point(4, 4);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(636, 802);
+			panel1.Size = new Size(778, 1088);
 			panel1.TabIndex = 0;
 			// 
 			// label13
@@ -396,7 +391,7 @@
 			panel3.BackColor = Color.Silver;
 			panel3.Location = new Point(8, 67);
 			panel3.Name = "panel3";
-			panel3.Size = new Size(608, 1);
+			panel3.Size = new Size(750, 1);
 			panel3.TabIndex = 23;
 			// 
 			// btnImprimir
@@ -405,7 +400,7 @@
 			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(467, 87);
+			btnImprimir.Location = new Point(609, 87);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(16, 0, 25, 0);
 			btnImprimir.Size = new Size(166, 39);
@@ -421,7 +416,7 @@
 			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
 			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(467, 179);
+			btnGuardar.Location = new Point(609, 179);
 			btnGuardar.Name = "btnGuardar";
 			btnGuardar.Padding = new Padding(20, 0, 30, 0);
 			btnGuardar.Size = new Size(166, 39);
@@ -467,7 +462,7 @@
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(630, 531);
+			dgvAsistencia.Size = new Size(772, 817);
 			dgvAsistencia.TabIndex = 14;
 			dgvAsistencia.CellClick += dgvAsistencia_CellClick;
 			dgvAsistencia.CellContentClick += dgvAsistencia_CellContentClick;
@@ -525,7 +520,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1287, 810);
+			ClientSize = new Size(1572, 1096);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAsistencia";
@@ -538,16 +533,12 @@
 			tableLayoutPanel2.ResumeLayout(false);
 			panel8.ResumeLayout(false);
 			panel8.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
 			panel7.ResumeLayout(false);
 			panel7.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
 			panel6.ResumeLayout(false);
 			panel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
 			panel5.ResumeLayout(false);
 			panel5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			((System.ComponentModel.ISupportInitialize)dgvChecador).EndInit();
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
@@ -572,13 +563,9 @@
 		private Button btnGuardar;
 		public Button btnImprimir;
 		private Label label7;
-		private PictureBox pictureBox3;
-		private PictureBox pictureBox2;
 		private Label label10;
 		private Label label9;
 		private Label label8;
-		private PictureBox pictureBox1;
-		private PictureBox pictureBox4;
 		private Panel panel4;
 		private Panel panel3;
 		private TableLayoutPanel tableLayoutPanel2;
@@ -591,5 +578,13 @@
 		private Label label12;
 		private PictureBox pictureBox6;
 		private Label label13;
+		private Button button1;
+		private Button button3;
+		private Button button4;
+		private Button btnE;
+		private Button btnES;
+		private Button btnF;
+		private Button btnS;
+
 	}
 }
