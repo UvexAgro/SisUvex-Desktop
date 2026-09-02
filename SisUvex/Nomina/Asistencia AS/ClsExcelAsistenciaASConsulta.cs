@@ -26,16 +26,17 @@ namespace SisUvex.Nomina.Asistencia_AS
         private static readonly XLColor ColorMonthBand   = XLColor.FromHtml("#D9E1F2");
 
         private const int StartCol  = 2;
-        private const int FixedCols = 4; // CÓDIGO | NOMBRE COMPLETO | LP | TOTAL
+        private const int FixedCols = 6; // CÓDIGO | NOMBRE COMPLETO | LP | TOTAL | FALTAS | FALTAS 30D
 
         // ── Punto de entrada ──────────────────────────────────────────────────
 
         public void GenerateExcelReport(
             DataTable reportData,
             List<DateTime> days,
-            Dictionary<string, Color> attendanceColorsByPrefix,
+            Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
-            string dateRange)
+            string dateRange,
+            string legend)
         {
             if (reportData == null || reportData.Rows.Count == 0)
             {
@@ -71,7 +72,9 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             using var wb = new XLWorkbook();
 
-            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceColorsByPrefix, colorAsistencia, dateRange);
+            var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
+
+            ClsAsistenciaASCalendario.AddCalendarSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
 
             AddRawDataSheet(wb, reportData);
 
@@ -95,9 +98,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             IXLWorkbook wb,
             DataTable reportData,
             List<DateTime> days,
-            Dictionary<string, Color> attendanceColorsByPrefix,
+            Dictionary<string, AttendanceStyle> attendanceStylesByPrefix,
             Color colorAsistencia,
-            string dateRange)
+            string dateRange,
+            string legend)
         {
             var ws = wb.Worksheets.Add("Reporte Asistencias");
             ws.TabColor = TabColorReport;
@@ -114,13 +118,23 @@ namespace SisUvex.Nomina.Asistencia_AS
             filtersStyle.Font.FontColor = XLColor.White;
             filtersStyle.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
 
-            int monthRow      = filtersRow + 2;
+            // Fila de leyenda: "PREFIJO Nombre | PREFIJO Nombre | ..." con los tipos de asistencia activos.
+            int legendRow = filtersRow + 2;
+            if (!string.IsNullOrWhiteSpace(legend))
+            {
+                ws.Cell(legendRow, StartCol).Value = legend;
+                var legendStyle = ws.Cell(legendRow, StartCol).Style;
+                legendStyle.Font.SetFontSize(9);
+                legendStyle.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            }
+
+            int monthRow      = legendRow + 2;
             int dayRow        = monthRow + 1;
             int dataStartRow  = dayRow + 1;
             int dayColStart   = StartCol + FixedCols;
 
             // Encabezados fijos, fusionados verticalmente (monthRow:dayRow) al no tener banda de mes
-            string[] fixedHeaders = { "CÓDIGO", "NOMBRE COMPLETO", "LP", "TOTAL" };
+            string[] fixedHeaders = { "CÓDIGO", "NOMBRE COMPLETO", "LP", "TOTAL", "FALTAS", "FALTAS 30D" };
             for (int i = 0; i < fixedHeaders.Length; i++)
             {
                 int col = StartCol + i;
@@ -182,6 +196,14 @@ namespace SisUvex.Nomina.Asistencia_AS
                 totalCell.Style.Font.SetBold();
                 totalCell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
+                var faltasCell = ws.Cell(row, StartCol + 4);
+                faltasCell.Value = ToInt(r[ClsAsistenciaASConsulta.ReportColFaltas]);
+                faltasCell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                var faltas30Cell = ws.Cell(row, StartCol + 5);
+                faltas30Cell.Value = ToInt(r[ClsAsistenciaASConsulta.ReportColFaltas30]);
+                faltas30Cell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
                 int col = dayColStart;
                 foreach (DateTime day in days)
                 {
@@ -194,13 +216,26 @@ namespace SisUvex.Nomina.Asistencia_AS
                         cell.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                         Color? bg = null;
+                        FontStyle fontStyle = FontStyle.Regular;
                         if (string.Equals(value, ClsAsistenciaASConsulta.ValueAsistencia, StringComparison.OrdinalIgnoreCase))
                             bg = colorAsistencia;
-                        else if (attendanceColorsByPrefix.TryGetValue(value, out Color prefixColor))
-                            bg = prefixColor;
+                        else if (attendanceStylesByPrefix.TryGetValue(value, out AttendanceStyle style))
+                        {
+                            bg = style.Color;
+                            fontStyle = style.FontStyle;
+                        }
 
                         if (bg.HasValue)
                             cell.Style.Fill.SetBackgroundColor(XLColor.FromColor(bg.Value));
+
+                        if (fontStyle != FontStyle.Regular)
+                        {
+                            cell.Style.Font.Bold          = fontStyle.HasFlag(FontStyle.Bold);
+                            cell.Style.Font.Italic        = fontStyle.HasFlag(FontStyle.Italic);
+                            cell.Style.Font.Strikethrough = fontStyle.HasFlag(FontStyle.Strikeout);
+                            if (fontStyle.HasFlag(FontStyle.Underline))
+                                cell.Style.Font.Underline = XLFontUnderlineValues.Single;
+                        }
                     }
 
                     col++;
@@ -221,6 +256,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             ws.Columns().AdjustToContents();
             ws.Column(1).Width = 2;
+            ws.Column(StartCol).Width = (60 - 5) / 7.0; // CÓDIGO: 60 px, por pedido explícito
 
             return ws;
         }
