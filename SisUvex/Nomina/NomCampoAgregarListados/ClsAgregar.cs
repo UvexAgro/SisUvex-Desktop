@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office.Word;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos.Metods.Values;
 using SisUvex.Nomina.Reporte_de_Emp_UVA;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
 {
@@ -18,7 +19,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public FrmAgregar frmA;
 		public string LugarPago { get; set; }
 		public string IdLugarPago { get; set; }
+		public class DiaRegistro
+		{
+			public string Nombre { get; set; }
+			public DateTime Fecha { get; set; }
 
+			public string Texto
+			{
+				get
+				{
+					return $"{Nombre} {Fecha:dd/MM/yyyy}";
+				}
+			}
+		}
 		public void CargarComboActividades()
 		{
 			DataTable dtActividades = ObtenerActividades();
@@ -70,6 +83,248 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
+		public void CargarDiasRegistro(DateTime fechaInicio)
+		{
+			frmA.cboFecha.Items.Clear();
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "VIERNES", Fecha = fechaInicio });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "SÁBADO", Fecha = fechaInicio.AddDays(1) });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "DOMINGO", Fecha = fechaInicio.AddDays(2) });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "LUNES", Fecha = fechaInicio.AddDays(3) });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "MARTES", Fecha = fechaInicio.AddDays(4) });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "MIÉRCOLES", Fecha = fechaInicio.AddDays(5) });
+
+			frmA.cboFecha.Items.Add(
+				new DiaRegistro { Nombre = "JUEVES", Fecha = fechaInicio.AddDays(6) });
+
+			frmA.cboFecha.DisplayMember = "Texto";
+			frmA.cboFecha.SelectedIndex = -1;
+		}
+		public void CargarEmpleadosSeleccionados(List<string> empleados)
+		{
+			if (empleados == null || empleados.Count == 0)
+				return;
+
+			// Pasar los códigos al textbox
+			frmA.txbCodigo.Text = string.Join(", ", empleados);
+
+			// Utilizar el mismo método que ya tienes
+			// para agregar varios empleados
+			btnAgregarVariosEmpleados();
+
+			// Limpiar el textbox después de agregarlos
+			frmA.txbCodigo.Clear();
+		}
+		public bool GuardarActividadLote()
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				// Determinar el día seleccionado
+				int diferenciaDias =
+					(frmA.FechaSeleccionada.Date - frmA.FechaInicio.Date).Days;
+
+				string sufijoDia;
+
+				switch (diferenciaDias)
+				{
+					case 0:
+						sufijoDia = "vie";
+						break;
+
+					case 1:
+						sufijoDia = "sab";
+						break;
+
+					case 2:
+						sufijoDia = "dom";
+						break;
+
+					case 3:
+						sufijoDia = "lun";
+						break;
+
+					case 4:
+						sufijoDia = "mar";
+						break;
+
+					case 5:
+						sufijoDia = "mie";
+						break;
+
+					case 6:
+						sufijoDia = "jue";
+						break;
+
+					default:
+						MessageBox.Show(
+							"El día seleccionado no pertenece a la semana.",
+							"Fecha",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning);
+
+						return false;
+				}
+
+				// Obtener valores seleccionados
+				string cuadrilla = frmA.IdCuadrilla?.Trim();
+				string secuencia = frmA.SecuenciaSemana?.Trim();
+
+				string actividad =
+					frmA.cboActividad.SelectedValue?.ToString().Trim();
+
+				string lote =
+					frmA.cboLote.SelectedValue?.ToString().Trim();
+
+				if (string.IsNullOrWhiteSpace(cuadrilla))
+				{
+					MessageBox.Show(
+						"No se encontró la cuadrilla seleccionada.",
+						"Cuadrilla",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return false;
+				}
+
+				if (string.IsNullOrWhiteSpace(actividad))
+				{
+					MessageBox.Show(
+						"No se encontró la actividad seleccionada.",
+						"Actividad",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return false;
+				}
+
+				if (string.IsNullOrWhiteSpace(lote))
+				{
+					MessageBox.Show(
+						"No se encontró el lote seleccionado.",
+						"Lote",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return false;
+				}
+
+				// Columnas correspondientes al día
+				string columnaCuadrilla =
+					$"id_workGroup_{sufijoDia}";
+
+				string columnaActividad =
+					$"id_activity_{sufijoDia}";
+
+				string columnaLote =
+					$"id_lot_{sufijoDia}";
+
+				// Actualizar empleados de la lista
+				foreach (DataGridViewRow fila in frmA.dgvListadoAgregar.Rows)
+				{
+					if (fila.IsNewRow)
+						continue;
+
+					string empleado =
+						fila.Cells["Codigo"].Value?.ToString().Trim();
+
+					if (string.IsNullOrWhiteSpace(empleado))
+						continue;
+
+					string query = $@"
+                UPDATE [SisUvex].[dbo].[Nom_EmployeeAttendanceWeekly]
+                SET
+                    {columnaCuadrilla} = @Cuadrilla,
+                    {columnaActividad} = @Actividad,
+                    {columnaLote} = @Lote,
+                    d_update = GETDATE(),
+                    userUpdate = @Usuario
+                WHERE
+                    id_employee = @Empleado
+                    AND c_sequence_per = @Secuencia
+                    AND d_startDate_per = @FechaInicio
+                    AND d_endDate_per = @FechaFin";
+
+					using (SqlCommand cmd =
+						new SqlCommand(query, sql.cnn))
+					{
+						cmd.Parameters.Add(
+							"@Cuadrilla",
+							SqlDbType.Char,
+							4).Value = cuadrilla;
+
+						cmd.Parameters.Add(
+							"@Actividad",
+							SqlDbType.Char,
+							4).Value = actividad;
+
+						cmd.Parameters.Add(
+							"@Lote",
+							SqlDbType.Char,
+							4).Value = lote;
+
+						cmd.Parameters.Add(
+							"@Empleado",
+							SqlDbType.Char,
+							6).Value = empleado;
+
+						cmd.Parameters.Add(
+							"@Secuencia",
+							SqlDbType.Char,
+							2).Value = secuencia;
+
+						cmd.Parameters.Add(
+							"@FechaInicio",
+							SqlDbType.Date).Value =
+							frmA.FechaInicio.Date;
+
+						cmd.Parameters.Add(
+							"@FechaFin",
+							SqlDbType.Date).Value =
+							frmA.FechaFin.Date;
+
+						cmd.Parameters.Add(
+							"@Usuario",
+							SqlDbType.VarChar,
+							100).Value =
+							User.GetUserName();
+
+						cmd.ExecuteNonQuery();
+					}
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al guardar lote y actividad:\n\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 		public void CargarComboLotes()
 		{
 			DataTable dtLotes = ObtenerLotes();
@@ -116,12 +371,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			  AND NULLIF(LTRIM(RTRIM(L.c_codigo_lot)), '') IS NOT NULL
 			ORDER BY L.c_codigo_lot ";
 
-			sql.OpenConectionWrite();
+				sql.OpenConectionWrite();
 
-			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+				SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
-			SqlDataAdapter da = new SqlDataAdapter(cmd);
-			da.Fill(dt);
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				da.Fill(dt);
 			}
 			catch (Exception ex)
 			{
@@ -132,108 +387,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 
-				return dt;
+			return dt;
 		}
-		public void ActualizarEmpleadoModificar(string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin,string idCuadrilla,DataGridView dgvEmpleados)
-		{
-			SQLControl sql = new SQLControl();
 
-			try
-			{
-				sql.OpenConectionWrite();
-
-				if (dgvEmpleados.Rows.Count == 0)
-					return;
-
-				DataGridViewRow row = dgvEmpleados.Rows[0];
-
-				string idEmpleado =
-					row.Cells["Codigo"].Value?.ToString();
-
-				string idActividad =
-					row.Cells["IdActividad"].Value?.ToString();
-
-				string idLote =
-					row.Cells["IdLote"].Value?.ToString();
-
-				if (string.IsNullOrWhiteSpace(idEmpleado))
-				{
-					MessageBox.Show(
-						"No se encontró el código del empleado.",
-						"Modificar empleado",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning);
-
-					return;
-				}
-
-				using (SqlCommand cmd = new SqlCommand(
-					"sp_UpdateEmployeeWeeklyList",
-					sql.cnn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-
-					cmd.Parameters.AddWithValue(
-						"@c_sequence_per",
-						secuenciaSemana);
-
-					cmd.Parameters.AddWithValue(
-						"@d_startDate_per",
-						fechaInicio.Date);
-
-					cmd.Parameters.AddWithValue(
-						"@d_endDate_per",
-						fechaFin.Date);
-
-					cmd.Parameters.AddWithValue(
-						"@id_employee",
-						idEmpleado);
-
-					cmd.Parameters.AddWithValue(
-						"@id_workGroup",
-						idCuadrilla);
-
-					cmd.Parameters.AddWithValue(
-						"@id_activity",
-						idActividad);
-
-					cmd.Parameters.AddWithValue(
-						"@id_lot",
-						idLote);
-
-					cmd.Parameters.AddWithValue(
-						"@userUpdate",
-						User.GetUserName());
-
-					cmd.ExecuteNonQuery();
-				}
-
-				MessageBox.Show(
-					"Empleado actualizado correctamente.",
-					"Modificar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					ex.Message,
-					"Error al actualizar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-		}
 		public void btnAgregarVariosEmpleados()
 		{
 			string textoCodigos = frmA.txbCodigo.Text.Trim();
 
-			// -----------------------------------------
 			// VALIDAR CÓDIGOS
-			// -----------------------------------------
 
 			if (string.IsNullOrWhiteSpace(textoCodigos))
 			{
@@ -247,56 +408,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// -----------------------------------------
-			// VALIDAR ACTIVIDAD
-			// -----------------------------------------
-
-			if (frmA.cboActividad.SelectedIndex < 0)
-			{
-				MessageBox.Show(
-					"Seleccione una actividad.",
-					"Actividad",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				frmA.cboActividad.Focus();
-				return;
-			}
-			// -----------------------------------------
-			// VALIDAR LOTE
-			// -----------------------------------------
-
-			if (frmA.cboLote.SelectedIndex < 0)
-			{
-				MessageBox.Show(
-					"Seleccione un lote.",
-					"Lote",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				frmA.cboLote.Focus();
-				return;
-			}
-
-			// -----------------------------------------
-			// OBTENER ACTIVIDAD
-			// -----------------------------------------
-
-			string actividad =
-				frmA.cboActividad.Text.Trim();
-
-			string idActividad =
-				frmA.cboActividad.SelectedValue?.ToString();
-
-			string lote =
-				frmA.cboLote.Text.Trim();
-
-			string idLote =
-				frmA.cboLote.SelectedValue?.ToString();
-
-			// -----------------------------------------
 			// SEPARAR CÓDIGOS
-			// -----------------------------------------
 
 			string[] codigos = textoCodigos
 				.Split(
@@ -317,9 +429,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// -----------------------------------------
 			// BUSCAR EMPLEADOS
-			// -----------------------------------------
 
 			foreach (string codigo in codigos)
 			{
@@ -339,9 +449,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				DataRow row = dt.Rows[0];
 
-				// -----------------------------------------
 				// EVITAR DUPLICADOS
-				// -----------------------------------------
 
 				bool existe = false;
 
@@ -362,20 +470,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (existe)
 					continue;
 
-				// -----------------------------------------
 				// AGREGAR AL DGV
-				// -----------------------------------------
 
 				frmA.dgvListadoAgregar.Rows.Add(
 					codigo,
 					row["Empleado"].ToString(),
-					row["IdLugarPago"].ToString() + " - " +
-					row["LugarPago"].ToString(),
-					actividad,
-					lote,
-					row["IdLugarPago"].ToString(),
-					idActividad,
-					idLote
+					row["IdLugarPago"] == DBNull.Value
+						? ""
+						: row["IdLugarPago"].ToString() + " - " +
+						  row["LugarPago"].ToString(),
+
+					row["IdLugarPago"] == DBNull.Value
+						? ""
+						: row["IdLugarPago"].ToString()
 				);
 			}
 
@@ -433,12 +540,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						frmA.txbCodigo.Text =
 							dr["id_employee"].ToString();
 
-						// NOMBRE
-						frmA.txbEmpleado.Text =
-							dr["Empleado"] == DBNull.Value
-								? ""
-								: dr["Empleado"].ToString();
-
 						// LUGAR DE PAGO
 						LugarPago =
 							dr["LugarPago"] == DBNull.Value
@@ -480,79 +581,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void ModificarEmpleado()
-		{
-			if (string.IsNullOrWhiteSpace(frmA.txbCodigo.Text))
-			{
-				MessageBox.Show(
-					"Ingrese un código de empleado.",
-					"Empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
 
-				frmA.txbCodigo.Focus();
-				return;
-			}
-
-			// VALIDAR ACTIVIDAD
-			if (frmA.cboActividad.SelectedIndex < 0)
-			{
-				MessageBox.Show(
-					"Seleccione una actividad.",
-					"Actividad",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				frmA.cboActividad.Focus();
-				return;
-			}
-
-			// VALIDAR LOTE
-			if (frmA.cboLote.SelectedIndex < 0)
-			{
-				MessageBox.Show(
-					"Seleccione un lote.",
-					"Lote",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				frmA.cboLote.Focus();
-				return;
-			}
-
-			// OBTENER DATOS
-			string codigo =
-				frmA.txbCodigo.Text.Trim();
-
-			string empleado =
-				frmA.txbEmpleado.Text.Trim();
-
-			string actividad =
-				frmA.cboActividad.Text.Trim();
-
-			string idActividad =
-				frmA.cboActividad.SelectedValue?.ToString();
-
-			string lote =
-				frmA.cboLote.Text.Trim();
-
-			string idLote =
-				frmA.cboLote.SelectedValue?.ToString();
-
-			// MOSTRAR EN EL DGV
-			frmA.dgvListadoAgregar.Rows.Clear();
-
-			frmA.dgvListadoAgregar.Rows.Add(
-				codigo,
-				empleado,
-				LugarPago,
-				actividad,
-				lote,
-				IdLugarPago,
-				idActividad,
-				idLote
-			);
-		}
 		private DataTable BuscarEmpleadoPorCodigo(string codigo)
 		{
 			SQLControl sql = new SQLControl();
@@ -621,113 +650,104 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataGridView dgv = frmA.dgvListadoAgregar;
 
-			// -----------------------------
 			// GENERAL
-			// -----------------------------
-			dgv.BackgroundColor = Color.White;
+
+			dgv.BackgroundColor = System.Drawing.Color.White;
 			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-			dgv.GridColor = Color.FromArgb(225, 228, 235);
+
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
+
+			dgv.GridColor =
+				System.Drawing.Color.FromArgb(225, 228, 235);
 
 			dgv.EnableHeadersVisualStyles = false;
 
 			dgv.AllowUserToAddRows = false;
 			dgv.AllowUserToResizeRows = false;
+			dgv.AllowUserToResizeColumns = false;
+
 			dgv.ReadOnly = true;
 
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
+
 			dgv.MultiSelect = false;
 
 			dgv.RowHeadersVisible = false;
 
-
-			// -----------------------------
 			// ENCABEZADO
-			// -----------------------------
+
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
-				Color.FromArgb(42, 67, 128);
+				System.Drawing.Color.FromArgb(42, 67, 128);
 
 			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
-				Color.White;
+				System.Drawing.Color.White;
 
-			// IMPORTANTE:
-			// Evita que el encabezado se ponga blanco
-			// cuando se selecciona una columna.
 			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(42, 67, 128);
+				System.Drawing.Color.FromArgb(42, 67, 128);
 
 			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
-				Color.White;
+				System.Drawing.Color.White;
 
 			dgv.ColumnHeadersDefaultCellStyle.Font =
-				new Font("Segoe UI", 9F, FontStyle.Bold);
+				new Font(
+					"Segoe UI",
+					9F,
+					FontStyle.Bold);
 
 			dgv.ColumnHeadersDefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
 			dgv.ColumnHeadersHeight = 36;
 
-
-			// -----------------------------
 			// FILAS
-			// -----------------------------
+
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 9F);
 
 			dgv.DefaultCellStyle.ForeColor =
-				Color.FromArgb(45, 45, 55);
+				System.Drawing.Color.FromArgb(45, 45, 55);
 
 			dgv.DefaultCellStyle.BackColor =
-				Color.White;
+				System.Drawing.Color.White;
 
 			dgv.DefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(220, 229, 250);
+				System.Drawing.Color.FromArgb(220, 229, 250);
 
 			dgv.DefaultCellStyle.SelectionForeColor =
-				Color.FromArgb(30, 45, 80);
+				System.Drawing.Color.FromArgb(30, 45, 80);
 
 			dgv.DefaultCellStyle.Padding =
 				new Padding(6, 0, 6, 0);
 
 			dgv.RowTemplate.Height = 32;
 
-
-			// -----------------------------
 			// FILAS ALTERNADAS
-			// -----------------------------
+
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
-				Color.FromArgb(247, 249, 253);
+				System.Drawing.Color.FromArgb(247, 249, 253);
 
+			// COLUMNAS
 
-			// -----------------------------
-			// AJUSTE DE COLUMNAS
-			// -----------------------------
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns[0].FillWeight = 12; // Código
-			dgv.Columns[1].FillWeight = 30; // Empleado
-			dgv.Columns[2].FillWeight = 20; // Lugar de pago
-			dgv.Columns[3].FillWeight = 18; // Actividad
-			dgv.Columns[4].FillWeight = 20; // Lote
+			dgv.Columns["Codigo"].FillWeight = 15;
 
+			dgv.Columns["Nombre"].FillWeight = 50;
 
-			// -----------------------------
+			dgv.Columns["LugarPago"].FillWeight = 35;
+
 			// ALINEACIÓN
-			// -----------------------------
-			dgv.Columns[0].DefaultCellStyle.Alignment =
+
+			dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			dgv.Columns[1].DefaultCellStyle.Alignment =
+			dgv.Columns["Nombre"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 
-			dgv.Columns[2].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.Columns[3].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.Columns[4].DefaultCellStyle.Alignment =
+			dgv.Columns["LugarPago"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 		}
 	}

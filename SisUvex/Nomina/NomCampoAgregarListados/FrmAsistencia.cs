@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NPOI.SS.Formula.Functions;
+using SisUvex.Nomina.Reporte_de_Asistencia;
+using static SisUvex.Nomina.NomCampoAgregarListados.ClsAsistencia;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
 {
@@ -15,23 +17,30 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	{
 		public ClsAsistencia _clsA;
 		public ClsReloj clsJ;
-		private HashSet<string> celdasBloqueadas =
-			new HashSet<string>();
+		public class DiaSemana
+		{
+			public string Nombre { get; set; }
+			public DateTime Fecha { get; set; }
+		}
 		public FrmAsistencia()
 		{
 			InitializeComponent();
 			this.StartPosition = FormStartPosition.CenterScreen;
+
 			_clsA = new ClsAsistencia();
 			_clsA._frmA = this;
 
 			clsJ = new ClsReloj();
 			clsJ._frmA = this;
-			dgvAsistencia.ColumnHeaderMouseClick +=
-					_clsA.DgvAsistencia_ColumnHeaderMouseClick;
+
+			dgvAsistencia.ColumnHeaderMouseClick += _clsA.DgvAsistencia_ColumnHeaderMouseClick;
 
 			dgvChecador.CellPainting += clsJ.DgvChecador_CellPainting;
 
 			dgvAsistencia.CellPainting += _clsA.DgvAsistencia_CellPainting;
+
+			// Seleccionar empleado desde asistencia
+			dgvAsistencia.CellClick += clsJ.DgvAsistencia_CellClick;
 		}
 
 		private void FrmAsistencia_Load(object sender, EventArgs e)
@@ -40,9 +49,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_clsA.CargarCuadrillas();
 			_clsA.CargarSemanas();
 			clsJ.ConfigurarGridChecador();
+			clsJ.EstilizarDgvReloj();
+			_clsA.CargarDiasSemana();
 
 		}
-
 		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (cboCuadrilla.SelectedIndex == -1)
@@ -51,8 +61,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (cboSemana.SelectedIndex == -1)
 				return;
 
+			// Actualizar empleados según cuadrilla + semana
 			_clsA.CargarEmpleados();
+
+			// Actualizar reloj checador según cuadrilla + semana
 			clsJ.CargarRelojChecador();
+
+			// Actualizar CAL según cuadrilla + semana
+			_clsA.CargarCAL();
+
+			// Limpiar empleado seleccionado
+			txbRegistro.Clear();
+
+			// Limpiar sus checadas
+			dgvReloj.DataSource = null;
 		}
 
 		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
@@ -63,8 +85,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (cboCuadrilla.SelectedIndex == -1)
 				return;
 
+			// Actualizar empleados según cuadrilla + semana
 			_clsA.CargarEmpleados();
+
+			// Actualizar CAL según cuadrilla + semana
+			_clsA.CargarCAL();
+
+			// Actualizar reloj checador según cuadrilla + semana
 			clsJ.CargarRelojChecador();
+
+			// Limpiar empleado seleccionado
+			txbRegistro.Clear();
+
+			// Limpiar sus checadas
+			dgvReloj.DataSource = null;
 		}
 
 		private void btnImprimir_Click(object sender, EventArgs e)
@@ -146,12 +180,29 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private void dgvAsistencia_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 
-			{
-				if (e.RowIndex < 0 || e.ColumnIndex < 0)
-					return;
+			// =====================================================
+			// SELECCIONAR TODOS LOS EMPLEADOS
+			// =====================================================
 
-				string[] dias =
-				{
+			if (e.RowIndex == -1 &&
+				e.ColumnIndex >= 0 &&
+				dgvAsistencia.Columns[e.ColumnIndex].Name == "Seleccionar")
+			{
+				_clsA.SeleccionarTodos();
+				return;
+			}
+
+
+			// =====================================================
+			// CLIC EN UNA CELDA
+			// =====================================================
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+
+			string[] dias =
+			{
 		"Vie",
 		"Sab",
 		"Dom",
@@ -161,76 +212,128 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		"Jue"
 	};
 
-				string dia =
-					dgvAsistencia.Columns[e.ColumnIndex].Name;
 
-				if (!dias.Contains(dia))
-					return;
+			string dia =
+				dgvAsistencia.Columns[e.ColumnIndex].Name;
 
-				// ==========================================
-				// OBTENER CELDA
-				// ==========================================
 
-				DataGridViewCell celda =
-					dgvAsistencia.Rows[e.RowIndex]
-					.Cells[e.ColumnIndex];
+			if (!dias.Contains(dia))
+				return;
 
-				// ==========================================
-				// SI ESTÁ BLOQUEADA → NO HACER NADA
-				// ==========================================
 
-				if (celda.ReadOnly)
-					return;
+			// =====================================================
+			// OBTENER CELDA
+			// =====================================================
 
-				string codigo =
-					dgvAsistencia.Rows[e.RowIndex]
-					.Cells["Codigo"]
-					.Value?.ToString();
+			DataGridViewCell celda =
+				dgvAsistencia.Rows[e.RowIndex]
+				.Cells[e.ColumnIndex];
 
-				if (string.IsNullOrWhiteSpace(codigo))
-					return;
 
-				string empleado =
-					dgvAsistencia.Rows[e.RowIndex]
-					.Cells["Empleado"]
-					.Value?.ToString();
+			// =====================================================
+			// SI ESTÁ BLOQUEADA
+			// =====================================================
 
-				bool marcado =
-					Convert.ToBoolean(celda.Value ?? false);
+			if (celda.ReadOnly)
+				return;
 
-				// ==========================================
-				// CONFIRMAR CAMBIO
-				// ==========================================
 
-				if (marcado)
+			// =====================================================
+			// DATOS DEL EMPLEADO
+			// =====================================================
+
+			string codigo =
+				dgvAsistencia.Rows[e.RowIndex]
+				.Cells["Codigo"]
+				.Value?.ToString()
+				.Trim();
+
+
+			if (string.IsNullOrWhiteSpace(codigo))
+				return;
+
+
+			string empleado =
+				dgvAsistencia.Rows[e.RowIndex]
+				.Cells["Empleado"]
+				.Value?.ToString();
+
+
+			// =====================================================
+			// ESTADO ACTUAL DEL CHECKBOX
+			// =====================================================
+
+			bool marcado =
+				Convert.ToBoolean(celda.Value ?? false);
+
+
+			// =====================================================
+			// SI ESTÁ MARCANDO
+			// =====================================================
+
+			if (!marcado)
+			{
+				// ================================================
+				// OBTENER CUADRILLA ACTUAL
+				// ================================================
+
+				string idCuadrilla =
+					cboCuadrilla.SelectedValue?
+					.ToString()
+					.Trim();
+
+
+				if (string.IsNullOrWhiteSpace(idCuadrilla))
 				{
-					DialogResult resultado =
-						MessageBox.Show(
-							$"¿Está segura de quitarle la asistencia?\n\n" +
-							$"Empleado: {empleado}\n" +
-							$"Código: {codigo}\n" +
-							$"Día: {dia}",
-							"Confirmar asistencia",
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Question);
+					MessageBox.Show(
+						"Seleccione una cuadrilla.",
+						"Cuadrilla",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
 
-					if (resultado == DialogResult.No)
-						celda.Value = true;
+					return;
 				}
-				else
-				{
-					DialogResult resultado =
-						MessageBox.Show(
-							$"¿Está segura de ponerle la asistencia?\n\n" +
-							$"Empleado: {empleado}\n" +
-							$"Código: {codigo}\n" +
-							$"Día: {dia}",
-							"Confirmar asistencia",
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Question);
 
-					if (resultado == DialogResult.No)
-						celda.Value = false;
+				// ================================================
+				// CONFIRMAR PONER ASISTENCIA
+				// ================================================
+
+				DialogResult resultado =
+					MessageBox.Show(
+						$"¿Está segura de ponerle la asistencia?\n\n" +
+						$"Empleado: {empleado}\n" +
+						$"Código: {codigo}\n" +
+						$"Día: {dia}",
+						"Confirmar asistencia",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question);
+
+
+				if (resultado == DialogResult.No)
+				{
+					celda.Value = false;
+				}
+			}
+			else
+			{
+				// =================================================
+				// QUITAR ASISTENCIA
+				// =================================================
+
+				DialogResult resultado =
+					MessageBox.Show(
+						$"¿Está segura de quitarle la asistencia?\n\n" +
+						$"Empleado: {empleado}\n" +
+						$"Código: {codigo}\n" +
+						$"Día: {dia}",
+						"Confirmar asistencia",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question);
+
+
+				if (resultado == DialogResult.No)
+				{
+					celda.Value = true;
 				}
 			}
 		}
@@ -254,6 +357,221 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			clsJ.MarcarPorEstado("S");
 		}
+
+		private void dgvChecador_SelectionChanged(object sender, EventArgs e)
+		{
+			if (dgvChecador.CurrentRow == null)
+				return;
+
+			DataGridViewRow fila =
+				dgvChecador.CurrentRow;
+
+			string codigo =
+				fila.Cells[0].Value?.ToString()?.Trim();
+
+			if (string.IsNullOrWhiteSpace(codigo))
+				return;
+
+			string nombre = "";
+
+			foreach (DataGridViewRow empleado in dgvAsistencia.Rows)
+			{
+				if (empleado.IsNewRow)
+					continue;
+
+				string codigoEmpleado =
+					empleado.Cells["Codigo"].Value?.ToString()?.Trim();
+
+				if (codigoEmpleado == codigo)
+				{
+					nombre =
+						empleado.Cells["Empleado"].Value?.ToString()?.Trim();
+
+					break;
+				}
+			}
+
+			if (!string.IsNullOrWhiteSpace(nombre))
+			{
+				clsJ.CargarRegistrosEmpleado(codigo, nombre);
+			}
+		}
+
+		private void btnCAL_Click(object sender, EventArgs e)
+		{
+			if (cboSemana.SelectedItem == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			if (cboCuadrilla.SelectedItem == null)
+			{
+				MessageBox.Show(
+					"Seleccione una cuadrilla.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// ==========================================
+			// OBTENER SEMANA
+			// ==========================================
+
+			DataRowView semana =
+				cboSemana.SelectedItem as DataRowView;
+
+			if (semana == null)
+			{
+				MessageBox.Show(
+					"No se pudo obtener la semana seleccionada.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semana["d_startDate_per"]);
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semana["d_endDate_per"]);
+
+			string secuenciaSemana =
+				semana["c_sequence_per"]
+				.ToString()
+				.Trim();
+
+
+			// ==========================================
+			// OBTENER CUADRILLA
+			// ==========================================
+
+			string idCuadrilla =
+				cboCuadrilla.SelectedValue?
+				.ToString()
+				.Trim();
+
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se encontró la cuadrilla seleccionada.",
+					"Cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+
+			// ==========================================
+			// OBTENER EMPLEADOS SELECCIONADOS
+			// ==========================================
+
+			List<string> empleadosSeleccionados =
+				new List<string>();
+
+			foreach (DataGridViewRow fila in dgvAsistencia.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				bool seleccionado =
+					fila.Cells["Seleccionar"].Value != null &&
+					Convert.ToBoolean(
+						fila.Cells["Seleccionar"].Value);
+
+				if (seleccionado)
+				{
+					string codigo =
+						fila.Cells["Codigo"]
+							.Value?
+							.ToString()
+							.Trim();
+
+					if (!string.IsNullOrWhiteSpace(codigo))
+					{
+						empleadosSeleccionados.Add(codigo);
+					}
+				}
+			}
+
+			if (empleadosSeleccionados.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos un empleado.",
+					"Empleados",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+
+			// ==========================================
+			// ABRIR FRMAGREGAR
+			// ==========================================
+
+			FrmAgregar frm = new FrmAgregar();
+
+			frm.BloquearControlesAgregarCuadrilla();
+
+			frm.MostrarActividadLote = true;
+
+			frm.IdCuadrilla = idCuadrilla;
+
+			frm.SecuenciaSemana = secuenciaSemana;
+
+			frm.FechaInicio = fechaInicio;
+
+			frm.FechaFin = fechaFin;
+
+			frm.EmpleadosSeleccionados =
+				empleadosSeleccionados;
+
+
+			// ==========================================
+			// ABRIR Y ESPERAR A QUE TERMINE
+			// ==========================================
+
+			if (frm.ShowDialog() == DialogResult.OK)
+			{
+				// Actualizar dgvCAL con los datos recién guardados
+				_clsA.CargarCAL();
+			}
+		}
+
+		private void btnJalar_Click(object sender, EventArgs e)
+		{
+			if (cboCuadrilla.SelectedIndex == -1)
+			{
+				MessageBox.Show("Selecciona una cuadrilla.");
+				return;
+			}
+
+			if (cboSemana.SelectedIndex == -1)
+			{
+				MessageBox.Show("Selecciona una semana.");
+				return;
+			}
+
+			if (cboDia.SelectedIndex == -1)
+			{
+				MessageBox.Show("Selecciona un día.");
+				return;
+			}
+
+			_clsA.JalarActividadLotePorDia();
+		}
 	}
 }
-

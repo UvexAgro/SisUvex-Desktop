@@ -28,46 +28,29 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAgregar));
-			label1 = new Label();
-			txbEmpleado = new TextBox();
 			dgvListadoAgregar = new DataGridView();
 			btnContinuar = new Button();
 			btnCancelar = new Button();
 			label2 = new Label();
-			label3 = new Label();
+			lblActividad = new Label();
 			cboActividad = new ComboBox();
 			txbCodigo = new TextBox();
 			groupBox1 = new GroupBox();
+			btnBuscar = new Button();
 			cboLote = new ComboBox();
-			label5 = new Label();
+			lblLote = new Label();
 			btnAgregarListado = new Button();
 			lblTitulo = new Label();
 			pictureBox1 = new PictureBox();
 			lblSubtitulo = new Label();
+			cboFecha = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)dgvListadoAgregar).BeginInit();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(28, 80);
-			label1.Name = "label1";
-			label1.Size = new Size(66, 15);
-			label1.TabIndex = 0;
-			label1.Text = "Empleado :";
-			// 
-			// txbEmpleado
-			// 
-			txbEmpleado.Location = new Point(28, 98);
-			txbEmpleado.Name = "txbEmpleado";
-			txbEmpleado.Size = new Size(252, 23);
-			txbEmpleado.TabIndex = 8;
 			// 
 			// dgvListadoAgregar
 			// 
@@ -79,14 +62,14 @@
 			dgvListadoAgregar.BackgroundColor = SystemColors.Control;
 			dgvListadoAgregar.BorderStyle = BorderStyle.Fixed3D;
 			dgvListadoAgregar.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvListadoAgregar.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvListadoAgregar.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvListadoAgregar.ColumnHeadersHeight = 29;
 			dgvListadoAgregar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvListadoAgregar.EnableHeadersVisualStyles = false;
@@ -94,14 +77,14 @@
 			dgvListadoAgregar.Location = new Point(12, 251);
 			dgvListadoAgregar.Name = "dgvListadoAgregar";
 			dgvListadoAgregar.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvListadoAgregar.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvListadoAgregar.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvListadoAgregar.RowHeadersVisible = false;
 			dgvListadoAgregar.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListadoAgregar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -147,15 +130,15 @@
 			label2.TabIndex = 22;
 			label2.Text = "Codigo del Empleado :";
 			// 
-			// label3
+			// lblActividad
 			// 
-			label3.AutoSize = true;
-			label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label3.Location = new Point(468, 27);
-			label3.Name = "label3";
-			label3.Size = new Size(166, 15);
-			label3.TabIndex = 24;
-			label3.Text = "Actividad (misma para todos):";
+			lblActividad.AutoSize = true;
+			lblActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblActividad.Location = new Point(468, 27);
+			lblActividad.Name = "lblActividad";
+			lblActividad.Size = new Size(166, 15);
+			lblActividad.TabIndex = 24;
+			lblActividad.Text = "Actividad (misma para todos):";
 			// 
 			// cboActividad
 			// 
@@ -174,24 +157,40 @@
 			txbCodigo.Multiline = true;
 			txbCodigo.Name = "txbCodigo";
 			txbCodigo.ScrollBars = ScrollBars.Vertical;
-			txbCodigo.Size = new Size(112, 25);
+			txbCodigo.Size = new Size(112, 34);
 			txbCodigo.TabIndex = 30;
+			txbCodigo.KeyDown += txbCodigo_KeyDown;
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(btnBuscar);
 			groupBox1.Controls.Add(cboLote);
-			groupBox1.Controls.Add(label5);
+			groupBox1.Controls.Add(lblLote);
 			groupBox1.Controls.Add(cboActividad);
 			groupBox1.Controls.Add(txbCodigo);
-			groupBox1.Controls.Add(label1);
-			groupBox1.Controls.Add(txbEmpleado);
 			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(label3);
+			groupBox1.Controls.Add(lblActividad);
 			groupBox1.Location = new Point(12, 60);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(836, 153);
 			groupBox1.TabIndex = 31;
 			groupBox1.TabStop = false;
+			// 
+			// btnBuscar
+			// 
+			btnBuscar.BackgroundImageLayout = ImageLayout.Stretch;
+			btnBuscar.Font = new Font("Segoe UI", 14F);
+			btnBuscar.Image = Properties.Resources.BuscarLupa1;
+			btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnBuscar.Location = new Point(28, 98);
+			btnBuscar.Name = "btnBuscar";
+			btnBuscar.Padding = new Padding(20, 0, 20, 0);
+			btnBuscar.Size = new Size(249, 34);
+			btnBuscar.TabIndex = 36;
+			btnBuscar.Text = "Buscar Empleado";
+			btnBuscar.TextAlign = ContentAlignment.MiddleRight;
+			btnBuscar.UseVisualStyleBackColor = true;
+			btnBuscar.Click += btnBuscar_Click;
 			// 
 			// cboLote
 			// 
@@ -201,15 +200,15 @@
 			cboLote.Size = new Size(323, 23);
 			cboLote.TabIndex = 33;
 			// 
-			// label5
+			// lblLote
 			// 
-			label5.AutoSize = true;
-			label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(468, 80);
-			label5.Name = "label5";
-			label5.Size = new Size(36, 15);
-			label5.TabIndex = 32;
-			label5.Text = "Lote :";
+			lblLote.AutoSize = true;
+			lblLote.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblLote.Location = new Point(468, 80);
+			lblLote.Name = "lblLote";
+			lblLote.Size = new Size(36, 15);
+			lblLote.TabIndex = 32;
+			lblLote.Text = "Lote :";
 			// 
 			// btnAgregarListado
 			// 
@@ -258,11 +257,21 @@
 			lblSubtitulo.TabIndex = 34;
 			lblSubtitulo.Text = "Registro de empleados por cuadrilla";
 			// 
+			// cboFecha
+			// 
+			cboFecha.FormattingEnabled = true;
+			cboFecha.Location = new Point(480, 26);
+			cboFecha.Name = "cboFecha";
+			cboFecha.Size = new Size(265, 23);
+			cboFecha.TabIndex = 35;
+			cboFecha.SelectedIndexChanged += cboFecha_SelectedIndexChanged;
+			// 
 			// FrmAgregar
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(852, 499);
+			Controls.Add(cboFecha);
 			Controls.Add(lblSubtitulo);
 			Controls.Add(pictureBox1);
 			Controls.Add(btnAgregarListado);
@@ -284,24 +293,25 @@
 		}
 
 		#endregion
-
-		private Label label1;
 		public DataGridView dgvListadoAgregar;
 		public Button btnContinuar;
 		public Button btnCancelar;
 		private Label label2;
-		private Label label3;
 		private ComboBox comboBox1;
 		public ComboBox cboActividad;
-		public TextBox txbEmpleado;
 		public TextBox txbCodigo;
 		private GroupBox groupBox1;
-		private Button btnAgregarListado;
 		public Label lblTitulo;
 		private PictureBox pictureBox1;
 		public Label lblSubtitulo;
 		private Label label6;
 		public ComboBox cboLote;
-		private Label label5;
+		public Button btnBuscar;
+		public Label label3;
+		public Label lblLote;
+		public Label lblActividad;
+		public ComboBox cboFecha;
+		private ComboBox comboBox2;
+		public Button btnAgregarListado;
 	}
 }

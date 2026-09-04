@@ -194,67 +194,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				cls.ActualizarTotalEmpleados();
 			}
 		}
-		private void btnModificar_Click(object sender, EventArgs e)
-		{
-		
-			if (dgvListado.CurrentRow == null)
-			{
-				MessageBox.Show(
-					"Seleccione un empleado.",
-					"Modificar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return;
-			}
-
-			if (!ObtenerSemanaSeleccionada(
-				out string secuenciaSemana,
-				out DateTime fechaInicio,
-				out DateTime fechaFin))
-			{
-				return;
-			}
-
-			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-			string idEmpleado =
-				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-			if (string.IsNullOrWhiteSpace(idEmpleado))
-			{
-				MessageBox.Show(
-					"No se pudo obtener el código del empleado.",
-					"Modificar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-			// Abrir formulario en modo modificar
-			cls.OpenFrmModify(
-				idEmpleado,
-				idCuadrilla,
-				secuenciaSemana,
-				fechaInicio,
-				fechaFin);
-
-			// Si se modificó correctamente, recargar la lista
-			if (cls.frmA != null &&
-				cls.frmA.DialogResult == DialogResult.OK)
-			{
-				cls.CargarEmpleadosCuadrilla(
-					idCuadrilla,
-					secuenciaSemana,
-					fechaInicio,
-					fechaFin);
-
-				cls.ActualizarTotalEmpleados();
-			}
-		}
-		
 
 		private void btnActulizar_Click(object sender, EventArgs e)
 		{

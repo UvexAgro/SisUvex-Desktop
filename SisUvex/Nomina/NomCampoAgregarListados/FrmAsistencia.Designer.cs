@@ -33,8 +33,18 @@
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
 			tableLayoutPanel1 = new TableLayoutPanel();
 			panel2 = new Panel();
+			panel9 = new Panel();
+			pictureBox1 = new PictureBox();
+			txbRegistro = new TextBox();
+			label6 = new Label();
+			label5 = new Label();
+			dgvReloj = new DataGridView();
 			pictureBox5 = new PictureBox();
 			label12 = new Label();
 			label11 = new Label();
@@ -55,6 +65,14 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			btnCAL = new Button();
+			panel10 = new Panel();
+			label14 = new Label();
+			btnJalar = new Button();
+			cboDia = new ComboBox();
+			pictureBox2 = new PictureBox();
+			label15 = new Label();
+			dgvCAL = new DataGridView();
 			label13 = new Label();
 			pictureBox6 = new PictureBox();
 			panel3 = new Panel();
@@ -68,6 +86,9 @@
 			label1 = new Label();
 			tableLayoutPanel1.SuspendLayout();
 			panel2.SuspendLayout();
+			panel9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+			((System.ComponentModel.ISupportInitialize)dgvReloj).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
 			tableLayoutPanel2.SuspendLayout();
 			panel8.SuspendLayout();
@@ -76,12 +97,16 @@
 			panel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvChecador).BeginInit();
 			panel1.SuspendLayout();
+			panel10.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+			((System.ComponentModel.ISupportInitialize)dgvCAL).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).BeginInit();
 			SuspendLayout();
 			// 
 			// tableLayoutPanel1
 			// 
+			tableLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			tableLayoutPanel1.BackColor = SystemColors.Control;
 			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 			tableLayoutPanel1.ColumnCount = 2;
@@ -89,16 +114,16 @@
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 			tableLayoutPanel1.Controls.Add(panel2, 1, 0);
 			tableLayoutPanel1.Controls.Add(panel1, 0, 0);
-			tableLayoutPanel1.Dock = DockStyle.Fill;
 			tableLayoutPanel1.Location = new Point(0, 0);
 			tableLayoutPanel1.Name = "tableLayoutPanel1";
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size = new Size(1572, 1096);
+			tableLayoutPanel1.Size = new Size(1572, 1150);
 			tableLayoutPanel1.TabIndex = 0;
 			// 
 			// panel2
 			// 
+			panel2.Controls.Add(panel9);
 			panel2.Controls.Add(pictureBox5);
 			panel2.Controls.Add(label12);
 			panel2.Controls.Add(label11);
@@ -109,8 +134,100 @@
 			panel2.Dock = DockStyle.Fill;
 			panel2.Location = new Point(789, 4);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(779, 1088);
+			panel2.Size = new Size(779, 1142);
 			panel2.TabIndex = 1;
+			// 
+			// panel9
+			// 
+			panel9.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			panel9.BackColor = SystemColors.Control;
+			panel9.BorderStyle = BorderStyle.FixedSingle;
+			panel9.Controls.Add(pictureBox1);
+			panel9.Controls.Add(txbRegistro);
+			panel9.Controls.Add(label6);
+			panel9.Controls.Add(label5);
+			panel9.Controls.Add(dgvReloj);
+			panel9.Location = new Point(4, 756);
+			panel9.Name = "panel9";
+			panel9.Size = new Size(772, 383);
+			panel9.TabIndex = 1;
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(10, 7);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(54, 44);
+			pictureBox1.TabIndex = 30;
+			pictureBox1.TabStop = false;
+			// 
+			// txbRegistro
+			// 
+			txbRegistro.Location = new Point(488, 18);
+			txbRegistro.Name = "txbRegistro";
+			txbRegistro.ReadOnly = true;
+			txbRegistro.Size = new Size(294, 23);
+			txbRegistro.TabIndex = 33;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label6.Location = new Point(327, 23);
+			label6.Name = "label6";
+			label6.Size = new Size(155, 17);
+			label6.TabIndex = 32;
+			label6.Text = "Empleado Seleccionado :";
+			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label5.Location = new Point(79, 18);
+			label5.Name = "label5";
+			label5.Size = new Size(212, 20);
+			label5.TabIndex = 31;
+			label5.Text = "4. Checadas de el Empleados ";
+			// 
+			// dgvReloj
+			// 
+			dgvReloj.AllowUserToAddRows = false;
+			dgvReloj.AllowUserToDeleteRows = false;
+			dgvReloj.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvReloj.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			dgvReloj.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgvReloj.BackgroundColor = SystemColors.ControlLightLight;
+			dgvReloj.BorderStyle = BorderStyle.Fixed3D;
+			dgvReloj.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvReloj.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dgvReloj.ColumnHeadersHeight = 29;
+			dgvReloj.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dgvReloj.EnableHeadersVisualStyles = false;
+			dgvReloj.ImeMode = ImeMode.NoControl;
+			dgvReloj.Location = new Point(-1, 103);
+			dgvReloj.Name = "dgvReloj";
+			dgvReloj.ReadOnly = true;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvReloj.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dgvReloj.RowHeadersVisible = false;
+			dgvReloj.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+			dgvReloj.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgvReloj.Size = new Size(768, 275);
+			dgvReloj.TabIndex = 30;
 			// 
 			// pictureBox5
 			// 
@@ -305,14 +422,14 @@
 			dgvChecador.BackgroundColor = SystemColors.ControlLightLight;
 			dgvChecador.BorderStyle = BorderStyle.Fixed3D;
 			dgvChecador.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvChecador.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvChecador.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvChecador.ColumnHeadersHeight = 29;
 			dgvChecador.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvChecador.EnableHeadersVisualStyles = false;
@@ -320,19 +437,20 @@
 			dgvChecador.Location = new Point(4, 263);
 			dgvChecador.Name = "dgvChecador";
 			dgvChecador.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvChecador.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvChecador.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvChecador.RowHeadersVisible = false;
 			dgvChecador.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvChecador.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvChecador.Size = new Size(773, 817);
+			dgvChecador.Size = new Size(762, 468);
 			dgvChecador.TabIndex = 15;
+			dgvChecador.SelectionChanged += dgvChecador_SelectionChanged;
 			// 
 			// label2
 			// 
@@ -347,6 +465,8 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(btnCAL);
+			panel1.Controls.Add(panel10);
 			panel1.Controls.Add(label13);
 			panel1.Controls.Add(pictureBox6);
 			panel1.Controls.Add(panel3);
@@ -361,8 +481,133 @@
 			panel1.Dock = DockStyle.Fill;
 			panel1.Location = new Point(4, 4);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(778, 1088);
+			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
+			// 
+			// btnCAL
+			// 
+			btnCAL.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnCAL.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnCAL.Image = (Image)resources.GetObject("btnCAL.Image");
+			btnCAL.ImageAlign = ContentAlignment.MiddleLeft;
+			btnCAL.Location = new Point(526, 87);
+			btnCAL.Name = "btnCAL";
+			btnCAL.Padding = new Padding(20, 0, 30, 0);
+			btnCAL.Size = new Size(232, 39);
+			btnCAL.TabIndex = 35;
+			btnCAL.Text = "Agregar Lote y Actividad";
+			btnCAL.TextAlign = ContentAlignment.MiddleRight;
+			btnCAL.UseVisualStyleBackColor = true;
+			btnCAL.Click += btnCAL_Click;
+			// 
+			// panel10
+			// 
+			panel10.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			panel10.BackColor = SystemColors.Control;
+			panel10.BorderStyle = BorderStyle.FixedSingle;
+			panel10.Controls.Add(label14);
+			panel10.Controls.Add(btnJalar);
+			panel10.Controls.Add(cboDia);
+			panel10.Controls.Add(pictureBox2);
+			panel10.Controls.Add(label15);
+			panel10.Controls.Add(dgvCAL);
+			panel10.Location = new Point(3, 756);
+			panel10.Name = "panel10";
+			panel10.Size = new Size(772, 383);
+			panel10.TabIndex = 34;
+			// 
+			// label14
+			// 
+			label14.AutoSize = true;
+			label14.Location = new Point(440, 49);
+			label14.Name = "label14";
+			label14.Size = new Size(30, 15);
+			label14.TabIndex = 37;
+			label14.Text = "Dia :";
+			// 
+			// btnJalar
+			// 
+			btnJalar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+			btnJalar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnJalar.Image = (Image)resources.GetObject("btnJalar.Image");
+			btnJalar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnJalar.Location = new Point(535, 58);
+			btnJalar.Name = "btnJalar";
+			btnJalar.Padding = new Padding(20, 0, 30, 0);
+			btnJalar.Size = new Size(232, 39);
+			btnJalar.TabIndex = 36;
+			btnJalar.Text = "Jalar Actividad y Lote";
+			btnJalar.TextAlign = ContentAlignment.MiddleRight;
+			btnJalar.UseVisualStyleBackColor = true;
+			btnJalar.Click += btnJalar_Click;
+			// 
+			// cboDia
+			// 
+			cboDia.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+			cboDia.FormattingEnabled = true;
+			cboDia.Location = new Point(440, 67);
+			cboDia.Name = "cboDia";
+			cboDia.Size = new Size(89, 23);
+			cboDia.TabIndex = 36;
+			// 
+			// pictureBox2
+			// 
+			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
+			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox2.Location = new Point(10, 7);
+			pictureBox2.Name = "pictureBox2";
+			pictureBox2.Size = new Size(54, 44);
+			pictureBox2.TabIndex = 30;
+			pictureBox2.TabStop = false;
+			// 
+			// label15
+			// 
+			label15.AutoSize = true;
+			label15.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label15.Location = new Point(79, 18);
+			label15.Name = "label15";
+			label15.Size = new Size(450, 20);
+			label15.TabIndex = 31;
+			label15.Text = "3. Registros de Cuadrilla, Lote y Actividad por dia de empleado ";
+			// 
+			// dgvCAL
+			// 
+			dgvCAL.AllowUserToAddRows = false;
+			dgvCAL.AllowUserToDeleteRows = false;
+			dgvCAL.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			dgvCAL.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+			dgvCAL.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgvCAL.BackgroundColor = SystemColors.ControlLightLight;
+			dgvCAL.BorderStyle = BorderStyle.Fixed3D;
+			dgvCAL.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.BackColor = SystemColors.Control;
+			dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+			dgvCAL.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+			dgvCAL.ColumnHeadersHeight = 29;
+			dgvCAL.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			dgvCAL.EnableHeadersVisualStyles = false;
+			dgvCAL.ImeMode = ImeMode.NoControl;
+			dgvCAL.Location = new Point(-1, 103);
+			dgvCAL.Name = "dgvCAL";
+			dgvCAL.ReadOnly = true;
+			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = SystemColors.Control;
+			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+			dgvCAL.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dgvCAL.RowHeadersVisible = false;
+			dgvCAL.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+			dgvCAL.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgvCAL.Size = new Size(772, 275);
+			dgvCAL.TabIndex = 30;
 			// 
 			// label13
 			// 
@@ -400,7 +645,7 @@
 			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(609, 87);
+			btnImprimir.Location = new Point(592, 18);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(16, 0, 25, 0);
 			btnImprimir.Size = new Size(166, 39);
@@ -416,7 +661,7 @@
 			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
 			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(609, 179);
+			btnGuardar.Location = new Point(592, 182);
 			btnGuardar.Name = "btnGuardar";
 			btnGuardar.Padding = new Padding(20, 0, 30, 0);
 			btnGuardar.Size = new Size(166, 39);
@@ -436,14 +681,14 @@
 			dgvAsistencia.BackgroundColor = SystemColors.ControlLightLight;
 			dgvAsistencia.BorderStyle = BorderStyle.Fixed3D;
 			dgvAsistencia.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle7.BackColor = SystemColors.Control;
+			dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle7.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			dgvAsistencia.ColumnHeadersHeight = 29;
 			dgvAsistencia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAsistencia.EnableHeadersVisualStyles = false;
@@ -451,18 +696,18 @@
 			dgvAsistencia.Location = new Point(3, 263);
 			dgvAsistencia.Name = "dgvAsistencia";
 			dgvAsistencia.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = SystemColors.Control;
+			dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle8.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle8.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+			dgvAsistencia.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
 			dgvAsistencia.RowHeadersVisible = false;
 			dgvAsistencia.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAsistencia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAsistencia.Size = new Size(772, 817);
+			dgvAsistencia.Size = new Size(772, 468);
 			dgvAsistencia.TabIndex = 14;
 			dgvAsistencia.CellClick += dgvAsistencia_CellClick;
 			dgvAsistencia.CellContentClick += dgvAsistencia_CellContentClick;
@@ -520,7 +765,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1572, 1096);
+			ClientSize = new Size(1572, 1162);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAsistencia";
@@ -529,6 +774,10 @@
 			tableLayoutPanel1.ResumeLayout(false);
 			panel2.ResumeLayout(false);
 			panel2.PerformLayout();
+			panel9.ResumeLayout(false);
+			panel9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+			((System.ComponentModel.ISupportInitialize)dgvReloj).EndInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
 			tableLayoutPanel2.ResumeLayout(false);
 			panel8.ResumeLayout(false);
@@ -542,6 +791,10 @@
 			((System.ComponentModel.ISupportInitialize)dgvChecador).EndInit();
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
+			panel10.ResumeLayout(false);
+			panel10.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+			((System.ComponentModel.ISupportInitialize)dgvCAL).EndInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
 			((System.ComponentModel.ISupportInitialize)dgvAsistencia).EndInit();
 			ResumeLayout(false);
@@ -578,13 +831,26 @@
 		private Label label12;
 		private PictureBox pictureBox6;
 		private Label label13;
-		private Button button1;
+		private Button btnCAL;
 		private Button button3;
 		private Button button4;
 		private Button btnE;
 		private Button btnES;
 		private Button btnF;
 		private Button btnS;
-
+		private Panel panel9;
+		private Label label5;
+		public DataGridView dgvReloj;
+		private PictureBox pictureBox1;
+		private TextBox textBox1;
+		private Label label6;
+		public TextBox txbRegistro;
+		private Panel panel10;
+		private PictureBox pictureBox2;
+		private Label label15;
+		public DataGridView dgvCAL;
+		private Button btnJalar;
+		public ComboBox cboDia;
+		private Label label14;
 	}
 }
