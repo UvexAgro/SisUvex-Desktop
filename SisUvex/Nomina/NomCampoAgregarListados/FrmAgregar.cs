@@ -40,9 +40,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			InitializeComponent();
 
+			cboFecha.DrawMode = DrawMode.OwnerDrawFixed;
+
 			this.StartPosition = FormStartPosition.CenterScreen;
 			txbCodigo.Text = "Ej. 012365";
 			txbCodigo.ForeColor = Color.Gray;
+
+			cboFecha.Text = "Ej. Selecciona un Dia";
+			cboFecha.ForeColor = Color.Gray;
 
 			txbCodigo.Enter += txbCodigo_Enter;
 			txbCodigo.Leave += txbCodigo_Leave;
@@ -61,15 +66,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_clsA.frmA = this;
 
 		}
-		public FrmAgregar(FrmAsistencia frmA) : this()
-		{
-			_frmA = frmA;
-		}
+
 		public void BloquearControlesAgregarCuadrilla()
 		{
 			txbCodigo.Enabled = false;
 			btnBuscar.Enabled = false;
 			btnAgregarListado.Enabled = false;
+			lblCodigo.Enabled = false;
 		}
 		private void dgvListadoAgregar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -345,6 +348,42 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			DiaRegistro dia = (DiaRegistro)cboFecha.SelectedItem;
 
 			FechaSeleccionada = dia.Fecha;
+
+			cboFecha.ForeColor = Color.Black;
+		}
+		
+
+		private void cboFecha_Enter(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(txbCodigo.Text))
+			{
+				cboFecha.Text = "Ej. Selecciona un Dia";
+				cboFecha.ForeColor = Color.Gray;
+			}
+		}
+
+		private void cboFecha_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			if (e.Index < 0)
+				return;
+
+			e.DrawBackground();
+
+			DiaRegistro dia = (DiaRegistro)cboFecha.Items[e.Index];
+
+			string texto = dia.Fecha.ToString("dddd dd/MM/yyyy").ToUpper();
+
+			using (Brush brush = new SolidBrush(Color.Black))
+			{
+				e.Graphics.DrawString(
+					texto,
+					e.Font,
+					brush,
+					e.Bounds
+				);
+			}
+
+			e.DrawFocusRectangle();
 		}
 	}
 }

@@ -34,7 +34,7 @@
 			dgvListadoAgregar = new DataGridView();
 			btnContinuar = new Button();
 			btnCancelar = new Button();
-			label2 = new Label();
+			lblCodigo = new Label();
 			lblActividad = new Label();
 			cboActividad = new ComboBox();
 			txbCodigo = new TextBox();
@@ -120,15 +120,15 @@
 			btnCancelar.UseVisualStyleBackColor = true;
 			btnCancelar.Click += btnCancelar_Click;
 			// 
-			// label2
+			// lblCodigo
 			// 
-			label2.AutoSize = true;
-			label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label2.Location = new Point(28, 27);
-			label2.Name = "label2";
-			label2.Size = new Size(126, 15);
-			label2.TabIndex = 22;
-			label2.Text = "Codigo del Empleado :";
+			lblCodigo.AutoSize = true;
+			lblCodigo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCodigo.Location = new Point(28, 27);
+			lblCodigo.Name = "lblCodigo";
+			lblCodigo.Size = new Size(126, 15);
+			lblCodigo.TabIndex = 22;
+			lblCodigo.Text = "Codigo del Empleado :";
 			// 
 			// lblActividad
 			// 
@@ -136,9 +136,9 @@
 			lblActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblActividad.Location = new Point(468, 27);
 			lblActividad.Name = "lblActividad";
-			lblActividad.Size = new Size(166, 15);
+			lblActividad.Size = new Size(169, 15);
 			lblActividad.TabIndex = 24;
-			lblActividad.Text = "Actividad (misma para todos):";
+			lblActividad.Text = "Actividad (misma para todos) :";
 			// 
 			// cboActividad
 			// 
@@ -168,7 +168,7 @@
 			groupBox1.Controls.Add(lblLote);
 			groupBox1.Controls.Add(cboActividad);
 			groupBox1.Controls.Add(txbCodigo);
-			groupBox1.Controls.Add(label2);
+			groupBox1.Controls.Add(lblCodigo);
 			groupBox1.Controls.Add(lblActividad);
 			groupBox1.Location = new Point(12, 60);
 			groupBox1.Name = "groupBox1";
@@ -206,9 +206,9 @@
 			lblLote.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			lblLote.Location = new Point(468, 80);
 			lblLote.Name = "lblLote";
-			lblLote.Size = new Size(36, 15);
+			lblLote.Size = new Size(146, 15);
 			lblLote.TabIndex = 32;
-			lblLote.Text = "Lote :";
+			lblLote.Text = "Lote (mismo para todos ) :";
 			// 
 			// btnAgregarListado
 			// 
@@ -264,7 +264,9 @@
 			cboFecha.Name = "cboFecha";
 			cboFecha.Size = new Size(265, 23);
 			cboFecha.TabIndex = 35;
+			cboFecha.DrawItem += cboFecha_DrawItem;
 			cboFecha.SelectedIndexChanged += cboFecha_SelectedIndexChanged;
+			cboFecha.Enter += cboFecha_Enter;
 			// 
 			// FrmAgregar
 			// 
@@ -313,5 +315,6 @@
 		public ComboBox cboFecha;
 		private ComboBox comboBox2;
 		public Button btnAgregarListado;
+		public Label lblCodigo;
 	}
 }

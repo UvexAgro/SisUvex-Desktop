@@ -105,14 +105,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
-	};
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
 
 			foreach (DataGridViewRow filaReloj in _frmA.dgvChecador.Rows)
 			{
@@ -549,15 +549,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
+				WITH Checadas AS
+				(
+					SELECT
+						d_date,
+						d_time,
+						c_deviceName,
+						ROW_NUMBER() OVER (
+							PARTITION BY d_date
+							ORDER BY d_time ASC
+						) AS Primera,
+						ROW_NUMBER() OVER (
+							PARTITION BY d_date
+							ORDER BY d_time DESC
+						) AS Ultima
+					FROM [SisUvex].[dbo].[Nom_HikvisionIVMS]
+					WHERE TRY_CONVERT(int, id_employee) = TRY_CONVERT(int, @Codigo)
+					  AND d_date >= @FechaInicio
+					  AND d_date <= @FechaFin
+				)
 				SELECT
 					d_date,
 					d_time,
 					c_deviceName
-				FROM [SisUvex].[dbo].[Nom_HikvisionIVMS]
-				WHERE TRY_CONVERT(int, id_employee) = TRY_CONVERT(int, @Codigo)
-				  AND d_date >= @FechaInicio
-				  AND d_date <= @FechaFin
-				ORDER BY d_date, d_time ";
+				FROM Checadas
+				WHERE Primera = 1
+				   OR Ultima = 1
+				ORDER BY d_date, d_time";
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
