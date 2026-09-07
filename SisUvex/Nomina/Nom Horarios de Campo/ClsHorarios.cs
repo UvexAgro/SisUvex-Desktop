@@ -15,286 +15,10 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 	{
 
 		public FrmHorarios frm;
-		public FrmAgregar frmA;
 
-		public void OpenFrmAdd()
-		{
-			frmA = new FrmAgregar(frm, this);
-
-			frmA.lblTitle.Text = "Añadir horario";
-			frmA.lblSubtitulo.Text =
-				"Define el horario y asígnalo a una o varias cuadrillas.";
-
-			// AGREGAR
-			frmA.IsAddOrModify = true;
-
-			frmA.ShowDialog();
-
-			CargarHorarios();
-		}
-		public void OpenFrmModify()
-		{
-			if (frm.dgvHorarios.CurrentRow == null)
-			{
-				MessageBox.Show(
-					"Seleccione un horario para modificar.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
-
-				return;
-			}
-
-			int idHorario = Convert.ToInt32(
-				frm.dgvHorarios.CurrentRow
-					.Cells["id_workGroupHorario"]
-					.Value
-			);
-
-			frmA = new FrmAgregar(frm, this);
-
-			frmA.lblTitle.Text = "Modificar horario";
-			frmA.lblSubtitulo.Text =
-				"Modifica el horario asignado a la cuadrilla.";
-
-			// MUY IMPORTANTE
-			frmA.IsAddOrModify = false;
-
-			// Guardar el ID que se va a modificar
-			frmA.idAddModify = idHorario.ToString();
-
-			// Cargar los datos actuales
-			CargarHorarioModificar(idHorario);
-
-			frmA.ShowDialog();
-
-			CargarHorarios();
-		}
-
-		public void CargarHorarioModificar(int idHorario)
-		{
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				string query = @"
-			SELECT
-				id_workGroupHorario,
-				id_workGroup,
-				d_fechaInicio,
-				d_fechaFin,
-				t_horaEntrada,
-				t_horaSalida,
-				b_cruzaMedianoche
-			FROM dbo.Nom_WorkGroupHorario
-			WHERE id_workGroupHorario = @idHorario";
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				{
-					cmd.Parameters.Add("@idHorario", SqlDbType.Int)
-						.Value = idHorario;
-
-					using (SqlDataReader dr = cmd.ExecuteReader())
-					{
-						if (dr.Read())
-						{
-							// =========================
-							// CUADRILLA
-							// =========================
-
-							string idCuadrilla =
-								dr["id_workGroup"].ToString().Trim();
-
-
-							// =========================
-							// FECHA INICIO
-							// =========================
-
-							frmA.dtpFechaInicio.Value =
-								Convert.ToDateTime(dr["d_fechaInicio"]);
-
-							// =========================
-							// FECHA FIN
-							// =========================
-
-							frmA.dtpFechaFin.ShowCheckBox = true;
-
-							// Habilitar porque estamos modificando
-							frmA.dtpFechaFin.Enabled = true;
-							frmA.dtpFechaFin.Enabled = true;
-
-							if (dr["d_fechaFin"] == DBNull.Value)
-							{
-								// No tiene fecha final
-								frmA.dtpFechaFin.Checked = false;
-							}
-							else
-							{
-								// Sí tiene fecha final
-								frmA.dtpFechaFin.Checked = true;
-
-								frmA.dtpFechaFin.Value =
-									Convert.ToDateTime(dr["d_fechaFin"]);
-							}
-
-
-							// =========================
-							// HORA ENTRADA
-							// =========================
-
-							TimeSpan horaEntrada =
-								(TimeSpan)dr["t_horaEntrada"];
-
-							frmA.dtpEntrada.Value =
-								DateTime.Today.Add(horaEntrada);
-
-
-							// =========================
-							// HORA SALIDA
-							// =========================
-
-							TimeSpan horaSalida =
-								(TimeSpan)dr["t_horaSalida"];
-
-							frmA.dtpSalida.Value =
-								DateTime.Today.Add(horaSalida);
-
-
-							// =========================
-							// CRUZA MEDIANOCHE
-							// =========================
-
-							frmA.chkCruce.Checked =
-								Convert.ToBoolean(
-									dr["b_cruzaMedianoche"]
-								);
-
-
-							// =========================
-							// SELECCIONAR CUADRILLA
-							// =========================
-
-							for (int i = 0;
-								 i < frmA.clbCuadrilla.Items.Count;
-								 i++)
-							{
-								WorkGroupItem item =
-									(WorkGroupItem)frmA.clbCuadrilla.Items[i];
-
-								if (item.Id == idCuadrilla)
-								{
-									frmA.clbCuadrilla.SetItemChecked(i, true);
-									break;
-								}
-							}
-						}
-					}
-				}
-
-				sql.CloseConectionWrite();
-			}
-			catch (Exception ex)
-			{
-				try
-				{
-					sql.CloseConectionWrite();
-				}
-				catch
-				{
-				}
-
-				MessageBox.Show(
-					"Error al cargar el horario.\n\n" + ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-			}
-		}
-		public class WorkGroupItem
-		{
-			public string Id { get; set; }
-			public string Nombre { get; set; }
-
-			public override string ToString()
-			{
-				return $"{Id} - {Nombre}";
-			}
-		}
-
-		public DataTable Cuadrillas()
+		public void CargarGrupos()
 		{
 			DataTable dt = new DataTable();
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				string query = @"
-            SELECT
-                id_workGroup,
-                v_nameWorkGroup
-            FROM dbo.Nom_WorkGroup
-            WHERE c_active = 1
-            ORDER BY id_workGroup";
-
-				sql.OpenConectionWrite();
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-				{
-					da.Fill(dt);
-				}
-
-				sql.CloseConectionWrite();
-
-				return dt;
-			}
-			catch (Exception ex)
-			{
-				try
-				{
-					sql.CloseConectionWrite();
-				}
-				catch
-				{
-				}
-
-				MessageBox.Show(
-					"Error al cargar las cuadrillas.\n\n" + ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				return null;
-			}
-		}
-		public void CargarCuadrillas()
-		{
-			DataTable dt = Cuadrillas();
-
-			if (dt == null)
-				return;
-
-			frmA.clbCuadrilla.Items.Clear();
-
-			foreach (DataRow row in dt.Rows)
-			{
-				ClsHorarios.WorkGroupItem cuadrilla =
-					new ClsHorarios.WorkGroupItem
-					{
-						Id = row["id_workGroup"].ToString().Trim(),
-						Nombre = row["v_nameWorkGroup"].ToString().Trim()
-					};
-
-				frmA.clbCuadrilla.Items.Add(cuadrilla, false);
-			}
-		}
-		public bool GuardarHorario(string idsCuadrillas, DateTime fechaInicio, DateTime? fechaFin,TimeSpan horaEntrada,TimeSpan horaSalida,bool cruzaMedianoche,string userCreate)
-		{
 			SQLControl sql = new SQLControl();
 
 			try
@@ -302,111 +26,25 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(
-					"sp_AddWorkGroupHorario",
+					"sp_GetWorkGroups",
 					sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroups", SqlDbType.VarChar).Value =
-						idsCuadrillas;
-
-					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date).Value =
-						fechaInicio.Date;
-
-					cmd.Parameters.Add("@fechaFin", SqlDbType.Date).Value =
-						fechaFin.HasValue
-							? (object)fechaFin.Value.Date
-							: DBNull.Value;
-
-					cmd.Parameters.Add("@horaEntrada", SqlDbType.Time).Value =
-						horaEntrada;
-
-					cmd.Parameters.Add("@horaSalida", SqlDbType.Time).Value =
-						horaSalida;
-
-					cmd.Parameters.Add("@cruzaMedianoche", SqlDbType.Bit).Value =
-						cruzaMedianoche;
-
-					cmd.Parameters.Add("@userCreate", SqlDbType.VarChar).Value =
-						userCreate;
-
-					cmd.ExecuteNonQuery();
-				}
-
-				sql.CloseConectionWrite();
-
-				return true;
-			}
-			catch (Exception ex)
-			{
-				try
-				{
-					sql.CloseConectionWrite();
-				}
-				catch
-				{
-				}
-
-				MessageBox.Show(
-					"Error al guardar el horario.\n\n" + ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				return false;
-			}
-		}
-		public bool ValidarHorarioAbierto(List<string> cuadrillas, out string cuadrillasBloqueadas)
-		{
-			cuadrillasBloqueadas = "";
-
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				string ids = string.Join(",", cuadrillas);
-
-				string query = @"
-            SELECT id_workGroup
-            FROM dbo.Nom_WorkGroupHorario
-            WHERE id_workGroup IN
-            (
-                SELECT LTRIM(RTRIM(value))
-                FROM STRING_SPLIT(@idsCuadrillas, ',')
-            )
-            AND d_fechaFin IS NULL
-            AND active = 1;
-        ";
-
-				List<string> bloqueadas = new List<string>();
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				{
-					cmd.Parameters.Add("@idsCuadrillas", SqlDbType.VarChar).Value = ids;
-
-					using (SqlDataReader dr = cmd.ExecuteReader())
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
 					{
-						while (dr.Read())
-						{
-							bloqueadas.Add(
-								dr["id_workGroup"].ToString().Trim()
-							);
-						}
+						da.Fill(dt);
 					}
 				}
 
 				sql.CloseConectionWrite();
 
-				if (bloqueadas.Count > 0)
-				{
-					cuadrillasBloqueadas = string.Join(", ", bloqueadas);
-					return false;
-				}
+				frm.cboGrupos.DataSource = dt;
+				frm.cboGrupos.DisplayMember = "Grupo";
+				frm.cboGrupos.ValueMember = "id_workGroup";
 
-				return true;
+				frm.cboGrupos.SelectedIndex = -1;
 			}
 			catch (Exception ex)
 			{
@@ -419,235 +57,37 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 
 				MessageBox.Show(
-					"Error al validar los horarios.\n\n" + ex.Message,
+					"Error al cargar los grupos.\n\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				return false;
+					MessageBoxIcon.Error);
 			}
 		}
-		public void Guardar()
+		public void CargarCuadrillasDisponibles()
 		{
-			// Validar que haya al menos una cuadrilla
-			if (frmA.clbCuadrilla.CheckedItems.Count == 0)
-			{
-				MessageBox.Show(
-					"Debe seleccionar al menos una cuadrilla.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
-
-				return;
-			}
-
-			// Obtener las cuadrillas seleccionadas
-			List<string> cuadrillas = new List<string>();
-
-			foreach (var item in frmA.clbCuadrilla.CheckedItems)
-			{
-				ClsHorarios.WorkGroupItem cuadrilla =
-					(ClsHorarios.WorkGroupItem)item;
-
-				cuadrillas.Add(cuadrilla.Id);
-			}
-
-			string idsCuadrillas = string.Join(",", cuadrillas);
-
-			// ========================================
-			// VALIDAR HORARIO ABIERTO
-			// ========================================
-
-			string cuadrillasBloqueadas;
-
-			if (frmA.IsAddOrModify)
-			{
-				// SOLO AL AGREGAR
-				if (!ValidarHorarioAbierto(
-					cuadrillas,
-					out cuadrillasBloqueadas))
-				{
-					MessageBox.Show(
-						"Las siguientes cuadrillas ya tienen un horario abierto:\n\n" +
-						cuadrillasBloqueadas +
-						"\n\nDebe cerrar el horario actual antes de agregar uno nuevo.",
-						"Horario existente",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
-
-					return;
-				}
-			}
-			else
-			{
-				// AL MODIFICAR NO VALIDAMOS AQUÍ,
-				// porque el horario actual ya está abierto.
-			}
-
-			// ========================================
-			// FECHA DE INICIO
-			// ========================================
-
-			DateTime fechaInicio =
-				frmA.dtpFechaInicio.Value.Date;
-
-			// ========================================
-			// FECHA DE FIN
-			// ========================================
-
-			DateTime? fechaFin = null;
-
-			if (frmA.dtpFechaFin.Checked)
-			{
-				fechaFin = frmA.dtpFechaFin.Value.Date;
-
-				if (fechaFin < fechaInicio)
-				{
-					MessageBox.Show(
-						"La fecha final no puede ser menor que la fecha de inicio.",
-						"Aviso",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
-
-					return;
-				}
-			}
-
-			// ========================================
-			// HORAS
-			// ========================================
-
-			TimeSpan horaEntrada =
-				frmA.dtpEntrada.Value.TimeOfDay;
-
-			TimeSpan horaSalida =
-				frmA.dtpSalida.Value.TimeOfDay;
-
-			// ========================================
-			// CRUZA MEDIANOCHE
-			// ========================================
-
-			bool cruzaMedianoche =
-				frmA.chkCruce.Checked;
-
-			// ========================================
-			// USUARIO
-			// ========================================
-
-			string usuario =
-				User.GetUserName();
-
-			// ========================================
-			// AGREGAR O MODIFICAR
-			// ========================================
-
-			bool guardado;
-
-			if (frmA.IsAddOrModify)
-			{
-				// AGREGAR
-				guardado = GuardarHorario(
-					idsCuadrillas,
-					fechaInicio,
-					fechaFin,
-					horaEntrada,
-					horaSalida,
-					cruzaMedianoche,
-					usuario
-				);
-			}
-			else
-			{
-				// MODIFICAR
-				int idHorario =
-					Convert.ToInt32(frmA.idAddModify);
-
-				guardado = ModificarHorario(
-					idHorario,
-					fechaInicio,
-					fechaFin,
-					horaEntrada,
-					horaSalida,
-					cruzaMedianoche,
-					usuario
-				);
-			}
-
-			// ========================================
-			// RESULTADO
-			// ========================================
-
-			if (guardado)
-			{
-				MessageBox.Show(
-					frmA.IsAddOrModify
-						? "Horario agregado correctamente."
-						: "Horario modificado correctamente.",
-					"Correcto",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
-				);
-
-				CargarHorarios();
-
-				frmA.Close();
-			}
-		}
-		public bool ModificarHorario(int idHorario,DateTime fechaInicio, DateTime? fechaFin, TimeSpan horaEntrada, TimeSpan horaSalida, bool cruzaMedianoche, string userModify)
-		{
+			DataTable dt = new DataTable();
 			SQLControl sql = new SQLControl();
 
 			try
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-			UPDATE dbo.Nom_WorkGroupHorario
-			SET
-				d_fechaInicio = @fechaInicio,
-				d_fechaFin = @fechaFin,
-				t_horaEntrada = @horaEntrada,
-				t_horaSalida = @horaSalida,
-				b_cruzaMedianoche = @cruzaMedianoche,
-				userModify = @userModify,
-				d_dateModify = GETDATE()
-			WHERE id_workGroupHorario = @idHorario";
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_GetWorkGroupsDisponibles",
+					sql.cnn))
 				{
-					cmd.Parameters.Add("@idHorario", SqlDbType.Int)
-						.Value = idHorario;
+					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date)
-						.Value = fechaInicio.Date;
-
-					cmd.Parameters.Add("@fechaFin", SqlDbType.Date)
-						.Value = fechaFin.HasValue
-							? fechaFin.Value.Date
-							: (object)DBNull.Value;
-
-					cmd.Parameters.Add("@horaEntrada", SqlDbType.Time)
-						.Value = horaEntrada;
-
-					cmd.Parameters.Add("@horaSalida", SqlDbType.Time)
-						.Value = horaSalida;
-
-					cmd.Parameters.Add("@cruzaMedianoche", SqlDbType.Bit)
-						.Value = cruzaMedianoche;
-
-					cmd.Parameters.Add("@userModify", SqlDbType.VarChar)
-						.Value = userModify;
-
-					cmd.ExecuteNonQuery();
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 
 				sql.CloseConectionWrite();
 
-				return true;
+				frm.dgvCuadrillaDisponible.DataSource = dt;
 			}
 			catch (Exception ex)
 			{
@@ -660,38 +100,136 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 
 				MessageBox.Show(
-					"Error al modificar el horario.\n\n" + ex.Message,
+					"Error al cargar las cuadrillas disponibles.\n\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
-				return false;
 			}
 		}
-		public bool EliminarHorario(int idHorario)
+		public void ConfigurarDgvCuadrillaDisponible()
 		{
+			DataGridView dgv = frm.dgvCuadrillaDisponible;
+
+			dgv.AutoGenerateColumns = true;
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
+
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
+			dgv.AllowUserToResizeRows = false;
+
+			dgv.RowHeadersVisible = false;
+
+			// Fuente
+			dgv.Font = new Font("Segoe UI", 9F);
+
+			// Encabezado
+			dgv.EnableHeadersVisualStyles = false;
+
+			dgv.ColumnHeadersDefaultCellStyle.BackColor =
+				Color.FromArgb(18, 59, 114);
+
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
+				Color.White;
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(18, 59, 114);
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
+				Color.White;
+
+			dgv.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 9F, FontStyle.Bold);
+
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ColumnHeadersHeight = 35;
+
+			// Celdas
+			dgv.DefaultCellStyle.Font =
+				new Font("Segoe UI", 9F);
+
+			dgv.DefaultCellStyle.ForeColor =
+				Color.FromArgb(40, 40, 40);
+
+			dgv.DefaultCellStyle.BackColor =
+				Color.White;
+
+			dgv.DefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(30, 115, 190);
+
+			dgv.DefaultCellStyle.SelectionForeColor =
+				Color.White;
+
+			dgv.DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.RowTemplate.Height = 30;
+
+			// Líneas
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
+
+			dgv.GridColor =
+				Color.FromArgb(220, 225, 230);
+
+			dgv.BackgroundColor =
+				Color.White;
+
+			// Columnas
+			if (dgv.Columns.Count >= 3)
+			{
+				dgv.Columns[0].FillWeight = 25;
+				dgv.Columns[1].FillWeight = 100;
+				dgv.Columns[2].FillWeight = 40;
+
+				dgv.Columns[0].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+				dgv.Columns[1].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
+
+				dgv.Columns[2].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
+		}
+		public void CargarCuadrillasAsignadas()
+		{
+			if (frm.cboGrupos.SelectedIndex == -1)
+				return;
+
+			DataTable dt = new DataTable();
 			SQLControl sql = new SQLControl();
 
 			try
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-			DELETE FROM dbo.Nom_WorkGroupHorario
-			WHERE id_workGroupHorario = @idHorario";
-
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_GetCuadrillasAsignadas",
+					sql.cnn))
 				{
-					cmd.Parameters.Add("@idHorario", SqlDbType.Int)
-						.Value = idHorario;
+					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.ExecuteNonQuery();
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						frm.cboGrupos.SelectedValue.ToString());
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 
 				sql.CloseConectionWrite();
 
-				return true;
+				frm.dgvCuadrillaAsignada.DataSource = dt;
 			}
 			catch (Exception ex)
 			{
@@ -704,55 +242,242 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 
 				MessageBox.Show(
-					"Error al eliminar el horario.\n\n" + ex.Message,
+					"Error al cargar las cuadrillas asignadas.\n\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
-				return false;
 			}
 		}
-		public void Eliminar()
+		public void ConfigurarDgvCuadrillaAsignada()
 		{
-			if (frm.dgvHorarios.CurrentRow == null)
+			DataGridView dgv = frm.dgvCuadrillaAsignada;
+
+			dgv.AutoGenerateColumns = true;
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
+
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
+			dgv.AllowUserToResizeRows = false;
+
+			dgv.RowHeadersVisible = false;
+
+			// Fuente
+			dgv.Font = new Font("Segoe UI", 9F);
+
+			// Encabezado
+			dgv.EnableHeadersVisualStyles = false;
+
+			dgv.ColumnHeadersDefaultCellStyle.BackColor =
+				Color.FromArgb(18, 59, 114);
+
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
+				Color.White;
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(18, 59, 114);
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
+				Color.White;
+
+			dgv.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 9F, FontStyle.Bold);
+
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ColumnHeadersHeight = 35;
+
+			// Celdas
+			dgv.DefaultCellStyle.Font =
+				new Font("Segoe UI", 9F);
+
+			dgv.DefaultCellStyle.ForeColor =
+				Color.FromArgb(40, 40, 40);
+
+			dgv.DefaultCellStyle.BackColor =
+				Color.White;
+
+			dgv.DefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(30, 115, 190);
+
+			dgv.DefaultCellStyle.SelectionForeColor =
+				Color.White;
+
+			dgv.DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.RowTemplate.Height = 30;
+
+			// Líneas
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
+
+			dgv.GridColor =
+				Color.FromArgb(220, 225, 230);
+
+			dgv.BackgroundColor =
+				Color.White;
+
+			// Columnas
+			if (dgv.Columns.Count >= 2)
+			{
+				dgv.Columns[0].FillWeight = 25;
+				dgv.Columns[1].FillWeight = 100;
+
+				dgv.Columns[0].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+				dgv.Columns[1].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
+			}
+
+			// Mantener encabezados azules aunque se seleccione una columna
+			foreach (DataGridViewColumn columna in dgv.Columns)
+			{
+				columna.HeaderCell.Style.BackColor =
+					Color.FromArgb(18, 59, 114);
+
+				columna.HeaderCell.Style.ForeColor =
+					Color.White;
+
+				columna.HeaderCell.Style.SelectionBackColor =
+					Color.FromArgb(18, 59, 114);
+
+				columna.HeaderCell.Style.SelectionForeColor =
+					Color.White;
+			}
+		}
+		public void GuardarGrupo()
+		{
+			if (frm.cboGrupos.SelectedIndex == -1)
 			{
 				MessageBox.Show(
-					"Seleccione un horario para eliminar.",
+					"Seleccione un grupo de horario.",
 					"Aviso",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
+					MessageBoxIcon.Warning);
 
 				return;
 			}
 
-			int idHorario = Convert.ToInt32(
-				frm.dgvHorarios.CurrentRow
-					.Cells["id_workGroupHorario"]
-					.Value
-			);
+			string idGrupo =
+				frm.cboGrupos.SelectedValue.ToString();
 
-			DialogResult resultado = MessageBox.Show(
-				"¿Está seguro de eliminar el horario seleccionado?",
-				"Confirmar eliminación",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question
-			);
+			SQLControl sql = new SQLControl();
 
-			if (resultado != DialogResult.Yes)
-				return;
-
-			if (EliminarHorario(idHorario))
+			try
 			{
-				MessageBox.Show(
-					"Horario eliminado correctamente.",
-					"Correcto",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
-				);
+				sql.OpenConectionWrite();
 
+				using (SqlTransaction transaccion =
+					sql.cnn.BeginTransaction())
+				{
+					try
+					{
+						// Eliminar las asignaciones anteriores
+						using (SqlCommand cmdDelete = new SqlCommand(
+							@"DELETE FROM Cat_WorkGroupTeam
+					  WHERE id_workGroup = @id_workGroup",
+							sql.cnn,
+							transaccion))
+						{
+							cmdDelete.Parameters.AddWithValue(
+								"@id_workGroup",
+								idGrupo);
+
+							cmdDelete.ExecuteNonQuery();
+						}
+
+						// Guardar las cuadrillas que quedaron asignadas
+						foreach (DataGridViewRow fila
+							in frm.dgvCuadrillaAsignada.Rows)
+						{
+							if (fila.IsNewRow)
+								continue;
+
+							string idCuadrillaTexto =
+								fila.Cells["ID"].Value?.ToString();
+
+							if (string.IsNullOrWhiteSpace(idCuadrillaTexto))
+								continue;
+
+							int idCuadrilla =
+								Convert.ToInt32(idCuadrillaTexto);
+
+							using (SqlCommand cmdInsert = new SqlCommand(
+								@"INSERT INTO Cat_WorkGroupTeam
+						  (
+							id_workGroup,
+							id_workTeam,
+							v_userCreate,
+							d_create
+						  )
+						  VALUES
+						  (
+							@id_workGroup,
+							@id_workTeam,
+							@v_userCreate,
+							GETDATE()
+						  )",
+								sql.cnn,
+								transaccion))
+							{
+								cmdInsert.Parameters.AddWithValue(
+									"@id_workGroup",
+									idGrupo);
+
+								cmdInsert.Parameters.AddWithValue(
+									"@id_workTeam",
+									idCuadrilla);
+
+								cmdInsert.Parameters.AddWithValue(
+									"@v_userCreate",
+									User.GetUserName());
+
+								cmdInsert.ExecuteNonQuery();
+							}
+						}
+
+						transaccion.Commit();
+					}
+					catch
+					{
+						transaccion.Rollback();
+						throw;
+					}
+				}
+
+				sql.CloseConectionWrite();
+				CargarCuadrillasDisponibles();
+				CargarCuadrillasAsignadas();
 				CargarHorarios();
+
+				MessageBox.Show(
+					"Grupo guardado correctamente.",
+					"Información",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			catch (Exception ex)
+			{
+				try
+				{
+					sql.CloseConectionWrite();
+				}
+				catch
+				{
+				}
+
+				MessageBox.Show(
+					"Error al guardar el grupo.\n\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 		}
 		public void CargarHorarios()
@@ -797,220 +522,130 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 					"Error al cargar los horarios.\n\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
+					MessageBoxIcon.Error);
 			}
 		}
 		public void ConfigurarDgvHorarios()
 		{
-			// =========================
-			// CONFIGURACIÓN GENERAL
-			// =========================
+			DataGridView dgv = frm.dgvHorarios;
 
-			frm.dgvHorarios.AutoGenerateColumns = true;
-			frm.dgvHorarios.AllowUserToAddRows = false;
-			frm.dgvHorarios.AllowUserToDeleteRows = false;
-			frm.dgvHorarios.AllowUserToResizeRows = false;
-			frm.dgvHorarios.ReadOnly = true;
-			frm.dgvHorarios.MultiSelect = false;
+			dgv.AutoGenerateColumns = true;
+			dgv.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.Fill;
 
-			// Seleccionar la fila completa
-			frm.dgvHorarios.SelectionMode =
+			dgv.SelectionMode =
 				DataGridViewSelectionMode.FullRowSelect;
 
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
 
-			// =========================
-			// FONDO
-			// =========================
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
+			dgv.AllowUserToResizeRows = false;
 
-			frm.dgvHorarios.BackgroundColor = Color.White;
+			dgv.RowHeadersVisible = false;
 
-			frm.dgvHorarios.BorderStyle =
-				BorderStyle.None;
+			// Fuente
+			dgv.Font = new Font("Segoe UI", 9F);
 
+			// Encabezado
+			dgv.EnableHeadersVisualStyles = false;
 
-			// =========================
-			// LÍNEAS
-			// =========================
+			dgv.ColumnHeadersDefaultCellStyle.BackColor =
+				Color.FromArgb(18, 59, 114);
 
-			frm.dgvHorarios.CellBorderStyle =
-				DataGridViewCellBorderStyle.SingleHorizontal;
-
-			frm.dgvHorarios.GridColor =
-				Color.FromArgb(225, 225, 225);
-
-			frm.dgvHorarios.RowHeadersBorderStyle =
-				DataGridViewHeaderBorderStyle.None;
-
-			frm.dgvHorarios.ColumnHeadersBorderStyle =
-				DataGridViewHeaderBorderStyle.None;
-
-
-			// =========================
-			// FILAS
-			// =========================
-
-			frm.dgvHorarios.RowTemplate.Height = 32;
-
-			frm.dgvHorarios.DefaultCellStyle.BackColor =
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
 				Color.White;
 
-			frm.dgvHorarios.DefaultCellStyle.ForeColor =
-				Color.FromArgb(40, 40, 40);
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(18, 59, 114);
 
-
-			// =========================
-			// SELECCIÓN
-			// =========================
-
-			frm.dgvHorarios.DefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(220, 235, 250);
-
-			frm.dgvHorarios.DefaultCellStyle.SelectionForeColor =
-				Color.FromArgb(40, 40, 40);
-
-			// =========================
-			// ENCABEZADO
-			// =========================
-
-			frm.dgvHorarios.EnableHeadersVisualStyles = false;
-
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.BackColor =
-				Color.FromArgb(35, 75, 145);
-
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.ForeColor =
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
 				Color.White;
 
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(35, 75, 145);
-
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.SelectionForeColor =
-				Color.White;
-
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.Font =
+			dgv.ColumnHeadersDefaultCellStyle.Font =
 				new Font("Segoe UI", 9F, FontStyle.Bold);
 
-			frm.dgvHorarios.ColumnHeadersDefaultCellStyle.Alignment =
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			frm.dgvHorarios.ColumnHeadersHeight = 32;
+			dgv.ColumnHeadersHeight = 35;
 
+			// Celdas
+			dgv.DefaultCellStyle.Font =
+				new Font("Segoe UI", 9F);
 
-			// =========================
-			// OCULTAR COLUMNAS INTERNAS
-			// =========================
+			dgv.DefaultCellStyle.ForeColor =
+				Color.FromArgb(40, 40, 40);
 
-			frm.dgvHorarios.Columns["id_workGroupHorario"].Visible = false;
+			dgv.DefaultCellStyle.BackColor =
+				Color.White;
 
-			frm.dgvHorarios.Columns["active"].Visible = false;
+			dgv.DefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(30, 115, 190);
 
+			dgv.DefaultCellStyle.SelectionForeColor =
+				Color.White;
 
-			// =========================
-			// ENCABEZADOS
-			// =========================
-
-			frm.dgvHorarios.Columns["id_workGroup"].HeaderText =
-				"Cuadrilla";
-
-			frm.dgvHorarios.Columns["v_nameWorkGroup"].HeaderText =
-				"Descripción";
-
-			frm.dgvHorarios.Columns["d_fechaInicio"].HeaderText =
-				"Fecha inicio";
-
-			frm.dgvHorarios.Columns["d_fechaFin"].HeaderText =
-				"Fecha fin";
-
-			frm.dgvHorarios.Columns["t_horaEntrada"].HeaderText =
-				"Entrada";
-
-			frm.dgvHorarios.Columns["t_horaSalida"].HeaderText =
-				"Salida";
-
-			frm.dgvHorarios.Columns["b_cruzaMedianoche"].HeaderText =
-				"Cruza medianoche";
-
-
-			// =========================
-			// ALINEACIÓN
-			// =========================
-
-			frm.dgvHorarios.Columns["id_workGroup"]
-				.DefaultCellStyle.Alignment =
+			dgv.DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			frm.dgvHorarios.Columns["v_nameWorkGroup"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
+			dgv.RowTemplate.Height = 30;
 
-			frm.dgvHorarios.Columns["d_fechaInicio"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			// Líneas
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
 
-			frm.dgvHorarios.Columns["d_fechaFin"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			dgv.GridColor =
+				Color.FromArgb(220, 225, 230);
 
-			frm.dgvHorarios.Columns["t_horaEntrada"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			dgv.BackgroundColor =
+				Color.White;
 
-			frm.dgvHorarios.Columns["t_horaSalida"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			// Columnas
+			if (dgv.Columns.Count >= 6)
+			{
+				dgv.Columns[0].FillWeight = 110;
+				dgv.Columns[1].FillWeight = 70;
+				dgv.Columns[2].FillWeight = 130;
+				dgv.Columns[3].FillWeight = 80;
+				dgv.Columns[4].FillWeight = 80;
+				dgv.Columns[5].FillWeight = 80;
 
-			frm.dgvHorarios.Columns["b_cruzaMedianoche"]
-				.DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+				dgv.Columns[0].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
 
+				dgv.Columns[1].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
 
-			// =========================
-			// FORMATO DE FECHAS
-			// =========================
+				dgv.Columns[2].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
 
-			frm.dgvHorarios.Columns["d_fechaInicio"]
-				.DefaultCellStyle.Format = "dd/MM/yyyy";
+				dgv.Columns[3].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
 
-			frm.dgvHorarios.Columns["d_fechaFin"]
-				.DefaultCellStyle.Format = "dd/MM/yyyy";
+				dgv.Columns[4].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
 
+				dgv.Columns[5].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
 
-			// =========================
-			// FORMATO DE HORAS
-			// =========================
+			// Encabezados siempre azules
+			foreach (DataGridViewColumn columna in dgv.Columns)
+			{
+				columna.HeaderCell.Style.BackColor =
+					Color.FromArgb(18, 59, 114);
 
-			frm.dgvHorarios.Columns["t_horaEntrada"]
-				.DefaultCellStyle.Format = @"hh\:mm";
+				columna.HeaderCell.Style.ForeColor =
+					Color.White;
 
-			frm.dgvHorarios.Columns["t_horaSalida"]
-				.DefaultCellStyle.Format = @"hh\:mm";
+				columna.HeaderCell.Style.SelectionBackColor =
+					Color.FromArgb(18, 59, 114);
 
-
-			// =========================
-			// ANCHO DE COLUMNAS
-			// =========================
-
-			frm.dgvHorarios.Columns["id_workGroup"].Width = 90;
-
-			frm.dgvHorarios.Columns["v_nameWorkGroup"].Width = 145;
-
-			frm.dgvHorarios.Columns["d_fechaInicio"].Width = 105;
-
-			frm.dgvHorarios.Columns["d_fechaFin"].Width = 105;
-
-			frm.dgvHorarios.Columns["t_horaEntrada"].Width = 85;
-
-			frm.dgvHorarios.Columns["t_horaSalida"].Width = 85;
-
-			frm.dgvHorarios.Columns["b_cruzaMedianoche"].Width = 130;
-
-
-			// =========================
-			// NO AUTOAJUSTAR COLUMNAS
-			// =========================
-
-			frm.dgvHorarios.AutoSizeColumnsMode =
-				DataGridViewAutoSizeColumnsMode.None;
+				columna.HeaderCell.Style.SelectionForeColor =
+					Color.White;
+			}
 		}
 	}
 }
