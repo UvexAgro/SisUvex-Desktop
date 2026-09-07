@@ -2050,7 +2050,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		private void MostrarCAL(DataTable dt,DateTime fechaInicio,DateTime fechaFin)
+		private void MostrarCAL(
+	DataTable dt,
+	DateTime fechaInicio,
+	DateTime fechaFin)
 		{
 			DataGridView dgv = _frmA.dgvCAL;
 
@@ -2066,12 +2069,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.EnableHeadersVisualStyles = false;
 
+			// ==========================================
 			// COLUMNAS FIJAS
+			// ==========================================
 
 			dgv.Columns.Add("Codigo", "Código");
 			dgv.Columns.Add("Empleado", "Empleado");
 
+			// ==========================================
 			// COLUMNAS DE LOS DÍAS
+			// ==========================================
 
 			for (DateTime fecha = fechaInicio;
 				 fecha <= fechaFin;
@@ -2088,7 +2095,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					));
 			}
 
+			// ==========================================
 			// AGRUPAR POR EMPLEADO
+			// ==========================================
 
 			var empleados = dt.AsEnumerable()
 				.GroupBy(row =>
@@ -2101,62 +2110,105 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				int indice = dgv.Rows.Add();
 
 				// Código
-				dgv.Rows[indice].Cells["Codigo"].Value =primeraFila["Codigo"].ToString().Trim();
+				dgv.Rows[indice]
+					.Cells["Codigo"]
+					.Value =
+					primeraFila["Codigo"]
+						.ToString()
+						.Trim();
 
 				// Empleado
-				dgv.Rows[indice].Cells["Empleado"].Value =primeraFila["Empleado"].ToString().Trim();
+				dgv.Rows[indice]
+					.Cells["Empleado"]
+					.Value =
+					primeraFila["Empleado"]
+						.ToString()
+						.Trim();
 
+				// ==========================================
 				// RECORRER REGISTROS DEL EMPLEADO
+				// ==========================================
 
 				foreach (DataRow row in grupo)
 				{
 					DateTime fecha =
-						Convert.ToDateTime(row["Fecha"]).Date;
+						Convert.ToDateTime(
+							row["Fecha"]).Date;
 
 					string nombreColumna =
 						fecha.ToString("yyyyMMdd");
 
-					string cuadrilla =
+					// ======================================
+					// CUADRILLA
+					// ======================================
+
+					string idCuadrilla =
 						row["Cuadrilla"] == DBNull.Value
-							? ""
-							: row["Cuadrilla"].ToString().Trim();
+						? ""
+						: row["Cuadrilla"].ToString().Trim();
+
+					string cuadrilla =
+						NombreCuadrilla(idCuadrilla);
+
+					// ======================================
+					// ACTIVIDAD
+					// ======================================
 
 					string actividad =
 						row["Actividad"] == DBNull.Value
 							? ""
-							: row["Actividad"].ToString().Trim();
+							: row["Actividad"]
+								.ToString()
+								.Trim();
 
-					string lote =
+					// ======================================
+					// LOTE
+					// ======================================
+
+					string loteCodigo =
 						row["Lote"] == DBNull.Value
 							? ""
 							: row["Lote"].ToString().Trim();
 
+					string loteNombre =
+						row["NombreLote"] == DBNull.Value
+							? ""
+							: row["NombreLote"].ToString().Trim();
+
+					// ======================================
 					// ARMAR TEXTO
+					// ======================================
 
 					string texto = "";
 
+					// Solo nombre de cuadrilla
 					if (!string.IsNullOrWhiteSpace(cuadrilla))
 					{
-						texto += $"Cuadrilla: {cuadrilla}";
+						texto += cuadrilla;
 					}
 
+					// Solo nombre de actividad
 					if (!string.IsNullOrWhiteSpace(actividad))
 					{
 						if (texto != "")
 							texto += "\r\n";
 
-						texto += $"Actividad: {actividad}";
+						texto += actividad;
 					}
 
-					if (!string.IsNullOrWhiteSpace(lote))
+					// Código + nombre del lote
+					if (!string.IsNullOrWhiteSpace(loteCodigo) ||
+						!string.IsNullOrWhiteSpace(loteNombre))
 					{
 						if (texto != "")
 							texto += "\r\n";
 
-						texto += $"Lote: {lote}";
+						texto += $"{loteCodigo} - {loteNombre}";
 					}
 
-					// COLOCAR VALOR EN EL DÍA
+					// ======================================
+					// COLOCAR EN EL DÍA
+					// ======================================
 
 					if (dgv.Columns.Contains(nombreColumna))
 					{
@@ -2167,13 +2219,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 
+			// ==========================================
 			// CONFIGURACIÓN GENERAL
+			// ==========================================
 
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
-
-			// ENCABEZADOS OSCUROS
-			// MISMO COLOR QUE dgvChecador
 
 			dgv.EnableHeadersVisualStyles = false;
 
@@ -2184,7 +2235,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				Color.White;
 
 			dgv.ColumnHeadersDefaultCellStyle.Font =
-				new Font("Segoe UI", 9F, FontStyle.Bold);
+				new Font(
+					"Segoe UI",
+					9F,
+					FontStyle.Bold);
 
 			dgv.ColumnHeadersDefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
@@ -2197,7 +2251,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ColumnHeadersHeight = 35;
 
-			// FORZAR EL COLOR OSCURO EN TODOS LOS ENCABEZADOS
+			// ==========================================
+			// ENCABEZADOS
+			// ==========================================
+
 			foreach (DataGridViewColumn columna in dgv.Columns)
 			{
 				columna.HeaderCell.Style.BackColor =
@@ -2207,13 +2264,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					Color.White;
 
 				columna.HeaderCell.Style.Font =
-					new Font("Segoe UI", 9F, FontStyle.Bold);
+					new Font(
+						"Segoe UI",
+						9F,
+						FontStyle.Bold);
 
 				columna.HeaderCell.Style.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 			}
 
+			// ==========================================
 			// CELDAS
+			// ==========================================
 
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 9F);
@@ -2233,12 +2295,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.DefaultCellStyle.SelectionForeColor =
 				Color.Black;
 
+			// ==========================================
 			// FILAS ALTERNADAS
+			// ==========================================
 
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(238, 241, 245);
 
+			// ==========================================
 			// BORDES
+			// ==========================================
 
 			dgv.CellBorderStyle =
 				DataGridViewCellBorderStyle.Single;
@@ -2246,14 +2312,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.GridColor =
 				Color.LightGray;
 
-			// ALTURA DE FILAS
+			// ==========================================
+			// ALTURA
+			// ==========================================
 
 			dgv.AutoSizeRowsMode =
 				DataGridViewAutoSizeRowsMode.AllCells;
 
 			dgv.RowTemplate.Height = 28;
 
-			// COLUMNA CÓDIGO
+			// ==========================================
+			// CÓDIGO
+			// ==========================================
 
 			dgv.Columns["Codigo"].FillWeight = 45;
 
@@ -2261,21 +2331,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				.DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// IMPORTANTE:
-			// El encabezado de Código también será oscuro
-			dgv.Columns["Codigo"]
-				.HeaderCell
-				.Style
-				.BackColor =
-				Color.FromArgb(22, 32, 45);
-
-			dgv.Columns["Codigo"]
-				.HeaderCell
-				.Style
-				.ForeColor =
-				Color.White;
-
-			// COLUMNA EMPLEADO
+			// ==========================================
+			// EMPLEADO
+			// ==========================================
 
 			dgv.Columns["Empleado"].FillWeight = 120;
 
@@ -2290,7 +2348,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					9F,
 					FontStyle.Bold);
 
-			// COLUMNAS DE LOS DÍAS
+			// ==========================================
+			// DÍAS
+			// ==========================================
 
 			foreach (DataGridViewColumn columna in dgv.Columns)
 			{
@@ -2307,10 +2367,50 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					DataGridViewTriState.True;
 			}
 
+			// ==========================================
 			// FINAL
+			// ==========================================
 
 			dgv.ClearSelection();
 			dgv.CurrentCell = null;
+		}
+		private string NombreCuadrilla(string idCuadrilla)
+		{
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+				return "";
+
+			foreach (object item in _frmA.cboCuadrilla.Items)
+			{
+				DataRowView row = item as DataRowView;
+
+				if (row == null)
+					continue;
+
+				string id =
+					row["id_workGroup"]?
+					.ToString()
+					.Trim();
+
+				if (id == idCuadrilla)
+				{
+					string nombre =
+						row["v_nameWorkGroup"]?
+						.ToString()
+						.Trim();
+
+					return nombre;
+				}
+			}
+
+			// Por si ya viene "001 - VALENTIN"
+			if (idCuadrilla.Contains(" - "))
+			{
+				return idCuadrilla
+					.Substring(idCuadrilla.IndexOf(" - ") + 3)
+					.Trim();
+			}
+
+			return idCuadrilla;
 		}
 		public void CargarDiasSemana()
 		{
@@ -2325,7 +2425,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 
 			DateTime fechaInicio =
-				Convert.ToDateTime(semana["d_startDate_per"]).Date;
+				Convert.ToDateTime(
+					semana["d_startDate_per"]
+				).Date;
 
 			string[] dias =
 			{
@@ -2566,9 +2668,4 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 		}
 	}
-}
-public class DiaSemana
-{
-	public string Nombre { get; set; }
-	public DateTime Fecha { get; set; }
 }

@@ -97,6 +97,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			estado = estado.Trim().ToUpper();
 
+			DialogResult resultado = MessageBox.Show(
+				"¿Está seguro de que desea agregar la asistencia?",
+				"Confirmar asistencia",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (resultado != DialogResult.Yes)
+				return;
+
 			DataTable dt =
 				_frmA.dgvAsistencia.DataSource as DataTable;
 
@@ -105,14 +114,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-				"Vie",
-				"Sab",
-				"Dom",
-				"Lun",
-				"Mar",
-				"Mie",
-				"Jue"
-			};
+		"Vie",
+		"Sab",
+		"Dom",
+		"Lun",
+		"Mar",
+		"Mie",
+		"Jue"
+	};
 
 			foreach (DataGridViewRow filaReloj in _frmA.dgvChecador.Rows)
 			{

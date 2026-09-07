@@ -82,6 +82,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (cboSemana.SelectedIndex == -1)
 				return;
 
+			// Actualizar los días de la semana
+			_clsA.CargarDiasSemana();
+
+			// Si no hay cuadrilla seleccionada,
+			// solamente actualizamos cboDia
 			if (cboCuadrilla.SelectedIndex == -1)
 				return;
 

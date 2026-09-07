@@ -292,6 +292,7 @@
 			// 
 			// btnF
 			// 
+			btnF.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			btnF.BackgroundImage = (Image)resources.GetObject("btnF.BackgroundImage");
 			btnF.BackgroundImageLayout = ImageLayout.Zoom;
 			btnF.Location = new Point(67, 3);
@@ -322,6 +323,7 @@
 			// 
 			// btnS
 			// 
+			btnS.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			btnS.BackgroundImage = (Image)resources.GetObject("btnS.BackgroundImage");
 			btnS.BackgroundImageLayout = ImageLayout.Zoom;
 			btnS.Location = new Point(66, 4);
@@ -353,6 +355,7 @@
 			// 
 			// btnE
 			// 
+			btnE.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			btnE.BackgroundImage = (Image)resources.GetObject("btnE.BackgroundImage");
 			btnE.BackgroundImageLayout = ImageLayout.Zoom;
 			btnE.Location = new Point(66, 4);
@@ -384,6 +387,7 @@
 			// 
 			// btnES
 			// 
+			btnES.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			btnES.BackgroundImage = (Image)resources.GetObject("btnES.BackgroundImage");
 			btnES.BackgroundImageLayout = ImageLayout.Zoom;
 			btnES.Location = new Point(62, 3);
