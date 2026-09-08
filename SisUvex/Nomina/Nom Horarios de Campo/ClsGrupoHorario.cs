@@ -180,15 +180,69 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 					MessageBoxIcon.Error);
 			}
 		}
-		public void ConfigurarDgvHorarios()
+		public bool ValidarHorario()
 		{
-			frm.dgvHorarios.AutoGenerateColumns = true;
-			frm.dgvHorarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			frm.dgvHorarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			frm.dgvHorarios.MultiSelect = false;
-			frm.dgvHorarios.ReadOnly = true;
-			frm.dgvHorarios.AllowUserToAddRows = false;
-			frm.dgvHorarios.AllowUserToDeleteRows = false;
+			if (string.IsNullOrWhiteSpace(frm.txbNombre.Text))
+			{
+				MessageBox.Show(
+					"Debe ingresar el nombre del grupo.",
+					"Datos incompletos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				frm.txbNombre.Focus();
+				return false;
+			}
+
+			if (frm.nudAntesEntrada.Value < 0)
+			{
+				MessageBox.Show(
+					"Debe ingresar los minutos antes de entrada.",
+					"Datos incompletos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				frm.nudAntesEntrada.Focus();
+				return false;
+			}
+
+			if (frm.nudDespuesEntrada.Value < 0)
+			{
+				MessageBox.Show(
+					"Debe ingresar los minutos después de entrada.",
+					"Datos incompletos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				frm.nudDespuesEntrada.Focus();
+				return false;
+			}
+
+			if (frm.nudSalidaAntes.Value < 0)
+			{
+				MessageBox.Show(
+					"Debe ingresar los minutos antes de salida.",
+					"Datos incompletos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				frm.nudSalidaAntes.Focus();
+				return false;
+			}
+
+			if (frm.nudSalidaDespues.Value < 0)
+			{
+				MessageBox.Show(
+					"Debe ingresar los minutos después de salida.",
+					"Datos incompletos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				frm.nudSalidaDespues.Focus();
+				return false;
+			}
+
+			return true;
 		}
 		public void ConfigurarDgvGrupo()
 		{
@@ -296,6 +350,63 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				columna.HeaderCell.Style.SelectionForeColor =
 					Color.White;
 			}
+			frm.dgvGrupo.CellPainting += DgvGrupo_CellPainting;
+		}
+		private void DgvGrupo_CellPainting(
+	object sender,
+	DataGridViewCellPaintingEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
+
+			if (frm.dgvGrupo.Columns[e.ColumnIndex].Name != "Estado")
+				return;
+
+			if (e.Value == null)
+				return;
+
+			string estado = e.Value.ToString().Trim();
+
+			if (estado != "Activo")
+				return;
+
+			// Pintar fondo y bordes normales
+			e.PaintBackground(e.CellBounds, true);
+			e.Paint(
+				e.CellBounds,
+				DataGridViewPaintParts.Border);
+
+			// Punto verde
+			using (Brush brochaVerde =
+				new SolidBrush(Color.Green))
+			{
+				e.Graphics.DrawString(
+					"●",
+					new Font(
+						"Segoe UI",
+						10F,
+						FontStyle.Bold),
+					brochaVerde,
+					e.CellBounds.X + 15,
+					e.CellBounds.Y + 5);
+			}
+
+			// Texto negro
+			using (Brush brochaNegra =
+				new SolidBrush(Color.Black))
+			{
+				e.Graphics.DrawString(
+					"Activo",
+					new Font(
+						"Segoe UI",
+						9F,
+						FontStyle.Bold),
+					brochaNegra,
+					e.CellBounds.X + 35,
+					e.CellBounds.Y + 6);
+			}
+
+			e.Handled = true;
 		}
 		public void CargarDatosGrupo()
 		{
@@ -531,10 +642,14 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 			}
 
 			string idGrupo =
-				frm.dgvGrupo.CurrentRow.Cells["ID"].Value?.ToString();
+				frm.dgvGrupo.CurrentRow.Cells["ID"].Value?
+				.ToString()
+				.Trim();
 
 			string nombreGrupo =
-				frm.dgvGrupo.CurrentRow.Cells["Nombre del grupo"].Value?.ToString();
+				frm.dgvGrupo.CurrentRow.Cells["Nombre del grupo"].Value?
+				.ToString()
+				.Trim();
 
 			if (string.IsNullOrWhiteSpace(idGrupo))
 				return;
@@ -556,26 +671,30 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(
-					"sp_Delete_WorkGroup",
+					"dbo.sp_Delete_WorkGroup",
 					sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.AddWithValue(
+					cmd.Parameters.Add(
 						"@id_workGroup",
-						idGrupo);
+						SqlDbType.Char,
+						3).Value = idGrupo;
 
-					cmd.Parameters.AddWithValue(
+					cmd.Parameters.Add(
 						"@v_userUpdate",
-						User.GetUserName());
+						SqlDbType.VarChar,
+						50).Value = User.GetUserName();
 
 					cmd.ExecuteNonQuery();
 				}
 
 				sql.CloseConectionWrite();
 
+				// Actualizar dgvGrupo
 				CargarDgvGrupo();
 
+				// Limpiar y deshabilitar los campos
 				DeshabilitarCampos();
 
 				MessageBox.Show(
@@ -595,7 +714,8 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 
 				MessageBox.Show(
-					"Error al eliminar el grupo de horario.\n\n" + ex.Message,
+					"Error al eliminar el grupo de horario.\n\n" +
+					ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);

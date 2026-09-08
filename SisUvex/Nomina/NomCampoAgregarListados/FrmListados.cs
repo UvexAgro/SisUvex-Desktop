@@ -132,69 +132,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cls.ImprimirListado();
 		}
 
-		private void btnQuitar_Click(object sender, EventArgs e)
-		{
-			if (dgvListado.CurrentRow == null)
-			{
-				MessageBox.Show(
-					"Seleccione un empleado.",
-					"Quitar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return;
-			}
-
-			if (!ObtenerSemanaSeleccionada(
-				out string secuenciaSemana,
-				out DateTime fechaInicio,
-				out DateTime fechaFin))
-			{
-				return;
-			}
-
-			string idEmpleado =
-				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
-
-			if (string.IsNullOrWhiteSpace(idEmpleado) ||
-				string.IsNullOrWhiteSpace(idCuadrilla))
-			{
-				MessageBox.Show(
-					"No se pudo obtener el empleado o la cuadrilla.",
-					"Quitar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-			bool eliminado = cls.EliminarEmpleadoCuadrilla(
-				idEmpleado,
-				idCuadrilla,
-				secuenciaSemana,
-				fechaInicio,
-				fechaFin);
-			if (eliminado)
-			{
-				MessageBox.Show(
-					"Empleado quitado correctamente.",
-					"Quitar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				cls.CargarEmpleadosCuadrilla(
-					idCuadrilla,
-					secuenciaSemana,
-					fechaInicio,
-					fechaFin);
-
-				cls.ActualizarTotalEmpleados();
-			}
-		}
-
 		private void btnActulizar_Click(object sender, EventArgs e)
 		{
 			cls.btnCopiarDatosDeLaSemanaAnterior();
@@ -235,6 +172,81 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				Convert.ToDateTime(semana["d_endDate_per"]);
 
 			return true;
+		}
+
+		private void btnQuitar_Click(object sender, EventArgs e)
+		{
+			if (dgvListado.CurrentRow == null)
+			{
+				MessageBox.Show(
+					"Seleccione un empleado.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			if (dgvCuadrilla.CurrentRow == null)
+			{
+				MessageBox.Show(
+					"Seleccione una cuadrilla.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			if (!ObtenerSemanaSeleccionada(
+				out string secuenciaSemana,
+				out DateTime fechaInicio,
+				out DateTime fechaFin))
+			{
+				return;
+			}
+
+			string idEmpleado =
+				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+			if (string.IsNullOrWhiteSpace(idEmpleado) ||
+				string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se pudo obtener el empleado o la cuadrilla.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			bool eliminado = cls.EliminarEmpleadoCuadrilla(
+				idEmpleado,
+				idCuadrilla,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
+
+			if (eliminado)
+			{
+				MessageBox.Show(
+					"Empleado quitado correctamente.",
+					"Quitar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				cls.CargarEmpleadosCuadrilla(
+					idCuadrilla,
+					secuenciaSemana,
+					fechaInicio,
+					fechaFin);
+
+				cls.ActualizarTotalEmpleados();
+			}
 		}
 	}
 }

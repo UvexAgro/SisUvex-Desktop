@@ -2109,7 +2109,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				int indice = dgv.Rows.Add();
 
-				// Código
+				// ==========================================
+				// CÓDIGO
+				// ==========================================
+
 				dgv.Rows[indice]
 					.Cells["Codigo"]
 					.Value =
@@ -2117,7 +2120,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						.ToString()
 						.Trim();
 
-				// Empleado
+				// ==========================================
+				// EMPLEADO
+				// ==========================================
+
 				dgv.Rows[indice]
 					.Cells["Empleado"]
 					.Value =
@@ -2142,13 +2148,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					// CUADRILLA
 					// ======================================
 
-					string idCuadrilla =
-						row["Cuadrilla"] == DBNull.Value
-						? ""
-						: row["Cuadrilla"].ToString().Trim();
-
 					string cuadrilla =
-						NombreCuadrilla(idCuadrilla);
+						row["Cuadrilla"] == DBNull.Value
+							? ""
+							: row["Cuadrilla"]
+								.ToString()
+								.Trim();
 
 					// ======================================
 					// ACTIVIDAD
@@ -2165,15 +2170,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					// LOTE
 					// ======================================
 
-					string loteCodigo =
+					string lote =
 						row["Lote"] == DBNull.Value
 							? ""
-							: row["Lote"].ToString().Trim();
-
-					string loteNombre =
-						row["NombreLote"] == DBNull.Value
-							? ""
-							: row["NombreLote"].ToString().Trim();
+							: row["Lote"]
+								.ToString()
+								.Trim();
 
 					// ======================================
 					// ARMAR TEXTO
@@ -2187,7 +2189,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						texto += cuadrilla;
 					}
 
-					// Solo nombre de actividad
+					// Código + nombre de actividad
 					if (!string.IsNullOrWhiteSpace(actividad))
 					{
 						if (texto != "")
@@ -2196,14 +2198,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						texto += actividad;
 					}
 
-					// Código + nombre del lote
-					if (!string.IsNullOrWhiteSpace(loteCodigo) ||
-						!string.IsNullOrWhiteSpace(loteNombre))
+					// Código + nombre de lote
+					if (!string.IsNullOrWhiteSpace(lote))
 					{
 						if (texto != "")
 							texto += "\r\n";
 
-						texto += $"{loteCodigo} - {loteNombre}";
+						texto += lote;
 					}
 
 					// ======================================

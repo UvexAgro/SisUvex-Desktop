@@ -83,26 +83,32 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				if (marcado)
 				{
 					// EMPAQUE
-					if (dgvLista.Columns.Contains("id_attendence"))
+					if (!esCampo)
 					{
-						if (row.Cells["id_attendence"].Value != null &&
-							row.Cells["id_attendence"].Value != DBNull.Value)
+						if (dgvLista.Columns.Contains("id_attendence"))
 						{
-							ids.Add(
-								row.Cells["id_attendence"].Value.ToString()
-							);
+							if (row.Cells["id_attendence"].Value != null &&
+								row.Cells["id_attendence"].Value != DBNull.Value)
+							{
+								ids.Add(
+									row.Cells["id_attendence"].Value.ToString()
+								);
+							}
 						}
 					}
 
 					// CAMPO
-					else if (dgvLista.Columns.Contains("id_workGroupEmployeeDaily"))
+					else
 					{
-						if (row.Cells["id_workGroupEmployeeDaily"].Value != null &&
-							row.Cells["id_workGroupEmployeeDaily"].Value != DBNull.Value)
+						if (dgvLista.Columns.Contains("id_attendance"))
 						{
-							ids.Add(
-								row.Cells["id_workGroupEmployeeDaily"].Value.ToString()
-							);
+							if (row.Cells["id_attendance"].Value != null &&
+								row.Cells["id_attendance"].Value != DBNull.Value)
+							{
+								ids.Add(
+									row.Cells["id_attendance"].Value.ToString()
+								);
+							}
 						}
 					}
 				}
@@ -151,21 +157,45 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			decimal monto =
 				Convert.ToDecimal(dgvLista.CurrentRow.Cells["Monto"].Value);
 
-			bool esCampo = dgvLista.Columns.Contains("id_workGroupEmployeeDaily");
-
 			string idAttendence = null;
 			string idWorkGroupEmployeeDaily = null;
 
+			// CAMPO
 			if (esCampo)
 			{
-				// CAMPO
+				if (!dgvLista.Columns.Contains("id_attendance"))
+				{
+					MessageBox.Show("No se encontró el identificador de asistencia de campo.");
+					return;
+				}
+
+				if (dgvLista.CurrentRow.Cells["id_attendance"].Value == null ||
+					dgvLista.CurrentRow.Cells["id_attendance"].Value == DBNull.Value)
+				{
+					MessageBox.Show("El registro no tiene asistencia.");
+					return;
+				}
+
 				idWorkGroupEmployeeDaily =
-					dgvLista.CurrentRow.Cells["id_workGroupEmployeeDaily"]
+					dgvLista.CurrentRow.Cells["id_attendance"]
 					.Value.ToString();
 			}
+			// EMPAQUE
 			else
 			{
-				// EMPAQUE
+				if (!dgvLista.Columns.Contains("id_attendence"))
+				{
+					MessageBox.Show("No se encontró el identificador de asistencia.");
+					return;
+				}
+
+				if (dgvLista.CurrentRow.Cells["id_attendence"].Value == null ||
+					dgvLista.CurrentRow.Cells["id_attendence"].Value == DBNull.Value)
+				{
+					MessageBox.Show("El registro no tiene asistencia.");
+					return;
+				}
+
 				idAttendence =
 					dgvLista.CurrentRow.Cells["id_attendence"]
 					.Value.ToString();
@@ -181,12 +211,15 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
 				if (esCampo)
+				{
 					cls.ObtenerEmpleadosCampoDia();
+				}
 				else
+				{
 					cls.ObtenerAsistenciaEmpaqueDia();
+				}
 			}
 		}
-
 		private void btnEliminar_Click(object sender, EventArgs e)
 		{
 			cls.EliminarIngresoDesdeGrid(dgvLista);

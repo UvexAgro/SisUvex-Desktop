@@ -58,46 +58,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
                     ON ded.id_Deductions = mi.id_Deductions ";
 
 		string queryOrder = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
-
-		string queryCampo = @"
-			SELECT
-				wg.id_workGroupEmployeeDaily,
-				wg.id_employee AS Empleado,
-				CONVERT(DATE, wg.d_date) AS Fecha,
-				emp.v_lastNamePat AS 'Apellido paterno',
-				emp.v_lastNameMat AS 'Apellido materno',
-				emp.v_name AS Nombre,
-				wg.id_activity AS Actividad,
-				tab.v_descripcion_tab AS 'Descripción actividad',
-				wg.id_workGroup AS id_workGroup,
-
-				con.id_concept AS id_concept,
-				con.v_concept AS Concepto,
-				con.n_unit AS Horas,
-				mi.n_amount AS Monto,
-
-				mi.id_Deductions,
-				ded.v_descripcion_ded AS 'Descripción Deducción',
-				mi.n_importefijo_ded AS 'Descuento'
-
-			FROM Nom_WorkGroupEmployeeDaily wg
-
-			JOIN Nom_Employees emp
-				ON emp.id_employee = wg.id_employee
-
-			LEFT JOIN Nom_Tabulador tab
-				ON tab.c_codigo_tab = wg.id_activity
-
-			LEFT JOIN Nom_MiscellaneousIncome mi
-				ON mi.id_workGroupEmployeeDaily = wg.id_workGroupEmployeeDaily
-
-			LEFT JOIN Nom_concept con
-				ON con.id_concept = mi.id_concept
-
-			LEFT JOIN Nom_Deductions ded
-				ON ded.id_Deductions = mi.id_Deductions";
-
-		string queryOrderCampo = "ORDER BY emp.v_lastNamePat, emp.v_lastNameMat, emp.v_name ";
 		public void ObtenerAsistenciaEmpaqueDia()
 		{
 			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
@@ -180,6 +140,39 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		{
 			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
 
+			string sufijo = "";
+
+			switch (frmDia.dtpDia.Value.DayOfWeek)
+			{
+				case DayOfWeek.Friday:
+					sufijo = "vie";
+					break;
+
+				case DayOfWeek.Saturday:
+					sufijo = "sab";
+					break;
+
+				case DayOfWeek.Sunday:
+					sufijo = "dom";
+					break;
+
+				case DayOfWeek.Monday:
+					sufijo = "lun";
+					break;
+
+				case DayOfWeek.Tuesday:
+					sufijo = "mar";
+					break;
+
+				case DayOfWeek.Wednesday:
+					sufijo = "mie";
+					break;
+
+				case DayOfWeek.Thursday:
+					sufijo = "jue";
+					break;
+			}
+
 			string idCuadrilla = "";
 
 			if (frmDia.cboCuadrillaCampo.SelectedValue != null)
@@ -189,54 +182,72 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			string filtroCuadrilla = "";
 
-			// Solo filtrar si NO está seleccionada TODAS
 			if (!string.IsNullOrEmpty(idCuadrilla))
 			{
 				filtroCuadrilla =
-					$" AND wg.id_workGroup = '{idCuadrilla}'";
+					$" AND wg.id_workGroup_{sufijo} = '{idCuadrilla}'";
 			}
 
 			string queryFinal = $@"
-			{queryCampo}
-			WHERE CONVERT(DATE, wg.d_date) = '{fecha}'
-			{filtroCuadrilla}
-			ORDER BY
-            emp.v_lastNamePat,
-            emp.v_lastNameMat,
-            emp.v_name";
+				SELECT
+					wg.id_attendance,
+					wg.id_employee AS Empleado,
+					CONVERT(DATE, '{fecha}') AS Fecha,
+
+					emp.v_lastNamePat AS 'Apellido paterno',
+					emp.v_lastNameMat AS 'Apellido materno',
+					emp.v_name AS Nombre,
+
+					wg.id_activity_{sufijo} AS Actividad,
+					tab.v_descripcion_tab AS 'Descripción actividad',
+
+					wg.id_workGroup_{sufijo} AS id_workGroup,
+
+					con.id_concept AS id_concept,
+					con.v_concept AS Concepto,
+					con.n_unit AS Horas,
+					mi.n_amount AS Monto,
+
+					mi.id_Deductions,
+					ded.v_descripcion_ded AS 'Descripción Deducción',
+					mi.n_importefijo_ded AS 'Descuento'
+
+				FROM dbo.Nom_EmployeeAttendanceWeekly wg
+
+				JOIN dbo.Nom_Employees emp
+					ON emp.id_employee = wg.id_employee
+
+				LEFT JOIN dbo.Nom_Tabulador tab
+					ON tab.c_codigo_tab = wg.id_activity_{sufijo}
+
+				LEFT JOIN Nom_MiscellaneousIncome mi
+					ON mi.id_workGroupEmployeeDaily = wg.id_attendance
+
+				LEFT JOIN Nom_concept con
+					ON con.id_concept = mi.id_concept
+
+				LEFT JOIN Nom_Deductions ded
+					ON ded.id_Deductions = mi.id_Deductions
+
+				WHERE
+					'{fecha}' BETWEEN wg.d_startDate_per AND wg.d_endDate_per
+
+					AND wg.b_{sufijo} = 1
+
+					{filtroCuadrilla}
+
+				ORDER BY
+					emp.v_lastNamePat,
+					emp.v_lastNameMat,
+					emp.v_name;
+				";
 
 			frmDia.dgvLista.DataSource =
 				ClsQuerysDB.GetDataTable(queryFinal);
 
-
-			if (frmDia.dgvLista.Columns.Contains("id_workGroupEmployeeDaily"))
-				frmDia.dgvLista.Columns["id_workGroupEmployeeDaily"].Visible = false;
+			if (frmDia.dgvLista.Columns.Contains("id_attendance"))
+				frmDia.dgvLista.Columns["id_attendance"].Visible = false;
 		}
-		public void ObtenerAsistenciaEmpaquePorEmpleadoYFecha()
-		{
-			string fecha = frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
-			string idEmpleado = frmDia.txbEmpleado.Text.Trim();
-
-			if (string.IsNullOrEmpty(idEmpleado))
-			{
-				MessageBox.Show("Ingrese un empleado");
-				return;
-			}
-
-			string queryFinal = $"{query} WHERE CONVERT(DATE, lst.d_attendence) = '{fecha}'AND lst.id_employee = '{idEmpleado}'{ queryOrder}";
-
-			frmDia.dgvLista.DataSource = ClsQuerysDB.GetDataTable(queryFinal);
-
-			if (frmDia.dgvLista.Columns.Contains("id_attendence"))
-				frmDia.dgvLista.Columns["id_attendence"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("id_concept"))
-				frmDia.dgvLista.Columns["id_concept"].Visible = false;
-
-			if (frmDia.dgvLista.Columns.Contains("id_Deductions"))
-				frmDia.dgvLista.Columns["id_Deductions"].Visible = false;
-		}
-
 		public void CboConceptos()
 		{
 			DataTable dtcbo = ClsQuerysDB.GetDataTable($"SELECT id_concept AS [" + Column.id + "], " +
@@ -301,25 +312,27 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 				string query;
 
+				// CAMPO
 				if (frmAdd.EsCampo)
 				{
-				query = $@"
-				EXEC sp_Nom_MiscellaneousIncome_Insert
-					NULL,
-					'{idRegistro}',
-					'{idConcepto}',
-					{monto},
-					'SYSTEM'";
+					query = $@"
+			EXEC sp_Nom_MiscellaneousIncome_Insert
+				NULL,
+				'{idRegistro}',
+				'{idConcepto}',
+				{monto},
+				'SYSTEM'";
 				}
+				// EMPAQUE
 				else
 				{
 					query = $@"
-					EXEC sp_Nom_MiscellaneousIncome_Insert
-						'{idRegistro}',
-						NULL,
-						'{idConcepto}',
-						{monto},
-						'SYSTEM'";
+			EXEC sp_Nom_MiscellaneousIncome_Insert
+				'{idRegistro}',
+				NULL,
+				'{idConcepto}',
+				{monto},
+				'SYSTEM'";
 				}
 
 				ClsQuerysDB.ExecuteQuery(query);
@@ -330,7 +343,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				$"Insertados: {insertados}\n" +
 				$"Omitidos (ya existían): {omitidos}");
 		}
-
 		public void ActualizarIngreso()
 		{
 			string idConceptoNuevo = frmAdd.cboConceptos.SelectedValue?.ToString();
@@ -374,26 +386,28 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (frmAdd.EsCampo)
 			{
 				// CAMPO
+				// IdWorkGroupEmployeeDaily contiene el id_attendance
+				// de Nom_EmployeeAttendanceWeekly
 				query = $@"
-				EXEC sp_Nom_MiscellaneousIncome_Update
-					NULL,
-					'{frmAdd.IdWorkGroupEmployeeDaily}',
-					'{frmAdd.IdConcepto}',
-					'{idConceptoNuevo}',
-					{monto},
-					'SYSTEM'";
+			EXEC sp_Nom_MiscellaneousIncome_Update
+			NULL,
+			'{frmAdd.IdWorkGroupEmployeeDaily}',
+			'{frmAdd.IdConcepto}',
+			'{idConceptoNuevo}',
+			{monto},
+			'SYSTEM'";
 			}
 			else
 			{
 				// EMPAQUE
 				query = $@"
-				EXEC sp_Nom_MiscellaneousIncome_Update
-					'{frmAdd.IdAttendence}',
-					NULL,
-					'{frmAdd.IdConcepto}',
-					'{idConceptoNuevo}',
-					{monto},
-					'SYSTEM'";
+			EXEC sp_Nom_MiscellaneousIncome_Update
+			'{frmAdd.IdAttendence}',
+			NULL,
+			'{frmAdd.IdConcepto}',
+			'{idConceptoNuevo}',
+			{monto},
+			'SYSTEM'";
 			}
 
 			ClsQuerysDB.ExecuteQuery(query);
@@ -418,13 +432,11 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			string query;
 
-
 			// CAMPO
-
-			if (dgv.Columns.Contains("id_workGroupEmployeeDaily"))
+			if (dgv.Columns.Contains("id_attendance"))
 			{
 				string idWorkGroupEmployeeDaily =
-					dgv.CurrentRow.Cells["id_workGroupEmployeeDaily"].Value.ToString();
+					dgv.CurrentRow.Cells["id_attendance"].Value.ToString();
 
 				if (MessageBox.Show(
 					"¿Desea eliminar el ingreso seleccionado?",
@@ -441,7 +453,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 
 			// EMPAQUE
-
 			else if (dgv.Columns.Contains("id_attendence"))
 			{
 				string idAttendence =
@@ -454,7 +465,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 					MessageBoxIcon.Question) == DialogResult.No)
 					return;
 
-			    query = $@"
+				query = $@"
 				EXEC sp_Nom_MiscellaneousIncome_Delete
 					'{idAttendence}',
 					NULL,
@@ -469,7 +480,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			ClsQuerysDB.ExecuteQuery(query);
 
 			// Recargar según el tipo de nómina
-			if (dgv.Columns.Contains("id_workGroupEmployeeDaily"))
+			if (dgv.Columns.Contains("id_attendance"))
 			{
 				ObtenerEmpleadosCampoDia();
 			}
@@ -486,19 +497,19 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			{
 				// CAMPO
 				query = $@"
-			SELECT COUNT(*)
-			FROM Nom_MiscellaneousIncome
-			WHERE id_workGroupEmployeeDaily = '{idRegistro}'
-			  AND id_concept IS NOT NULL";
+		SELECT COUNT(*)
+		FROM Nom_MiscellaneousIncome
+		WHERE id_workGroupEmployeeDaily = '{idRegistro}'
+		  AND id_concept IS NOT NULL";
 			}
 			else
 			{
 				// EMPAQUE
 				query = $@"
-			SELECT COUNT(*)
-			FROM Nom_MiscellaneousIncome
-			WHERE id_attendence = '{idRegistro}'
-			  AND id_concept IS NOT NULL";
+		SELECT COUNT(*)
+		FROM Nom_MiscellaneousIncome
+		WHERE id_attendence = '{idRegistro}'
+		  AND id_concept IS NOT NULL";
 			}
 
 			object result = ClsQuerysDB.GetData(query);

@@ -67,6 +67,9 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 
 		private void btnGuardar_Click(object sender, EventArgs e)
 		{
+			if (!clsH.ValidarHorario())
+				return;
+
 			if (modificando)
 			{
 				clsH.ActualizarHorario();
