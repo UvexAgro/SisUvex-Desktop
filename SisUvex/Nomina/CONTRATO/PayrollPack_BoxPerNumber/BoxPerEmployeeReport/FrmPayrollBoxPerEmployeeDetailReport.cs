@@ -46,6 +46,14 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             {
                 e.SuppressKeyPress = true;
                 cls.BtnAddEmployee();
+                return;
+            }
+
+            // Ctrl+V / Shift+Insert: forzar pegado como texto plano (sin formato de Excel).
+            if ((e.Control && e.KeyCode == Keys.V) || (e.Shift && e.KeyCode == Keys.Insert))
+            {
+                e.SuppressKeyPress = true;
+                cls.PasteEmployeeCodesAsPlainText();
             }
         }
 

@@ -59,21 +59,16 @@ namespace SisUvex.Assets.Vehicle.Vehicle
             controlList.Add(_frmAdd.txbId, "Ingresar el código del vehículo.");
             controlList.Add(_frmAdd.txbIdVehicleType, "Seleccionar el tipo de vehículo.");
             controlList.Add(_frmAdd.txbEcoNumber, "Ingresar el número económico.");
-            controlList.Add(_frmAdd.cboPrefix, "Ingresar el prefijo del vehículo válido.");
         }
 
         private void LoadComboBoxes()
         {
-            _frmAdd.cboPrefix.Tag = "text";
-            _frmAdd.cboPrefix.DataSource = EVehicle.GetDtPrefix();
-            _frmAdd.cboPrefix.DisplayMember = "v_prefix";
-            _frmAdd.cboPrefix.SelectedIndex = -1;
-
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVehicleType, ClsObject.VehicleType.Cbo);
             ClsComboBoxes.CboLoadActives(_frmAdd.cboGrower, Grower.Cbo);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboVehicleType, _frmAdd.txbIdVehicleType);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboGrower, _frmAdd.txbIdGrower);
+            ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboGrower, _frmAdd.chbGrowerRemoved);
         }
 
         public void OpenFrmAdd()
@@ -115,8 +110,8 @@ namespace SisUvex.Assets.Vehicle.Vehicle
             entity.GetVehicle(idAddModify ?? "0");
 
             _frmAdd.txbId.Text = entity.idVehicle;
-            _frmAdd.cboPrefix.Text = entity.prefix;
             _frmAdd.txbEcoNumber.Text = entity.ecoNumber;
+            _frmAdd.txbVehicleDescription.Text = entity.vehicleDescription;
             _frmAdd.txbSerialNumber.Text = entity.serialNumber;
             _frmAdd.txbPlates.Text = entity.plate;
             _frmAdd.txbMake.Text = entity.make;
@@ -136,7 +131,6 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                 idVehicle = _frmAdd.txbId.Text,
                 idVehicleType = _frmAdd.txbIdVehicleType.Text,
                 active = _frmAdd.cboActive.SelectedIndex == 1 ? "1" : "0",
-                prefix = _frmAdd.cboPrefix.Text,
                 ecoNumber = _frmAdd.txbEcoNumber.Text,
                 serialNumber = _frmAdd.txbSerialNumber.Text,
                 plate = _frmAdd.txbPlates.Text,
@@ -144,6 +138,7 @@ namespace SisUvex.Assets.Vehicle.Vehicle
                 model = _frmAdd.txbModel.Text,
                 year = _frmAdd.txbYear.Text,
                 comments = _frmAdd.txbComments.Text,
+                vehicleDescription = _frmAdd.txbVehicleDescription.Text,
                 idGrower = _frmAdd.txbIdGrower.Text
             };
 

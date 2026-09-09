@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SisUvex.Catalogos.Metods.Querys;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
+using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Catalogos.Metods.Values;
 
 namespace SisUvex.Assets.Vehicle.VehicleType
@@ -15,6 +11,8 @@ namespace SisUvex.Assets.Vehicle.VehicleType
         public string? idVehicleType { get; set; }
         public string? nameVehicleType { get; set; }
         public string? implements { get; set; }
+        public string? prefix { get; set; }
+        public string? meterType { get; set; }
 
         public static string GetNextId()
         {
@@ -35,6 +33,8 @@ namespace SisUvex.Assets.Vehicle.VehicleType
                     idVehicleType = dr.GetValue(dr.GetOrdinal("id_vehicleType")).ToString();
                     nameVehicleType = dr.GetValue(dr.GetOrdinal("v_nameVehicleType")).ToString();
                     implements = dr.GetValue(dr.GetOrdinal("v_implements")).ToString();
+                    prefix = dr.GetValue(dr.GetOrdinal("v_prefix")).ToString();
+                    meterType = dr.GetValue(dr.GetOrdinal("c_meterType")).ToString();
                 }
             }
             catch (Exception ex)
@@ -56,20 +56,24 @@ namespace SisUvex.Assets.Vehicle.VehicleType
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new("sp_AstVehicleTypeAdd", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@nameVehicleType", ClsValues.IfEmptyToDBNull(nameVehicleType));
-                cmd.Parameters.AddWithValue("@implements", ClsValues.IfEmptyToDBNull(implements));
-                cmd.Parameters.AddWithValue("@user", User.GetUserName());
 
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
+                SqlParameter idOut = new("@id_out", SqlDbType.Int)
                 {
-                    string? id = dr.GetValue(dr.GetOrdinal("id_vehicleType")).ToString();
-                    return (true, id);
-                }
-                else
-                {
-                    return (false, null);
-                }
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(idOut);
+                cmd.Parameters.AddWithValue("@v_name", ClsValues.IfEmptyToDBNull(nameVehicleType));
+                cmd.Parameters.AddWithValue("@v_implements", ClsValues.IfEmptyToDBNull(implements));
+                cmd.Parameters.AddWithValue("@v_prefix", ClsValues.IfEmptyToDBNull(prefix));
+                cmd.Parameters.AddWithValue("@c_meterType", ClsValues.IfEmptyToDBNull(meterType));
+                cmd.Parameters.AddWithValue("@userCreate", User.GetUserName());
+
+                cmd.ExecuteNonQuery();
+
+                if (idOut.Value != null && idOut.Value != DBNull.Value)
+                    return (true, idOut.Value.ToString());
+
+                return (false, null);
             }
             catch (Exception ex)
             {
@@ -90,20 +94,15 @@ namespace SisUvex.Assets.Vehicle.VehicleType
                 sql.OpenConectionWrite();
                 SqlCommand cmd = new("sp_AstVehicleTypeModify", sql.cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", idVehicleType);
-                cmd.Parameters.AddWithValue("@nameVehicleType", ClsValues.IfEmptyToDBNull(nameVehicleType));
-                cmd.Parameters.AddWithValue("@implements", ClsValues.IfEmptyToDBNull(implements));
-                cmd.Parameters.AddWithValue("@user", User.GetUserName());
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
-                {
-                    string? id = dr.GetValue(dr.GetOrdinal("id_vehicleType")).ToString();
-                    return (true, id);
-                }
-                else
-                {
-                    return (false, null);
-                }
+                cmd.Parameters.AddWithValue("@id_vehicleType", idVehicleType);
+                cmd.Parameters.AddWithValue("@v_name", ClsValues.IfEmptyToDBNull(nameVehicleType));
+                cmd.Parameters.AddWithValue("@v_implements", ClsValues.IfEmptyToDBNull(implements));
+                cmd.Parameters.AddWithValue("@v_prefix", ClsValues.IfEmptyToDBNull(prefix));
+                cmd.Parameters.AddWithValue("@c_meterType", ClsValues.IfEmptyToDBNull(meterType));
+                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
+
+                cmd.ExecuteNonQuery();
+                return (true, idVehicleType);
             }
             catch (Exception ex)
             {

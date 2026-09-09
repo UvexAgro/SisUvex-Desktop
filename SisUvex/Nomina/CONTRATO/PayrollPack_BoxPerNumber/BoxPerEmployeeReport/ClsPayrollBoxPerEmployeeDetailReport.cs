@@ -266,16 +266,51 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         }
 
         /// <summary>
-        /// Parsea el texto del RichTextBox y devuelve códigos de empleado únicos y no vacíos.
-        /// Compatible con copia de celdas de Excel (separadas por saltos de línea o tabuladores).
+        /// Parsea el texto del RichTextBox y devuelve códigos de empleado únicos, no vacíos y normalizados.
+        /// Compatible con copia de celdas de Excel (separadas por saltos de línea o tabuladores) y con
+        /// captura manual usando Shift+Enter, que en un RichTextBox inserta un salto de línea "suave" (\v)
+        /// en lugar de \r\n.
         /// </summary>
         private static IEnumerable<string> ParseEmployeeCodes(string input)
         {
             return input
-                .Split(new[] { '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { '\r', '\n', '\t', '\v' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Trim())
                 .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(NormalizeEmployeeCode)
                 .Distinct(StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Si el código es completamente numérico y tiene menos de 6 dígitos, lo rellena con ceros a la izquierda
+        /// (ej. "38" → "000038"). Los códigos alfanuméricos (ej. "MD0099") se dejan sin cambios.
+        /// </summary>
+        private static string NormalizeEmployeeCode(string code)
+        {
+            string trimmed = code.Trim();
+
+            if (trimmed.Length > 0 && trimmed.Length < 6 && trimmed.All(char.IsDigit))
+                return trimmed.PadLeft(6, '0');
+
+            return trimmed;
+        }
+
+        /// <summary>
+        /// Pega el contenido del portapapeles como texto plano (sin formato/colores de Excel),
+        /// reemplazando tabuladores por saltos de línea para que cada código de empleado quede en su propia línea.
+        /// </summary>
+        public void PasteEmployeeCodesAsPlainText()
+        {
+            if (frm == null || !Clipboard.ContainsText()) return;
+
+            string text = Clipboard.GetText(TextDataFormat.UnicodeText);
+            if (string.IsNullOrEmpty(text))
+                text = Clipboard.GetText(TextDataFormat.Text);
+            if (string.IsNullOrEmpty(text)) return;
+
+            text = text.Replace("\t", Environment.NewLine);
+
+            frm.txbIdEmployee.SelectedText = text;
         }
 
         /// <summary>

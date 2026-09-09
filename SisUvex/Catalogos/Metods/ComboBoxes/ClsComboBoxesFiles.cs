@@ -59,6 +59,23 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             return dataTable;
         }
 
+        /// <summary>
+        /// Fuerza que la próxima llamada a <see cref="GetCboCatalogDataTable"/> para <paramref name="catalogName"/>
+        /// vuelva a consultar la base de datos, ignorando el archivo cacheado en disco.
+        /// Se necesita para catálogos como <see cref="ClsObject.AttendanceType.Cbo"/> cuya tabla no tiene
+        /// un registro de actualización en Pack_TablesUpdates (por lo que la comparación de fechas nunca
+        /// detecta cambios por sí sola); se debe llamar manualmente después de cualquier alta/modificación/
+        /// cambio de estatus hecho desde la aplicación.
+        /// </summary>
+        public static void InvalidateCache(string catalogName)
+        {
+            if (lastUpdateDates.Count == 0)
+                LoadLastUpdateDates();
+
+            lastUpdateDates[catalogName] = DateTime.MinValue.ToString();
+            SaveLastUpdateDates();
+        }
+
         public static void SaveLastUpdateDates()
         {
             //GUARDAR EL ARCHIVO DE LAS FECHAS DE ACTUALIZACIONES
@@ -276,6 +293,9 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.LabelLegend.Cbo:
                     queryDataTable = ClsObject.LabelLegend.QueryCbo;
                     break;
+                case ClsObject.AttendanceType.Cbo:
+                    queryDataTable = ClsObject.AttendanceType.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -449,6 +469,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.TypeBox.TableName;
                 case ClsObject.LabelLegend.Cbo:
                     return ClsObject.LabelLegend.TableName;
+                case ClsObject.AttendanceType.Cbo:
+                    return ClsObject.AttendanceType.TableName;
                 default:
                     return string.Empty;// Handle unknown table names
             }
