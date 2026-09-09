@@ -472,8 +472,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.AllowUserToAddRows = false;
             dgvReport.AllowUserToDeleteRows = false;
             dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             dgvReport.BackgroundColor = SystemColors.Control;
             dgvReport.BorderStyle = BorderStyle.Fixed3D;
             dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -500,7 +500,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvReport.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvReport.RowHeadersVisible = false;
-            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvReport.Size = new Size(909, 342);
             dgvReport.TabIndex = 86;

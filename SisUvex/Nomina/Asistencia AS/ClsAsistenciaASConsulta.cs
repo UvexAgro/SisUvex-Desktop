@@ -11,6 +11,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Media;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using static SisUvex.Catalogos.Metods.ClsObject;
@@ -72,6 +74,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (frm == null) return;
 
             SetControls();
+            DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvReport);
+            DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvReport);
             frm.lblEmployeeAdvice.Text = string.Empty;
             ShowEmployeeList();
         }
@@ -623,7 +627,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             e.CellStyle.BackColor          = color;
             e.CellStyle.SelectionBackColor = ControlPaint.Dark(color, 0.1f);
             if (fontStyle != FontStyle.Regular)
-                e.CellStyle.Font = new Font(frm.dgvReport.Font, fontStyle);
+                e.CellStyle.Font = DgvAsistenciaASPerf.GetStyledFont(frm.dgvReport.Font, fontStyle);
         }
 
         // ── Comentarios de las faltas (tooltip + marcador visual) ─────────────
@@ -1030,18 +1034,32 @@ namespace SisUvex.Nomina.Asistencia_AS
             _showingReport   = true;
             _showingCalendar = false;
 
-            frm.dgvReport.ColumnHeadersVisible = true;
-            frm.dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            frm.dgvReport.ReadOnly = true;
-            frm.dgvReport.AutoGenerateColumns = true;
-            frm.dgvReport.DataSource = null;
-            frm.dgvReport.DataSource = _dtReportPreview;
+            DataGridView dgv = frm.dgvReport;
+            using (DgvAsistenciaASPerf.PausePainting(dgv))
+            {
+                dgv.ColumnHeadersVisible = true;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                dgv.ReadOnly = true;
+                dgv.AutoGenerateColumns = true;
+                dgv.DataSource = null;
+                dgv.DataSource = _dtReportPreview;
 
-            ApplyDayColumnHeaders();
+                ApplyDayColumnHeaders();
 
-            // El encabezado de fecha usa 2 líneas (mes-día / día de semana); se necesita más alto
-            // y sin la reserva de espacio de la flecha de "ordenar" para aprovechar más celdas en pantalla.
-            frm.dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                // El encabezado de fecha usa 2 líneas (mes-día / día de semana); se necesita más alto
+                // y sin la reserva de espacio de la flecha de "ordenar" para aprovechar más celdas en pantalla.
+                dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+                // Anchos fijos después de un único ajuste: AllCells permanente recalcula en cada scroll.
+                foreach (DataGridViewColumn col in dgv.Columns)
+                {
+                    if (TryParseDayColumn(col.Name, out _))
+                        col.Width = 44;
+                    else
+                        dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
+                }
+            }
 
             frm.chbShowReport.Checked = true;
             frm.chbShowEmployees.Checked = false;
@@ -1065,13 +1083,17 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             DataTable dtCalendar = _calendarCls.BuildCalendarTable(_dtReportPreview, _reportDays, _attendanceStylesByPrefix);
 
-            frm.dgvReport.ReadOnly = true;
-            frm.dgvReport.AutoGenerateColumns = true;
-            frm.dgvReport.DataSource = null;
-            frm.dgvReport.DataSource = dtCalendar;
+            using (DgvAsistenciaASPerf.PausePainting(frm.dgvReport))
+            {
+                frm.dgvReport.ReadOnly = true;
+                frm.dgvReport.AutoGenerateColumns = true;
+                frm.dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                frm.dgvReport.DataSource = null;
+                frm.dgvReport.DataSource = dtCalendar;
 
-            _showingCalendar = true;
-            _calendarCls.ApplyHeadersAndFormatting(frm.dgvReport);
+                _showingCalendar = true;
+                _calendarCls.ApplyHeadersAndFormatting(frm.dgvReport);
+            }
 
             frm.chbShowReportCalendar.Checked = true;
             frm.chbShowReport.Checked = false;
@@ -1121,15 +1143,21 @@ namespace SisUvex.Nomina.Asistencia_AS
             _showingReport   = false;
             _showingCalendar = false;
 
-            frm.dgvReport.ColumnHeadersVisible = true;
-            frm.dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            frm.dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            frm.dgvReport.ReadOnly = false;
-            frm.dgvReport.AutoGenerateColumns = true;
-            frm.dgvReport.DataSource = null;
-            frm.dgvReport.DataSource = _dtEmployeeList;
-            ApplyCheckBoxColumnToSel();
-            HideColumnsInDgv(_columnsToHideInDgv);
+            DataGridView dgv = frm.dgvReport;
+            using (DgvAsistenciaASPerf.PausePainting(dgv))
+            {
+                dgv.ColumnHeadersVisible = true;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+                dgv.ReadOnly = false;
+                dgv.AutoGenerateColumns = true;
+                dgv.DataSource = null;
+                dgv.DataSource = _dtEmployeeList;
+                ApplyCheckBoxColumnToSel();
+                HideColumnsInDgv(_columnsToHideInDgv);
+                dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            }
 
             frm.chbShowEmployees.Checked = true;
             frm.chbShowReport.Checked = false;
@@ -1255,6 +1283,82 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (frm == null) return;
             frm.lblEmployeeAdvice.Text      = text;
             frm.lblEmployeeAdvice.ForeColor = isError ? Color.Red : Color.Gray;
+        }
+    }
+
+    /// <summary>
+    /// Ajustes de rendimiento del <see cref="DataGridView"/> del reporte: doble búfer, pausa de pintado
+    /// al cambiar de vista y caché de fuentes para no crear un <see cref="Font"/> por cada celda.
+    /// </summary>
+    internal static class DgvAsistenciaASPerf
+    {
+        private const int WmSetRedraw = 0x000B;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        private static Font? _baseFont;
+        private static readonly Dictionary<FontStyle, Font> FontsByStyle = new();
+
+        public static void EnableDoubleBuffer(DataGridView dgv)
+        {
+            typeof(DataGridView).InvokeMember(
+                "DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.SetProperty,
+                binder: null,
+                target: dgv,
+                args: new object[] { true });
+        }
+
+        public static void PrepareForFastScroll(DataGridView dgv)
+        {
+            dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgv.RowTemplate.Height = 22;
+        }
+
+        public static IDisposable PausePainting(DataGridView dgv) => new PauseScope(dgv);
+
+        public static Font GetStyledFont(Font baseFont, FontStyle style)
+        {
+            if (_baseFont == null
+                || !string.Equals(_baseFont.FontFamily.Name, baseFont.FontFamily.Name, StringComparison.Ordinal)
+                || Math.Abs(_baseFont.Size - baseFont.Size) > 0.01f)
+            {
+                foreach (Font font in FontsByStyle.Values)
+                    font.Dispose();
+                FontsByStyle.Clear();
+                _baseFont = baseFont;
+            }
+
+            if (!FontsByStyle.TryGetValue(style, out Font? cached))
+            {
+                cached = new Font(baseFont, style);
+                FontsByStyle[style] = cached;
+            }
+            return cached;
+        }
+
+        private sealed class PauseScope : IDisposable
+        {
+            private readonly DataGridView _dgv;
+
+            public PauseScope(DataGridView dgv)
+            {
+                _dgv = dgv;
+                _dgv.SuspendLayout();
+                if (_dgv.IsHandleCreated)
+                    SendMessage(_dgv.Handle, WmSetRedraw, IntPtr.Zero, IntPtr.Zero);
+            }
+
+            public void Dispose()
+            {
+                if (_dgv.IsHandleCreated)
+                    SendMessage(_dgv.Handle, WmSetRedraw, new IntPtr(1), IntPtr.Zero);
+                _dgv.ResumeLayout();
+                _dgv.Invalidate();
+            }
         }
     }
 }

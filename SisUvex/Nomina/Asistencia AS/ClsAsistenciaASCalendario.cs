@@ -80,6 +80,10 @@ namespace SisUvex.Nomina.Asistencia_AS
         public List<MonthBlock> Blocks { get; private set; } = new();
         public int WeeksPerBlock { get; private set; }
 
+        private static readonly Pen BorderPen = new(Color.Black);
+        private static readonly Dictionary<int, Pen> MaskPens = new();
+        private readonly Dictionary<(string Text, int Width, float Size), Font> _fittingFonts = new();
+
         // ── Cálculo de los bloques de mes (compartido por la vista DGV y la hoja de Excel) ─────
 
         private static (List<MonthBlock> Blocks, int WeeksPerBlock) BuildBlocks(List<DateTime> days)
@@ -276,6 +280,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             // del mes guardado en una de las columnas de día para poder "pintarlo" encima), descuadrando
             // el ancho uniforme de las columnas de día. En esta vista los anchos se fijan manualmente.
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            foreach (Font font in _fittingFonts.Values)
+                font.Dispose();
+            _fittingFonts.Clear();
 
             foreach (DataGridViewColumn col in dgv.Columns)
             {
@@ -323,12 +331,14 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             // Filas de nombre de mes y de encabezados (Código/.../Faltas + D L M M J V S): un poco más altas,
-            // igual que en el Excel, para que se distingan de las filas de datos.
+            // igual que en el Excel, para que se distingan de las filas de datos. El resto queda en alto fijo
+            // (sin AutoSizeRows) para no medir cada celda al hacer scroll.
             foreach (DataGridViewRow row in dgv.Rows)
             {
                 if (row.DataBoundItem is not DataRowView drv || !TryGetKind(drv, out string kind)) continue;
                 if (kind == KindMonth) row.Height = 26;
                 else if (kind == KindWeekday) row.Height = 30;
+                else row.Height = 22;
             }
         }
 
@@ -369,7 +379,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 e.CellStyle.SelectionBackColor = ColorHeaderDark;
                 e.CellStyle.ForeColor          = Color.White;
                 e.CellStyle.SelectionForeColor = Color.White;
-                e.CellStyle.Font = new Font(dgv.Font, FontStyle.Bold);
+                e.CellStyle.Font = DgvAsistenciaASPerf.GetStyledFont(dgv.Font, FontStyle.Bold);
                 e.CellStyle.Alignment = colName.StartsWith(SlotPrefix, StringComparison.Ordinal)
                     ? DataGridViewContentAlignment.MiddleCenter
                     : e.CellStyle.Alignment;
@@ -416,7 +426,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             bool isValueRow = string.Equals(drv[ColKind]?.ToString(), KindVal, StringComparison.Ordinal);
             if (isValueRow && fontStyle != FontStyle.Regular)
-                e.CellStyle.Font = new Font(dgv.Font, fontStyle);
+                e.CellStyle.Font = DgvAsistenciaASPerf.GetStyledFont(dgv.Font, fontStyle);
         }
 
         /// <summary>
@@ -472,8 +482,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             using (var brush = new SolidBrush(bg))
                 e.Graphics.FillRectangle(brush, union);
             const TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding;
-            using (Font font = GetFittingFont(monthLabel, dgv.Font, FontStyle.Bold, union.Width))
-                TextRenderer.DrawText(e.Graphics, monthLabel, font, union, Color.White, flags);
+            Font font = GetFittingFont(monthLabel, dgv.Font, FontStyle.Bold, union.Width);
+            TextRenderer.DrawText(e.Graphics, monthLabel, font, union, Color.White, flags);
             e.Graphics.Clip = oldClip;
 
             e.Handled = true;
@@ -498,21 +508,18 @@ namespace SisUvex.Nomina.Asistencia_AS
             // La línea que comparten estas dos celdas (abajo de "N", arriba de "V") se repinta primero con
             // el mismo color de fondo de la celda (coincide en ambas filas, ya que usan el mismo prefijo)
             // para tapar cualquier línea de cuadrícula residual de otro color que el DataGridView dibuje ahí.
-            using (var maskPen = new Pen(e.CellStyle.BackColor))
-            {
-                if (kind == KindNum)
-                    e.Graphics!.DrawLine(maskPen, b.Left, b.Bottom - 1, b.Right - 1, b.Bottom - 1);
-                else
-                    e.Graphics!.DrawLine(maskPen, b.Left, b.Top, b.Right - 1, b.Top);
-            }
-
-            using var pen = new Pen(Color.Black);
-            e.Graphics!.DrawLine(pen, b.Left, b.Top, b.Left, b.Bottom - 1);
-            e.Graphics.DrawLine(pen, b.Right - 1, b.Top, b.Right - 1, b.Bottom - 1);
+            Pen maskPen = GetMaskPen(e.CellStyle.BackColor);
             if (kind == KindNum)
-                e.Graphics.DrawLine(pen, b.Left, b.Top, b.Right - 1, b.Top);
+                e.Graphics!.DrawLine(maskPen, b.Left, b.Bottom - 1, b.Right - 1, b.Bottom - 1);
             else
-                e.Graphics.DrawLine(pen, b.Left, b.Bottom - 1, b.Right - 1, b.Bottom - 1);
+                e.Graphics!.DrawLine(maskPen, b.Left, b.Top, b.Right - 1, b.Top);
+
+            e.Graphics!.DrawLine(BorderPen, b.Left, b.Top, b.Left, b.Bottom - 1);
+            e.Graphics.DrawLine(BorderPen, b.Right - 1, b.Top, b.Right - 1, b.Bottom - 1);
+            if (kind == KindNum)
+                e.Graphics.DrawLine(BorderPen, b.Left, b.Top, b.Right - 1, b.Top);
+            else
+                e.Graphics.DrawLine(BorderPen, b.Left, b.Bottom - 1, b.Right - 1, b.Bottom - 1);
 
             e.Handled = true;
         }
@@ -548,26 +555,47 @@ namespace SisUvex.Nomina.Asistencia_AS
                 ? row[col].ToString()?.Trim() ?? string.Empty
                 : string.Empty;
 
+        private static Pen GetMaskPen(Color color)
+        {
+            int key = color.ToArgb();
+            if (!MaskPens.TryGetValue(key, out Pen? pen))
+            {
+                pen = new Pen(color);
+                MaskPens[key] = pen;
+            }
+            return pen;
+        }
+
         /// <summary>
         /// Devuelve una fuente basada en <paramref name="baseFont"/> cuyo tamaño se reduce (hasta un mínimo)
-        /// para que <paramref name="text"/> quepa dentro de <paramref name="maxWidth"/> px. Necesario porque
-        /// el ancho de las columnas del calendario es fijo en píxeles, pero el tamaño real de <c>dgv.Font</c>
-        /// puede variar según el DPI/escala de Windows, provocando que el texto del mes se corte.
+        /// para que <paramref name="text"/> quepa dentro de <paramref name="maxWidth"/> px. El resultado se
+        /// cachea: CellPainting se dispara en cada scroll y no debe crear/destruir Font en cada llamada.
         /// </summary>
-        private static Font GetFittingFont(string text, Font baseFont, FontStyle style, int maxWidth)
+        private Font GetFittingFont(string text, Font baseFont, FontStyle style, int maxWidth)
         {
+            var key = (text, maxWidth, baseFont.Size);
+            if (_fittingFonts.TryGetValue(key, out Font? cached))
+                return cached;
+
             const float minSize = 6.5f;
             const TextFormatFlags measureFlags = TextFormatFlags.NoPadding | TextFormatFlags.SingleLine;
 
             float size = baseFont.Size;
-            while (size > minSize)
+            Font chosen;
+            while (true)
             {
                 using var candidate = new Font(baseFont.FontFamily, size, style);
                 int textWidth = TextRenderer.MeasureText(text, candidate, Size.Empty, measureFlags).Width;
-                if (textWidth <= maxWidth) return new Font(baseFont.FontFamily, size, style);
+                if (textWidth <= maxWidth || size <= minSize)
+                {
+                    chosen = new Font(baseFont.FontFamily, size, style);
+                    break;
+                }
                 size -= 0.5f;
             }
-            return new Font(baseFont.FontFamily, minSize, style);
+
+            _fittingFonts[key] = chosen;
+            return chosen;
         }
 
         // ── Hoja "Calendario" del reporte de Excel ──────────────────────────────
