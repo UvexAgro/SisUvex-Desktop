@@ -907,5 +907,15 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat);
 		}
+
+		private void consultaDeActividadPorEmpleadoToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (!User.HasViewCatalogsPermission())
+				return;
+
+			Nomina.Nom_Consulta_de_Actividad_por_empleado.FrmConsulta cat = new();
+			cat.WindowState = FormWindowState.Normal;
+			AbrirVentanaHijo(cat);
+		}
 	}
 }
