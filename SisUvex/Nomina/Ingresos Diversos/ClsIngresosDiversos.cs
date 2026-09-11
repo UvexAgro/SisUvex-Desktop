@@ -189,58 +189,59 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 
 			string queryFinal = $@"
-				SELECT
-					wg.id_attendance,
-					wg.id_employee AS Empleado,
-					CONVERT(DATE, '{fecha}') AS Fecha,
+		SELECT
+			wg.id_attendance,
+			wg.id_employee AS Empleado,
+			CONVERT(DATE, '{fecha}') AS Fecha,
 
-					emp.v_lastNamePat AS 'Apellido paterno',
-					emp.v_lastNameMat AS 'Apellido materno',
-					emp.v_name AS Nombre,
+			emp.v_lastNamePat AS 'Apellido paterno',
+			emp.v_lastNameMat AS 'Apellido materno',
+			emp.v_name AS Nombre,
 
-					wg.id_activity_{sufijo} AS Actividad,
-					tab.v_descripcion_tab AS 'Descripción actividad',
+			wg.id_activity_{sufijo} AS Actividad,
+			tab.v_descripcion_tab AS 'Descripción actividad',
 
-					wg.id_workGroup_{sufijo} AS id_workGroup,
+			wg.id_workGroup_{sufijo} AS id_workGroup,
 
-					con.id_concept AS id_concept,
-					con.v_concept AS Concepto,
-					con.n_unit AS Horas,
-					mi.n_amount AS Monto,
+			con.id_concept AS id_concept,
+			con.v_concept AS Concepto,
+			con.n_unit AS Horas,
+			mi.n_amount AS Monto,
 
-					mi.id_Deductions,
-					ded.v_descripcion_ded AS 'Descripción Deducción',
-					mi.n_importefijo_ded AS 'Descuento'
+			mi.id_Deductions,
+			ded.v_descripcion_ded AS 'Descripción Deducción',
+			mi.n_importefijo_ded AS 'Descuento'
 
-				FROM dbo.Nom_EmployeeAttendanceWeekly wg
+		FROM dbo.Nom_EmployeeAttendanceWeekly wg
 
-				JOIN dbo.Nom_Employees emp
-					ON emp.id_employee = wg.id_employee
+		JOIN dbo.Nom_Employees emp
+			ON emp.id_employee = wg.id_employee
 
-				LEFT JOIN dbo.Nom_Tabulador tab
-					ON tab.c_codigo_tab = wg.id_activity_{sufijo}
+		LEFT JOIN dbo.Nom_Tabulador tab
+			ON tab.c_codigo_tab = wg.id_activity_{sufijo}
 
-				LEFT JOIN Nom_MiscellaneousIncome mi
-					ON mi.id_workGroupEmployeeDaily = wg.id_attendance
+		LEFT JOIN Nom_MiscellaneousIncome mi
+			ON mi.id_workGroupEmployeeDaily = wg.id_attendance
+			AND mi.d_date = CONVERT(DATE, '{fecha}')
 
-				LEFT JOIN Nom_concept con
-					ON con.id_concept = mi.id_concept
+		LEFT JOIN Nom_concept con
+			ON con.id_concept = mi.id_concept
 
-				LEFT JOIN Nom_Deductions ded
-					ON ded.id_Deductions = mi.id_Deductions
+		LEFT JOIN Nom_Deductions ded
+			ON ded.id_Deductions = mi.id_Deductions
 
-				WHERE
-					'{fecha}' BETWEEN wg.d_startDate_per AND wg.d_endDate_per
+		WHERE
+			'{fecha}' BETWEEN wg.d_startDate_per AND wg.d_endDate_per
 
-					AND wg.b_{sufijo} = 1
+			AND wg.b_{sufijo} = 1
 
-					{filtroCuadrilla}
+			{filtroCuadrilla}
 
-				ORDER BY
-					emp.v_lastNamePat,
-					emp.v_lastNameMat,
-					emp.v_name;
-				";
+		ORDER BY
+			emp.v_lastNamePat,
+			emp.v_lastNameMat,
+			emp.v_name;
+		";
 
 			frmDia.dgvLista.DataSource =
 				ClsQuerysDB.GetDataTable(queryFinal);
@@ -257,7 +258,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 														"FROM Nom_concept");
 			ClsComboBoxes.LoadComboBoxDataSource(frmAdd.cboConceptos, dtcbo);
 		}
-		public void InsertarIngreso()
+		public void InsertarIngreso(DateTime fecha)
 		{
 			object val = frmAdd.cboConceptos.SelectedValue;
 
@@ -304,7 +305,10 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				if (string.IsNullOrWhiteSpace(idRegistro))
 					continue;
 
-				if (ExisteConceptoEnAsistencia(idRegistro, frmAdd.EsCampo))
+				if (ExisteConceptoEnAsistencia(
+					idRegistro,
+					frmAdd.EsCampo,
+					fecha))
 				{
 					omitidos++;
 					continue;
@@ -316,23 +320,25 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				if (frmAdd.EsCampo)
 				{
 					query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Insert
-				NULL,
-				'{idRegistro}',
-				'{idConcepto}',
-				{monto},
-				'SYSTEM'";
+					EXEC sp_Nom_MiscellaneousIncome_Insert
+						NULL,
+						'{idRegistro}',
+						'{idConcepto}',
+						{monto},
+						'SYSTEM',
+						'{fecha:yyyy-MM-dd}'";
 				}
 				// EMPAQUE
 				else
 				{
 					query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Insert
-				'{idRegistro}',
-				NULL,
-				'{idConcepto}',
-				{monto},
-				'SYSTEM'";
+					EXEC sp_Nom_MiscellaneousIncome_Insert
+						'{idRegistro}',
+						NULL,
+						'{idConcepto}',
+						{monto},
+						'SYSTEM',
+						NULL";
 				}
 
 				ClsQuerysDB.ExecuteQuery(query);
@@ -343,7 +349,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				$"Insertados: {insertados}\n" +
 				$"Omitidos (ya existían): {omitidos}");
 		}
-		public void ActualizarIngreso()
+		public void ActualizarIngreso(DateTime fecha)
 		{
 			string idConceptoNuevo = frmAdd.cboConceptos.SelectedValue?.ToString();
 
@@ -386,28 +392,28 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (frmAdd.EsCampo)
 			{
 				// CAMPO
-				// IdWorkGroupEmployeeDaily contiene el id_attendance
-				// de Nom_EmployeeAttendanceWeekly
 				query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Update
-			NULL,
-			'{frmAdd.IdWorkGroupEmployeeDaily}',
-			'{frmAdd.IdConcepto}',
-			'{idConceptoNuevo}',
-			{monto},
-			'SYSTEM'";
+				EXEC sp_Nom_MiscellaneousIncome_Update
+				NULL,
+				'{frmAdd.IdWorkGroupEmployeeDaily}',
+				'{frmAdd.IdConcepto}',
+				'{idConceptoNuevo}',
+				{monto},
+				'SYSTEM',
+				'{fecha:yyyy-MM-dd}'";
 			}
 			else
 			{
 				// EMPAQUE
 				query = $@"
-			EXEC sp_Nom_MiscellaneousIncome_Update
-			'{frmAdd.IdAttendence}',
-			NULL,
-			'{frmAdd.IdConcepto}',
-			'{idConceptoNuevo}',
-			{monto},
-			'SYSTEM'";
+				EXEC sp_Nom_MiscellaneousIncome_Update
+				'{frmAdd.IdAttendence}',
+				NULL,
+				'{frmAdd.IdConcepto}',
+				'{idConceptoNuevo}',
+				{monto},
+				'SYSTEM',
+				NULL";
 			}
 
 			ClsQuerysDB.ExecuteQuery(query);
@@ -489,7 +495,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				ObtenerAsistenciaEmpaqueDia();
 			}
 		}
-		private bool ExisteConceptoEnAsistencia(string idRegistro, bool esCampo)
+		private bool ExisteConceptoEnAsistencia(string idRegistro,bool esCampo,DateTime fecha)
 		{
 			string query;
 
@@ -497,19 +503,20 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			{
 				// CAMPO
 				query = $@"
-		SELECT COUNT(*)
-		FROM Nom_MiscellaneousIncome
-		WHERE id_workGroupEmployeeDaily = '{idRegistro}'
-		  AND id_concept IS NOT NULL";
+				SELECT COUNT(*)
+				FROM Nom_MiscellaneousIncome
+				WHERE id_workGroupEmployeeDaily = '{idRegistro}'
+				  AND id_concept IS NOT NULL
+				  AND d_date = '{fecha:yyyy-MM-dd}'";
 			}
 			else
 			{
 				// EMPAQUE
 				query = $@"
-		SELECT COUNT(*)
-		FROM Nom_MiscellaneousIncome
-		WHERE id_attendence = '{idRegistro}'
-		  AND id_concept IS NOT NULL";
+				SELECT COUNT(*)
+				FROM Nom_MiscellaneousIncome
+				WHERE id_attendence = '{idRegistro}'
+				  AND id_concept IS NOT NULL";
 			}
 
 			object result = ClsQuerysDB.GetData(query);

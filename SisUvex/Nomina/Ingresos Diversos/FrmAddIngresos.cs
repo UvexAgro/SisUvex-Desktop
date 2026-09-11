@@ -20,8 +20,10 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		public decimal? MontoActual = null;
 		public bool EsEdicion = false;
 		public List<string> IdsAttendence;
+		FrmIncomeConcepts frmDia;
 
 		public bool EsCampo { get; set; }
+		public DateTime Fecha { get; set; }
 
 		ClsIngresosDiversos cls;
 
@@ -125,14 +127,12 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 
 			if (EsEdicion)
-				cls.ActualizarIngreso();
+				cls.ActualizarIngreso(Fecha);
 			else
-				cls.InsertarIngreso();
+				cls.InsertarIngreso(Fecha);
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();
 		}
-
-		
 	}
 }
