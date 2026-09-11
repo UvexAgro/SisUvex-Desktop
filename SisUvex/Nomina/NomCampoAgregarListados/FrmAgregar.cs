@@ -97,7 +97,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			if (txbCodigo.Text == "Ej. 012365")
 			{
-				txbCodigo.Text = "";
+				txbCodigo.Clear();
 				txbCodigo.ForeColor = Color.Black;
 			}
 		}
@@ -313,7 +313,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				string codigosActuales = txbCodigo.Text.Trim();
 
-				if (string.IsNullOrWhiteSpace(codigosActuales))
+				// Si tiene el texto de ejemplo, considerarlo vacío
+				if (codigosActuales == "Ej. 012365" ||
+					string.IsNullOrWhiteSpace(codigosActuales))
 				{
 					txbCodigo.Text = nuevoCodigo;
 				}
@@ -323,6 +325,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						codigosActuales + ", " + nuevoCodigo;
 				}
 
+				txbCodigo.ForeColor = Color.Black;
 				txbCodigo.Focus();
 			}
 		}

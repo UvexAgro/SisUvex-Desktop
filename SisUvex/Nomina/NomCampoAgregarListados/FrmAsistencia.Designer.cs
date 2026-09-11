@@ -612,6 +612,8 @@
 			dgvCAL.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvCAL.Size = new Size(772, 275);
 			dgvCAL.TabIndex = 30;
+			dgvCAL.ColumnHeaderMouseClick += dgvCAL_ColumnHeaderMouseClick;
+			dgvCAL.ColumnHeaderMouseDoubleClick += dgvCAL_ColumnHeaderMouseDoubleClick;
 			// 
 			// label13
 			// 

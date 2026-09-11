@@ -976,7 +976,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			MemoryStream ms = new MemoryStream();
 
+			// ==========================================
 			// CREAR PDF
+			// ==========================================
 
 			iText.Kernel.Pdf.PdfWriter writer =
 				new iText.Kernel.Pdf.PdfWriter(ms);
@@ -986,16 +988,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Kernel.Pdf.PdfDocument pdf =
 				new iText.Kernel.Pdf.PdfDocument(writer);
 
-
 			pdf.SetDefaultPageSize(
-			iText.Kernel.Geom.PageSize.LETTER);
+				iText.Kernel.Geom.PageSize.LETTER);
 
 			iText.Layout.Document document =
 				new iText.Layout.Document(pdf);
 
 			document.SetMargins(25, 25, 25, 25);
 
+			// ==========================================
 			// COLORES
+			// ==========================================
 
 			iText.Kernel.Colors.DeviceRgb colorHeader =
 				new iText.Kernel.Colors.DeviceRgb(25, 35, 48);
@@ -1006,20 +1009,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Kernel.Colors.DeviceRgb colorAzul =
 				new iText.Kernel.Colors.DeviceRgb(0, 102, 204);
 
+			// ==========================================
 			// TÍTULO
+			// ==========================================
 
 			iText.Layout.Element.Paragraph titulo =
 				new iText.Layout.Element.Paragraph(
 					"ASISTENCIA PARA REVISIÓN");
 
 			titulo
-			.SetFontSize(16)
-			.SetTextAlignment(
-				iText.Layout.Properties.TextAlignment.CENTER);
+				.SetFontSize(16)
+				.SetTextAlignment(
+					iText.Layout.Properties.TextAlignment.CENTER);
 
 			document.Add(titulo);
 
+			// ==========================================
 			// INFORMACIÓN
+			// ==========================================
 
 			string cuadrilla = "";
 
@@ -1040,73 +1047,80 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Layout.Element.Table info =
 				new iText.Layout.Element.Table(
 					iText.Layout.Properties.UnitValue
-						.CreatePercentArray(new float[] { 1, 1 }))
+						.CreatePercentArray(
+							new float[] { 1, 1 }))
 				.UseAllAvailableWidth();
 
 			iText.Layout.Element.Cell celdaCuadrilla =
 				new iText.Layout.Element.Cell()
-				.SetBorder(
-					iText.Layout.Borders.Border.NO_BORDER)
-				.Add(
-					new iText.Layout.Element.Paragraph(
-						"Cuadrilla: " + cuadrilla)
-					.SetFontSize(9));
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Cuadrilla: " + cuadrilla)
+							.SetFontSize(9));
 
 			iText.Layout.Element.Cell celdaSemana =
 				new iText.Layout.Element.Cell()
-				.SetBorder(
-					iText.Layout.Borders.Border.NO_BORDER)
-				.Add(
-					new iText.Layout.Element.Paragraph(
-						"Semana: " + semana)
-					.SetFontSize(9));
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Semana: " + semana)
+							.SetFontSize(9));
 
 			info.AddCell(celdaCuadrilla);
 			info.AddCell(celdaSemana);
 
 			document.Add(info);
 
-			// Espacio
+			// ==========================================
+			// ESPACIO
+			// ==========================================
+
 			document.Add(
 				new iText.Layout.Element.Paragraph(" ")
 					.SetFontSize(3));
 
+			// ==========================================
 			// TABLA
+			// ==========================================
 
 			float[] anchos =
 			{
-				55,     // Código
-				250,    // Empleado
-				37,     // Vie
-				37,     // Sáb
-				37,     // Dom
-				37,     // Lun
-				37,     // Mar
-				37,     // Mié
-				37      // Jue
+			55,     // Código
+			250,    // Empleado
+			37,     // Vie
+			37,     // Sáb
+			37,     // Dom
+			37,     // Lun
+			37,     // Mar
+			37,     // Mié
+			37      // Jue
 			};
 
 			iText.Layout.Element.Table tabla =
-				new iText.Layout.Element.Table(
-					anchos);
+				new iText.Layout.Element.Table(anchos);
 
 			tabla.SetWidth(
-			iText.Layout.Properties.UnitValue
-			.CreatePercentValue(100));
+				iText.Layout.Properties.UnitValue
+					.CreatePercentValue(100));
 
+			// ==========================================
 			// ENCABEZADOS
+			// ==========================================
 
 			string[] encabezados =
 			{
-				"CÓDIGO",
-				"EMPLEADO",
-				"VIE",
-				"SÁB",
-				"DOM",
-				"LUN",
-				"MAR",
-				"MIÉ",
-				"JUE"
+			"CÓDIGO",
+			"EMPLEADO",
+			"VIE",
+			"SÁB",
+			"DOM",
+			"LUN",
+			"MAR",
+			"MIÉ",
+			"JUE"
 			};
 
 			foreach (string encabezado in encabezados)
@@ -1125,30 +1139,37 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					.SetPadding(3)
 					.SetBorder(
 						new iText.Layout.Borders.SolidBorder(
-							colorBorde, 0.5f));
+							colorBorde,
+							0.5f));
 
 				celda.Add(
-				new iText.Layout.Element.Paragraph(encabezado)
-				.SetFontSize(8)
-				);
+					new iText.Layout.Element.Paragraph(
+						encabezado)
+						.SetFontSize(8));
 
 				tabla.AddHeaderCell(celda);
 			}
 
-			// FILAS
+			// ==========================================
+			// COLUMNAS
+			// ==========================================
 
 			string[] columnas =
 			{
-				"Codigo",
-				"Empleado",
-				"Vie",
-				"Sab",
-				"Dom",
-				"Lun",
-				"Mar",
-				"Mie",
-				"Jue"
+			"Codigo",
+			"Empleado",
+			"Vie",
+			"Sab",
+			"Dom",
+			"Lun",
+			"Mar",
+			"Mie",
+			"Jue"
 			};
+
+			// ==========================================
+			// FILAS DE EMPLEADOS
+			// ==========================================
 
 			foreach (DataGridViewRow row in dgv.Rows)
 			{
@@ -1157,7 +1178,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				for (int i = 0; i < columnas.Length; i++)
 				{
-					string nombreColumna = columnas[i];
+					string nombreColumna =
+						columnas[i];
 
 					if (!dgv.Columns.Contains(nombreColumna))
 						continue;
@@ -1165,12 +1187,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					object valor =
 						row.Cells[nombreColumna].Value;
 
+					// ======================================
 					// CÓDIGO Y EMPLEADO
+					// ======================================
 
 					if (i < 2)
 					{
 						string texto =
-							valor == null || valor == DBNull.Value ? "" : valor.ToString();
+							valor == null ||
+							valor == DBNull.Value
+								? ""
+								: valor.ToString();
 
 						iText.Layout.Element.Cell celda =
 							new iText.Layout.Element.Cell();
@@ -1181,18 +1208,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 								iText.Layout.Properties.VerticalAlignment.MIDDLE)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
-									colorBorde, 0.5f));
+									colorBorde,
+									0.5f));
 
 						celda.Add(
-							new iText.Layout.Element.Paragraph(texto)
+							new iText.Layout.Element.Paragraph(
+								texto)
 								.SetFontSize(7));
 
 						tabla.AddCell(celda);
 					}
 					else
 					{
-
+						// ==================================
 						// CHECKBOX
+						// ==================================
 
 						bool marcado = false;
 
@@ -1215,9 +1245,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							.SetPadding(3)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
-									colorBorde, 0.5f));
-
-						// SIN NARANJA
+									colorBorde,
+									0.5f));
 
 						if (marcado)
 						{
@@ -1240,9 +1269,51 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 
+			// ==========================================
+			// 5 FILAS VACÍAS
+			// ==========================================
+
+			for (int fila = 0; fila < 5; fila++)
+			{
+				for (int i = 0; i < columnas.Length; i++)
+				{
+					iText.Layout.Element.Cell celda =
+						new iText.Layout.Element.Cell();
+
+					celda
+						.SetPadding(3)
+						.SetMinHeight(22)
+						.SetBorder(
+							new iText.Layout.Borders.SolidBorder(
+								colorBorde,
+								0.5f))
+						.SetVerticalAlignment(
+							iText.Layout.Properties.VerticalAlignment.MIDDLE);
+
+					if (i >= 2)
+					{
+						celda.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER);
+					}
+
+					// Celda vacía
+					celda.Add(
+						new iText.Layout.Element.Paragraph(" ")
+							.SetFontSize(7));
+
+					tabla.AddCell(celda);
+				}
+			}
+
+			// ==========================================
+			// AGREGAR TABLA AL DOCUMENTO
+			// ==========================================
+
 			document.Add(tabla);
 
+			// ==========================================
 			// CERRAR
+			// ==========================================
 
 			document.Close();
 
@@ -2050,10 +2121,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		private void MostrarCAL(
-	DataTable dt,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+		private void MostrarCAL(DataTable dt,DateTime fechaInicio,DateTime fechaFin)
 		{
 			DataGridView dgv = _frmA.dgvCAL;
 
@@ -2374,44 +2442,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ClearSelection();
 			dgv.CurrentCell = null;
-		}
-		private string NombreCuadrilla(string idCuadrilla)
-		{
-			if (string.IsNullOrWhiteSpace(idCuadrilla))
-				return "";
-
-			foreach (object item in _frmA.cboCuadrilla.Items)
-			{
-				DataRowView row = item as DataRowView;
-
-				if (row == null)
-					continue;
-
-				string id =
-					row["id_workGroup"]?
-					.ToString()
-					.Trim();
-
-				if (id == idCuadrilla)
-				{
-					string nombre =
-						row["v_nameWorkGroup"]?
-						.ToString()
-						.Trim();
-
-					return nombre;
-				}
-			}
-
-			// Por si ya viene "001 - VALENTIN"
-			if (idCuadrilla.Contains(" - "))
-			{
-				return idCuadrilla
-					.Substring(idCuadrilla.IndexOf(" - ") + 3)
-					.Trim();
-			}
-
-			return idCuadrilla;
 		}
 		public void CargarDiasSemana()
 		{

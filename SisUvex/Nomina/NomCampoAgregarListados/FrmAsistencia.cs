@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -584,6 +585,47 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			_clsA.JalarActividadLotePorDia();
+		}
+
+		private void dgvCAL_ColumnHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex < 2)
+				return;
+
+			DataGridViewColumn columna =
+				dgvCAL.Columns[e.ColumnIndex];
+
+			if (columna.SortMode ==
+				DataGridViewColumnSortMode.NotSortable)
+				return;
+
+			ListSortDirection direccion;
+
+			if (columna.HeaderCell.SortGlyphDirection ==
+				SortOrder.Ascending)
+			{
+				direccion = ListSortDirection.Descending;
+			}
+			else
+			{
+				direccion = ListSortDirection.Ascending;
+			}
+
+			dgvCAL.Sort(columna, direccion);
+		}
+
+		private void dgvCAL_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex < 2)
+				return;
+
+			int indiceDia = e.ColumnIndex - 2;
+
+			if (indiceDia >= 0 &&
+				indiceDia < cboDia.Items.Count)
+			{
+				cboDia.SelectedIndex = indiceDia;
+			}
 		}
 	}
 }
