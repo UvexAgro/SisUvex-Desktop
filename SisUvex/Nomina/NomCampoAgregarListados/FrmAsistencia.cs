@@ -42,7 +42,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// Seleccionar empleado desde asistencia
 			dgvAsistencia.CellClick += clsJ.DgvAsistencia_CellClick;
 		}
-
+		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
+		{
+			if (User.HasEditCatalogsPermission())
+				return;
+			cboCuadrilla.Enabled = false;
+			cboSemana.Enabled = false;
+		}
 		private void FrmAsistencia_Load(object sender, EventArgs e)
 		{
 			_clsA.ConfigurarGrid();
@@ -51,6 +57,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			clsJ.ConfigurarGridChecador();
 			clsJ.EstilizarDgvReloj();
 			_clsA.CargarDiasSemana();
+			HasEditCatalogsPermission();
 
 		}
 		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)

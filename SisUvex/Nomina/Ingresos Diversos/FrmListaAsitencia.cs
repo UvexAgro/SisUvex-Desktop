@@ -122,7 +122,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			// SE MANDA EL ID Y SI ES CAMPO O EMPAQUE
 			FrmAddIngresos frm = new FrmAddIngresos(ids, esCampo);
-
+			frm.Fecha = dtpDia.Value.Date;
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
 				if (esCampo)
@@ -207,7 +207,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				idConcepto,
 				monto,
 				esCampo);
-
+			frm.Fecha = dtpDia.Value.Date;
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
 				if (esCampo)
