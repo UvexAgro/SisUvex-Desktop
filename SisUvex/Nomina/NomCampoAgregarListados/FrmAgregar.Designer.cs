@@ -147,6 +147,7 @@
 			cboActividad.Name = "cboActividad";
 			cboActividad.Size = new Size(265, 23);
 			cboActividad.TabIndex = 26;
+			cboActividad.TextUpdate += cboActividad_TextUpdate;
 			// 
 			// txbCodigo
 			// 

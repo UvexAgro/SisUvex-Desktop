@@ -19,6 +19,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public FrmAgregar frmA;
 		public string LugarPago { get; set; }
 		public string IdLugarPago { get; set; }
+		private DataTable dtActividades = new DataTable();
 		public class DiaRegistro
 		{
 			public string Nombre { get; set; }
@@ -31,28 +32,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return $"{Nombre} {Fecha:dd/MM/yyyy}";
 				}
 			}
-		}
-		public void CargarComboActividades()
-		{
-			DataTable dtActividades = ObtenerActividades();
-
-			dtActividades.Columns.Add("ActividadCompleta");
-
-			foreach (DataRow row in dtActividades.Rows)
-			{
-				row["ActividadCompleta"] = row["c_codigo_tab"] + " - " + row["v_descripcion_tab"];
-			}
-
-			frmA.cboActividad.DataSource = dtActividades;
-			frmA.cboActividad.DisplayMember = "ActividadCompleta";
-			frmA.cboActividad.ValueMember = "c_codigo_tab";
-
-			frmA.cboActividad.DropDownStyle = ComboBoxStyle.DropDown;
-			frmA.cboActividad.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			frmA.cboActividad.AutoCompleteSource = AutoCompleteSource.ListItems;
-
-			frmA.cboActividad.SelectedIndex = -1;
-			frmA.cboActividad.Text = "";
 		}
 		public DataTable ObtenerActividades()
 		{
@@ -82,6 +61,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			return dt;
+		}
+		public void FiltrarActividades(string texto)
+		{
+			if (frmA.bsActividades.DataSource == null)
+				return;
+
+			texto = texto.Replace("'", "''");
+
+			if (string.IsNullOrWhiteSpace(texto))
+			{
+				frmA.bsActividades.RemoveFilter();
+			}
+			else
+			{
+				frmA.bsActividades.Filter =
+					$"c_codigo_tab LIKE '%{texto}%' " +
+					$"OR v_descripcion_tab LIKE '%{texto}%'";
+			}
 		}
 		public void CargarDiasRegistro(DateTime fechaInicio)
 		{

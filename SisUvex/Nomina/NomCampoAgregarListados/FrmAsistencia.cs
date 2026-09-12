@@ -557,10 +557,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ABRIR Y ESPERAR A QUE TERMINE
 			// ==========================================
 
-			if (frm.ShowDialog() == DialogResult.OK)
+			try
 			{
-				// Actualizar dgvCAL con los datos recién guardados
-				_clsA.CargarCAL();
+				if (frm.ShowDialog() == DialogResult.OK)
+				{
+					_clsA.CargarCAL();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.ToString(),
+					"Error detallado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 		}
 

@@ -36,6 +36,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public int IndiceFilaModificar { get; set; }
 		public DateTime FechaSeleccionada { get; set; }
 		public List<string> EmpleadosSeleccionados { get; set; } = new List<string>();
+		public bool cargandoActividades = false;
+		public BindingSource bsActividades = new BindingSource();
+		private DataTable dtActividades = new DataTable();
+		private List<string> actividadesOriginales =
+			new List<string>();
 		public FrmAgregar()
 		{
 			InitializeComponent();
@@ -43,6 +48,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cboFecha.DrawMode = DrawMode.OwnerDrawFixed;
 
 			this.StartPosition = FormStartPosition.CenterScreen;
+
 			txbCodigo.Text = "Ej. 012365";
 			txbCodigo.ForeColor = Color.Gray;
 
@@ -54,7 +60,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			this.Load += FrmAgregar_Load;
 
-			dgvListadoAgregar.CellDoubleClick += dgvListadoAgregar_CellDoubleClick;
+			dgvListadoAgregar.CellDoubleClick +=
+				dgvListadoAgregar_CellDoubleClick;
 
 			clsA = new ClsAgregar();
 			clsA.frmA = this;
@@ -64,7 +71,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_clsA = new ClsAsistencia();
 			_clsA.frmA = this;
-
 		}
 
 		public void BloquearControlesAgregarCuadrilla()
@@ -113,6 +119,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void FrmAgregar_Load(object sender, EventArgs e)
 		{
+			cargandoActividades = true;
 			cboActividad.Visible = MostrarActividadLote;
 			cboLote.Visible = MostrarActividadLote;
 
@@ -125,15 +132,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvListadoAgregar.Columns.Add("Codigo", "Código");
 			dgvListadoAgregar.Columns.Add("Nombre", "Empleado");
 			dgvListadoAgregar.Columns.Add("LugarPago", "Lugar de Pago");
-
 			dgvListadoAgregar.Columns.Add("IdLugarPago", "IdLugarPago");
 
 			dgvListadoAgregar.Columns["IdLugarPago"].Visible = false;
+
 			clsA.EstiloDgvListadoAgregar();
 
-			clsA.CargarComboActividades();
+			CargarActividades();
+
+
 			clsA.CargarComboLotes();
+
 			clsA.CargarDiasRegistro(FechaInicio);
+
 			if (EmpleadosSeleccionados.Count > 0)
 			{
 				clsA.CargarEmpleadosSeleccionados(
@@ -354,7 +365,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			cboFecha.ForeColor = Color.Black;
 		}
-		
+
 
 		private void cboFecha_Enter(object sender, EventArgs e)
 		{
@@ -387,6 +398,111 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			e.DrawFocusRectangle();
+		}
+		private void CargarActividades()
+		{
+			try
+			{
+				cargandoActividades = true;
+
+				dtActividades = clsA.ObtenerActividades();
+
+				actividadesOriginales.Clear();
+
+				cboActividad.Items.Clear();
+
+				foreach (DataRow fila in dtActividades.Rows)
+				{
+					string codigo =
+						fila["c_codigo_tab"].ToString();
+
+					string descripcion =
+						fila["v_descripcion_tab"].ToString();
+
+					string actividad =
+						$"{codigo} - {descripcion}";
+
+					actividadesOriginales.Add(actividad);
+
+					cboActividad.Items.Add(actividad);
+				}
+
+				cboActividad.DropDownStyle =
+					ComboBoxStyle.DropDown;
+
+				cboActividad.AutoCompleteMode =
+					AutoCompleteMode.None;
+
+				cboActividad.SelectedIndex = -1;
+				cboActividad.Text = "";
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar las actividades: " +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				cargandoActividades = false;
+			}
+		}
+		private void cboActividad_TextUpdate(object sender, EventArgs e)
+		{
+			if (cargandoActividades)
+				return;
+
+			if (actividadesOriginales == null)
+				return;
+
+			string texto = cboActividad.Text;
+
+			int posicionCursor = cboActividad.SelectionStart;
+
+			List<string> resultados = actividadesOriginales
+				.Where(a =>
+					a.IndexOf(
+						texto,
+						StringComparison.OrdinalIgnoreCase) >= 0)
+				.ToList();
+
+			cargandoActividades = true;
+
+			try
+			{
+				cboActividad.BeginUpdate();
+
+				cboActividad.Items.Clear();
+
+				foreach (string actividad in resultados)
+				{
+					cboActividad.Items.Add(actividad);
+				}
+
+				// Restaurar el texto que escribió el usuario
+				cboActividad.Text = texto;
+
+				cboActividad.SelectionStart =
+					Math.Min(posicionCursor, texto.Length);
+
+				cboActividad.SelectionLength = 0;
+
+				cboActividad.EndUpdate();
+
+				// Mostrar coincidencias
+				if (resultados.Count > 0 &&
+					!string.IsNullOrWhiteSpace(texto))
+				{
+					cboActividad.DroppedDown = true;
+				}
+			}
+			finally
+			{
+				cargandoActividades = false;
+			}
 		}
 	}
 }

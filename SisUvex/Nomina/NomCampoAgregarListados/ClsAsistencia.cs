@@ -28,6 +28,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public FrmAsistencia _frmA;
 		public FrmListados frm;
 		public FrmAgregar frmA;
+		public BindingSource bsActividades = new BindingSource();
 		public class Semana
 		{
 			public string Secuencia { get; set; }
@@ -172,11 +173,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_frmA.cboSemana.SelectedIndex = -1;
 		}
-		public DataTable CargarEmpleadosCuadrillaSemana(
-	string idCuadrilla,
-	string secuenciaSemana,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+		public DataTable CargarEmpleadosCuadrillaSemana(string idCuadrilla,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
 		{
 			DataTable dt = new DataTable();
 

@@ -261,12 +261,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public bool EliminarEmpleadoCuadrilla(
-	string idEmpleado,
-	string idCuadrilla,
-	string secuenciaSemana,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+		public bool EliminarEmpleadoCuadrilla(string idEmpleado,string idCuadrilla,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -275,65 +270,42 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
-	DELETE FROM dbo.Nom_EmployeeAttendenceList
-	WHERE id_employee = @idEmpleado
-	  AND id_workGroup = @idCuadrilla
-	  AND c_sequence_per = @secuenciaSemana
-	  AND d_startDate_per = @fechaInicio
-	  AND d_endDate_per = @fechaFin;
-";
+            DELETE FROM dbo.Nom_EmployeeAttendenceList
+            WHERE id_employee = @idEmpleado
+              AND id_workGroup = @idCuadrilla
+              AND c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin;
+        ";
 
 				int filasEliminadas;
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.AddWithValue(
-						"@idEmpleado",
-						idEmpleado);
-
-					cmd.Parameters.AddWithValue(
-						"@idCuadrilla",
-						idCuadrilla);
-
-					cmd.Parameters.AddWithValue(
-						"@secuenciaSemana",
-						secuenciaSemana);
-
-					cmd.Parameters.AddWithValue(
-						"@fechaInicio",
-						fechaInicio.Date);
-
-					cmd.Parameters.AddWithValue(
-						"@fechaFin",
-						fechaFin.Date);
+					cmd.Parameters.AddWithValue("@idEmpleado", idEmpleado);
+					cmd.Parameters.AddWithValue("@idCuadrilla", idCuadrilla);
+					cmd.Parameters.AddWithValue("@secuenciaSemana", secuenciaSemana);
+					cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
+					cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date);
 
 					filasEliminadas = cmd.ExecuteNonQuery();
 				}
 
-
 				if (filasEliminadas > 0)
 				{
 					string queryWeekly = @"
-		DELETE FROM dbo.Nom_EmployeeAttendanceWeekly
-		WHERE id_employee = @idEmpleado
-		  AND c_sequence_per = @secuenciaSemana
-		  AND d_startDate_per = @fechaInicio;
-";
+                DELETE FROM dbo.Nom_EmployeeAttendanceWeekly
+                WHERE id_employee = @idEmpleado
+                  AND c_sequence_per = @secuenciaSemana
+                  AND d_startDate_per = @fechaInicio;
+            ";
 
 					using (SqlCommand cmdWeekly =
 						new SqlCommand(queryWeekly, sql.cnn))
 					{
-						cmdWeekly.Parameters.AddWithValue(
-							"@idEmpleado",
-							idEmpleado);
-
-						cmdWeekly.Parameters.AddWithValue(
-							"@secuenciaSemana",
-							secuenciaSemana);
-
-						cmdWeekly.Parameters.AddWithValue(
-							"@fechaInicio",
-							fechaInicio.Date);
+						cmdWeekly.Parameters.AddWithValue("@idEmpleado", idEmpleado);
+						cmdWeekly.Parameters.AddWithValue("@secuenciaSemana", secuenciaSemana);
+						cmdWeekly.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
 
 						cmdWeekly.ExecuteNonQuery();
 					}
@@ -356,6 +328,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+		
 		private void FrmA_Shown(object sender, EventArgs e)
 		{
 			frmA.clsA.CargarDatosEmpleadoModificar(idAddModify);
@@ -1294,7 +1267,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.MultiSelect = true;
 
-			dgv.RowHeadersVisible = false;
+			dgv.AllowUserToAddRows = false;
 
 
 			// ENCABEZADO

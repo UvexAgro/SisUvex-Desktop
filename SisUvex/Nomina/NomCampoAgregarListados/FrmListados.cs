@@ -176,11 +176,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnQuitar_Click(object sender, EventArgs e)
 		{
-			if (dgvListado.CurrentRow == null)
+			if (dgvListado.SelectedRows.Count == 0)
 			{
 				MessageBox.Show(
-					"Seleccione un empleado.",
-					"Quitar empleado",
+					"Seleccione uno o varios empleados.",
+					"Quitar empleados",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 
@@ -191,7 +191,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				MessageBox.Show(
 					"Seleccione una cuadrilla.",
-					"Quitar empleado",
+					"Quitar empleados",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 
@@ -206,47 +206,89 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			string idEmpleado =
-				dgvListado.CurrentRow.Cells["Codigo"].Value?.ToString();
-
 			string idCuadrilla =
 				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
-			if (string.IsNullOrWhiteSpace(idEmpleado) ||
-				string.IsNullOrWhiteSpace(idCuadrilla))
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
 			{
 				MessageBox.Show(
-					"No se pudo obtener el empleado o la cuadrilla.",
-					"Quitar empleado",
+					"No se pudo obtener la cuadrilla.",
+					"Quitar empleados",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 
 				return;
 			}
 
-			bool eliminado = cls.EliminarEmpleadoCuadrilla(
-				idEmpleado,
-				idCuadrilla,
-				secuenciaSemana,
-				fechaInicio,
-				fechaFin);
+			// Guardar los códigos de los empleados seleccionados
+			List<string> empleadosSeleccionados = new List<string>();
 
-			if (eliminado)
+			foreach (DataGridViewRow fila in dgvListado.SelectedRows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string idEmpleado =
+					fila.Cells["Codigo"].Value?.ToString();
+
+				if (!string.IsNullOrWhiteSpace(idEmpleado))
+				{
+					empleadosSeleccionados.Add(idEmpleado);
+				}
+			}
+
+			if (empleadosSeleccionados.Count == 0)
 			{
 				MessageBox.Show(
-					"Empleado quitado correctamente.",
-					"Quitar empleado",
+					"No se encontraron empleados seleccionados.",
+					"Quitar empleados",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 
-				cls.CargarEmpleadosCuadrilla(
+				return;
+			}
+
+			DialogResult resultado = MessageBox.Show(
+				$"¿Desea quitar {empleadosSeleccionados.Count} empleado(s) seleccionados?",
+				"Confirmar eliminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (resultado != DialogResult.Yes)
+				return;
+
+			int eliminados = 0;
+
+			// Eliminar los empleados seleccionados
+			foreach (string idEmpleado in empleadosSeleccionados)
+			{
+				bool eliminado = cls.EliminarEmpleadoCuadrilla(
+					idEmpleado,
 					idCuadrilla,
 					secuenciaSemana,
 					fechaInicio,
 					fechaFin);
 
-				cls.ActualizarTotalEmpleados();
+				if (eliminado)
+				{
+					eliminados++;
+				}
 			}
+
+			// Recargar la lista
+			cls.CargarEmpleadosCuadrilla(
+				idCuadrilla,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
+
+			cls.ActualizarTotalEmpleados();
+
+			MessageBox.Show(
+				$"Se quitaron {eliminados} empleado(s) correctamente.",
+				"Quitar empleados",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
 		}
 	}
 }
