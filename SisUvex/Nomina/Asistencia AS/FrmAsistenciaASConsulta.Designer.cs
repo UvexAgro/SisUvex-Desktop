@@ -68,6 +68,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             labelLP = new Label();
             labelSeason = new Label();
             dgvReport = new DataGridView();
+            pgrReport = new ProgressBar();
             lblTitle = new Label();
             btnOpenFrmAttendanceType = new Button();
             bgpInfo.SuspendLayout();
@@ -472,8 +473,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.AllowUserToAddRows = false;
             dgvReport.AllowUserToDeleteRows = false;
             dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             dgvReport.BackgroundColor = SystemColors.Control;
             dgvReport.BorderStyle = BorderStyle.Fixed3D;
             dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -488,7 +487,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 289);
+            dgvReport.Location = new Point(12, 303);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -502,11 +501,20 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.RowHeadersVisible = false;
             dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(909, 342);
+            dgvReport.Size = new Size(909, 328);
             dgvReport.TabIndex = 86;
             dgvReport.CellFormatting += dgvReport_CellFormatting;
             dgvReport.CellPainting += dgvReport_CellPainting;
             dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
+            // 
+            // pgrReport
+            // 
+            pgrReport.Location = new Point(12, 285);
+            pgrReport.Maximum = 1000;
+            pgrReport.Name = "pgrReport";
+            pgrReport.Size = new Size(706, 16);
+            pgrReport.Style = ProgressBarStyle.Continuous;
+            pgrReport.TabIndex = 95;
             // 
             // lblTitle
             // 
@@ -547,6 +555,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             Controls.Add(chbShowEmployees);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
+            Controls.Add(pgrReport);
             Controls.Add(dgvReport);
             Controls.Add(lblTitle);
             Controls.Add(btnModifyAttendance);
@@ -591,6 +600,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Label labelLP;
         private Label labelSeason;
         public DataGridView dgvReport;
+        public ProgressBar pgrReport;
         public Label lblTitle;
         public ComboBox cboAttendenceType;
         private Label label2;

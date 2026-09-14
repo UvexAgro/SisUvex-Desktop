@@ -159,7 +159,11 @@ namespace SisUvex.Nomina.Asistencia_AS
         // ── Vista en el DataGridView (dgvReport) ────────────────────────────────
 
         /// <summary>Construye la tabla en formato calendario a partir de la misma tabla del reporte lineal.</summary>
-        public DataTable BuildCalendarTable(DataTable reportData, List<DateTime> days, Dictionary<string, AttendanceStyle> stylesByPrefix)
+        public DataTable BuildCalendarTable(
+            DataTable reportData,
+            List<DateTime> days,
+            Dictionary<string, AttendanceStyle> stylesByPrefix,
+            Action<int, int>? onProgress = null)
         {
             (Blocks, WeeksPerBlock) = BuildBlocks(days);
 
@@ -183,6 +187,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             if (Blocks.Count == 0 || WeeksPerBlock == 0) return table;
+
+            int empCount = reportData.Rows.Count;
+            int weekCount = Math.Max(1, WeeksPerBlock);
+            int totalUnits = Math.Max(1, empCount * weekCount);
+            int doneUnits = 0;
 
             foreach (DataRow empRow in reportData.Rows)
             {
@@ -261,6 +270,8 @@ namespace SisUvex.Nomina.Asistencia_AS
 
                     table.Rows.Add(numRow);
                     table.Rows.Add(valRow);
+                    doneUnits++;
+                    onProgress?.Invoke(doneUnits, totalUnits);
                 }
             }
 
@@ -272,7 +283,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         /// del control se oculta por completo: el nombre de mes y "D L M M J V S" ahora se muestran como
         /// filas del propio calendario (una vez por empleado), igual que en la hoja de Excel.
         /// </summary>
-        public void ApplyHeadersAndFormatting(DataGridView dgv)
+        public void ApplyHeadersAndFormatting(DataGridView dgv, Action<int, int>? onProgress = null)
         {
             dgv.ColumnHeadersVisible = false;
 
@@ -285,6 +296,9 @@ namespace SisUvex.Nomina.Asistencia_AS
                 font.Dispose();
             _fittingFonts.Clear();
 
+            int total = Math.Max(1, dgv.Columns.Count + dgv.Rows.Count);
+            int done = 0;
+
             foreach (DataGridViewColumn col in dgv.Columns)
             {
                 col.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -292,18 +306,24 @@ namespace SisUvex.Nomina.Asistencia_AS
                 if (col.Name == ColKind || col.Name.StartsWith(ColorPrefix, StringComparison.Ordinal))
                 {
                     col.Visible = false;
+                    done++;
+                    onProgress?.Invoke(done, total);
                     continue;
                 }
 
                 if (col.Name.StartsWith(GapPrefix, StringComparison.Ordinal))
                 {
                     col.Width = 12;
+                    done++;
+                    onProgress?.Invoke(done, total);
                     continue;
                 }
 
                 if (TryParseSlot(col.Name, out _, out _))
                 {
                     col.Width = 34;
+                    done++;
+                    onProgress?.Invoke(done, total);
                     continue;
                 }
 
@@ -319,6 +339,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     ColFaltas30                               => 70,
                     _ => col.Width,
                 };
+                done++;
+                onProgress?.Invoke(done, total);
             }
 
             // Nombre completo: se ajusta al texto más largo entre los empleados (o al del propio
@@ -335,10 +357,17 @@ namespace SisUvex.Nomina.Asistencia_AS
             // (sin AutoSizeRows) para no medir cada celda al hacer scroll.
             foreach (DataGridViewRow row in dgv.Rows)
             {
-                if (row.DataBoundItem is not DataRowView drv || !TryGetKind(drv, out string kind)) continue;
+                if (row.DataBoundItem is not DataRowView drv || !TryGetKind(drv, out string kind))
+                {
+                    done++;
+                    onProgress?.Invoke(done, total);
+                    continue;
+                }
                 if (kind == KindMonth) row.Height = 26;
                 else if (kind == KindWeekday) row.Height = 30;
                 else row.Height = 22;
+                done++;
+                onProgress?.Invoke(done, total);
             }
         }
 

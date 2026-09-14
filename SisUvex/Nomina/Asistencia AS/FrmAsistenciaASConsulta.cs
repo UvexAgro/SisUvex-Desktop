@@ -149,5 +149,23 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             txbIdEmployee.SelectAll();
         }
+
+        /// <summary>
+        /// Bloquea filtros, botones y cambios de vista mientras hay una carga en curso,
+        /// para que Application.DoEvents de la barra de progreso no reentre en esas acciones.
+        /// </summary>
+        internal void SetOperationBusy(bool busy)
+        {
+            bool enabled = !busy;
+            gpbFilters.Enabled = enabled;
+            bgpInfo.Enabled = enabled;
+            btnClearList.Enabled = enabled;
+            chbShowEmployees.Enabled = enabled;
+            chbShowReport.Enabled = enabled;
+            chbShowReportCalendar.Enabled = enabled;
+            btnExcel.Enabled = enabled;
+            btnModifyAttendance.Enabled = enabled;
+            btnOpenFrmAttendanceType.Enabled = enabled;
+        }
     }
 }

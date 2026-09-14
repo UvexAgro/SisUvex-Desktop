@@ -65,6 +65,10 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Dictionary<(string Codigo, DateTime Fecha), string> _commentsByCodeAndDay = new();
         private bool _showingReport;
         private bool _showingCalendar;
+        /// <summary>Evita que asignar Checked en los botones de vista reentre a Show* mientras se cambia de modo.</summary>
+        private bool _updatingViewButtons;
+        /// <summary>Profundidad de BeginProgress: EndProgress solo cierra la barra en el nivel más externo.</summary>
+        private int _progressDepth;
         private readonly ClsAsistenciaASCalendario _calendarCls = new();
 
         // ── Inicio del formulario ─────────────────────────────────────────────
@@ -77,7 +81,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvReport);
             DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvReport);
             frm.lblEmployeeAdvice.Text = string.Empty;
-            ShowEmployeeList();
+            ShowEmployeeList(showProgress: false);
         }
 
         private void SetControls()
@@ -195,9 +199,11 @@ namespace SisUvex.Nomina.Asistencia_AS
                 return;
             }
 
+            BeginProgress();
             try
             {
                 DataTable dt = FetchEmployeeByCode(id);
+                AdvanceTo(400);
                 if (dt.Rows.Count == 0)
                 {
                     SetAdvice($"No se encontró el empleado {id}.", isError: true);
@@ -205,6 +211,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 AddRowsToEmployeeList(dt);
+                AdvanceTo(650);
                 RefreshEmployeeDgv();
                 SetAdvice($"Empleado {id} agregado correctamente.", isError: false);
                 frm!.txbIdEmployee.Clear();
@@ -214,6 +221,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             {
                 MessageBox.Show(ex.Message, "Error al agregar empleado", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                EndProgress();
+            }
         }
 
         private void AddMultipleEmployees(List<string> codes)
@@ -222,36 +233,49 @@ namespace SisUvex.Nomina.Asistencia_AS
             int repeated = 0;
             var notFound = new List<string>();
 
-            foreach (string id in codes)
+            BeginProgress();
+            try
             {
-                try
+                for (int i = 0; i < codes.Count; i++)
                 {
-                    DataRow? existing = FindEmployeeInList(id);
-                    if (existing != null)
+                    string id = codes[i];
+                    try
                     {
-                        existing[ColSel] = "1";
-                        repeated++;
-                        continue;
+                        DataRow? existing = FindEmployeeInList(id);
+                        if (existing != null)
+                        {
+                            existing[ColSel] = "1";
+                            repeated++;
+                        }
+                        else
+                        {
+                            DataTable dt = FetchEmployeeByCode(id);
+                            if (dt.Rows.Count == 0)
+                            {
+                                notFound.Add(id);
+                            }
+                            else
+                            {
+                                AddRowsToEmployeeList(dt);
+                                added++;
+                            }
+                        }
                     }
-
-                    DataTable dt = FetchEmployeeByCode(id);
-                    if (dt.Rows.Count == 0)
+                    catch
                     {
                         notFound.Add(id);
-                        continue;
                     }
 
-                    AddRowsToEmployeeList(dt);
-                    added++;
+                    ReportRange(i + 1, codes.Count, 0, 820);
                 }
-                catch
-                {
-                    notFound.Add(id);
-                }
-            }
 
-            RefreshEmployeeDgv();
-            ShowEmployeeList();
+                RefreshEmployeeDgv();
+                ShowEmployeeList();
+            }
+            finally
+            {
+                EndProgress();
+            }
 
             var summary = new System.Text.StringBuilder();
             summary.Append($"{added} agregado(s)");
@@ -326,11 +350,13 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null) return;
 
+            BeginProgress();
             try
             {
                 string? idPaymentPlace = frm.cboLP.ComboValueOrNull();
 
                 DataTable dt = FetchEmployeeListByPaymentPlace(idPaymentPlace);
+                AdvanceTo(220);
 
                 if (dt.Rows.Count == 0)
                 {
@@ -338,7 +364,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     return;
                 }
 
-                int added = AddRowsToEmployeeList(dt);
+                int added = AddRowsToEmployeeList(dt, rangeFrom: 220, rangeTo: 820);
+                AdvanceTo(820);
                 RefreshEmployeeDgv();
                 SetAdvice($"{added} empleado(s) agregado(s) al listado.", isError: false);
                 ShowEmployeeList();
@@ -346,6 +373,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error al agregar listado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                EndProgress();
             }
         }
 
@@ -383,21 +414,20 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         public void ChbShowEmployees_CheckedChanged()
         {
-            if (frm == null) return;
+            if (frm == null || _updatingViewButtons) return;
             if (frm.chbShowEmployees.Checked)
                 ShowEmployeeList();
         }
 
         public void ChbShowReport_CheckedChanged()
         {
-            if (frm == null) return;
+            if (frm == null || _updatingViewButtons) return;
             if (!frm.chbShowReport.Checked) return;
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                frm.chbShowReport.Checked = false;
-                frm.chbShowEmployees.Checked = true;
+                SetViewButtons(employees: true, report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -407,14 +437,13 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         public void ChbShowReportCalendar_CheckedChanged()
         {
-            if (frm == null) return;
+            if (frm == null || _updatingViewButtons) return;
             if (!frm.chbShowReportCalendar.Checked) return;
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                frm.chbShowReportCalendar.Checked = false;
-                frm.chbShowEmployees.Checked = true;
+                SetViewButtons(employees: true, report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -454,10 +483,13 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             if (!ValidateConnectionSettings()) return;
 
+            BeginProgress();
             try
             {
-                DataTable dtAsistencias   = FetchAsistenciasQuery(employeeCodes, date1, date2);
+                DataTable dtAsistencias = FetchAsistenciasQuery(employeeCodes, date1, date2);
+                AdvanceTo(140);
                 DataTable dtInasistencias = FetchInasistenciasQuery(employeeCodes, date1, date2);
+                AdvanceTo(280);
 
                 if (dtAsistencias.Rows.Count == 0 && dtInasistencias.Rows.Count == 0)
                 {
@@ -467,11 +499,15 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 DataTable dtEmployeeInfo = FetchEmployeeInfoQuery(employeeCodes);
+                AdvanceTo(360);
 
                 _attendanceStylesByPrefix = GetAttendanceTypeStylesByPrefix();
                 _reportDays = EachDayInclusive(date1, date2).ToList();
+                AdvanceTo(400);
+
                 _dtReportPreview = BuildReportTable(
-                    employeeCodes, dtEmployeeInfo, dtAsistencias, dtInasistencias, defaultPrefix);
+                    employeeCodes, dtEmployeeInfo, dtAsistencias, dtInasistencias, defaultPrefix,
+                    onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
                 SetAdvice(string.Empty, isError: false);
@@ -479,6 +515,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error al cargar reporte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                EndProgress();
             }
         }
 
@@ -902,7 +942,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             DataTable dtEmployeeInfo,
             DataTable dtAsistencias,
             DataTable dtInasistencias,
-            string defaultPrefix)
+            string defaultPrefix,
+            Action<int, int>? onProgress = null)
         {
             var table = new DataTable();
             table.Columns.Add(ReportColCodigo, typeof(string));
@@ -939,6 +980,10 @@ namespace SisUvex.Nomina.Asistencia_AS
                     Codigo: r["id_employee"]?.ToString()?.Trim() ?? string.Empty,
                     Fecha: NormalizeDate(r["d_attendance"])))
                 .ToDictionary(g => g.Key, g => g.First()["v_comments"]?.ToString()?.Trim() ?? string.Empty);
+
+            int dayCount = Math.Max(1, _reportDays.Count);
+            int totalUnits = Math.Max(1, employeeCodes.Count * dayCount);
+            int doneUnits = 0;
 
             foreach (string codigo in employeeCodes)
             {
@@ -984,6 +1029,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     }
 
                     newRow[BuildDayColumnName(day)] = value;
+                    doneUnits++;
+                    onProgress?.Invoke(doneUnits, totalUnits);
                 }
 
                 newRow[ReportColTotal] = totalAsistencias;
@@ -1031,39 +1078,54 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || _dtReportPreview == null) return;
 
-            _showingReport   = true;
-            _showingCalendar = false;
-
-            DataGridView dgv = frm.dgvReport;
-            using (DgvAsistenciaASPerf.PausePainting(dgv))
+            bool ownProgress = _progressDepth == 0;
+            int from = ownProgress ? 0 : _progressTarget;
+            int to = ProgressScale;
+            if (ownProgress) BeginProgress();
+            try
             {
-                dgv.ColumnHeadersVisible = true;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-                dgv.ReadOnly = true;
-                dgv.AutoGenerateColumns = true;
-                dgv.DataSource = null;
-                dgv.DataSource = _dtReportPreview;
+                _showingReport   = true;
+                _showingCalendar = false;
 
-                ApplyDayColumnHeaders();
-
-                // El encabezado de fecha usa 2 líneas (mes-día / día de semana); se necesita más alto
-                // y sin la reserva de espacio de la flecha de "ordenar" para aprovechar más celdas en pantalla.
-                dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-                // Anchos fijos después de un único ajuste: AllCells permanente recalcula en cada scroll.
-                foreach (DataGridViewColumn col in dgv.Columns)
+                DataGridView dgv = frm.dgvReport;
+                using (DgvAsistenciaASPerf.PausePainting(dgv))
                 {
-                    if (TryParseDayColumn(col.Name, out _))
-                        col.Width = 44;
-                    else
-                        dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
-                }
-            }
+                    dgv.ColumnHeadersVisible = true;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                    dgv.ReadOnly = true;
+                    dgv.AutoGenerateColumns = true;
+                    dgv.DataSource = null;
+                    dgv.DataSource = _dtReportPreview;
+                    ReportRange(1, 4, from, to);
 
-            frm.chbShowReport.Checked = true;
-            frm.chbShowEmployees.Checked = false;
-            frm.chbShowReportCalendar.Checked = false;
+                    ApplyDayColumnHeaders();
+                    ReportRange(2, 4, from, to);
+
+                    // El encabezado de fecha usa 2 líneas (mes-día / día de semana); se necesita más alto
+                    // y sin la reserva de espacio de la flecha de "ordenar" para aprovechar más celdas en pantalla.
+                    dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+                    int colCount = dgv.Columns.Count;
+                    for (int i = 0; i < colCount; i++)
+                    {
+                        DataGridViewColumn col = dgv.Columns[i];
+                        if (TryParseDayColumn(col.Name, out _))
+                            col.Width = 44;
+                        else
+                            dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
+
+                        ReportRange(i + 1, colCount, LerpRange(from, to, 0.55), to);
+                    }
+                }
+
+                SetViewButtons(employees: false, report: true, calendar: false);
+                AdvanceTo(to);
+            }
+            finally
+            {
+                if (ownProgress) EndProgress();
+            }
         }
 
         /// <summary>
@@ -1075,29 +1137,48 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || _dtReportPreview == null) return;
 
-            // _showingCalendar se activa hasta después de cambiar el DataSource: mientras se reemplaza,
-            // el DGV puede seguir disparando eventos de formato/pintado para la tabla anterior (empleados
-            // o reporte lineal), que no tiene las columnas del calendario.
-            _showingReport   = false;
-            _showingCalendar = false;
-
-            DataTable dtCalendar = _calendarCls.BuildCalendarTable(_dtReportPreview, _reportDays, _attendanceStylesByPrefix);
-
-            using (DgvAsistenciaASPerf.PausePainting(frm.dgvReport))
+            bool ownProgress = _progressDepth == 0;
+            int from = ownProgress ? 0 : _progressTarget;
+            int to = ProgressScale;
+            if (ownProgress) BeginProgress();
+            try
             {
-                frm.dgvReport.ReadOnly = true;
-                frm.dgvReport.AutoGenerateColumns = true;
-                frm.dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-                frm.dgvReport.DataSource = null;
-                frm.dgvReport.DataSource = dtCalendar;
+                // _showingCalendar se activa hasta después de cambiar el DataSource: mientras se reemplaza,
+                // el DGV puede seguir disparando eventos de formato/pintado para la tabla anterior (empleados
+                // o reporte lineal), que no tiene las columnas del calendario.
+                _showingReport   = false;
+                _showingCalendar = false;
 
-                _showingCalendar = true;
-                _calendarCls.ApplyHeadersAndFormatting(frm.dgvReport);
+                int buildFrom = from;
+                int buildTo   = LerpRange(from, to, 0.72);
+                DataTable dtCalendar = _calendarCls.BuildCalendarTable(
+                    _dtReportPreview, _reportDays, _attendanceStylesByPrefix,
+                    onProgress: (done, total) => ReportRange(done, total, buildFrom, buildTo));
+                AdvanceTo(buildTo);
+
+                using (DgvAsistenciaASPerf.PausePainting(frm.dgvReport))
+                {
+                    frm.dgvReport.ReadOnly = true;
+                    frm.dgvReport.AutoGenerateColumns = true;
+                    frm.dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                    frm.dgvReport.DataSource = null;
+                    frm.dgvReport.DataSource = dtCalendar;
+                    ReportRange(1, 2, buildTo, LerpRange(from, to, 0.80));
+
+                    _showingCalendar = true;
+                    int formatFrom = LerpRange(from, to, 0.80);
+                    _calendarCls.ApplyHeadersAndFormatting(
+                        frm.dgvReport,
+                        onProgress: (done, total) => ReportRange(done, total, formatFrom, to));
+                }
+
+                SetViewButtons(employees: false, report: false, calendar: true);
+                AdvanceTo(to);
             }
-
-            frm.chbShowReportCalendar.Checked = true;
-            frm.chbShowReport.Checked = false;
-            frm.chbShowEmployees.Checked = false;
+            finally
+            {
+                if (ownProgress) EndProgress();
+            }
         }
 
         /// <summary>
@@ -1136,32 +1217,68 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         // ── Helpers DGV ──────────────────────────────────────────────────────
 
-        private void ShowEmployeeList()
+        private void ShowEmployeeList(bool showProgress = true)
         {
             if (frm == null) return;
 
-            _showingReport   = false;
-            _showingCalendar = false;
-
-            DataGridView dgv = frm.dgvReport;
-            using (DgvAsistenciaASPerf.PausePainting(dgv))
+            bool ownProgress = showProgress && _progressDepth == 0;
+            int from = ownProgress ? 0 : _progressTarget;
+            int to = ProgressScale;
+            if (ownProgress) BeginProgress();
+            try
             {
-                dgv.ColumnHeadersVisible = true;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-                dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-                dgv.ReadOnly = false;
-                dgv.AutoGenerateColumns = true;
-                dgv.DataSource = null;
-                dgv.DataSource = _dtEmployeeList;
-                ApplyCheckBoxColumnToSel();
-                HideColumnsInDgv(_columnsToHideInDgv);
-                dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
-            }
+                _showingReport   = false;
+                _showingCalendar = false;
 
-            frm.chbShowEmployees.Checked = true;
-            frm.chbShowReport.Checked = false;
-            frm.chbShowReportCalendar.Checked = false;
+                DataGridView dgv = frm.dgvReport;
+                using (DgvAsistenciaASPerf.PausePainting(dgv))
+                {
+                    dgv.ColumnHeadersVisible = true;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                    dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+                    dgv.ReadOnly = false;
+                    dgv.AutoGenerateColumns = true;
+                    dgv.DataSource = null;
+                    dgv.DataSource = _dtEmployeeList;
+                    ReportRange(1, 4, from, to);
+                    ApplyCheckBoxColumnToSel();
+                    HideColumnsInDgv(_columnsToHideInDgv);
+                    ReportRange(2, 4, from, to);
+
+                    int colCount = dgv.Columns.Count;
+                    for (int i = 0; i < colCount; i++)
+                    {
+                        if (dgv.Columns[i].Visible)
+                            dgv.AutoResizeColumn(i, DataGridViewAutoSizeColumnMode.DisplayedCells);
+                        ReportRange(i + 1, Math.Max(1, colCount), LerpRange(from, to, 0.50), to);
+                    }
+                }
+
+                SetViewButtons(employees: true, report: false, calendar: false);
+                AdvanceTo(to);
+            }
+            finally
+            {
+                if (ownProgress) EndProgress();
+            }
+        }
+
+        private void SetViewButtons(bool employees, bool report, bool calendar)
+        {
+            if (frm == null) return;
+
+            _updatingViewButtons = true;
+            try
+            {
+                frm.chbShowEmployees.Checked = employees;
+                frm.chbShowReport.Checked = report;
+                frm.chbShowReportCalendar.Checked = calendar;
+            }
+            finally
+            {
+                _updatingViewButtons = false;
+            }
         }
 
         /// <summary>
@@ -1231,7 +1348,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         /// <summary>Agrega filas al listado evitando duplicados. Devuelve cantidad agregada.</summary>
-        private int AddRowsToEmployeeList(DataTable source)
+        private int AddRowsToEmployeeList(DataTable source, int rangeFrom = 0, int rangeTo = 0)
         {
             foreach (DataColumn col in source.Columns)
             {
@@ -1239,7 +1356,10 @@ namespace SisUvex.Nomina.Asistencia_AS
                     _dtEmployeeList.Columns.Add(col.ColumnName, col.DataType);
             }
 
+            bool reportProgress = rangeTo > rangeFrom;
             int count = 0;
+            int processed = 0;
+            int total = Math.Max(1, source.Rows.Count);
             foreach (DataRow srcRow in source.Rows)
             {
                 string codigo = srcRow.Table.Columns.Contains(ColCodigo)
@@ -1250,6 +1370,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                 if (existing != null)
                 {
                     existing[ColSel] = "1";
+                    processed++;
+                    if (reportProgress) ReportRange(processed, total, rangeFrom, rangeTo);
                     continue;
                 }
 
@@ -1262,6 +1384,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                 newRow[ColSel] = "1";
                 _dtEmployeeList.Rows.Add(newRow);
                 count++;
+                processed++;
+                if (reportProgress) ReportRange(processed, total, rangeFrom, rangeTo);
             }
 
             return count;
@@ -1283,6 +1407,154 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (frm == null) return;
             frm.lblEmployeeAdvice.Text      = text;
             frm.lblEmployeeAdvice.ForeColor = isError ? Color.Red : Color.Gray;
+        }
+
+        // ── ProgressBar pgrReport ─────────────────────────────────────────────
+
+        private const int ProgressScale = 1000;
+        private const int ProgressPaintMs = 20;
+        private int _progressTarget;
+        private int _lastPaintTick;
+
+        private bool HasProgressBar => frm?.pgrReport != null;
+
+        private void BeginProgress()
+        {
+            if (!HasProgressBar) return;
+            _progressDepth++;
+            if (_progressDepth > 1) return;
+
+            frm!.Cursor = Cursors.WaitCursor;
+            frm.SetOperationBusy(true);
+            ProgressBar p = frm.pgrReport;
+            p.Style = ProgressBarStyle.Continuous;
+            p.Minimum = 0;
+            if (p.Value > ProgressScale)
+                p.Value = 0;
+            p.Maximum = ProgressScale;
+            p.Value = 0;
+            _progressTarget = 0;
+            _lastPaintTick = 0;
+            p.Update();
+        }
+
+        /// <summary>Punto intermedio entre <paramref name="from"/> y <paramref name="to"/> (t de 0 a 1).</summary>
+        private static int LerpRange(int from, int to, double t)
+            => from + (int)Math.Round((to - from) * t);
+
+        private void ReportRange(int done, int total, int from, int to)
+        {
+            if (total <= 0)
+            {
+                AdvanceTo(to);
+                return;
+            }
+
+            int v = from + (int)((long)Math.Min(done, total) * (to - from) / total);
+            AdvanceTo(v);
+        }
+
+        /// <summary>
+        /// Mueve la barra hacia <paramref name="permille"/> (0–1000). Los saltos grandes se interpolan
+        /// en varios frames; los avances chicos se pintan como máximo cada <see cref="ProgressPaintMs"/> ms.
+        /// </summary>
+        private void AdvanceTo(int permille)
+        {
+            if (!HasProgressBar) return;
+
+            permille = Math.Clamp(permille, 0, ProgressScale);
+            if (permille < _progressTarget)
+                permille = _progressTarget;
+            _progressTarget = permille;
+
+            ProgressBar p = frm!.pgrReport;
+            EnsureBarScale();
+
+            int shown = p.Value;
+            int gap = permille - shown;
+            if (gap <= 0) return;
+
+            int now = Environment.TickCount;
+            bool force = permille >= ProgressScale;
+            bool largeJump = gap >= 30;
+            if (!force && !largeJump && _lastPaintTick != 0 && now - _lastPaintTick < ProgressPaintMs)
+                return;
+
+            if (largeJump)
+            {
+                int frames = Math.Clamp(gap / 12, 8, 18);
+                for (int i = 1; i <= frames; i++)
+                {
+                    ApplyBarValue(shown + gap * i / frames);
+                    p.Update();
+                    Application.DoEvents();
+                    if (i < frames)
+                        System.Threading.Thread.Sleep(8);
+                }
+            }
+            else
+            {
+                ApplyBarValue(permille);
+                p.Update();
+                Application.DoEvents();
+            }
+
+            _lastPaintTick = Environment.TickCount;
+        }
+
+        private void EnsureBarScale()
+        {
+            ProgressBar p = frm!.pgrReport;
+            if (p.Style != ProgressBarStyle.Continuous)
+                p.Style = ProgressBarStyle.Continuous;
+            if (p.Minimum != 0)
+                p.Minimum = 0;
+            if (p.Maximum != ProgressScale)
+            {
+                if (p.Value > ProgressScale)
+                    p.Value = ProgressScale;
+                p.Maximum = ProgressScale;
+            }
+        }
+
+        private void ApplyBarValue(int value)
+        {
+            EnsureBarScale();
+            ProgressBar p = frm!.pgrReport;
+            int max = p.Maximum;
+            int v = Math.Clamp(value, 0, max);
+
+            if (v >= max)
+            {
+                // WinForms no pinta el tope hasta rebasar Maximum; se sube uno y se deja Value en max
+                // sin quedar Maximum alterado por si Application.DoEvents reentra.
+                p.Maximum = max + 1;
+                p.Value = max + 1;
+                p.Value = max;
+                p.Maximum = max;
+                if (p.Value > max)
+                    p.Value = max;
+                return;
+            }
+
+            p.Value = v + 1;
+            p.Value = v;
+        }
+
+        private void EndProgress()
+        {
+            if (_progressDepth <= 0) return;
+            _progressDepth--;
+            if (_progressDepth > 0 || !HasProgressBar) return;
+
+            AdvanceTo(ProgressScale);
+            ProgressBar p = frm!.pgrReport;
+            p.Update();
+            System.Threading.Thread.Sleep(60);
+            p.Value = 0;
+            _progressTarget = 0;
+            frm.Cursor = Cursors.Default;
+            frm.SetOperationBusy(false);
         }
     }
 

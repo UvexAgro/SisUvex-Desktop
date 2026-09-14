@@ -512,8 +512,11 @@ internal class ClsModifyAttendanceEmployees
         bool isAsistencia = string.IsNullOrEmpty(selectedId);
         string displayValue = isAsistencia ? ValueAsistencia : selectedPrefix;
         string? comments = string.IsNullOrWhiteSpace(frm.txbComments.Text) ? null : frm.txbComments.Text.Trim();
+        bool applyingAbsence = !isAsistencia && IsInasistenciaValue(displayValue);
 
-        var touchedRows = new HashSet<int>();
+        var targets = new List<(DataRowView Drv, string ColName, DateTime Day, string Code, int RowIndex)>();
+        int asistenciaAFalta = 0;
+        int faltaAAsistencia = 0;
 
         foreach (DataGridViewCell cell in frm.dgvPivot.SelectedCells)
         {
@@ -525,6 +528,24 @@ internal class ClsModifyAttendanceEmployees
             string code = drv[ColCodigo]?.ToString()?.Trim() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(code)) continue;
 
+            string current = drv[colName]?.ToString()?.Trim() ?? string.Empty;
+            if (applyingAbsence && IsAsistenciaValue(current))
+                asistenciaAFalta++;
+            else if (!applyingAbsence && IsInasistenciaValue(current))
+                faltaAAsistencia++;
+
+            targets.Add((drv, colName, day, code, cell.RowIndex));
+        }
+
+        if (targets.Count == 0) return;
+
+        if (!ConfirmAttendanceKindChange(asistenciaAFalta, faltaAAsistencia))
+            return;
+
+        var touchedRows = new HashSet<int>();
+
+        foreach (var (drv, colName, day, code, rowIndex) in targets)
+        {
             drv[colName] = displayValue;
 
             _pendingEdits[(code, day)] = new EAttendanceEdit
@@ -536,7 +557,7 @@ internal class ClsModifyAttendanceEmployees
                 Prefix = displayValue,
             };
 
-            touchedRows.Add(cell.RowIndex);
+            touchedRows.Add(rowIndex);
         }
 
         foreach (int rowIndex in touchedRows)
@@ -544,6 +565,44 @@ internal class ClsModifyAttendanceEmployees
 
         frm.dgvPivot.Refresh();
         UpdatePendingSummary();
+    }
+
+    /// <summary>
+    /// Pide confirmación si se va a cambiar asistencia → falta o falta → asistencia.
+    /// </summary>
+    private static bool ConfirmAttendanceKindChange(int asistenciaAFalta, int faltaAAsistencia)
+    {
+        string? message = null;
+        if (asistenciaAFalta > 0)
+            message = asistenciaAFalta == 1
+                ? "Una de las celdas seleccionadas está marcada como asistencia y se cambiará a inasistencia.\n\n¿Deseas continuar?"
+                : $"{asistenciaAFalta} celdas seleccionadas están marcadas como asistencia y se cambiarán a inasistencia.\n\n¿Deseas continuar?";
+        else if (faltaAAsistencia > 0)
+            message = faltaAAsistencia == 1
+                ? "Una de las celdas seleccionadas está marcada como inasistencia y se cambiará a asistencia.\n\n¿Deseas continuar?"
+                : $"{faltaAAsistencia} celdas seleccionadas están marcadas como inasistencia y se cambiarán a asistencia.\n\n¿Deseas continuar?";
+
+        if (message == null) return true;
+
+        return MessageBox.Show(
+            message,
+            "Confirmar cambio de asistencia",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning,
+            MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+    }
+
+    private bool IsAsistenciaValue(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return false;
+        if (string.Equals(value, ValueAsistencia, StringComparison.OrdinalIgnoreCase)) return true;
+        return _stylesByPrefix.TryGetValue(value, out AttendanceStyle style) && !style.IsAbsence;
+    }
+
+    private bool IsInasistenciaValue(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value) || IsAsistenciaValue(value)) return false;
+        return true;
     }
 
     private void RecalculateTotal(int rowIndex)
