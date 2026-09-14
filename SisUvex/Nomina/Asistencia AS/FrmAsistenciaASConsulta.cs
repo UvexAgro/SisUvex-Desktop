@@ -167,5 +167,28 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnModifyAttendance.Enabled = enabled;
             btnOpenFrmAttendanceType.Enabled = enabled;
         }
+
+        /// <summary>
+        /// Cursor de espera. Hay que restaurar también <see cref="Cursor.Current"/> y el del MDI:
+        /// si no, tras Application.DoEvents el reloj se queda pegado aunque el formulario ya haya terminado.
+        /// </summary>
+        internal void SetWaitCursor(bool wait)
+        {
+            UseWaitCursor = wait;
+            Cursor = wait ? Cursors.WaitCursor : Cursors.Default;
+            Application.UseWaitCursor = wait;
+            Cursor.Current = wait ? Cursors.WaitCursor : Cursors.Default;
+
+            dgvReport.UseWaitCursor = wait;
+            if (!wait)
+                dgvReport.Cursor = Cursors.Default;
+
+            if (MdiParent != null)
+            {
+                MdiParent.UseWaitCursor = wait;
+                if (!wait)
+                    MdiParent.Cursor = Cursors.Default;
+            }
+        }
     }
 }

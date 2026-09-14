@@ -73,6 +73,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                 return;
             }
 
+            reportData = OrderReportRowsByName(reportData);
+
             using var wb = new XLWorkbook();
 
             var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
@@ -279,6 +281,20 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         // ── Utilidades estáticas ──────────────────────────────────────────────
+
+        private static DataTable OrderReportRowsByName(DataTable reportData)
+        {
+            if (reportData.Rows.Count <= 1) return reportData;
+            if (!reportData.Columns.Contains(ClsAsistenciaASConsulta.ReportColNombre))
+                return reportData;
+
+            return reportData.AsEnumerable()
+                .OrderBy(r => r[ClsAsistenciaASConsulta.ReportColNombre]?.ToString() ?? string.Empty,
+                    ClsAsistenciaASConsulta.EmployeeNameComparer)
+                .ThenBy(r => r[ClsAsistenciaASConsulta.ReportColCodigo]?.ToString() ?? string.Empty,
+                    StringComparer.OrdinalIgnoreCase)
+                .CopyToDataTable();
+        }
 
         private static string SafeStr(DataRow row, string col)
             => row.Table.Columns.Contains(col) && row[col] != DBNull.Value

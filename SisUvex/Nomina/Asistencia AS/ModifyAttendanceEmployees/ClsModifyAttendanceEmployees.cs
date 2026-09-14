@@ -42,6 +42,10 @@ internal class ClsModifyAttendanceEmployees
     private List<DateTime> _days = new();
     /// <summary>id_attendanceType con el que debe preseleccionarse cboDefaultType (viene, p. ej., del cboAttendenceType del reporte). Null = usar el primero de la lista.</summary>
     private string? _initialDefaultTypeId;
+    /// <summary>Reporte ya cargado en FrmAsistenciaASConsulta; si viene, se arma el pivote sin volver a consultar nomhojas.</summary>
+    private DataTable? _seedReport;
+    private List<DateTime>? _seedDays;
+    private Dictionary<(string Codigo, DateTime Fecha), string>? _seedComments;
 
     private DataTable _dtPivot = null!;
     private DataTable? _dtOriginalSnapshot;
@@ -76,7 +80,10 @@ internal class ClsModifyAttendanceEmployees
         List<(string Code, string FullName, string Lp)> employees,
         DateTime date1,
         DateTime date2,
-        string? defaultAttendanceTypeId = null)
+        string? defaultAttendanceTypeId = null,
+        DataTable? seedReport = null,
+        List<DateTime>? seedDays = null,
+        Dictionary<(string Codigo, DateTime Fecha), string>? seedComments = null)
     {
         if (!User.HasCreateRecordsPermission())
             return null;
@@ -89,6 +96,19 @@ internal class ClsModifyAttendanceEmployees
             return null;
         }
 
+        if (FrmMenu.FrmMenuInstance != null)
+        {
+            foreach (Form open in FrmMenu.FrmMenuInstance.MdiChildren)
+            {
+                if (open is FrmModifyAttendanceEmployees existing && !existing.IsDisposed)
+                {
+                    existing.BringToFront();
+                    existing.Focus();
+                    return existing.cls;
+                }
+            }
+        }
+
         FrmModifyAttendanceEmployees frm = new();
         ClsModifyAttendanceEmployees cls = new()
         {
@@ -97,6 +117,9 @@ internal class ClsModifyAttendanceEmployees
             _date1 = date1.Date,
             _date2 = date2.Date,
             _initialDefaultTypeId = defaultAttendanceTypeId,
+            _seedReport = seedReport,
+            _seedDays = seedDays,
+            _seedComments = seedComments,
         };
         frm.cls = cls;
 
@@ -115,17 +138,25 @@ internal class ClsModifyAttendanceEmployees
             return;
         }
 
-        LoadAttendanceTypeCombo();
-        frm.lblPeriodo.Text = $"Periodo: {_date1:dd/MM/yyyy} al {_date2:dd/MM/yyyy}    ·    {_employees.Count} empleado(s)";
-        UpdatePendingSummary();
-
+        frm.UseWaitCursor = true;
+        frm.lblPeriodo.Text = "Cargando asistencias...";
+        frm.Update();
         try
         {
+            LoadAttendanceTypeCombo();
+            frm.lblPeriodo.Text = $"Periodo: {_date1:dd/MM/yyyy} al {_date2:dd/MM/yyyy}    ·    {_employees.Count} empleado(s)";
+            UpdatePendingSummary();
+
             LoadPivot();
         }
         catch (Exception ex)
         {
             MessageBox.Show(ex.ToString(), "Error al cargar asistencias", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            frm.UseWaitCursor = false;
+            frm.Cursor = Cursors.Default;
         }
     }
 
@@ -252,11 +283,19 @@ internal class ClsModifyAttendanceEmployees
 
     private void LoadPivot()
     {
+        if (TryLoadPivotFromSeed())
+            return;
+
         _days = EachDayInclusive(_date1, _date2).ToList();
         List<string> codes = _employees.Select(e => e.Code).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
         DataTable dtAsistencias = FetchAsistenciasQuery(codes, _date1, _date2);
         DataTable dtInasistencias = FetchInasistenciasQuery(codes, _date1, _date2);
+
+        HashSet<string> withRecords = ClsAsistenciaASConsulta.CollectEmployeeCodesWithAttendanceRecords(
+            dtAsistencias, dtInasistencias);
+        if (!KeepEmployees(withRecords))
+            return;
 
         _asistenciaLookup = dtAsistencias.AsEnumerable()
             .GroupBy(r => (
@@ -276,12 +315,89 @@ internal class ClsModifyAttendanceEmployees
                 Date: NormalizeDate(r["d_attendance"])))
             .ToDictionary(g => g.Key, g => g.First()["v_comments"]?.ToString()?.Trim() ?? string.Empty);
 
+        FinishPivotLoad();
+    }
+
+    /// <summary>
+    /// Deja sólo empleados con registros de asistencia/inasistencia y los ordena por apellidos y nombre.
+    /// </summary>
+    private bool KeepEmployees(HashSet<string> codesWithRecords)
+    {
+        _employees = ClsAsistenciaASConsulta.OrderEmployeesByName(
+            _employees.Where(e => codesWithRecords.Contains(e.Code)));
+
+        if (_employees.Count > 0)
+        {
+            frm.lblPeriodo.Text = $"Periodo: {_date1:dd/MM/yyyy} al {_date2:dd/MM/yyyy}    ·    {_employees.Count} empleado(s)";
+            return true;
+        }
+
+        MessageBox.Show(
+            "No hay empleados con registros de asistencia (nomhojas) ni de inasistencia (Nom_Attendance_AS) en el rango de fechas.",
+            "Modificar asistencias",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
+        frm.Close();
+        return false;
+    }
+
+    /// <summary>
+    /// Si el reporte de consulta ya trae el mismo rango, se reutiliza para no volver a consultar
+    /// nomhojas (esa query es pesada y, combinada con el AutoSize del DGV, congelaba el MDI).
+    /// </summary>
+    private bool TryLoadPivotFromSeed()
+    {
+        if (_seedReport == null || _seedDays == null || _seedDays.Count == 0)
+            return false;
+        if (_seedDays[0].Date != _date1.Date || _seedDays[^1].Date != _date2.Date)
+            return false;
+
+        _days = _seedDays.Select(d => d.Date).ToList();
+        _asistenciaLookup = new();
+        _inasistenciaLookup = new();
+        _commentsLookup = new();
+        if (_seedComments != null)
+        {
+            foreach (var kv in _seedComments)
+                _commentsLookup[(kv.Key.Codigo, kv.Key.Fecha.Date)] = kv.Value;
+        }
+
+        var wanted = new HashSet<string>(_employees.Select(e => e.Code), StringComparer.OrdinalIgnoreCase);
+        var inSeed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        string colCodigo = ClsAsistenciaASConsulta.ReportColCodigo;
+
+        foreach (DataRow src in _seedReport.Rows)
+        {
+            string code = src.Table.Columns.Contains(colCodigo)
+                ? src[colCodigo]?.ToString()?.Trim() ?? string.Empty
+                : string.Empty;
+            if (string.IsNullOrWhiteSpace(code) || !wanted.Contains(code)) continue;
+            inSeed.Add(code);
+
+            foreach (DateTime day in _days)
+            {
+                string colName = BuildDayColumnName(day);
+                if (!src.Table.Columns.Contains(colName)) continue;
+                string value = src[colName]?.ToString()?.Trim() ?? string.Empty;
+                if (string.Equals(value, ValueAsistencia, StringComparison.OrdinalIgnoreCase))
+                    _asistenciaLookup[(code, day)] = 1;
+                else if (!string.IsNullOrWhiteSpace(value))
+                    _inasistenciaLookup[(code, day)] = value;
+            }
+        }
+
+        if (!KeepEmployees(inSeed))
+            return true;
+
+        FinishPivotLoad();
+        return true;
+    }
+
+    private void FinishPivotLoad()
+    {
         _dtPivot = BuildPivotTable();
         _pendingEdits.Clear();
         ShowPivot();
-
-        // El relleno con el tipo por defecto se aplica después de mostrar la grilla, y su snapshot
-        // (usado por "Descartar") ya incluye ese relleno porque no se considera un cambio manual.
         RebuildPivotDisplay();
         _dtOriginalSnapshot = _dtPivot.Copy();
     }
@@ -454,15 +570,29 @@ internal class ClsModifyAttendanceEmployees
 
     private void ShowPivot()
     {
-        frm.dgvPivot.ReadOnly = true; // la edición sólo se hace vía "Aplicar a selección"
-        frm.dgvPivot.SelectionMode = DataGridViewSelectionMode.CellSelect;
-        frm.dgvPivot.MultiSelect = true;
-        frm.dgvPivot.AutoGenerateColumns = true;
-        frm.dgvPivot.DataSource = null;
-        frm.dgvPivot.DataSource = _dtPivot;
+        DataGridView dgv = frm.dgvPivot;
+        using (DgvAsistenciaASPerf.PausePainting(dgv))
+        {
+            dgv.ReadOnly = true; // la edición sólo se hace vía "Aplicar a selección"
+            dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgv.MultiSelect = true;
+            dgv.AutoGenerateColumns = true;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dgv.DataSource = null;
+            dgv.DataSource = _dtPivot;
 
-        ApplyDayColumnHeaders();
-        frm.dgvPivot.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ApplyDayColumnHeaders();
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                if (TryParseDayColumn(col.Name, out _))
+                    col.Width = 44;
+                else
+                    dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.DisplayedCells);
+            }
+        }
     }
 
     private void ApplyDayColumnHeaders()
@@ -657,7 +787,7 @@ internal class ClsModifyAttendanceEmployees
         if (isPending)
             fontStyle |= FontStyle.Bold;
         if (fontStyle != FontStyle.Regular)
-            e.CellStyle.Font = new Font(frm.dgvPivot.Font, fontStyle);
+            e.CellStyle.Font = DgvAsistenciaASPerf.GetStyledFont(frm.dgvPivot.Font, fontStyle);
     }
 
     // ── Comentarios de las faltas (tooltip + marcador visual + precarga) ──

@@ -1,3 +1,4 @@
+using SisUvex.Nomina.Asistencia_AS;
 using System.Windows.Forms;
 
 namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
@@ -5,6 +6,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
     public partial class FrmModifyAttendanceEmployees : Form
     {
         internal ClsModifyAttendanceEmployees cls = null!;
+        private bool _beginFormQueued;
 
         public FrmModifyAttendanceEmployees()
         {
@@ -13,7 +15,17 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
 
         private void FrmModifyAttendanceEmployees_Load(object sender, EventArgs e)
         {
-            cls.BeginForm();
+            DgvAsistenciaASPerf.EnableDoubleBuffer(dgvPivot);
+            DgvAsistenciaASPerf.PrepareForFastScroll(dgvPivot);
+        }
+
+        private void FrmModifyAttendanceEmployees_Shown(object sender, EventArgs e)
+        {
+            if (_beginFormQueued) return;
+            _beginFormQueued = true;
+            // Load corre antes de que la ventana se pinte. Si aquí se arma el pivote (consultas + DGV),
+            // el MDI se queda congelado sin mostrar este formulario. Se difiere al primer paint.
+            BeginInvoke(new Action(() => cls.BeginForm()));
         }
 
         private void btnApply_Click(object sender, EventArgs e)

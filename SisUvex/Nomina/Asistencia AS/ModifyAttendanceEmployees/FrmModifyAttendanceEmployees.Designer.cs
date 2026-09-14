@@ -200,8 +200,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             dgvPivot.AllowUserToAddRows = false;
             dgvPivot.AllowUserToDeleteRows = false;
             dgvPivot.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvPivot.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvPivot.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvPivot.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvPivot.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             dgvPivot.BackgroundColor = SystemColors.Control;
             dgvPivot.BorderStyle = BorderStyle.Fixed3D;
             dgvPivot.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -228,7 +228,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvPivot.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPivot.RowHeadersVisible = false;
-            dgvPivot.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvPivot.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvPivot.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvPivot.Size = new Size(958, 420);
             dgvPivot.TabIndex = 5;
@@ -308,6 +308,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             WindowState = FormWindowState.Maximized;
             FormClosing += FrmModifyAttendanceEmployees_FormClosing;
             Load += FrmModifyAttendanceEmployees_Load;
+            Shown += FrmModifyAttendanceEmployees_Shown;
             gpbApply.ResumeLayout(false);
             gpbApply.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPivot).EndInit();

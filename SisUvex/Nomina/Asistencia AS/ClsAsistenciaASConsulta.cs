@@ -491,7 +491,11 @@ namespace SisUvex.Nomina.Asistencia_AS
                 DataTable dtInasistencias = FetchInasistenciasQuery(employeeCodes, date1, date2);
                 AdvanceTo(280);
 
-                if (dtAsistencias.Rows.Count == 0 && dtInasistencias.Rows.Count == 0)
+                HashSet<string> codesWithRecords = CollectEmployeeCodesWithAttendanceRecords(dtAsistencias, dtInasistencias);
+                int omitted = employeeCodes.Count(c => !codesWithRecords.Contains(c));
+                employeeCodes = employeeCodes.Where(c => codesWithRecords.Contains(c)).ToList();
+
+                if (employeeCodes.Count == 0)
                 {
                     SystemSounds.Exclamation.Play();
                     SetAdvice("No se encontraron datos de asistencia para el rango y empleados seleccionados.", isError: true);
@@ -510,7 +514,11 @@ namespace SisUvex.Nomina.Asistencia_AS
                     onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
-                SetAdvice(string.Empty, isError: false);
+                SetAdvice(
+                    omitted > 0
+                        ? $"Se omitieron {omitted} empleado(s) sin registros de asistencia ni de inasistencia en el rango."
+                        : string.Empty,
+                    isError: false);
             }
             catch (Exception ex)
             {
@@ -571,12 +579,40 @@ namespace SisUvex.Nomina.Asistencia_AS
                     employees.Add((codigo, fullName, lp));
                 }
 
+                employees = ClsAsistenciaASConsulta.OrderEmployeesByName(employees);
+
                 string? selectedTypeId = frm.cboAttendenceType.SelectedValue?.ToString();
+
+                DataTable? seedReport = null;
+                List<DateTime>? seedDays = null;
+                Dictionary<(string Codigo, DateTime Fecha), string>? seedComments = null;
+                if (_dtReportPreview != null
+                    && _reportDays.Count > 0
+                    && _reportDays[0].Date == date1
+                    && _reportDays[^1].Date == date2)
+                {
+                    seedReport = _dtReportPreview;
+                    seedDays = _reportDays;
+                    seedComments = _commentsByCodeAndDay;
+                    var inReport = new HashSet<string>(
+                        _dtReportPreview.AsEnumerable()
+                            .Select(r => r[ReportColCodigo]?.ToString()?.Trim() ?? string.Empty)
+                            .Where(c => !string.IsNullOrWhiteSpace(c)),
+                        StringComparer.OrdinalIgnoreCase);
+                    employees = employees.Where(e => inReport.Contains(e.Code)).ToList();
+                }
+
+                if (employees.Count == 0)
+                {
+                    SetAdvice("No hay empleados con registros de asistencia o inasistencia en el rango para modificar.", isError: true);
+                    return;
+                }
 
                 // El formulario de modificar se abre como ventana hija de FrmMenu (no modal), por lo que
                 // en vez de esperar a que se cierre, se escucha su evento ChangesSaved para volver a cargar
                 // el reporte (mismos empleados marcados y mismo rango de fechas) en cuanto se guarde algo.
-                ClsModifyAttendanceEmployees? modifyCls = ClsModifyAttendanceEmployees.Open(employees, date1, date2, selectedTypeId);
+                ClsModifyAttendanceEmployees? modifyCls = ClsModifyAttendanceEmployees.Open(
+                    employees, date1, date2, selectedTypeId, seedReport, seedDays, seedComments);
                 if (modifyCls != null)
                     modifyCls.ChangesSaved += BtnLoadReport;
             }
@@ -888,6 +924,39 @@ namespace SisUvex.Nomina.Asistencia_AS
             return ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
         }
 
+        /// <summary>
+        /// Códigos con al menos un registro en nomhojas/nomhojas_temp o en Nom_Attendance_AS
+        /// dentro del rango consultado. El resto no entra al reporte, al Excel ni a modificar asistencias.
+        /// </summary>
+        internal static HashSet<string> CollectEmployeeCodesWithAttendanceRecords(
+            DataTable dtAsistencias,
+            DataTable dtInasistencias)
+        {
+            var codes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            if (dtAsistencias.Columns.Contains("Codigo"))
+            {
+                foreach (DataRow row in dtAsistencias.Rows)
+                {
+                    string codigo = row["Codigo"]?.ToString()?.Trim() ?? string.Empty;
+                    if (!string.IsNullOrWhiteSpace(codigo))
+                        codes.Add(codigo);
+                }
+            }
+
+            if (dtInasistencias.Columns.Contains("id_employee"))
+            {
+                foreach (DataRow row in dtInasistencias.Rows)
+                {
+                    string codigo = row["id_employee"]?.ToString()?.Trim() ?? string.Empty;
+                    if (!string.IsNullOrWhiteSpace(codigo))
+                        codes.Add(codigo);
+                }
+            }
+
+            return codes;
+        }
+
         /// <summary>Inasistencias explícitas (permisos, vacaciones, faltas, etc.) de la BD principal.</summary>
         private DataTable FetchInasistenciasQuery(List<string> employeeCodes, DateTime date1, DateTime date2)
         {
@@ -981,6 +1050,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     Fecha: NormalizeDate(r["d_attendance"])))
                 .ToDictionary(g => g.Key, g => g.First()["v_comments"]?.ToString()?.Trim() ?? string.Empty);
 
+            employeeCodes = OrderCodesByEmployeeName(employeeCodes, infoByCode);
+
             int dayCount = Math.Max(1, _reportDays.Count);
             int totalUnits = Math.Max(1, employeeCodes.Count * dayCount);
             int doneUnits = 0;
@@ -1040,6 +1111,45 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             return table;
+        }
+
+        internal static readonly StringComparer EmployeeNameComparer =
+            StringComparer.Create(CultureEs, ignoreCase: true);
+
+        /// <summary>Orden: apellido paterno, apellido materno, nombre, y al final el código.</summary>
+        internal static string FormatEmployeeFullName(string? apPat, string? apMat, string? nombre, string fallback)
+        {
+            string full = string.Join(" ", new[] { apPat?.Trim(), apMat?.Trim(), nombre?.Trim() }
+                .Where(s => !string.IsNullOrWhiteSpace(s)));
+            return string.IsNullOrWhiteSpace(full) ? fallback : full;
+        }
+
+        internal static List<string> OrderCodesByEmployeeName(
+            IEnumerable<string> codes,
+            Dictionary<string, DataRow> infoByCode)
+        {
+            return codes
+                .OrderBy(c =>
+                {
+                    if (!infoByCode.TryGetValue(c, out DataRow? row) || row == null)
+                        return c;
+                    return FormatEmployeeFullName(
+                        row["v_lastNamePat"]?.ToString(),
+                        row["v_lastNameMat"]?.ToString(),
+                        row["v_name"]?.ToString(),
+                        c);
+                }, EmployeeNameComparer)
+                .ThenBy(c => c, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        internal static List<(string Code, string FullName, string Lp)> OrderEmployeesByName(
+            IEnumerable<(string Code, string FullName, string Lp)> employees)
+        {
+            return employees
+                .OrderBy(e => e.FullName ?? string.Empty, EmployeeNameComparer)
+                .ThenBy(e => e.Code ?? string.Empty, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         internal static string BuildDayColumnName(DateTime day) => DayColumnPrefix + day.ToString("yyyy-MM-dd");
@@ -1420,12 +1530,14 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         private void BeginProgress()
         {
-            if (!HasProgressBar) return;
+            if (frm == null) return;
             _progressDepth++;
             if (_progressDepth > 1) return;
 
-            frm!.Cursor = Cursors.WaitCursor;
+            frm.SetWaitCursor(true);
             frm.SetOperationBusy(true);
+            if (!HasProgressBar) return;
+
             ProgressBar p = frm.pgrReport;
             p.Style = ProgressBarStyle.Continuous;
             p.Minimum = 0;
@@ -1543,18 +1655,37 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         private void EndProgress()
         {
-            if (_progressDepth <= 0) return;
-            _progressDepth--;
-            if (_progressDepth > 0 || !HasProgressBar) return;
+            if (_progressDepth <= 0)
+            {
+                RestoreIdleUi();
+                return;
+            }
 
-            AdvanceTo(ProgressScale);
-            ProgressBar p = frm!.pgrReport;
-            p.Update();
-            System.Threading.Thread.Sleep(60);
-            p.Value = 0;
-            _progressTarget = 0;
-            frm.Cursor = Cursors.Default;
+            _progressDepth--;
+            if (_progressDepth > 0) return;
+
+            try
+            {
+                if (HasProgressBar)
+                {
+                    AdvanceTo(ProgressScale);
+                    ProgressBar p = frm!.pgrReport;
+                    p.Update();
+                    p.Value = 0;
+                    _progressTarget = 0;
+                }
+            }
+            finally
+            {
+                RestoreIdleUi();
+            }
+        }
+
+        private void RestoreIdleUi()
+        {
+            if (frm == null) return;
             frm.SetOperationBusy(false);
+            frm.SetWaitCursor(false);
         }
     }
 
