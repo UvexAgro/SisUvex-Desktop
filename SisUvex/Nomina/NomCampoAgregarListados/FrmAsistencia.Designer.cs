@@ -39,6 +39,10 @@
 			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
 			tableLayoutPanel1 = new TableLayoutPanel();
 			panel2 = new Panel();
+			lblCuadrilla = new Label();
+			cboCuadrilla2 = new ComboBox();
+			btnGuardarCuadrilla = new Button();
+			btnAsignar = new Button();
 			panel9 = new Panel();
 			pictureBox1 = new PictureBox();
 			txbRegistro = new TextBox();
@@ -123,6 +127,10 @@
 			// 
 			// panel2
 			// 
+			panel2.Controls.Add(lblCuadrilla);
+			panel2.Controls.Add(cboCuadrilla2);
+			panel2.Controls.Add(btnGuardarCuadrilla);
+			panel2.Controls.Add(btnAsignar);
 			panel2.Controls.Add(panel9);
 			panel2.Controls.Add(pictureBox5);
 			panel2.Controls.Add(label12);
@@ -136,6 +144,58 @@
 			panel2.Name = "panel2";
 			panel2.Size = new Size(779, 1142);
 			panel2.TabIndex = 1;
+			// 
+			// lblCuadrilla
+			// 
+			lblCuadrilla.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			lblCuadrilla.AutoSize = true;
+			lblCuadrilla.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblCuadrilla.Location = new Point(104, 239);
+			lblCuadrilla.Name = "lblCuadrilla";
+			lblCuadrilla.Size = new Size(59, 13);
+			lblCuadrilla.TabIndex = 39;
+			lblCuadrilla.Text = "Cuadrilla :";
+			// 
+			// cboCuadrilla2
+			// 
+			cboCuadrilla2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			cboCuadrilla2.FormattingEnabled = true;
+			cboCuadrilla2.Location = new Point(169, 234);
+			cboCuadrilla2.Name = "cboCuadrilla2";
+			cboCuadrilla2.Size = new Size(191, 23);
+			cboCuadrilla2.TabIndex = 38;
+			// 
+			// btnGuardarCuadrilla
+			// 
+			btnGuardarCuadrilla.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnGuardarCuadrilla.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnGuardarCuadrilla.Image = (Image)resources.GetObject("btnGuardarCuadrilla.Image");
+			btnGuardarCuadrilla.ImageAlign = ContentAlignment.MiddleLeft;
+			btnGuardarCuadrilla.Location = new Point(600, 222);
+			btnGuardarCuadrilla.Name = "btnGuardarCuadrilla";
+			btnGuardarCuadrilla.Padding = new Padding(20, 0, 30, 0);
+			btnGuardarCuadrilla.Size = new Size(166, 39);
+			btnGuardarCuadrilla.TabIndex = 37;
+			btnGuardarCuadrilla.Text = "Guardar";
+			btnGuardarCuadrilla.TextAlign = ContentAlignment.MiddleRight;
+			btnGuardarCuadrilla.UseVisualStyleBackColor = true;
+			btnGuardarCuadrilla.Click += btnGuardarCuadrilla_Click;
+			// 
+			// btnAsignar
+			// 
+			btnAsignar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnAsignar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnAsignar.Image = (Image)resources.GetObject("btnAsignar.Image");
+			btnAsignar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnAsignar.Location = new Point(411, 222);
+			btnAsignar.Name = "btnAsignar";
+			btnAsignar.Padding = new Padding(30, 0, 30, 0);
+			btnAsignar.Size = new Size(166, 39);
+			btnAsignar.TabIndex = 36;
+			btnAsignar.Text = "Asignar";
+			btnAsignar.TextAlign = ContentAlignment.MiddleRight;
+			btnAsignar.UseVisualStyleBackColor = true;
+			btnAsignar.Click += btnAsignar_Click;
 			// 
 			// panel9
 			// 
@@ -254,7 +314,7 @@
 			// 
 			label11.AutoSize = true;
 			label11.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label11.Location = new Point(15, 122);
+			label11.Location = new Point(15, 104);
 			label11.Name = "label11";
 			label11.Size = new Size(184, 17);
 			label11.TabIndex = 26;
@@ -273,7 +333,7 @@
 			tableLayoutPanel2.Controls.Add(panel7, 2, 0);
 			tableLayoutPanel2.Controls.Add(panel6, 1, 0);
 			tableLayoutPanel2.Controls.Add(panel5, 0, 0);
-			tableLayoutPanel2.Location = new Point(4, 138);
+			tableLayoutPanel2.Location = new Point(4, 120);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
 			tableLayoutPanel2.RowCount = 1;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -522,6 +582,7 @@
 			// 
 			// label14
 			// 
+			label14.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			label14.AutoSize = true;
 			label14.Location = new Point(440, 49);
 			label14.Name = "label14";
@@ -858,5 +919,10 @@
 		private Button btnJalar;
 		public ComboBox cboDia;
 		private Label label14;
+		private Button btnGuardarCuadrilla;
+		public Button btnAsignar;
+		private Label lblCuadrilla;
+		public ComboBox cboCuadrilla2;
+		private Button button1;
 	}
 }

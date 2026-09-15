@@ -63,6 +63,25 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 
 				frm.dgvCuadrilla.DataSource = dt;
+				// Cargar datos en el DataGridView
+				frm.dgvCuadrilla.DataSource = dt;
+
+				// Agregar CheckBox solamente una vez
+				if (!frm.dgvCuadrilla.Columns.Contains("Seleccionar"))
+				{
+					DataGridViewCheckBoxColumn seleccionar =
+						new DataGridViewCheckBoxColumn();
+
+					seleccionar.Name = "Seleccionar";
+					seleccionar.HeaderText = "✓";
+					seleccionar.ReadOnly = false;
+					seleccionar.Width = 55;
+
+					frm.dgvCuadrilla.Columns.Insert(0, seleccionar);
+				}
+
+				// Aplicar el estilo después de agregar las columnas
+				EstiloDgvCuadrilla();
 			}
 			catch (Exception ex)
 			{
@@ -528,21 +547,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			frm.lblNumeroTotal.Text = total.ToString();
 		}
-		public void ImprimirListado()
-		{
-			filaImprimir = 0;
-
-			using (PrintPreviewDialog preview =
-				new PrintPreviewDialog())
-			{
-				preview.Document = printDocument;
-
-				preview.Width = 1000;
-				preview.Height = 700;
-
-				preview.ShowDialog();
-			}
-		}
+		
 		public void MostrarEmpleados()
 		{
 			int total = frm.dgvListado.Rows.Count;
@@ -623,6 +628,383 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.CloseConectionWrite();
 			}
+		}
+		public List<string> ObtenerCuadrillasSeleccionadas()
+		{
+			List<string> cuadrillas = new List<string>();
+
+			foreach (DataGridViewRow fila in frm.dgvCuadrilla.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				bool seleccionada = Convert.ToBoolean(
+					fila.Cells["Seleccionar"].Value ?? false
+				);
+
+				if (seleccionada)
+				{
+					string idCuadrilla = fila.Cells["Codigo"].Value
+						?.ToString();
+
+					if (!string.IsNullOrWhiteSpace(idCuadrilla))
+					{
+						cuadrillas.Add(idCuadrilla);
+					}
+				}
+			}
+
+			return cuadrillas;
+		}
+		public DataTable ObtenerEmpleadosCuadrilla(
+	string idCuadrilla,
+	string idSemana)
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			string query = @"
+			   SELECT
+			A.id_workGroup,
+			W.v_nameWorkGroup AS Cuadrilla,
+			A.id_employee AS Codigo,
+
+			CONCAT(
+				E.v_lastNamePat, ' ',
+				E.v_lastNameMat, ' ',
+				E.v_name
+			) AS Nom_Employee,
+
+			A.c_sequence_per,
+			A.d_startDate_per,
+			A.d_endDate_per
+
+		FROM dbo.Nom_EmployeeAttendenceList AS A
+
+		INNER JOIN dbo.Nom_Employees AS E
+			ON E.id_employee = A.id_employee
+
+		INNER JOIN dbo.Nom_WorkGroup AS W
+			ON W.id_workGroup = A.id_workGroup
+
+		WHERE A.id_workGroup = @id_workGroup
+		  AND A.c_sequence_per = @c_sequence_per
+
+		ORDER BY
+			E.v_lastNamePat,
+			E.v_lastNameMat,
+			E.v_name";
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						idCuadrilla);
+
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per",
+						idSemana);
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al consultar empleados de la cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+		public MemoryStream GenerarPdfListasCuadrillas(List<string> cuadrillasSeleccionadas,string idSemana)
+		{
+			MemoryStream ms = new MemoryStream();
+
+			iText.Kernel.Pdf.PdfWriter writer =
+				new iText.Kernel.Pdf.PdfWriter(ms);
+
+			writer.SetCloseStream(false);
+
+			iText.Kernel.Pdf.PdfDocument pdf =
+				new iText.Kernel.Pdf.PdfDocument(writer);
+
+			pdf.SetDefaultPageSize(
+				iText.Kernel.Geom.PageSize.LETTER);
+
+			iText.Layout.Document document =
+				new iText.Layout.Document(pdf);
+
+			document.SetMargins(25, 25, 25, 25);
+
+			bool primeraLista = true;
+
+			foreach (string idCuadrilla in cuadrillasSeleccionadas)
+			{
+				DataTable dt =
+					ObtenerEmpleadosCuadrilla(
+						idCuadrilla,
+						idSemana);
+
+				if (dt.Rows.Count == 0)
+					continue;
+
+				// Espacio entre una lista y la siguiente
+				if (!primeraLista)
+				{
+					document.Add(
+						new iText.Layout.Element.Paragraph(" ")
+							.SetMarginTop(8)
+							.SetMarginBottom(8)
+							.SetFontSize(5));
+				}
+
+				CrearPaginaAsistenciaCuadrilla(
+					document,
+					dt);
+
+				primeraLista = false;
+			}
+
+			document.Close();
+
+			ms.Position = 0;
+
+			return ms;
+		}
+		private void CrearPaginaAsistenciaCuadrilla(iText.Layout.Document document,DataTable dt)
+		{
+			iText.Kernel.Colors.DeviceRgb colorHeader =
+				new iText.Kernel.Colors.DeviceRgb(25, 35, 48);
+
+			iText.Kernel.Colors.DeviceRgb colorBorde =
+				new iText.Kernel.Colors.DeviceRgb(90, 90, 90);
+
+			iText.Kernel.Colors.DeviceRgb colorAzul =
+				new iText.Kernel.Colors.DeviceRgb(0, 102, 204);
+
+			// ==========================================
+			// TÍTULO
+			// ==========================================
+
+			iText.Layout.Element.Paragraph titulo =
+				new iText.Layout.Element.Paragraph(
+					"ASISTENCIA PARA REVISIÓN");
+
+			titulo
+				.SetFontSize(16)
+				.SetTextAlignment(
+					iText.Layout.Properties.TextAlignment.CENTER);
+
+			document.Add(titulo);
+
+			// ==========================================
+			// INFORMACIÓN DE LA CUADRILLA
+			// ==========================================
+
+			string cuadrilla =
+				dt.Rows[0]["id_workGroup"].ToString()
+				+ " - "
+				+ dt.Rows[0]["Cuadrilla"].ToString();
+
+			string semana =
+				dt.Rows[0]["c_sequence_per"].ToString();
+
+			string fechaInicio =
+				Convert.ToDateTime(
+					dt.Rows[0]["d_startDate_per"])
+				.ToString("dd/MM/yyyy");
+
+			string fechaFin =
+				Convert.ToDateTime(
+					dt.Rows[0]["d_endDate_per"])
+				.ToString("dd/MM/yyyy");
+
+			iText.Layout.Element.Table info =
+				new iText.Layout.Element.Table(
+					iText.Layout.Properties.UnitValue
+						.CreatePercentArray(
+							new float[] { 1, 1 }))
+				.UseAllAvailableWidth();
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Cuadrilla: " + cuadrilla)
+							.SetFontSize(9)));
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Semana: " + semana)
+							.SetFontSize(9)));
+
+			document.Add(info);
+
+			document.Add(
+				new iText.Layout.Element.Paragraph(" ")
+					.SetFontSize(3));
+
+			// ==========================================
+			// TABLA
+			// ==========================================
+
+			float[] anchos =
+			{
+				55,
+				250,
+				37,
+				37,
+				37,
+				37,
+				37,
+				37,
+				37
+			};
+
+			iText.Layout.Element.Table tabla =
+				new iText.Layout.Element.Table(anchos);
+
+			tabla.SetWidth(
+				iText.Layout.Properties.UnitValue
+					.CreatePercentValue(100));
+
+			string[] encabezados =
+			{
+		"CÓDIGO",
+		"EMPLEADO",
+		"VIE",
+		"SÁB",
+		"DOM",
+		"LUN",
+		"MAR",
+		"MIÉ",
+		"JUE"
+	};
+
+			foreach (string encabezado in encabezados)
+			{
+				iText.Layout.Element.Cell celda =
+					new iText.Layout.Element.Cell()
+						.SetBackgroundColor(colorHeader)
+						.SetFontColor(
+							iText.Kernel.Colors.ColorConstants.WHITE)
+						.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER)
+						.SetVerticalAlignment(
+							iText.Layout.Properties.VerticalAlignment.MIDDLE)
+						.SetPadding(3)
+						.SetBorder(
+							new iText.Layout.Borders.SolidBorder(
+								colorBorde,
+								0.5f));
+
+				celda.Add(
+					new iText.Layout.Element.Paragraph(
+						encabezado)
+						.SetFontSize(8));
+
+				tabla.AddHeaderCell(celda);
+			}
+
+			// ==========================================
+			// EMPLEADOS
+			// ==========================================
+
+			foreach (DataRow fila in dt.Rows)
+			{
+				string[] valores =
+				{
+				fila["Codigo"].ToString(),
+				fila["Nom_Employee"].ToString(),
+				"", // VIE
+				"", // SÁB
+				"", // DOM
+				"", // LUN
+				"", // MAR
+				"", // MIÉ
+				""  // JUE
+			};
+
+				for (int i = 0; i < valores.Length; i++)
+				{
+					iText.Layout.Element.Cell celda =
+						new iText.Layout.Element.Cell()
+							.SetPadding(3)
+							.SetBorder(
+								new iText.Layout.Borders.SolidBorder(
+									colorBorde,
+									0.5f))
+							.SetVerticalAlignment(
+								iText.Layout.Properties.VerticalAlignment.MIDDLE);
+
+					if (i >= 2)
+					{
+						celda.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER);
+					}
+
+					celda.Add(
+						new iText.Layout.Element.Paragraph(
+							valores[i])
+							.SetFontSize(7));
+
+					tabla.AddCell(celda);
+				}
+			}
+			// ==========================================
+			// FILAS VACÍAS
+			// ==========================================
+
+			for (int fila = 0; fila < 2; fila++)
+			{
+				for (int i = 0; i < 9; i++)
+				{
+					iText.Layout.Element.Cell celda =
+						new iText.Layout.Element.Cell()
+							.SetMinHeight(22)
+							.SetPadding(3)
+							.SetBorder(
+								new iText.Layout.Borders.SolidBorder(
+									colorBorde,
+									0.5f));
+
+					if (i >= 2)
+					{
+						celda.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER);
+					}
+
+					celda.Add(
+						new iText.Layout.Element.Paragraph(" ")
+							.SetFontSize(7));
+
+					tabla.AddCell(celda);
+				}
+			}
+
+			document.Add(tabla);
 		}
 		public bool ExisteEmpleadosSemana(string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
 		{
@@ -1069,86 +1451,102 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataGridView dgv = frm.dgvCuadrilla;
 
-			// GENERAL
 			dgv.BackgroundColor = Color.White;
 			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-			dgv.GridColor = Color.FromArgb(225, 228, 235);
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
 
+			dgv.GridColor = Color.FromArgb(225, 228, 235);
 			dgv.EnableHeadersVisualStyles = false;
 
 			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
 			dgv.AllowUserToResizeRows = false;
 			dgv.AllowUserToResizeColumns = false;
 
-			dgv.ReadOnly = true;
-
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv.MultiSelect = false;
-
+			dgv.ReadOnly = false;
 			dgv.RowHeadersVisible = false;
 
+			dgv.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
+
+			dgv.MultiSelect = false;
+
+			// Permitir marcar el CheckBox
+			dgv.EditMode = DataGridViewEditMode.EditOnEnter;
+
+			// Encabezado
 			// ENCABEZADO
+			dgv.EnableHeadersVisualStyles = false;
+
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
 				Color.FromArgb(42, 67, 128);
 
 			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
 				Color.White;
 
-			dgv.ColumnHeadersDefaultCellStyle.Font =
-				new Font("Segoe UI", 9F, FontStyle.Bold);
-
-			dgv.ColumnHeadersDefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.ColumnHeadersHeight = 34;
-
-			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(42, 67, 128);
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(42, 67, 128);
 
 			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
 				Color.White;
 
-			// FILAS
+			dgv.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 8F, FontStyle.Bold);
+
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ColumnHeadersHeight = 26;
+
+			// Filas
 			dgv.DefaultCellStyle.Font =
-				new Font("Segoe UI", 9F);
+				new Font("Segoe UI", 8F);
 
-			dgv.DefaultCellStyle.ForeColor =
-				Color.FromArgb(45, 45, 55);
+			dgv.DefaultCellStyle.Padding =
+				new Padding(1, 0, 1, 0);
 
-			dgv.DefaultCellStyle.BackColor =
-				Color.White;
-
-			// SELECCIONADA
 			dgv.DefaultCellStyle.SelectionBackColor =
 				Color.FromArgb(220, 229, 250);
 
 			dgv.DefaultCellStyle.SelectionForeColor =
 				Color.FromArgb(30, 45, 80);
 
-			dgv.DefaultCellStyle.Padding =
-				new Padding(5, 0, 5, 0);
+			dgv.RowTemplate.Height = 20;
 
-			dgv.RowTemplate.Height = 30;
-
-			// ALTERNADAS
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(247, 249, 253);
 
-			// COLUMNAS
-
+			// Columnas
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns[0].FillWeight = 25; // Código
-			dgv.Columns[1].FillWeight = 75; // Nombre
+			if (dgv.Columns.Contains("Seleccionar"))
+			{
+				dgv.Columns["Seleccionar"].ReadOnly = false;
+				dgv.Columns["Seleccionar"].FillWeight = 35;
 
-			// ALINEACIÓN
+				dgv.Columns["Seleccionar"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
 
-			dgv.Columns[0].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			if (dgv.Columns.Contains("id_workGroup"))
+			{
+				dgv.Columns["id_workGroup"].ReadOnly = true;
+				dgv.Columns["id_workGroup"].FillWeight = 35;
 
-			dgv.Columns[1].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
+				dgv.Columns["id_workGroup"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
+
+			if (dgv.Columns.Contains("v_nameWorkGroup"))
+			{
+				dgv.Columns["v_nameWorkGroup"].ReadOnly = true;
+				dgv.Columns["v_nameWorkGroup"].FillWeight = 75;
+
+				dgv.Columns["v_nameWorkGroup"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
+			}
 		}
 		public void EstiloDgvListado()
 		{

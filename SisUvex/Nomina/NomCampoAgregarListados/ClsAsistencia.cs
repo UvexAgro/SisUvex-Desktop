@@ -91,6 +91,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					row["v_nameWorkGroup"].ToString();
 			}
 
+			// Agregar opción "Todos"
+			DataRow rowTodos = dt.NewRow();
+
+			rowTodos["id_workGroup"] = 0;
+			rowTodos["v_nameWorkGroup"] = "Todos";
+			rowTodos["Descripcion"] = "Todos";
+
+			dt.Rows.InsertAt(rowTodos, 0);
+
+			// Cargar ComboBox
 			_frmA.cboCuadrilla.DataSource = dt;
 			_frmA.cboCuadrilla.DisplayMember = "Descripcion";
 			_frmA.cboCuadrilla.ValueMember = "id_workGroup";
@@ -2766,6 +2776,39 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 			}
+		}
+		public DataTable CargarEmpleadosSinCuadrilla(DateTime fechaInicio, DateTime fechaFin)
+		{
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand("dbo.sp_EmpleadosSinCuadrilla", sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date).Value = fechaInicio.Date;
+					cmd.Parameters.Add("@fechaFin", SqlDbType.Date).Value = fechaFin.Date;
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al cargar empleados sin cuadrilla:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
 		}
 	}
 }

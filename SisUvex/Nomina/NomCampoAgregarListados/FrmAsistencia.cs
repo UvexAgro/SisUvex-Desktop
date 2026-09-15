@@ -12,6 +12,7 @@ using NPOI.SS.Formula.Functions;
 using SisUvex.Nomina.Reporte_de_Asistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.ClsAsistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.FrmAgregarLoteyActividad;
+using static SisUvex.Nomina.NomCampoAgregarListados.FrmAsistencia;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
 {
@@ -60,6 +61,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			_clsA.ConfigurarGrid();
 			_clsA.CargarCuadrillas();
+			clsJ.CargarCuadrillas();
 			_clsA.CargarSemanas();
 			clsJ.ConfigurarGridChecador();
 			clsJ.EstilizarDgvReloj();
@@ -69,26 +71,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		}
 		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (cboCuadrilla.SelectedIndex == -1)
-				return;
-
-			if (cboSemana.SelectedIndex == -1)
-				return;
-
-			// Actualizar empleados según cuadrilla + semana
-			_clsA.CargarEmpleados();
-
-			// Actualizar reloj checador según cuadrilla + semana
-			clsJ.CargarRelojChecador();
-
-			// Actualizar CAL según cuadrilla + semana
-			_clsA.CargarCAL();
-
-			// Limpiar empleado seleccionado
-			txbRegistro.Clear();
-
-			// Limpiar sus checadas
-			dgvReloj.DataSource = null;
+			CargarDatosCuadrillaSemana();
 		}
 
 		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
@@ -96,30 +79,114 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (cboSemana.SelectedIndex == -1)
 				return;
 
-			// Actualizar los días de la semana
 			_clsA.CargarDiasSemana();
 
-			// Si no hay cuadrilla seleccionada,
-			// solamente actualizamos cboDia
-			if (cboCuadrilla.SelectedIndex == -1)
+			CargarDatosCuadrillaSemana();
+		}
+		private bool ObtenerFechasSemana(out DateTime fechaInicio, out DateTime fechaFin)
+		{
+			fechaInicio = DateTime.MinValue;
+			fechaFin = DateTime.MinValue;
+
+			if (cboSemana.SelectedItem is ClsAsistencia.Semana semana)
+			{
+				fechaInicio = semana.FechaInicio;
+				fechaFin = semana.FechaFin;
+				return true;
+			}
+
+			if (cboSemana.SelectedItem is DataRowView fila)
+			{
+				if (fila.Row.Table.Columns.Contains("FechaInicio") && fila.Row.Table.Columns.Contains("FechaFin"))
+				{
+					fechaInicio = Convert.ToDateTime(fila["FechaInicio"]);
+					fechaFin = Convert.ToDateTime(fila["FechaFin"]);
+					return true;
+				}
+
+				if (fila.Row.Table.Columns.Contains("d_startDate_per") && fila.Row.Table.Columns.Contains("d_endDate_per"))
+				{
+					fechaInicio = Convert.ToDateTime(fila["d_startDate_per"]);
+					fechaFin = Convert.ToDateTime(fila["d_endDate_per"]);
+					return true;
+				}
+			}
+
+			return false;
+		}
+		private void CargarDatosCuadrillaSemana()
+		{
+			if (cboCuadrilla.SelectedIndex == -1 ||
+				cboSemana.SelectedIndex == -1)
 				return;
 
-			// Actualizar empleados según cuadrilla + semana
-			_clsA.CargarEmpleados();
+			if (!ObtenerIdCuadrilla(out int idWorkGroup))
+				return;
 
-			// Actualizar CAL según cuadrilla + semana
-			_clsA.CargarCAL();
+			if (!ObtenerFechasSemana(out DateTime fechaInicio, out DateTime fechaFin))
+			{
+				MessageBox.Show(
+					"No se pudieron obtener las fechas de la semana seleccionada.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
 
-			// Actualizar reloj checador según cuadrilla + semana
-			clsJ.CargarRelojChecador();
+				return;
+			}
 
-			// Limpiar empleado seleccionado
 			txbRegistro.Clear();
+			dgvChecador.DataSource = null;
 
-			// Limpiar sus checadas
-			dgvReloj.DataSource = null;
+			// OPCIÓN "TODOS"
+			if (idWorkGroup == 0)
+			{
+				DataTable empleadosSinCuadrilla =
+					_clsA.CargarEmpleadosSinCuadrilla(fechaInicio, fechaFin);
+
+				if (empleadosSinCuadrilla == null ||
+					empleadosSinCuadrilla.Rows.Count == 0)
+				{
+					MessageBox.Show(
+						"No se encontraron empleados sin cuadrilla.",
+						"Información",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+
+					return;
+				}
+
+				dgvChecador.DataSource = empleadosSinCuadrilla;
+				clsJ.MostrarEmpleadosSinCuadrilla(empleadosSinCuadrilla);
+
+				return;
+			}
+
+			// CUADRILLA NORMAL
+			_clsA.CargarEmpleados();
+			_clsA.CargarCAL();
+			clsJ.CargarRelojChecador();
 		}
+		private bool ObtenerIdCuadrilla(out int idWorkGroup)
+		{
+			idWorkGroup = -1;
 
+			if (cboCuadrilla.SelectedIndex == -1)
+				return false;
+
+			if (cboCuadrilla.SelectedItem is DataRowView fila)
+			{
+				if (fila.Row.Table.Columns.Contains("id_workGroup"))
+				{
+					return int.TryParse(
+						fila["id_workGroup"]?.ToString(),
+						out idWorkGroup);
+				}
+			}
+
+			return int.TryParse(
+				cboCuadrilla.SelectedValue?.ToString(),
+				out idWorkGroup);
+		}
 		private void btnImprimir_Click(object sender, EventArgs e)
 		{
 			try
@@ -653,6 +720,151 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				cboDia.SelectedIndex = indiceDia;
 			}
+		}
+
+		private void btnAsignar_Click(object sender, EventArgs e)
+		{
+			if (cboCuadrilla2.SelectedIndex == -1)
+			{
+				MessageBox.Show(
+					"Seleccione una cuadrilla.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string idCuadrilla =
+				cboCuadrilla2.SelectedValue.ToString();
+
+			string nombreCuadrilla =
+				cboCuadrilla2.Text.Trim();
+
+			bool haySeleccionados = false;
+
+			foreach (DataGridViewRow fila in dgvChecador.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				bool seleccionado = Convert.ToBoolean(
+					fila.Cells["Seleccionar"].Value ?? false);
+
+				if (!seleccionado)
+					continue;
+
+				haySeleccionados = true;
+
+				// Mostrar el nombre de la cuadrilla
+				fila.Cells["Cuadrilla"].Value =
+					nombreCuadrilla;
+
+				// Guardar el ID de la cuadrilla en la fila
+				fila.Cells["id_workGroup"].Value =
+					idCuadrilla;
+
+				// Desmarcar después de asignar
+				fila.Cells["Seleccionar"].Value = false;
+			}
+
+			if (!haySeleccionados)
+			{
+				MessageBox.Show(
+					"Seleccione al menos un empleado.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			MessageBox.Show(
+				"Cuadrilla asignada a los empleados seleccionados.",
+				"Información",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
+		}
+
+		private void btnGuardarCuadrilla_Click(object sender, EventArgs e)
+		{
+
+			if (!ObtenerFechasSemana(
+			out DateTime fechaInicio,
+			out DateTime fechaFin))
+			{
+				return;
+			}
+
+			if (cboSemana.SelectedIndex == -1)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// Obtener el ID de la semana seleccionada
+			string idSemana = cboSemana.SelectedValue.ToString().Trim();
+
+			bool hayEmpleados = false;
+
+			foreach (DataGridViewRow fila in dgvChecador.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				// Verificar que tenga una cuadrilla asignada
+				object valorIdCuadrilla =
+					fila.Cells["id_workGroup"].Value;
+
+				if (valorIdCuadrilla == null ||
+					valorIdCuadrilla == DBNull.Value ||
+					string.IsNullOrWhiteSpace(
+						valorIdCuadrilla.ToString()))
+				{
+					continue;
+				}
+
+				// Obtener código del empleado
+				string codigoEmpleado = fila.Cells["Codigo"].Value?.ToString().Trim();
+
+				if (string.IsNullOrWhiteSpace(codigoEmpleado))
+					continue;
+
+				string idCuadrilla =
+					valorIdCuadrilla.ToString().Trim();
+
+				bool guardado = clsJ.GuardarEmpleadoCuadrilla(
+					codigoEmpleado,
+					idSemana,
+					idCuadrilla,
+					fechaInicio,
+					fechaFin);
+
+				if (guardado)
+					hayEmpleados = true;
+			}
+
+			if (!hayEmpleados)
+			{
+				MessageBox.Show(
+					"No hay empleados con cuadrilla asignada para guardar.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			MessageBox.Show(
+				"Los empleados fueron guardados correctamente.",
+				"Información",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
 		}
 	}
 }

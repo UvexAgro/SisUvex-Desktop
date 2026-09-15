@@ -59,28 +59,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		}
 		public void CargarRelojChecador()
 		{
-			if (_frmA.cboCuadrilla.SelectedIndex == -1 ||
-				_frmA.cboSemana.SelectedIndex == -1)
+			if (_frmA.cboCuadrilla.SelectedIndex == -1 || _frmA.cboSemana.SelectedIndex == -1)
 				return;
 
-			string idWorkGroup =
-				_frmA.cboCuadrilla.SelectedValue.ToString();
+			string idWorkGroup = _frmA.cboCuadrilla.SelectedValue.ToString();
 
-			DataRowView semana =
-				(DataRowView)_frmA.cboSemana.SelectedItem;
+			DataRowView semana = (DataRowView)_frmA.cboSemana.SelectedItem;
 
-			DateTime fechaInicio =
-				Convert.ToDateTime(
-					semana["d_startDate_per"]).Date;
+			DateTime fechaInicio = Convert.ToDateTime(semana["d_startDate_per"]).Date;
+			DateTime fechaFin = Convert.ToDateTime(semana["d_endDate_per"]).Date;
 
-			DateTime fechaFin =
-				Convert.ToDateTime(
-					semana["d_endDate_per"]).Date;
+			DataTable dt = CargarAsistenciaReloj(idWorkGroup, fechaInicio, fechaFin);
 
-			DataTable dt = CargarAsistenciaReloj(
-				idWorkGroup,
-				fechaInicio,
-				fechaFin);
+			if (dt == null)
+				return;
 
 			dt = OrdenarChecadorIgualAsistencia(dt);
 
@@ -90,7 +82,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_frmA.dgvChecador.ClearSelection();
 			_frmA.dgvChecador.CurrentCell = null;
-
 			_frmA.dgvChecador.Invalidate();
 		}
 		public void MarcarPorEstado(string estado)
@@ -922,6 +913,185 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ClearSelection();
 			dgv.CurrentCell = null;
+		}
+		public void MostrarEmpleadosSinCuadrilla(DataTable empleados)
+		{
+			_frmA.dgvChecador.DataSource = null;
+			_frmA.dgvChecador.Columns.Clear();
+
+			_frmA.dgvChecador.ReadOnly = false;
+			_frmA.dgvChecador.AllowUserToAddRows = false;
+
+			// Cargar empleados
+			_frmA.dgvChecador.DataSource = empleados;
+
+			// =====================================================
+			// COLUMNA SELECCIONAR
+			// =====================================================
+
+			DataGridViewCheckBoxColumn seleccionar =
+				new DataGridViewCheckBoxColumn();
+
+			seleccionar.Name = "Seleccionar";
+			seleccionar.HeaderText = "Seleccionar";
+			seleccionar.ReadOnly = false;
+			seleccionar.Width = 80;
+
+			_frmA.dgvChecador.Columns.Insert(0, seleccionar);
+
+			// =====================================================
+			// COLUMNA VISIBLE: CUADRILLA
+			// =====================================================
+
+			DataGridViewTextBoxColumn cuadrilla =
+				new DataGridViewTextBoxColumn();
+
+			cuadrilla.Name = "Cuadrilla";
+			cuadrilla.HeaderText = "Cuadrilla";
+			cuadrilla.ReadOnly = true;
+
+			_frmA.dgvChecador.Columns.Add(cuadrilla);
+
+			// =====================================================
+			// COLUMNA OCULTA: ID DE CUADRILLA
+			// =====================================================
+
+			DataGridViewTextBoxColumn idCuadrilla =
+				new DataGridViewTextBoxColumn();
+
+			idCuadrilla.Name = "id_workGroup";
+			idCuadrilla.HeaderText = "ID Cuadrilla";
+			idCuadrilla.ReadOnly = true;
+			idCuadrilla.Visible = false;
+
+			_frmA.dgvChecador.Columns.Add(idCuadrilla);
+
+			// =====================================================
+			// CONFIGURACIÓN DEL GRID
+			// =====================================================
+
+			_frmA.dgvChecador.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.Fill;
+
+			_frmA.dgvChecador.Columns["Codigo"].HeaderText =
+				"Código";
+
+			_frmA.dgvChecador.Columns["Empleado"].HeaderText =
+				"Empleado";
+		}
+		public bool GuardarEmpleadoCuadrilla(string codigoEmpleado,string idSemana,string idCuadrilla,DateTime fechaInicio,DateTime fechaFin)
+		{
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"dbo.sp_AsignarEmpleadoCuadrilla",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6)
+						.Value = codigoEmpleado
+						.Trim()
+						.PadLeft(6, '0');
+
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = idSemana.Trim();
+
+					cmd.Parameters.Add("@d_startDate_per", SqlDbType.DateTime)
+						.Value = fechaInicio;
+
+					cmd.Parameters.Add("@d_endDate_per", SqlDbType.DateTime)
+						.Value = fechaFin;
+
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3)
+						.Value = idCuadrilla.Trim();
+
+					cmd.Parameters.Add("@userCreate", SqlDbType.Char, 10)
+						.Value = User.GetUserName();
+
+					cmd.ExecuteNonQuery();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al asignar el empleado:\n\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public void CargarCuadrillas()
+		{
+			string query = @"
+        SELECT 
+            id_workGroup,
+            v_nameWorkGroup
+        FROM dbo.Nom_WorkGroup
+        WHERE c_active = '1'
+        ORDER BY id_workGroup";
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar las cuadrillas:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// Columna que se mostrará en el ComboBox
+			dt.Columns.Add("Descripcion", typeof(string));
+
+			foreach (DataRow row in dt.Rows)
+			{
+				row["Descripcion"] =
+					row["id_workGroup"].ToString() +
+					" - " +
+					row["v_nameWorkGroup"].ToString();
+			}
+
+			// Cargar ComboBox sin la opción "Todos"
+			_frmA.cboCuadrilla2.DataSource = dt;
+			_frmA.cboCuadrilla2.DisplayMember = "Descripcion";
+			_frmA.cboCuadrilla2.ValueMember = "id_workGroup";
+
+			_frmA.cboCuadrilla2.DropDownStyle = ComboBoxStyle.DropDown;
+			_frmA.cboCuadrilla2.AutoCompleteMode =
+				AutoCompleteMode.SuggestAppend;
+			_frmA.cboCuadrilla2.AutoCompleteSource =
+				AutoCompleteSource.ListItems;
+
+			_frmA.cboCuadrilla2.SelectedIndex = -1;
+			_frmA.cboCuadrilla2.Text = "";
 		}
 	}
 }

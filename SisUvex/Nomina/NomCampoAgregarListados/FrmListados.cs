@@ -129,7 +129,77 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnImprimir_Click(object sender, EventArgs e)
 		{
-			cls.ImprimirListado();
+			List<string> cuadrillasSeleccionadas =
+		cls.ObtenerCuadrillasSeleccionadas();
+
+			if (cuadrillasSeleccionadas.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos una cuadrilla.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			if (cboSemana.SelectedValue == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string idSemana =
+				cboSemana.SelectedValue.ToString();
+
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+
+				// Cambia ClsJ por el nombre real de tu clase.
+				MemoryStream pdf =
+					cls.GenerarPdfListasCuadrillas(
+						cuadrillasSeleccionadas,
+						idSemana);
+
+				string ruta =
+					Path.Combine(
+						Path.GetTempPath(),
+						"ListasCuadrillas.pdf");
+
+				using (FileStream archivo =
+					new FileStream(
+						ruta,
+						FileMode.Create,
+						FileAccess.Write))
+				{
+					pdf.CopyTo(archivo);
+				}
+
+				System.Diagnostics.Process.Start(
+					new System.Diagnostics.ProcessStartInfo
+					{
+						FileName = ruta,
+						UseShellExecute = true
+					});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al generar las listas:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
 		}
 
 		private void btnActulizar_Click(object sender, EventArgs e)
