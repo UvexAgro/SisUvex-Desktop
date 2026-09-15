@@ -284,14 +284,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
-	};
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
 
 			foreach (string dia in dias)
 			{
@@ -2112,6 +2112,78 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public bool ExisteAsistenciaEnLaSemana(
+	string idCuadrilla,
+	string secuenciaSemana,
+	DateTime fechaInicio,
+	DateTime fechaFin)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				string query = @"
+            SELECT COUNT(*)
+            FROM dbo.Nom_EmployeeAttendanceWeekly
+            WHERE c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin
+              AND (
+                    (id_workGroup_vie = @idCuadrilla AND b_vie = 1)
+                 OR (id_workGroup_sab = @idCuadrilla AND b_sab = 1)
+                 OR (id_workGroup_dom = @idCuadrilla AND b_dom = 1)
+                 OR (id_workGroup_lun = @idCuadrilla AND b_lun = 1)
+                 OR (id_workGroup_mar = @idCuadrilla AND b_mar = 1)
+                 OR (id_workGroup_mie = @idCuadrilla AND b_mie = 1)
+                 OR (id_workGroup_jue = @idCuadrilla AND b_jue = 1)
+              );
+        ";
+
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.Add(
+						"@idCuadrilla",
+						SqlDbType.Char,
+						4).Value = idCuadrilla;
+
+					cmd.Parameters.Add(
+						"@secuenciaSemana",
+						SqlDbType.Char,
+						2).Value = secuenciaSemana;
+
+					cmd.Parameters.Add(
+						"@fechaInicio",
+						SqlDbType.Date).Value = fechaInicio.Date;
+
+					cmd.Parameters.Add(
+						"@fechaFin",
+						SqlDbType.Date).Value = fechaFin.Date;
+
+					int total = Convert.ToInt32(
+						cmd.ExecuteScalar());
+
+					return total > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al validar la asistencia:\n\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
 			}
 			finally
 			{

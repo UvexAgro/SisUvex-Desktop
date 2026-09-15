@@ -391,6 +391,7 @@
 			btnConsultar.Text = "Salir";
 			btnConsultar.TextAlign = ContentAlignment.MiddleRight;
 			btnConsultar.UseVisualStyleBackColor = false;
+			btnConsultar.Click += btnConsultar_Click;
 			// 
 			// FrmConsulta
 			// 

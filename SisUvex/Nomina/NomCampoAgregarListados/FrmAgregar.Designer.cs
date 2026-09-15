@@ -35,18 +35,13 @@
 			btnContinuar = new Button();
 			btnCancelar = new Button();
 			lblCodigo = new Label();
-			lblActividad = new Label();
-			cboActividad = new ComboBox();
 			txbCodigo = new TextBox();
 			groupBox1 = new GroupBox();
 			btnBuscar = new Button();
-			cboLote = new ComboBox();
-			lblLote = new Label();
 			btnAgregarListado = new Button();
 			lblTitulo = new Label();
 			pictureBox1 = new PictureBox();
 			lblSubtitulo = new Label();
-			cboFecha = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)dgvListadoAgregar).BeginInit();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -130,25 +125,6 @@
 			lblCodigo.TabIndex = 22;
 			lblCodigo.Text = "Codigo del Empleado :";
 			// 
-			// lblActividad
-			// 
-			lblActividad.AutoSize = true;
-			lblActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblActividad.Location = new Point(468, 27);
-			lblActividad.Name = "lblActividad";
-			lblActividad.Size = new Size(169, 15);
-			lblActividad.TabIndex = 24;
-			lblActividad.Text = "Actividad (misma para todos) :";
-			// 
-			// cboActividad
-			// 
-			cboActividad.FormattingEnabled = true;
-			cboActividad.Location = new Point(468, 45);
-			cboActividad.Name = "cboActividad";
-			cboActividad.Size = new Size(265, 23);
-			cboActividad.TabIndex = 26;
-			cboActividad.TextUpdate += cboActividad_TextUpdate;
-			// 
 			// txbCodigo
 			// 
 			txbCodigo.Font = new Font("Segoe UI", 9.25F);
@@ -165,12 +141,8 @@
 			// groupBox1
 			// 
 			groupBox1.Controls.Add(btnBuscar);
-			groupBox1.Controls.Add(cboLote);
-			groupBox1.Controls.Add(lblLote);
-			groupBox1.Controls.Add(cboActividad);
 			groupBox1.Controls.Add(txbCodigo);
 			groupBox1.Controls.Add(lblCodigo);
-			groupBox1.Controls.Add(lblActividad);
 			groupBox1.Location = new Point(12, 60);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(836, 153);
@@ -192,24 +164,6 @@
 			btnBuscar.TextAlign = ContentAlignment.MiddleRight;
 			btnBuscar.UseVisualStyleBackColor = true;
 			btnBuscar.Click += btnBuscar_Click;
-			// 
-			// cboLote
-			// 
-			cboLote.FormattingEnabled = true;
-			cboLote.Location = new Point(468, 98);
-			cboLote.Name = "cboLote";
-			cboLote.Size = new Size(323, 23);
-			cboLote.TabIndex = 33;
-			// 
-			// lblLote
-			// 
-			lblLote.AutoSize = true;
-			lblLote.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblLote.Location = new Point(468, 80);
-			lblLote.Name = "lblLote";
-			lblLote.Size = new Size(146, 15);
-			lblLote.TabIndex = 32;
-			lblLote.Text = "Lote (mismo para todos ) :";
 			// 
 			// btnAgregarListado
 			// 
@@ -258,23 +212,11 @@
 			lblSubtitulo.TabIndex = 34;
 			lblSubtitulo.Text = "Registro de empleados por cuadrilla";
 			// 
-			// cboFecha
-			// 
-			cboFecha.FormattingEnabled = true;
-			cboFecha.Location = new Point(480, 26);
-			cboFecha.Name = "cboFecha";
-			cboFecha.Size = new Size(265, 23);
-			cboFecha.TabIndex = 35;
-			cboFecha.DrawItem += cboFecha_DrawItem;
-			cboFecha.SelectedIndexChanged += cboFecha_SelectedIndexChanged;
-			cboFecha.Enter += cboFecha_Enter;
-			// 
 			// FrmAgregar
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(852, 499);
-			Controls.Add(cboFecha);
 			Controls.Add(lblSubtitulo);
 			Controls.Add(pictureBox1);
 			Controls.Add(btnAgregarListado);
@@ -301,19 +243,14 @@
 		public Button btnCancelar;
 		private Label label2;
 		private ComboBox comboBox1;
-		public ComboBox cboActividad;
 		public TextBox txbCodigo;
 		private GroupBox groupBox1;
 		public Label lblTitulo;
 		private PictureBox pictureBox1;
 		public Label lblSubtitulo;
 		private Label label6;
-		public ComboBox cboLote;
 		public Button btnBuscar;
 		public Label label3;
-		public Label lblLote;
-		public Label lblActividad;
-		public ComboBox cboFecha;
 		private ComboBox comboBox2;
 		public Button btnAgregarListado;
 		public Label lblCodigo;

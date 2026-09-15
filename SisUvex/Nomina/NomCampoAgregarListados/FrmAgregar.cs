@@ -21,39 +21,22 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	public partial class FrmAgregar : Form
 	{
 		public ClsAgregar clsA;
-		public FrmListados frm;
 		public ClsListados cls;
 		public ClsAsistencia _clsA;
-		public FrmAsistencia _frmA;
-		public bool MostrarActividadLote { get; set; }
 		public string IdCuadrilla { get; set; }
 		public string SecuenciaSemana { get; set; }
-
 		public DateTime FechaInicio { get; set; }
 		public DateTime FechaFin { get; set; }
-
 		public bool ModoModificar { get; set; }
-		public int IndiceFilaModificar { get; set; }
-		public DateTime FechaSeleccionada { get; set; }
 		public List<string> EmpleadosSeleccionados { get; set; } = new List<string>();
-		public bool cargandoActividades = false;
-		public BindingSource bsActividades = new BindingSource();
-		private DataTable dtActividades = new DataTable();
-		private List<string> actividadesOriginales =
-			new List<string>();
 		public FrmAgregar()
 		{
 			InitializeComponent();
-
-			cboFecha.DrawMode = DrawMode.OwnerDrawFixed;
 
 			this.StartPosition = FormStartPosition.CenterScreen;
 
 			txbCodigo.Text = "Ej. 012365";
 			txbCodigo.ForeColor = Color.Gray;
-
-			cboFecha.Text = "Ej. Selecciona un Dia";
-			cboFecha.ForeColor = Color.Gray;
 
 			txbCodigo.Enter += txbCodigo_Enter;
 			txbCodigo.Leave += txbCodigo_Leave;
@@ -71,14 +54,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_clsA = new ClsAsistencia();
 			_clsA.frmA = this;
-		}
-
-		public void BloquearControlesAgregarCuadrilla()
-		{
-			txbCodigo.Enabled = false;
-			btnBuscar.Enabled = false;
-			btnAgregarListado.Enabled = false;
-			lblCodigo.Enabled = false;
 		}
 		private void dgvListadoAgregar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -119,13 +94,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void FrmAgregar_Load(object sender, EventArgs e)
 		{
-			cargandoActividades = true;
-			cboActividad.Visible = MostrarActividadLote;
-			cboLote.Visible = MostrarActividadLote;
-
-			lblActividad.Visible = MostrarActividadLote;
-			lblLote.Visible = MostrarActividadLote;
-			cboFecha.Visible = MostrarActividadLote;
 
 			dgvListadoAgregar.Columns.Clear();
 
@@ -138,12 +106,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			clsA.EstiloDgvListadoAgregar();
 
-			CargarActividades();
-
-
-			clsA.CargarComboLotes();
-
-			clsA.CargarDiasRegistro(FechaInicio);
+		
 
 			if (EmpleadosSeleccionados.Count > 0)
 			{
@@ -151,10 +114,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					EmpleadosSeleccionados);
 			}
 
-			if (ModoModificar)
-			{
-				cls.CargarEmpleadoModificar();
-			}
+			//if (ModoModificar)
+			//{
+			//	cls.CargarEmpleadoModificar();
+			//}
 
 			BeginInvoke(new Action(() =>
 			{
@@ -177,70 +140,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// =========================================================
-			// MODO: AGREGAR LOTE Y ACTIVIDAD
-			// =========================================================
-			if (MostrarActividadLote)
-			{
-				if (cboFecha.SelectedItem == null)
-				{
-					MessageBox.Show(
-						"Seleccione el día.",
-						"Fecha",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning);
-
-					return;
-				}
-
-				if (cboActividad.SelectedValue == null)
-				{
-					MessageBox.Show(
-						"Seleccione una actividad.",
-						"Actividad",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning);
-
-					return;
-				}
-
-				if (cboLote.SelectedValue == null)
-				{
-					MessageBox.Show(
-						"Seleccione un lote.",
-						"Lote",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning);
-
-					return;
-				}
-
-				// =====================================================
-				// GUARDAR LOTE, ACTIVIDAD Y CUADRILLA
-				// PARA EL DÍA SELECCIONADO
-				// =====================================================
-				if (clsA.GuardarActividadLote())
-				{
-					MessageBox.Show(
-						"El lote y la actividad se asignaron correctamente.",
-						"Correcto",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
-
-					// Avisar al formulario Asistencia
-					// que los datos se guardaron correctamente
-					this.DialogResult = DialogResult.OK;
-					this.Close();
-				}
-
-				return;
-			}
-
-
-			// =========================================================
-			// MODO NORMAL: AGREGAR EMPLEADOS
+			// VALIDAR EMPLEADOS
 			// =========================================================
 
-			// Validar empleados repetidos dentro de la lista
 			HashSet<string> empleados =
 				new HashSet<string>();
 
@@ -249,13 +151,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (fila.IsNewRow)
 					continue;
 
-				string codigo =
-					fila.Cells["Codigo"].Value?.ToString().Trim();
+				string codigo = fila.Cells["Codigo"].Value?.ToString().Trim();
 
 				if (string.IsNullOrWhiteSpace(codigo))
 					continue;
 
-				// EMPLEADO REPETIDO EN LA LISTA
+				// Validar empleados repetidos en la lista
 				if (!empleados.Add(codigo))
 				{
 					MessageBox.Show(
@@ -267,13 +168,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return;
 				}
 
-				// EMPLEADO YA EXISTE EN LA CUADRILLA
+				// Validar si ya pertenece a la cuadrilla
 				if (cls.ExisteEmpleadoEnCuadrilla(
-					codigo,
-					IdCuadrilla,
-					SecuenciaSemana,
-					FechaInicio,
-					FechaFin))
+						codigo,
+						IdCuadrilla,
+						SecuenciaSemana,
+						FechaInicio,
+						FechaFin))
 				{
 					MessageBox.Show(
 						$"El empleado {codigo} ya está agregado a esta cuadrilla " +
@@ -287,8 +188,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// =========================================================
-			// GUARDAR EMPLEADOS
+			// GUARDAR SOLAMENTE LOS EMPLEADOS EN LA CUADRILLA
 			// =========================================================
+
 			cls.ActualizarEmpleadosCuadrilla(
 				IdCuadrilla,
 				SecuenciaSemana,
@@ -296,8 +198,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				FechaFin,
 				dgvListadoAgregar);
 
-			// Avisar al formulario Asistencia
-			// que los empleados se guardaron correctamente
 			this.DialogResult = DialogResult.OK;
 			this.Close();
 		}
@@ -353,156 +253,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				txbCodigo.Focus();
 			}
 		}
-
-		private void cboFecha_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (cboFecha.SelectedItem == null)
-				return;
-
-			DiaRegistro dia = (DiaRegistro)cboFecha.SelectedItem;
-
-			FechaSeleccionada = dia.Fecha;
-
-			cboFecha.ForeColor = Color.Black;
-		}
-
-
-		private void cboFecha_Enter(object sender, EventArgs e)
-		{
-			if (string.IsNullOrWhiteSpace(txbCodigo.Text))
-			{
-				cboFecha.Text = "Ej. Selecciona un Dia";
-				cboFecha.ForeColor = Color.Gray;
-			}
-		}
-
-		private void cboFecha_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			if (e.Index < 0)
-				return;
-
-			e.DrawBackground();
-
-			DiaRegistro dia = (DiaRegistro)cboFecha.Items[e.Index];
-
-			string texto = dia.Fecha.ToString("dddd dd/MM/yyyy").ToUpper();
-
-			using (Brush brush = new SolidBrush(Color.Black))
-			{
-				e.Graphics.DrawString(
-					texto,
-					e.Font,
-					brush,
-					e.Bounds
-				);
-			}
-
-			e.DrawFocusRectangle();
-		}
-		private void CargarActividades()
-		{
-			try
-			{
-				cargandoActividades = true;
-
-				dtActividades = clsA.ObtenerActividades();
-
-				actividadesOriginales.Clear();
-
-				cboActividad.Items.Clear();
-
-				foreach (DataRow fila in dtActividades.Rows)
-				{
-					string codigo =
-						fila["c_codigo_tab"].ToString();
-
-					string descripcion =
-						fila["v_descripcion_tab"].ToString();
-
-					string actividad =
-						$"{codigo} - {descripcion}";
-
-					actividadesOriginales.Add(actividad);
-
-					cboActividad.Items.Add(actividad);
-				}
-
-				cboActividad.DropDownStyle =
-					ComboBoxStyle.DropDown;
-
-				cboActividad.AutoCompleteMode =
-					AutoCompleteMode.None;
-
-				cboActividad.SelectedIndex = -1;
-				cboActividad.Text = "";
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"Error al cargar las actividades: " +
-					ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-			}
-			finally
-			{
-				cargandoActividades = false;
-			}
-		}
-		private void cboActividad_TextUpdate(object sender, EventArgs e)
-		{
-			if (cargandoActividades)
-				return;
-
-			if (actividadesOriginales == null)
-				return;
-
-			string texto = cboActividad.Text;
-
-			int posicionCursor = cboActividad.SelectionStart;
-
-			List<string> resultados = actividadesOriginales
-				.Where(a =>
-					a.IndexOf(
-						texto,
-						StringComparison.OrdinalIgnoreCase) >= 0)
-				.ToList();
-
-			cargandoActividades = true;
-
-			try
-			{
-				cboActividad.BeginUpdate();
-
-				cboActividad.Items.Clear();
-
-				foreach (string actividad in resultados)
-				{
-					cboActividad.Items.Add(actividad);
-				}
-
-				// Restaurar el texto que escribió el usuario
-				cboActividad.Text = texto;
-
-				cboActividad.SelectionStart =
-					Math.Min(posicionCursor, texto.Length);
-
-				cboActividad.SelectionLength = 0;
-
-				cboActividad.EndUpdate();
-
-				// Mostrar coincidencias
-				if (resultados.Count > 0 &&
-					!string.IsNullOrWhiteSpace(texto))
-				{
-					cboActividad.DroppedDown = true;
-				}
-			}
-			finally
-			{
-				cargandoActividades = false;
-			}
-		}
 	}
 }
+		
+		

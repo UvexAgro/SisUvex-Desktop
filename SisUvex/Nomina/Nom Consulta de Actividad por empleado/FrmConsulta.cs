@@ -101,5 +101,10 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 			txbCodigo.Clear();
 			txbCodigo.Focus();
 		}
+
+		private void btnConsultar_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 	}
 }

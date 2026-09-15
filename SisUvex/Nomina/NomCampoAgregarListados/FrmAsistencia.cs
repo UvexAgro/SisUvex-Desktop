@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Nomina.Reporte_de_Asistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.ClsAsistencia;
+using static SisUvex.Nomina.NomCampoAgregarListados.FrmAgregarLoteyActividad;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
 {
@@ -22,6 +23,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			public string Nombre { get; set; }
 			public DateTime Fecha { get; set; }
+		}
+		public class EmpleadoSeleccionado
+		{
+			public string Codigo { get; set; }
+			public string Nombre { get; set; }
 		}
 		public FrmAsistencia()
 		{
@@ -453,18 +459,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			DateTime fechaInicio =
-				Convert.ToDateTime(
-					semana["d_startDate_per"]);
+				Convert.ToDateTime(semana["d_startDate_per"]);
 
 			DateTime fechaFin =
-				Convert.ToDateTime(
-					semana["d_endDate_per"]);
+				Convert.ToDateTime(semana["d_endDate_per"]);
 
 			string secuenciaSemana =
 				semana["c_sequence_per"]
 				.ToString()
 				.Trim();
-
 
 			// ==========================================
 			// OBTENER CUADRILLA
@@ -486,13 +489,31 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ==========================================
+			// VALIDAR ASISTENCIA
+			// ==========================================
+
+			if (!_clsA.ExisteAsistenciaEnLaSemana(
+					idCuadrilla,
+					secuenciaSemana,
+					fechaInicio,
+					fechaFin))
+			{
+				MessageBox.Show(
+					"No existe asistencia registrada para esta cuadrilla en la semana seleccionada.",
+					"Asistencia requerida",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
 
 			// ==========================================
 			// OBTENER EMPLEADOS SELECCIONADOS
 			// ==========================================
 
-			List<string> empleadosSeleccionados =
-				new List<string>();
+			List<EmpleadoSeleccionado> empleadosSeleccionados =
+				new List<EmpleadoSeleccionado>();
 
 			foreach (DataGridViewRow fila in dgvAsistencia.Rows)
 			{
@@ -504,19 +525,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					Convert.ToBoolean(
 						fila.Cells["Seleccionar"].Value);
 
-				if (seleccionado)
-				{
-					string codigo =
-						fila.Cells["Codigo"]
-							.Value?
-							.ToString()
-							.Trim();
+				if (!seleccionado)
+					continue;
 
-					if (!string.IsNullOrWhiteSpace(codigo))
+				string codigo =
+					fila.Cells["Codigo"].Value?
+					.ToString()
+					.Trim();
+
+				string nombre =
+					fila.Cells["Empleado"].Value?
+					.ToString()
+					.Trim();
+
+				if (string.IsNullOrWhiteSpace(codigo))
+					continue;
+
+				empleadosSeleccionados.Add(
+					new EmpleadoSeleccionado
 					{
-						empleadosSeleccionados.Add(codigo);
-					}
-				}
+						Codigo = codigo,
+						Nombre = nombre
+					});
 			}
 
 			if (empleadosSeleccionados.Count == 0)
@@ -530,35 +560,22 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-
 			// ==========================================
-			// ABRIR FRMAGREGAR
-			// ==========================================
-
-			FrmAgregar frm = new FrmAgregar();
-
-			frm.BloquearControlesAgregarCuadrilla();
-
-			frm.MostrarActividadLote = true;
-
-			frm.IdCuadrilla = idCuadrilla;
-
-			frm.SecuenciaSemana = secuenciaSemana;
-
-			frm.FechaInicio = fechaInicio;
-
-			frm.FechaFin = fechaFin;
-
-			frm.EmpleadosSeleccionados =
-				empleadosSeleccionados;
-
-
-			// ==========================================
-			// ABRIR Y ESPERAR A QUE TERMINE
+			// ABRIR FRM AGREGAR
 			// ==========================================
 
 			try
 			{
+				FrmAgregarLoteyActividad frm = new FrmAgregarLoteyActividad();
+
+				frm.EmpleadosSeleccionados =
+					empleadosSeleccionados;
+
+				frm.IdCuadrilla = idCuadrilla;
+				frm.SecuenciaSemana = secuenciaSemana;
+				frm.FechaInicio = fechaInicio;
+				frm.FechaFin = fechaFin;
+
 				if (frm.ShowDialog() == DialogResult.OK)
 				{
 					_clsA.CargarCAL();
