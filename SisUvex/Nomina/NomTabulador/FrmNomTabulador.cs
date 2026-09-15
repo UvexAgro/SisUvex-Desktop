@@ -41,6 +41,7 @@ namespace SisUvex.Nomina.NomTabulador
 			cboSeason.SelectedValue = "05";
 	
 			FiltrarGrid();
+			cls.DiseñarDgvTabulador();
 			HasEditCatalogsPermission(); //metodo para dar permisos al usuario 
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
@@ -86,11 +87,13 @@ namespace SisUvex.Nomina.NomTabulador
 			DataTable dt = ClsQuerysDB.GetDataTable(query);
 
 			dgvCatalog.DataSource = dt;
+			cls.DiseñarDgvTabulador();
 		}
 
 		private void cboSeason_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			FiltrarGrid();
+			cls.DiseñarDgvTabulador();
 		}
 	}
 }
