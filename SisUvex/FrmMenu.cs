@@ -917,5 +917,13 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Normal;
 			AbrirVentanaHijo(cat);
 		}
+
+		private void ajusteDeNominaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+			Nomina.Ingresos_Diversos.FrmListaAsitencia cat = new(this);
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat, 3);
+		}
 	}
 }
