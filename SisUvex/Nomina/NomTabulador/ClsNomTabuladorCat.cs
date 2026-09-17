@@ -36,11 +36,22 @@ namespace SisUvex.Nomina.NomTabulador
 			n_WorkedRestHolidayPay AS [Sueldo Festivo Domingo],
 			d_commission      AS [Comision],
 			n_aboutSalary     AS [Sobre Sueldo],
-			c_campo_tab       AS [Campo],
-		    c_empaque_tab     AS [Empaque]
+			CAST(
+					CASE
+						WHEN c_campo_tab = '1' THEN 1
+						ELSE 0
+					END
+				AS bit) AS [Campo],
 
-		FROM dbo.Nom_Tabulador
-		";
+				CAST(
+					CASE
+						WHEN c_empaque_tab = '1' THEN 1
+						ELSE 0
+					END
+				AS bit) AS [Empaque]
+
+			FROM dbo.Nom_Tabulador
+			";
 
 		public void OpenFrmModify(string id)
 		{
@@ -71,10 +82,15 @@ namespace SisUvex.Nomina.NomTabulador
 		{
 			frm.cls ??= this;
 
-		
-			dtCatalog = ClsQuerysDB.GetDataTable(queryTabulador);
+			dtCatalog =
+				ClsQuerysDB.GetDataTable(queryTabulador);
 
-			dgv = new ClsDGVCatalog(frm.dgvCatalog, dtCatalog);
+			dgv =
+				new ClsDGVCatalog(
+					frm.dgvCatalog,
+					dtCatalog);
+
+			ConfigurarCheckboxCampoEmpaque();
 		}
 		public void CargarDatos(string id)
 		{
@@ -313,6 +329,66 @@ namespace SisUvex.Nomina.NomTabulador
 
 			if (dgv.Columns.Contains("Empaque"))
 				dgv.Columns["Empaque"].Width = 80;
+		}
+		public void ConfigurarCheckboxCampoEmpaque()
+		{
+			DataGridView dgv = frm.dgvCatalog;
+
+			// =========================================================
+			// CAMPO
+			// =========================================================
+
+			if (dgv.Columns.Contains("Campo"))
+			{
+				int indiceCampo =
+					dgv.Columns["Campo"].Index;
+
+				dgv.Columns.Remove("Campo");
+
+				DataGridViewCheckBoxColumn chkCampo =
+					new DataGridViewCheckBoxColumn();
+
+				chkCampo.Name = "Campo";
+				chkCampo.HeaderText = "Campo";
+				chkCampo.DataPropertyName = "Campo";
+				chkCampo.Width = 70;
+				chkCampo.ReadOnly = true;
+
+				chkCampo.DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+				dgv.Columns.Insert(
+					indiceCampo,
+					chkCampo);
+			}
+
+			// =========================================================
+			// EMPAQUE
+			// =========================================================
+
+			if (dgv.Columns.Contains("Empaque"))
+			{
+				int indiceEmpaque =
+					dgv.Columns["Empaque"].Index;
+
+				dgv.Columns.Remove("Empaque");
+
+				DataGridViewCheckBoxColumn chkEmpaque =
+					new DataGridViewCheckBoxColumn();
+
+				chkEmpaque.Name = "Empaque";
+				chkEmpaque.HeaderText = "Empaque";
+				chkEmpaque.DataPropertyName = "Empaque";
+				chkEmpaque.Width = 80;
+				chkEmpaque.ReadOnly = true;
+
+				chkEmpaque.DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+				dgv.Columns.Insert(
+					indiceEmpaque,
+					chkEmpaque);
+			}
 		}
 	}
 }

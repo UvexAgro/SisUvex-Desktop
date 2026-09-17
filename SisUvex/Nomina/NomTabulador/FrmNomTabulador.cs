@@ -42,6 +42,7 @@ namespace SisUvex.Nomina.NomTabulador
 	
 			FiltrarGrid();
 			cls.DiseñarDgvTabulador();
+			cls.ConfigurarCheckboxCampoEmpaque();
 			HasEditCatalogsPermission(); //metodo para dar permisos al usuario 
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
