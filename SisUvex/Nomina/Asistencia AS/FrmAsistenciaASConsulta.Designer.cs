@@ -45,6 +45,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             labelDateTo = new Label();
             dtpDate2 = new DateTimePicker();
             btnLoadReport = new Button();
+            txbLastDays = new TextBox();
+            lblLastDays = new Label();
             btnModifyAttendance = new Button();
             btnExcel = new Button();
             gpbFilters = new GroupBox();
@@ -151,6 +153,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             bgpInfo.Controls.Add(labelDateTo);
             bgpInfo.Controls.Add(dtpDate2);
             bgpInfo.Controls.Add(btnLoadReport);
+            bgpInfo.Controls.Add(txbLastDays);
+            bgpInfo.Controls.Add(lblLastDays);
             bgpInfo.Font = new Font("Segoe UI", 12F);
             bgpInfo.Location = new Point(12, 168);
             bgpInfo.Name = "bgpInfo";
@@ -178,7 +182,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblSobrantesInfo.Name = "lblSobrantesInfo";
             lblSobrantesInfo.Size = new Size(545, 15);
             lblSobrantesInfo.TabIndex = 72;
-            lblSobrantesInfo.Text = "ℹ Si no hay empleados en el listado se generará de todos los empleados en la temporada seleccionada";
+            lblSobrantesInfo.Text = "ℹ Sin listado: indica Últimos días (empleados con importe). Vacío = sin ese límite";
             // 
             // label2
             // 
@@ -240,6 +244,25 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnLoadReport.TextAlign = ContentAlignment.TopLeft;
             btnLoadReport.UseVisualStyleBackColor = true;
             btnLoadReport.Click += btnLoadReport_Click;
+            // 
+            // txbLastDays
+            // 
+            txbLastDays.Location = new Point(545, 20);
+            txbLastDays.MaxLength = 4;
+            txbLastDays.Name = "txbLastDays";
+            txbLastDays.Size = new Size(50, 29);
+            txbLastDays.TabIndex = 96;
+            txbLastDays.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblLastDays
+            // 
+            lblLastDays.AutoSize = true;
+            lblLastDays.Location = new Point(543, 52);
+            lblLastDays.Margin = new Padding(0);
+            lblLastDays.Name = "lblLastDays";
+            lblLastDays.Size = new Size(99, 21);
+            lblLastDays.TabIndex = 97;
+            lblLastDays.Text = "Últimos días";
             // 
             // btnModifyAttendance
             // 
@@ -590,6 +613,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Label labelDateTo;
         public DateTimePicker dtpDate2;
         private Button btnLoadReport;
+        public TextBox txbLastDays;
+        private Label lblLastDays;
         private Button btnModifyAttendance;
         private GroupBox gpbFilters;
         public Label lblEmployeeAdvice;

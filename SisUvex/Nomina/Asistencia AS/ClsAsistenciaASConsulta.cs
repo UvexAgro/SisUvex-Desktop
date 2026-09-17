@@ -2,6 +2,7 @@ using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Catalogos.Metods.Querys;
+using SisUvex.Catalogos.Metods.TextBoxes;
 using SisUvex.Configuracion;
 using SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees;
 using System;
@@ -104,6 +105,9 @@ namespace SisUvex.Nomina.Asistencia_AS
             ClsComboBoxes.CboLoadActives(frm.cboLP, PlacePayment.Cbo);
 
             ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.CboWithDates);
+
+            frm.txbLastDays.Clear();
+            ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbLastDays);
 
             frm.cboSeason.SelectedIndexChanged += CboSeason_SelectedIndexChanged;
         }
@@ -472,10 +476,22 @@ namespace SisUvex.Nomina.Asistencia_AS
                 return;
             }
 
-            List<string> employeeCodes = GetCheckedEmployeeCodes();
-            if (employeeCodes.Count == 0)
+            if (!TryGetLastDays(out int? lastDays)) return;
+
+            bool hasListedEmployees = HasEmployeesInList();
+            List<string>? listedCodes = null;
+            if (hasListedEmployees)
             {
-                SetAdvice("Marca (check) al menos un empleado en el listado antes de cargar el reporte.", isError: true);
+                listedCodes = GetCheckedEmployeeCodes();
+                if (listedCodes.Count == 0)
+                {
+                    SetAdvice("Marca (check) al menos un empleado en el listado antes de cargar el reporte.", isError: true);
+                    return;
+                }
+            }
+            else if (lastDays == null)
+            {
+                SetAdvice("Agrega empleados al listado, o indica \"Últimos días\" para consultar quienes tuvieron importe en esa ventana.", isError: true);
                 return;
             }
 
@@ -491,6 +507,38 @@ namespace SisUvex.Nomina.Asistencia_AS
             BeginProgress();
             try
             {
+                List<string> employeeCodes;
+                int omittedLastDays = 0;
+
+                if (lastDays is int n)
+                {
+                    DateTime lastStart = date2.AddDays(-n);
+                    HashSet<string> withImporte = FetchEmployeeCodesWithImporte(lastStart, date2, listedCodes);
+
+                    if (listedCodes != null)
+                    {
+                        omittedLastDays = listedCodes.Count(c => !withImporte.Contains(c));
+                        employeeCodes = listedCodes.Where(c => withImporte.Contains(c)).ToList();
+                    }
+                    else
+                    {
+                        employeeCodes = withImporte.ToList();
+                    }
+
+                    if (employeeCodes.Count == 0)
+                    {
+                        SystemSounds.Exclamation.Play();
+                        SetAdvice(
+                            $"Ningún empleado tuvo importe del {lastStart:dd/MM/yyyy} al {date2:dd/MM/yyyy} (últimos {n} día(s)).",
+                            isError: true);
+                        return;
+                    }
+                }
+                else
+                {
+                    employeeCodes = listedCodes!;
+                }
+
                 DataTable dtAsistencias = FetchAsistenciasQuery(employeeCodes, date1, date2);
                 AdvanceTo(140);
                 DataTable dtInasistencias = FetchInasistenciasQuery(employeeCodes, date1, date2);
@@ -519,11 +567,13 @@ namespace SisUvex.Nomina.Asistencia_AS
                     onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
-                SetAdvice(
-                    omitted > 0
-                        ? $"Se omitieron {omitted} empleado(s) sin registros de asistencia ni de inasistencia en el rango."
-                        : string.Empty,
-                    isError: false);
+
+                var adviceParts = new List<string>();
+                if (omittedLastDays > 0)
+                    adviceParts.Add($"Se omitieron {omittedLastDays} empleado(s) sin importe en los últimos {lastDays} día(s).");
+                if (omitted > 0)
+                    adviceParts.Add($"Se omitieron {omitted} empleado(s) sin registros de asistencia ni de inasistencia en el rango.");
+                SetAdvice(string.Join(" ", adviceParts), isError: false);
             }
             catch (Exception ex)
             {
@@ -799,6 +849,33 @@ namespace SisUvex.Nomina.Asistencia_AS
                 .ToList();
         }
 
+        /// <summary>True si el listado tiene empleados agregados (no importa si están marcados).</summary>
+        private bool HasEmployeesInList()
+        {
+            return _dtEmployeeList.Rows.Count > 0 && _dtEmployeeList.Columns.Contains(ColCodigo);
+        }
+
+        /// <summary>
+        /// Lee txbLastDays: vacío = sin límite extra; un entero ≥ 0 = ventana de esos días respecto a dtpDate2.
+        /// </summary>
+        private bool TryGetLastDays(out int? lastDays)
+        {
+            lastDays = null;
+            if (frm == null) return true;
+
+            string raw = frm.txbLastDays.Text.Trim();
+            if (string.IsNullOrWhiteSpace(raw)) return true;
+
+            if (!int.TryParse(raw, out int n) || n < 0)
+            {
+                SetAdvice("\"Últimos días\" debe ser un número entero mayor o igual a 0, o dejarse vacío.", isError: true);
+                return false;
+            }
+
+            lastDays = n;
+            return true;
+        }
+
         /// <summary>
         /// Valida que la configuración de conexión (servidor, base de datos principal y base de datos
         /// de empleados) esté completa antes de intentar las consultas del reporte.
@@ -933,6 +1010,52 @@ namespace SisUvex.Nomina.Asistencia_AS
                 ORDER BY CODIGO, FECHA;";
 
             return ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Códigos con importe &gt; 0 en nomhojas / nomhojas_temp entre <paramref name="dateStart"/> y
+        /// <paramref name="dateEnd"/>. Si <paramref name="restrictToCodes"/> no es null, se limita a esos códigos.
+        /// </summary>
+        private HashSet<string> FetchEmployeeCodesWithImporte(
+            DateTime dateStart,
+            DateTime dateEnd,
+            List<string>? restrictToCodes)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                ["@date1"] = dateStart,
+                ["@date2"] = dateEnd,
+            };
+
+            string codeFilter = string.Empty;
+            if (restrictToCodes != null && restrictToCodes.Count > 0)
+                codeFilter = $" AND CODIGO IN {BuildInClause(restrictToCodes, "emp", parameters)}";
+
+            string query = $@"
+                USE [{ClsConfig.DbEmployees}];
+                SELECT DISTINCT Codigo FROM
+                (
+                    SELECT d_fecha_cpn FECHA, c_codigo_emp CODIGO, SUM(n_importe_hoj) IMPORTE
+                    FROM nomhojas GROUP BY d_fecha_cpn, c_codigo_emp
+                    UNION
+                    SELECT d_fecha_cpn FECHA, c_codigo_emp CODIGO, SUM(n_importe_hoj) IMPORTE
+                    FROM nomhojas_temp GROUP BY d_fecha_cpn, c_codigo_emp
+                ) NomHojas
+                WHERE FECHA BETWEEN @date1 AND @date2 AND IMPORTE > 0
+                {codeFilter};";
+
+            DataTable dt = ClsQuerysDB.ExecuteParameterizedQuery(query, parameters);
+            var codes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (!dt.Columns.Contains("Codigo")) return codes;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string codigo = row["Codigo"]?.ToString()?.Trim() ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(codigo))
+                    codes.Add(codigo);
+            }
+
+            return codes;
         }
 
         /// <summary>
