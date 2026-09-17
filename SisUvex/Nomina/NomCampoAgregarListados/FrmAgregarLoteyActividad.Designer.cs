@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAgregarLoteyActividad));
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			cboFecha = new ComboBox();
 			lblSubtitulo = new Label();
 			pictureBox1 = new PictureBox();
@@ -206,14 +206,14 @@
 			dgvAgregarLoteyActividad.BackgroundColor = SystemColors.Control;
 			dgvAgregarLoteyActividad.BorderStyle = BorderStyle.Fixed3D;
 			dgvAgregarLoteyActividad.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvAgregarLoteyActividad.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvAgregarLoteyActividad.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvAgregarLoteyActividad.ColumnHeadersHeight = 29;
 			dgvAgregarLoteyActividad.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvAgregarLoteyActividad.EnableHeadersVisualStyles = false;
@@ -221,28 +221,28 @@
 			dgvAgregarLoteyActividad.Location = new Point(8, 290);
 			dgvAgregarLoteyActividad.Name = "dgvAgregarLoteyActividad";
 			dgvAgregarLoteyActividad.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvAgregarLoteyActividad.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvAgregarLoteyActividad.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvAgregarLoteyActividad.RowHeadersVisible = false;
 			dgvAgregarLoteyActividad.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvAgregarLoteyActividad.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvAgregarLoteyActividad.Size = new Size(905, 402);
+			dgvAgregarLoteyActividad.Size = new Size(1160, 402);
 			dgvAgregarLoteyActividad.TabIndex = 41;
 			dgvAgregarLoteyActividad.KeyDown += dgvAgregarLoteyActividad_KeyDown;
 			// 
 			// btnCancelar
 			// 
-			btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			btnCancelar.BackgroundImageLayout = ImageLayout.Zoom;
 			btnCancelar.Image = (Image)resources.GetObject("btnCancelar.Image");
 			btnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCancelar.Location = new Point(653, 702);
+			btnCancelar.Location = new Point(908, 702);
 			btnCancelar.Name = "btnCancelar";
 			btnCancelar.Padding = new Padding(10, 0, 10, 0);
 			btnCancelar.Size = new Size(110, 27);
@@ -253,10 +253,10 @@
 			// 
 			// btnContinuar
 			// 
-			btnContinuar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnContinuar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			btnContinuar.Image = (Image)resources.GetObject("btnContinuar.Image");
 			btnContinuar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnContinuar.Location = new Point(803, 702);
+			btnContinuar.Location = new Point(1058, 702);
 			btnContinuar.Name = "btnContinuar";
 			btnContinuar.Padding = new Padding(6, 0, 6, 0);
 			btnContinuar.Size = new Size(110, 27);
@@ -280,7 +280,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(925, 741);
+			ClientSize = new Size(1180, 741);
 			Controls.Add(label1);
 			Controls.Add(btnCancelar);
 			Controls.Add(btnContinuar);

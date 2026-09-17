@@ -95,8 +95,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			DataRow rowTodos = dt.NewRow();
 
 			rowTodos["id_workGroup"] = 0;
-			rowTodos["v_nameWorkGroup"] = "Todos";
-			rowTodos["Descripcion"] = "Todos";
+			rowTodos["v_nameWorkGroup"] = "SIN SELECCIONAR";
+			rowTodos["Descripcion"] = "SIN SELECCIONAR";
 
 			dt.Rows.InsertAt(rowTodos, 0);
 
