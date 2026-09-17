@@ -20,6 +20,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	{
 		public FrmMenu frmMenu;
 		private bool cargando = false;
+		private bool esCampo = true;
 		ClsIngresosDiversos cls;
 		ClsDeducciones clsDeu;
 
@@ -57,23 +58,13 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 		private void btnBuscar_Click(object sender, EventArgs e)
 		{
-			// CAMPO
-			if (cboCuadrillaCampo.SelectedIndex > 0)
+			if (esCampo)
 			{
 				cls.ObtenerEmpleadosCampoDia();
 			}
-			// EMPAQUE
-			else if (cboCuadrillaEmpaque.SelectedIndex > 0)
-			{
-				cls.ObtenerAsistenciaEmpaqueDia();
-			}
 			else
 			{
-				MessageBox.Show(
-					"Seleccione una cuadrilla.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
+				cls.ObtenerAsistenciaEmpaqueDia();
 			}
 		}
 
@@ -83,12 +74,43 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			foreach (DataGridViewRow row in dgvLista.Rows)
 			{
+				if (row.IsNewRow)
+					continue;
+
 				bool marcado = row.Cells["Seleccionar"].Value != null &&
 							   Convert.ToBoolean(row.Cells["Seleccionar"].Value);
 
 				if (marcado)
 				{
-					ids.Add(row.Cells["id_attendence"].Value.ToString());
+					// EMPAQUE
+					if (!esCampo)
+					{
+						if (dgvLista.Columns.Contains("id_attendence"))
+						{
+							if (row.Cells["id_attendence"].Value != null &&
+								row.Cells["id_attendence"].Value != DBNull.Value)
+							{
+								ids.Add(
+									row.Cells["id_attendence"].Value.ToString()
+								);
+							}
+						}
+					}
+
+					// CAMPO
+					else
+					{
+						if (dgvLista.Columns.Contains("id_attendance"))
+						{
+							if (row.Cells["id_attendance"].Value != null &&
+								row.Cells["id_attendance"].Value != DBNull.Value)
+							{
+								ids.Add(
+									row.Cells["id_attendance"].Value.ToString()
+								);
+							}
+						}
+					}
 				}
 			}
 
@@ -98,14 +120,20 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-			FrmAddIngresos frm = new FrmAddIngresos(ids);
-
+			// SE MANDA EL ID Y SI ES CAMPO O EMPAQUE
+			FrmAddIngresos frm = new FrmAddIngresos(ids, esCampo);
+			frm.Fecha = dtpDia.Value.Date;
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
-				cls.ObtenerAsistenciaEmpaqueDia();
+				if (esCampo)
+				{
+					cls.ObtenerEmpleadosCampoDia();
+				}
+				else
+				{
+					cls.ObtenerAsistenciaEmpaqueDia();
+				}
 			}
-
-
 		}
 
 		private void btnModify_Click(object sender, EventArgs e)
@@ -116,24 +144,82 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-			if (dgvLista.CurrentRow.Cells["id_concept"].Value == DBNull.Value)
+			if (dgvLista.CurrentRow.Cells["id_concept"].Value == DBNull.Value ||
+				dgvLista.CurrentRow.Cells["id_concept"].Value == null)
 			{
-				MessageBox.Show("Esta asistencia no tiene ingreso para modificar");
+				MessageBox.Show("Este registro no tiene ingreso para modificar");
 				return;
 			}
 
-			string idAttendence = dgvLista.CurrentRow.Cells["id_attendence"].Value.ToString();
-			string idConcepto = dgvLista.CurrentRow.Cells["id_concept"].Value.ToString();
-			decimal monto = Convert.ToDecimal(dgvLista.CurrentRow.Cells["Monto"].Value);
+			string idConcepto =
+				dgvLista.CurrentRow.Cells["id_concept"].Value.ToString();
 
-			FrmAddIngresos frm = new FrmAddIngresos(idAttendence, idConcepto, monto);
+			decimal monto =
+				Convert.ToDecimal(dgvLista.CurrentRow.Cells["Monto"].Value);
 
+			string idAttendence = null;
+			string idWorkGroupEmployeeDaily = null;
+
+			// CAMPO
+			if (esCampo)
+			{
+				if (!dgvLista.Columns.Contains("id_attendance"))
+				{
+					MessageBox.Show("No se encontró el identificador de asistencia de campo.");
+					return;
+				}
+
+				if (dgvLista.CurrentRow.Cells["id_attendance"].Value == null ||
+					dgvLista.CurrentRow.Cells["id_attendance"].Value == DBNull.Value)
+				{
+					MessageBox.Show("El registro no tiene asistencia.");
+					return;
+				}
+
+				idWorkGroupEmployeeDaily =
+					dgvLista.CurrentRow.Cells["id_attendance"]
+					.Value.ToString();
+			}
+			// EMPAQUE
+			else
+			{
+				if (!dgvLista.Columns.Contains("id_attendence"))
+				{
+					MessageBox.Show("No se encontró el identificador de asistencia.");
+					return;
+				}
+
+				if (dgvLista.CurrentRow.Cells["id_attendence"].Value == null ||
+					dgvLista.CurrentRow.Cells["id_attendence"].Value == DBNull.Value)
+				{
+					MessageBox.Show("El registro no tiene asistencia.");
+					return;
+				}
+
+				idAttendence =
+					dgvLista.CurrentRow.Cells["id_attendence"]
+					.Value.ToString();
+			}
+
+			FrmAddIngresos frm = new FrmAddIngresos(
+				idAttendence,
+				idWorkGroupEmployeeDaily,
+				idConcepto,
+				monto,
+				esCampo);
+			frm.Fecha = dtpDia.Value.Date;
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
-				cls.ObtenerAsistenciaEmpaqueDia();
+				if (esCampo)
+				{
+					cls.ObtenerEmpleadosCampoDia();
+				}
+				else
+				{
+					cls.ObtenerAsistenciaEmpaqueDia();
+				}
 			}
 		}
-
 		private void btnEliminar_Click(object sender, EventArgs e)
 		{
 			cls.EliminarIngresoDesdeGrid(dgvLista);
@@ -165,50 +251,83 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-			if (dgvLista.CurrentRow.Cells["id_Deductions"].Value == DBNull.Value)
+			if (dgvLista.CurrentRow.Cells["id_Deductions"].Value == null ||
+				dgvLista.CurrentRow.Cells["id_Deductions"].Value == DBNull.Value)
 			{
-				MessageBox.Show("Esta asistencia no tiene ingreso para modificar");
+				MessageBox.Show("Esta asistencia no tiene descuento para modificar");
 				return;
 			}
 
-			string idAttendence = dgvLista.CurrentRow.Cells["id_attendence"].Value.ToString();
-			string IdDeductions = dgvLista.CurrentRow.Cells["id_Deductions"].Value.ToString();
-			decimal montoD = dgvLista.CurrentRow.Cells["Descuento"].Value == DBNull.Value
-			? 0
-			: Convert.ToDecimal(dgvLista.CurrentRow.Cells["Descuento"].Value);
+			string idDeductions =
+				dgvLista.CurrentRow.Cells["id_Deductions"].Value.ToString();
 
-			FrmDeducciones frm = new FrmDeducciones(idAttendence, IdDeductions, montoD);
+			decimal montoD =
+				dgvLista.CurrentRow.Cells["Descuento"].Value == DBNull.Value
+				? 0
+				: Convert.ToDecimal(
+					dgvLista.CurrentRow.Cells["Descuento"].Value);
+
+			// Saber si el grid es CAMPO o EMPAQUE
+			bool esCampo =
+				dgvLista.Columns.Contains("id_workGroupEmployeeDaily");
+
+			string idAttendence = null;
+			string idWorkGroupEmployeeDaily = null;
+
+			if (esCampo)
+			{
+
+				// CAMPO
+
+
+				object valor =
+					dgvLista.CurrentRow.Cells[
+						"id_workGroupEmployeeDaily"].Value;
+
+				if (valor != null && valor != DBNull.Value)
+				{
+					idWorkGroupEmployeeDaily = valor.ToString();
+				}
+			}
+			else
+			{
+				// EMPAQUE
+
+
+				object valor =
+					dgvLista.CurrentRow.Cells[
+						"id_attendence"].Value;
+
+				if (valor != null && valor != DBNull.Value)
+				{
+					idAttendence = valor.ToString();
+				}
+			}
+
+			if (string.IsNullOrEmpty(idAttendence) &&
+				string.IsNullOrEmpty(idWorkGroupEmployeeDaily))
+			{
+				MessageBox.Show(
+					"No se encontró el identificador de la asistencia");
+
+				return;
+			}
+
+			// ABRIR FORMULARIO
+
+			FrmDeducciones frm = new FrmDeducciones(idAttendence, idWorkGroupEmployeeDaily, idDeductions, montoD, esCampo);
 
 			if (frm.ShowDialog() == DialogResult.OK)
 			{
-				cls.ObtenerAsistenciaEmpaqueDia();
+				if (esCampo)
+				{
+					cls.ObtenerEmpleadosCampoDia();
+				}
+				else
+				{
+					cls.ObtenerAsistenciaEmpaqueDia();
+				}
 			}
-		}
-
-		private void EliminarD_Click(object sender, EventArgs e)
-		{
-			clsDeu.EliminarDeduccionDesdeGrid(dgvLista, cls);
-		}
-
-		private void btnEmpleado_Click(object sender, EventArgs e)
-		{
-			empleadoValor = txbEmpleado.Text;
-			cls.ObtenerAsistenciaEmpaquePorEmpleadoYFecha();
-			//this.Close();
-		}
-
-		private void btnFrmSearchEmployeeId_Click(object sender, EventArgs e)
-		{
-			ClsSelectionForm sel = new ClsSelectionForm();
-
-			sel.OpenSelectionForm("EmployeeBasic", "Código");
-
-			if (!sel.SelectedValue.IsNullOrEmpty())
-				txbEmpleado.Text = sel.SelectedValue;
-
-			txbEmpleado.Focus();
-
-			txbEmpleado.SelectAll();
 		}
 
 		private void cboActividad_SelectedIndexChanged(object sender, EventArgs e)
@@ -237,6 +356,31 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			{
 				cboCuadrillaCampo.SelectedIndex = 0;
 			}
+		}
+
+		private void chkSeleccionar_CheckedChanged(object sender, EventArgs e)
+		{
+			bool seleccionar = chkSeleccionar.Checked;
+
+			foreach (DataGridViewRow fila in dgvLista.Rows)
+			{
+				if (!fila.IsNewRow)
+				{
+					fila.Cells["Seleccionar"].Value = seleccionar;
+				}
+			}
+
+			dgvLista.EndEdit();
+		}
+
+		private void cboCuadrillaCampo_Enter(object sender, EventArgs e)
+		{
+			esCampo = true;
+		}
+
+		private void cboCuadrillaEmpaque_Enter(object sender, EventArgs e)
+		{
+			esCampo = false;
 		}
 	}
 

@@ -55,6 +55,7 @@
 			cboCuadrillaCampo = new ComboBox();
 			label4 = new Label();
 			cboCuadrillaEmpaque = new ComboBox();
+			chkSeleccionar = new CheckBox();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -90,7 +91,7 @@
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
-			dgvLista.Location = new Point(12, 234);
+			dgvLista.Location = new Point(12, 256);
 			dgvLista.Name = "dgvLista";
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = SystemColors.Control;
@@ -103,7 +104,7 @@
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvLista.Size = new Size(1230, 551);
+			dgvLista.Size = new Size(1230, 529);
 			dgvLista.TabIndex = 3;
 			// 
 			// btnBuscar
@@ -209,7 +210,6 @@
 			button2.Text = "Eliminar";
 			button2.TextAlign = ContentAlignment.MiddleRight;
 			button2.UseVisualStyleBackColor = true;
-			button2.Click += EliminarD_Click;
 			// 
 			// btnModificarDed
 			// 
@@ -251,7 +251,6 @@
 			btnEmpleado.Size = new Size(23, 23);
 			btnEmpleado.TabIndex = 14;
 			btnEmpleado.UseVisualStyleBackColor = true;
-			btnEmpleado.Click += btnEmpleado_Click;
 			// 
 			// btnFrmSearchEmployeeId
 			// 
@@ -262,7 +261,6 @@
 			btnFrmSearchEmployeeId.TabIndex = 68;
 			btnFrmSearchEmployeeId.Text = "...";
 			btnFrmSearchEmployeeId.UseVisualStyleBackColor = true;
-			btnFrmSearchEmployeeId.Click += btnFrmSearchEmployeeId_Click;
 			// 
 			// cboActividad
 			// 
@@ -332,6 +330,7 @@
 			cboCuadrillaCampo.Size = new Size(234, 23);
 			cboCuadrillaCampo.TabIndex = 111;
 			cboCuadrillaCampo.SelectedIndexChanged += cboCuadrillaCampo_SelectedIndexChanged;
+			cboCuadrillaCampo.Enter += cboCuadrillaCampo_Enter;
 			// 
 			// label4
 			// 
@@ -351,12 +350,25 @@
 			cboCuadrillaEmpaque.Size = new Size(234, 23);
 			cboCuadrillaEmpaque.TabIndex = 113;
 			cboCuadrillaEmpaque.SelectedIndexChanged += cboCuadrillaEmpaque_SelectedIndexChanged;
+			cboCuadrillaEmpaque.Enter += cboCuadrillaEmpaque_Enter;
+			// 
+			// chkSeleccionar
+			// 
+			chkSeleccionar.AutoSize = true;
+			chkSeleccionar.Location = new Point(12, 231);
+			chkSeleccionar.Name = "chkSeleccionar";
+			chkSeleccionar.Size = new Size(114, 19);
+			chkSeleccionar.TabIndex = 115;
+			chkSeleccionar.Text = "Seleccionar todo";
+			chkSeleccionar.UseVisualStyleBackColor = true;
+			chkSeleccionar.CheckedChanged += chkSeleccionar_CheckedChanged;
 			// 
 			// FrmListaAsitencia
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1254, 797);
+			Controls.Add(chkSeleccionar);
 			Controls.Add(label4);
 			Controls.Add(cboCuadrillaEmpaque);
 			Controls.Add(label3);
@@ -413,5 +425,6 @@
 		public ComboBox cboCuadrillaCampo;
 		private Label label4;
 		public ComboBox cboCuadrillaEmpaque;
+		private CheckBox chkSeleccionar;
 	}
 }

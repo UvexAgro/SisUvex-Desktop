@@ -36,10 +36,13 @@
 			cboSeason = new ComboBox();
 			lblSeason = new Label();
 			panel1 = new Panel();
+			pictureBox1 = new PictureBox();
 			label2 = new Label();
 			label1 = new Label();
+			txbBuscar = new TextBox();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
 			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// btnModify
@@ -47,10 +50,10 @@
 			btnModify.BackgroundImageLayout = ImageLayout.Zoom;
 			btnModify.Image = (Image)resources.GetObject("btnModify.Image");
 			btnModify.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModify.Location = new Point(318, 86);
+			btnModify.Location = new Point(320, 125);
 			btnModify.Name = "btnModify";
 			btnModify.Padding = new Padding(8, 0, 8, 0);
-			btnModify.Size = new Size(105, 23);
+			btnModify.Size = new Size(105, 33);
 			btnModify.TabIndex = 3;
 			btnModify.Text = "Modificar";
 			btnModify.TextAlign = ContentAlignment.MiddleRight;
@@ -79,7 +82,7 @@
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
 			dgvCatalog.ImeMode = ImeMode.NoControl;
-			dgvCatalog.Location = new Point(12, 112);
+			dgvCatalog.Location = new Point(12, 164);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -93,14 +96,14 @@
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCatalog.Size = new Size(776, 316);
+			dgvCatalog.Size = new Size(1209, 956);
 			dgvCatalog.TabIndex = 13;
 			// 
 			// cboSeason
 			// 
 			cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
 			cboSeason.FormattingEnabled = true;
-			cboSeason.Location = new Point(93, 86);
+			cboSeason.Location = new Point(95, 135);
 			cboSeason.Name = "cboSeason";
 			cboSeason.Size = new Size(200, 23);
 			cboSeason.TabIndex = 22;
@@ -109,7 +112,7 @@
 			// lblSeason
 			// 
 			lblSeason.AutoSize = true;
-			lblSeason.Location = new Point(13, 88);
+			lblSeason.Location = new Point(15, 137);
 			lblSeason.Name = "lblSeason";
 			lblSeason.Size = new Size(67, 15);
 			lblSeason.TabIndex = 23;
@@ -117,39 +120,64 @@
 			// 
 			// panel1
 			// 
-			panel1.BackColor = SystemColors.GradientInactiveCaption;
+			panel1.BackColor = Color.FromArgb(35, 103, 149);
+			panel1.Controls.Add(pictureBox1);
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(label1);
 			panel1.Location = new Point(12, 9);
 			panel1.Margin = new Padding(3, 2, 3, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(776, 62);
+			panel1.Size = new Size(1209, 107);
 			panel1.TabIndex = 24;
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(13, 9);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(91, 85);
+			pictureBox1.TabIndex = 25;
+			pictureBox1.TabStop = false;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(16, 38);
+			label2.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label2.ForeColor = SystemColors.ControlLightLight;
+			label2.Location = new Point(120, 70);
 			label2.Name = "label2";
-			label2.Size = new Size(272, 15);
+			label2.Size = new Size(342, 20);
 			label2.TabIndex = 2;
 			label2.Text = "Administra los salarios y comisiones por actividad.";
 			// 
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(16, 8);
+			label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label1.ForeColor = Color.White;
+			label1.Location = new Point(119, 18);
 			label1.Name = "label1";
-			label1.Size = new Size(235, 25);
+			label1.Size = new Size(343, 37);
 			label1.TabIndex = 1;
 			label1.Text = "TABULADOR DE NÓMINA";
+			// 
+			// txbBuscar
+			// 
+			txbBuscar.Location = new Point(538, 129);
+			txbBuscar.Name = "txbBuscar";
+			txbBuscar.Size = new Size(297, 23);
+			txbBuscar.TabIndex = 25;
+			txbBuscar.TextChanged += txbBuscar_TextChanged;
+			txbBuscar.Enter += txbBuscar_Enter;
+			txbBuscar.Leave += txbBuscar_Leave;
 			// 
 			// FrmNomTabulador
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 450);
+			ClientSize = new Size(1233, 1142);
+			Controls.Add(txbBuscar);
 			Controls.Add(panel1);
 			Controls.Add(cboSeason);
 			Controls.Add(lblSeason);
@@ -162,6 +190,7 @@
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).EndInit();
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -175,5 +204,7 @@
 		private Panel panel1;
 		private Label label2;
 		private Label label1;
+		private PictureBox pictureBox1;
+		private TextBox txbBuscar;
 	}
 }

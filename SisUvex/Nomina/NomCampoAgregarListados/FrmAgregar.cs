@@ -4,32 +4,37 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.IdentityModel.Tokens;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using SisUvex.Nomina.Reporte_de_Asistencia;
+using static SisUvex.Nomina.NomCampoAgregarListados.ClsAgregar;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
 {
 	public partial class FrmAgregar : Form
 	{
 		public ClsAgregar clsA;
-		public FrmListados frm;
 		public ClsListados cls;
-		public DataGridView DgvEmpleados
-		{
-			get { return dgvListadoAgregar; }
-		}
+		public ClsAsistencia _clsA;
 		public string IdCuadrilla { get; set; }
-		public DateTime Fecha { get; set; }
+		public string SecuenciaSemana { get; set; }
+		public DateTime FechaInicio { get; set; }
+		public DateTime FechaFin { get; set; }
 		public bool ModoModificar { get; set; }
-		public int IndiceFilaModificar { get; set; }
+		public List<string> EmpleadosSeleccionados { get; set; } = new List<string>();
 		public FrmAgregar()
 		{
 			InitializeComponent();
+
 			this.StartPosition = FormStartPosition.CenterScreen;
+
 			txbCodigo.Text = "Ej. 012365";
 			txbCodigo.ForeColor = Color.Gray;
 
@@ -38,7 +43,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			this.Load += FrmAgregar_Load;
 
-			dgvListadoAgregar.CellDoubleClick += dgvListadoAgregar_CellDoubleClick;
+			dgvListadoAgregar.CellDoubleClick +=
+				dgvListadoAgregar_CellDoubleClick;
 
 			clsA = new ClsAgregar();
 			clsA.frmA = this;
@@ -46,6 +52,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cls = new ClsListados();
 			cls.frmA = this;
 
+			_clsA = new ClsAsistencia();
+			_clsA.frmA = this;
 		}
 		private void dgvListadoAgregar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -53,7 +61,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (e.RowIndex < 0)
 				return;
 
-			string empleado = dgvListadoAgregar.Rows[e.RowIndex].Cells["colEmpleado"].Value?.ToString();
+			string empleado = dgvListadoAgregar.Rows[e.RowIndex].Cells["Nombre"].Value?.ToString();
 
 			DialogResult respuesta = MessageBox.Show(
 				$"¿Desea quitar a {empleado} de la lista?",
@@ -70,7 +78,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			if (txbCodigo.Text == "Ej. 012365")
 			{
-				txbCodigo.Text = "";
+				txbCodigo.Clear();
 				txbCodigo.ForeColor = Color.Black;
 			}
 		}
@@ -87,42 +95,29 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private void FrmAgregar_Load(object sender, EventArgs e)
 		{
 
-			if (!ModoModificar)
-			{
-				// El nombre y lugar de pago NO se pueden modificar
-				txbEmpleado.Enabled = false;
-			}
-			else
-			{
-				// En modificar sí se pueden cambiar
-				txbEmpleado.Enabled = false; // El nombre tampoco debería editarse
-				txbCodigo.Enabled = false;
-			}
-
 			dgvListadoAgregar.Columns.Clear();
 
 			dgvListadoAgregar.Columns.Add("Codigo", "Código");
 			dgvListadoAgregar.Columns.Add("Nombre", "Empleado");
 			dgvListadoAgregar.Columns.Add("LugarPago", "Lugar de Pago");
-			dgvListadoAgregar.Columns.Add("Actividad", "Actividad");
-			dgvListadoAgregar.Columns.Add("Lote", "Lote");
-
 			dgvListadoAgregar.Columns.Add("IdLugarPago", "IdLugarPago");
-			dgvListadoAgregar.Columns.Add("IdActividad", "IdActividad");
-			dgvListadoAgregar.Columns.Add("IdLote", "IdLote");
 
 			dgvListadoAgregar.Columns["IdLugarPago"].Visible = false;
-			dgvListadoAgregar.Columns["IdActividad"].Visible = false;
-			dgvListadoAgregar.Columns["IdLote"].Visible = false;
+
 			clsA.EstiloDgvListadoAgregar();
 
-			clsA.CargarComboActividades();
-			clsA.CargarComboLotes();
+		
 
-			if (ModoModificar)
+			if (EmpleadosSeleccionados.Count > 0)
 			{
-				cls.CargarEmpleadoModificar();
+				clsA.CargarEmpleadosSeleccionados(
+					EmpleadosSeleccionados);
 			}
+
+			//if (ModoModificar)
+			//{
+			//	cls.CargarEmpleadoModificar();
+			//}
 
 			BeginInvoke(new Action(() =>
 			{
@@ -144,7 +139,64 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			cls.ActualizarEmpleadosCuadrilla(IdCuadrilla, Fecha, dgvListadoAgregar);
+			// =========================================================
+			// VALIDAR EMPLEADOS
+			// =========================================================
+
+			HashSet<string> empleados =
+				new HashSet<string>();
+
+			foreach (DataGridViewRow fila in dgvListadoAgregar.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string codigo = fila.Cells["Codigo"].Value?.ToString().Trim();
+
+				if (string.IsNullOrWhiteSpace(codigo))
+					continue;
+
+				// Validar empleados repetidos en la lista
+				if (!empleados.Add(codigo))
+				{
+					MessageBox.Show(
+						$"El empleado {codigo} ya está agregado a la lista.",
+						"Empleado ya agregado",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+				// Validar si ya pertenece a la cuadrilla
+				if (cls.ExisteEmpleadoEnCuadrilla(
+						codigo,
+						IdCuadrilla,
+						SecuenciaSemana,
+						FechaInicio,
+						FechaFin))
+				{
+					MessageBox.Show(
+						$"El empleado {codigo} ya está agregado a esta cuadrilla " +
+						$"para la semana {SecuenciaSemana}.",
+						"Empleado ya agregado",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+			}
+
+			// =========================================================
+			// GUARDAR SOLAMENTE LOS EMPLEADOS EN LA CUADRILLA
+			// =========================================================
+
+			cls.ActualizarEmpleadosCuadrilla(
+				IdCuadrilla,
+				SecuenciaSemana,
+				FechaInicio,
+				FechaFin,
+				dgvListadoAgregar);
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();
@@ -157,13 +209,51 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnAgregarListado_Click(object sender, EventArgs e)
 		{
-			if (ModoModificar)
-			{
-				clsA.ModificarEmpleado();
-				return;
-			}
-
 			clsA.btnAgregarVariosEmpleados();
+		}
+
+		private void btnBuscar_Click(object sender, EventArgs e)
+		{
+			ClsSelectionForm sel = new ClsSelectionForm();
+
+			sel.OpenSelectionForm("EmployeeBasic", "Código");
+
+			if (!sel.SelectedValue.IsNullOrEmpty())
+			{
+				string nuevoCodigo = sel.SelectedValue.Trim();
+
+				string codigosActuales = txbCodigo.Text.Trim();
+
+				// Si tiene el texto de ejemplo, considerarlo vacío
+				if (codigosActuales == "Ej. 012365" ||
+					string.IsNullOrWhiteSpace(codigosActuales))
+				{
+					txbCodigo.Text = nuevoCodigo;
+				}
+				else
+				{
+					txbCodigo.Text =
+						codigosActuales + ", " + nuevoCodigo;
+				}
+
+				txbCodigo.ForeColor = Color.Black;
+				txbCodigo.Focus();
+			}
+		}
+
+		private void txbCodigo_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+
+				clsA.btnAgregarVariosEmpleados();
+
+				txbCodigo.Clear();
+				txbCodigo.Focus();
+			}
 		}
 	}
 }
+		
+		
