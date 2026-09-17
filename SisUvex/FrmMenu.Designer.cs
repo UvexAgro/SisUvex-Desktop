@@ -67,11 +67,21 @@ namespace SisUvex
 			tamañoToolStripMenuItem1 = new ToolStripMenuItem();
 			nominaToolStripMenuItem = new ToolStripMenuItem();
 			actividadesDeTemporadaToolStripMenuItem = new ToolStripMenuItem();
+			registroCuadrillaDeCampoToolStripMenuItem = new ToolStripMenuItem();
+			registroHorarioDeCampoToolStripMenuItem = new ToolStripMenuItem();
 			contratistaToolStripMenuItem1 = new ToolStripMenuItem();
 			cuadrillaToolStripMenuItem1 = new ToolStripMenuItem();
+			tabuladorToolStripMenuItem1 = new ToolStripMenuItem();
+			precioToolStripMenuItem = new ToolStripMenuItem();
+			precioPorGTINToolStripMenuItem = new ToolStripMenuItem();
+			ingresosDiversosToolStripMenuItem = new ToolStripMenuItem();
 			dedudccionesToolStripMenuItem = new ToolStripMenuItem();
 			fechasFestivasToolStripMenuItem = new ToolStripMenuItem();
-			ingresosDiversosToolStripMenuItem = new ToolStripMenuItem();
+			lugarDePagoToolStripMenuItem1 = new ToolStripMenuItem();
+			comedorToolStripMenuItem1 = new ToolStripMenuItem();
+			areaDeComedorToolStripMenuItem = new ToolStripMenuItem();
+			catalogoVentanillaToolStripMenuItem = new ToolStripMenuItem();
+			proveedoresToolStripMenuItem = new ToolStripMenuItem();
 			productoToolStripMenuItem = new ToolStripMenuItem();
 			categoríaToolStripMenuItem1 = new ToolStripMenuItem();
 			contenedorToolStripMenuItem1 = new ToolStripMenuItem();
@@ -117,40 +127,31 @@ namespace SisUvex
 			altaDeEmpleadosSinRegistroToolStripMenuItem = new ToolStripMenuItem();
 			sUAToolStripMenuItem = new ToolStripMenuItem();
 			nominaDeCampoToolStripMenuItem = new ToolStripMenuItem();
-			registroDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
-			registroHorariosDeCampoToolStripMenuItem = new ToolStripMenuItem();
 			listasDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
 			registroDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
 			reporteDeAsistenciasASToolStripMenuItem = new ToolStripMenuItem();
 			consultaDeActividadPorEmpleadoToolStripMenuItem = new ToolStripMenuItem();
 			consultarNominaToolStripMenuItem = new ToolStripMenuItem();
-			desertGhostToolStripMenuItem = new ToolStripMenuItem();
-			cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
+			ajustesDeNominaToolStripMenuItem = new ToolStripMenuItem();
 			empaqueToolStripMenuItem = new ToolStripMenuItem();
-			preciosToolStripMenuItem = new ToolStripMenuItem();
-			preciosPorGTINToolStripMenuItem = new ToolStripMenuItem();
-			tabuladorToolStripMenuItem = new ToolStripMenuItem();
+			mantenimientoToolStripMenuItem = new ToolStripMenuItem();
 			registroDeBajasDePersonalToolStripMenuItem = new ToolStripMenuItem();
 			asistenciaEmpaqueToolStripMenuItem1 = new ToolStripMenuItem();
-			mantenimientoToolStripMenuItem = new ToolStripMenuItem();
-			nominaEmpaqueToolStripMenuItem = new ToolStripMenuItem();
-			cajasPorEmpleadoYHorariosToolStripMenuItem = new ToolStripMenuItem();
-			salarioDiversosToolStripMenuItem = new ToolStripMenuItem();
-			descuentoDePrsonalToolStripMenuItem = new ToolStripMenuItem();
-			calculToolStripMenuItem = new ToolStripMenuItem();
-			reporteToolStripMenuItem1 = new ToolStripMenuItem();
-			reporteDeEmpacadorToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeHorariosToolStripMenuItem1 = new ToolStripMenuItem();
-			reporteDeAsistenciaToolStripMenuItem1 = new ToolStripMenuItem();
-			reporteDeEmpaqueCentralUvaToolStripMenuItem = new ToolStripMenuItem();
+			horarioDeEmpaqueCentralToolStripMenuItem = new ToolStripMenuItem();
+			descuentosDePersonalSorteoToolStripMenuItem = new ToolStripMenuItem();
+			calculoDeNominaToolStripMenuItem = new ToolStripMenuItem();
+			reporteSemanalDeEmpaqueToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeEmpacadorToolStripMenuItem1 = new ToolStripMenuItem();
+			reporteDeHorariosToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeAsistenciaToolStripMenuItem2 = new ToolStripMenuItem();
+			reporteDeEmpaqueCentralUvaToolStripMenuItem1 = new ToolStripMenuItem();
+			desertGhostToolStripMenuItem = new ToolStripMenuItem();
+			cargarEmpleadosToolStripMenuItem = new ToolStripMenuItem();
 			credencialesToolStripMenuItem = new ToolStripMenuItem();
 			comedorToolStripMenuItem = new ToolStripMenuItem();
-			áreaComedorToolStripMenuItem1 = new ToolStripMenuItem();
 			asignarComedorToolStripMenuItem1 = new ToolStripMenuItem();
 			reportesComedorToolStripMenuItem1 = new ToolStripMenuItem();
-			catálogoVentanillasToolStripMenuItem = new ToolStripMenuItem();
 			sincronizarRegistrosToolStripMenuItem = new ToolStripMenuItem();
-			proveedoresToolStripMenuItem1 = new ToolStripMenuItem();
 			relaciónEmpleadoscomedorToolStripMenuItem = new ToolStripMenuItem();
 			reporteAucensiasToolStripMenuItem = new ToolStripMenuItem();
 			contratoToolStripMenuItem = new ToolStripMenuItem();
@@ -162,7 +163,6 @@ namespace SisUvex
 			cajasPorCuadrillaToolStripMenuItem = new ToolStripMenuItem();
 			cajasPorEmpleadoToolStripMenuItem = new ToolStripMenuItem();
 			cajasPorEmpleadoDetalladoToolStripMenuItem = new ToolStripMenuItem();
-			lugarDePagoToolStripMenuItem = new ToolStripMenuItem();
 			consultasToolStripMenuItem = new ToolStripMenuItem();
 			plantasToolStripMenuItem = new ToolStripMenuItem();
 			palletsToolStripMenuItem = new ToolStripMenuItem();
@@ -190,7 +190,6 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			ajusteDeNominaToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -410,7 +409,7 @@ namespace SisUvex
 			// 
 			// catálogosToolStripMenuItem
 			// 
-			catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { frutaPlantaToolStripMenuItem, nominaToolStripMenuItem, productoToolStripMenuItem, embarquesToolStripMenuItem, líneaDeTransporteToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, actividadToolStripMenuItem });
+			catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { frutaPlantaToolStripMenuItem, nominaToolStripMenuItem, comedorToolStripMenuItem1, productoToolStripMenuItem, embarquesToolStripMenuItem, líneaDeTransporteToolStripMenuItem, productorToolStripMenuItem, distribuidorToolStripMenuItem, consigToolStripMenuItem, actividadToolStripMenuItem });
 			catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
 			catálogosToolStripMenuItem.Size = new Size(72, 19);
 			catálogosToolStripMenuItem.Text = "Catálogos";
@@ -445,7 +444,7 @@ namespace SisUvex
 			// 
 			// nominaToolStripMenuItem
 			// 
-			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actividadesDeTemporadaToolStripMenuItem, contratistaToolStripMenuItem1, cuadrillaToolStripMenuItem1, dedudccionesToolStripMenuItem, fechasFestivasToolStripMenuItem, ingresosDiversosToolStripMenuItem });
+			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actividadesDeTemporadaToolStripMenuItem, registroCuadrillaDeCampoToolStripMenuItem, registroHorarioDeCampoToolStripMenuItem, contratistaToolStripMenuItem1, cuadrillaToolStripMenuItem1, tabuladorToolStripMenuItem1, precioToolStripMenuItem, precioPorGTINToolStripMenuItem, ingresosDiversosToolStripMenuItem, dedudccionesToolStripMenuItem, fechasFestivasToolStripMenuItem, lugarDePagoToolStripMenuItem1 });
 			nominaToolStripMenuItem.Name = "nominaToolStripMenuItem";
 			nominaToolStripMenuItem.Size = new Size(175, 22);
 			nominaToolStripMenuItem.Text = "Nomina";
@@ -453,44 +452,112 @@ namespace SisUvex
 			// actividadesDeTemporadaToolStripMenuItem
 			// 
 			actividadesDeTemporadaToolStripMenuItem.Name = "actividadesDeTemporadaToolStripMenuItem";
-			actividadesDeTemporadaToolStripMenuItem.Size = new Size(212, 22);
-			actividadesDeTemporadaToolStripMenuItem.Text = "Actividades de temporada";
+			actividadesDeTemporadaToolStripMenuItem.Size = new Size(225, 22);
+			actividadesDeTemporadaToolStripMenuItem.Text = "Actividades de Contrato";
 			actividadesDeTemporadaToolStripMenuItem.Click += actividadesDeTemporadaToolStripMenuItem_Click;
+			// 
+			// registroCuadrillaDeCampoToolStripMenuItem
+			// 
+			registroCuadrillaDeCampoToolStripMenuItem.Name = "registroCuadrillaDeCampoToolStripMenuItem";
+			registroCuadrillaDeCampoToolStripMenuItem.Size = new Size(225, 22);
+			registroCuadrillaDeCampoToolStripMenuItem.Text = "Registro Cuadrilla de Campo";
+			registroCuadrillaDeCampoToolStripMenuItem.Click += registroCuadrillaDeCampoToolStripMenuItem_Click;
+			// 
+			// registroHorarioDeCampoToolStripMenuItem
+			// 
+			registroHorarioDeCampoToolStripMenuItem.Name = "registroHorarioDeCampoToolStripMenuItem";
+			registroHorarioDeCampoToolStripMenuItem.Size = new Size(225, 22);
+			registroHorarioDeCampoToolStripMenuItem.Text = "Registro Horario de Campo";
+			registroHorarioDeCampoToolStripMenuItem.Click += registroHorarioDeCampoToolStripMenuItem_Click;
 			// 
 			// contratistaToolStripMenuItem1
 			// 
 			contratistaToolStripMenuItem1.Name = "contratistaToolStripMenuItem1";
-			contratistaToolStripMenuItem1.Size = new Size(212, 22);
+			contratistaToolStripMenuItem1.Size = new Size(225, 22);
 			contratistaToolStripMenuItem1.Text = "Contratista";
 			contratistaToolStripMenuItem1.Click += contratistaToolStripMenuItem1_Click;
 			// 
 			// cuadrillaToolStripMenuItem1
 			// 
 			cuadrillaToolStripMenuItem1.Name = "cuadrillaToolStripMenuItem1";
-			cuadrillaToolStripMenuItem1.Size = new Size(212, 22);
+			cuadrillaToolStripMenuItem1.Size = new Size(225, 22);
 			cuadrillaToolStripMenuItem1.Text = "Cuadrilla";
 			cuadrillaToolStripMenuItem1.Click += cuadrillaToolStripMenuItem1_Click;
+			// 
+			// tabuladorToolStripMenuItem1
+			// 
+			tabuladorToolStripMenuItem1.Name = "tabuladorToolStripMenuItem1";
+			tabuladorToolStripMenuItem1.Size = new Size(225, 22);
+			tabuladorToolStripMenuItem1.Text = "Tabulador";
+			tabuladorToolStripMenuItem1.Click += tabuladorToolStripMenuItem1_Click;
+			// 
+			// precioToolStripMenuItem
+			// 
+			precioToolStripMenuItem.Name = "precioToolStripMenuItem";
+			precioToolStripMenuItem.Size = new Size(225, 22);
+			precioToolStripMenuItem.Text = "Precio";
+			precioToolStripMenuItem.Click += precioToolStripMenuItem_Click;
+			// 
+			// precioPorGTINToolStripMenuItem
+			// 
+			precioPorGTINToolStripMenuItem.Name = "precioPorGTINToolStripMenuItem";
+			precioPorGTINToolStripMenuItem.Size = new Size(225, 22);
+			precioPorGTINToolStripMenuItem.Text = "Precio por GTIN";
+			precioPorGTINToolStripMenuItem.Click += precioPorGTINToolStripMenuItem_Click;
+			// 
+			// ingresosDiversosToolStripMenuItem
+			// 
+			ingresosDiversosToolStripMenuItem.Name = "ingresosDiversosToolStripMenuItem";
+			ingresosDiversosToolStripMenuItem.Size = new Size(225, 22);
+			ingresosDiversosToolStripMenuItem.Text = "Ingresos Diversos";
+			ingresosDiversosToolStripMenuItem.Click += ingresosDiversosToolStripMenuItem_Click;
 			// 
 			// dedudccionesToolStripMenuItem
 			// 
 			dedudccionesToolStripMenuItem.Name = "dedudccionesToolStripMenuItem";
-			dedudccionesToolStripMenuItem.Size = new Size(212, 22);
+			dedudccionesToolStripMenuItem.Size = new Size(225, 22);
 			dedudccionesToolStripMenuItem.Text = "Deducciones";
 			dedudccionesToolStripMenuItem.Click += dedudccionesToolStripMenuItem_Click;
 			// 
 			// fechasFestivasToolStripMenuItem
 			// 
 			fechasFestivasToolStripMenuItem.Name = "fechasFestivasToolStripMenuItem";
-			fechasFestivasToolStripMenuItem.Size = new Size(212, 22);
+			fechasFestivasToolStripMenuItem.Size = new Size(225, 22);
 			fechasFestivasToolStripMenuItem.Text = "Fechas Festivas";
 			fechasFestivasToolStripMenuItem.Click += fechasFestivasToolStripMenuItem_Click;
 			// 
-			// ingresosDiversosToolStripMenuItem
+			// lugarDePagoToolStripMenuItem1
 			// 
-			ingresosDiversosToolStripMenuItem.Name = "ingresosDiversosToolStripMenuItem";
-			ingresosDiversosToolStripMenuItem.Size = new Size(212, 22);
-			ingresosDiversosToolStripMenuItem.Text = "Ingresos Diversos";
-			ingresosDiversosToolStripMenuItem.Click += ingresosDiversosToolStripMenuItem_Click;
+			lugarDePagoToolStripMenuItem1.Name = "lugarDePagoToolStripMenuItem1";
+			lugarDePagoToolStripMenuItem1.Size = new Size(225, 22);
+			lugarDePagoToolStripMenuItem1.Text = "Lugar de Pago";
+			lugarDePagoToolStripMenuItem1.Click += lugarDePagoToolStripMenuItem1_Click;
+			// 
+			// comedorToolStripMenuItem1
+			// 
+			comedorToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { areaDeComedorToolStripMenuItem, catalogoVentanillaToolStripMenuItem, proveedoresToolStripMenuItem });
+			comedorToolStripMenuItem1.Name = "comedorToolStripMenuItem1";
+			comedorToolStripMenuItem1.Size = new Size(175, 22);
+			comedorToolStripMenuItem1.Text = "Comedor";
+			// 
+			// areaDeComedorToolStripMenuItem
+			// 
+			areaDeComedorToolStripMenuItem.Name = "areaDeComedorToolStripMenuItem";
+			areaDeComedorToolStripMenuItem.Size = new Size(176, 22);
+			areaDeComedorToolStripMenuItem.Text = "Area de Comedor";
+			// 
+			// catalogoVentanillaToolStripMenuItem
+			// 
+			catalogoVentanillaToolStripMenuItem.Name = "catalogoVentanillaToolStripMenuItem";
+			catalogoVentanillaToolStripMenuItem.Size = new Size(176, 22);
+			catalogoVentanillaToolStripMenuItem.Text = "Catalogo Ventanilla";
+			catalogoVentanillaToolStripMenuItem.Click += catalogoVentanillaToolStripMenuItem_Click;
+			// 
+			// proveedoresToolStripMenuItem
+			// 
+			proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
+			proveedoresToolStripMenuItem.Size = new Size(176, 22);
+			proveedoresToolStripMenuItem.Text = "Proveedores";
 			// 
 			// productoToolStripMenuItem
 			// 
@@ -747,7 +814,7 @@ namespace SisUvex
 			// 
 			// nóminaToolStripMenuItem
 			// 
-			nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { modificacionesToolStripMenuItem, nominaDeCampoToolStripMenuItem, desertGhostToolStripMenuItem, empaqueToolStripMenuItem, credencialesToolStripMenuItem, comedorToolStripMenuItem, contratoToolStripMenuItem, lugarDePagoToolStripMenuItem });
+			nóminaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { modificacionesToolStripMenuItem, nominaDeCampoToolStripMenuItem, ajustesDeNominaToolStripMenuItem, empaqueToolStripMenuItem, desertGhostToolStripMenuItem, credencialesToolStripMenuItem, comedorToolStripMenuItem, contratoToolStripMenuItem });
 			nóminaToolStripMenuItem.Name = "nóminaToolStripMenuItem";
 			nóminaToolStripMenuItem.Size = new Size(62, 19);
 			nóminaToolStripMenuItem.Text = "Nómina";
@@ -789,24 +856,10 @@ namespace SisUvex
 			// 
 			// nominaDeCampoToolStripMenuItem
 			// 
-			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registroDeCuadrillasToolStripMenuItem, registroHorariosDeCampoToolStripMenuItem, listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, ajusteDeNominaToolStripMenuItem, consultarNominaToolStripMenuItem });
+			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, consultarNominaToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem });
 			nominaDeCampoToolStripMenuItem.Name = "nominaDeCampoToolStripMenuItem";
 			nominaDeCampoToolStripMenuItem.Size = new Size(189, 22);
 			nominaDeCampoToolStripMenuItem.Text = "Nomina de Campo";
-			// 
-			// registroDeCuadrillasToolStripMenuItem
-			// 
-			registroDeCuadrillasToolStripMenuItem.Name = "registroDeCuadrillasToolStripMenuItem";
-			registroDeCuadrillasToolStripMenuItem.Size = new Size(267, 22);
-			registroDeCuadrillasToolStripMenuItem.Text = "Registro de Cuadrillas";
-			registroDeCuadrillasToolStripMenuItem.Click += registroDeCuadrillasToolStripMenuItem_Click;
-			// 
-			// registroHorariosDeCampoToolStripMenuItem
-			// 
-			registroHorariosDeCampoToolStripMenuItem.Name = "registroHorariosDeCampoToolStripMenuItem";
-			registroHorariosDeCampoToolStripMenuItem.Size = new Size(267, 22);
-			registroHorariosDeCampoToolStripMenuItem.Text = "Registro Horarios de Campo";
-			registroHorariosDeCampoToolStripMenuItem.Click += registroHorariosDeCampoToolStripMenuItem_Click;
 			// 
 			// listasDeCuadrillasToolStripMenuItem
 			// 
@@ -840,50 +893,29 @@ namespace SisUvex
 			// 
 			consultarNominaToolStripMenuItem.Name = "consultarNominaToolStripMenuItem";
 			consultarNominaToolStripMenuItem.Size = new Size(267, 22);
-			consultarNominaToolStripMenuItem.Text = "Consultar Nomina";
+			consultarNominaToolStripMenuItem.Text = "Consultar y Generar CSV";
 			consultarNominaToolStripMenuItem.Click += consultarNominaToolStripMenuItem_Click;
 			// 
-			// desertGhostToolStripMenuItem
+			// ajustesDeNominaToolStripMenuItem
 			// 
-			desertGhostToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cargarEmpleadosToolStripMenuItem });
-			desertGhostToolStripMenuItem.Name = "desertGhostToolStripMenuItem";
-			desertGhostToolStripMenuItem.Size = new Size(189, 22);
-			desertGhostToolStripMenuItem.Text = "Desert Ghost";
-			// 
-			// cargarEmpleadosToolStripMenuItem
-			// 
-			cargarEmpleadosToolStripMenuItem.Name = "cargarEmpleadosToolStripMenuItem";
-			cargarEmpleadosToolStripMenuItem.Size = new Size(170, 22);
-			cargarEmpleadosToolStripMenuItem.Text = "Cargar empleados";
-			cargarEmpleadosToolStripMenuItem.Click += cargarEmpleadosToolStripMenuItem_Click;
+			ajustesDeNominaToolStripMenuItem.Name = "ajustesDeNominaToolStripMenuItem";
+			ajustesDeNominaToolStripMenuItem.Size = new Size(189, 22);
+			ajustesDeNominaToolStripMenuItem.Text = "Ajustes de Nomina";
+			ajustesDeNominaToolStripMenuItem.Click += ajustesDeNominaToolStripMenuItem_Click;
 			// 
 			// empaqueToolStripMenuItem
 			// 
-			empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { preciosToolStripMenuItem, preciosPorGTINToolStripMenuItem, tabuladorToolStripMenuItem, registroDeBajasDePersonalToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1, mantenimientoToolStripMenuItem, nominaEmpaqueToolStripMenuItem });
+			empaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mantenimientoToolStripMenuItem, registroDeBajasDePersonalToolStripMenuItem, asistenciaEmpaqueToolStripMenuItem1, horarioDeEmpaqueCentralToolStripMenuItem, descuentosDePersonalSorteoToolStripMenuItem, calculoDeNominaToolStripMenuItem, reporteSemanalDeEmpaqueToolStripMenuItem, reporteDeEmpacadorToolStripMenuItem1, reporteDeHorariosToolStripMenuItem, reporteDeAsistenciaToolStripMenuItem2, reporteDeEmpaqueCentralUvaToolStripMenuItem1 });
 			empaqueToolStripMenuItem.Name = "empaqueToolStripMenuItem";
 			empaqueToolStripMenuItem.Size = new Size(189, 22);
 			empaqueToolStripMenuItem.Text = "Empaque";
 			// 
-			// preciosToolStripMenuItem
+			// mantenimientoToolStripMenuItem
 			// 
-			preciosToolStripMenuItem.Name = "preciosToolStripMenuItem";
-			preciosToolStripMenuItem.Size = new Size(257, 22);
-			preciosToolStripMenuItem.Text = "Precios";
-			preciosToolStripMenuItem.Click += preciosToolStripMenuItem_Click;
-			// 
-			// preciosPorGTINToolStripMenuItem
-			// 
-			preciosPorGTINToolStripMenuItem.Name = "preciosPorGTINToolStripMenuItem";
-			preciosPorGTINToolStripMenuItem.Size = new Size(257, 22);
-			preciosPorGTINToolStripMenuItem.Text = "Precios por GTIN";
-			preciosPorGTINToolStripMenuItem.Click += preciosPorGTINToolStripMenuItem_Click;
-			// 
-			// tabuladorToolStripMenuItem
-			// 
-			tabuladorToolStripMenuItem.Name = "tabuladorToolStripMenuItem";
-			tabuladorToolStripMenuItem.Size = new Size(257, 22);
-			tabuladorToolStripMenuItem.Text = "Tabulador";
-			tabuladorToolStripMenuItem.Click += tabuladorToolStripMenuItem_Click;
+			mantenimientoToolStripMenuItem.Name = "mantenimientoToolStripMenuItem";
+			mantenimientoToolStripMenuItem.Size = new Size(257, 22);
+			mantenimientoToolStripMenuItem.Text = "Limpieza de etiquetas no utilizadas";
+			mantenimientoToolStripMenuItem.Click += mantenimientoToolStripMenuItem_Click;
 			// 
 			// registroDeBajasDePersonalToolStripMenuItem
 			// 
@@ -899,83 +931,75 @@ namespace SisUvex
 			asistenciaEmpaqueToolStripMenuItem1.Text = "Registro de Asistencia";
 			asistenciaEmpaqueToolStripMenuItem1.Click += asistenciaEmpaqueToolStripMenuItem1_Click;
 			// 
-			// mantenimientoToolStripMenuItem
+			// horarioDeEmpaqueCentralToolStripMenuItem
 			// 
-			mantenimientoToolStripMenuItem.Name = "mantenimientoToolStripMenuItem";
-			mantenimientoToolStripMenuItem.Size = new Size(257, 22);
-			mantenimientoToolStripMenuItem.Text = "Limpieza de etiquetas no utilizadas";
-			mantenimientoToolStripMenuItem.Click += mantenimientoToolStripMenuItem_Click;
+			horarioDeEmpaqueCentralToolStripMenuItem.Name = "horarioDeEmpaqueCentralToolStripMenuItem";
+			horarioDeEmpaqueCentralToolStripMenuItem.Size = new Size(257, 22);
+			horarioDeEmpaqueCentralToolStripMenuItem.Text = "Horario de Empaque Central";
+			horarioDeEmpaqueCentralToolStripMenuItem.Click += horarioDeEmpaqueCentralToolStripMenuItem_Click;
 			// 
-			// nominaEmpaqueToolStripMenuItem
+			// descuentosDePersonalSorteoToolStripMenuItem
 			// 
-			nominaEmpaqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cajasPorEmpleadoYHorariosToolStripMenuItem, salarioDiversosToolStripMenuItem, descuentoDePrsonalToolStripMenuItem, calculToolStripMenuItem, reporteToolStripMenuItem1, reporteDeEmpacadorToolStripMenuItem, reporteDeHorariosToolStripMenuItem1, reporteDeAsistenciaToolStripMenuItem1, reporteDeEmpaqueCentralUvaToolStripMenuItem });
-			nominaEmpaqueToolStripMenuItem.Name = "nominaEmpaqueToolStripMenuItem";
-			nominaEmpaqueToolStripMenuItem.Size = new Size(257, 22);
-			nominaEmpaqueToolStripMenuItem.Text = "Nomina Empaque";
-			nominaEmpaqueToolStripMenuItem.Click += nominaEmpaqueToolStripMenuItem_Click;
+			descuentosDePersonalSorteoToolStripMenuItem.Name = "descuentosDePersonalSorteoToolStripMenuItem";
+			descuentosDePersonalSorteoToolStripMenuItem.Size = new Size(257, 22);
+			descuentosDePersonalSorteoToolStripMenuItem.Text = "Descuentos de Personal - Sorteo";
+			descuentosDePersonalSorteoToolStripMenuItem.Click += descuentosDePersonalSorteoToolStripMenuItem_Click;
 			// 
-			// cajasPorEmpleadoYHorariosToolStripMenuItem
+			// calculoDeNominaToolStripMenuItem
 			// 
-			cajasPorEmpleadoYHorariosToolStripMenuItem.Name = "cajasPorEmpleadoYHorariosToolStripMenuItem";
-			cajasPorEmpleadoYHorariosToolStripMenuItem.Size = new Size(248, 22);
-			cajasPorEmpleadoYHorariosToolStripMenuItem.Text = "Horario de Empaque Central";
-			cajasPorEmpleadoYHorariosToolStripMenuItem.Click += cajasPorEmpleadoYHorariosToolStripMenuItem_Click;
+			calculoDeNominaToolStripMenuItem.Name = "calculoDeNominaToolStripMenuItem";
+			calculoDeNominaToolStripMenuItem.Size = new Size(257, 22);
+			calculoDeNominaToolStripMenuItem.Text = "Calculo de Nomina";
+			calculoDeNominaToolStripMenuItem.Click += calculoDeNominaToolStripMenuItem_Click;
 			// 
-			// salarioDiversosToolStripMenuItem
+			// reporteSemanalDeEmpaqueToolStripMenuItem
 			// 
-			salarioDiversosToolStripMenuItem.Name = "salarioDiversosToolStripMenuItem";
-			salarioDiversosToolStripMenuItem.Size = new Size(248, 22);
-			salarioDiversosToolStripMenuItem.Text = "Ajustes de Nómina";
-			salarioDiversosToolStripMenuItem.Click += salarioDiversosToolStripMenuItem_Click;
+			reporteSemanalDeEmpaqueToolStripMenuItem.Name = "reporteSemanalDeEmpaqueToolStripMenuItem";
+			reporteSemanalDeEmpaqueToolStripMenuItem.Size = new Size(257, 22);
+			reporteSemanalDeEmpaqueToolStripMenuItem.Text = "Reporte Semanal de Empaque";
+			reporteSemanalDeEmpaqueToolStripMenuItem.Click += reporteSemanalDeEmpaqueToolStripMenuItem_Click;
 			// 
-			// descuentoDePrsonalToolStripMenuItem
+			// reporteDeEmpacadorToolStripMenuItem1
 			// 
-			descuentoDePrsonalToolStripMenuItem.Name = "descuentoDePrsonalToolStripMenuItem";
-			descuentoDePrsonalToolStripMenuItem.Size = new Size(248, 22);
-			descuentoDePrsonalToolStripMenuItem.Text = "Descuentos de Personal - Sorteo";
-			descuentoDePrsonalToolStripMenuItem.Click += descuentoDePrsonalToolStripMenuItem_Click;
+			reporteDeEmpacadorToolStripMenuItem1.Name = "reporteDeEmpacadorToolStripMenuItem1";
+			reporteDeEmpacadorToolStripMenuItem1.Size = new Size(257, 22);
+			reporteDeEmpacadorToolStripMenuItem1.Text = "Reporte de Empacador";
+			reporteDeEmpacadorToolStripMenuItem1.Click += reporteDeEmpacadorToolStripMenuItem1_Click;
 			// 
-			// calculToolStripMenuItem
+			// reporteDeHorariosToolStripMenuItem
 			// 
-			calculToolStripMenuItem.Name = "calculToolStripMenuItem";
-			calculToolStripMenuItem.Size = new Size(248, 22);
-			calculToolStripMenuItem.Text = "Calculo de Nomina";
-			calculToolStripMenuItem.Click += calculToolStripMenuItem_Click;
+			reporteDeHorariosToolStripMenuItem.Name = "reporteDeHorariosToolStripMenuItem";
+			reporteDeHorariosToolStripMenuItem.Size = new Size(257, 22);
+			reporteDeHorariosToolStripMenuItem.Text = "Reporte de horarios";
+			reporteDeHorariosToolStripMenuItem.Click += reporteDeHorariosToolStripMenuItem_Click_1;
 			// 
-			// reporteToolStripMenuItem1
+			// reporteDeAsistenciaToolStripMenuItem2
 			// 
-			reporteToolStripMenuItem1.Name = "reporteToolStripMenuItem1";
-			reporteToolStripMenuItem1.Size = new Size(248, 22);
-			reporteToolStripMenuItem1.Text = "Reporte Semanal de Empaque";
-			reporteToolStripMenuItem1.Click += reporteToolStripMenuItem1_Click;
+			reporteDeAsistenciaToolStripMenuItem2.Name = "reporteDeAsistenciaToolStripMenuItem2";
+			reporteDeAsistenciaToolStripMenuItem2.Size = new Size(257, 22);
+			reporteDeAsistenciaToolStripMenuItem2.Text = "Reporte de Asistencia";
+			reporteDeAsistenciaToolStripMenuItem2.Click += reporteDeAsistenciaToolStripMenuItem2_Click;
 			// 
-			// reporteDeEmpacadorToolStripMenuItem
+			// reporteDeEmpaqueCentralUvaToolStripMenuItem1
 			// 
-			reporteDeEmpacadorToolStripMenuItem.Name = "reporteDeEmpacadorToolStripMenuItem";
-			reporteDeEmpacadorToolStripMenuItem.Size = new Size(248, 22);
-			reporteDeEmpacadorToolStripMenuItem.Text = "Reporte de Empacador";
-			reporteDeEmpacadorToolStripMenuItem.Click += reporteDeEmpacadorToolStripMenuItem_Click;
+			reporteDeEmpaqueCentralUvaToolStripMenuItem1.Name = "reporteDeEmpaqueCentralUvaToolStripMenuItem1";
+			reporteDeEmpaqueCentralUvaToolStripMenuItem1.Size = new Size(257, 22);
+			reporteDeEmpaqueCentralUvaToolStripMenuItem1.Text = "Reporte de Empaque Central Uva";
+			reporteDeEmpaqueCentralUvaToolStripMenuItem1.Click += reporteDeEmpaqueCentralUvaToolStripMenuItem1_Click;
 			// 
-			// reporteDeHorariosToolStripMenuItem1
+			// desertGhostToolStripMenuItem
 			// 
-			reporteDeHorariosToolStripMenuItem1.Name = "reporteDeHorariosToolStripMenuItem1";
-			reporteDeHorariosToolStripMenuItem1.Size = new Size(248, 22);
-			reporteDeHorariosToolStripMenuItem1.Text = "Reporte de horarios";
-			reporteDeHorariosToolStripMenuItem1.Click += reporteDeHorariosToolStripMenuItem1_Click;
+			desertGhostToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cargarEmpleadosToolStripMenuItem });
+			desertGhostToolStripMenuItem.Name = "desertGhostToolStripMenuItem";
+			desertGhostToolStripMenuItem.Size = new Size(189, 22);
+			desertGhostToolStripMenuItem.Text = "Desert Ghost";
 			// 
-			// reporteDeAsistenciaToolStripMenuItem1
+			// cargarEmpleadosToolStripMenuItem
 			// 
-			reporteDeAsistenciaToolStripMenuItem1.Name = "reporteDeAsistenciaToolStripMenuItem1";
-			reporteDeAsistenciaToolStripMenuItem1.Size = new Size(248, 22);
-			reporteDeAsistenciaToolStripMenuItem1.Text = "Reporte de Asistencia";
-			reporteDeAsistenciaToolStripMenuItem1.Click += reporteDeAsistenciaToolStripMenuItem1_Click;
-			// 
-			// reporteDeEmpaqueCentralUvaToolStripMenuItem
-			// 
-			reporteDeEmpaqueCentralUvaToolStripMenuItem.Name = "reporteDeEmpaqueCentralUvaToolStripMenuItem";
-			reporteDeEmpaqueCentralUvaToolStripMenuItem.Size = new Size(248, 22);
-			reporteDeEmpaqueCentralUvaToolStripMenuItem.Text = "Reporte de Empaque Central Uva";
-			reporteDeEmpaqueCentralUvaToolStripMenuItem.Click += reporteDeEmpaqueCentralUvaToolStripMenuItem_Click;
+			cargarEmpleadosToolStripMenuItem.Name = "cargarEmpleadosToolStripMenuItem";
+			cargarEmpleadosToolStripMenuItem.Size = new Size(170, 22);
+			cargarEmpleadosToolStripMenuItem.Text = "Cargar empleados";
+			cargarEmpleadosToolStripMenuItem.Click += cargarEmpleadosToolStripMenuItem_Click;
 			// 
 			// credencialesToolStripMenuItem
 			// 
@@ -986,17 +1010,10 @@ namespace SisUvex
 			// 
 			// comedorToolStripMenuItem
 			// 
-			comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { áreaComedorToolStripMenuItem1, asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, catálogoVentanillasToolStripMenuItem, sincronizarRegistrosToolStripMenuItem, proveedoresToolStripMenuItem1, relaciónEmpleadoscomedorToolStripMenuItem, reporteAucensiasToolStripMenuItem });
+			comedorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { asignarComedorToolStripMenuItem1, reportesComedorToolStripMenuItem1, sincronizarRegistrosToolStripMenuItem, relaciónEmpleadoscomedorToolStripMenuItem, reporteAucensiasToolStripMenuItem });
 			comedorToolStripMenuItem.Name = "comedorToolStripMenuItem";
 			comedorToolStripMenuItem.Size = new Size(189, 22);
 			comedorToolStripMenuItem.Text = "Comedor";
-			// 
-			// áreaComedorToolStripMenuItem1
-			// 
-			áreaComedorToolStripMenuItem1.Name = "áreaComedorToolStripMenuItem1";
-			áreaComedorToolStripMenuItem1.Size = new Size(233, 22);
-			áreaComedorToolStripMenuItem1.Text = "Área comedor";
-			áreaComedorToolStripMenuItem1.Click += áreaComedorToolStripMenuItem1_Click;
 			// 
 			// asignarComedorToolStripMenuItem1
 			// 
@@ -1012,25 +1029,12 @@ namespace SisUvex
 			reportesComedorToolStripMenuItem1.Text = "Reportes comedor";
 			reportesComedorToolStripMenuItem1.Click += reportesComedorToolStripMenuItem1_Click;
 			// 
-			// catálogoVentanillasToolStripMenuItem
-			// 
-			catálogoVentanillasToolStripMenuItem.Name = "catálogoVentanillasToolStripMenuItem";
-			catálogoVentanillasToolStripMenuItem.Size = new Size(233, 22);
-			catálogoVentanillasToolStripMenuItem.Text = "Catálogo ventanillas";
-			catálogoVentanillasToolStripMenuItem.Click += catálogoVentanillasToolStripMenuItem_Click;
-			// 
 			// sincronizarRegistrosToolStripMenuItem
 			// 
 			sincronizarRegistrosToolStripMenuItem.Name = "sincronizarRegistrosToolStripMenuItem";
 			sincronizarRegistrosToolStripMenuItem.Size = new Size(233, 22);
 			sincronizarRegistrosToolStripMenuItem.Text = "Sincronizar registros";
 			sincronizarRegistrosToolStripMenuItem.Click += sincronizarRegistrosToolStripMenuItem_Click;
-			// 
-			// proveedoresToolStripMenuItem1
-			// 
-			proveedoresToolStripMenuItem1.Name = "proveedoresToolStripMenuItem1";
-			proveedoresToolStripMenuItem1.Size = new Size(233, 22);
-			proveedoresToolStripMenuItem1.Text = "Proveedores";
 			// 
 			// relaciónEmpleadoscomedorToolStripMenuItem
 			// 
@@ -1043,7 +1047,7 @@ namespace SisUvex
 			// 
 			reporteAucensiasToolStripMenuItem.Name = "reporteAucensiasToolStripMenuItem";
 			reporteAucensiasToolStripMenuItem.Size = new Size(233, 22);
-			reporteAucensiasToolStripMenuItem.Text = "Reporte aucentes";
+			reporteAucensiasToolStripMenuItem.Text = "Reporte ausentes";
 			reporteAucensiasToolStripMenuItem.Click += reporteAucensiasToolStripMenuItem_Click;
 			// 
 			// contratoToolStripMenuItem
@@ -1109,13 +1113,6 @@ namespace SisUvex
 			cajasPorEmpleadoDetalladoToolStripMenuItem.Size = new Size(262, 22);
 			cajasPorEmpleadoDetalladoToolStripMenuItem.Text = "Cajas por cada empleado detallado ";
 			cajasPorEmpleadoDetalladoToolStripMenuItem.Click += cajasPorEmpleadoDetalladoToolStripMenuItem_Click;
-			// 
-			// lugarDePagoToolStripMenuItem
-			// 
-			lugarDePagoToolStripMenuItem.Name = "lugarDePagoToolStripMenuItem";
-			lugarDePagoToolStripMenuItem.Size = new Size(189, 22);
-			lugarDePagoToolStripMenuItem.Text = "Lugar de pago";
-			lugarDePagoToolStripMenuItem.Click += lugarDePagoToolStripMenuItem_Click;
 			// 
 			// consultasToolStripMenuItem
 			// 
@@ -1306,13 +1303,6 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// ajusteDeNominaToolStripMenuItem
-			// 
-			ajusteDeNominaToolStripMenuItem.Name = "ajusteDeNominaToolStripMenuItem";
-			ajusteDeNominaToolStripMenuItem.Size = new Size(267, 22);
-			ajusteDeNominaToolStripMenuItem.Text = "Ajuste de Nomina ";
-			ajusteDeNominaToolStripMenuItem.Click += ajusteDeNominaToolStripMenuItem_Click;
-			// 
 			// FrmMenu
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1398,21 +1388,16 @@ namespace SisUvex
         private ToolStripMenuItem códigoParaCajaÚnicaEspárragoToolStripMenuItem;
         private ToolStripMenuItem uvaNombreYCódigoDeEmpleadoToolStripMenuItem;
         private ToolStripMenuItem empaqueToolStripMenuItem;
-        private ToolStripMenuItem preciosToolStripMenuItem;
         private ToolStripMenuItem manifiestosToolStripMenuItem;
         private ToolStripMenuItem totalesPorManifiestoToolStripMenuItem;
         private ToolStripMenuItem totalDeCajasEmbarcadasToolStripMenuItem;
         private ToolStripMenuItem convertirPalletToolStripMenuItem;
-        private ToolStripMenuItem preciosPorGTINToolStripMenuItem;
         private ToolStripMenuItem credencialesToolStripMenuItem;
         private ToolStripMenuItem comedorToolStripMenuItem;
-        private ToolStripMenuItem áreaComedorToolStripMenuItem1;
         private ToolStripMenuItem asignarComedorToolStripMenuItem1;
         private ToolStripMenuItem reportesComedorToolStripMenuItem1;
-        private ToolStripMenuItem catálogoVentanillasToolStripMenuItem;
         private ToolStripMenuItem sincronizarRegistrosToolStripMenuItem;
         private ToolStripMenuItem altaDeEmpleadosSinRegistroToolStripMenuItem;
-        private ToolStripMenuItem proveedoresToolStripMenuItem1;
         private ToolStripMenuItem asistenciaEmpaqueToolStripMenuItem1;
         private ToolStripMenuItem relaciónEmpleadoscomedorToolStripMenuItem;
         private ToolStripMenuItem sUAToolStripMenuItem;
@@ -1435,28 +1420,17 @@ namespace SisUvex
         private ToolStripMenuItem podaToolStripMenuItem;
         private ToolStripMenuItem generarReporteDePodaEnExcelToolStripMenuItem;
         private ToolStripMenuItem parámetrosToolStripMenuItem1;
-        private ToolStripMenuItem nominaEmpaqueToolStripMenuItem;
-        private ToolStripMenuItem calculToolStripMenuItem;
-        private ToolStripMenuItem salarioDiversosToolStripMenuItem;
         private ToolStripMenuItem nominaToolStripMenuItem;
         private ToolStripMenuItem ingresosDiversosToolStripMenuItem;
         private ToolStripMenuItem plantasToolStripMenuItem;
         private ToolStripMenuItem contratoToolStripMenuItem;
         private ToolStripMenuItem reporteDeAsistenciaToolStripMenuItem;
         private ToolStripMenuItem reporteToolStripMenuItem;
-        private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem;
         private ToolStripMenuItem factorToolStripMenuItem;
-        private ToolStripMenuItem reporteToolStripMenuItem1;
         private ToolStripMenuItem fechasFestivasToolStripMenuItem;
-        private ToolStripMenuItem cajasPorEmpleadoYHorariosToolStripMenuItem;
-        private ToolStripMenuItem reporteDeHorariosToolStripMenuItem1;
-        private ToolStripMenuItem reporteDeAsistenciaToolStripMenuItem1;
         private ToolStripMenuItem usuariosToolStripMenuItem;
         private ToolStripMenuItem rolesDeUsuarioToolStripMenuItem;
         private ToolStripMenuItem cambiarTuContraseñaToolStripMenuItem;
-        private ToolStripMenuItem descuentoDePrsonalToolStripMenuItem;
-        private ToolStripMenuItem lugarDePagoToolStripMenuItem;
-		private ToolStripMenuItem tabuladorToolStripMenuItem;
 		private ToolStripMenuItem dedudccionesToolStripMenuItem;
         private ToolStripMenuItem líneaDeTransporteToolStripMenuItem1;
         private ToolStripMenuItem choferToolStripMenuItem1;
@@ -1478,7 +1452,6 @@ namespace SisUvex
         private ToolStripMenuItem cuadrillaToolStripMenuItem1;
         private ToolStripMenuItem relaciónDeEmpaquePorColorToolStripMenuItem;
         private ToolStripMenuItem zPLPreviewToolStripMenuItem;
-		private ToolStripMenuItem reporteDeEmpaqueCentralUvaToolStripMenuItem;
         private ToolStripMenuItem mixtearViejoToolStripMenuItem;
         private ToolStripMenuItem mixtearToolStripMenuItem;
         private ToolStripMenuItem reestibarToolStripMenuItem;
@@ -1496,13 +1469,29 @@ namespace SisUvex
         private ToolStripMenuItem actividadesDeTemporadaToolStripMenuItem;
 		private ToolStripMenuItem registroDeBajasDePersonalToolStripMenuItem;
 		private ToolStripMenuItem nominaDeCampoToolStripMenuItem;
-		private ToolStripMenuItem registroDeCuadrillasToolStripMenuItem;
 		private ToolStripMenuItem listasDeCuadrillasToolStripMenuItem;
-		private ToolStripMenuItem registroHorariosDeCampoToolStripMenuItem;
         private ToolStripMenuItem reporteDeAsistenciasASToolStripMenuItem;
 		private ToolStripMenuItem registroDeAsistenciaToolStripMenuItem;
 		private ToolStripMenuItem consultarNominaToolStripMenuItem;
 		private ToolStripMenuItem consultaDeActividadPorEmpleadoToolStripMenuItem;
-		private ToolStripMenuItem ajusteDeNominaToolStripMenuItem;
+		private ToolStripMenuItem horarioDeEmpaqueCentralToolStripMenuItem;
+		private ToolStripMenuItem descuentosDePersonalSorteoToolStripMenuItem;
+		private ToolStripMenuItem calculoDeNominaToolStripMenuItem;
+		private ToolStripMenuItem reporteSemanalDeEmpaqueToolStripMenuItem;
+		private ToolStripMenuItem reporteDeEmpacadorToolStripMenuItem1;
+		private ToolStripMenuItem reporteDeHorariosToolStripMenuItem;
+		private ToolStripMenuItem reporteDeAsistenciaToolStripMenuItem2;
+		private ToolStripMenuItem reporteDeEmpaqueCentralUvaToolStripMenuItem1;
+		private ToolStripMenuItem tabuladorToolStripMenuItem1;
+		private ToolStripMenuItem precioPorGTINToolStripMenuItem;
+		private ToolStripMenuItem precioToolStripMenuItem;
+		private ToolStripMenuItem ajustesDeNominaToolStripMenuItem;
+		private ToolStripMenuItem registroCuadrillaDeCampoToolStripMenuItem;
+		private ToolStripMenuItem registroHorarioDeCampoToolStripMenuItem;
+		private ToolStripMenuItem lugarDePagoToolStripMenuItem1;
+		private ToolStripMenuItem comedorToolStripMenuItem1;
+		private ToolStripMenuItem areaDeComedorToolStripMenuItem;
+		private ToolStripMenuItem catalogoVentanillaToolStripMenuItem;
+		private ToolStripMenuItem proveedoresToolStripMenuItem;
 	}
 }
