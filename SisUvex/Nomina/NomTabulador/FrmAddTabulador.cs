@@ -18,6 +18,8 @@ namespace SisUvex.Nomina.NomTabulador
 		public FrmAddTabulador()
 		{
 			InitializeComponent();
+
+			this.StartPosition = FormStartPosition.CenterScreen;
 		}
 
 		private void FrmAddTabulador_Load(object sender, EventArgs e)

@@ -23,11 +23,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 {
 	internal class ClsDeducciones
 	{
-		ClsIngresosDiversos cls;
-		public FrmMenu frmMenu;
-		
-		public FrmListaAsitencia frmDia;
-		public FrmAddIngresos frmAdd;
 		public FrmDeducciones frmDeu;
 
 		public void CboDeducciones(ComboBox cbo)
@@ -42,8 +37,8 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		}
 		public void ActualizarDeducciones()
 		{
-
-			string idDeductionsNuevo = frmDeu.cboDeducciones.SelectedValue?.ToString();
+			string idDeductionsNuevo =
+				frmDeu.cboDeducciones.SelectedValue?.ToString();
 
 			if (string.IsNullOrWhiteSpace(idDeductionsNuevo))
 			{
@@ -51,9 +46,9 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-
 			DataTable dt = ClsQuerysDB.GetDataTable(
-				$"SELECT 1 FROM Nom_Deductions WHERE id_Deductions = '{idDeductionsNuevo}'");
+				$"SELECT 1 FROM Nom_Deductions " +
+				$"WHERE id_Deductions = '{idDeductionsNuevo}'");
 
 			if (dt.Rows.Count == 0)
 			{
@@ -61,12 +56,13 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-
 			decimal Descuento;
 
 			if (!string.IsNullOrWhiteSpace(frmDeu.txbMmodificarD.Text))
 			{
-				if (!decimal.TryParse(frmDeu.txbMmodificarD.Text, out Descuento))
+				if (!decimal.TryParse(
+					frmDeu.txbMmodificarD.Text,
+					out Descuento))
 				{
 					MessageBox.Show("Monto modificado inválido");
 					return;
@@ -74,19 +70,39 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 			else
 			{
-				if (!decimal.TryParse(frmDeu.txbMontoDeduccion.Text, out Descuento))
+				if (!decimal.TryParse(
+					frmDeu.txbMontoDeduccion.Text,
+					out Descuento))
 				{
-					MessageBox.Show("lA Deduccion no tiene monto válido");
+					MessageBox.Show("La deducción no tiene monto válido");
 					return;
 				}
 			}
+
+			string idAttendence = "NULL";
+			string idWorkGroupEmployeeDaily = "NULL";
+
+			if (frmDeu.EsCampo)
+			{
+				// CAMPO
+				idWorkGroupEmployeeDaily =
+					$"'{frmDeu.IdWorkGroupEmployeeDaily}'";
+			}
+			else
+			{
+				// EMPAQUE
+				idAttendence =
+					$"'{frmDeu.IdAttendence}'";
+			}
+
 			string query = $@"
 			EXEC sp_Nom_Deductions_Update
-			'{frmDeu.IdAttendence}',
-			'{frmDeu.IdDeductions}',
-			'{idDeductionsNuevo}',
-			{Descuento},
-			'SYSTEM'";
+				{idAttendence},
+				{idWorkGroupEmployeeDaily},
+				'{frmDeu.IdDeductions}',
+				'{idDeductionsNuevo}',
+				{Descuento},
+				'SYSTEM'";
 
 			ClsQuerysDB.ExecuteQuery(query);
 		}
@@ -96,23 +112,58 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			if (val == null || val is DataRowView)
 			{
-				MessageBox.Show("Seleccione una Deduccion válida");
+				MessageBox.Show("Seleccione una Deducción válida");
 				return;
 			}
 
-			string IdDeductions = val.ToString();
+			string idDeductions = val.ToString();
 
-			if (ExisteDeduccionEnAsistencia(frmDeu.IdAttendence, IdDeductions))
+
+			// ============================================
+			// VALIDAR SI YA EXISTE
+			// ============================================
+
+			string idAttendence = null;
+			string idWorkGroupEmployeeDaily = null;
+
+			if (frmDeu.EsCampo)
 			{
-				MessageBox.Show("Este Descuento ya fue agregado a esta asistencia");
+				// CAMPO
+				idWorkGroupEmployeeDaily =
+					frmDeu.IdWorkGroupEmployeeDaily;
+			}
+			else
+			{
+				// EMPAQUE
+				idAttendence =
+					frmDeu.IdAttendence;
+			}
+
+
+			if (ExisteDeduccionEnAsistencia(
+				idAttendence,
+				idWorkGroupEmployeeDaily,
+				idDeductions))
+			{
+				MessageBox.Show(
+					"Este Descuento ya fue agregado a esta asistencia");
+
 				return;
 			}
+
+
+
+			// OBTENER MONTO
+
 
 			decimal Descuento;
 
-			if (!string.IsNullOrWhiteSpace(frmDeu.txbMmodificarD.Text))
+			if (!string.IsNullOrWhiteSpace(
+				frmDeu.txbMmodificarD.Text))
 			{
-				if (!decimal.TryParse(frmDeu.txbMmodificarD.Text, out Descuento))
+				if (!decimal.TryParse(
+					frmDeu.txbMmodificarD.Text,
+					out Descuento))
 				{
 					MessageBox.Show("Monto modificado inválido");
 					return;
@@ -120,37 +171,71 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			}
 			else
 			{
-				if (!decimal.TryParse(frmDeu.txbMontoDeduccion.Text, out Descuento))
+				if (!decimal.TryParse(
+					frmDeu.txbMontoDeduccion.Text,
+					out Descuento))
 				{
 					MessageBox.Show("No tiene monto válido");
 					return;
 				}
 			}
 
+
+			// PREPARAR IDs
+
+
+			string idAttendenceSQL =
+				string.IsNullOrEmpty(idAttendence)
+				? "NULL"
+				: $"'{idAttendence}'";
+
+			string idWorkGroupEmployeeDailySQL =
+				string.IsNullOrEmpty(idWorkGroupEmployeeDaily)
+				? "NULL"
+				: $"'{idWorkGroupEmployeeDaily}'";
+
+
+			// INSERTAR
+
 			string query = $@"
-			EXEC sp_Nom_Deductions_Insert
-			'{frmDeu.IdAttendence}',
-			'{IdDeductions}',
+		EXEC sp_Nom_Deductions_Insert
+			{idAttendenceSQL},
+			{idWorkGroupEmployeeDailySQL},
+			'{idDeductions}',
 			{Descuento},
 			'SYSTEM'";
 
 			ClsQuerysDB.ExecuteQuery(query);
 		}
-		
-		private bool ExisteDeduccionEnAsistencia(string idAttendence, string idConcepto)
+
+		private bool ExisteDeduccionEnAsistencia(string idAttendence,string idWorkGroupEmployeeDaily,string idDeductions)
 		{
+			string filtro;
+
+			if (!string.IsNullOrEmpty(idWorkGroupEmployeeDaily))
+			{
+				// CAMPO
+				filtro =
+					$"id_workGroupEmployeeDaily = '{idWorkGroupEmployeeDaily}'";
+			}
+			else
+			{
+				// EMPAQUE
+				filtro =
+					$"id_attendence = '{idAttendence}'";
+			}
+
 			string query = $@"
-			SELECT COUNT(*) 
-			FROM Nom_MiscellaneousIncome
-			WHERE id_attendence = '{idAttendence}' and id_Deductions is not null ";
+		SELECT COUNT(*)
+		FROM Nom_MiscellaneousIncome
+		WHERE {filtro}
+		  AND id_Deductions = '{idDeductions}'";
 
 			object result = ClsQuerysDB.GetData(query);
 
 			return Convert.ToInt32(result) > 0;
 		}
-		public void EliminarDeduccionDesdeGrid(
-					DataGridView dgv,
-					ClsIngresosDiversos clsIngresos)
+		public void EliminarDeduccionDesdeGrid(DataGridView dgv, ClsIngresosDiversos clsIngresos)
 		{
 			if (dgv.CurrentRow == null)
 			{
@@ -158,29 +243,93 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				return;
 			}
 
-			if (dgv.CurrentRow.Cells["id_Deductions"].Value == DBNull.Value)
+			if (dgv.CurrentRow.Cells["id_Deductions"].Value == null ||
+				dgv.CurrentRow.Cells["id_Deductions"].Value == DBNull.Value)
 			{
-				MessageBox.Show("Esta asistencia no tiene Descuento para eliminar");
+				MessageBox.Show(
+					"Esta asistencia no tiene Descuento para eliminar");
 				return;
 			}
 
-			string idAttendence = dgv.CurrentRow.Cells["id_attendence"].Value.ToString();
-			string idDeductions = dgv.CurrentRow.Cells["id_Deductions"].Value.ToString();
+			string idDeductions =
+				dgv.CurrentRow.Cells["id_Deductions"].Value.ToString();
 
-			if (MessageBox.Show("¿Desea eliminar el Descuento seleccionado?",
+			string idAttendence = null;
+			string idWorkGroupEmployeeDaily = null;
+
+
+			// DETERMINAR SI ES CAMPO O EMPAQUE
+
+
+			if (dgv.Columns.Contains("id_workGroupEmployeeDaily"))
+			{
+				// CAMPO
+				object valor =
+					dgv.CurrentRow.Cells["id_workGroupEmployeeDaily"].Value;
+
+				if (valor != null && valor != DBNull.Value)
+				{
+					idWorkGroupEmployeeDaily = valor.ToString();
+				}
+			}
+			else if (dgv.Columns.Contains("id_attendence"))
+			{
+				// EMPAQUE
+				object valor =
+					dgv.CurrentRow.Cells["id_attendence"].Value;
+
+				if (valor != null && valor != DBNull.Value)
+				{
+					idAttendence = valor.ToString();
+				}
+			}
+
+			if (string.IsNullOrEmpty(idAttendence) &&
+				string.IsNullOrEmpty(idWorkGroupEmployeeDaily))
+			{
+				MessageBox.Show(
+					"No se encontró el identificador de la asistencia");
+				return;
+			}
+
+			if (MessageBox.Show(
+				"¿Desea eliminar el Descuento seleccionado?",
 				"Confirmar",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question) == DialogResult.No)
+			{
 				return;
+			}
+
+			string idAttendenceSQL =
+				string.IsNullOrEmpty(idAttendence)
+				? "NULL"
+				: $"'{idAttendence}'";
+
+			string idWorkGroupEmployeeDailySQL =
+				string.IsNullOrEmpty(idWorkGroupEmployeeDaily)
+				? "NULL"
+				: $"'{idWorkGroupEmployeeDaily}'";
 
 			string query = $@"
-			EXEC sp_Nom_Deductions_Delete
-			'{idAttendence}',
+		EXEC sp_Nom_Deductions_Delete
+			{idAttendenceSQL},
+			{idWorkGroupEmployeeDailySQL},
 			'{idDeductions}'";
 
 			ClsQuerysDB.ExecuteQuery(query);
 
-			clsIngresos.ObtenerAsistenciaEmpaqueDia();
+
+			// ACTUALIZAR GRID
+
+			if (!string.IsNullOrEmpty(idWorkGroupEmployeeDaily))
+			{
+				clsIngresos.ObtenerEmpleadosCampoDia();
+			}
+			else
+			{
+				clsIngresos.ObtenerAsistenciaEmpaqueDia();
+			}
 		}
 
 	}

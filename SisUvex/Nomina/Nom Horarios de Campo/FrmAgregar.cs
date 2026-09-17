@@ -36,32 +36,12 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 
 		private void FrmAgregar_Load(object sender, EventArgs e)
 		{
-			// Cargar cuadrillas
-			cls.CargarCuadrillas();
-
-			// MODIFICAR
-			if (!IsAddOrModify)
-			{
-				// Habilitar fecha final
-				dtpFechaFin.Enabled = true;
-				dtpFechaFin.ShowCheckBox = true;
-
-				cls.CargarHorarioModificar(
-					Convert.ToInt32(idAddModify)
-				);
-			}
-			else
-			{
-				// AGREGAR
-				dtpFechaFin.ShowCheckBox = true;
-				dtpFechaFin.Checked = false;
-				dtpFechaFin.Enabled = false;
-			}
+			
 		}
 
 		private void btnGuardar_Click(object sender, EventArgs e)
 		{
-			cls.Guardar();
+			
 		}
 
 		private void chkSeleccionarTodas_CheckedChanged(object sender, EventArgs e)

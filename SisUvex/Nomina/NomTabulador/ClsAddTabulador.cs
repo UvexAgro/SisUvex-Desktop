@@ -31,6 +31,10 @@ namespace SisUvex.Nomina.NomTabulador
 
 		public decimal? n_WorkedRestHolidayPay { get; set; }
 
+		public bool c_campo_tab { get; set; }
+
+		public bool c_empaque_tab { get; set; }
+
 		public ClsNomTabuladorCat cls;
 
 		public bool UpdateTabulador()
@@ -56,6 +60,9 @@ namespace SisUvex.Nomina.NomTabulador
 				cmd.Parameters.AddWithValue("@n_SeventhDayPay", (object?)n_SeventhDayPay ?? DBNull.Value);
 				cmd.Parameters.AddWithValue("@n_HolidayBasePay", (object?)n_HolidayBasePay ?? DBNull.Value);
 				cmd.Parameters.AddWithValue("@n_WorkedRestHolidayPay", (object?)n_WorkedRestHolidayPay ?? DBNull.Value);
+				cmd.Parameters.AddWithValue("@c_campo_tab", c_campo_tab ? "1" : "0");
+				cmd.Parameters.AddWithValue("@c_empaque_tab", c_empaque_tab ? "1" : "0");
+
 
 				cmd.Parameters.AddWithValue("@c_usuario_mod", User.GetUserName());
 

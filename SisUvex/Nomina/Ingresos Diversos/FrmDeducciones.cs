@@ -22,31 +22,56 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 	public partial class FrmDeducciones : Form
 	{
 		ClsDeducciones cls;
+
 		public bool Edicion = false;
+
 		public string IdDeductions = null;
 		public decimal? Descuento = null;
-		public string IdAttendence;
-		public ClsIngresosDiversos clsIngresos;
 
-		public FrmDeducciones(string idAttendence, string idDeductions, decimal montoD)
+		public string IdAttendence;
+
+		public string IdWorkGroupEmployeeDaily;
+		public bool EsCampo { get; set; }
+		public List<string> IdsAttendence;
+
+
+		public FrmDeducciones(string idAttendence, string idWorkGroupEmployeeDaily, string idDeductions, decimal montoD, bool esCampo)
 		{
 			InitializeComponent();
 
 			IdAttendence = idAttendence;
+			IdWorkGroupEmployeeDaily = idWorkGroupEmployeeDaily;
+
 			IdDeductions = idDeductions;
-			Descuento = Descuento;
+			Descuento = montoD;
+
 			Edicion = true;
+			EsCampo = esCampo;
 
 			cls = new ClsDeducciones();
 			cls.frmDeu = this;
 		}
-
 		public FrmDeducciones(string idAttendence)
 		{
 			InitializeComponent();
 
 			IdAttendence = idAttendence;
+
 			Edicion = false;
+			EsCampo = false;
+
+			cls = new ClsDeducciones();
+			cls.frmDeu = this;
+		}
+
+		public FrmDeducciones(List<string> ids, bool esCampo)
+		{
+			InitializeComponent();
+
+			IdsAttendence = ids;
+
+			Edicion = false;
+			EsCampo = esCampo;
 
 			cls = new ClsDeducciones();
 			cls.frmDeu = this;

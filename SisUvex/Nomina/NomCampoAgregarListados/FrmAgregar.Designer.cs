@@ -31,18 +31,13 @@
 			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAgregar));
-			label1 = new Label();
-			txbEmpleado = new TextBox();
 			dgvListadoAgregar = new DataGridView();
 			btnContinuar = new Button();
 			btnCancelar = new Button();
-			label2 = new Label();
-			label3 = new Label();
-			cboActividad = new ComboBox();
+			lblCodigo = new Label();
 			txbCodigo = new TextBox();
 			groupBox1 = new GroupBox();
-			cboLote = new ComboBox();
-			label5 = new Label();
+			btnBuscar = new Button();
 			btnAgregarListado = new Button();
 			lblTitulo = new Label();
 			pictureBox1 = new PictureBox();
@@ -51,23 +46,6 @@
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(15, 80);
-			label1.Name = "label1";
-			label1.Size = new Size(66, 15);
-			label1.TabIndex = 0;
-			label1.Text = "Empleado :";
-			// 
-			// txbEmpleado
-			// 
-			txbEmpleado.Location = new Point(15, 98);
-			txbEmpleado.Name = "txbEmpleado";
-			txbEmpleado.Size = new Size(252, 23);
-			txbEmpleado.TabIndex = 8;
 			// 
 			// dgvListadoAgregar
 			// 
@@ -91,7 +69,7 @@
 			dgvListadoAgregar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvListadoAgregar.EnableHeadersVisualStyles = false;
 			dgvListadoAgregar.ImeMode = ImeMode.NoControl;
-			dgvListadoAgregar.Location = new Point(12, 211);
+			dgvListadoAgregar.Location = new Point(12, 251);
 			dgvListadoAgregar.Name = "dgvListadoAgregar";
 			dgvListadoAgregar.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -105,14 +83,14 @@
 			dgvListadoAgregar.RowHeadersVisible = false;
 			dgvListadoAgregar.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListadoAgregar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListadoAgregar.Size = new Size(678, 246);
+			dgvListadoAgregar.Size = new Size(836, 206);
 			dgvListadoAgregar.TabIndex = 14;
 			// 
 			// btnContinuar
 			// 
 			btnContinuar.Image = (Image)resources.GetObject("btnContinuar.Image");
 			btnContinuar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnContinuar.Location = new Point(572, 463);
+			btnContinuar.Location = new Point(707, 463);
 			btnContinuar.Name = "btnContinuar";
 			btnContinuar.Padding = new Padding(6, 0, 6, 0);
 			btnContinuar.Size = new Size(110, 27);
@@ -127,7 +105,7 @@
 			btnCancelar.BackgroundImageLayout = ImageLayout.Zoom;
 			btnCancelar.Image = (Image)resources.GetObject("btnCancelar.Image");
 			btnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCancelar.Location = new Point(438, 463);
+			btnCancelar.Location = new Point(573, 463);
 			btnCancelar.Name = "btnCancelar";
 			btnCancelar.Padding = new Padding(10, 0, 10, 0);
 			btnCancelar.Size = new Size(110, 27);
@@ -137,89 +115,68 @@
 			btnCancelar.UseVisualStyleBackColor = true;
 			btnCancelar.Click += btnCancelar_Click;
 			// 
-			// label2
+			// lblCodigo
 			// 
-			label2.AutoSize = true;
-			label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label2.Location = new Point(15, 27);
-			label2.Name = "label2";
-			label2.Size = new Size(126, 15);
-			label2.TabIndex = 22;
-			label2.Text = "Codigo del Empleado :";
-			// 
-			// label3
-			// 
-			label3.AutoSize = true;
-			label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label3.Location = new Point(329, 27);
-			label3.Name = "label3";
-			label3.Size = new Size(166, 15);
-			label3.TabIndex = 24;
-			label3.Text = "Actividad (misma para todos):";
-			// 
-			// cboActividad
-			// 
-			cboActividad.FormattingEnabled = true;
-			cboActividad.Location = new Point(329, 45);
-			cboActividad.Name = "cboActividad";
-			cboActividad.Size = new Size(265, 23);
-			cboActividad.TabIndex = 26;
+			lblCodigo.AutoSize = true;
+			lblCodigo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCodigo.Location = new Point(28, 27);
+			lblCodigo.Name = "lblCodigo";
+			lblCodigo.Size = new Size(126, 15);
+			lblCodigo.TabIndex = 22;
+			lblCodigo.Text = "Codigo del Empleado :";
 			// 
 			// txbCodigo
 			// 
 			txbCodigo.Font = new Font("Segoe UI", 9.25F);
-			txbCodigo.Location = new Point(15, 45);
+			txbCodigo.Location = new Point(28, 45);
 			txbCodigo.Margin = new Padding(1);
 			txbCodigo.MaxLength = 3000;
 			txbCodigo.Multiline = true;
 			txbCodigo.Name = "txbCodigo";
 			txbCodigo.ScrollBars = ScrollBars.Vertical;
-			txbCodigo.Size = new Size(112, 25);
+			txbCodigo.Size = new Size(112, 34);
 			txbCodigo.TabIndex = 30;
+			txbCodigo.KeyDown += txbCodigo_KeyDown;
 			// 
 			// groupBox1
 			// 
-			groupBox1.Controls.Add(cboLote);
-			groupBox1.Controls.Add(label5);
-			groupBox1.Controls.Add(btnAgregarListado);
-			groupBox1.Controls.Add(cboActividad);
+			groupBox1.Controls.Add(btnBuscar);
 			groupBox1.Controls.Add(txbCodigo);
-			groupBox1.Controls.Add(label1);
-			groupBox1.Controls.Add(txbEmpleado);
-			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(label3);
+			groupBox1.Controls.Add(lblCodigo);
 			groupBox1.Location = new Point(12, 60);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(670, 145);
+			groupBox1.Size = new Size(836, 153);
 			groupBox1.TabIndex = 31;
 			groupBox1.TabStop = false;
 			// 
-			// cboLote
+			// btnBuscar
 			// 
-			cboLote.FormattingEnabled = true;
-			cboLote.Location = new Point(329, 98);
-			cboLote.Name = "cboLote";
-			cboLote.Size = new Size(323, 23);
-			cboLote.TabIndex = 33;
-			// 
-			// label5
-			// 
-			label5.AutoSize = true;
-			label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(329, 80);
-			label5.Name = "label5";
-			label5.Size = new Size(36, 15);
-			label5.TabIndex = 32;
-			label5.Text = "Lote :";
+			btnBuscar.BackgroundImageLayout = ImageLayout.Stretch;
+			btnBuscar.Font = new Font("Segoe UI", 14F);
+			btnBuscar.Image = Properties.Resources.BuscarLupa1;
+			btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnBuscar.Location = new Point(28, 98);
+			btnBuscar.Name = "btnBuscar";
+			btnBuscar.Padding = new Padding(20, 0, 20, 0);
+			btnBuscar.Size = new Size(249, 34);
+			btnBuscar.TabIndex = 36;
+			btnBuscar.Text = "Buscar Empleado";
+			btnBuscar.TextAlign = ContentAlignment.MiddleRight;
+			btnBuscar.UseVisualStyleBackColor = true;
+			btnBuscar.Click += btnBuscar_Click;
 			// 
 			// btnAgregarListado
 			// 
 			btnAgregarListado.Image = Properties.Resources.mas_16;
-			btnAgregarListado.Location = new Point(129, 45);
+			btnAgregarListado.ImageAlign = ContentAlignment.MiddleLeft;
+			btnAgregarListado.Location = new Point(664, 217);
 			btnAgregarListado.Margin = new Padding(1);
 			btnAgregarListado.Name = "btnAgregarListado";
-			btnAgregarListado.Size = new Size(30, 25);
+			btnAgregarListado.Padding = new Padding(20, 0, 15, 0);
+			btnAgregarListado.Size = new Size(184, 30);
 			btnAgregarListado.TabIndex = 31;
+			btnAgregarListado.Text = "Agregar Empleado";
+			btnAgregarListado.TextAlign = ContentAlignment.MiddleRight;
 			btnAgregarListado.UseVisualStyleBackColor = true;
 			btnAgregarListado.Click += btnAgregarListado_Click;
 			// 
@@ -259,9 +216,10 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(694, 499);
+			ClientSize = new Size(852, 499);
 			Controls.Add(lblSubtitulo);
 			Controls.Add(pictureBox1);
+			Controls.Add(btnAgregarListado);
 			Controls.Add(lblTitulo);
 			Controls.Add(groupBox1);
 			Controls.Add(btnCancelar);
@@ -280,24 +238,21 @@
 		}
 
 		#endregion
-
-		private Label label1;
 		public DataGridView dgvListadoAgregar;
 		public Button btnContinuar;
 		public Button btnCancelar;
 		private Label label2;
-		private Label label3;
 		private ComboBox comboBox1;
-		public ComboBox cboActividad;
-		public TextBox txbEmpleado;
 		public TextBox txbCodigo;
 		private GroupBox groupBox1;
-		private Button btnAgregarListado;
 		public Label lblTitulo;
 		private PictureBox pictureBox1;
 		public Label lblSubtitulo;
 		private Label label6;
-		public ComboBox cboLote;
-		private Label label5;
+		public Button btnBuscar;
+		public Label label3;
+		private ComboBox comboBox2;
+		public Button btnAgregarListado;
+		public Label lblCodigo;
 	}
 }

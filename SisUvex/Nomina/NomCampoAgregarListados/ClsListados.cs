@@ -6,6 +6,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.Formula.Functions;
 using SisUvex.Nomina.Conceptos_Ingresos_Diversos;
 
 namespace SisUvex.Nomina.NomCampoAgregarListados
@@ -20,7 +21,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
 		public string? idAddModify;
 		public string IdCuadrilla { get; set; }
-		public DateTime Fecha { get; set; }
+		public DateTime FechaInicio { get; set; }
+		public DateTime FechaFin { get; set; }
 		public string IdLote { get; set; }
 		public ClsListados()
 		{
@@ -49,7 +51,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				string query = @"
 				SELECT
 					id_workGroup AS Codigo,
-					v_nameWorkGroup AS [Nombre de Cuadrilla]
+					v_nameWorkGroup AS [Cuadrilla]
 				FROM Nom_WorkGroup
 				WHERE c_active = 1
 				ORDER BY id_workGroup";
@@ -61,6 +63,25 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 
 				frm.dgvCuadrilla.DataSource = dt;
+				// Cargar datos en el DataGridView
+				frm.dgvCuadrilla.DataSource = dt;
+
+				// Agregar CheckBox solamente una vez
+				if (!frm.dgvCuadrilla.Columns.Contains("Seleccionar"))
+				{
+					DataGridViewCheckBoxColumn seleccionar =
+					new DataGridViewCheckBoxColumn();
+
+					seleccionar.Name = "Imprimir";
+					seleccionar.HeaderText = "";
+					seleccionar.ReadOnly = false;
+					seleccionar.Width = 55;
+
+					frm.dgvCuadrilla.Columns.Insert(0, seleccionar);
+				}
+
+				// Aplicar el estilo después de agregar las columnas
+				EstiloDgvCuadrilla();
 			}
 			catch (Exception ex)
 			{
@@ -75,6 +96,104 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+		public void CargarSemanas()
+		{
+			SQLControl sql = new SQLControl();
+
+			string query = @"
+		SELECT
+			id_period,
+			c_sequence_per,
+			d_startDate_per,
+			d_endDate_per,
+			v_name_per
+		FROM dbo.Payroll_AttendancePeriod
+		WHERE c_active = '1'
+		ORDER BY d_startDate_per DESC";
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar las semanas:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// Crear texto que se mostrará en el ComboBox
+			if (!dt.Columns.Contains("SemanaMostrar"))
+			{
+				dt.Columns.Add("SemanaMostrar", typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				DateTime fechaInicio =
+					Convert.ToDateTime(row["d_startDate_per"]).Date;
+
+				DateTime fechaFin =
+					Convert.ToDateTime(row["d_endDate_per"]).Date;
+
+				row["SemanaMostrar"] =
+					"Semana " + row["c_sequence_per"].ToString().Trim() +
+					" | " +
+					fechaInicio.ToString("dd/MM/yyyy") +
+					" - " +
+					fechaFin.ToString("dd/MM/yyyy");
+			}
+
+			frm.cboSemana.DataSource = null;
+
+			frm.cboSemana.DisplayMember = "SemanaMostrar";
+			frm.cboSemana.ValueMember = "c_sequence_per";
+
+			frm.cboSemana.DataSource = dt;
+
+			SeleccionarSemanaActual(dt);
+		}
+
+		private void SeleccionarSemanaActual(DataTable dt)
+		{
+			DateTime fechaActual = DateTime.Today;
+
+			foreach (DataRow row in dt.Rows)
+			{
+				DateTime fechaInicio =
+					Convert.ToDateTime(
+						row["d_startDate_per"]).Date;
+
+				DateTime fechaFin =
+					Convert.ToDateTime(
+						row["d_endDate_per"]).Date;
+
+				if (fechaActual >= fechaInicio &&
+					fechaActual <= fechaFin)
+				{
+					frm.cboSemana.SelectedValue =
+						row["c_sequence_per"].ToString().Trim();
+
+					return;
+				}
+			}
+
+			frm.cboSemana.SelectedIndex = -1;
+		}
 		public void CrearColumnasListado()
 		{
 			DataGridView dgv = frm.dgvListado;
@@ -84,19 +203,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.Columns.Add("Codigo", "Código");
 			dgv.Columns.Add("Nombre", "Empleado");
 			dgv.Columns.Add("LugarPago", "Lugar de Pago");
-			dgv.Columns.Add("Actividad", "Actividad");
-			dgv.Columns.Add("Lote", "Lote");
 
-			// Códigos reales para guardar en BD
+			// Código real para guardar en BD
 			dgv.Columns.Add("IdLugarPago", "IdLugarPago");
-			dgv.Columns.Add("IdActividad", "IdActividad");
-			dgv.Columns.Add("IdLote", "IdLote");
 
 			dgv.Columns["IdLugarPago"].Visible = false;
-			dgv.Columns["IdActividad"].Visible = false;
-			dgv.Columns["IdLote"].Visible = false;
 		}
-		public void CargarEmpleadosCuadrilla(string idCuadrilla,DateTime fecha)
+		public void CargarEmpleadosCuadrilla(string idCuadrilla, string secuenciaSemana, DateTime fechaInicio, DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -104,15 +217,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-
 				using (SqlCommand cmd = new SqlCommand(
-				"sp_GetEmpleadosCuadrilla",sql.cnn))
+					"sp_GetEmployeeWeeklyList",
+					sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
 					cmd.Parameters.AddWithValue(
-						"@fecha",
-						fecha.Date);
+						"@c_sequence_per",
+						secuenciaSemana);
+
+					cmd.Parameters.AddWithValue(
+						"@d_startDate",
+						fechaInicio.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@d_endDate",
+						fechaFin.Date);
 
 					cmd.Parameters.AddWithValue(
 						"@id_workGroup",
@@ -138,25 +259,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									? ""
 									: row["LugarPago"].ToString(),
 
-								row["Actividad"] == DBNull.Value
-									? ""
-									: row["Actividad"].ToString(),
-
-								row["Lote"] == DBNull.Value
-									? ""
-									: row["Lote"].ToString(),
-
 								row["id_paymentPlace"] == DBNull.Value
 									? ""
-									: row["id_paymentPlace"].ToString(),
-
-								row["id_activity"] == DBNull.Value
-									? ""
-									: row["id_activity"].ToString(),
-
-								row["id_lot"] == DBNull.Value
-									? ""
-									: row["id_lot"].ToString()
+									: row["id_paymentPlace"].ToString()
 							);
 						}
 					}
@@ -175,7 +280,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public bool EliminarEmpleadoCuadrilla(string idEmpleado,string idCuadrilla,DateTime fecha)
+		public bool EliminarEmpleadoCuadrilla(string idEmpleado,string idCuadrilla,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -184,30 +289,48 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
-					DELETE FROM dbo.Nom_WorkGroupEmployeeDaily
-					WHERE id_employee = @idEmpleado
-					  AND id_workGroup = @idCuadrilla
-					  AND d_date = @fecha;";
+            DELETE FROM dbo.Nom_EmployeeAttendenceList
+            WHERE id_employee = @idEmpleado
+              AND id_workGroup = @idCuadrilla
+              AND c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin;
+        ";
+
+				int filasEliminadas;
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.AddWithValue(
-						"@idEmpleado",
-						idEmpleado);
+					cmd.Parameters.AddWithValue("@idEmpleado", idEmpleado);
+					cmd.Parameters.AddWithValue("@idCuadrilla", idCuadrilla);
+					cmd.Parameters.AddWithValue("@secuenciaSemana", secuenciaSemana);
+					cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
+					cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date);
 
-					cmd.Parameters.AddWithValue(
-						"@idCuadrilla",
-
-						idCuadrilla);
-
-					cmd.Parameters.AddWithValue(
-						"@fecha",
-						fecha.Date);
-
-					int filasAfectadas = cmd.ExecuteNonQuery();
-
-					return filasAfectadas > 0;
+					filasEliminadas = cmd.ExecuteNonQuery();
 				}
+
+				if (filasEliminadas > 0)
+				{
+					string queryWeekly = @"
+                DELETE FROM dbo.Nom_EmployeeAttendanceWeekly
+                WHERE id_employee = @idEmpleado
+                  AND c_sequence_per = @secuenciaSemana
+                  AND d_startDate_per = @fechaInicio;
+            ";
+
+					using (SqlCommand cmdWeekly =
+						new SqlCommand(queryWeekly, sql.cnn))
+					{
+						cmdWeekly.Parameters.AddWithValue("@idEmpleado", idEmpleado);
+						cmdWeekly.Parameters.AddWithValue("@secuenciaSemana", secuenciaSemana);
+						cmdWeekly.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
+
+						cmdWeekly.ExecuteNonQuery();
+					}
+				}
+
+				return filasEliminadas > 0;
 			}
 			catch (Exception ex)
 			{
@@ -224,50 +347,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		private void FrmA_Shown(object sender, EventArgs e)
-		{
-			CargarEmpleadoModificar();
-
-			// Evita que el evento se ejecute nuevamente
-			frmA.Shown -= FrmA_Shown;
-		}
-		public void OpenFrmModify(string id)
-		{
-			if (string.IsNullOrEmpty(id))
-			{
-				MessageBox.Show(
-					"Seleccione un empleado.",
-					"Modificar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return;
-			}
-
-			IsAddOrModify = false;
-			idAddModify = id;
-
-			frmA = new FrmAgregar();
-
-			frmA.cls = this;
-
-			frmA.Text = "Modificar empleado";
-			frmA.lblTitulo.Text = "MODIFICAR EMPLEADO";
-			frmA.lblSubtitulo.Text =
-				"Modifica la información del empleado";
-
-			frmA.IdCuadrilla = IdCuadrilla;
-			frmA.Fecha = Fecha;
-
-			// MUY IMPORTANTE
-			frmA.ModoModificar = true;
-
-			// Conectar el evento
-			frmA.Shown += FrmA_Shown;
-
-			frmA.ShowDialog();
-		}
-		public void CargarEmpleadoModificar()
+		
+		public void ActualizarEmpleadosCuadrilla(string idCuadrilla,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin,DataGridView dgvEmpleados)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -275,80 +356,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand(
-					"sp_GetEmpleadoCuadrillaModificar",
-					sql.cnn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-
-					cmd.Parameters.AddWithValue(
-						"@idEmpleado",
-						idAddModify);
-
-					cmd.Parameters.AddWithValue(
-						"@idCuadrilla",
-						frmA.IdCuadrilla);
-
-					cmd.Parameters.AddWithValue(
-						"@fecha",
-						frmA.Fecha.Date);
-
-					using (SqlDataReader dr = cmd.ExecuteReader())
-					{
-						if (!dr.Read())
-						{
-							MessageBox.Show(
-								"No se encontró el empleado en la cuadrilla.",
-								"Empleado",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information);
-
-							return;
-						}
-
-						frmA.txbCodigo.Text =
-							dr["id_employee"].ToString();
-
-						frmA.txbEmpleado.Text =
-							dr["Empleado"].ToString();
-
-						if (dr["id_activity"] != DBNull.Value)
-						{
-							frmA.cboActividad.SelectedValue =
-								Convert.ToInt32(dr["id_activity"]);
-						}
-
-						if (dr["id_lot"] != DBNull.Value)
-						{
-							frmA.cboLote.SelectedValue =
-								Convert.ToInt32(dr["id_lot"]);
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					ex.Message,
-					"Error al cargar empleado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-		}
-		public void ActualizarEmpleadosCuadrilla(string idCuadrilla,DateTime fecha,DataGridView dgvEmpleados)
-		{
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				using (SqlTransaction transaction =
-					sql.cnn.BeginTransaction())
+				using (SqlTransaction transaction = sql.cnn.BeginTransaction())
 				{
 					try
 					{
@@ -358,283 +366,85 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 								continue;
 
 							string codigo =
-								fila.Cells["Codigo"].Value?.ToString();
+								fila.Cells["Codigo"].Value?.ToString()?.Trim();
 
 							if (string.IsNullOrWhiteSpace(codigo))
 								continue;
 
-							string idActividad =
-								fila.Cells["IdActividad"].Value?.ToString();
+							// VALIDAR SI EL EMPLEADO YA ESTÁ EN LA CUADRILLA
 
-							string idLote =
-								fila.Cells["IdLote"].Value?.ToString();
-
-							if (string.IsNullOrWhiteSpace(idActividad))
-							{
-								MessageBox.Show(
-									"La actividad del empleado " + codigo +
-									" no tiene un código válido.",
-									"Actualizar",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning);
-
-								transaction.Rollback();
-								return;
-							}
-
-							if (string.IsNullOrWhiteSpace(idLote))
-							{
-								MessageBox.Show(
-									"El lote del empleado " + codigo +
-									" no tiene un código válido.",
-									"Lote",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning);
-
-								transaction.Rollback();
-								return;
-							}
-
-							// =========================================
-							// CONSULTAR EMPLEADO
-							// =========================================
-
-							string cuadrillaAnterior = "";
-							string actividadAnterior = "";
-							string loteAnterior = "";
-
-							using (SqlCommand cmd = new SqlCommand(
-								"sp_GetEmpleadoWorkGroupDaily",
+							using (SqlCommand cmdExiste = new SqlCommand(@"
+							SELECT COUNT(*)
+							FROM dbo.Nom_EmployeeAttendenceList
+							WHERE id_employee = @id_employee
+							  AND id_workGroup = @id_workGroup",
 								sql.cnn,
 								transaction))
 							{
-								cmd.CommandType =
-									CommandType.StoredProcedure;
-
-								cmd.Parameters.AddWithValue(
+								cmdExiste.Parameters.Add(
 									"@id_employee",
-									codigo);
+									SqlDbType.Char,
+									6).Value = codigo;
 
-								cmd.Parameters.AddWithValue(
-									"@fecha",
-									fecha.Date);
-
-								using (SqlDataReader reader =
-									cmd.ExecuteReader())
-								{
-									if (reader.Read())
-									{
-										if (reader["id_workGroup"] != DBNull.Value)
-										{
-											cuadrillaAnterior =
-												reader["id_workGroup"].ToString();
-										}
-
-										if (reader["id_activity"] != DBNull.Value)
-										{
-											actividadAnterior =
-												reader["id_activity"].ToString();
-										}
-
-										if (reader["id_lot"] != DBNull.Value)
-										{
-											loteAnterior =
-												reader["id_lot"].ToString();
-										}
-									}
-								}
-							}
-
-							// =========================================
-							// NO EXISTE → INSERTAR
-							// =========================================
-
-							if (string.IsNullOrWhiteSpace(cuadrillaAnterior))
-							{
-								using (SqlCommand cmd = new SqlCommand(
-									"sp_AddEmpleadoWorkGroupDaily",
-									sql.cnn,
-									transaction))
-								{
-									cmd.CommandType =
-										CommandType.StoredProcedure;
-
-									cmd.Parameters.AddWithValue(
-										"@fecha",
-										fecha.Date);
-
-									cmd.Parameters.AddWithValue(
-										"@id_employee",
-										codigo);
-
-									cmd.Parameters.AddWithValue(
-										"@id_workGroup",
-										idCuadrilla);
-
-									cmd.Parameters.AddWithValue(
-										"@id_activity",
-										idActividad);
-
-									cmd.Parameters.AddWithValue(
-										"@id_lot",
-										idLote);
-
-									cmd.Parameters.AddWithValue(
-										"@userCreate",
-										User.GetUserName());
-
-									cmd.ExecuteNonQuery();
-								}
-
-								continue;
-							}
-
-							// =========================================
-							// OTRA CUADRILLA
-							// =========================================
-
-							if (cuadrillaAnterior != idCuadrilla)
-							{
-								DialogResult respuesta =
-									MessageBox.Show(
-										"El empleado " + codigo +
-										" ya pertenece a otra cuadrilla " +
-										"el día " +
-										fecha.ToString("dd/MM/yyyy") +
-										".\n\n" +
-										"¿Desea cambiarlo a la cuadrilla actual?",
-
-										"Empleado en otra cuadrilla",
-
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Question);
-
-								if (respuesta == DialogResult.No)
-									continue;
-
-								using (SqlCommand cmd = new SqlCommand(
-									"sp_MoverEmpleadoWorkGroupDaily",
-									sql.cnn,
-									transaction))
-								{
-									cmd.CommandType =
-										CommandType.StoredProcedure;
-
-									cmd.Parameters.AddWithValue(
-										"@fecha",
-										fecha.Date);
-
-									cmd.Parameters.AddWithValue(
-										"@id_employee",
-										codigo);
-
-									cmd.Parameters.AddWithValue(
-										"@id_workGroup",
-										idCuadrilla);
-
-									cmd.Parameters.AddWithValue(
-										"@id_activity",
-										idActividad);
-
-									cmd.Parameters.AddWithValue(
-										"@id_lot",
-										idLote);
-
-									cmd.Parameters.AddWithValue(
-										"@userUpdate",
-										User.GetUserName());
-
-									cmd.ExecuteNonQuery();
-								}
-
-								continue;
-							}
-
-							// =========================================
-							// MISMA CUADRILLA
-							// =========================================
-
-							bool cambioActividad =
-								actividadAnterior != idActividad;
-
-							bool cambioLote =
-								loteAnterior != idLote;
-
-							if (cambioActividad || cambioLote)
-							{
-								string mensaje =
-									"El empleado " + codigo +
-									" ya pertenece a esta cuadrilla.\n\n";
-
-								if (cambioActividad)
-								{
-									mensaje +=
-										"Actividad anterior: " +
-										actividadAnterior +
-										"\nNueva actividad: " +
-										idActividad +
-										"\n\n";
-								}
-
-								if (cambioLote)
-								{
-									mensaje +=
-										"Lote anterior: " +
-										loteAnterior +
-										"\nNuevo lote: " +
-										idLote +
-										"\n\n";
-								}
-
-								mensaje +=
-									"¿Desea actualizar los datos?";
-
-								DialogResult respuesta =
-									MessageBox.Show(
-										mensaje,
-										"Cambio de información",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Question);
-
-								if (respuesta == DialogResult.No)
-									continue;
-							}
-
-							// =========================================
-							// ACTUALIZAR
-							// =========================================
-
-							using (SqlCommand cmd = new SqlCommand(
-								"sp_UpdateEmpleadoWorkGroupDaily",
-								sql.cnn,
-								transaction))
-							{
-								cmd.CommandType =
-									CommandType.StoredProcedure;
-
-								cmd.Parameters.AddWithValue(
-									"@fecha",
-									fecha.Date);
-
-								cmd.Parameters.AddWithValue(
-									"@id_employee",
-									codigo);
-
-								cmd.Parameters.AddWithValue(
+								cmdExiste.Parameters.Add(
 									"@id_workGroup",
-									idCuadrilla);
+									SqlDbType.Char,
+									3).Value = idCuadrilla;
 
-								cmd.Parameters.AddWithValue(
-									"@id_activity",
-									idActividad);
+								int existe =
+									Convert.ToInt32(
+										cmdExiste.ExecuteScalar());
 
-								cmd.Parameters.AddWithValue(
-									"@id_lot",
-									idLote);
+								// Ya existe en esta cuadrilla
+								if (existe > 0)
+								{
+									continue;
+								}
+							}
 
-								cmd.Parameters.AddWithValue(
-									"@userUpdate",
-									User.GetUserName());
+							// INSERTAR EMPLEADO
+
+							using (SqlCommand cmd = new SqlCommand(
+								"sp_AddEmployeeWeeklyList",
+								sql.cnn,
+								transaction))
+							{
+								cmd.CommandType =
+									CommandType.StoredProcedure;
+
+								cmd.Parameters.Add(
+									"@c_sequence_per",
+									SqlDbType.Char,
+									2).Value =
+									secuenciaSemana;
+
+								cmd.Parameters.Add(
+									"@d_startDate_per",
+									SqlDbType.Date).Value =
+									fechaInicio.Date;
+
+								cmd.Parameters.Add(
+									"@d_endDate_per",
+									SqlDbType.Date).Value =
+									fechaFin.Date;
+
+								cmd.Parameters.Add(
+									"@id_employee",
+									SqlDbType.Char,
+									6).Value =
+									codigo;
+
+								cmd.Parameters.Add(
+									"@id_workGroup",
+									SqlDbType.Char,
+									3).Value =
+									idCuadrilla;
+
+								cmd.Parameters.Add(
+									"@userCreate",
+									SqlDbType.VarChar,
+									100).Value =
+									User.GetUserName();
 
 								cmd.ExecuteNonQuery();
 							}
@@ -644,7 +454,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 						MessageBox.Show(
 							"Los empleados se guardaron correctamente.",
-							"Actualizar",
+							"Lista semanal",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Information);
 					}
@@ -668,27 +478,76 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+		public bool ExisteEmpleadoEnCuadrilla(string idEmpleado,string idCuadrilla,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+				SELECT COUNT(*)
+				FROM dbo.Nom_EmployeeAttendenceList
+				WHERE id_employee = @id_employee
+				  AND id_workGroup = @id_workGroup
+				  AND c_sequence_per = @c_sequence_per
+				  AND CAST(d_startDate_per AS DATE) = @d_startDate
+				  AND CAST(d_endDate_per AS DATE) = @d_endDate";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.Add(
+						"@id_employee",
+						SqlDbType.Char,
+						6).Value = idEmpleado;
+
+					cmd.Parameters.Add(
+						"@id_workGroup",
+						SqlDbType.Char,
+						3).Value = idCuadrilla;
+
+					cmd.Parameters.Add(
+						"@c_sequence_per",
+						SqlDbType.Char,
+						2).Value = secuenciaSemana;
+
+					cmd.Parameters.Add(
+						"@d_startDate",
+						SqlDbType.Date).Value = fechaInicio.Date;
+
+					cmd.Parameters.Add(
+						"@d_endDate",
+						SqlDbType.Date).Value = fechaFin.Date;
+
+					int cantidad =
+						Convert.ToInt32(cmd.ExecuteScalar());
+
+					return cantidad > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al verificar el empleado:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 		public void ActualizarTotalEmpleados()
 		{
 			int total = frm.dgvListado.Rows.Count;
 
 			frm.lblNumeroTotal.Text = total.ToString();
 		}
-		public void ImprimirListado()
-		{
-			filaImprimir = 0;
-
-			using (PrintPreviewDialog preview =
-				new PrintPreviewDialog())
-			{
-				preview.Document = printDocument;
-
-				preview.Width = 1000;
-				preview.Height = 700;
-
-				preview.ShowDialog();
-			}
-		}
+		
 		public void MostrarEmpleados()
 		{
 			int total = frm.dgvListado.Rows.Count;
@@ -707,7 +566,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				frm.pnlSinEmpleados.Visible = true;
 			}
 		}
-		public bool ActualizarCuadrillas(DateTime fechaActual)
+		public bool CopiarEmpleadosSemanaAnterior(string secuenciaSemanaAnterior, DateTime fechaInicioAnterior, DateTime fechaFinAnterior, string secuenciaSemanaNueva, DateTime fechaInicioNueva, DateTime fechaFinNueva)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -716,24 +575,50 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(
-					"sp_ActualizarCuadrillasDia",
+					"sp_CopyEmployeesFromPreviousWeek",
 					sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.AddWithValue("@FechaActual", fechaActual.Date);
-					cmd.Parameters.AddWithValue("@Usuario", User.GetUserName());
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per_anterior",
+						secuenciaSemanaAnterior);
 
-					cmd.ExecuteNonQuery();
+					cmd.Parameters.AddWithValue(
+						"@d_startDate_anterior",
+						fechaInicioAnterior.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@d_endDate_anterior",
+						fechaFinAnterior.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per_nueva",
+						secuenciaSemanaNueva);
+
+					cmd.Parameters.AddWithValue(
+						"@d_startDate_nueva",
+						fechaInicioNueva.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@d_endDate_nueva",
+						fechaFinNueva.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@userCreate",
+						User.GetUserName());
+
+					int resultado = Convert.ToInt32(
+						cmd.ExecuteScalar());
+
+					return resultado == 1;
 				}
-
-				return true;
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(
 					ex.Message,
-					"Error al actualizar cuadrillas",
+					"Error al copiar empleados",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 
@@ -744,7 +629,384 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public bool ExistenEmpleadosFecha(DateTime fecha)
+		public List<string> ObtenerCuadrillasSeleccionadas()
+		{
+			List<string> cuadrillas = new List<string>();
+
+			foreach (DataGridViewRow fila in frm.dgvCuadrilla.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				bool seleccionada = Convert.ToBoolean(
+					fila.Cells["Imprimir"].Value ?? false
+				);
+
+				if (seleccionada)
+				{
+					string idCuadrilla = fila.Cells["Codigo"].Value
+						?.ToString();
+
+					if (!string.IsNullOrWhiteSpace(idCuadrilla))
+					{
+						cuadrillas.Add(idCuadrilla);
+					}
+				}
+			}
+
+			return cuadrillas;
+		}
+		public DataTable ObtenerEmpleadosCuadrilla(
+	string idCuadrilla,
+	string idSemana)
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			string query = @"
+			   SELECT
+			A.id_workGroup,
+			W.v_nameWorkGroup AS Cuadrilla,
+			A.id_employee AS Codigo,
+
+			CONCAT(
+				E.v_lastNamePat, ' ',
+				E.v_lastNameMat, ' ',
+				E.v_name
+			) AS Nom_Employee,
+
+			A.c_sequence_per,
+			A.d_startDate_per,
+			A.d_endDate_per
+
+		FROM dbo.Nom_EmployeeAttendenceList AS A
+
+		INNER JOIN dbo.Nom_Employees AS E
+			ON E.id_employee = A.id_employee
+
+		INNER JOIN dbo.Nom_WorkGroup AS W
+			ON W.id_workGroup = A.id_workGroup
+
+		WHERE A.id_workGroup = @id_workGroup
+		  AND A.c_sequence_per = @c_sequence_per
+
+		ORDER BY
+			E.v_lastNamePat,
+			E.v_lastNameMat,
+			E.v_name";
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.AddWithValue(
+						"@id_workGroup",
+						idCuadrilla);
+
+					cmd.Parameters.AddWithValue(
+						"@c_sequence_per",
+						idSemana);
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al consultar empleados de la cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+		public MemoryStream GenerarPdfListasCuadrillas(List<string> cuadrillasSeleccionadas,string idSemana)
+		{
+			MemoryStream ms = new MemoryStream();
+
+			iText.Kernel.Pdf.PdfWriter writer =
+				new iText.Kernel.Pdf.PdfWriter(ms);
+
+			writer.SetCloseStream(false);
+
+			iText.Kernel.Pdf.PdfDocument pdf =
+				new iText.Kernel.Pdf.PdfDocument(writer);
+
+			pdf.SetDefaultPageSize(
+				iText.Kernel.Geom.PageSize.LETTER);
+
+			iText.Layout.Document document =
+				new iText.Layout.Document(pdf);
+
+			document.SetMargins(25, 25, 25, 25);
+
+			bool primeraLista = true;
+
+			foreach (string idCuadrilla in cuadrillasSeleccionadas)
+			{
+				DataTable dt =
+					ObtenerEmpleadosCuadrilla(
+						idCuadrilla,
+						idSemana);
+
+				if (dt.Rows.Count == 0)
+					continue;
+
+				// Espacio entre una lista y la siguiente
+				if (!primeraLista)
+				{
+					document.Add(
+						new iText.Layout.Element.Paragraph(" ")
+							.SetMarginTop(8)
+							.SetMarginBottom(8)
+							.SetFontSize(5));
+				}
+
+				CrearPaginaAsistenciaCuadrilla(
+					document,
+					dt);
+
+				primeraLista = false;
+			}
+
+			document.Close();
+
+			ms.Position = 0;
+
+			return ms;
+		}
+		private void CrearPaginaAsistenciaCuadrilla(iText.Layout.Document document,DataTable dt)
+		{
+			iText.Kernel.Colors.DeviceRgb colorHeader =
+				new iText.Kernel.Colors.DeviceRgb(25, 35, 48);
+
+			iText.Kernel.Colors.DeviceRgb colorBorde =
+				new iText.Kernel.Colors.DeviceRgb(90, 90, 90);
+
+			iText.Kernel.Colors.DeviceRgb colorAzul =
+				new iText.Kernel.Colors.DeviceRgb(0, 102, 204);
+
+			// ==========================================
+			// TÍTULO
+			// ==========================================
+
+			iText.Layout.Element.Paragraph titulo =
+				new iText.Layout.Element.Paragraph(
+					"ASISTENCIA PARA REVISIÓN");
+
+			titulo
+				.SetFontSize(16)
+				.SetTextAlignment(
+					iText.Layout.Properties.TextAlignment.CENTER);
+
+			document.Add(titulo);
+
+			// ==========================================
+			// INFORMACIÓN DE LA CUADRILLA
+			// ==========================================
+
+			string cuadrilla =
+				dt.Rows[0]["id_workGroup"].ToString()
+				+ " - "
+				+ dt.Rows[0]["Cuadrilla"].ToString();
+
+			string semana =
+				dt.Rows[0]["c_sequence_per"].ToString();
+
+			string fechaInicio =
+				Convert.ToDateTime(
+					dt.Rows[0]["d_startDate_per"])
+				.ToString("dd/MM/yyyy");
+
+			string fechaFin =
+				Convert.ToDateTime(
+					dt.Rows[0]["d_endDate_per"])
+				.ToString("dd/MM/yyyy");
+
+			iText.Layout.Element.Table info =
+				new iText.Layout.Element.Table(
+					iText.Layout.Properties.UnitValue
+						.CreatePercentArray(
+							new float[] { 1, 1 }))
+				.UseAllAvailableWidth();
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Cuadrilla: " + cuadrilla)
+							.SetFontSize(9)));
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Semana: " + semana)
+							.SetFontSize(9)));
+
+			document.Add(info);
+
+			document.Add(
+				new iText.Layout.Element.Paragraph(" ")
+					.SetFontSize(3));
+
+			// ==========================================
+			// TABLA
+			// ==========================================
+
+			float[] anchos =
+			{
+				55,
+				250,
+				37,
+				37,
+				37,
+				37,
+				37,
+				37,
+				37
+			};
+
+			iText.Layout.Element.Table tabla =
+				new iText.Layout.Element.Table(anchos);
+
+			tabla.SetWidth(
+				iText.Layout.Properties.UnitValue
+					.CreatePercentValue(100));
+
+			string[] encabezados =
+			{
+		"CÓDIGO",
+		"EMPLEADO",
+		"VIE",
+		"SÁB",
+		"DOM",
+		"LUN",
+		"MAR",
+		"MIÉ",
+		"JUE"
+	};
+
+			foreach (string encabezado in encabezados)
+			{
+				iText.Layout.Element.Cell celda =
+					new iText.Layout.Element.Cell()
+						.SetBackgroundColor(colorHeader)
+						.SetFontColor(
+							iText.Kernel.Colors.ColorConstants.WHITE)
+						.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER)
+						.SetVerticalAlignment(
+							iText.Layout.Properties.VerticalAlignment.MIDDLE)
+						.SetPadding(3)
+						.SetBorder(
+							new iText.Layout.Borders.SolidBorder(
+								colorBorde,
+								0.5f));
+
+				celda.Add(
+					new iText.Layout.Element.Paragraph(
+						encabezado)
+						.SetFontSize(8));
+
+				tabla.AddHeaderCell(celda);
+			}
+
+			// ==========================================
+			// EMPLEADOS
+			// ==========================================
+
+			foreach (DataRow fila in dt.Rows)
+			{
+				string[] valores =
+				{
+				fila["Codigo"].ToString(),
+				fila["Nom_Employee"].ToString(),
+				"", // VIE
+				"", // SÁB
+				"", // DOM
+				"", // LUN
+				"", // MAR
+				"", // MIÉ
+				""  // JUE
+			};
+
+				for (int i = 0; i < valores.Length; i++)
+				{
+					iText.Layout.Element.Cell celda =
+						new iText.Layout.Element.Cell()
+							.SetPadding(3)
+							.SetBorder(
+								new iText.Layout.Borders.SolidBorder(
+									colorBorde,
+									0.5f))
+							.SetVerticalAlignment(
+								iText.Layout.Properties.VerticalAlignment.MIDDLE);
+
+					if (i >= 2)
+					{
+						celda.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER);
+					}
+
+					celda.Add(
+						new iText.Layout.Element.Paragraph(
+							valores[i])
+							.SetFontSize(7));
+
+					tabla.AddCell(celda);
+				}
+			}
+			// ==========================================
+			// FILAS VACÍAS
+			// ==========================================
+
+			for (int fila = 0; fila < 2; fila++)
+			{
+				for (int i = 0; i < 9; i++)
+				{
+					iText.Layout.Element.Cell celda =
+						new iText.Layout.Element.Cell()
+							.SetMinHeight(22)
+							.SetPadding(3)
+							.SetBorder(
+								new iText.Layout.Borders.SolidBorder(
+									colorBorde,
+									0.5f));
+
+					if (i >= 2)
+					{
+						celda.SetTextAlignment(
+							iText.Layout.Properties.TextAlignment.CENTER);
+					}
+
+					celda.Add(
+						new iText.Layout.Element.Paragraph(" ")
+							.SetFontSize(7));
+
+					tabla.AddCell(celda);
+				}
+			}
+
+			document.Add(tabla);
+		}
+		public bool ExisteEmpleadosSemana(string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -753,15 +1015,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
-			SELECT COUNT(*)
-			FROM [SisUvex].[dbo].[Nom_WorkGroupEmployeeDaily]
-			WHERE d_date = @Fecha";
+            SELECT COUNT(*)
+            FROM dbo.Nom_EmployeeAttendenceList
+            WHERE c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin ";
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.AddWithValue("@Fecha", fecha.Date);
+					cmd.Parameters.AddWithValue(
+						"@secuenciaSemana",
+						secuenciaSemana);
 
-					int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+					cmd.Parameters.AddWithValue(
+						"@fechaInicio",
+						fechaInicio.Date);
+
+					cmd.Parameters.AddWithValue(
+						"@fechaFin",
+						fechaFin.Date);
+
+					int cantidad = Convert.ToInt32(
+						cmd.ExecuteScalar());
 
 					return cantidad > 0;
 				}
@@ -770,7 +1045,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				MessageBox.Show(
 					ex.Message,
-					"Error",
+					"Error al verificar semana",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 
@@ -781,13 +1056,138 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+		public void btnCopiarDatosDeLaSemanaAnterior() 
+		{
+			if (frm.cboSemana.SelectedIndex < 0)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			// Obtener semana seleccionada (DESTINO)
+			if (!frm.ObtenerSemanaSeleccionada(
+				out string secuenciaSemanaNueva,
+				out DateTime fechaInicioNueva,
+				out DateTime fechaFinNueva))
+			{
+				return;
+			}
+
+			// Obtener semana anterior
+			int indiceSemanaAnterior =
+				frm.cboSemana.SelectedIndex + 1;
+
+			if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
+			{
+				MessageBox.Show(
+					"No existe una semana anterior.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			DataRowView semanaAnterior = frm.cboSemana.Items[indiceSemanaAnterior] as DataRowView;
+
+			if (semanaAnterior == null)
+			{
+				MessageBox.Show(
+					"No se pudo obtener la semana anterior.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string secuenciaSemanaAnterior =
+				semanaAnterior["c_sequence_per"]?.ToString();
+
+			DateTime fechaInicioAnterior =
+				Convert.ToDateTime(
+					semanaAnterior["d_startDate_per"]);
+
+			DateTime fechaFinAnterior =
+				Convert.ToDateTime(
+					semanaAnterior["d_endDate_per"]);
+
+
+			// Verificar si la semana actual ya tiene empleados
+			bool existeDatos = ExisteEmpleadosSemana(
+				secuenciaSemanaNueva,
+				fechaInicioNueva,
+				fechaFinNueva);
+
+
+			// Si ya tiene datos, pedir confirmación
+			if (existeDatos)
+			{
+				DialogResult resultado = MessageBox.Show(
+					"La semana seleccionada ya tiene empleados registrados.\n\n" +
+					"¿Está seguro de volver a realizar la acción?\n\n" +
+					"Esto copiará nuevamente TODOS los datos de la semana anterior " +
+					"y se perderán los cambios que haya realizado en la semana actual.",
+					"Actualizar semana",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning,
+					MessageBoxDefaultButton.Button2);
+
+				if (resultado != DialogResult.Yes)
+				{
+					return;
+				}
+			}
+
+
+			// Copiar semana anterior → semana seleccionada
+			bool copiado = CopiarEmpleadosSemanaAnterior(
+				secuenciaSemanaAnterior,
+				fechaInicioAnterior,
+				fechaFinAnterior,
+				secuenciaSemanaNueva,
+				fechaInicioNueva,
+				fechaFinNueva);
+
+
+			if (copiado)
+			{
+				MessageBox.Show(
+					"Los empleados de la semana anterior fueron copiados correctamente.",
+					"Actualizar semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+
+				// Mostrar la semana seleccionada
+				if (frm.dgvCuadrilla.CurrentRow != null)
+				{
+					string idCuadrilla =
+						frm.dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+
+					CargarEmpleadosCuadrilla(
+						idCuadrilla,
+						secuenciaSemanaNueva,
+						fechaInicioNueva,
+						fechaFinNueva);
+
+					ActualizarTotalEmpleados();
+					MostrarEmpleados();
+				}
+			}
+		}
+		public void PrintDocument_PrintPage(
+		object sender,
+		PrintPageEventArgs e)
 		{
 			Graphics g = e.Graphics;
 
-			// -----------------------------------------
 			// FUENTES
-			// -----------------------------------------
 
 			using Font titulo = new Font(
 				"Segoe UI",
@@ -803,18 +1203,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Segoe UI",
 				9);
 
-			// -----------------------------------------
 			// ÁREA REAL DE IMPRESIÓN
-			// -----------------------------------------
 
 			int x = e.MarginBounds.Left;
 			int y = e.MarginBounds.Top;
 
 			int ancho = e.MarginBounds.Width;
 
-			// -----------------------------------------
+
 			// TÍTULO
-			// -----------------------------------------
 
 			g.DrawString(
 				"LISTADO DE EMPLEADOS",
@@ -836,9 +1233,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			y += 25;
 
-			// -----------------------------------------
+
 			// INFORMACIÓN
-			// -----------------------------------------
 
 			g.DrawString(
 				"Cuadrilla:",
@@ -864,7 +1260,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				y);
 
 			g.DrawString(
-				frm.dtpFecha.Value.ToString("dd/MM/yyyy"),
+				$"{FechaInicio:dd/MM/yyyy} - {FechaFin:dd/MM/yyyy}",
 				texto,
 				Brushes.Black,
 				x + 75,
@@ -891,23 +1287,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			y += 30;
 
-			// -----------------------------------------
 			// ANCHOS DE COLUMNAS
-			// -----------------------------------------
 
-			int anchoCodigo = 70;
-			int anchoEmpleado = 280;
-			int anchoLugarPago = 220;
-			int anchoActividad = 220;
-			int anchoLote = ancho -
-				anchoCodigo -
-				anchoEmpleado -
-				anchoLugarPago -
-				anchoActividad;
+			int anchoCodigo = 80;
+			int anchoEmpleado = 300;
+			int anchoLugarPago =
+				ancho - anchoCodigo - anchoEmpleado;
 
-			// -----------------------------------------
 			// ENCABEZADO TABLA
-			// -----------------------------------------
 
 			int altoEncabezado = 30;
 
@@ -923,9 +1310,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			using Font fuenteEncabezado =
-				new Font("Segoe UI", 9, FontStyle.Bold);
+				new Font(
+					"Segoe UI",
+					9,
+					FontStyle.Bold);
 
 			Brush brushBlanco = Brushes.White;
+
 
 			g.DrawString(
 				"Código",
@@ -945,32 +1336,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Lugar de Pago",
 				fuenteEncabezado,
 				brushBlanco,
-				x + anchoCodigo + anchoEmpleado + 12,
-				y + 8);
-
-			g.DrawString(
-				"Actividad",
-				fuenteEncabezado,
-				brushBlanco,
 				x + anchoCodigo +
-				anchoEmpleado +
-				anchoLugarPago + 12,
-				y + 8);
-			g.DrawString(
-				"Lote",
-				fuenteEncabezado,
-				brushBlanco,
-				x + anchoCodigo +
-				anchoEmpleado +
-				anchoLugarPago +
-				anchoActividad + 12,
+				anchoEmpleado + 12,
 				y + 8);
 
 			y += altoEncabezado;
 
-			// -----------------------------------------
 			// EMPLEADOS
-			// -----------------------------------------
 
 			int altoFila = 32;
 
@@ -994,14 +1366,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				string lugarPago =
 					fila.Cells["LugarPago"].Value?.ToString() ?? "";
 
-				string actividad =
-					fila.Cells["Actividad"].Value?.ToString() ?? "";
-				string lote =
-					fila.Cells["Lote"].Value?.ToString() ?? "";
 
-				// -----------------------------------------
 				// CAMBIO DE PÁGINA
-				// -----------------------------------------
 
 				if (y + altoFila > e.MarginBounds.Bottom)
 				{
@@ -1009,14 +1375,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return;
 				}
 
-				// -----------------------------------------
+
 				// FONDO ALTERNO
-				// -----------------------------------------
 
 				if (filaImprimir % 2 == 1)
 				{
 					using Brush fondo =
-						new SolidBrush(Color.FromArgb(247, 249, 253));
+						new SolidBrush(
+							Color.FromArgb(247, 249, 253));
 
 					g.FillRectangle(
 						fondo,
@@ -1026,12 +1392,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						altoFila);
 				}
 
-				// -----------------------------------------
+
 				// LÍNEA INFERIOR
-				// -----------------------------------------
 
 				using Pen linea =
-					new Pen(Color.FromArgb(220, 220, 220));
+					new Pen(
+						Color.FromArgb(220, 220, 220));
 
 				g.DrawLine(
 					linea,
@@ -1040,9 +1406,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					x + ancho,
 					y + altoFila);
 
-				// -----------------------------------------
+
 				// TEXTO
-				// -----------------------------------------
 
 				int textoY = y + 9;
 
@@ -1068,32 +1433,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					anchoEmpleado + 12,
 					textoY);
 
-				g.DrawString(
-					actividad,
-					texto,
-					Brushes.Black,
-					x + anchoCodigo +
-					anchoEmpleado +
-					anchoLugarPago + 12,
-					textoY);
-				g.DrawString(
-					lote,
-					texto,
-					Brushes.Black,
-					x + anchoCodigo +
-					anchoEmpleado +
-					anchoLugarPago +
-					anchoActividad + 12,
-					textoY);
 
 				y += altoFila;
 
 				filaImprimir++;
 			}
 
-			// -----------------------------------------
+
 			// FIN
-			// -----------------------------------------
 
 			e.HasMorePages = false;
 
@@ -1104,24 +1451,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataGridView dgv = frm.dgvCuadrilla;
 
-			// GENERAL
+			// CONFIGURACIÓN GENERAL
 			dgv.BackgroundColor = Color.White;
 			dgv.BorderStyle = BorderStyle.None;
-			dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-			dgv.GridColor = Color.FromArgb(225, 228, 235);
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
+
+			dgv.GridColor =
+				Color.FromArgb(225, 228, 235);
 
 			dgv.EnableHeadersVisualStyles = false;
 
 			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
 			dgv.AllowUserToResizeRows = false;
 			dgv.AllowUserToResizeColumns = false;
 
-			dgv.ReadOnly = true;
-
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv.MultiSelect = false;
+			// Permitir edición para que funcione el CheckBox
+			dgv.ReadOnly = false;
 
 			dgv.RowHeadersVisible = false;
+
+			dgv.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
+
+			dgv.MultiSelect = false;
+
+			dgv.EditMode =
+				DataGridViewEditMode.EditOnEnter;
 
 			// ENCABEZADO
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
@@ -1130,70 +1487,93 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
 				Color.White;
 
-			dgv.ColumnHeadersDefaultCellStyle.Font =
-				new Font("Segoe UI", 9F, FontStyle.Bold);
-
-			dgv.ColumnHeadersDefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.ColumnHeadersHeight = 34;
-
-			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(42, 67, 128);
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(42, 67, 128);
 
 			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
 				Color.White;
 
+			dgv.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 8F, FontStyle.Bold);
+
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ColumnHeadersHeight = 26;
+
 			// FILAS
 			dgv.DefaultCellStyle.Font =
-				new Font("Segoe UI", 9F);
+				new Font("Segoe UI", 8F);
 
-			dgv.DefaultCellStyle.ForeColor =
-				Color.FromArgb(45, 45, 55);
+			dgv.DefaultCellStyle.Padding =
+				new Padding(1, 0, 1, 0);
 
-			dgv.DefaultCellStyle.BackColor =
-				Color.White;
-
-			// SELECCIONADA
 			dgv.DefaultCellStyle.SelectionBackColor =
 				Color.FromArgb(220, 229, 250);
 
 			dgv.DefaultCellStyle.SelectionForeColor =
 				Color.FromArgb(30, 45, 80);
 
-			dgv.DefaultCellStyle.Padding =
-				new Padding(5, 0, 5, 0);
+			dgv.RowTemplate.Height = 20;
 
-			dgv.RowTemplate.Height = 30;
-
-			// ALTERNADAS
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(247, 249, 253);
 
-			// -----------------------------
-			// COLUMNAS
-			// -----------------------------
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns[0].FillWeight = 25; // Código
-			dgv.Columns[1].FillWeight = 75; // Nombre
+			// =====================================================
+			// CHECKBOX - ÚNICA COLUMNA QUE SE PUEDE EDITAR
+			// =====================================================
 
-			// -----------------------------
-			// ALINEACIÓN
-			// -----------------------------
-			dgv.Columns[0].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+			if (dgv.Columns.Contains("Imprimir"))
+			{
+				dgv.Columns["Imprimir"].ReadOnly = false;
 
-			dgv.Columns[1].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
+				dgv.Columns["Imprimir"].FillWeight = 35;
+
+				dgv.Columns["Imprimir"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
+
+			// =====================================================
+			// CÓDIGO - SOLO LECTURA
+			// =====================================================
+
+			if (dgv.Columns.Contains("Codigo"))
+			{
+				dgv.Columns["Codigo"].ReadOnly = true;
+
+				dgv.Columns["Codigo"].FillWeight = 35;
+
+				dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+			}
+
+			// =====================================================
+			// CUADRILLA - SOLO LECTURA
+			// =====================================================
+
+			if (dgv.Columns.Contains("Cuadrilla"))
+			{
+				dgv.Columns["Cuadrilla"].ReadOnly = true;
+
+				dgv.Columns["Cuadrilla"].FillWeight = 75;
+
+				dgv.Columns["Cuadrilla"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
+			}
 		}
 		public void EstiloDgvListado()
 		{
 			DataGridView dgv = frm.dgvListado;
 
 			// GENERAL
+
 			dgv.BackgroundColor = Color.White;
-			dgv.BorderStyle = BorderStyle.None;
+
+			dgv.BorderStyle =
+				BorderStyle.None;
 
 			dgv.CellBorderStyle =
 				DataGridViewCellBorderStyle.SingleHorizontal;
@@ -1209,15 +1589,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ReadOnly = true;
 
+
 			// SELECCIÓN
+
 			dgv.SelectionMode =
 				DataGridViewSelectionMode.FullRowSelect;
 
 			dgv.MultiSelect = true;
 
-			dgv.RowHeadersVisible = false;
+			dgv.AllowUserToAddRows = false;
+
 
 			// ENCABEZADO
+
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
 				Color.FromArgb(42, 67, 128);
 
@@ -1225,7 +1609,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				Color.White;
 
 			dgv.ColumnHeadersDefaultCellStyle.Font =
-				new Font("Segoe UI", 9F, FontStyle.Bold);
+				new Font(
+					"Segoe UI",
+					9F,
+					FontStyle.Bold);
 
 			dgv.ColumnHeadersDefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
@@ -1238,7 +1625,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
 				Color.White;
 
+
 			// FILAS
+
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 9F);
 
@@ -1248,7 +1637,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.DefaultCellStyle.BackColor =
 				Color.White;
 
+
 			// SELECCIÓN
+
 			dgv.DefaultCellStyle.SelectionBackColor =
 				Color.FromArgb(220, 229, 250);
 
@@ -1260,19 +1651,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.RowTemplate.Height = 32;
 
+
 			// ALTERNADAS
+
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(247, 249, 253);
 
 			// COLUMNAS
+
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			dgv.Columns["Codigo"].FillWeight = 12;
-			dgv.Columns["Nombre"].FillWeight = 30;
-			dgv.Columns["LugarPago"].FillWeight = 22;
-			dgv.Columns["Actividad"].FillWeight = 18;
-			dgv.Columns["Lote"].FillWeight = 30;
+			dgv.Columns["Codigo"].FillWeight = 15;
+
+			dgv.Columns["Nombre"].FillWeight = 50;
+
+			dgv.Columns["LugarPago"].FillWeight = 35;
+
+			// ALINEACIÓN
 
 			dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
@@ -1281,12 +1677,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DataGridViewContentAlignment.MiddleLeft;
 
 			dgv.Columns["LugarPago"].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.Columns["Actividad"].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleLeft;
-
-			dgv.Columns["Lote"].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 		}
 	}
