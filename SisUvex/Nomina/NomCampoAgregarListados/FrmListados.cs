@@ -66,7 +66,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
 
 			string nombreCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[1].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells[2].Value?.ToString();
 
 			lblCuadrilla.Text = nombreCuadrilla;
 
@@ -359,6 +359,32 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Quitar empleados",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
+		}
+
+		private void dgvCuadrilla_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			if (e.RowIndex == -1 &&
+			e.ColumnIndex >= 0 &&
+			dgvCuadrilla.Columns[e.ColumnIndex].Name == "Imprimir")
+			{
+				e.PaintBackground(e.CellBounds, true);
+
+				Image imagen = Properties.Resources.impresora;
+
+				int tamaño = 25;
+
+				Rectangle destino = new Rectangle(
+					e.CellBounds.X + (e.CellBounds.Width - tamaño) / 2,
+					e.CellBounds.Y + (e.CellBounds.Height - tamaño) / 2,
+					tamaño,
+					tamaño);
+
+				e.Graphics.DrawImage(
+					imagen,
+					destino);
+
+				e.Handled = true;
+			}
 		}
 	}
 }

@@ -70,10 +70,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (!frm.dgvCuadrilla.Columns.Contains("Seleccionar"))
 				{
 					DataGridViewCheckBoxColumn seleccionar =
-						new DataGridViewCheckBoxColumn();
+					new DataGridViewCheckBoxColumn();
 
-					seleccionar.Name = "Seleccionar";
-					seleccionar.HeaderText = "✓";
+					seleccionar.Name = "Imprimir";
+					seleccionar.HeaderText = "";
 					seleccionar.ReadOnly = false;
 					seleccionar.Width = 55;
 
@@ -639,7 +639,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 				bool seleccionada = Convert.ToBoolean(
-					fila.Cells["Seleccionar"].Value ?? false
+					fila.Cells["Imprimir"].Value ?? false
 				);
 
 				if (seleccionada)
@@ -1451,12 +1451,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataGridView dgv = frm.dgvCuadrilla;
 
+			// CONFIGURACIÓN GENERAL
 			dgv.BackgroundColor = Color.White;
 			dgv.BorderStyle = BorderStyle.None;
 			dgv.CellBorderStyle =
 				DataGridViewCellBorderStyle.SingleHorizontal;
 
-			dgv.GridColor = Color.FromArgb(225, 228, 235);
+			dgv.GridColor =
+				Color.FromArgb(225, 228, 235);
+
 			dgv.EnableHeadersVisualStyles = false;
 
 			dgv.AllowUserToAddRows = false;
@@ -1464,7 +1467,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.AllowUserToResizeRows = false;
 			dgv.AllowUserToResizeColumns = false;
 
+			// Permitir edición para que funcione el CheckBox
 			dgv.ReadOnly = false;
+
 			dgv.RowHeadersVisible = false;
 
 			dgv.SelectionMode =
@@ -1472,13 +1477,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.MultiSelect = false;
 
-			// Permitir marcar el CheckBox
-			dgv.EditMode = DataGridViewEditMode.EditOnEnter;
+			dgv.EditMode =
+				DataGridViewEditMode.EditOnEnter;
 
-			// Encabezado
 			// ENCABEZADO
-			dgv.EnableHeadersVisualStyles = false;
-
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
 				Color.FromArgb(42, 67, 128);
 
@@ -1499,7 +1501,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ColumnHeadersHeight = 26;
 
-			// Filas
+			// FILAS
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 8F);
 
@@ -1517,34 +1519,48 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(247, 249, 253);
 
-			// Columnas
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			if (dgv.Columns.Contains("Seleccionar"))
-			{
-				dgv.Columns["Seleccionar"].ReadOnly = false;
-				dgv.Columns["Seleccionar"].FillWeight = 35;
+			// =====================================================
+			// CHECKBOX - ÚNICA COLUMNA QUE SE PUEDE EDITAR
+			// =====================================================
 
-				dgv.Columns["Seleccionar"].DefaultCellStyle.Alignment =
+			if (dgv.Columns.Contains("Imprimir"))
+			{
+				dgv.Columns["Imprimir"].ReadOnly = false;
+
+				dgv.Columns["Imprimir"].FillWeight = 35;
+
+				dgv.Columns["Imprimir"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 			}
 
-			if (dgv.Columns.Contains("id_workGroup"))
-			{
-				dgv.Columns["id_workGroup"].ReadOnly = true;
-				dgv.Columns["id_workGroup"].FillWeight = 35;
+			// =====================================================
+			// CÓDIGO - SOLO LECTURA
+			// =====================================================
 
-				dgv.Columns["id_workGroup"].DefaultCellStyle.Alignment =
+			if (dgv.Columns.Contains("Codigo"))
+			{
+				dgv.Columns["Codigo"].ReadOnly = true;
+
+				dgv.Columns["Codigo"].FillWeight = 35;
+
+				dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 			}
 
-			if (dgv.Columns.Contains("v_nameWorkGroup"))
-			{
-				dgv.Columns["v_nameWorkGroup"].ReadOnly = true;
-				dgv.Columns["v_nameWorkGroup"].FillWeight = 75;
+			// =====================================================
+			// CUADRILLA - SOLO LECTURA
+			// =====================================================
 
-				dgv.Columns["v_nameWorkGroup"].DefaultCellStyle.Alignment =
+			if (dgv.Columns.Contains("Cuadrilla"))
+			{
+				dgv.Columns["Cuadrilla"].ReadOnly = true;
+
+				dgv.Columns["Cuadrilla"].FillWeight = 75;
+
+				dgv.Columns["Cuadrilla"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
 			}
 		}

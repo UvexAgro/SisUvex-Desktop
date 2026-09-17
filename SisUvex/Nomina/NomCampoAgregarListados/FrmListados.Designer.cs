@@ -147,11 +147,12 @@
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvCuadrilla.Size = new Size(298, 791);
 			dgvCuadrilla.TabIndex = 14;
+			dgvCuadrilla.CellPainting += dgvCuadrilla_CellPainting;
 			// 
 			// btnImprimir
 			// 
 			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
+			btnImprimir.Image = Properties.Resources.impresora;
 			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
 			btnImprimir.Location = new Point(5, 125);
 			btnImprimir.Name = "btnImprimir";
