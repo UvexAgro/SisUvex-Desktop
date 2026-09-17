@@ -385,6 +385,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			empleado.ReadOnly = true;
 
 			frmCAL.dgvAgregarLoteyActividad.Columns.Add(empleado);
+			// =========================================
+			// ACTIVIDAD ANTERIOR
+			// =========================================
+
+			DataGridViewTextBoxColumn actividadAnterior =
+				new DataGridViewTextBoxColumn();
+
+			actividadAnterior.Name =
+				"ActividadAnterior";
+
+			actividadAnterior.HeaderText =
+				"Actividad anterior";
+
+			actividadAnterior.ReadOnly = true;
+
+			frmCAL.dgvAgregarLoteyActividad.Columns.Add(
+				actividadAnterior);
 
 			// =========================================
 			// ACTIVIDAD
@@ -773,6 +790,108 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			frmCAL.dgvAgregarLoteyActividad.Columns["IdActividad"].Visible = false;
 			frmCAL.dgvAgregarLoteyActividad.Columns["IdVariedad"].Visible = false;
 			frmCAL.dgvAgregarLoteyActividad.Columns["IdLote"].Visible = false;
+		}
+		public DataTable ObtenerActividadAnterior(DateTime fechaSeleccionada)
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_GetActividadAnterior",
+					sql.cnn))
+				{
+					cmd.CommandType =
+						CommandType.StoredProcedure;
+
+					cmd.Parameters.Add(
+						"@FechaSeleccionada",
+						SqlDbType.Date).Value =
+							fechaSeleccionada.Date;
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al obtener actividad anterior",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+		public void CargarActividadAnterior(DateTime fecha)
+		{
+			DataTable dt = ObtenerActividadAnterior(fecha);
+
+			// =========================================================
+			// LIMPIAR
+			// =========================================================
+
+			foreach (DataGridViewRow fila in frmCAL.dgvAgregarLoteyActividad.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				fila.Cells["ActividadAnterior"].Value = "";
+				fila.Cells["Actividad"].Value = "";
+				fila.Cells["IdActividad"].Value = "";
+			}
+
+			if (dt == null || dt.Rows.Count == 0)
+				return;
+
+			// =========================================================
+			// BUSCAR ACTIVIDAD ANTERIOR DE CADA EMPLEADO
+			// =========================================================
+
+			foreach (DataGridViewRow fila in frmCAL.dgvAgregarLoteyActividad.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string codigoEmpleado =
+					fila.Cells["Codigo"]
+						.Value?
+						.ToString()
+						.Trim();
+
+				if (string.IsNullOrWhiteSpace(codigoEmpleado))
+					continue;
+
+				DataRow[] encontrados = dt.Select(
+					$"id_employee = '{codigoEmpleado.Replace("'", "''")}'"
+				);
+
+				if (encontrados.Length == 0)
+					continue;
+
+				string actividadAnterior =
+					encontrados[0]["ActividadAnterior"]
+						?.ToString()
+						.Trim();
+
+				if (string.IsNullOrWhiteSpace(actividadAnterior))
+					continue;
+
+				// SOLO MOSTRAR LA ACTIVIDAD ANTERIOR
+				fila.Cells["ActividadAnterior"].Value =
+					actividadAnterior;
+			}
 		}
 	}
 }

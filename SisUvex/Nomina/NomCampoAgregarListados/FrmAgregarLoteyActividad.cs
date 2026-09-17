@@ -71,6 +71,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			cboFecha.Text = "Ej. Selecciona un Dia";
 			cboFecha.ForeColor = Color.Gray;
+
+
 		}
 
 		private void FrmAgregarLoteyActividad_Load(object sender, EventArgs e)
@@ -78,6 +80,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			clsCAL.DiseñarDgvEmpleados();
 
 			clsCAL.CargarEmpleadosSeleccionados();
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick -=
+		dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick +=
+				dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+
+			// Cargar la actividad anterior del día seleccionado
+			if (cboFecha.SelectedItem is DiaRegistro dia)
+			{
+				FechaSeleccionada = dia.Fecha;
+
+				clsCAL.CargarActividadAnterior(FechaSeleccionada);
+			}
 
 			CargarActividades();
 			ConfigurarActividadDgv();
@@ -250,11 +265,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (cboFecha.SelectedItem == null)
 				return;
 
-			DiaRegistro dia = (DiaRegistro)cboFecha.SelectedItem;
+			DiaRegistro dia =
+				(DiaRegistro)cboFecha.SelectedItem;
 
-			FechaSeleccionada = dia.Fecha;
+			FechaSeleccionada =
+				dia.Fecha;
 
-			cboFecha.ForeColor = Color.Black;
+			cboFecha.ForeColor =
+				Color.Black;
+
+			clsCAL.CargarActividadAnterior(FechaSeleccionada);
 		}
 		private void AsignarActividad()
 		{
@@ -586,13 +606,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						fila.Cells["IdLote"].Value?
 						.ToString()
 						.Trim();
-
-					MessageBox.Show(
-$"Empleado: {codigoEmpleado}\n" +
-$"Actividad: [{idActividad}]\n" +
-$"Variedad: [{idVariedad}]\n" +
-$"Lote: [{idLote}]",
-"Datos de la fila");
 
 					// ==========================================
 					// VALIDAR EMPLEADO
@@ -1355,5 +1368,76 @@ $"Lote: [{idLote}]",
 		{
 			AsignarLote();
 		}
+
+		private void dgvAgregarLoteyActividad_ColumnHeaderMouseClick(
+	object sender,
+	DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex < 0)
+				return;
+
+			// Verificar que sea la columna Actividad
+			if (dgvAgregarLoteyActividad
+				.Columns[e.ColumnIndex]
+				.Name != "Actividad")
+			{
+				return;
+			}
+
+			// ==========================================
+			// RECORRER TODOS LOS EMPLEADOS
+			// ==========================================
+
+			foreach (DataGridViewRow fila
+				in dgvAgregarLoteyActividad.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string actividadAnterior =
+					fila.Cells["ActividadAnterior"]
+						.Value?
+						.ToString()
+						.Trim();
+
+				// Si no tiene actividad anterior,
+				// dejar Actividad vacía
+				if (string.IsNullOrWhiteSpace(actividadAnterior))
+				{
+					fila.Cells["Actividad"].Value = "";
+					fila.Cells["IdActividad"].Value = "";
+
+					continue;
+				}
+
+				// ==========================================
+				// COPIAR ACTIVIDAD ANTERIOR
+				// ==========================================
+
+				fila.Cells["Actividad"].Value =
+					actividadAnterior;
+
+				// ==========================================
+				// OBTENER ID
+				// ==========================================
+
+				int posicion =
+					actividadAnterior.IndexOf("-");
+
+				if (posicion > 0)
+				{
+					string idActividad =
+						actividadAnterior
+							.Substring(0, posicion)
+							.Trim();
+
+					fila.Cells["IdActividad"].Value =
+						idActividad;
+				}
+			}
+
+			dgvAgregarLoteyActividad.Refresh();
+		}
 	}
 }
+		
