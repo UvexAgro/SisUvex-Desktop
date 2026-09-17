@@ -84,6 +84,21 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.DgvReport_CellPainting(sender, e);
         }
 
+        private void dgvReport_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            cls.DgvReport_ColumnHeaderMouseClick(sender, e);
+        }
+
+        private void dgvReport_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            cls.DgvReport_CurrentCellDirtyStateChanged(sender, e);
+        }
+
+        private void dgvReport_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            cls.DgvReport_CellValueChanged(sender, e);
+        }
+
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)

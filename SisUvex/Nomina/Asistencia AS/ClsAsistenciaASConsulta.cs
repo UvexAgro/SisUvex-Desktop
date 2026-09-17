@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using static SisUvex.Catalogos.Metods.ClsObject;
 using Color = System.Drawing.Color;
 
@@ -67,6 +68,10 @@ namespace SisUvex.Nomina.Asistencia_AS
         private bool _showingCalendar;
         /// <summary>Evita que asignar Checked en los botones de vista reentre a Show* mientras se cambia de modo.</summary>
         private bool _updatingViewButtons;
+        /// <summary>Estado del checkbox del encabezado "Sel." (seleccionar todos).</summary>
+        private bool _headerSelChecked;
+        /// <summary>Evita reentrada al marcar/desmarcar todos los checkboxes del listado.</summary>
+        private bool _updatingSel;
         /// <summary>Profundidad de BeginProgress: EndProgress solo cierra la barra en el nivel más externo.</summary>
         private int _progressDepth;
         private readonly ClsAsistenciaASCalendario _calendarCls = new();
@@ -733,6 +738,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                 return;
             }
 
+            if (!_showingReport && !_showingCalendar)
+            {
+                PaintSelHeaderCheckBox(e);
+                return;
+            }
+
             if (!_showingReport) return;
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
@@ -1363,7 +1374,12 @@ namespace SisUvex.Nomina.Asistencia_AS
                             dgv.AutoResizeColumn(i, DataGridViewAutoSizeColumnMode.DisplayedCells);
                         ReportRange(i + 1, Math.Max(1, colCount), LerpRange(from, to, 0.50), to);
                     }
+
+                    if (dgv.Columns.Contains(ColSel))
+                        dgv.Columns[ColSel].Width = 36;
                 }
+
+                SyncHeaderSelFromRows();
 
                 SetViewButtons(employees: true, report: false, calendar: false);
                 AdvanceTo(to);
@@ -1412,7 +1428,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         /// <summary>
-        /// Convierte la columna "Sel." en una columna de checkboxes en el DGV.
+        /// Convierte la columna "Sel." en una columna de checkboxes en el DGV,
+        /// con un checkbox en el encabezado para seleccionar o deseleccionar todos.
         /// </summary>
         private void ApplyCheckBoxColumnToSel()
         {
@@ -1420,7 +1437,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (!frm.dgvReport.Columns.Contains(ColSel)) return;
 
             var col = frm.dgvReport.Columns[ColSel];
-            if (col is DataGridViewCheckBoxColumn) return;
+            if (col is DataGridViewCheckBoxColumn existing)
+            {
+                ConfigureSelCheckBoxColumn(existing);
+                return;
+            }
 
             int ordinal = col.Index;
             frm.dgvReport.Columns.Remove(col);
@@ -1428,14 +1449,123 @@ namespace SisUvex.Nomina.Asistencia_AS
             var chkCol = new DataGridViewCheckBoxColumn
             {
                 Name             = ColSel,
-                HeaderText       = ColSel,
                 DataPropertyName = ColSel,
                 TrueValue        = "1",
                 FalseValue       = "0",
-                Width            = 45,
+                Width            = 36,
                 DisplayIndex     = ordinal,
             };
+            ConfigureSelCheckBoxColumn(chkCol);
             frm.dgvReport.Columns.Insert(ordinal, chkCol);
+        }
+
+        private static void ConfigureSelCheckBoxColumn(DataGridViewCheckBoxColumn chkCol)
+        {
+            chkCol.HeaderText = string.Empty;
+            chkCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+            chkCol.Width = 36;
+            chkCol.Resizable = DataGridViewTriState.False;
+            chkCol.ToolTipText = "Seleccionar / deseleccionar todos";
+            chkCol.HeaderCell.ToolTipText = "Seleccionar / deseleccionar todos";
+        }
+
+        private void PaintSelHeaderCheckBox(DataGridViewCellPaintingEventArgs e)
+        {
+            if (frm == null || e.RowIndex != -1 || e.ColumnIndex < 0) return;
+            if (e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
+            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+
+            e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border);
+
+            CheckBoxState state = _headerSelChecked
+                ? CheckBoxState.CheckedNormal
+                : CheckBoxState.UncheckedNormal;
+            System.Drawing.Size glyph = CheckBoxRenderer.GetGlyphSize(e.Graphics, state);
+            var location = new Point(
+                e.CellBounds.X + Math.Max(0, (e.CellBounds.Width - glyph.Width) / 2),
+                e.CellBounds.Y + Math.Max(0, (e.CellBounds.Height - glyph.Height) / 2));
+            CheckBoxRenderer.DrawCheckBox(e.Graphics, location, state);
+            e.Handled = true;
+        }
+
+        public void DgvReport_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (frm == null || _showingReport || _showingCalendar) return;
+            if (e.ColumnIndex < 0 || e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
+            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+
+            SetAllEmployeeSelection(!_headerSelChecked);
+        }
+
+        public void DgvReport_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+        {
+            if (frm == null || _showingReport || _showingCalendar) return;
+            if (!frm.dgvReport.IsCurrentCellDirty) return;
+            if (frm.dgvReport.CurrentCell?.OwningColumn?.Name != ColSel) return;
+
+            frm.dgvReport.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        public void DgvReport_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (_updatingSel || frm == null || _showingReport || _showingCalendar) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+
+            SyncHeaderSelFromRows();
+        }
+
+        private void SetAllEmployeeSelection(bool selected)
+        {
+            if (frm == null || !_dtEmployeeList.Columns.Contains(ColSel)) return;
+
+            DataGridView dgv = frm.dgvReport;
+            _updatingSel = true;
+            try
+            {
+                // La celda actual queda en modo edición y no refleja el cambio hasta que se sale de la fila.
+                int? currentRow = dgv.CurrentCell?.RowIndex;
+                int? currentCol = dgv.CurrentCell?.ColumnIndex;
+                if (dgv.IsCurrentCellInEditMode)
+                    dgv.CancelEdit();
+                dgv.EndEdit();
+                dgv.CurrentCell = null;
+
+                string value = selected ? "1" : "0";
+                foreach (DataRow row in _dtEmployeeList.Rows)
+                    row[ColSel] = value;
+
+                _headerSelChecked = selected;
+
+                if (currentRow is >= 0 && currentCol is >= 0
+                    && currentRow.Value < dgv.Rows.Count
+                    && currentCol.Value < dgv.Columns.Count)
+                {
+                    dgv.CurrentCell = dgv.Rows[currentRow.Value].Cells[currentCol.Value];
+                    dgv.RefreshEdit();
+                }
+
+                if (dgv.Columns.Contains(ColSel))
+                    dgv.InvalidateColumn(dgv.Columns[ColSel].Index);
+                dgv.Refresh();
+            }
+            finally
+            {
+                _updatingSel = false;
+            }
+        }
+
+        private void SyncHeaderSelFromRows()
+        {
+            if (frm == null || !_dtEmployeeList.Columns.Contains(ColSel)) return;
+
+            bool allChecked = _dtEmployeeList.Rows.Count > 0
+                && _dtEmployeeList.AsEnumerable().All(r => r[ColSel]?.ToString() == "1");
+
+            if (_headerSelChecked == allChecked) return;
+            _headerSelChecked = allChecked;
+            if (frm.dgvReport.Columns.Contains(ColSel))
+                frm.dgvReport.InvalidateColumn(frm.dgvReport.Columns[ColSel].Index);
         }
 
         // ── Helpers listado ───────────────────────────────────────────────────

@@ -506,6 +506,9 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.CellFormatting += dgvReport_CellFormatting;
             dgvReport.CellPainting += dgvReport_CellPainting;
             dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
+            dgvReport.CellValueChanged += dgvReport_CellValueChanged;
+            dgvReport.ColumnHeaderMouseClick += dgvReport_ColumnHeaderMouseClick;
+            dgvReport.CurrentCellDirtyStateChanged += dgvReport_CurrentCellDirtyStateChanged;
             // 
             // pgrReport
             // 
