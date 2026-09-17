@@ -210,6 +210,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				frmCAL.cboLote.DataSource = null;
 				frmCAL.cboLote.Text = "";
+
+				frmCAL.dtLotesDgv = new DataTable();
+
 				return;
 			}
 
@@ -225,10 +228,22 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			foreach (DataRow row in dtLotes.Rows)
 			{
 				row["LoteCompleto"] =
-					row["c_codigo_lot"].ToString() + " - " +
-					row["v_nameLot"].ToString() + " - " +
+					row["c_codigo_lot"].ToString() +
+					" - " +
+					row["v_nameLot"].ToString() +
+					" - " +
 					row["NombreVariedad"].ToString();
 			}
+
+			// ==========================================
+			// GUARDAR LOS LOTES PARA EL DGV
+			// ==========================================
+
+			frmCAL.dtLotesDgv = dtLotes;
+
+			// ==========================================
+			// COMBO SUPERIOR DE LOTE
+			// ==========================================
 
 			frmCAL.cboLote.DataSource = null;
 
@@ -252,6 +267,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			frmCAL.cboLote.SelectedIndex = -1;
 			frmCAL.cboLote.Text = "";
+
+			// ==========================================
+			// ACTUALIZAR LOTE DEL DGV
+			// ==========================================
+
+			frmCAL.ConfigurarLoteDgv();
 		}
 		public void CargarLotesDelCultivoSeleccionado()
 		{
@@ -298,7 +319,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		
+
 		public void CargarEmpleadosSeleccionados()
 		{
 			frmCAL.dgvAgregarLoteyActividad.Rows.Clear();
@@ -315,17 +336,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				int fila =
 					frmCAL.dgvAgregarLoteyActividad.Rows.Add();
 
-				frmCAL.dgvAgregarLoteyActividad.Rows[fila].Cells[0].Value =
-					empleado.Codigo;
+				frmCAL.dgvAgregarLoteyActividad.Rows[fila]
+					.Cells["Codigo"]
+					.Value = empleado.Codigo;
 
-				frmCAL.dgvAgregarLoteyActividad.Rows[fila].Cells[1].Value =
-					empleado.Nombre;
+				frmCAL.dgvAgregarLoteyActividad.Rows[fila]
+					.Cells["Empleado"]
+					.Value = empleado.Nombre;
 
-				frmCAL.dgvAgregarLoteyActividad.Rows[fila].Cells[2].Value =
-					"";
-
-				frmCAL.dgvAgregarLoteyActividad.Rows[fila].Cells[3].Value =
-					"";
+				// NO poner valores en Actividad ni Lote
 			}
 		}
 		public void DiseñarDgvEmpleados()
@@ -337,7 +356,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			frmCAL.dgvAgregarLoteyActividad.ReadOnly = false;
 
 			frmCAL.dgvAgregarLoteyActividad.SelectionMode =
-				DataGridViewSelectionMode.FullRowSelect;
+			DataGridViewSelectionMode.CellSelect;
 
 			frmCAL.dgvAgregarLoteyActividad.MultiSelect = false;
 
@@ -376,20 +395,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			actividad.Name = "Actividad";
 			actividad.HeaderText = "Actividad";
+
 			actividad.ReadOnly = true;
 
 			frmCAL.dgvAgregarLoteyActividad.Columns.Add(actividad);
-
 			// =========================================
 			// LOTE
 			// =========================================
 
-			DataGridViewTextBoxColumn lote =
-				new DataGridViewTextBoxColumn();
+			DataGridViewComboBoxColumn lote =
+				new DataGridViewComboBoxColumn();
 
 			lote.Name = "Lote";
 			lote.HeaderText = "Lote";
-			lote.ReadOnly = true;
+
+			lote.FlatStyle = FlatStyle.Flat;
+
+			lote.DisplayStyle =
+				DataGridViewComboBoxDisplayStyle.DropDownButton;
+
+			lote.ReadOnly = false;
 
 			frmCAL.dgvAgregarLoteyActividad.Columns.Add(lote);
 

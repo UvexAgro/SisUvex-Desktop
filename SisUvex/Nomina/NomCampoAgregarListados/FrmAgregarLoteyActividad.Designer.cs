@@ -36,6 +36,8 @@
 			pictureBox1 = new PictureBox();
 			lblTitulo = new Label();
 			groupBox1 = new GroupBox();
+			btnLote = new Button();
+			btnAsignar = new Button();
 			cboCultivo = new ComboBox();
 			label2 = new Label();
 			cboLote = new ComboBox();
@@ -46,7 +48,6 @@
 			btnCancelar = new Button();
 			btnContinuar = new Button();
 			label1 = new Label();
-			btnAsignar = new Button();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvAgregarLoteyActividad).BeginInit();
@@ -96,6 +97,8 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(btnLote);
+			groupBox1.Controls.Add(btnAsignar);
 			groupBox1.Controls.Add(cboCultivo);
 			groupBox1.Controls.Add(label2);
 			groupBox1.Controls.Add(cboLote);
@@ -104,9 +107,37 @@
 			groupBox1.Controls.Add(lblActividad);
 			groupBox1.Location = new Point(8, 90);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(905, 143);
+			groupBox1.Size = new Size(905, 186);
 			groupBox1.TabIndex = 40;
 			groupBox1.TabStop = false;
+			// 
+			// btnLote
+			// 
+			btnLote.Image = (Image)resources.GetObject("btnLote.Image");
+			btnLote.ImageAlign = ContentAlignment.MiddleLeft;
+			btnLote.Location = new Point(694, 153);
+			btnLote.Name = "btnLote";
+			btnLote.Padding = new Padding(10, 0, 20, 0);
+			btnLote.Size = new Size(156, 27);
+			btnLote.TabIndex = 46;
+			btnLote.Text = "Asignar Lote";
+			btnLote.TextAlign = ContentAlignment.MiddleRight;
+			btnLote.UseVisualStyleBackColor = true;
+			btnLote.Click += btnLote_Click;
+			// 
+			// btnAsignar
+			// 
+			btnAsignar.Image = (Image)resources.GetObject("btnAsignar.Image");
+			btnAsignar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnAsignar.Location = new Point(6, 110);
+			btnAsignar.Name = "btnAsignar";
+			btnAsignar.Padding = new Padding(6, 0, 6, 0);
+			btnAsignar.Size = new Size(156, 27);
+			btnAsignar.TabIndex = 45;
+			btnAsignar.Text = "Asignar Actividad";
+			btnAsignar.TextAlign = ContentAlignment.MiddleRight;
+			btnAsignar.UseVisualStyleBackColor = true;
+			btnAsignar.Click += btnAsignar_Click;
 			// 
 			// cboCultivo
 			// 
@@ -134,6 +165,7 @@
 			cboLote.Name = "cboLote";
 			cboLote.Size = new Size(323, 23);
 			cboLote.TabIndex = 33;
+			cboLote.KeyDown += cboLote_KeyDown;
 			// 
 			// lblLote
 			// 
@@ -202,6 +234,7 @@
 			dgvAgregarLoteyActividad.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvAgregarLoteyActividad.Size = new Size(905, 402);
 			dgvAgregarLoteyActividad.TabIndex = 41;
+			dgvAgregarLoteyActividad.KeyDown += dgvAgregarLoteyActividad_KeyDown;
 			// 
 			// btnCancelar
 			// 
@@ -243,26 +276,11 @@
 			label1.TabIndex = 44;
 			label1.Text = "Dia:";
 			// 
-			// btnAsignar
-			// 
-			btnAsignar.Image = (Image)resources.GetObject("btnAsignar.Image");
-			btnAsignar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAsignar.Location = new Point(791, 257);
-			btnAsignar.Name = "btnAsignar";
-			btnAsignar.Padding = new Padding(6, 0, 6, 0);
-			btnAsignar.Size = new Size(110, 27);
-			btnAsignar.TabIndex = 45;
-			btnAsignar.Text = "Asignar";
-			btnAsignar.TextAlign = ContentAlignment.MiddleRight;
-			btnAsignar.UseVisualStyleBackColor = true;
-			btnAsignar.Click += btnAsignar_Click;
-			// 
 			// FrmAgregarLoteyActividad
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(925, 741);
-			Controls.Add(btnAsignar);
 			Controls.Add(label1);
 			Controls.Add(btnCancelar);
 			Controls.Add(btnContinuar);
@@ -302,5 +320,6 @@
 		public Button btnAsignar;
 		public ComboBox cboCultivo;
 		public Label label2;
+		public Button btnLote;
 	}
 }
