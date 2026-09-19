@@ -62,11 +62,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ID REAL de Nom_WorkGroup
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells["ID"].Value?.ToString();
 
+			// Nombre de la cuadrilla
 			string nombreCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[2].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells["Cuadrilla"].Value?.ToString();
+
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se pudo obtener el ID de la cuadrilla.",
+					"Cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
 
 			lblCuadrilla.Text = nombreCuadrilla;
 
@@ -277,7 +290,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+			dgvCuadrilla.CurrentRow.Cells["ID"].Value?.ToString();
 
 			if (string.IsNullOrWhiteSpace(idCuadrilla))
 			{

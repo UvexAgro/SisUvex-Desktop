@@ -49,12 +49,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				string query = @"
-				SELECT
-					id_workGroup AS Codigo,
-					v_nameWorkGroup AS [Cuadrilla]
-				FROM Nom_WorkGroup
-				WHERE c_active = 1
-				ORDER BY id_workGroup";
+            SELECT
+                id_workGroup AS ID,
+                c_order AS Codigo,
+                v_nameWorkGroup AS [Cuadrilla]
+            FROM Nom_WorkGroup
+            WHERE c_active = 1
+            ORDER BY
+                CASE
+                    WHEN c_order IS NULL OR c_order = '' THEN 1
+                    ELSE 0
+                END,
+                c_order,
+                id_workGroup";
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
@@ -63,14 +70,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 
 				frm.dgvCuadrilla.DataSource = dt;
-				// Cargar datos en el DataGridView
-				frm.dgvCuadrilla.DataSource = dt;
+
+				// Ocultar el ID real, pero conservarlo para usarlo internamente
+				if (frm.dgvCuadrilla.Columns.Contains("ID"))
+				{
+					frm.dgvCuadrilla.Columns["ID"].Visible = false;
+				}
 
 				// Agregar CheckBox solamente una vez
-				if (!frm.dgvCuadrilla.Columns.Contains("Seleccionar"))
+				if (!frm.dgvCuadrilla.Columns.Contains("Imprimir"))
 				{
 					DataGridViewCheckBoxColumn seleccionar =
-					new DataGridViewCheckBoxColumn();
+						new DataGridViewCheckBoxColumn();
 
 					seleccionar.Name = "Imprimir";
 					seleccionar.HeaderText = "";
@@ -80,7 +91,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					frm.dgvCuadrilla.Columns.Insert(0, seleccionar);
 				}
 
-				// Aplicar el estilo después de agregar las columnas
+				// Aplicar estilo
 				EstiloDgvCuadrilla();
 			}
 			catch (Exception ex)
@@ -1451,7 +1462,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataGridView dgv = frm.dgvCuadrilla;
 
+			// =====================================================
 			// CONFIGURACIÓN GENERAL
+			// =====================================================
+
 			dgv.BackgroundColor = Color.White;
 			dgv.BorderStyle = BorderStyle.None;
 			dgv.CellBorderStyle =
@@ -1467,7 +1481,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.AllowUserToResizeRows = false;
 			dgv.AllowUserToResizeColumns = false;
 
-			// Permitir edición para que funcione el CheckBox
+			// Permitir edición para el CheckBox
 			dgv.ReadOnly = false;
 
 			dgv.RowHeadersVisible = false;
@@ -1480,7 +1494,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.EditMode =
 				DataGridViewEditMode.EditOnEnter;
 
+			// =====================================================
 			// ENCABEZADO
+			// =====================================================
+
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
 				Color.FromArgb(42, 67, 128);
 
@@ -1501,7 +1518,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			dgv.ColumnHeadersHeight = 26;
 
+			// =====================================================
 			// FILAS
+			// =====================================================
+
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 8F);
 
@@ -1523,7 +1543,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DataGridViewAutoSizeColumnsMode.Fill;
 
 			// =====================================================
-			// CHECKBOX - ÚNICA COLUMNA QUE SE PUEDE EDITAR
+			// ID - OCULTO
+			// =====================================================
+
+			if (dgv.Columns.Contains("ID"))
+			{
+				dgv.Columns["ID"].Visible = false;
+				dgv.Columns["ID"].ReadOnly = true;
+			}
+
+			// =====================================================
+			// CHECKBOX
 			// =====================================================
 
 			if (dgv.Columns.Contains("Imprimir"))
@@ -1537,7 +1567,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// =====================================================
-			// CÓDIGO - SOLO LECTURA
+			// CÓDIGO
 			// =====================================================
 
 			if (dgv.Columns.Contains("Codigo"))
@@ -1551,7 +1581,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// =====================================================
-			// CUADRILLA - SOLO LECTURA
+			// CUADRILLA
 			// =====================================================
 
 			if (dgv.Columns.Contains("Cuadrilla"))

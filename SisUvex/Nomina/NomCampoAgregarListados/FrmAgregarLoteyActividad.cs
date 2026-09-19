@@ -80,11 +80,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			clsCAL.DiseñarDgvEmpleados();
 
 			clsCAL.CargarEmpleadosSeleccionados();
-			dgvAgregarLoteyActividad.ColumnHeaderMouseClick -=
-		dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick -=dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
 
-			dgvAgregarLoteyActividad.ColumnHeaderMouseClick +=
-				dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick +=dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
 
 			// Cargar la actividad anterior del día seleccionado
 			if (cboFecha.SelectedItem is DiaRegistro dia)

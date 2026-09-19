@@ -46,12 +46,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public void CargarCuadrillas()
 		{
 			string query = @"
-		SELECT 
-			id_workGroup,
-			v_nameWorkGroup
-		FROM dbo.Nom_WorkGroup
-		WHERE c_active = '1'
-		ORDER BY id_workGroup";
+			SELECT 
+				id_workGroup,
+				c_order,
+				v_nameWorkGroup
+			FROM dbo.Nom_WorkGroup
+			WHERE c_active = 1
+			ORDER BY
+				CASE
+					WHEN c_order IS NULL OR c_order = '' THEN 1
+					ELSE 0
+				END,
+				c_order,
+				id_workGroup";
 
 			DataTable dt = new DataTable();
 
@@ -85,16 +92,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			foreach (DataRow row in dt.Rows)
 			{
+				string codigo = row["c_order"] == DBNull.Value
+					? ""
+					: row["c_order"].ToString();
+
+				string nombre = row["v_nameWorkGroup"].ToString();
+
 				row["Descripcion"] =
-					row["id_workGroup"].ToString() +
-					" - " +
-					row["v_nameWorkGroup"].ToString();
+					(string.IsNullOrWhiteSpace(codigo)
+						? nombre
+						: codigo + " - " + nombre);
 			}
 
 			// Agregar opción "Todos"
 			DataRow rowTodos = dt.NewRow();
 
 			rowTodos["id_workGroup"] = 0;
+			rowTodos["c_order"] = "";
 			rowTodos["v_nameWorkGroup"] = "SIN SELECCIONAR";
 			rowTodos["Descripcion"] = "SIN SELECCIONAR";
 
@@ -102,7 +116,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			// Cargar ComboBox
 			_frmA.cboCuadrilla.DataSource = dt;
+
+			// Lo que se muestra
 			_frmA.cboCuadrilla.DisplayMember = "Descripcion";
+
+			// Lo que realmente devuelve SelectedValue
 			_frmA.cboCuadrilla.ValueMember = "id_workGroup";
 
 			_frmA.cboCuadrilla.DropDownStyle = ComboBoxStyle.DropDown;
@@ -1554,14 +1572,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
-	};
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
 
 
 			// ==========================================
