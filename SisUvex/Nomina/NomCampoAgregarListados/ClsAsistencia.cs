@@ -2596,13 +2596,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 4)
+					cmd.Parameters.Add(
+						"@id_workGroup",
+						SqlDbType.Char,
+						4)
 						.Value = idCuadrilla;
 
-					cmd.Parameters.Add("@fechaAnterior", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@fechaAnterior",
+						SqlDbType.Date)
 						.Value = fechaAnterior.Date;
 
-					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
 					{
 						da.Fill(dt);
 					}
@@ -2611,7 +2617,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al consultar la actividad y lote :\n"
+					"Error al consultar la actividad, lote y variedad:\n"
 					+ ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
@@ -2624,7 +2630,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		public bool GuardarActividadLoteDia(string idEmployee,string cSequencePer,DateTime fechaInicio,DateTime fechaFin,DateTime fecha,string idActivity,string idLot,string usuario)
+		public bool GuardarActividadLoteDia(string idEmployee,string cSequencePer,DateTime fechaInicio,DateTime fechaFin,DateTime fecha,string idActivity,string idLot,string idVariety,string usuario)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -2638,32 +2644,68 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6)
+					cmd.Parameters.Add(
+						"@id_employee",
+						SqlDbType.Char,
+						6)
 						.Value = idEmployee;
 
-					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+					cmd.Parameters.Add(
+						"@c_sequence_per",
+						SqlDbType.Char,
+						2)
 						.Value = cSequencePer;
 
-					cmd.Parameters.Add("@d_startDate_per", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@d_startDate_per",
+						SqlDbType.Date)
 						.Value = fechaInicio.Date;
 
-					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@d_endDate_per",
+						SqlDbType.Date)
 						.Value = fechaFin.Date;
 
-					cmd.Parameters.Add("@fecha", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@fecha",
+						SqlDbType.Date)
 						.Value = fecha.Date;
 
-					cmd.Parameters.Add("@id_activity", SqlDbType.Char, 4)
-						.Value = string.IsNullOrWhiteSpace(idActivity)
-							? ""
-							: idActivity;
+					cmd.Parameters.Add(
+						"@id_activity",
+						SqlDbType.Char,
+						4)
+						.Value =
+							string.IsNullOrWhiteSpace(idActivity)
+								? ""
+								: idActivity;
 
-					cmd.Parameters.Add("@id_lot", SqlDbType.Char, 4)
-						.Value = string.IsNullOrWhiteSpace(idLot)
-							? ""
-							: idLot;
+					cmd.Parameters.Add(
+						"@id_lot",
+						SqlDbType.Char,
+						4)
+						.Value =
+							string.IsNullOrWhiteSpace(idLot)
+								? ""
+								: idLot;
 
-					cmd.Parameters.Add("@user", SqlDbType.VarChar, 100)
+					// ==========================================
+					// VARIEDAD
+					// ==========================================
+
+					cmd.Parameters.Add(
+						"@id_variety",
+						SqlDbType.Char,
+						2)
+						.Value =
+							string.IsNullOrWhiteSpace(idVariety)
+								? ""
+								: idVariety;
+
+					cmd.Parameters.Add(
+						"@user",
+						SqlDbType.VarChar,
+						100)
 						.Value = usuario ?? "";
 
 					cmd.ExecuteNonQuery();
@@ -2674,7 +2716,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al guardar actividad y lote:\n"
+					"Error al guardar actividad, lote y variedad:\n"
 					+ ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
@@ -2701,10 +2743,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				semana["c_sequence_per"].ToString().Trim();
 
 			DateTime fechaInicio =
-				Convert.ToDateTime(semana["d_startDate_per"]).Date;
+				Convert.ToDateTime(
+					semana["d_startDate_per"]).Date;
 
 			DateTime fechaFin =
-				Convert.ToDateTime(semana["d_endDate_per"]).Date;
+				Convert.ToDateTime(
+					semana["d_endDate_per"]).Date;
 
 			// Día seleccionado
 			int indiceDia = _frmA.cboDia.SelectedIndex;
@@ -2716,7 +2760,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			DateTime fechaAnterior =
 				fechaSeleccionada.AddDays(-1);
 
-			// Si selecciona viernes, no hay día anterior dentro de la semana
+			// Si selecciona viernes, no hay día anterior
 			if (indiceDia == 0)
 			{
 				MessageBox.Show(
@@ -2728,7 +2772,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// Obtener actividad y lote del día anterior
+			// Obtener actividad, lote y variedad del día anterior
 			DataTable dt =
 				ObtenerActividadLoteDiaAnterior(
 					idCuadrilla,
@@ -2753,10 +2797,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					row["id_employee"].ToString().Trim();
 
 				string idActivity =
-					row["id_activity"].ToString().Trim();
+					row["id_activity"]?.ToString().Trim();
 
 				string idLot =
-					row["id_lot"].ToString().Trim();
+					row["id_lot"]?.ToString().Trim();
+
+				string idVariety =
+					row["id_variety"]?.ToString().Trim();
 
 				// Guardar solamente si existe actividad o lote
 				if (string.IsNullOrWhiteSpace(idActivity) &&
@@ -2774,6 +2821,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						fechaSeleccionada,
 						idActivity,
 						idLot,
+						idVariety,
 						User.GetUserName());
 
 				if (!guardado)
@@ -2789,7 +2837,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				CargarCAL();
 
 				MessageBox.Show(
-					"Actividad y lote cargados correctamente.",
+					"Actividad, lote y variedad cargados correctamente.",
 					"Información",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
