@@ -161,7 +161,7 @@
 			dgvCuadrillas.RowHeadersVisible = false;
 			dgvCuadrillas.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrillas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadrillas.Size = new Size(681, 625);
+			dgvCuadrillas.Size = new Size(681, 929);
 			dgvCuadrillas.TabIndex = 12;
 			// 
 			// panel2
@@ -183,7 +183,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(939, 749);
+			ClientSize = new Size(1108, 1053);
 			Controls.Add(panel2);
 			Controls.Add(dgvCuadrillas);
 			Icon = (Icon)resources.GetObject("$this.Icon");
