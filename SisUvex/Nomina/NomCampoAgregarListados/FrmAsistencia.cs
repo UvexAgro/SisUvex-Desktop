@@ -46,9 +46,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvChecador.CellPainting += clsJ.DgvChecador_CellPainting;
 
 			dgvAsistencia.CellPainting += _clsA.DgvAsistencia_CellPainting;
-
-			// Seleccionar empleado desde asistencia
-			dgvAsistencia.CellClick += clsJ.DgvAsistencia_CellClick;
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
 		{
@@ -219,59 +216,85 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void dgvAsistencia_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			{
-				if (e.RowIndex < 0)
-					return;
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
 
-				string codigo =
-					dgvAsistencia.Rows[e.RowIndex]
-					.Cells["Codigo"]
+			// ==========================================
+			// SI CLIC EN CHECKBOX SELECCIONAR
+			// NO MOVER EL CHECADOR
+			// ==========================================
+
+			if (dgvAsistencia.Columns[e.ColumnIndex].Name == "Seleccionar")
+				return;
+
+			string codigo =
+				dgvAsistencia.Rows[e.RowIndex]
+				.Cells["Codigo"]
+				.Value?.ToString()
+				.Trim();
+
+			if (string.IsNullOrWhiteSpace(codigo))
+				return;
+
+			dgvChecador.ClearSelection();
+
+			foreach (DataGridViewRow fila in dgvChecador.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string codigoChecador =
+					fila.Cells["id_employee"]
 					.Value?.ToString()
 					.Trim();
 
-				if (string.IsNullOrWhiteSpace(codigo))
-					return;
-
-				// Quitar selección anterior
-				dgvChecador.ClearSelection();
-
-				foreach (DataGridViewRow fila in dgvChecador.Rows)
+				if (codigoChecador == codigo)
 				{
-					if (fila.IsNewRow)
-						continue;
+					fila.Selected = true;
 
-					string codigoChecador =
-						fila.Cells["id_employee"]
-						.Value?.ToString()
-						.Trim();
-
-					if (codigoChecador == codigo)
+					if (fila.Index >= 0 &&
+						fila.Index < dgvChecador.Rows.Count)
 					{
-						// Seleccionar toda la fila
-						fila.Selected = true;
-
-						// Hacer visible la fila
 						dgvChecador.FirstDisplayedScrollingRowIndex =
 							fila.Index;
-
-						// Evitar que se quede seleccionada una celda
-						dgvChecador.CurrentCell = null;
-
-						break;
 					}
+
+					dgvChecador.CurrentCell = null;
+
+					break;
 				}
 			}
 		}
+		private void MantenerFilaSeleccionada(int filaIndex)
+		{
+			if (filaIndex < 0 ||
+				filaIndex >= dgvAsistencia.Rows.Count)
+				return;
 
+			dgvAsistencia.BeginInvoke(new Action(() =>
+			{
+				try
+				{
+					// Mantener la fila que acabamos de marcar visible
+					dgvAsistencia.FirstDisplayedScrollingRowIndex =
+						filaIndex;
+				}
+				catch
+				{
+				}
+			}));
+		}
 		private void dgvAsistencia_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
+			if (e.ColumnIndex < 0)
+				return;
+
 
 			// =====================================================
-			// SELECCIONAR TODOS LOS EMPLEADOS
+			// SELECCIONAR TODOS
 			// =====================================================
 
 			if (e.RowIndex == -1 &&
-				e.ColumnIndex >= 0 &&
 				dgvAsistencia.Columns[e.ColumnIndex].Name == "Seleccionar")
 			{
 				_clsA.SeleccionarTodos();
@@ -280,12 +303,48 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// =====================================================
-			// CLIC EN UNA CELDA
+			// VALIDAR FILA
 			// =====================================================
 
-			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+			if (e.RowIndex < 0)
 				return;
 
+
+			// =====================================================
+			// CHECKBOX SELECCIONAR
+			// =====================================================
+
+			if (dgvAsistencia.Columns[e.ColumnIndex].Name == "Seleccionar")
+			{
+				int filaMarcada = e.RowIndex;
+
+				// Dejamos que el DataGridView termine de cambiar
+				// el estado del checkbox
+				dgvAsistencia.BeginInvoke(new Action(() =>
+				{
+					if (filaMarcada >= 0 &&
+						filaMarcada < dgvAsistencia.Rows.Count)
+					{
+						// Dejar seleccionada la fila que acabamos
+						// de marcar
+						dgvAsistencia.ClearSelection();
+
+						dgvAsistencia.Rows[filaMarcada].Selected = true;
+
+						// Mantener esa fila visible
+						dgvAsistencia.FirstDisplayedScrollingRowIndex =
+							filaMarcada;
+					}
+				}));
+
+				return;
+			}
+
+
+
+			// =====================================================
+			// DÍAS DE LA SEMANA
+			// =====================================================
 
 			string[] dias =
 			{
@@ -359,10 +418,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			if (!marcado)
 			{
-				// ================================================
-				// OBTENER CUADRILLA ACTUAL
-				// ================================================
-
 				string idCuadrilla =
 					cboCuadrilla.SelectedValue?
 					.ToString()
@@ -380,9 +435,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return;
 				}
 
-				// ================================================
-				// CONFIRMAR PONER ASISTENCIA
-				// ================================================
 
 				DialogResult resultado =
 					MessageBox.Show(
