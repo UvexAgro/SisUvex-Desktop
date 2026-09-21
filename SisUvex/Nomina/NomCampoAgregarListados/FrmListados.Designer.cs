@@ -37,9 +37,11 @@
 			btnMostrar = new Button();
 			label3 = new Label();
 			dgvCuadrilla = new DataGridView();
+			btnImprimir2 = new Button();
 			btnImprimir = new Button();
 			pictureBox2 = new PictureBox();
 			panel2 = new Panel();
+			btnVertical = new Button();
 			pnlSinEmpleados = new Panel();
 			label8 = new Label();
 			label7 = new Label();
@@ -61,6 +63,7 @@
 			label5 = new Label();
 			button1 = new Button();
 			btnActulizar = new Button();
+			btnHorizontal = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvCuadrilla).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -81,7 +84,7 @@
 			panel1.Controls.Add(dgvCuadrilla);
 			panel1.Location = new Point(12, 110);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(306, 897);
+			panel1.Size = new Size(377, 897);
 			panel1.TabIndex = 0;
 			// 
 			// btnMostrar
@@ -89,10 +92,10 @@
 			btnMostrar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnMostrar.Image = (Image)resources.GetObject("btnMostrar.Image");
 			btnMostrar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnMostrar.Location = new Point(135, 58);
+			btnMostrar.Location = new Point(5, 125);
 			btnMostrar.Name = "btnMostrar";
 			btnMostrar.Padding = new Padding(20, 0, 30, 0);
-			btnMostrar.Size = new Size(166, 39);
+			btnMostrar.Size = new Size(166, 44);
 			btnMostrar.TabIndex = 16;
 			btnMostrar.Text = "Mostrar";
 			btnMostrar.TextAlign = ContentAlignment.MiddleRight;
@@ -103,7 +106,7 @@
 			// 
 			label3.AutoSize = true;
 			label3.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label3.Location = new Point(3, 12);
+			label3.Location = new Point(5, 35);
 			label3.Name = "label3";
 			label3.Size = new Size(109, 30);
 			label3.TabIndex = 15;
@@ -131,7 +134,7 @@
 			dgvCuadrilla.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCuadrilla.EnableHeadersVisualStyles = false;
 			dgvCuadrilla.ImeMode = ImeMode.NoControl;
-			dgvCuadrilla.Location = new Point(3, 103);
+			dgvCuadrilla.Location = new Point(3, 175);
 			dgvCuadrilla.Name = "dgvCuadrilla";
 			dgvCuadrilla.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -145,22 +148,37 @@
 			dgvCuadrilla.RowHeadersVisible = false;
 			dgvCuadrilla.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadrilla.Size = new Size(298, 791);
+			dgvCuadrilla.Size = new Size(371, 719);
 			dgvCuadrilla.TabIndex = 14;
 			dgvCuadrilla.CellPainting += dgvCuadrilla_CellPainting;
+			// 
+			// btnImprimir2
+			// 
+			btnImprimir2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnImprimir2.Image = Properties.Resources.impresora;
+			btnImprimir2.ImageAlign = ContentAlignment.TopCenter;
+			btnImprimir2.Location = new Point(154, 125);
+			btnImprimir2.Name = "btnImprimir2";
+			btnImprimir2.Padding = new Padding(16, 0, 25, 0);
+			btnImprimir2.Size = new Size(143, 47);
+			btnImprimir2.TabIndex = 22;
+			btnImprimir2.Text = "Listas por Dia";
+			btnImprimir2.TextAlign = ContentAlignment.BottomCenter;
+			btnImprimir2.UseVisualStyleBackColor = true;
+			btnImprimir2.Click += btnImprimir2_Click;
 			// 
 			// btnImprimir
 			// 
 			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnImprimir.Image = Properties.Resources.impresora;
-			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(5, 125);
+			btnImprimir.ImageAlign = ContentAlignment.TopCenter;
+			btnImprimir.Location = new Point(3, 125);
 			btnImprimir.Name = "btnImprimir";
 			btnImprimir.Padding = new Padding(16, 0, 25, 0);
-			btnImprimir.Size = new Size(166, 44);
+			btnImprimir.Size = new Size(141, 47);
 			btnImprimir.TabIndex = 21;
-			btnImprimir.Text = "Imprimir Listas";
-			btnImprimir.TextAlign = ContentAlignment.MiddleRight;
+			btnImprimir.Text = " Grupo de Listas";
+			btnImprimir.TextAlign = ContentAlignment.BottomCenter;
 			btnImprimir.UseVisualStyleBackColor = true;
 			btnImprimir.Click += btnImprimir_Click;
 			// 
@@ -169,7 +187,7 @@
 			pictureBox2.Anchor = AnchorStyles.None;
 			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
 			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(592, 222);
+			pictureBox2.Location = new Point(558, 222);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(120, 92);
 			pictureBox2.TabIndex = 17;
@@ -179,19 +197,37 @@
 			// 
 			panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel2.BackColor = SystemColors.ControlLightLight;
+			panel2.Controls.Add(btnHorizontal);
+			panel2.Controls.Add(btnVertical);
+			panel2.Controls.Add(btnImprimir2);
 			panel2.Controls.Add(pnlSinEmpleados);
+			panel2.Controls.Add(btnImprimir);
 			panel2.Controls.Add(panel5);
 			panel2.Controls.Add(panel4);
-			panel2.Controls.Add(btnImprimir);
 			panel2.Controls.Add(btnQuitar);
 			panel2.Controls.Add(btnAgregar);
 			panel2.Controls.Add(lblCuadrilla);
 			panel2.Controls.Add(label4);
 			panel2.Controls.Add(dgvListado);
-			panel2.Location = new Point(324, 110);
+			panel2.Location = new Point(392, 110);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(1271, 897);
+			panel2.Size = new Size(1203, 897);
 			panel2.TabIndex = 1;
+			// 
+			// btnVertical
+			// 
+			btnVertical.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnVertical.Image = Properties.Resources.impresora;
+			btnVertical.ImageAlign = ContentAlignment.TopCenter;
+			btnVertical.Location = new Point(303, 125);
+			btnVertical.Name = "btnVertical";
+			btnVertical.Padding = new Padding(16, 0, 25, 0);
+			btnVertical.Size = new Size(143, 47);
+			btnVertical.TabIndex = 42;
+			btnVertical.Text = "Vertical";
+			btnVertical.TextAlign = ContentAlignment.BottomCenter;
+			btnVertical.UseVisualStyleBackColor = true;
+			btnVertical.Click += btnVertical_Click;
 			// 
 			// pnlSinEmpleados
 			// 
@@ -201,7 +237,7 @@
 			pnlSinEmpleados.Controls.Add(label7);
 			pnlSinEmpleados.Location = new Point(5, 239);
 			pnlSinEmpleados.Name = "pnlSinEmpleados";
-			pnlSinEmpleados.Size = new Size(1263, 627);
+			pnlSinEmpleados.Size = new Size(1195, 627);
 			pnlSinEmpleados.TabIndex = 41;
 			// 
 			// label8
@@ -211,7 +247,7 @@
 			label8.BackColor = Color.Transparent;
 			label8.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label8.ForeColor = Color.DimGray;
-			label8.Location = new Point(533, 377);
+			label8.Location = new Point(499, 377);
 			label8.Name = "label8";
 			label8.Size = new Size(239, 17);
 			label8.TabIndex = 2;
@@ -222,7 +258,7 @@
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label7.Location = new Point(517, 335);
+			label7.Location = new Point(483, 335);
 			label7.Name = "label7";
 			label7.Size = new Size(270, 25);
 			label7.TabIndex = 1;
@@ -235,7 +271,7 @@
 			panel5.Controls.Add(label6);
 			panel5.Controls.Add(lblNumeroTotal);
 			panel5.Controls.Add(lblTotalEmpleados);
-			panel5.Location = new Point(1027, 10);
+			panel5.Location = new Point(959, 10);
 			panel5.Name = "panel5";
 			panel5.Size = new Size(200, 84);
 			panel5.TabIndex = 40;
@@ -275,7 +311,7 @@
 			panel4.BackColor = Color.Silver;
 			panel4.Location = new Point(21, 110);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(1231, 1);
+			panel4.Size = new Size(1163, 1);
 			panel4.TabIndex = 39;
 			// 
 			// btnQuitar
@@ -283,7 +319,7 @@
 			btnQuitar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnQuitar.Image = (Image)resources.GetObject("btnQuitar.Image");
 			btnQuitar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnQuitar.Location = new Point(424, 125);
+			btnQuitar.Location = new Point(1027, 128);
 			btnQuitar.Name = "btnQuitar";
 			btnQuitar.Padding = new Padding(15, 0, 15, 0);
 			btnQuitar.Size = new Size(166, 44);
@@ -298,7 +334,7 @@
 			btnAgregar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnAgregar.Image = (Image)resources.GetObject("btnAgregar.Image");
 			btnAgregar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAgregar.Location = new Point(252, 125);
+			btnAgregar.Location = new Point(855, 128);
 			btnAgregar.Name = "btnAgregar";
 			btnAgregar.Padding = new Padding(15, 0, 10, 0);
 			btnAgregar.Size = new Size(166, 44);
@@ -364,7 +400,7 @@
 			dgvListado.RowHeadersVisible = false;
 			dgvListado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListado.Size = new Size(1265, 711);
+			dgvListado.Size = new Size(1197, 711);
 			dgvListado.TabIndex = 13;
 			// 
 			// label1
@@ -465,6 +501,21 @@
 			btnActulizar.UseVisualStyleBackColor = true;
 			btnActulizar.Click += btnActulizar_Click;
 			// 
+			// btnHorizontal
+			// 
+			btnHorizontal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnHorizontal.Image = Properties.Resources.impresora;
+			btnHorizontal.ImageAlign = ContentAlignment.TopCenter;
+			btnHorizontal.Location = new Point(452, 125);
+			btnHorizontal.Name = "btnHorizontal";
+			btnHorizontal.Padding = new Padding(16, 0, 25, 0);
+			btnHorizontal.Size = new Size(141, 47);
+			btnHorizontal.TabIndex = 43;
+			btnHorizontal.Text = "Horizontal";
+			btnHorizontal.TextAlign = ContentAlignment.BottomCenter;
+			btnHorizontal.UseVisualStyleBackColor = true;
+			btnHorizontal.Click += btnHorizontal_Click;
+			// 
 			// FrmListados
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -525,5 +576,8 @@
 		public Button button1;
 		public ComboBox cboSemana;
 		private Label label5;
+		public Button btnImprimir2;
+		public Button btnVertical;
+		public Button btnHorizontal;
 	}
 }

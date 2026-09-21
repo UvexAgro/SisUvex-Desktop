@@ -40,6 +40,8 @@
 			pictureBox1 = new PictureBox();
 			lblSubtitulo = new Label();
 			lblTitulo = new Label();
+			txbOrden = new TextBox();
+			label5 = new Label();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
@@ -62,7 +64,7 @@
 			groupBox1.Controls.Add(chkActivo);
 			groupBox1.Controls.Add(label2);
 			groupBox1.Controls.Add(label1);
-			groupBox1.Location = new Point(13, 59);
+			groupBox1.Location = new Point(13, 99);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(340, 157);
 			groupBox1.TabIndex = 2;
@@ -108,7 +110,7 @@
 			// 
 			// btnCancelar
 			// 
-			btnCancelar.Location = new Point(278, 222);
+			btnCancelar.Location = new Point(278, 263);
 			btnCancelar.Name = "btnCancelar";
 			btnCancelar.Size = new Size(75, 29);
 			btnCancelar.TabIndex = 103;
@@ -118,7 +120,7 @@
 			// 
 			// btnAccept
 			// 
-			btnAccept.Location = new Point(178, 222);
+			btnAccept.Location = new Point(178, 263);
 			btnAccept.Name = "btnAccept";
 			btnAccept.Size = new Size(75, 29);
 			btnAccept.TabIndex = 102;
@@ -158,11 +160,31 @@
 			lblTitulo.TabIndex = 3;
 			lblTitulo.Text = "AGREGAR CUADRILLA ";
 			// 
+			// txbOrden
+			// 
+			txbOrden.Location = new Point(63, 81);
+			txbOrden.MaxLength = 3;
+			txbOrden.Name = "txbOrden";
+			txbOrden.Size = new Size(68, 23);
+			txbOrden.TabIndex = 106;
+			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label5.Location = new Point(13, 84);
+			label5.Name = "label5";
+			label5.Size = new Size(49, 17);
+			label5.TabIndex = 6;
+			label5.Text = "Orden:";
+			// 
 			// FrmAgregar
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(366, 266);
+			ClientSize = new Size(365, 300);
+			Controls.Add(label5);
+			Controls.Add(txbOrden);
 			Controls.Add(lblSubtitulo);
 			Controls.Add(pictureBox1);
 			Controls.Add(btnCancelar);
@@ -196,5 +218,7 @@
 		private FlowLayoutPanel flowLayoutPanel1;
 		public Label lblTitulo;
 		public Label lblSubtitulo;
+		public TextBox txbOrden;
+		private Label label5;
 	}
 }
