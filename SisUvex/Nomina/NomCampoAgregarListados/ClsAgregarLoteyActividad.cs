@@ -685,7 +685,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.Invalidate();
 		}
 
-		public void GuardarActividadLoteCuadrilla(string idEmpleado,string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin,string dia,string idCuadrilla,string idActividad,string idVariedad,string idLote)
+		public void GuardarActividadLoteCuadrilla(string idEmpleado, string secuenciaSemana, DateTime fechaInicio, DateTime fechaFin, string dia, string idCuadrilla, string idActividad, string idVariedad, string idLote)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -839,7 +839,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			DataTable dt = ObtenerActividadAnterior(fecha);
 
 			// =========================================================
-			// LIMPIAR
+			// LIMPIAR SOLAMENTE ACTIVIDAD ANTERIOR
 			// =========================================================
 
 			foreach (DataGridViewRow fila in frmCAL.dgvAgregarLoteyActividad.Rows)
@@ -848,8 +848,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 				fila.Cells["ActividadAnterior"].Value = "";
-				fila.Cells["Actividad"].Value = "";
-				fila.Cells["IdActividad"].Value = "";
 			}
 
 			if (dt == null || dt.Rows.Count == 0)
@@ -888,7 +886,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (string.IsNullOrWhiteSpace(actividadAnterior))
 					continue;
 
+				// =====================================================
 				// SOLO MOSTRAR LA ACTIVIDAD ANTERIOR
+				// NO TOCAR LA ACTIVIDAD ASIGNADA
+				// =====================================================
+
 				fila.Cells["ActividadAnterior"].Value =
 					actividadAnterior;
 			}

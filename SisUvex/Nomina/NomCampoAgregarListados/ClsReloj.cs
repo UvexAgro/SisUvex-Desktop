@@ -979,7 +979,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_frmA.dgvChecador.Columns["Empleado"].HeaderText =
 				"Empleado";
 		}
-		public bool GuardarEmpleadoCuadrilla(string codigoEmpleado,string idSemana,string idCuadrilla,DateTime fechaInicio,DateTime fechaFin)
+		public bool GuardarEmpleadoCuadrilla(string codigoEmpleado, string idSemana, string idCuadrilla, DateTime fechaInicio, DateTime fechaFin)
 		{
 			try
 			{
@@ -1036,10 +1036,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			string query = @"
         SELECT 
             id_workGroup,
+            c_order,
             v_nameWorkGroup
         FROM dbo.Nom_WorkGroup
-        WHERE c_active = '1'
-        ORDER BY id_workGroup";
+        WHERE c_active = 1
+        ORDER BY
+            CASE
+                WHEN c_order IS NULL OR c_order = '' THEN 1
+                ELSE 0
+            END,
+            c_order,
+            id_workGroup";
 
 			DataTable dt = new DataTable();
 
@@ -1073,20 +1080,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			foreach (DataRow row in dt.Rows)
 			{
+				string codigo = row["c_order"] == DBNull.Value
+					? ""
+					: row["c_order"].ToString();
+
+				string nombre = row["v_nameWorkGroup"].ToString();
+
 				row["Descripcion"] =
-					row["id_workGroup"].ToString() +
-					" - " +
-					row["v_nameWorkGroup"].ToString();
+					string.IsNullOrWhiteSpace(codigo)
+						? nombre
+						: codigo + " - " + nombre;
 			}
 
-			// Cargar ComboBox sin la opción "Todos"
+			// Cargar ComboBox
 			_frmA.cboCuadrilla2.DataSource = dt;
+
+			// Lo que se muestra
 			_frmA.cboCuadrilla2.DisplayMember = "Descripcion";
+
+			// ID REAL de la cuadrilla
 			_frmA.cboCuadrilla2.ValueMember = "id_workGroup";
 
-			_frmA.cboCuadrilla2.DropDownStyle = ComboBoxStyle.DropDown;
+			_frmA.cboCuadrilla2.DropDownStyle =
+				ComboBoxStyle.DropDown;
+
 			_frmA.cboCuadrilla2.AutoCompleteMode =
 				AutoCompleteMode.SuggestAppend;
+
 			_frmA.cboCuadrilla2.AutoCompleteSource =
 				AutoCompleteSource.ListItems;
 

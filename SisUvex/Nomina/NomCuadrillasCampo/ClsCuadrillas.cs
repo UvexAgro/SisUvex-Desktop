@@ -27,10 +27,12 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 		DataTable dtCuadrilla;
 		public string id_workGroup { get; set; }
 		public string v_nameWorkGroup { get; set; }
+		public string c_order { get; set; }
 		public bool c_active { get; set; }
-		public string queryCatalog = @"
+				public string queryCatalog = @"
 		SELECT 
 			id_workGroup AS [Código],
+			c_order AS [Orden],
 			v_nameWorkGroup AS [Nombre de cuadrilla],
 			CASE 
 				WHEN c_active = 1 THEN 'Activa'
@@ -38,10 +40,18 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			END AS [Estado],
 			d_create AS [Fecha]
 		FROM Nom_WorkGroup";
+
 		public void BeginFormCat()
 		{
 			dtCuadrilla = ClsQuerysDB.GetDataTable(
-				queryCatalog + " ORDER BY id_workGroup"
+				queryCatalog + @"
+        ORDER BY 
+            CASE 
+                WHEN c_order IS NULL OR c_order = '' THEN 1 
+                ELSE 0 
+            END,
+            c_order,
+            id_workGroup"
 			);
 
 			dgv = new ClsDGVCatalog(frm.dgvCuadrillas, dtCuadrilla);
@@ -60,9 +70,19 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar).Value = v_nameWorkGroup;
-					cmd.Parameters.Add("@c_active", SqlDbType.Bit).Value = c_active;
-					cmd.Parameters.Add("@userCreate", SqlDbType.VarChar).Value = User.GetUserName();
+					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar)
+						.Value = v_nameWorkGroup;
+
+					cmd.Parameters.Add("@c_active", SqlDbType.Bit)
+						.Value = c_active;
+
+					cmd.Parameters.Add("@c_order", SqlDbType.Char, 3)
+						.Value = string.IsNullOrWhiteSpace(c_order)
+							? DBNull.Value
+							: c_order.Trim().PadLeft(3, '0');
+
+					cmd.Parameters.Add("@userCreate", SqlDbType.VarChar)
+						.Value = User.GetUserName();
 
 					object result = cmd.ExecuteScalar();
 
@@ -78,11 +98,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(
-					ex.Message,
-					"Agregar Cuadrilla"
-				);
-
+				MessageBox.Show(ex.Message, "Agregar Cuadrilla");
 				return (false, null);
 			}
 			finally
@@ -105,7 +121,13 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3).Value = id_workGroup;
 					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar).Value = v_nameWorkGroup;
 					cmd.Parameters.Add("@c_active", SqlDbType.Bit).Value = c_active;
-					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar).Value = User.GetUserName();
+					cmd.Parameters.Add("@c_order", SqlDbType.Char, 3).Value =
+						string.IsNullOrWhiteSpace(c_order)
+							? DBNull.Value
+							: c_order.Trim().PadLeft(3, '0');
+
+					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar).Value =
+						User.GetUserName();
 
 					cmd.ExecuteNonQuery();
 
@@ -247,6 +269,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 
 				if (IsAddUpdate)
 				{
+					BeginFormCat();
 					frmAdd.Close();
 				}
 				else
@@ -260,6 +283,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 
 				if (IsModifyUpdate)
 				{
+					BeginFormCat();
 					frmAdd.Close();
 				}
 				else
@@ -285,6 +309,10 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 		{
 			v_nameWorkGroup = frmAdd.txbCuadrilla.Text.Trim();
 			c_active = frmAdd.chkActivo.Checked;
+
+			c_order = string.IsNullOrWhiteSpace(frmAdd.txbOrden.Text)
+				? null
+				: frmAdd.txbOrden.Text.Trim().PadLeft(3, '0');
 		}
 		public void CargarDatosModificar()
 		{
@@ -408,21 +436,26 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			dgv.Columns[0].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// Nombre de cuadrilla
-			dgv.Columns[1].FillWeight = 35;
-
-			// Estado
-			dgv.Columns[2].FillWeight = 20;
-			dgv.Columns[2].DefaultCellStyle.Alignment =
+			// orden
+			dgv.Columns[1].FillWeight = 15;
+			dgv.Columns[1].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// Fecha de creación
-			dgv.Columns[3].FillWeight = 30;
+			// Nombre de cuadrilla
+			dgv.Columns[2].FillWeight = 35;
+
+			// Estado
+			dgv.Columns[3].FillWeight = 20;
 			dgv.Columns[3].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
+			// Fecha de creación
+			dgv.Columns[4].FillWeight = 30;
+			dgv.Columns[4].DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
 			// Formato de fecha
-			dgv.Columns[3].DefaultCellStyle.Format =
+			dgv.Columns[4].DefaultCellStyle.Format =
 				"dd/MM/yyyy";
 
 			dgv.CellPainting += Dgv_CellPainting;
@@ -431,7 +464,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 		{
 			DataGridView dgv = (DataGridView)sender;
 
-			if (e.RowIndex < 0 || e.ColumnIndex != 2)
+			if (e.RowIndex < 0 || e.ColumnIndex != 3)
 				return;
 
 			if (e.Value == null)

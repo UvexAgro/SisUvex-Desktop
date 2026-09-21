@@ -62,11 +62,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ID REAL de Nom_WorkGroup
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells["ID"].Value?.ToString();
 
+			// Nombre de la cuadrilla
 			string nombreCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells[2].Value?.ToString();
+				dgvCuadrilla.CurrentRow.Cells["Cuadrilla"].Value?.ToString();
+
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se pudo obtener el ID de la cuadrilla.",
+					"Cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
 
 			lblCuadrilla.Text = nombreCuadrilla;
 
@@ -277,7 +290,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+			dgvCuadrilla.CurrentRow.Cells["ID"].Value?.ToString();
 
 			if (string.IsNullOrWhiteSpace(idCuadrilla))
 			{
@@ -384,6 +397,271 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					destino);
 
 				e.Handled = true;
+			}
+		}
+
+		private void btnImprimir2_Click(object sender, EventArgs e)
+		{
+			// ==========================================
+			// OBTENER CUADRILLAS SELECCIONADAS
+			// ==========================================
+
+			List<string> cuadrillasSeleccionadas =
+				cls.ObtenerCuadrillasSeleccionadas();
+
+			if (cuadrillasSeleccionadas.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos una cuadrilla.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// ==========================================
+			// VALIDAR SEMANA
+			// ==========================================
+
+			if (cboSemana.SelectedValue == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string idSemana =
+				cboSemana.SelectedValue.ToString();
+
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+
+				// ==========================================
+				// GENERAR PDF
+				// ==========================================
+
+				MemoryStream pdf =
+					cls.PdfListasCuadrillas(
+						cuadrillasSeleccionadas,
+						idSemana);
+
+				// ==========================================
+				// GUARDAR PDF TEMPORAL
+				// ==========================================
+
+				string ruta =
+					Path.Combine(
+						Path.GetTempPath(),
+						"ListasPorActividad.pdf");
+
+				using (FileStream archivo =
+					new FileStream(
+						ruta,
+						FileMode.Create,
+						FileAccess.Write))
+				{
+					pdf.CopyTo(archivo);
+				}
+
+				// ==========================================
+				// ABRIR PDF
+				// ==========================================
+
+				System.Diagnostics.Process.Start(
+					new System.Diagnostics.ProcessStartInfo
+					{
+						FileName = ruta,
+						UseShellExecute = true
+					});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al generar las listas:\n\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
+		}
+
+		private void btnVertical_Click(object sender, EventArgs e)
+		{
+			List<string> cuadrillasSeleccionadas =
+		   cls.ObtenerCuadrillasSeleccionadas();
+
+			if (cuadrillasSeleccionadas.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos una cuadrilla.",
+					"Imprimir",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			if (cboSemana.SelectedValue == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Imprimir",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string idSemana =
+				cboSemana.SelectedValue.ToString();
+
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+
+				MemoryStream pdf =
+					cls.GenerarPdfListasCuadrillasVertical(
+						cuadrillasSeleccionadas,
+						idSemana);
+
+				string ruta =
+					Path.Combine(
+						Path.GetTempPath(),
+						"ListasCuadrillasVertical.pdf");
+
+				using (FileStream archivo =
+					new FileStream(
+						ruta,
+						FileMode.Create,
+						FileAccess.Write))
+				{
+					pdf.CopyTo(archivo);
+				}
+
+				System.Diagnostics.Process.Start(
+					new System.Diagnostics.ProcessStartInfo
+					{
+						FileName = ruta,
+						UseShellExecute = true
+					});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al generar el PDF:\n\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
+		}
+
+		private void btnHorizontal_Click(object sender, EventArgs e)
+		{
+			// ==========================================
+			// OBTENER CUADRILLAS SELECCIONADAS
+			// ==========================================
+
+			List<string> cuadrillasSeleccionadas =
+				cls.ObtenerCuadrillasSeleccionadas();
+
+			if (cuadrillasSeleccionadas.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos una cuadrilla.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// ==========================================
+			// VALIDAR SEMANA
+			// ==========================================
+
+			if (cboSemana.SelectedValue == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Imprimir listas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string idSemana =
+				cboSemana.SelectedValue.ToString();
+
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+
+				// ==========================================
+				// GENERAR PDF
+				// ==========================================
+
+				MemoryStream pdf =
+					cls.GenerarPdfListasCuadrillasHorizontal(
+						cuadrillasSeleccionadas,
+						idSemana);
+
+				// ==========================================
+				// GUARDAR TEMPORALMENTE
+				// ==========================================
+
+				string ruta =
+					Path.Combine(
+						Path.GetTempPath(),
+						"ListasCuadrillasHorizontal.pdf");
+
+				using (FileStream archivo =
+					new FileStream(
+						ruta,
+						FileMode.Create,
+						FileAccess.Write))
+				{
+					pdf.CopyTo(archivo);
+				}
+
+				// ==========================================
+				// ABRIR PDF
+				// ==========================================
+
+				System.Diagnostics.Process.Start(
+					new System.Diagnostics.ProcessStartInfo
+					{
+						FileName = ruta,
+						UseShellExecute = true
+					});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al generar las listas:\n\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
 			}
 		}
 	}

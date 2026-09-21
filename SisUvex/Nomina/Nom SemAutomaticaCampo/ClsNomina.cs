@@ -24,17 +24,20 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			DataTable dt = CboCuadrillaCampo();
 
 			DataRow dr = dt.NewRow();
+			dr["ID"] = "";
 			dr["Código"] = "";
 			dr["Nombre"] = " ------ Selecciona ------ ";
+
 			dt.Rows.InsertAt(dr, 0);
 
 			combo.DataSource = dt.Copy();
 			combo.DisplayMember = "Nombre";
-			combo.ValueMember = "Código";
+			combo.ValueMember = "ID";
 			combo.SelectedIndex = 0;
 
 			cargando = false;
 		}
+
 		public DataTable CboCuadrillaCampo()
 		{
 			SQLControl sql = new SQLControl();
@@ -43,12 +46,23 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			sql.OpenConectionWrite();
 
 			string query = @"
-			SELECT 
-				g.id_workGroup AS Código,
-				g.id_workGroup + ' - ' + g.v_nameWorkGroup AS Nombre
-			FROM Nom_WorkGroup g
-			WHERE g.c_active = 1
-			ORDER BY g.id_workGroup";
+	SELECT 
+		g.id_workGroup AS ID,
+		g.c_order AS Código,
+		CASE
+			WHEN g.c_order IS NULL OR g.c_order = ''
+				THEN g.v_nameWorkGroup
+			ELSE g.c_order + ' - ' + g.v_nameWorkGroup
+		END AS Nombre
+	FROM Nom_WorkGroup g
+	WHERE g.c_active = 1
+	ORDER BY
+		CASE 
+			WHEN g.c_order IS NULL OR g.c_order = '' THEN 1
+			ELSE 0
+		END,
+		g.c_order,
+		g.id_workGroup";
 
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 

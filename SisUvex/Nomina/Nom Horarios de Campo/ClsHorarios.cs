@@ -184,18 +184,17 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 			// Columnas
 			if (dgv.Columns.Count >= 3)
 			{
-				dgv.Columns[0].FillWeight = 25;
-				dgv.Columns[1].FillWeight = 100;
-				dgv.Columns[2].FillWeight = 40;
+				// Ocultar ID
+				dgv.Columns["ID"].Visible = false;
 
-				dgv.Columns[0].DefaultCellStyle.Alignment =
+				dgv.Columns["Código"].FillWeight = 25;
+				dgv.Columns["Nombre de la cuadrilla"].FillWeight = 100;
+
+				dgv.Columns["Código"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 
-				dgv.Columns[1].DefaultCellStyle.Alignment =
+				dgv.Columns["Nombre de la cuadrilla"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
-
-				dgv.Columns[2].DefaultCellStyle.Alignment =
-					DataGridViewContentAlignment.MiddleCenter;
 			}
 		}
 		public void CargarCuadrillasAsignadas()
@@ -324,18 +323,20 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				Color.White;
 
 			// Columnas
-			if (dgv.Columns.Count >= 2)
+			if (dgv.Columns.Count >= 3)
 			{
-				dgv.Columns[0].FillWeight = 25;
-				dgv.Columns[1].FillWeight = 100;
+				// Ocultar ID
+				dgv.Columns["ID"].Visible = false;
 
-				dgv.Columns[0].DefaultCellStyle.Alignment =
+				dgv.Columns["Código"].FillWeight = 25;
+				dgv.Columns["Nombre de la cuadrilla"].FillWeight = 100;
+
+				dgv.Columns["Código"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 
-				dgv.Columns[1].DefaultCellStyle.Alignment =
+				dgv.Columns["Nombre de la cuadrilla"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
 			}
-
 			// Mantener encabezados azules aunque se seleccione una columna
 			foreach (DataGridViewColumn columna in dgv.Columns)
 			{
@@ -603,31 +604,34 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				Color.White;
 
 			// Columnas
-			if (dgv.Columns.Count >= 6)
+			if (dgv.Columns.Count >= 7)
 			{
-				dgv.Columns[0].FillWeight = 110;
-				dgv.Columns[1].FillWeight = 70;
-				dgv.Columns[2].FillWeight = 130;
-				dgv.Columns[3].FillWeight = 80;
-				dgv.Columns[4].FillWeight = 80;
-				dgv.Columns[5].FillWeight = 80;
+				// Ocultar ID Cuadrilla
+				dgv.Columns["ID Cuadrilla"].Visible = false;
 
-				dgv.Columns[0].DefaultCellStyle.Alignment =
+				dgv.Columns["Grupo de horario"].FillWeight = 110;
+				dgv.Columns["Código"].FillWeight = 70;
+				dgv.Columns["Nombre de la cuadrilla"].FillWeight = 130;
+				dgv.Columns["Hora entrada"].FillWeight = 80;
+				dgv.Columns["Hora salida"].FillWeight = 80;
+				dgv.Columns["Estado grupo"].FillWeight = 80;
+
+				dgv.Columns["Grupo de horario"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
 
-				dgv.Columns[1].DefaultCellStyle.Alignment =
+				dgv.Columns["Código"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 
-				dgv.Columns[2].DefaultCellStyle.Alignment =
+				dgv.Columns["Nombre de la cuadrilla"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
 
-				dgv.Columns[3].DefaultCellStyle.Alignment =
+				dgv.Columns["Hora entrada"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 
-				dgv.Columns[4].DefaultCellStyle.Alignment =
+				dgv.Columns["Hora salida"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 
-				dgv.Columns[5].DefaultCellStyle.Alignment =
+				dgv.Columns["Estado grupo"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleCenter;
 			}
 
