@@ -128,6 +128,25 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnContinuar_Click(object sender, EventArgs e)
 		{
+			// =========================================================
+			// VALIDAR ID REAL DE CUADRILLA
+			// =========================================================
+
+			if (string.IsNullOrWhiteSpace(IdCuadrilla))
+			{
+				MessageBox.Show(
+					"No se recibió el ID de la cuadrilla.",
+					"Cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// =========================================================
+			// VALIDAR EMPLEADOS
+			// =========================================================
+
 			if (dgvListadoAgregar.Rows.Count == 0)
 			{
 				MessageBox.Show(
@@ -139,10 +158,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// =========================================================
-			// VALIDAR EMPLEADOS
-			// =========================================================
-
 			HashSet<string> empleados =
 				new HashSet<string>();
 
@@ -151,12 +166,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (fila.IsNewRow)
 					continue;
 
-				string codigo = fila.Cells["Codigo"].Value?.ToString().Trim();
+				string codigo =
+					fila.Cells["Codigo"]
+					.Value?
+					.ToString()
+					.Trim();
 
 				if (string.IsNullOrWhiteSpace(codigo))
 					continue;
 
-				// Validar empleados repetidos en la lista
+				// ==========================================
+				// EMPLEADO REPETIDO EN LA LISTA
+				// ==========================================
+
 				if (!empleados.Add(codigo))
 				{
 					MessageBox.Show(
@@ -168,13 +190,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return;
 				}
 
-				// Validar si ya pertenece a la cuadrilla
+				// ==========================================
+				// VALIDAR SI YA EXISTE
+				// ==========================================
+
 				if (cls.ExisteEmpleadoEnCuadrilla(
-						codigo,
-						IdCuadrilla,
-						SecuenciaSemana,
-						FechaInicio,
-						FechaFin))
+					codigo,
+					IdCuadrilla,
+					SecuenciaSemana,
+					FechaInicio,
+					FechaFin))
 				{
 					MessageBox.Show(
 						$"El empleado {codigo} ya está agregado a esta cuadrilla " +
@@ -188,7 +213,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// =========================================================
-			// GUARDAR SOLAMENTE LOS EMPLEADOS EN LA CUADRILLA
+			// GUARDAR
 			// =========================================================
 
 			cls.ActualizarEmpleadosCuadrilla(
