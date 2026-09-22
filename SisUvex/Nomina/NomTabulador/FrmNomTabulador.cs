@@ -146,5 +146,10 @@ namespace SisUvex.Nomina.NomTabulador
 				txbBuscar.ForeColor = System.Drawing.Color.Gray;
 			}
 		}
+
+		private void btnActualizar_Click(object sender, EventArgs e)
+		{
+			cls.ActualizarTabulador();
+		}
 	}
 }
