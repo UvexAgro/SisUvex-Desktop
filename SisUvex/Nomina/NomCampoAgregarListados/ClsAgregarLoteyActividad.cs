@@ -283,10 +283,31 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 
 			string idCrop =
-				frmCAL.cboCultivo.SelectedValue.ToString();
+				frmCAL.cboCultivo.SelectedValue
+				.ToString()
+				.Trim();
 
 			if (string.IsNullOrWhiteSpace(idCrop))
 				return;
+
+			// ==========================================
+			// LIMPIAR LOTES ACTUALES
+			// ==========================================
+
+			foreach (DataGridViewRow fila in frmCAL.dgvAgregarLoteyActividad.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				if (fila.Cells["Lote"] != null)
+				{
+					fila.Cells["Lote"].Value = null;
+				}
+			}
+
+			// ==========================================
+			// CARGAR LOTES DEL NUEVO CULTIVO
+			// ==========================================
 
 			CargarComboLotes(idCrop);
 		}

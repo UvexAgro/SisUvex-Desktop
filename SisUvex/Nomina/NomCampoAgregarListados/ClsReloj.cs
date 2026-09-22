@@ -760,25 +760,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			_frmA.dgvReloj.RowTemplate.Height = 28;
 		}
-		public void DgvAsistencia_CellClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.RowIndex < 0)
-				return;
-
-			DataGridViewRow fila =
-				_frmA.dgvAsistencia.Rows[e.RowIndex];
-
-			string codigo =
-				fila.Cells["Codigo"].Value?.ToString()?.Trim();
-
-			string nombre =
-				fila.Cells["Empleado"].Value?.ToString()?.Trim();
-
-			if (string.IsNullOrWhiteSpace(codigo))
-				return;
-
-			CargarRegistrosEmpleado(codigo, nombre);
-		}
 		public void EstilizarDgvReloj()
 		{
 			DataGridView dgv = _frmA.dgvReloj;

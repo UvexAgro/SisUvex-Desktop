@@ -227,14 +227,45 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (dgvAsistencia.Columns[e.ColumnIndex].Name == "Seleccionar")
 				return;
 
+			// ==========================================
+			// OBTENER DATOS DEL EMPLEADO
+			// ==========================================
+
 			string codigo =
 				dgvAsistencia.Rows[e.RowIndex]
 				.Cells["Codigo"]
-				.Value?.ToString()
+				.Value?
+				.ToString()
+				.Trim();
+
+			string nombre =
+				dgvAsistencia.Rows[e.RowIndex]
+				.Cells["Empleado"]
+				.Value?
+				.ToString()
 				.Trim();
 
 			if (string.IsNullOrWhiteSpace(codigo))
 				return;
+
+			// ==========================================
+			// CARGAR REGISTROS DEL EMPLEADO
+			// ==========================================
+
+			clsJ.CargarRegistrosEmpleado(codigo, nombre);
+
+			// ==========================================
+			// POSICIÓN ACTUAL DEL EMPLEADO
+			// EN LA TABLA IZQUIERDA
+			// ==========================================
+
+			int filaVisibleIzquierda =
+				e.RowIndex -
+				dgvAsistencia.FirstDisplayedScrollingRowIndex;
+
+			// ==========================================
+			// BUSCAR EMPLEADO EN EL CHECADOR
+			// ==========================================
 
 			dgvChecador.ClearSelection();
 
@@ -245,44 +276,45 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				string codigoChecador =
 					fila.Cells["id_employee"]
-					.Value?.ToString()
+					.Value?
+					.ToString()
 					.Trim();
 
 				if (codigoChecador == codigo)
 				{
 					fila.Selected = true;
 
-					if (fila.Index >= 0 &&
-						fila.Index < dgvChecador.Rows.Count)
-					{
-						dgvChecador.FirstDisplayedScrollingRowIndex =
-							fila.Index;
-					}
+					// ==========================================
+					// MANTENERLO A LA MISMA ALTURA
+					// QUE EN LA TABLA IZQUIERDA
+					// ==========================================
+
+					int nuevaPrimeraFila =
+						fila.Index - filaVisibleIzquierda;
+
+					// No permitir valores negativos
+					if (nuevaPrimeraFila < 0)
+						nuevaPrimeraFila = 0;
+
+					// No permitir pasar el máximo
+					int maximo =
+						dgvChecador.Rows.Count -
+						dgvChecador.DisplayedRowCount(false);
+
+					if (maximo < 0)
+						maximo = 0;
+
+					if (nuevaPrimeraFila > maximo)
+						nuevaPrimeraFila = maximo;
+
+					dgvChecador.FirstDisplayedScrollingRowIndex =
+						nuevaPrimeraFila;
 
 					dgvChecador.CurrentCell = null;
 
 					break;
 				}
 			}
-		}
-		private void MantenerFilaSeleccionada(int filaIndex)
-		{
-			if (filaIndex < 0 ||
-				filaIndex >= dgvAsistencia.Rows.Count)
-				return;
-
-			dgvAsistencia.BeginInvoke(new Action(() =>
-			{
-				try
-				{
-					// Mantener la fila que acabamos de marcar visible
-					dgvAsistencia.FirstDisplayedScrollingRowIndex =
-						filaIndex;
-				}
-				catch
-				{
-				}
-			}));
 		}
 		private void dgvAsistencia_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{

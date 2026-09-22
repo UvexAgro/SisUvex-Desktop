@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmNomTabulador));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			btnModify = new Button();
 			dgvCatalog = new DataGridView();
 			cboSeason = new ComboBox();
@@ -39,6 +39,7 @@
 			pictureBox1 = new PictureBox();
 			label2 = new Label();
 			label1 = new Label();
+			btnActualizar = new Button();
 			txbBuscar = new TextBox();
 			((System.ComponentModel.ISupportInitialize)dgvCatalog).BeginInit();
 			panel1.SuspendLayout();
@@ -70,14 +71,14 @@
 			dgvCatalog.BackgroundColor = SystemColors.ControlLightLight;
 			dgvCatalog.BorderStyle = BorderStyle.Fixed3D;
 			dgvCatalog.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvCatalog.ColumnHeadersHeight = 29;
 			dgvCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvCatalog.EnableHeadersVisualStyles = false;
@@ -85,14 +86,14 @@
 			dgvCatalog.Location = new Point(12, 164);
 			dgvCatalog.Name = "dgvCatalog";
 			dgvCatalog.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvCatalog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvCatalog.RowHeadersVisible = false;
 			dgvCatalog.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -162,6 +163,22 @@
 			label1.TabIndex = 1;
 			label1.Text = "TABULADOR DE NÓMINA";
 			// 
+			// btnActualizar
+			// 
+			btnActualizar.BackgroundImageLayout = ImageLayout.Zoom;
+			btnActualizar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
+			btnActualizar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnActualizar.Location = new Point(1080, 120);
+			btnActualizar.Name = "btnActualizar";
+			btnActualizar.Padding = new Padding(15, 0, 15, 0);
+			btnActualizar.Size = new Size(141, 40);
+			btnActualizar.TabIndex = 26;
+			btnActualizar.Text = "Actualizar";
+			btnActualizar.TextAlign = ContentAlignment.MiddleRight;
+			btnActualizar.UseVisualStyleBackColor = true;
+			btnActualizar.Click += btnActualizar_Click;
+			// 
 			// txbBuscar
 			// 
 			txbBuscar.Location = new Point(538, 129);
@@ -177,6 +194,7 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1233, 1142);
+			Controls.Add(btnActualizar);
 			Controls.Add(txbBuscar);
 			Controls.Add(panel1);
 			Controls.Add(cboSeason);
@@ -206,5 +224,6 @@
 		private Label label1;
 		private PictureBox pictureBox1;
 		private TextBox txbBuscar;
+		private Button btnActualizar;
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Media;
@@ -388,6 +389,43 @@ namespace SisUvex.Nomina.NomTabulador
 				dgv.Columns.Insert(
 					indiceEmpaque,
 					chkEmpaque);
+			}
+		}
+		public void ActualizarTabulador()
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_Nom_Tabulador",
+					sql.cnn))
+				{
+					cmd.CommandType =
+						CommandType.StoredProcedure;
+
+					cmd.ExecuteNonQuery();
+				}
+
+				MessageBox.Show(
+					"El tabulador se actualizó correctamente.",
+					"Actualizar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al actualizar tabulador",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
 			}
 		}
 	}

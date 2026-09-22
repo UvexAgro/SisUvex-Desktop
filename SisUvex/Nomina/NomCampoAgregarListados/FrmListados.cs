@@ -54,6 +54,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ==========================================
+			// OBTENER SEMANA
+			// ==========================================
+
 			if (!ObtenerSemanaSeleccionada(
 				out string secuenciaSemana,
 				out DateTime fechaInicio,
@@ -62,13 +66,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// ID REAL de Nom_WorkGroup
-			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["ID"].Value?.ToString();
+			// ==========================================
+			// OBTENER ID REAL DE LA CUADRILLA
+			// ID = id_workGroup
+			// Codigo = c_order
+			// ==========================================
 
-			// Nombre de la cuadrilla
+			string idCuadrilla =
+				dgvCuadrilla.CurrentRow
+				.Cells["ID"]
+				.Value?
+				.ToString()
+				.Trim();
+
+			// ==========================================
+			// OBTENER NOMBRE
+			// ==========================================
+
 			string nombreCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Cuadrilla"].Value?.ToString();
+				dgvCuadrilla.CurrentRow
+				.Cells["Cuadrilla"]
+				.Value?
+				.ToString()
+				.Trim();
+
+			// ==========================================
+			// VALIDAR ID
+			// ==========================================
 
 			if (string.IsNullOrWhiteSpace(idCuadrilla))
 			{
@@ -81,7 +105,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ==========================================
+			// MOSTRAR NOMBRE
+			// ==========================================
+
 			lblCuadrilla.Text = nombreCuadrilla;
+
+			// ==========================================
+			// CARGAR EMPLEADOS USANDO EL ID REAL
+			// ==========================================
 
 			cls.CargarEmpleadosCuadrilla(
 				idCuadrilla,
@@ -89,7 +121,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				fechaInicio,
 				fechaFin);
 
+			// ==========================================
+			// ACTUALIZAR
+			// ==========================================
+
 			cls.ActualizarTotalEmpleados();
+
 			cls.MostrarEmpleados();
 		}
 
@@ -108,19 +145,36 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			if (!ObtenerSemanaSeleccionada(
-			out string secuenciaSemana,
-			out DateTime fechaInicio,
-			out DateTime fechaFin))
+				out string secuenciaSemana,
+				out DateTime fechaInicio,
+				out DateTime fechaFin))
 			{
 				return;
 			}
 
 			string idCuadrilla =
-				dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+				dgvCuadrilla.CurrentRow
+				.Cells["ID"]
+				.Value?
+				.ToString()
+				.Trim();
+
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+			{
+				MessageBox.Show(
+					"No se pudo obtener el ID de la cuadrilla.",
+					"Cuadrilla",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
 
 			FrmAgregar frmAgregar = new FrmAgregar();
 
+			// AQUÍ MANDAMOS EL id_workGroup
 			frmAgregar.IdCuadrilla = idCuadrilla;
+
 			frmAgregar.FechaInicio = fechaInicio;
 			frmAgregar.FechaFin = fechaFin;
 			frmAgregar.SecuenciaSemana = secuenciaSemana;
