@@ -344,7 +344,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 		}
 
-		public void ActualizarEmpleadosCuadrilla(string idCuadrilla, string secuenciaSemana, DateTime fechaInicio, DateTime fechaFin, DataGridView dgvEmpleados)
+		public void ActualizarEmpleadosCuadrilla(
+	string idCuadrilla,
+	string secuenciaSemana,
+	DateTime fechaInicio,
+	DateTime fechaFin,
+	DataGridView dgvEmpleados)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -352,7 +357,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlTransaction transaction = sql.cnn.BeginTransaction())
+				using (SqlTransaction transaction =
+					sql.cnn.BeginTransaction())
 				{
 					try
 					{
@@ -361,21 +367,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							if (fila.IsNewRow)
 								continue;
 
-							string codigo =
-								fila.Cells["Codigo"].Value?.ToString()?.Trim();
+							string codigo = fila.Cells["Codigo"].Value?.ToString().Trim();
 
 							if (string.IsNullOrWhiteSpace(codigo))
 								continue;
 
-							// VALIDAR SI EL EMPLEADO YA ESTÁ EN LA CUADRILLA
 
-							using (SqlCommand cmdExiste = new SqlCommand(@"
+							// ==========================================
+							// VALIDAR SI YA EXISTE EN ESA CUADRILLA
+							// Y EN ESA SEMANA
+							// ==========================================
+
+							using (SqlCommand cmdExiste =
+								new SqlCommand(@"
 							SELECT COUNT(*)
 							FROM dbo.Nom_EmployeeAttendenceList
 							WHERE id_employee = @id_employee
-							  AND id_workGroup = @id_workGroup",
-								sql.cnn,
-								transaction))
+							  AND id_workGroup = @id_workGroup
+							  AND c_sequence_per = @c_sequence_per
+							  AND d_startDate_per = @d_startDate_per
+							  AND d_endDate_per = @d_endDate_per",
+									sql.cnn,
+									transaction))
 							{
 								cmdExiste.Parameters.Add(
 									"@id_employee",
@@ -387,23 +400,39 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									SqlDbType.Char,
 									3).Value = idCuadrilla;
 
+								cmdExiste.Parameters.Add(
+									"@c_sequence_per",
+									SqlDbType.Char,
+									2).Value = secuenciaSemana;
+
+								cmdExiste.Parameters.Add(
+									"@d_startDate_per",
+									SqlDbType.Date).Value =
+									fechaInicio.Date;
+
+								cmdExiste.Parameters.Add(
+									"@d_endDate_per",
+									SqlDbType.Date).Value =
+									fechaFin.Date;
+
 								int existe =
 									Convert.ToInt32(
 										cmdExiste.ExecuteScalar());
 
-								// Ya existe en esta cuadrilla
 								if (existe > 0)
-								{
 									continue;
-								}
 							}
 
-							// INSERTAR EMPLEADO
 
-							using (SqlCommand cmd = new SqlCommand(
-								"sp_AddEmployeeWeeklyList",
-								sql.cnn,
-								transaction))
+							// ==========================================
+							// INSERTAR EMPLEADO
+							// ==========================================
+
+							using (SqlCommand cmd =
+								new SqlCommand(
+									"sp_AddEmployeeWeeklyList",
+									sql.cnn,
+									transaction))
 							{
 								cmd.CommandType =
 									CommandType.StoredProcedure;
@@ -429,6 +458,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									SqlDbType.Char,
 									6).Value =
 									codigo;
+
+								// ======================================
+								// AQUÍ SE GUARDA EL ID REAL
+								// ======================================
 
 								cmd.Parameters.Add(
 									"@id_workGroup",
