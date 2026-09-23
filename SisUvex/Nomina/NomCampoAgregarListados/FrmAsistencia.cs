@@ -20,6 +20,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	{
 		public ClsAsistencia _clsA;
 		public ClsReloj clsJ;
+		public ClsAjustesdeNomina clsAjuste;
+		public string IdWorkGroupEmployeeDailyActual { get; set; }
 		public class DiaSemana
 		{
 			public string Nombre { get; set; }
@@ -40,6 +42,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			clsJ = new ClsReloj();
 			clsJ._frmA = this;
+
+			clsAjuste = new ClsAjustesdeNomina();
+			clsAjuste._frmA = this;
 
 			dgvAsistencia.ColumnHeaderMouseClick += _clsA.DgvAsistencia_ColumnHeaderMouseClick;
 
@@ -63,6 +68,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			clsJ.ConfigurarGridChecador();
 			clsJ.EstilizarDgvReloj();
 			_clsA.CargarDiasSemana();
+			clsAjuste.CargarConceptosCombo();
+
+			cboDiaChecador.Items.Clear();
+
+			cboDiaChecador.Items.Add("TODOS");
+			cboDiaChecador.Items.Add("VIE");
+			cboDiaChecador.Items.Add("SAB");
+			cboDiaChecador.Items.Add("DOM");
+			cboDiaChecador.Items.Add("LUN");
+			cboDiaChecador.Items.Add("MAR");
+			cboDiaChecador.Items.Add("MIE");
+			cboDiaChecador.Items.Add("JUE");
+
+			cboDiaChecador.SelectedIndex = 0;
+
 			HasEditCatalogsPermission();
 
 		}
@@ -949,6 +969,74 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Información",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
+		}
+
+		private void cboConceptos_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboConceptos.SelectedIndex == -1)
+			{
+				txbMonto.Clear();
+				return;
+			}
+
+			DataRowView fila = cboConceptos.SelectedItem as DataRowView;
+
+			if (fila != null)
+			{
+				txbMonto.Text = Convert.ToDecimal(fila["n_amount"])
+					.ToString("0.00");
+			}
+		}
+
+		private void dgvReloj_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			DataGridViewRow fila =
+				dgvReloj.Rows[e.RowIndex];
+
+			// Verificar que sea la fila de botones
+			if (fila.Tag?.ToString() != "BOTONES")
+				return;
+
+			// Verificar que exista empleado seleccionado
+			if (string.IsNullOrWhiteSpace(txbRegistro.Text))
+			{
+				MessageBox.Show(
+					"Seleccione un empleado.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// Verificar que tengamos el ID del registro del empleado
+			if (string.IsNullOrWhiteSpace(
+				IdWorkGroupEmployeeDailyActual))
+			{
+				MessageBox.Show(
+					"No se encontró el registro diario del empleado.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// Mandar guardar el ingreso
+			clsAjuste.ConfirmarIngresoDia(
+				e.ColumnIndex);
+		}
+
+		private void cboDiaChecador_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboDiaChecador.SelectedIndex == -1)
+				return;
+
+			clsAjuste.FiltrarDiaChecador(
+				cboDiaChecador.Text.Trim());
 		}
 	}
 }
