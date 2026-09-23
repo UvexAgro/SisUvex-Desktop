@@ -75,6 +75,7 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			btnJalarActividad = new Button();
 			btnCAL = new Button();
 			panel10 = new Panel();
 			label14 = new Label();
@@ -604,6 +605,7 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(btnJalarActividad);
 			panel1.Controls.Add(btnCAL);
 			panel1.Controls.Add(panel10);
 			panel1.Controls.Add(label13);
@@ -622,6 +624,22 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
+			// 
+			// btnJalarActividad
+			// 
+			btnJalarActividad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnJalarActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnJalarActividad.Image = (Image)resources.GetObject("btnJalarActividad.Image");
+			btnJalarActividad.ImageAlign = ContentAlignment.MiddleLeft;
+			btnJalarActividad.Location = new Point(526, 137);
+			btnJalarActividad.Name = "btnJalarActividad";
+			btnJalarActividad.Padding = new Padding(20, 0, 30, 0);
+			btnJalarActividad.Size = new Size(232, 39);
+			btnJalarActividad.TabIndex = 38;
+			btnJalarActividad.Text = "Reutilizar Actividad ";
+			btnJalarActividad.TextAlign = ContentAlignment.MiddleRight;
+			btnJalarActividad.UseVisualStyleBackColor = true;
+			btnJalarActividad.Click += btnJalarActividad_Click;
 			// 
 			// btnCAL
 			// 
@@ -673,10 +691,10 @@
 			btnJalar.ImageAlign = ContentAlignment.MiddleLeft;
 			btnJalar.Location = new Point(535, 58);
 			btnJalar.Name = "btnJalar";
-			btnJalar.Padding = new Padding(20, 0, 30, 0);
+			btnJalar.Padding = new Padding(20, 0, 20, 0);
 			btnJalar.Size = new Size(232, 39);
 			btnJalar.TabIndex = 36;
-			btnJalar.Text = "Jalar Actividad y Lote";
+			btnJalar.Text = "Reutilizar Actividad y Lote";
 			btnJalar.TextAlign = ContentAlignment.MiddleRight;
 			btnJalar.UseVisualStyleBackColor = true;
 			btnJalar.Click += btnJalar_Click;
@@ -1005,5 +1023,6 @@
 		private Label label17;
 		private Label label18;
 		public ComboBox cboDiaChecador;
+		private Button btnJalarActividad;
 	}
 }

@@ -2876,5 +2876,375 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
+		public DataTable ObtenerActividadSemanaAnterior(string idCuadrilla,DateTime fechaInicioAnterior,DateTime fechaFinAnterior)
+		{
+			DataTable dt = new DataTable();
+
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_JalarActividadSemanaAnterior",
+					sql.cnn))
+				{
+					cmd.CommandType =
+						CommandType.StoredProcedure;
+
+					cmd.Parameters.Add(
+						"@id_workGroup",
+						SqlDbType.Char,
+						4).Value =
+						idCuadrilla;
+
+					cmd.Parameters.Add(
+						"@fechaInicioAnterior",
+						SqlDbType.Date).Value =
+						fechaInicioAnterior.Date;
+
+					cmd.Parameters.Add(
+						"@fechaFinAnterior",
+						SqlDbType.Date).Value =
+						fechaFinAnterior.Date;
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al consultar la actividad de la semana anterior:\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+		public bool GuardarSoloActividadDia(string idEmployee,string cSequencePer,DateTime fechaInicio,DateTime fechaFin,DateTime fecha,string idActivity,string usuario)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_UpdateSoloActividadDia",
+					sql.cnn))
+				{
+					cmd.CommandType =
+						CommandType.StoredProcedure;
+
+					cmd.Parameters.Add(
+						"@id_employee",
+						SqlDbType.Char,
+						6).Value =
+						idEmployee;
+
+					cmd.Parameters.Add(
+						"@c_sequence_per",
+						SqlDbType.Char,
+						2).Value =
+						cSequencePer;
+
+					cmd.Parameters.Add(
+						"@d_startDate_per",
+						SqlDbType.Date).Value =
+						fechaInicio.Date;
+
+					cmd.Parameters.Add(
+						"@d_endDate_per",
+						SqlDbType.Date).Value =
+						fechaFin.Date;
+
+					cmd.Parameters.Add(
+						"@fecha",
+						SqlDbType.Date).Value =
+						fecha.Date;
+
+					cmd.Parameters.Add(
+						"@id_activity",
+						SqlDbType.Char,
+						4).Value =
+						idActivity;
+
+					cmd.Parameters.Add(
+						"@user",
+						SqlDbType.VarChar,
+						100).Value =
+						usuario ?? "";
+
+					cmd.ExecuteNonQuery();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al guardar la actividad:\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public void JalarActividadSemanaAnterior()
+		{
+			if (_frmA.cboCuadrilla.SelectedIndex == -1)
+				return;
+
+			if (_frmA.cboSemana.SelectedIndex == -1)
+				return;
+
+			string idCuadrilla =
+				_frmA.cboCuadrilla.SelectedValue
+				.ToString()
+				.Trim();
+
+			DataRow semana =
+				ObtenerSemanaSeleccionada();
+
+			if (semana == null)
+				return;
+
+			string secuencia =
+				semana["c_sequence_per"]
+				.ToString()
+				.Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semana["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semana["d_endDate_per"]).Date;
+
+			// ==========================================
+			// SEMANA ANTERIOR
+			// ==========================================
+
+			DateTime fechaInicioAnterior =
+				fechaInicio.AddDays(-7);
+
+			DateTime fechaFinAnterior =
+				fechaFin.AddDays(-7);
+
+			// ==========================================
+			// CONSULTAR TODA LA SEMANA ANTERIOR
+			// ==========================================
+
+			DataTable dt =
+				ObtenerActividadSemanaAnterior(
+					idCuadrilla,
+					fechaInicioAnterior,
+					fechaFinAnterior);
+
+			if (dt.Rows.Count == 0)
+			{
+				MessageBox.Show(
+					"No se encontró actividad en la semana anterior.",
+					"Información",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			int empleadosProcesados = 0;
+
+			// ==========================================
+			// RECORRER EMPLEADOS
+			// ==========================================
+
+			foreach (DataRow row in dt.Rows)
+			{
+				string idEmployee =
+					row["id_employee"]
+					.ToString()
+					.Trim();
+
+				// ======================================
+				// VIE
+				// ======================================
+
+				string actividadVie =
+					row["id_activity_vie"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadVie))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio,
+						actividadVie,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// SAB
+				// ======================================
+
+				string actividadSab =
+					row["id_activity_sab"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadSab))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(1),
+						actividadSab,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// DOM
+				// ======================================
+
+				string actividadDom =
+					row["id_activity_dom"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadDom))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(2),
+						actividadDom,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// LUN
+				// ======================================
+
+				string actividadLun =
+					row["id_activity_lun"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadLun))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(3),
+						actividadLun,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// MAR
+				// ======================================
+
+				string actividadMar =
+					row["id_activity_mar"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadMar))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(4),
+						actividadMar,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// MIE
+				// ======================================
+
+				string actividadMie =
+					row["id_activity_mie"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadMie))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(5),
+						actividadMie,
+						User.GetUserName());
+				}
+
+				// ======================================
+				// JUE
+				// ======================================
+
+				string actividadJue =
+					row["id_activity_jue"]?
+					.ToString()
+					.Trim();
+
+				if (!string.IsNullOrWhiteSpace(actividadJue))
+				{
+					GuardarSoloActividadDia(
+						idEmployee,
+						secuencia,
+						fechaInicio,
+						fechaFin,
+						fechaInicio.AddDays(6),
+						actividadJue,
+						User.GetUserName());
+				}
+
+				empleadosProcesados++;
+			}
+
+			// ==========================================
+			// RECARGAR dgvCAL
+			// ==========================================
+
+			// Aquí debe ir TU método que actualmente
+			// carga el dgvCAL.
+
+			MessageBox.Show(
+				"Se cargó la actividad de la semana anterior.",
+				"Correcto",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
+		}
 	}
 }

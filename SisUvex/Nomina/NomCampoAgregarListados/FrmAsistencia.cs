@@ -1038,5 +1038,31 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			clsAjuste.FiltrarDiaChecador(
 				cboDiaChecador.Text.Trim());
 		}
+
+		private void btnJalarActividad_Click(object sender, EventArgs e)
+		{
+
+			if (cboCuadrilla.SelectedIndex == -1)
+			{
+				MessageBox.Show(
+					"Selecciona una cuadrilla.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+				return;
+			}
+
+			if (cboSemana.SelectedIndex == -1)
+			{
+				MessageBox.Show(
+					"Selecciona una semana.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+				return;
+			}
+
+			_clsA.JalarActividadSemanaAnterior();
+		}
 	}
 }
