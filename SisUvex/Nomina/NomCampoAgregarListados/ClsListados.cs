@@ -15,15 +15,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	{
 		public FrmListados frm;
 		public FrmAgregar frmA;
-		public ClsAgregar clsA;
-		private PrintDocument printDocument = new PrintDocument();
-		private int filaImprimir = 0;
-		public bool IsAddOrModify = true, IsAddUpdate = false, IsModifyUpdate = false;
-		public string? idAddModify;
-		public string IdCuadrilla { get; set; }
-		public DateTime FechaInicio { get; set; }
-		public DateTime FechaFin { get; set; }
-		public string IdLote { get; set; }
 		public void CargarCuadrillas()
 		{
 			SQLControl sql = new SQLControl();
@@ -1228,7 +1219,127 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 		}
+		public bool ActualizarActividadEmpleadoSemana(string secuenciaSemana,DateTime fechaInicio,DateTime fechaFin)
+		{
+			SQLControl sql = new SQLControl();
 
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_UpdateEmployeeActivityFromWeekly",
+					sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = secuenciaSemana;
+
+					cmd.Parameters.Add("@d_startDate_per", SqlDbType.Date)
+						.Value = fechaInicio.Date;
+
+					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
+						.Value = fechaFin.Date;
+
+					cmd.ExecuteNonQuery();
+
+					return true;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Actualizar actividad",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public void ActividadEmpleadoSemana()
+		{
+			if (frm.cboSemana.SelectedIndex < 0)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			// Obtener semana anterior
+			int indiceSemanaAnterior =
+				frm.cboSemana.SelectedIndex + 1;
+
+			if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
+			{
+				MessageBox.Show(
+					"No existe una semana anterior.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			DataRowView semanaAnterior =
+				frm.cboSemana.Items[indiceSemanaAnterior] as DataRowView;
+
+			if (semanaAnterior == null)
+			{
+				MessageBox.Show(
+					"No se pudo obtener la semana anterior.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string secuenciaSemanaAnterior =
+				semanaAnterior["c_sequence_per"]?.ToString();
+
+			DateTime fechaInicioAnterior =
+				Convert.ToDateTime(
+					semanaAnterior["d_startDate_per"]);
+
+			DateTime fechaFinAnterior =
+				Convert.ToDateTime(
+					semanaAnterior["d_endDate_per"]);
+
+
+			// Actualizar actividad
+			bool actualizado = ActualizarActividadEmpleadoSemana(
+				secuenciaSemanaAnterior,
+				fechaInicioAnterior,
+				fechaFinAnterior);
+
+
+			if (actualizado)
+			{
+				MessageBox.Show(
+					"Las actividades de los empleados se actualizaron correctamente.",
+					"Actualizar actividad",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			else
+			{
+				MessageBox.Show(
+					"No se pudieron actualizar las actividades de los empleados.",
+					"Actualizar actividad",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+			}
+		}
 		public void EstiloDgvCuadrilla()
 		{
 			DataGridView dgv = frm.dgvCuadrilla;
@@ -1487,65 +1598,61 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string query = @"
 				SELECT
-					A.id_workGroup,
-					W.c_order,
-					W.v_nameWorkGroup AS Cuadrilla,
+				A.id_workGroup,
+				W.c_order,
+				W.v_nameWorkGroup AS Cuadrilla,
 
-					A.id_employee AS Codigo,
+				A.id_employee AS Codigo,
 
-					CONCAT(
-						E.v_lastNamePat, ' ',
-						E.v_lastNameMat, ' ',
-						E.v_name
-					) AS Nom_Employee,
+				CONCAT(
+					E.v_lastNamePat, ' ',
+					E.v_lastNameMat, ' ',
+					E.v_name
+				) AS Nom_Employee,
 
-					X.Dia,
+				X.Dia,
 
-					DATEADD(
-						DAY,
-						X.NumDia,
-						A.d_startDate_per
-					) AS Fecha,
+				DATEADD(
+					DAY,
+					X.NumDia,
+					A.d_startDate_per
+				) AS Fecha,
 
-					TAB.v_descripcion_tab AS Actividad
+				TAB.v_descripcion_tab AS Actividad
 
-				FROM dbo.Nom_EmployeeAttendenceList AS A
+			FROM dbo.Nom_EmployeeAttendenceList AS A
 
-				INNER JOIN dbo.Nom_Employees AS E
-					ON E.id_employee = A.id_employee
+			INNER JOIN dbo.Nom_Employees AS E
+				ON E.id_employee = A.id_employee
 
-				INNER JOIN dbo.Nom_WorkGroup AS W
-					ON W.id_workGroup = A.id_workGroup
+			INNER JOIN dbo.Nom_WorkGroup AS W
+				ON W.id_workGroup = A.id_workGroup
 
-				LEFT JOIN dbo.Nom_EmployeeAttendanceWeekly AS AW
-					ON AW.id_employee = A.id_employee
-					AND AW.c_sequence_per = A.c_sequence_per
+			CROSS APPLY
+			(
+				VALUES
+					('VIE', 0),
+					('SÁB', 1),
+					('DOM', 2),
+					('LUN', 3),
+					('MAR', 4),
+					('MIÉ', 5),
+					('JUE', 6)
 
-				CROSS APPLY
-				(
-					VALUES
-						('VIE', 0, AW.id_activity_vie),
-						('SÁB', 1, AW.id_activity_sab),
-						('DOM', 2, AW.id_activity_dom),
-						('LUN', 3, AW.id_activity_lun),
-						('MAR', 4, AW.id_activity_mar),
-						('MIÉ', 5, AW.id_activity_mie),
-						('JUE', 6, AW.id_activity_jue)
+			) AS X(Dia, NumDia)
 
-				) AS X(Dia, NumDia, IdActividad)
+			LEFT JOIN dbo.Nom_Tabulador AS TAB
+				ON TAB.c_codigo_tab = A.id_activity
 
-				LEFT JOIN dbo.Nom_Tabulador AS TAB
-					ON TAB.c_codigo_tab = X.IdActividad
+			WHERE A.id_workGroup = @id_workGroup
+			  AND A.c_sequence_per = @c_sequence_per
 
-				WHERE A.id_workGroup = @id_workGroup
-				  AND A.c_sequence_per = @c_sequence_per
-
-				ORDER BY
-					W.c_order,
-					E.v_lastNamePat,
-					E.v_lastNameMat,
-					E.v_name,
-					X.NumDia;
+			ORDER BY
+				W.c_order,
+				E.v_lastNamePat,
+				E.v_lastNameMat,
+				E.v_name,
+				X.NumDia;
 				";
 
 			try
@@ -1585,7 +1692,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		public MemoryStream PdfListasCuadrillas(List<string> cuadrillasSeleccionadas, string idSemana)
+		public MemoryStream PdfListasCuadrillas(
+		List<string> cuadrillasSeleccionadas,
+		string idSemana,
+		bool horizontal)
 		{
 			MemoryStream ms = new MemoryStream();
 
@@ -1597,39 +1707,48 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Kernel.Pdf.PdfDocument pdf =
 				new iText.Kernel.Pdf.PdfDocument(writer);
 
+
 			// ==========================================
-			// HOJA CARTA HORIZONTAL
+			// TAMAÑO DE HOJA
 			// ==========================================
 
-			pdf.SetDefaultPageSize(
-				iText.Kernel.Geom.PageSize.LETTER.Rotate());
+			if (horizontal)
+			{
+				pdf.SetDefaultPageSize(
+					iText.Kernel.Geom.PageSize.LETTER.Rotate());
+			}
+			else
+			{
+				pdf.SetDefaultPageSize(
+					iText.Kernel.Geom.PageSize.LETTER);
+			}
+
 
 			iText.Layout.Document document =
 				new iText.Layout.Document(pdf);
 
-			// MÁRGENES
-			document.SetMargins(25, 20, 25, 30);
 
 			// ==========================================
-			// DÍAS DE LA SEMANA
+			// MÁRGENES
 			// ==========================================
+
+			document.SetMargins(25, 20, 25, 20);
+
 
 			string[] dias =
 			{
-				"VIE",
-				"SÁB",
-				"DOM",
-				"LUN",
-				"MAR",
-				"MIÉ",
-				"JUE"
-			};
+		"VIE",
+		"SÁB",
+		"DOM",
+		"LUN",
+		"MAR",
+		"MIÉ",
+		"JUE"
+	};
+
 
 			bool primeraPagina = true;
 
-			// ==========================================
-			// CUADRILLAS
-			// ==========================================
 
 			foreach (string idCuadrilla in cuadrillasSeleccionadas)
 			{
@@ -1641,9 +1760,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (dt.Rows.Count == 0)
 					continue;
 
-				// ==========================================
-				// CADA DÍA
-				// ==========================================
 
 				foreach (string dia in dias)
 				{
@@ -1656,6 +1772,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					if (filas.Length == 0)
 						continue;
 
+
 					DataTable dtDia =
 						dt.Clone();
 
@@ -1663,6 +1780,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					{
 						dtDia.ImportRow(fila);
 					}
+
 
 					if (!primeraPagina)
 					{
@@ -1672,19 +1790,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									.NEXT_PAGE));
 					}
 
-					// ==========================================
-					// CREAR PDF DEL DÍA
-					// ==========================================
 
 					CrearPaginaListaPorDia(
 						document,
 						dtDia,
 						dia,
-						idSemana);
+						idSemana,
+						horizontal);
+
 
 					primeraPagina = false;
 				}
 			}
+
 
 			document.Close();
 
@@ -1692,7 +1810,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return ms;
 		}
-		private void CrearPaginaListaPorDia(iText.Layout.Document document,DataTable dt,string dia,string idSemana)
+		private void CrearPaginaListaPorDia(
+	iText.Layout.Document document,
+	DataTable dt,
+	string dia,
+	string idSemana,
+	bool horizontal)
 		{
 			// ==========================================
 			// COLORES
@@ -1704,6 +1827,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Kernel.Colors.DeviceRgb colorBorde =
 				new iText.Kernel.Colors.DeviceRgb(90, 90, 90);
 
+
 			// ==========================================
 			// INFORMACIÓN
 			// ==========================================
@@ -1713,14 +1837,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				+ " - "
 				+ dt.Rows[0]["Cuadrilla"].ToString();
 
-			// ==========================================
-			// FECHA
-			// ==========================================
+
 			DateTime fecha =
 				Convert.ToDateTime(dt.Rows[0]["Fecha"]);
 
 			string fechaTexto =
 				dia + " " + fecha.ToString("dd/MM/yyyy");
+
 
 			// ==========================================
 			// ENCABEZADO
@@ -1733,7 +1856,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							new float[] { 1, 1, 1 }))
 				.UseAllAvailableWidth();
 
-			// CUADRILLA
 
 			info.AddCell(
 				new iText.Layout.Element.Cell()
@@ -1744,20 +1866,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							"Cuadrilla: " + cuadrilla)
 							.SetFontSize(10)));
 
-			// FECHA
 
 			info.AddCell(
-			new iText.Layout.Element.Cell()
-				.SetBorder(
-			iText.Layout.Borders.Border.NO_BORDER)
-				.SetTextAlignment(
-			iText.Layout.Properties.TextAlignment.CENTER)
-				.Add(
-			new iText.Layout.Element.Paragraph(
-				"Día: " + fechaTexto)
-				.SetFontSize(10)));
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetTextAlignment(
+						iText.Layout.Properties.TextAlignment.CENTER)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Día: " + fechaTexto)
+							.SetFontSize(10)));
 
-			// SEMANA
 
 			info.AddCell(
 				new iText.Layout.Element.Cell()
@@ -1770,33 +1890,61 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							"Semana: " + idSemana)
 							.SetFontSize(10)));
 
+
 			document.Add(info);
+
 
 			document.Add(
 				new iText.Layout.Element.Paragraph(" ")
 					.SetFontSize(3));
 
+
+			// ==========================================
+			// ANCHOS SEGÚN ORIENTACIÓN
+			// ==========================================
+
+			float[] anchos;
+
+			if (horizontal)
+			{
+				// CARTA HORIZONTAL
+				anchos = new float[]
+				{
+			10, // CÓDIGO
+            25, // EMPLEADO
+            20, // ACTIVIDAD
+            10, // HORAS
+            10, // TURNO
+            15, // LOTE
+            10  // SUELDO
+				};
+			}
+			else
+			{
+				// CARTA VERTICAL
+				anchos = new float[]
+				{
+			12, // CÓDIGO
+            30, // EMPLEADO
+            20, // ACTIVIDAD
+            8,  // HORAS
+            8,  // TURNO
+            12, // LOTE
+            10  // SUELDO
+				};
+			}
+
+
 			// ==========================================
 			// TABLA
 			// ==========================================
 
-			float[] anchos =
-			{
-		10, // CÓDIGO
-        25, // EMPLEADO
-        20, // ACTIVIDAD
-        10, // HORAS
-        10, // TURNO
-        15, // LOTE
-        10  // SUELDO
-    };
-
 			iText.Layout.Element.Table tabla =
 				new iText.Layout.Element.Table(
 					iText.Layout.Properties.UnitValue
-						.CreatePercentArray(anchos));
+						.CreatePercentArray(anchos))
+				.UseAllAvailableWidth();
 
-			tabla.UseAllAvailableWidth();
 
 			// ==========================================
 			// ENCABEZADOS
@@ -1812,6 +1960,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		"LOTE",
 		"SUELDO"
 	};
+
 
 			foreach (string encabezado in encabezados)
 			{
@@ -1839,6 +1988,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				tabla.AddHeaderCell(celda);
 			}
 
+
 			// ==========================================
 			// EMPLEADOS
 			// ==========================================
@@ -1854,16 +2004,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				string actividad =
 					fila["Actividad"]?.ToString() ?? "";
 
+
 				string[] valores =
 				{
-					codigo,
-					empleado,
-					actividad,
-					"",     // HORAS
-					"",     // TURNO
-					"",     // LOTE
-					""      // SUELDO
-				};
+			codigo,
+			empleado,
+			actividad,
+			"",
+			"",
+			"",
+			""
+		};
+
 
 				for (int i = 0; i < valores.Length; i++)
 				{
@@ -1881,6 +2033,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									colorBorde,
 									0.5f));
 
+
 					if (i == 0 || i >= 3)
 					{
 						celda.SetTextAlignment(
@@ -1892,14 +2045,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.LEFT);
 					}
 
+
 					celda.Add(
-						new iText.Layout.Element.Paragraph(valores[i])
+						new iText.Layout.Element.Paragraph(
+							valores[i])
 							.SetFontSize(9)
 							.SetMargin(0));
+
 
 					tabla.AddCell(celda);
 				}
 			}
+
 
 			// ==========================================
 			// FILAS VACÍAS
@@ -1926,11 +2083,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 
+
 			document.Add(tabla);
 		}
-		public MemoryStream GenerarPdfListasCuadrillasVertical(
+		public MemoryStream GenerarPdfListasCuadrillas(
 	List<string> cuadrillasSeleccionadas,
-	string idSemana)
+	string idSemana,
+	bool horizontal)
 		{
 			MemoryStream ms = new MemoryStream();
 
@@ -1942,15 +2101,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Kernel.Pdf.PdfDocument pdf =
 				new iText.Kernel.Pdf.PdfDocument(writer);
 
+
 			// ==========================================
-			// HOJA CARTA VERTICAL
+			// ORIENTACIÓN
 			// ==========================================
 
-			pdf.SetDefaultPageSize(
-				iText.Kernel.Geom.PageSize.LETTER);
+			if (horizontal)
+			{
+				// CARTA HORIZONTAL
+				pdf.SetDefaultPageSize(
+					iText.Kernel.Geom.PageSize.LETTER.Rotate());
+			}
+			else
+			{
+				// CARTA VERTICAL
+				pdf.SetDefaultPageSize(
+					iText.Kernel.Geom.PageSize.LETTER);
+			}
+
 
 			iText.Layout.Document document =
 				new iText.Layout.Document(pdf);
+
 
 			// ==========================================
 			// MÁRGENES
@@ -1958,7 +2130,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			document.SetMargins(25, 20, 25, 20);
 
+
 			bool primeraLista = true;
+
+
+			// ==========================================
+			// CUADRILLAS
+			// ==========================================
 
 			foreach (string idCuadrilla in cuadrillasSeleccionadas)
 			{
@@ -1970,6 +2148,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (dt.Rows.Count == 0)
 					continue;
 
+
 				if (!primeraLista)
 				{
 					document.Add(
@@ -1978,12 +2157,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 								.NEXT_PAGE));
 				}
 
-				CrearPaginaAsistenciaCuadrillaVertical(
+
+				CrearPaginaAsistenciaCuadrilla(
 					document,
-					dt);
+					dt,
+					horizontal);
+
 
 				primeraLista = false;
 			}
+
 
 			document.Close();
 
@@ -1991,9 +2174,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return ms;
 		}
-		private void CrearPaginaAsistenciaCuadrillaVertical(
+		private void CrearPaginaAsistenciaCuadrilla(
 	iText.Layout.Document document,
-	DataTable dt)
+	DataTable dt,
+	bool horizontal)
 		{
 			// ==========================================
 			// COLORES
@@ -2004,6 +2188,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			iText.Kernel.Colors.DeviceRgb colorBorde =
 				new iText.Kernel.Colors.DeviceRgb(90, 90, 90);
+
 
 			// ==========================================
 			// INFORMACIÓN DE LA CUADRILLA
@@ -2017,6 +2202,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			string semana =
 				dt.Rows[0]["c_sequence_per"].ToString();
 
+
 			// ==========================================
 			// ENCABEZADO
 			// ==========================================
@@ -2028,7 +2214,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							new float[] { 1, 1 }))
 				.UseAllAvailableWidth();
 
+
+			// ------------------------------------------
 			// CUADRILLA
+			// ------------------------------------------
 
 			info.AddCell(
 				new iText.Layout.Element.Cell()
@@ -2039,7 +2228,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							"Cuadrilla: " + cuadrilla)
 							.SetFontSize(10)));
 
+
+			// ------------------------------------------
 			// SEMANA
+			// ------------------------------------------
 
 			info.AddCell(
 				new iText.Layout.Element.Cell()
@@ -2052,28 +2244,64 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							"Semana: " + semana)
 							.SetFontSize(10)));
 
+
 			document.Add(info);
+
 
 			document.Add(
 				new iText.Layout.Element.Paragraph(" ")
 					.SetFontSize(3));
 
+
 			// ==========================================
-			// TABLA
+			// ANCHOS DE COLUMNAS
 			// ==========================================
 
-			float[] anchos =
+			float[] anchos;
+
+			if (horizontal)
 			{
-		15,       // CÓDIGO
-        31,       // EMPLEADO
-        7.714f,   // VIE
-        7.714f,   // SÁB
-        7.714f,   // DOM
-        7.714f,   // LUN
-        7.714f,   // MAR
-        7.714f,   // MIÉ
-        7.714f    // JUE
-    };
+				// ======================================
+				// CARTA HORIZONTAL
+				// ======================================
+
+				anchos = new float[]
+				{
+			12, // CÓDIGO
+            30, // EMPLEADO
+            8,  // VIE
+            8,  // SÁB
+            8,  // DOM
+            8,  // LUN
+            8,  // MAR
+            8,  // MIÉ
+            8   // JUE
+				};
+			}
+			else
+			{
+				// ======================================
+				// CARTA VERTICAL
+				// ======================================
+
+				anchos = new float[]
+				{
+			14, // CÓDIGO
+            32, // EMPLEADO
+            9,  // VIE
+            9,  // SÁB
+            9,  // DOM
+            9,  // LUN
+            9,  // MAR
+            9,  // MIÉ
+            9   // JUE
+				};
+			}
+
+
+			// ==========================================
+			// CREAR TABLA
+			// ==========================================
 
 			iText.Layout.Element.Table tabla =
 				new iText.Layout.Element.Table(
@@ -2084,6 +2312,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			tabla.SetHorizontalAlignment(
 				iText.Layout.Properties.HorizontalAlignment.CENTER);
+
 
 			// ==========================================
 			// ENCABEZADOS
@@ -2102,6 +2331,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		"JUE"
 	};
 
+
 			foreach (string encabezado in encabezados)
 			{
 				iText.Layout.Element.Cell celda =
@@ -2113,20 +2343,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.CENTER)
 						.SetVerticalAlignment(
 							iText.Layout.Properties.VerticalAlignment.MIDDLE)
-						.SetPadding(4)
-						.SetMinHeight(28)
+						.SetPadding(
+							horizontal ? 4 : 3)
+						.SetMinHeight(
+							horizontal ? 28 : 25)
 						.SetBorder(
 							new iText.Layout.Borders.SolidBorder(
 								colorBorde,
 								0.5f));
 
+
 				celda.Add(
 					new iText.Layout.Element.Paragraph(
 						encabezado)
-						.SetFontSize(8));
+						.SetFontSize(
+							horizontal ? 8 : 7));
+
 
 				tabla.AddHeaderCell(celda);
 			}
+
 
 			// ==========================================
 			// EMPLEADOS
@@ -2134,10 +2370,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			foreach (DataRow fila in dt.Rows)
 			{
+				string codigo =
+					fila["Codigo"]?.ToString() ?? "";
+
+				string empleado =
+					fila["Nom_Employee"]?.ToString() ?? "";
+
+
 				string[] valores =
 				{
-			fila["Codigo"]?.ToString() ?? "",
-			fila["Nom_Employee"]?.ToString() ?? "",
+			codigo,
+			empleado,
 			"", // VIE
             "", // SÁB
             "", // DOM
@@ -2147,12 +2390,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
             ""  // JUE
         };
 
+
 				for (int i = 0; i < valores.Length; i++)
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetPadding(4)
-							.SetMinHeight(30)
+							.SetPadding(
+								horizontal ? 4 : 3)
+							.SetMinHeight(
+								horizontal ? 30 : 25)
 							.SetKeepTogether(true)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
@@ -2161,7 +2407,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							.SetVerticalAlignment(
 								iText.Layout.Properties.VerticalAlignment.MIDDLE);
 
-					// DÍAS CENTRADOS
+
+					// ==================================
+					// ALINEACIÓN
+					// ==================================
 
 					if (i >= 2)
 					{
@@ -2174,14 +2423,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.LEFT);
 					}
 
+
+					// ==================================
+					// TEXTO
+					// ==================================
+
 					celda.Add(
 						new iText.Layout.Element.Paragraph(
 							valores[i])
-							.SetFontSize(10));
+							.SetFontSize(
+								horizontal ? 9 : 8)
+							.SetMargin(0));
+
 
 					tabla.AddCell(celda);
 				}
 			}
+
 
 			// ==========================================
 			// FILAS VACÍAS
@@ -2193,12 +2451,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetMinHeight(30)
-							.SetPadding(4)
+							.SetMinHeight(
+								horizontal ? 30 : 25)
+							.SetPadding(
+								horizontal ? 4 : 3)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
 									0.5f));
+
 
 					if (i >= 2)
 					{
@@ -2206,13 +2467,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.CENTER);
 					}
 
+
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
 							.SetFontSize(10));
 
+
 					tabla.AddCell(celda);
 				}
 			}
+
+
+			// ==========================================
+			// AGREGAR TABLA AL DOCUMENTO
+			// ==========================================
 
 			document.Add(tabla);
 		}
