@@ -1869,9 +1869,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetPadding(5)
-							.SetMinHeight(30)
-							.SetKeepTogether(true)
+							.SetPaddingTop(2)
+							.SetPaddingBottom(2)
+							.SetPaddingLeft(3)
+							.SetPaddingRight(3)
+							.SetMinHeight(20)
 							.SetVerticalAlignment(
 								iText.Layout.Properties.VerticalAlignment.MIDDLE)
 							.SetBorder(
@@ -1891,9 +1893,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					}
 
 					celda.Add(
-						new iText.Layout.Element.Paragraph(
-							valores[i])
-							.SetFontSize(11));
+						new iText.Layout.Element.Paragraph(valores[i])
+							.SetFontSize(9)
+							.SetMargin(0));
 
 					tabla.AddCell(celda);
 				}

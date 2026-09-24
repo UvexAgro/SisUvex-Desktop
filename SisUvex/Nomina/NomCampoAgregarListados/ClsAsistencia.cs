@@ -3237,8 +3237,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// RECARGAR dgvCAL
 			// ==========================================
 
-			// Aquí debe ir TU método que actualmente
-			// carga el dgvCAL.
+			CargarCAL();
+
+			// Limpiar selección
+			_frmA.dgvCAL.ClearSelection();
+			_frmA.dgvCAL.CurrentCell = null;
+
 
 			MessageBox.Show(
 				"Se cargó la actividad de la semana anterior.",
