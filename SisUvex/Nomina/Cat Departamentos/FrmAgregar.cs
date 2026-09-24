@@ -47,5 +47,23 @@ namespace SisUvex.Nomina.Cat_Departamentos
 		{
 			cls.BtnAccept();
 		}
+
+		private void txbDepartamento_Leave(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(txbDepartamento.Text))
+			{
+				txbDepartamento.Text = "Escriba el nombre de la cuadrilla";
+				txbDepartamento.ForeColor = Color.Gray;
+			}
+		}
+
+		private void txbDepartamento_Enter(object sender, EventArgs e)
+		{
+			if (txbDepartamento.Text == "Escriba el nombre de la cuadrilla")
+			{
+				txbDepartamento.Text = "";
+				txbDepartamento.ForeColor = Color.Black;
+			}
+		}
 	}
 }

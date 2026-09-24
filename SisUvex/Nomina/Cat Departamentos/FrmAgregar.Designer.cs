@@ -38,7 +38,7 @@
 			groupBox1 = new GroupBox();
 			txbCorto = new TextBox();
 			flowLayoutPanel1 = new FlowLayoutPanel();
-			this.txbDepartamento = new TextBox();
+			txbDepartamento = new TextBox();
 			chkActivo = new CheckBox();
 			label2 = new Label();
 			label1 = new Label();
@@ -113,7 +113,7 @@
 			groupBox1.Controls.Add(txbCorto);
 			groupBox1.Controls.Add(label5);
 			groupBox1.Controls.Add(flowLayoutPanel1);
-			groupBox1.Controls.Add(this.txbDepartamento);
+			groupBox1.Controls.Add(txbDepartamento);
 			groupBox1.Controls.Add(chkActivo);
 			groupBox1.Controls.Add(label2);
 			groupBox1.Controls.Add(label1);
@@ -141,11 +141,13 @@
 			// 
 			// txbDepartamento
 			// 
-			this.txbDepartamento.BackColor = SystemColors.Control;
-			this.txbDepartamento.Location = new Point(6, 47);
-			this.txbDepartamento.Name = "txbDepartamento";
-			this.txbDepartamento.Size = new Size(327, 23);
-			this.txbDepartamento.TabIndex = 1;
+			txbDepartamento.BackColor = SystemColors.Control;
+			txbDepartamento.Location = new Point(6, 47);
+			txbDepartamento.Name = "txbDepartamento";
+			txbDepartamento.Size = new Size(327, 23);
+			txbDepartamento.TabIndex = 1;
+			txbDepartamento.Enter += txbDepartamento_Enter;
+			txbDepartamento.Leave += txbDepartamento_Leave;
 			// 
 			// chkActivo
 			// 
