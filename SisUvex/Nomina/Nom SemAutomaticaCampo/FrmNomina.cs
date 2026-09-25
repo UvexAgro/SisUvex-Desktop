@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Nomina.LOAD;
 using SisUvex.Nomina.Ingresos_Diversos;
+using static SisUvex.Nomina.Nom_SemAutomaticaCampo.ClsNomina;
 
 namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 {
@@ -16,16 +17,54 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 	{
 		public ClsNomina cls;
 		bool cargando = false;
+		private ClsListaCuadrillas listaCuadrillas;
+		public List<object> cuadrillasSeleccionadas =new List<object>();
 		public FrmNomina()
 		{
 			InitializeComponent();
 			cls ??= new ClsNomina();
 			cls.frm ??= this;
+
+			InicializarListaCuadrillas();
+		}
+		public List<string> ObtenerIdsCuadrillasSeleccionadas()
+		{
+			return cuadrillasSeleccionadas
+				.Cast<CuadrillaItem>()
+				.Select(x => x.ID)
+				.ToList();
+		}
+		private void InicializarListaCuadrillas()
+		{
+			listaCuadrillas =
+				new ClsListaCuadrillas();
+
+			splitNomina.Panel1.Controls.Add(
+				listaCuadrillas
+			);
+
+			listaCuadrillas.Dock =
+				DockStyle.Fill;
+
+			listaCuadrillas.BringToFront();
+
+			// ==========================================
+			// CONECTAR EVENTO ACEPTAR
+			// ==========================================
+
+			listaCuadrillas.Aceptado +=
+				ListaCuadrillas_Aceptado;
+
+			// ==========================================
+			// INICIAR OCULTO
+			// ==========================================
+
+			splitNomina.Panel1Collapsed = true;
 		}
 
 		private void FrmNomina_Load(object sender, EventArgs e)
 		{
-			cls.CargarCuadrillaCampo(cboCuadrilla);
+			cls.CargarCuadrillaCampoCheck(listaCuadrillas);
 			cls.CargarCuadrillaCampo(cboCuadrillaRevisar);
 			cls.CargarLugarPago(cboLugarPago);
 			cls.CargarSemanas();
@@ -416,6 +455,35 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				.DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 		}
-		
+
+		private void btnSeleccionar_Click(object sender, EventArgs e)
+		{
+			splitNomina.Panel1Collapsed = false;
+		}
+		private void ListaCuadrillas_Aceptado(object? sender,EventArgs e)
+		{
+			cuadrillasSeleccionadas =
+				listaCuadrillas.ObtenerSeleccionados();
+
+			if (cuadrillasSeleccionadas.Count == 0)
+			{
+				MessageBox.Show(
+					"Seleccione al menos una cuadrilla.",
+					"Cuadrillas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				return;
+			}
+
+			// Cerrar panel
+			splitNomina.Panel1Collapsed = true;
+
+			// Mantener el texto del botón
+			// y agregar la cantidad
+			btnSeleccionar.Text =
+				$" Seleccionadas ({cuadrillasSeleccionadas.Count})";
+		}
 	}
 }

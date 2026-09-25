@@ -16,28 +16,69 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 	{
 		public FrmNomina frm;
 		private bool cargando = false;
-		public bool PuedeGenerarReporte { get; private set; } = false;
+		public class CuadrillaItem
+		{
+			public string ID { get; set; }
+			public string Codigo { get; set; }
+			public string Nombre { get; set; }
+
+			public override string ToString()
+			{
+				return Nombre;
+			}
+		}
+		public void CargarCuadrillaCampoCheck(ClsListaCuadrillas lista)
+		{
+			cargando = true;
+
+			try
+			{
+				DataTable dt = CboCuadrillaCampo();
+
+				lista.Limpiar();
+
+				foreach (DataRow row in dt.Rows)
+				{
+					CuadrillaItem cuadrilla = new CuadrillaItem
+					{
+						ID = row["ID"].ToString(),
+						Codigo = row["Código"].ToString(),
+						Nombre = row["Nombre"].ToString()
+					};
+
+					lista.AgregarCuadrilla(cuadrilla);
+				}
+			}
+			finally
+			{
+				cargando = false;
+			}
+		}
 		public void CargarCuadrillaCampo(ComboBox combo)
 		{
 			cargando = true;
 
-			DataTable dt = CboCuadrillaCampo();
+			try
+			{
+				DataTable dt = CboCuadrillaCampo();
 
-			DataRow dr = dt.NewRow();
-			dr["ID"] = "";
-			dr["Código"] = "";
-			dr["Nombre"] = " ------ Selecciona ------ ";
+				DataRow dr = dt.NewRow();
+				dr["ID"] = "";
+				dr["Código"] = "";
+				dr["Nombre"] = " ------ Selecciona ------ ";
 
-			dt.Rows.InsertAt(dr, 0);
+				dt.Rows.InsertAt(dr, 0);
 
-			combo.DataSource = dt.Copy();
-			combo.DisplayMember = "Nombre";
-			combo.ValueMember = "ID";
-			combo.SelectedIndex = 0;
-
-			cargando = false;
+				combo.DataSource = dt.Copy();
+				combo.DisplayMember = "Nombre";
+				combo.ValueMember = "ID";
+				combo.SelectedIndex = 0;
+			}
+			finally
+			{
+				cargando = false;
+			}
 		}
-
 		public DataTable CboCuadrillaCampo()
 		{
 			SQLControl sql = new SQLControl();
@@ -46,23 +87,23 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			sql.OpenConectionWrite();
 
 			string query = @"
-	SELECT 
-		g.id_workGroup AS ID,
-		g.c_order AS Código,
-		CASE
-			WHEN g.c_order IS NULL OR g.c_order = ''
-				THEN g.v_nameWorkGroup
-			ELSE g.c_order + ' - ' + g.v_nameWorkGroup
-		END AS Nombre
-	FROM Nom_WorkGroup g
-	WHERE g.c_active = 1
-	ORDER BY
-		CASE 
-			WHEN g.c_order IS NULL OR g.c_order = '' THEN 1
-			ELSE 0
-		END,
-		g.c_order,
-		g.id_workGroup";
+			SELECT 
+				g.id_workGroup AS ID,
+				g.c_order AS Código,
+				CASE
+					WHEN g.c_order IS NULL OR g.c_order = ''
+						THEN g.v_nameWorkGroup
+					ELSE g.c_order + ' - ' + g.v_nameWorkGroup
+				END AS Nombre
+			FROM Nom_WorkGroup g
+			WHERE g.c_active = 1
+			ORDER BY
+				CASE 
+					WHEN g.c_order IS NULL OR g.c_order = '' THEN 1
+					ELSE 0
+				END,
+				g.c_order,
+				g.id_workGroup";
 
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
@@ -73,70 +114,133 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			return dt;
 		}
+		public List<string> ObtenerIdsCuadrillasSeleccionadas()
+		{
+			return frm.cuadrillasSeleccionadas
+				.Cast<CuadrillaItem>()
+				.Select(x => x.ID)
+				.ToList();
+		}
 		public void ConsultarNomina()
 		{
 			SQLControl sql = new SQLControl();
 
 			try
 			{
-				DateTime fecha = frm.dtpFecha.Value.Date;
+				DateTime fecha =
+					frm.dtpFecha.Value.Date;
 
-				string idCuadrilla = null;
+				// =====================================================
+				// OBTENER CUADRILLAS SELECCIONADAS
+				// =====================================================
 
-				if (frm.cboCuadrilla.SelectedIndex > 0)
+				List<string> idsCuadrillas =
+					ObtenerIdsCuadrillasSeleccionadas();
+
+				// =====================================================
+				// VALIDAR QUE HAYA SELECCIÓN
+				// =====================================================
+
+				if (idsCuadrillas.Count == 0)
 				{
-					idCuadrilla =
-						frm.cboCuadrilla.SelectedValue?.ToString().Trim();
+					MessageBox.Show(
+						"Seleccione al menos una cuadrilla.",
+						"Cuadrillas",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
 
-					if (string.IsNullOrWhiteSpace(idCuadrilla))
-						idCuadrilla = null;
-				}
-
-
-				bool datosCompletos =
-					ValidarLoteYActividad(fecha, idCuadrilla);
-
-				// SI FALTA LOTE O ACTIVIDAD, NO CONTINÚA
-				if (!datosCompletos)
-				{
 					return;
 				}
 
+				// =====================================================
+				// VALIDAR TODAS LAS CUADRILLAS
+				// =====================================================
+
+				foreach (string idCuadrilla in idsCuadrillas)
+				{
+					bool datosCompletos =
+						ValidarLoteYActividad(
+							fecha,
+							idCuadrilla
+						);
+
+					if (!datosCompletos)
+					{
+						return;
+					}
+				}
+
+				// =====================================================
+				// ABRIR CONEXIÓN
+				// =====================================================
 
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand(
-					"sp_ReporteNominadeCampo",
-					sql.cnn))
+				DataTable dtFinal =
+					new DataTable();
+
+				// =====================================================
+				// CONSULTAR CADA CUADRILLA
+				// =====================================================
+
+				foreach (string idCuadrilla in idsCuadrillas)
 				{
-					cmd.CommandType = CommandType.StoredProcedure;
-
-					cmd.Parameters.Add(
-						"@FechaNomina",
-						SqlDbType.Date).Value = fecha;
-
-					cmd.Parameters.Add(
-						"@IdWorkGroup",
-						SqlDbType.VarChar,
-						3).Value =
-						(object)idCuadrilla ?? DBNull.Value;
-
-
-					DataTable dt = new DataTable();
-
-					using (SqlDataAdapter da =
-						   new SqlDataAdapter(cmd))
+					using (SqlCommand cmd =
+						new SqlCommand(
+							"sp_ReporteNominadeCampo",
+							sql.cnn))
 					{
-						da.Fill(dt);
+						cmd.CommandType =
+							CommandType.StoredProcedure;
+
+						cmd.Parameters.Add(
+							"@FechaNomina",
+							SqlDbType.Date
+						).Value = fecha;
+
+						cmd.Parameters.Add(
+							"@IdWorkGroup",
+							SqlDbType.VarChar,
+							3
+						).Value = idCuadrilla;
+
+						using (SqlDataAdapter da =
+							new SqlDataAdapter(cmd))
+						{
+							DataTable dt =
+								new DataTable();
+
+							da.Fill(dt);
+
+							// =========================================
+							// AGREGAR RESULTADOS
+							// =========================================
+
+							if (dtFinal.Columns.Count == 0)
+							{
+								dtFinal =
+									dt.Clone();
+							}
+
+							foreach (DataRow row in dt.Rows)
+							{
+								dtFinal.ImportRow(row);
+							}
+						}
 					}
-
-
-					frm.dgvNomina.DataSource = dt;
-
-					ConfigurarDgvNomina();
-
-					frm.dgvNomina.ClearSelection();
 				}
+
+				// =====================================================
+				// MOSTRAR RESULTADO
+				// =====================================================
+
+				frm.dgvNomina.DataSource =
+					dtFinal;
+
+				ConfigurarDgvNomina();
+
+				frm.dgvNomina.ClearSelection();
 			}
 			catch (Exception ex)
 			{
@@ -145,7 +249,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					ex.Message,
 					"Consulta de nómina",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+					MessageBoxIcon.Error
+				);
 			}
 			finally
 			{
