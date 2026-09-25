@@ -812,7 +812,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return ms;
 		}
-		private void CrearPaginaAsistenciaCuadrilla(iText.Layout.Document document,DataTable dt)
+		private void CrearPaginaAsistenciaCuadrilla(
+	iText.Layout.Document document,
+	DataTable dt)
 		{
 			// ==========================================
 			// COLORES
@@ -834,57 +836,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				+ dt.Rows[0]["Cuadrilla"].ToString();
 
 			string semana =
-				dt.Rows[0]["c_sequence_per"].ToString();
+				dt.Rows[0]["c_sequence_per"]?.ToString() ?? "";
 
-			// ==========================================
-			// ENCABEZADO
-			// ==========================================
-
-			iText.Layout.Element.Table info =
-				new iText.Layout.Element.Table(
-					iText.Layout.Properties.UnitValue
-						.CreatePercentArray(
-							new float[] { 75, 25 }))
-				.UseAllAvailableWidth();
-
-			// CUADRILLA
-
-			info.AddCell(
-				new iText.Layout.Element.Cell()
-					.SetBorder(
-						iText.Layout.Borders.Border.NO_BORDER)
-					.SetPadding(0)
-					.SetTextAlignment(
-						iText.Layout.Properties.TextAlignment.LEFT)
-					.Add(
-						new iText.Layout.Element.Paragraph(
-							"Cuadrilla: " + cuadrilla)
-							.SetFontSize(10)
-							.SetMargin(0)));
-
-			// SEMANA
-
-			info.AddCell(
-				new iText.Layout.Element.Cell()
-					.SetBorder(
-						iText.Layout.Borders.Border.NO_BORDER)
-					.SetPadding(0)
-					.SetTextAlignment(
-						iText.Layout.Properties.TextAlignment.RIGHT)
-					.Add(
-						new iText.Layout.Element.Paragraph(
-							"Semana: " + semana)
-							.SetFontSize(10)
-							.SetMargin(0)));
-
-			document.Add(info);
-
-			// ESPACIO ENTRE ENCABEZADO Y TABLA
-
-			document.Add(
-				new iText.Layout.Element.Paragraph(" ")
-					.SetFontSize(3)
-					.SetMargin(0));
+			string rangoSemana =
+				ObtenerRangoSemana(dt);
 
 			// ==========================================
 			// TABLA
@@ -906,12 +861,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			iText.Layout.Element.Table tabla =
 				new iText.Layout.Element.Table(
 					iText.Layout.Properties.UnitValue
-						.CreatePercentArray(anchos));
-
-			tabla.UseAllAvailableWidth();
+						.CreatePercentArray(anchos))
+				.UseAllAvailableWidth();
 
 			// ==========================================
-			// ENCABEZADOS
+			// ENCABEZADO CUADRILLA + SEMANA
+			// ==========================================
+
+			iText.Layout.Element.Cell celdaInfo =
+				new iText.Layout.Element.Cell(1, 9)
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetPaddingBottom(5);
+
+			iText.Layout.Element.Table info =
+				new iText.Layout.Element.Table(
+					iText.Layout.Properties.UnitValue
+						.CreatePercentArray(
+							new float[] { 75, 25 }))
+				.UseAllAvailableWidth();
+
+			// ==========================================
+			// CUADRILLA
+			// ==========================================
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetTextAlignment(
+						iText.Layout.Properties.TextAlignment.LEFT)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Cuadrilla: " + cuadrilla)
+							.SetFontSize(10)
+							.SetMargin(0)));
+
+			// ==========================================
+			// SEMANA
+			// ==========================================
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetTextAlignment(
+						iText.Layout.Properties.TextAlignment.RIGHT)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							$"Semana: {semana} | {rangoSemana}")
+							.SetFontSize(10)
+							.SetMargin(0)));
+
+			celdaInfo.Add(info);
+
+			// ==========================================
+			// IMPORTANTE:
+			// SE AGREGA COMO HEADER PARA QUE SE REPITA
+			// ==========================================
+
+			tabla.AddHeaderCell(celdaInfo);
+
+			// ==========================================
+			// ENCABEZADOS DE DÍAS
 			// ==========================================
 
 			string[] encabezados =
@@ -1032,7 +1047,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
-							.SetFontSize(12));
+							.SetFontSize(12)
+							.SetMargin(0));
 
 					tabla.AddCell(celda);
 				}
@@ -1043,6 +1059,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ==========================================
 
 			document.Add(tabla);
+		}
+		private string ObtenerRangoSemana(DataTable dt)
+		{
+			if (dt == null || dt.Rows.Count == 0)
+				return "";
+
+			DateTime fechaInicio;
+			DateTime fechaFin;
+
+			if (!DateTime.TryParse(
+				dt.Rows[0]["d_startDate_per"]?.ToString(),
+				out fechaInicio))
+				return "";
+
+			if (!DateTime.TryParse(
+				dt.Rows[0]["d_endDate_per"]?.ToString(),
+				out fechaFin))
+				return "";
+
+			return $"{fechaInicio:dd/MM/yyyy} - {fechaFin:dd/MM/yyyy}";
 		}
 		public bool ExisteEmpleadosSemana(string secuenciaSemana, DateTime fechaInicio, DateTime fechaFin)
 		{
@@ -2200,57 +2236,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				+ dt.Rows[0]["Cuadrilla"].ToString();
 
 			string semana =
-				dt.Rows[0]["c_sequence_per"].ToString();
+				dt.Rows[0]["c_sequence_per"]?.ToString() ?? "";
 
-
-			// ==========================================
-			// ENCABEZADO
-			// ==========================================
-
-			iText.Layout.Element.Table info =
-				new iText.Layout.Element.Table(
-					iText.Layout.Properties.UnitValue
-						.CreatePercentArray(
-							new float[] { 1, 1 }))
-				.UseAllAvailableWidth();
-
-
-			// ------------------------------------------
-			// CUADRILLA
-			// ------------------------------------------
-
-			info.AddCell(
-				new iText.Layout.Element.Cell()
-					.SetBorder(
-						iText.Layout.Borders.Border.NO_BORDER)
-					.Add(
-						new iText.Layout.Element.Paragraph(
-							"Cuadrilla: " + cuadrilla)
-							.SetFontSize(10)));
-
-
-			// ------------------------------------------
-			// SEMANA
-			// ------------------------------------------
-
-			info.AddCell(
-				new iText.Layout.Element.Cell()
-					.SetBorder(
-						iText.Layout.Borders.Border.NO_BORDER)
-					.SetTextAlignment(
-						iText.Layout.Properties.TextAlignment.RIGHT)
-					.Add(
-						new iText.Layout.Element.Paragraph(
-							"Semana: " + semana)
-							.SetFontSize(10)));
-
-
-			document.Add(info);
-
-
-			document.Add(
-				new iText.Layout.Element.Paragraph(" ")
-					.SetFontSize(3));
+			string rangoSemana =
+				ObtenerRangoSemana(dt);
 
 
 			// ==========================================
@@ -2315,7 +2304,75 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// ==========================================
-			// ENCABEZADOS
+			// ENCABEZADO CUADRILLA + SEMANA
+			// SE REPITE EN CADA PÁGINA
+			// ==========================================
+
+			iText.Layout.Element.Cell celdaInfo =
+				new iText.Layout.Element.Cell(1, 9)
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetPaddingBottom(5);
+
+
+			iText.Layout.Element.Table info =
+				new iText.Layout.Element.Table(
+					iText.Layout.Properties.UnitValue
+						.CreatePercentArray(
+							new float[] { 75, 25 }))
+				.UseAllAvailableWidth();
+
+
+			// ------------------------------------------
+			// CUADRILLA
+			// ------------------------------------------
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetTextAlignment(
+						iText.Layout.Properties.TextAlignment.LEFT)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							"Cuadrilla: " + cuadrilla)
+							.SetFontSize(10)
+							.SetMargin(0)));
+
+
+			// ------------------------------------------
+			// SEMANA + RANGO
+			// ------------------------------------------
+
+			info.AddCell(
+				new iText.Layout.Element.Cell()
+					.SetBorder(
+						iText.Layout.Borders.Border.NO_BORDER)
+					.SetPadding(0)
+					.SetTextAlignment(
+						iText.Layout.Properties.TextAlignment.RIGHT)
+					.Add(
+						new iText.Layout.Element.Paragraph(
+							$"Semana: {semana} | {rangoSemana}")
+							.SetFontSize(10)
+							.SetMargin(0)));
+
+
+			celdaInfo.Add(info);
+
+
+			// ==========================================
+			// AGREGAR COMO HEADER
+			// ESTO HACE QUE SE REPITA
+			// ==========================================
+
+			tabla.AddHeaderCell(celdaInfo);
+
+
+			// ==========================================
+			// ENCABEZADOS DE COLUMNAS
 			// ==========================================
 
 			string[] encabezados =
@@ -2357,7 +2414,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					new iText.Layout.Element.Paragraph(
 						encabezado)
 						.SetFontSize(
-							horizontal ? 8 : 7));
+							horizontal ? 8 : 7)
+						.SetMargin(0));
 
 
 				tabla.AddHeaderCell(celda);
@@ -2470,7 +2528,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
-							.SetFontSize(10));
+							.SetFontSize(10)
+							.SetMargin(0));
 
 
 					tabla.AddCell(celda);
