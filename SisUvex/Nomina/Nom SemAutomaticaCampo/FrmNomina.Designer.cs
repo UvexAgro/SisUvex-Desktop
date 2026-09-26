@@ -64,6 +64,10 @@
 			cboCuadrillaRevisar = new ComboBox();
 			label5 = new Label();
 			splitNomina = new SplitContainer();
+			pnlCSV = new Panel();
+			lblCuadrillas = new Label();
+			lbCSV = new ListBox();
+			label12 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -75,6 +79,7 @@
 			((System.ComponentModel.ISupportInitialize)splitNomina).BeginInit();
 			splitNomina.Panel2.SuspendLayout();
 			splitNomina.SuspendLayout();
+			pnlCSV.SuspendLayout();
 			SuspendLayout();
 			// 
 			// dgvNomina
@@ -112,7 +117,7 @@
 			dgvNomina.RowHeadersVisible = false;
 			dgvNomina.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvNomina.Size = new Size(1272, 723);
+			dgvNomina.Size = new Size(1509, 723);
 			dgvNomina.TabIndex = 4;
 			// 
 			// label1
@@ -135,7 +140,7 @@
 			panel1.Controls.Add(label1);
 			panel1.Location = new Point(12, 6);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(1536, 140);
+			panel1.Size = new Size(1819, 140);
 			panel1.TabIndex = 5;
 			// 
 			// label2
@@ -197,7 +202,7 @@
 			btnConsultar.ForeColor = Color.Black;
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(765, 36);
+			btnConsultar.Location = new Point(760, 38);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(25, 0, 25, 0);
 			btnConsultar.Size = new Size(165, 40);
@@ -285,7 +290,7 @@
 			panel6.Controls.Add(label10);
 			panel6.Location = new Point(3, 0);
 			panel6.Name = "panel6";
-			panel6.Size = new Size(1272, 48);
+			panel6.Size = new Size(1509, 48);
 			panel6.TabIndex = 8;
 			// 
 			// label10
@@ -485,16 +490,62 @@
 			// 
 			splitNomina.Panel2.Controls.Add(panel6);
 			splitNomina.Panel2.Controls.Add(dgvNomina);
-			splitNomina.Size = new Size(1536, 777);
-			splitNomina.SplitterDistance = 254;
+			splitNomina.Size = new Size(1819, 777);
+			splitNomina.SplitterDistance = 300;
 			splitNomina.TabIndex = 11;
+			// 
+			// pnlCSV
+			// 
+			pnlCSV.Controls.Add(lblCuadrillas);
+			pnlCSV.Controls.Add(lbCSV);
+			pnlCSV.Controls.Add(label12);
+			pnlCSV.Location = new Point(1067, 152);
+			pnlCSV.Name = "pnlCSV";
+			pnlCSV.Size = new Size(764, 171);
+			pnlCSV.TabIndex = 12;
+			// 
+			// lblCuadrillas
+			// 
+			lblCuadrillas.AutoSize = true;
+			lblCuadrillas.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCuadrillas.Location = new Point(139, 7);
+			lblCuadrillas.Name = "lblCuadrillas";
+			lblCuadrillas.Size = new Size(0, 17);
+			lblCuadrillas.TabIndex = 12;
+			// 
+			// lbCSV
+			// 
+			lbCSV.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			lbCSV.BackColor = Color.FromArgb(236, 243, 249);
+			lbCSV.BorderStyle = BorderStyle.FixedSingle;
+			lbCSV.ColumnWidth = 200;
+			lbCSV.FormattingEnabled = true;
+			lbCSV.HorizontalScrollbar = true;
+			lbCSV.ItemHeight = 15;
+			lbCSV.Location = new Point(3, 40);
+			lbCSV.MultiColumn = true;
+			lbCSV.Name = "lbCSV";
+			lbCSV.Size = new Size(758, 122);
+			lbCSV.TabIndex = 11;
+			// 
+			// label12
+			// 
+			label12.AutoSize = true;
+			label12.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label12.ForeColor = Color.FromArgb(31, 95, 145);
+			label12.Location = new Point(3, 6);
+			label12.Name = "label12";
+			label12.Size = new Size(132, 17);
+			label12.TabIndex = 10;
+			label12.Text = "Cuadrilla con un csv:";
 			// 
 			// FrmNomina
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(244, 247, 251);
-			ClientSize = new Size(1560, 1118);
+			ClientSize = new Size(1843, 1118);
+			Controls.Add(pnlCSV);
 			Controls.Add(splitNomina);
 			Controls.Add(tabControl2);
 			Controls.Add(panel1);
@@ -518,6 +569,8 @@
 			splitNomina.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)splitNomina).EndInit();
 			splitNomina.ResumeLayout(false);
+			pnlCSV.ResumeLayout(false);
+			pnlCSV.PerformLayout();
 			ResumeLayout(false);
 		}
 
@@ -563,5 +616,10 @@
 		private Panel panel2;
 		private SplitContainer splitContainer1;
 		private SplitContainer splitNomina;
+		private Label label12;
+		public ListBox lbCSV;
+		private ListBox listBox1;
+		public Label lblCuadrillas;
+		public Panel pnlCSV;
 	}
 }

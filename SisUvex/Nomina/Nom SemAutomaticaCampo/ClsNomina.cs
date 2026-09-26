@@ -24,7 +24,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			public override string ToString()
 			{
-				return Nombre;
+				return $"{Codigo} - {Nombre}";
 			}
 		}
 		public void CargarCuadrillaCampoCheck(ClsListaCuadrillas lista)
@@ -33,20 +33,28 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			try
 			{
-				DataTable dt = CboCuadrillaCampo();
+				DataTable dt =
+					CboCuadrillaCampo();
 
 				lista.Limpiar();
 
 				foreach (DataRow row in dt.Rows)
 				{
-					CuadrillaItem cuadrilla = new CuadrillaItem
-					{
-						ID = row["ID"].ToString(),
-						Codigo = row["Código"].ToString(),
-						Nombre = row["Nombre"].ToString()
-					};
+					CuadrillaItem cuadrilla =
+						new CuadrillaItem
+						{
+							ID =
+								row["ID"].ToString(),
 
-					lista.AgregarCuadrilla(cuadrilla);
+							Codigo =
+								row["Código"].ToString(),
+
+							Nombre =
+								row["Nombre"].ToString()
+						};
+
+					lista.AgregarCuadrilla(
+						cuadrilla);
 				}
 			}
 			finally
@@ -54,6 +62,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				cargando = false;
 			}
 		}
+
 		public void CargarCuadrillaCampo(ComboBox combo)
 		{
 			cargando = true;
@@ -90,11 +99,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			SELECT 
 				g.id_workGroup AS ID,
 				g.c_order AS Código,
-				CASE
-					WHEN g.c_order IS NULL OR g.c_order = ''
-						THEN g.v_nameWorkGroup
-					ELSE g.c_order + ' - ' + g.v_nameWorkGroup
-				END AS Nombre
+				g.v_nameWorkGroup AS Nombre
 			FROM Nom_WorkGroup g
 			WHERE g.c_active = 1
 			ORDER BY
@@ -105,9 +110,12 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				g.c_order,
 				g.id_workGroup";
 
-			SqlCommand cmd = new SqlCommand(query, sql.cnn);
+			SqlCommand cmd =
+				new SqlCommand(query, sql.cnn);
 
-			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			SqlDataAdapter da =
+				new SqlDataAdapter(cmd);
+
 			da.Fill(dt);
 
 			sql.CloseConectionWrite();
@@ -219,13 +227,21 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 							if (dtFinal.Columns.Count == 0)
 							{
-								dtFinal =
-									dt.Clone();
+								dtFinal = dt.Clone();
+
+								// Columna interna para saber a qué cuadrilla pertenece cada registro
+								dtFinal.Columns.Add(
+									"id_workGroup_CSV",
+									typeof(string));
 							}
 
 							foreach (DataRow row in dt.Rows)
 							{
 								dtFinal.ImportRow(row);
+
+								// Guardar el ID real de la cuadrilla
+								dtFinal.Rows[dtFinal.Rows.Count - 1]["id_workGroup_CSV"] =
+									idCuadrilla;
 							}
 						}
 					}
@@ -357,6 +373,10 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
 
+			// =====================================================
+			// GENERAR ARCHIVO CSV
+			// =====================================================
+
 			using (StreamWriter sw = new StreamWriter(
 				sfd.FileName,
 				false,
@@ -384,6 +404,10 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				}
 			}
 
+			// =====================================================
+			// VERIFICAR QUE EL ARCHIVO SE HAYA CREADO
+			// =====================================================
+
 			if (!File.Exists(sfd.FileName))
 			{
 				MessageBox.Show(
@@ -394,6 +418,90 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 				return;
 			}
+
+			// =====================================================
+			// OBTENER CUADRILLAS DEL DGV
+			// =====================================================
+
+			DataTable dtNomina =
+				frm.dgvNomina.DataSource as DataTable;
+
+			if (dtNomina == null ||
+				!dtNomina.Columns.Contains("id_workGroup_CSV"))
+			{
+				MessageBox.Show(
+					"El listado de nómina no contiene el ID de las cuadrillas.",
+					"CSV",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			List<string> idsCuadrillas =
+				dtNomina.AsEnumerable()
+					.Select(r =>
+						r["id_workGroup_CSV"]
+							?.ToString()
+							.Trim())
+					.Where(x =>
+						!string.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
+
+			// =====================================================
+			// REGISTRAR CSV GENERADO
+			// =====================================================
+
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				foreach (string idCuadrilla in idsCuadrillas)
+				{
+					using (SqlCommand cmd =
+						new SqlCommand(
+							"sp_AddCsvGenerated",
+							sql.cnn))
+					{
+						cmd.CommandType =
+							CommandType.StoredProcedure;
+
+						cmd.Parameters.Add(
+							"@IdWorkGroup",
+							SqlDbType.Char,
+							3
+						).Value = idCuadrilla;
+
+						cmd.Parameters.Add(
+							"@FechaNomina",
+							SqlDbType.Date
+						).Value = fechaNomina.Date;
+
+						cmd.ExecuteNonQuery();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"El CSV se generó correctamente, pero no se pudo registrar " +
+					"el estado de las cuadrillas:\n\n" +
+					ex.Message,
+					"Registro de CSV",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// =====================================================
+			// MENSAJE FINAL
+			// =====================================================
 
 			DialogResult result = MessageBox.Show(
 				"Reporte en CSV generado correctamente.\n\n" +
@@ -426,6 +534,11 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					MessageBoxIcon.Information);
 
 				return null;
+			}
+
+			foreach (DataColumn col in dtNomina.Columns)
+			{
+				Console.WriteLine(col.ColumnName);
 			}
 
 			// Valores de los TextBox
@@ -656,24 +769,32 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				// =====================================================
 
 				string querySemana = @"
-            SELECT TOP 1
-                c_sequence_per
-            FROM dbo.Payroll_AttendancePeriod
-            WHERE @Fecha BETWEEN d_startDate_per AND d_endDate_per
-              AND c_active = 1
-            ORDER BY d_startDate_per DESC;
-        ";
+			SELECT TOP 1
+				c_sequence_per
+			FROM dbo.Payroll_AttendancePeriod
+			WHERE @Fecha BETWEEN d_startDate_per AND d_endDate_per
+			  AND c_active = 1
+			ORDER BY d_startDate_per DESC;
+		";
 
 				string semana = "";
 
-				using (SqlCommand cmdSemana = new SqlCommand(querySemana, sql.cnn))
+				using (SqlCommand cmdSemana =
+					new SqlCommand(querySemana, sql.cnn))
 				{
-					cmdSemana.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha;
+					cmdSemana.Parameters.Add(
+						"@Fecha",
+						SqlDbType.Date).Value = fecha;
 
-					object resultado = cmdSemana.ExecuteScalar();
+					object resultado =
+						cmdSemana.ExecuteScalar();
 
-					if (resultado != null && resultado != DBNull.Value)
-						semana = resultado.ToString().Trim();
+					if (resultado != null &&
+						resultado != DBNull.Value)
+					{
+						semana =
+							resultado.ToString().Trim();
+					}
 				}
 
 				if (string.IsNullOrWhiteSpace(semana))
@@ -689,7 +810,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 
 				// =====================================================
-				// DETERMINAR LAS COLUMNAS SEGÚN EL DÍA
+				// DETERMINAR EL PREFIJO SEGÚN EL DÍA
 				// =====================================================
 
 				string prefijo;
@@ -735,25 +856,38 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 				string query = $@"
 
-				SELECT
-					aw.id_employee,
+			SELECT
+				aw.id_employee,
 
-					emp.v_lastNamePat,
-					emp.v_lastNameMat,
-					emp.v_name,
+				emp.v_lastNamePat,
+				emp.v_lastNameMat,
+				emp.v_name,
 
-					aw.id_activity_{prefijo},
-					aw.id_lot_{prefijo}
+				aw.id_activity_{prefijo},
+				aw.id_lot_{prefijo},
 
-				FROM dbo.Nom_EmployeeAttendanceWeekly aw
+				-- ID REAL DE LA CUADRILLA
+				aw.id_workGroup_{prefijo} AS id_workGroup,
 
-				LEFT JOIN dbo.Nom_Employees emp
-					ON emp.id_employee = aw.id_employee
+				-- DATOS DE LA CUADRILLA
+				wg.c_order,
+				wg.v_nameWorkGroup
 
-				WHERE TRY_CONVERT(INT, aw.c_sequence_per) =
-					  TRY_CONVERT(INT, @Semana)
+			FROM dbo.Nom_EmployeeAttendanceWeekly aw
 
-				  AND aw.b_{prefijo} = 1";
+			LEFT JOIN dbo.Nom_Employees emp
+				ON emp.id_employee = aw.id_employee
+
+			LEFT JOIN dbo.Nom_WorkGroup wg
+				ON wg.id_workGroup =
+				   aw.id_workGroup_{prefijo}
+
+			WHERE TRY_CONVERT(INT, aw.c_sequence_per) =
+				  TRY_CONVERT(INT, @Semana)
+
+			  AND aw.b_{prefijo} = 1
+		";
+
 
 				// =====================================================
 				// SI SE SELECCIONÓ CUADRILLA
@@ -762,26 +896,39 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				if (!string.IsNullOrWhiteSpace(idCuadrilla))
 				{
 					query += $@"
-                AND aw.id_workGroup_{prefijo} = @IdWorkGroup";
+
+				AND aw.id_workGroup_{prefijo} =
+					@IdWorkGroup
+			";
 				}
 
 
-				DataTable dtValidacion = new DataTable();
+				// =====================================================
+				// EJECUTAR CONSULTA
+				// =====================================================
 
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				DataTable dtValidacion =
+					new DataTable();
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.Add("@Semana", SqlDbType.VarChar, 4)
-						.Value = semana;
+					cmd.Parameters.Add(
+						"@Semana",
+						SqlDbType.VarChar,
+						4).Value = semana;
 
 					if (!string.IsNullOrWhiteSpace(idCuadrilla))
 					{
 						cmd.Parameters.Add(
 							"@IdWorkGroup",
 							SqlDbType.VarChar,
-							4).Value = idCuadrilla;
+							4).Value =
+								idCuadrilla;
 					}
 
-					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
 					{
 						da.Fill(dtValidacion);
 					}
@@ -794,6 +941,10 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 				foreach (DataRow row in dtValidacion.Rows)
 				{
+					// =================================================
+					// EMPLEADO
+					// =================================================
+
 					string folio =
 						row["id_employee"]?
 						.ToString()
@@ -801,21 +952,61 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 					string nombre =
 						(
-							row["v_lastNamePat"]?.ToString().Trim() + " " +
-							row["v_lastNameMat"]?.ToString().Trim() + " " +
-							row["v_name"]?.ToString().Trim()
+							row["v_lastNamePat"]?
+							.ToString()
+							.Trim() + " " +
+
+							row["v_lastNameMat"]?
+							.ToString()
+							.Trim() + " " +
+
+							row["v_name"]?
+							.ToString()
+							.Trim()
 						).Trim();
+
+
+					// =================================================
+					// ACTIVIDAD
+					// =================================================
 
 					string actividad =
 						row[$"id_activity_{prefijo}"]?
 						.ToString()
 						.Trim() ?? "";
 
+
+					// =================================================
+					// LOTE
+					// =================================================
+
 					string lote =
 						row[$"id_lot_{prefijo}"]?
 						.ToString()
 						.Trim() ?? "";
 
+
+					// =================================================
+					// CUADRILLA
+					// =================================================
+
+					string codigoCuadrilla =
+						row["c_order"]?
+						.ToString()
+						.Trim() ?? "";
+
+					string nombreCuadrilla =
+						row["v_nameWorkGroup"]?
+						.ToString()
+						.Trim() ?? "";
+
+					string cuadrilla =
+						$"{codigoCuadrilla} - {nombreCuadrilla}";
+
+
+					// =================================================
+					// VALIDAR
+					// =================================================
 
 					bool faltaActividad =
 						string.IsNullOrWhiteSpace(actividad);
@@ -824,19 +1015,37 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 						string.IsNullOrWhiteSpace(lote);
 
 
-					if (faltaActividad || faltaLote)
+					if (faltaActividad ||
+						faltaLote)
 					{
 						string faltante;
 
-						if (faltaActividad && faltaLote)
-							faltante = "Actividad y Lote";
+						if (faltaActividad &&
+							faltaLote)
+						{
+							faltante =
+								"Actividad y Lote";
+						}
 						else if (faltaActividad)
-							faltante = "Actividad";
+						{
+							faltante =
+								"Actividad";
+						}
 						else
-							faltante = "Lote";
+						{
+							faltante =
+								"Lote";
+						}
+
+
+						// =================================================
+						// AGREGAR EMPLEADO CON ERROR
+						// =================================================
 
 						empleadosConError.Add(
-							$"{folio} - {nombre} → Falta {faltante}"
+							$"{folio} - {nombre} " +
+							$"→ Cuadrilla: {cuadrilla} " +
+							$"→ Falta {faltante}"
 						);
 					}
 				}
@@ -848,7 +1057,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 				if (empleadosConError.Count > 0)
 				{
-					StringBuilder mensaje = new StringBuilder();
+					StringBuilder mensaje =
+						new StringBuilder();
 
 					mensaje.AppendLine(
 						"NO SE PUEDE GENERAR LA NÓMINA."
@@ -863,15 +1073,20 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					mensaje.AppendLine();
 
 					mensaje.AppendLine(
-						"Los siguientes empleados no tienen Lote y/o Actividad:"
+						"Los siguientes empleados no tienen " +
+						"Lote y/o Actividad:"
 					);
 
 					mensaje.AppendLine();
 
-					foreach (string empleado in empleadosConError)
+
+					foreach (string empleado
+						in empleadosConError)
 					{
-						mensaje.AppendLine("• " + empleado);
+						mensaje.AppendLine(
+							"• " + empleado);
 					}
+
 
 					MessageBox.Show(
 						mensaje.ToString(),
@@ -899,6 +1114,59 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					MessageBoxIcon.Error);
 
 				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public void CargarCuadrillasConCsv(ListBox ckbCSV,DateTime fecha)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+			SELECT DISTINCT
+				wg.c_order,
+				wg.v_nameWorkGroup
+			FROM Nom_CsvGenerated cg
+			INNER JOIN Nom_WorkGroup wg
+				ON cg.id_workGroup = wg.id_workGroup
+			WHERE CONVERT(date, cg.d_fechaNomina) = @Fecha
+			ORDER BY wg.c_order";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.Add(
+						"@Fecha",
+						SqlDbType.Date).Value =
+						fecha.Date;
+
+					using (SqlDataReader dr =
+						cmd.ExecuteReader())
+					{
+						ckbCSV.Items.Clear();
+
+						while (dr.Read())
+						{
+							string codigo =
+								dr["c_order"]?.ToString()?.Trim() ?? "";
+
+							string nombre =
+								dr["v_nameWorkGroup"]?.ToString()?.Trim() ?? "";
+
+							ckbCSV.Items.Add(
+								$"{codigo} - {nombre}");
+						}
+					}
+				}
+				frm.pnlCSV.Visible = ckbCSV.Items.Count > 0;
+
+				frm.lblCuadrillas.Text =ckbCSV.Items.Count.ToString();
 			}
 			finally
 			{

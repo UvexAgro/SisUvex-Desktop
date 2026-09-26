@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
+using static SisUvex.Nomina.Nom_SemAutomaticaCampo.ClsNomina;
 
 namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 {
@@ -15,6 +17,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		private Label lblTitulo;
 		public event EventHandler? Aceptado;
 
+
 		public ClsListaCuadrillas()
 		{
 			// ==========================================
@@ -24,10 +27,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			Dock = DockStyle.Fill;
 
 			BackColor = Color.White;
-			BorderStyle = BorderStyle.FixedSingle;
-			// =====================================================
+
+			BorderStyle =
+				BorderStyle.FixedSingle;
+
+			// ==========================================
 			// TÍTULO
-			// =====================================================
+			// ==========================================
 
 			lblTitulo = new Label();
 
@@ -36,16 +42,16 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			lblTitulo.Font = new Font(
 				"Segoe UI",
 				16,
-				FontStyle.Bold
-			);
+				FontStyle.Bold);
 
-			lblTitulo.ForeColor = Color.White;
+			lblTitulo.ForeColor =
+				Color.White;
 
 			lblTitulo.BackColor =
 				Color.FromArgb(25, 105, 155);
 
 			lblTitulo.TextAlign =
-				ContentAlignment.MiddleLeft;
+	System.Drawing.ContentAlignment.MiddleLeft;
 
 			lblTitulo.Dock =
 				DockStyle.Top;
@@ -82,7 +88,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			Controls.Add(lista);
 
 			// ==========================================
-			// BOTÓN SELECCIONAR TODAS
+			// SELECCIONAR TODAS
 			// ==========================================
 
 			btnTodas = new Button();
@@ -97,12 +103,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				AnchorStyles.Right |
 				AnchorStyles.Bottom;
 
-			btnTodas.Click += BtnTodas_Click;
+			btnTodas.Click +=
+				BtnTodas_Click;
 
 			Controls.Add(btnTodas);
 
 			// ==========================================
-			// BOTÓN QUITAR SELECCIÓN
+			// QUITAR SELECCIÓN
 			// ==========================================
 
 			btnNinguna = new Button();
@@ -117,12 +124,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				AnchorStyles.Right |
 				AnchorStyles.Bottom;
 
-			btnNinguna.Click += BtnNinguna_Click;
+			btnNinguna.Click +=
+				BtnNinguna_Click;
 
 			Controls.Add(btnNinguna);
 
 			// ==========================================
-			// BOTÓN ACEPTAR
+			// ACEPTAR
 			// ==========================================
 
 			btnAceptar = new Button();
@@ -137,7 +145,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				AnchorStyles.Right |
 				AnchorStyles.Bottom;
 
-			btnAceptar.Click += BtnAceptar_Click;
+			btnAceptar.Click +=
+				BtnAceptar_Click;
 
 			Controls.Add(btnAceptar);
 
@@ -145,14 +154,11 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			// AJUSTAR POSICIONES
 			// ==========================================
 
-			Resize += ClsListaCuadrillas_Resize;
+			Resize +=
+				ClsListaCuadrillas_Resize;
 
 			AjustarControles();
 		}
-
-		// =========================================================
-		// AJUSTAR CONTROLES
-		// =========================================================
 
 		private void ClsListaCuadrillas_Resize(
 			object sender,
@@ -374,3 +380,4 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		}
 	}
 }
+	

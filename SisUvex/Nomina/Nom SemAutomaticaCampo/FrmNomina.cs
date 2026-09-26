@@ -71,6 +71,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			txbReferencia.Text = dtpFecha.Value.ToString("yyyyMMdd");
 			txbJornada.Text = "8";
 			txbDestajo.Text = "0";
+			cls.CargarCuadrillasConCsv(lbCSV, dtpFecha.Value.Date);
 		}
 
 		private void btnConsultar_Click(object sender, EventArgs e)
@@ -81,6 +82,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		private void dtpFecha_ValueChanged(object sender, EventArgs e)
 		{
 			txbReferencia.Text = dtpFecha.Value.ToString("yyyyMMdd");
+
+			cls.CargarCuadrillasConCsv(lbCSV, dtpFecha.Value.Date);
 		}
 
 		private void btnCSV_Click(object sender, EventArgs e)
