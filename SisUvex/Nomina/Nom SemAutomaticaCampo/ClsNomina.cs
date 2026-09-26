@@ -254,6 +254,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				frm.dgvNomina.DataSource =
 					dtFinal;
 
+				// Ocultar columna interna
+				if (frm.dgvNomina.Columns.Contains("id_workGroup_CSV"))
+				{
+					frm.dgvNomina.Columns["id_workGroup_CSV"].Visible = false;
+				}
+
+
 				ConfigurarDgvNomina();
 
 				frm.dgvNomina.ClearSelection();
@@ -1172,6 +1179,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			{
 				sql.CloseConectionWrite();
 			}
+		}
+		public void ActualizarListaCSV()
+		{
+			CargarCuadrillasConCsv(
+				frm.lbCSV,
+				frm.dtpFecha.Value
+			);
 		}
 	}
 }

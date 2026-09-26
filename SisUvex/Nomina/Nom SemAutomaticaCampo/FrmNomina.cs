@@ -89,6 +89,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		private void btnCSV_Click(object sender, EventArgs e)
 		{
 			cls.GenerarArchivoCsv();
+			cls.ActualizarListaCSV();
 		}
 
 		private void tabControl2_DrawItem(object sender, DrawItemEventArgs e)
@@ -407,16 +408,16 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			string[] columnasImporte =
 			{
-		"VIE",
-		"SAB",
-		"DOM",
-		"LUN",
-		"MAR",
-		"MIE",
-		"JUE",
-		"DESCTOS",
-		"IMPORTE NETO"
-	};
+				"VIE",
+				"SAB",
+				"DOM",
+				"LUN",
+				"MAR",
+				"MIE",
+				"JUE",
+				"DESCTOS",
+				"IMPORTE NETO"
+			};
 
 			foreach (string columna in columnasImporte)
 			{
