@@ -22,6 +22,7 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 
 		private void FrmAgregar_Load(object sender, EventArgs e)
 		{
+			cls.CargarDepartamentos(cboDepartamento);
 			if (cls.IsAddOrModify)
 			{
 				// AGREGAR

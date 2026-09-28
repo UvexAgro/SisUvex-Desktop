@@ -22,6 +22,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public ClsReloj clsJ;
 		public ClsAjustesdeNomina clsAjuste;
 		public string IdWorkGroupEmployeeDailyActual { get; set; }
+		private bool asistenciaModificada = false;
 		public class DiaSemana
 		{
 			public string Nombre { get; set; }
@@ -51,6 +52,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvChecador.CellPainting += clsJ.DgvChecador_CellPainting;
 
 			dgvAsistencia.CellPainting += _clsA.DgvAsistencia_CellPainting;
+
+			this.FormClosing += FrmAsistencia_FormClosing;
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
 		{
@@ -530,7 +533,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnGuardar_Click(object sender, EventArgs e)
 		{
-			_clsA.GuardarAsistencia();
+			bool guardado = _clsA.GuardarAsistencia();
+
+			if (guardado)
+			{
+				asistenciaModificada = false;
+			}
 		}
 
 		private void btnES_Click(object sender, EventArgs e)
@@ -1063,6 +1071,386 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			_clsA.JalarActividadSemanaAnterior();
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{ // ==========================================
+		  // VALIDAR EMPLEADO
+		  // ==========================================
+
+			if (dgvCAL.CurrentRow == null)
+			{
+				MessageBox.Show(
+					"Seleccione un empleado.",
+					"Modificar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+
+			// ==========================================
+			// OBTENER EMPLEADO
+			// ==========================================
+
+			DataGridViewRow fila = dgvCAL.CurrentRow;
+
+			string codigo =
+				fila.Cells["Codigo"].Value?.ToString().Trim() ?? "";
+
+			string empleado =
+				fila.Cells["Empleado"].Value?.ToString().Trim() ?? "";
+
+
+			// ==========================================
+			// VALIDAR SEMANA
+			// ==========================================
+
+			if (cboSemana.SelectedIndex < 0)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Modificar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+
+			// ==========================================
+			// OBTENER INFORMACIÓN DE LA SEMANA
+			// ==========================================
+
+			DataRowView semanaSeleccionada =
+				cboSemana.SelectedItem as DataRowView;
+
+			if (semanaSeleccionada == null)
+			{
+				MessageBox.Show(
+					"No se pudo obtener la información de la semana.",
+					"Modificar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			string semana =
+				semanaSeleccionada["c_sequence_per"]
+				?.ToString()
+				.Trim() ?? "";
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semanaSeleccionada["d_startDate_per"]);
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semanaSeleccionada["d_endDate_per"]);
+
+
+			// ==========================================
+			// CUADRILLA
+			// ==========================================
+
+			string idWorkGroup = "";
+			string cuadrilla = "";
+
+			if (cboCuadrilla.SelectedItem is DataRowView filaCuadrilla)
+			{
+				// ID REAL DE Nom_WorkGroup
+				idWorkGroup =
+					filaCuadrilla["id_workGroup"]
+					?.ToString()
+					.Trim() ?? "";
+
+				// Texto que se muestra
+				cuadrilla =
+					filaCuadrilla["Descripcion"]
+					?.ToString()
+					.Trim() ?? "";
+			}
+
+			// ==========================================
+			// ABRIR FORMULARIO
+			// ==========================================
+
+			FrmModificar frm = new FrmModificar();
+
+			frm.CodigoEmpleado = codigo;
+			frm.NombreEmpleado = empleado;
+			frm.Semana = semana;
+			frm.FechaInicio = fechaInicio;
+			frm.FechaFin = fechaFin;
+
+			// Para mostrar
+			frm.IdCuadrilla = cuadrilla;
+
+			// ID REAL para guardar
+			frm.IdWorkGroup = idWorkGroup;
+
+			if (frm.ShowDialog() == DialogResult.OK)
+			{
+				_clsA.CargarCAL();
+			}
+		}
+		private void AbrirFormularioModificar(int rowIndex)
+		{
+			try
+			{
+				// ==========================================
+				// OBTENER EMPLEADO
+				// ==========================================
+
+				DataGridViewRow fila =
+					dgvCAL.Rows[rowIndex];
+
+				string codigo =
+					fila.Cells["Codigo"].Value?
+					.ToString()
+					.Trim() ?? "";
+
+				string empleado =
+					fila.Cells["Empleado"].Value?
+					.ToString()
+					.Trim() ?? "";
+
+				if (string.IsNullOrWhiteSpace(codigo))
+				{
+					MessageBox.Show(
+						"No se encontró el empleado.",
+						"Modificar",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+
+				// ==========================================
+				// VALIDAR SEMANA
+				// ==========================================
+
+				if (cboSemana.SelectedIndex < 0)
+				{
+					MessageBox.Show(
+						"Seleccione una semana.",
+						"Modificar",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+
+					return;
+				}
+
+
+				// ==========================================
+				// OBTENER SEMANA
+				// ==========================================
+
+				DataRowView semanaSeleccionada =
+					cboSemana.SelectedItem as DataRowView;
+
+				if (semanaSeleccionada == null)
+				{
+					MessageBox.Show(
+						"No se pudo obtener la información de la semana.",
+						"Modificar",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+				string semana =
+					semanaSeleccionada["c_sequence_per"]
+					?.ToString()
+					.Trim() ?? "";
+
+				DateTime fechaInicio =
+					Convert.ToDateTime(
+						semanaSeleccionada["d_startDate_per"]);
+
+				DateTime fechaFin =
+					Convert.ToDateTime(
+						semanaSeleccionada["d_endDate_per"]);
+
+
+				// ==========================================
+				// CUADRILLA
+				// ==========================================
+
+				string idWorkGroup = "";
+				string cuadrilla = "";
+
+				if (cboCuadrilla.SelectedItem is DataRowView filaCuadrilla)
+				{
+					// ID REAL
+					idWorkGroup =
+						filaCuadrilla["id_workGroup"]
+						?.ToString()
+						.Trim() ?? "";
+
+					// TEXTO PARA MOSTRAR
+					cuadrilla =
+						filaCuadrilla["Descripcion"]
+						?.ToString()
+						.Trim() ?? "";
+				}
+
+				if (string.IsNullOrWhiteSpace(idWorkGroup))
+				{
+					MessageBox.Show(
+						"No se encontró la cuadrilla.",
+						"Modificar",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+
+				// ==========================================
+				// ABRIR FORMULARIO
+				// ==========================================
+
+				FrmModificar frm =
+					new FrmModificar();
+
+				frm.CodigoEmpleado = codigo;
+				frm.NombreEmpleado = empleado;
+				frm.Semana = semana;
+				frm.FechaInicio = fechaInicio;
+				frm.FechaFin = fechaFin;
+
+				// PARA MOSTRAR
+				frm.IdCuadrilla = cuadrilla;
+
+				// ID REAL PARA GUARDAR
+				frm.IdWorkGroup = idWorkGroup;
+
+
+				if (frm.ShowDialog() == DialogResult.OK)
+				{
+					_clsA.CargarCAL();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al abrir la modificación:\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+		}
+
+		private void dgvCAL_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
+
+			AbrirFormularioModificar(e.RowIndex);
+		}
+
+		private void dgvAsistencia_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+		{
+			if (dgvAsistencia.IsCurrentCellDirty)
+			{
+				dgvAsistencia.CommitEdit(
+					DataGridViewDataErrorContexts.Commit);
+			}
+		}
+
+		private void dgvAsistencia_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
+
+			string nombreColumna =
+				dgvAsistencia.Columns[e.ColumnIndex].Name;
+
+			string[] columnasAsistencia =
+			{
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
+
+			if (columnasAsistencia.Contains(nombreColumna))
+			{
+				asistenciaModificada = true;
+			}
+		}
+
+		private void FrmAsistencia_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// ==========================================
+			// NO HAY CAMBIOS
+			// ==========================================
+
+			if (!asistenciaModificada)
+				return;
+
+
+			// ==========================================
+			// PREGUNTAR AL USUARIO
+			// ==========================================
+
+			DialogResult resultado = MessageBox.Show(
+				"La asistencia tiene cambios que todavía no se han guardado.\n\n" +
+				"¿Desea guardar la asistencia antes de cerrar?",
+				"Asistencia sin guardar",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Warning);
+
+
+			// ==========================================
+			// SÍ
+			// ==========================================
+
+			if (resultado == DialogResult.Yes)
+			{
+				bool guardado = _clsA.GuardarAsistencia();
+
+				if (guardado)
+				{
+					asistenciaModificada = false;
+				}
+				else
+				{
+					// No cerrar si no se pudo guardar
+					e.Cancel = true;
+				}
+			}
+
+
+			// ==========================================
+			// NO
+			// ==========================================
+
+			else if (resultado == DialogResult.No)
+			{
+				// Cerrar sin guardar
+				asistenciaModificada = false;
+			}
+
+
+			// ==========================================
+			// CANCELAR
+			// ==========================================
+
+			else if (resultado == DialogResult.Cancel)
+			{
+				// Permanecer en el formulario
+				e.Cancel = true;
+			}
 		}
 	}
 }

@@ -59,11 +59,11 @@
 			label2 = new Label();
 			pictureBox1 = new PictureBox();
 			panel3 = new Panel();
+			btnActividad = new Button();
 			cboSemana = new ComboBox();
 			label5 = new Label();
 			button1 = new Button();
 			btnActulizar = new Button();
-			btnHorizontal = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvCuadrilla).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -197,7 +197,6 @@
 			// 
 			panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel2.BackColor = SystemColors.ControlLightLight;
-			panel2.Controls.Add(btnHorizontal);
 			panel2.Controls.Add(btnVertical);
 			panel2.Controls.Add(btnImprimir2);
 			panel2.Controls.Add(pnlSinEmpleados);
@@ -224,7 +223,7 @@
 			btnVertical.Padding = new Padding(16, 0, 25, 0);
 			btnVertical.Size = new Size(143, 47);
 			btnVertical.TabIndex = 42;
-			btnVertical.Text = "Vertical";
+			btnVertical.Text = "Imprimir";
 			btnVertical.TextAlign = ContentAlignment.BottomCenter;
 			btnVertical.UseVisualStyleBackColor = true;
 			btnVertical.Click += btnVertical_Click;
@@ -438,6 +437,7 @@
 			// 
 			panel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel3.BackColor = Color.FromArgb(245, 247, 250);
+			panel3.Controls.Add(btnActividad);
 			panel3.Controls.Add(cboSemana);
 			panel3.Controls.Add(label5);
 			panel3.Controls.Add(button1);
@@ -449,6 +449,22 @@
 			panel3.Name = "panel3";
 			panel3.Size = new Size(1583, 89);
 			panel3.TabIndex = 2;
+			// 
+			// btnActividad
+			// 
+			btnActividad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnActividad.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnActividad.Image = (Image)resources.GetObject("btnActividad.Image");
+			btnActividad.ImageAlign = ContentAlignment.MiddleLeft;
+			btnActividad.Location = new Point(943, 21);
+			btnActividad.Name = "btnActividad";
+			btnActividad.Padding = new Padding(30, 0, 30, 0);
+			btnActividad.Size = new Size(170, 44);
+			btnActividad.TabIndex = 47;
+			btnActividad.Text = "Actividad";
+			btnActividad.TextAlign = ContentAlignment.MiddleRight;
+			btnActividad.UseVisualStyleBackColor = true;
+			btnActividad.Click += btnActividad_Click;
 			// 
 			// cboSemana
 			// 
@@ -500,21 +516,6 @@
 			btnActulizar.TextAlign = ContentAlignment.MiddleRight;
 			btnActulizar.UseVisualStyleBackColor = true;
 			btnActulizar.Click += btnActulizar_Click;
-			// 
-			// btnHorizontal
-			// 
-			btnHorizontal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnHorizontal.Image = Properties.Resources.impresora;
-			btnHorizontal.ImageAlign = ContentAlignment.TopCenter;
-			btnHorizontal.Location = new Point(452, 125);
-			btnHorizontal.Name = "btnHorizontal";
-			btnHorizontal.Padding = new Padding(16, 0, 25, 0);
-			btnHorizontal.Size = new Size(141, 47);
-			btnHorizontal.TabIndex = 43;
-			btnHorizontal.Text = "Horizontal";
-			btnHorizontal.TextAlign = ContentAlignment.BottomCenter;
-			btnHorizontal.UseVisualStyleBackColor = true;
-			btnHorizontal.Click += btnHorizontal_Click;
 			// 
 			// FrmListados
 			// 
@@ -578,6 +579,6 @@
 		private Label label5;
 		public Button btnImprimir2;
 		public Button btnVertical;
-		public Button btnHorizontal;
+		public Button btnActividad;
 	}
 }

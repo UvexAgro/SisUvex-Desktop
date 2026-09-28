@@ -922,5 +922,15 @@ namespace SisUvex
 			ClsDiningHall cls = new ClsDiningHall();
 			AbrirVentanaHijo(cls._frmCat, 1);
 		}
+
+		private void departamentoToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (!User.HasViewCatalogsPermission())
+				return;
+
+			Nomina.Cat_Departamentos.FrmDepartamento cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat);
+		}
 	}
 }
