@@ -586,52 +586,73 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						.ToString()
 						.Trim();
 
+					if (string.IsNullOrWhiteSpace(codigoEmpleado))
+						continue;
+
 					// ==========================================
-					// OBTENER IDs REALES DE LA FILA
+					// OBTENER IDs REALES
 					// ==========================================
 
 					string idActividad =
 						fila.Cells["IdActividad"].Value?
 						.ToString()
-						.Trim();
+						.Trim() ?? "";
 
 					string idVariedad =
 						fila.Cells["IdVariedad"].Value?
 						.ToString()
-						.Trim();
+						.Trim() ?? "";
 
 					string idLote =
 						fila.Cells["IdLote"].Value?
 						.ToString()
-						.Trim();
+						.Trim() ?? "";
 
 					// ==========================================
-					// VALIDAR EMPLEADO
+					// DETERMINAR QUÉ TIENE LA FILA
 					// ==========================================
 
-					if (string.IsNullOrWhiteSpace(codigoEmpleado))
+					bool tieneActividad =
+						!string.IsNullOrWhiteSpace(idActividad);
+
+					bool tieneVariedad =
+						!string.IsNullOrWhiteSpace(idVariedad);
+
+					bool tieneLote =
+						!string.IsNullOrWhiteSpace(idLote);
+
+					// ==========================================
+					// COMBINACIONES PERMITIDAS
+					// ==========================================
+
+					// Actividad sola
+					bool actividadSola =
+						tieneActividad &&
+						!tieneLote &&
+						!tieneVariedad;
+
+					// Lote + variedad
+					bool loteConVariedad =
+						!tieneActividad &&
+						tieneLote &&
+						tieneVariedad;
+
+					// Actividad + lote + variedad
+					bool actividadLoteVariedad =
+						tieneActividad &&
+						tieneLote &&
+						tieneVariedad;
+
+					// ==========================================
+					// VALIDAR COMBINACIÓN
+					// ==========================================
+
+					if (!actividadSola &&
+						!loteConVariedad &&
+						!actividadLoteVariedad)
+					{
 						continue;
-
-					// ==========================================
-					// VALIDAR ACTIVIDAD
-					// ==========================================
-
-					if (string.IsNullOrWhiteSpace(idActividad))
-						continue;
-
-					// ==========================================
-					// VALIDAR VARIEDAD
-					// ==========================================
-
-					if (string.IsNullOrWhiteSpace(idVariedad))
-						continue;
-
-					// ==========================================
-					// VALIDAR LOTE
-					// ==========================================
-
-					if (string.IsNullOrWhiteSpace(idLote))
-						continue;
+					}
 
 					// ==========================================
 					// GUARDAR ESTA FILA
@@ -658,13 +679,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				if (empleadosGuardados == 0)
 				{
 					MessageBox.Show(
-						"No hay empleados con actividad, variedad y lote asignados.",
+						"No hay empleados con una combinación válida.\n\n" +
+						"Puede guardar:\n" +
+						"• Actividad sola\n" +
+						"• Lote + variedad\n" +
+						"• Actividad + lote + variedad",
 						"Guardar",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning);
 
 					return;
 				}
+
+				// ==========================================
+				// MENSAJE DE ÉXITO
+				// ==========================================
 
 				MessageBox.Show(
 					$"La información se guardó correctamente.\n\n" +

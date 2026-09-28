@@ -18,6 +18,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private bool eventosSeleccionConfigurados = false;
 		public FrmAgregarLoteyActividad frmCAL;
 		public bool cargandoCultivos = false;
+		public FrmModificar frmM;
 		public void CargarDiasRegistro(DateTime fechaInicio)
 		{
 			frmCAL.cboFecha.Items.Clear();

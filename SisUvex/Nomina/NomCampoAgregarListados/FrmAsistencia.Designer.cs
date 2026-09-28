@@ -78,6 +78,7 @@
 			btnJalarActividad = new Button();
 			btnCAL = new Button();
 			panel10 = new Panel();
+			button2 = new Button();
 			label14 = new Label();
 			btnJalar = new Button();
 			cboDia = new ComboBox();
@@ -662,6 +663,7 @@
 			panel10.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel10.BackColor = SystemColors.Control;
 			panel10.BorderStyle = BorderStyle.FixedSingle;
+			panel10.Controls.Add(button2);
 			panel10.Controls.Add(label14);
 			panel10.Controls.Add(btnJalar);
 			panel10.Controls.Add(cboDia);
@@ -672,6 +674,22 @@
 			panel10.Name = "panel10";
 			panel10.Size = new Size(772, 383);
 			panel10.TabIndex = 34;
+			// 
+			// button2
+			// 
+			button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			button2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button2.Image = (Image)resources.GetObject("button2.Image");
+			button2.ImageAlign = ContentAlignment.MiddleLeft;
+			button2.Location = new Point(3, 58);
+			button2.Name = "button2";
+			button2.Padding = new Padding(20, 0, 20, 0);
+			button2.Size = new Size(232, 39);
+			button2.TabIndex = 38;
+			button2.Text = "Modificar Lote y Actividad";
+			button2.TextAlign = ContentAlignment.MiddleRight;
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// label14
 			// 
@@ -766,6 +784,7 @@
 			dgvCAL.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvCAL.Size = new Size(772, 275);
 			dgvCAL.TabIndex = 30;
+			dgvCAL.CellDoubleClick += dgvCAL_CellDoubleClick;
 			dgvCAL.ColumnHeaderMouseClick += dgvCAL_ColumnHeaderMouseClick;
 			dgvCAL.ColumnHeaderMouseDoubleClick += dgvCAL_ColumnHeaderMouseDoubleClick;
 			// 
@@ -1024,5 +1043,6 @@
 		private Label label18;
 		public ComboBox cboDiaChecador;
 		private Button btnJalarActividad;
+		private Button button2;
 	}
 }
