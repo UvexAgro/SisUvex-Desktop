@@ -890,6 +890,8 @@
 			dgvAsistencia.TabIndex = 14;
 			dgvAsistencia.CellClick += dgvAsistencia_CellClick;
 			dgvAsistencia.CellContentClick += dgvAsistencia_CellContentClick;
+			dgvAsistencia.CellValueChanged += dgvAsistencia_CellValueChanged;
+			dgvAsistencia.CurrentCellDirtyStateChanged += dgvAsistencia_CurrentCellDirtyStateChanged;
 			// 
 			// cboSemana
 			// 
@@ -949,6 +951,7 @@
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAsistencia";
 			Text = "Lista de Asistencia ";
+			FormClosing += FrmAsistencia_FormClosing;
 			Load += FrmAsistencia_Load;
 			tableLayoutPanel1.ResumeLayout(false);
 			panel2.ResumeLayout(false);

@@ -1534,20 +1534,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void GuardarAsistencia()
+		public bool GuardarAsistencia()
 		{
 			_frmA.dgvAsistencia.EndEdit();
 
 			if (_frmA.cboCuadrilla.SelectedIndex == -1)
-				return;
+				return false;
 
 			if (_frmA.cboSemana.SelectedIndex == -1)
-				return;
+				return false;
 
 			DataRow semana = ObtenerSemanaSeleccionada();
 
 			if (semana == null)
-				return;
+				return false;
 
 			string cSequencePer =
 				semana["c_sequence_per"].ToString().Trim();
@@ -1568,18 +1568,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				.Trim();
 
 			if (string.IsNullOrWhiteSpace(idCuadrillaActual))
-				return;
+				return false;
 
 			string[] dias =
 			{
-				"Vie",
-				"Sab",
-				"Dom",
-				"Lun",
-				"Mar",
-				"Mie",
-				"Jue"
-			};
+		"Vie",
+		"Sab",
+		"Dom",
+		"Lun",
+		"Mar",
+		"Mie",
+		"Jue"
+	};
 
 
 			// ==========================================
@@ -1593,7 +1593,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					fechaFin);
 
 			if (dtAsistencia == null)
-				return;
+				return false;
 
 
 			// ==========================================
@@ -1694,7 +1694,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 
-				return;
+				return false;
 			}
 
 
@@ -1716,7 +1716,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 
-				// Buscar registro existente
+				// ==========================================
+				// BUSCAR REGISTRO EXISTENTE
+				// ==========================================
+
 				DataRow[] registros =
 					dtAsistencia.Select(
 						$"id_employee = '{idEmployee.Replace("'", "''")}'");
@@ -1757,7 +1760,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						"id_workGroup_" + dias[d].ToLower();
 
 
-					// No existe registro todavía
+					// ======================================
+					// NO EXISTE REGISTRO TODAVÍA
+					// ======================================
+
 					if (existente == null)
 					{
 						cuadrillas[d] =
@@ -1847,6 +1853,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Asistencia",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
+
+			return true;
 		}
 		private bool ObtenerValorCheckBox(DataGridViewRow fila,string columna)
 		{

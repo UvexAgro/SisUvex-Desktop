@@ -22,6 +22,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public ClsReloj clsJ;
 		public ClsAjustesdeNomina clsAjuste;
 		public string IdWorkGroupEmployeeDailyActual { get; set; }
+		private bool asistenciaModificada = false;
 		public class DiaSemana
 		{
 			public string Nombre { get; set; }
@@ -51,6 +52,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgvChecador.CellPainting += clsJ.DgvChecador_CellPainting;
 
 			dgvAsistencia.CellPainting += _clsA.DgvAsistencia_CellPainting;
+
+			this.FormClosing += FrmAsistencia_FormClosing;
 		}
 		private void HasEditCatalogsPermission() //metodo para dar permisos al usuario 
 		{
@@ -530,7 +533,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void btnGuardar_Click(object sender, EventArgs e)
 		{
-			_clsA.GuardarAsistencia();
+			bool guardado = _clsA.GuardarAsistencia();
+
+			if (guardado)
+			{
+				asistenciaModificada = false;
+			}
 		}
 
 		private void btnES_Click(object sender, EventArgs e)
@@ -1345,6 +1353,104 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 
 			AbrirFormularioModificar(e.RowIndex);
+		}
+
+		private void dgvAsistencia_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+		{
+			if (dgvAsistencia.IsCurrentCellDirty)
+			{
+				dgvAsistencia.CommitEdit(
+					DataGridViewDataErrorContexts.Commit);
+			}
+		}
+
+		private void dgvAsistencia_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
+
+			string nombreColumna =
+				dgvAsistencia.Columns[e.ColumnIndex].Name;
+
+			string[] columnasAsistencia =
+			{
+				"Vie",
+				"Sab",
+				"Dom",
+				"Lun",
+				"Mar",
+				"Mie",
+				"Jue"
+			};
+
+			if (columnasAsistencia.Contains(nombreColumna))
+			{
+				asistenciaModificada = true;
+			}
+		}
+
+		private void FrmAsistencia_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// ==========================================
+			// NO HAY CAMBIOS
+			// ==========================================
+
+			if (!asistenciaModificada)
+				return;
+
+
+			// ==========================================
+			// PREGUNTAR AL USUARIO
+			// ==========================================
+
+			DialogResult resultado = MessageBox.Show(
+				"La asistencia tiene cambios que todavía no se han guardado.\n\n" +
+				"¿Desea guardar la asistencia antes de cerrar?",
+				"Asistencia sin guardar",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Warning);
+
+
+			// ==========================================
+			// SÍ
+			// ==========================================
+
+			if (resultado == DialogResult.Yes)
+			{
+				bool guardado = _clsA.GuardarAsistencia();
+
+				if (guardado)
+				{
+					asistenciaModificada = false;
+				}
+				else
+				{
+					// No cerrar si no se pudo guardar
+					e.Cancel = true;
+				}
+			}
+
+
+			// ==========================================
+			// NO
+			// ==========================================
+
+			else if (resultado == DialogResult.No)
+			{
+				// Cerrar sin guardar
+				asistenciaModificada = false;
+			}
+
+
+			// ==========================================
+			// CANCELAR
+			// ==========================================
+
+			else if (resultado == DialogResult.Cancel)
+			{
+				// Permanecer en el formulario
+				e.Cancel = true;
+			}
 		}
 	}
 }
