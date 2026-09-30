@@ -977,23 +977,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				string[] valores =
 				{
-			fila["Codigo"]?.ToString() ?? "",
-			fila["Nom_Employee"]?.ToString() ?? "",
-			"", // VIE
-            "", // SÁB
-            "", // DOM
-            "", // LUN
-            "", // MAR
-            "", // MIÉ
-            ""  // JUE
-        };
+		fila["Codigo"]?.ToString() ?? "",
+		fila["Nom_Employee"]?.ToString() ?? "",
+		"", // VIE
+		"", // SÁB
+		"", // DOM
+		"", // LUN
+		"", // MAR
+		"", // MIÉ
+		""  // JUE
+	};
 
 				for (int i = 0; i < valores.Length; i++)
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetPadding(5)
-							.SetMinHeight(30)
+							.SetPadding(2)
+							.SetMinHeight(20)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
@@ -1015,7 +1015,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					celda.Add(
 						new iText.Layout.Element.Paragraph(
 							valores[i])
-							.SetFontSize(12)
+							.SetFontSize(8)
 							.SetMargin(0));
 
 					tabla.AddCell(celda);
@@ -1032,8 +1032,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetMinHeight(20)
-							.SetPadding(5)
+							.SetMinHeight(18)
+							.SetPadding(2)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
@@ -1047,7 +1047,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
-							.SetFontSize(12)
+							.SetFontSize(9)
 							.SetMargin(0));
 
 					tabla.AddCell(celda);
@@ -2019,7 +2019,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				celda.Add(
 					new iText.Layout.Element.Paragraph(
 						encabezado)
-						.SetFontSize(9));
+						.SetFontSize(8));
 
 				tabla.AddHeaderCell(celda);
 			}
@@ -2040,35 +2040,32 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				string actividad =
 					fila["Actividad"]?.ToString() ?? "";
 
-
 				string[] valores =
 				{
-			codigo,
-			empleado,
-			actividad,
-			"",
-			"",
-			"",
-			""
-		};
-
+		codigo,
+		empleado,
+		actividad,
+		"",
+		"",
+		"",
+		""
+	};
 
 				for (int i = 0; i < valores.Length; i++)
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetPaddingTop(2)
-							.SetPaddingBottom(2)
-							.SetPaddingLeft(3)
-							.SetPaddingRight(3)
-							.SetMinHeight(20)
+							.SetPaddingTop(1)
+							.SetPaddingBottom(1)
+							.SetPaddingLeft(2)
+							.SetPaddingRight(2)
+							.SetMinHeight(18)
 							.SetVerticalAlignment(
 								iText.Layout.Properties.VerticalAlignment.MIDDLE)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
 									0.5f));
-
 
 					if (i == 0 || i >= 3)
 					{
@@ -2081,13 +2078,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.LEFT);
 					}
 
-
 					celda.Add(
 						new iText.Layout.Element.Paragraph(
 							valores[i])
-							.SetFontSize(9)
+							.SetFontSize(8)
 							.SetMargin(0));
-
 
 					tabla.AddCell(celda);
 				}
@@ -2104,8 +2099,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetMinHeight(30)
-							.SetPadding(5)
+							.SetMinHeight(18)
+							.SetPaddingTop(1)
+							.SetPaddingBottom(1)
+							.SetPaddingLeft(2)
+							.SetPaddingRight(2)
+							.SetVerticalAlignment(
+								iText.Layout.Properties.VerticalAlignment.MIDDLE)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
@@ -2113,12 +2113,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
-							.SetFontSize(11));
+							.SetFontSize(8)
+							.SetMargin(0));
 
 					tabla.AddCell(celda);
 				}
 			}
-
 
 			document.Add(tabla);
 		}
@@ -2144,13 +2144,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			if (horizontal)
 			{
-				// CARTA HORIZONTAL
 				pdf.SetDefaultPageSize(
 					iText.Kernel.Geom.PageSize.LETTER.Rotate());
 			}
 			else
 			{
-				// CARTA VERTICAL
 				pdf.SetDefaultPageSize(
 					iText.Kernel.Geom.PageSize.LETTER);
 			}
@@ -2165,9 +2163,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ==========================================
 
 			document.SetMargins(25, 20, 25, 20);
-
-
-			bool primeraLista = true;
 
 
 			// ==========================================
@@ -2185,22 +2180,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 
-				if (!primeraLista)
-				{
-					document.Add(
-						new iText.Layout.Element.AreaBreak(
-							iText.Layout.Properties.AreaBreakType
-								.NEXT_PAGE));
-				}
-
+				// ======================================
+				// SIN SALTO DE PÁGINA
+				// LAS CUADRILLAS SALEN CORRIDAS
+				// ======================================
 
 				CrearPaginaAsistenciaCuadrilla(
 					document,
 					dt,
 					horizontal);
-
-
-				primeraLista = false;
 			}
 
 
@@ -2434,41 +2422,35 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				string empleado =
 					fila["Nom_Employee"]?.ToString() ?? "";
 
-
 				string[] valores =
 				{
-			codigo,
-			empleado,
-			"", // VIE
-            "", // SÁB
-            "", // DOM
-            "", // LUN
-            "", // MAR
-            "", // MIÉ
-            ""  // JUE
-        };
-
+		codigo,
+		empleado,
+		"", // VIE
+		"", // SÁB
+		"", // DOM
+		"", // LUN
+		"", // MAR
+		"", // MIÉ
+		""  // JUE
+	};
 
 				for (int i = 0; i < valores.Length; i++)
 				{
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
-							.SetPadding(
-								horizontal ? 4 : 3)
+							.SetPaddingTop(1)
+							.SetPaddingBottom(1)
+							.SetPaddingLeft(2)
+							.SetPaddingRight(2)
 							.SetMinHeight(
-								horizontal ? 30 : 25)
-							.SetKeepTogether(true)
+								horizontal ? 18 : 17)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
 									0.5f))
 							.SetVerticalAlignment(
 								iText.Layout.Properties.VerticalAlignment.MIDDLE);
-
-
-					// ==================================
-					// ALINEACIÓN
-					// ==================================
 
 					if (i >= 2)
 					{
@@ -2481,23 +2463,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.LEFT);
 					}
 
-
-					// ==================================
-					// TEXTO
-					// ==================================
-
 					celda.Add(
 						new iText.Layout.Element.Paragraph(
 							valores[i])
 							.SetFontSize(
-								horizontal ? 9 : 8)
+								horizontal ? 8 : 7)
 							.SetMargin(0));
-
 
 					tabla.AddCell(celda);
 				}
 			}
-
 
 			// ==========================================
 			// FILAS VACÍAS
@@ -2510,14 +2485,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					iText.Layout.Element.Cell celda =
 						new iText.Layout.Element.Cell()
 							.SetMinHeight(
-								horizontal ? 30 : 25)
-							.SetPadding(
-								horizontal ? 4 : 3)
+								horizontal ? 18 : 17)
+							.SetPaddingTop(1)
+							.SetPaddingBottom(1)
+							.SetPaddingLeft(2)
+							.SetPaddingRight(2)
 							.SetBorder(
 								new iText.Layout.Borders.SolidBorder(
 									colorBorde,
 									0.5f));
-
 
 					if (i >= 2)
 					{
@@ -2525,12 +2501,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							iText.Layout.Properties.TextAlignment.CENTER);
 					}
 
-
 					celda.Add(
 						new iText.Layout.Element.Paragraph(" ")
-							.SetFontSize(10)
+							.SetFontSize(8)
 							.SetMargin(0));
-
 
 					tabla.AddCell(celda);
 				}
