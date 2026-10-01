@@ -88,7 +88,7 @@
 			label13 = new Label();
 			pictureBox6 = new PictureBox();
 			panel3 = new Panel();
-			btnImprimir = new Button();
+			btnEstado = new Button();
 			btnGuardar = new Button();
 			dgvAsistencia = new DataGridView();
 			cboSemana = new ComboBox();
@@ -612,7 +612,7 @@
 			panel1.Controls.Add(label13);
 			panel1.Controls.Add(pictureBox6);
 			panel1.Controls.Add(panel3);
-			panel1.Controls.Add(btnImprimir);
+			panel1.Controls.Add(btnEstado);
 			panel1.Controls.Add(btnGuardar);
 			panel1.Controls.Add(dgvAsistencia);
 			panel1.Controls.Add(cboSemana);
@@ -818,21 +818,20 @@
 			panel3.Size = new Size(750, 1);
 			panel3.TabIndex = 23;
 			// 
-			// btnImprimir
+			// btnEstado
 			// 
-			btnImprimir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
-			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(592, 18);
-			btnImprimir.Name = "btnImprimir";
-			btnImprimir.Padding = new Padding(16, 0, 25, 0);
-			btnImprimir.Size = new Size(166, 39);
-			btnImprimir.TabIndex = 22;
-			btnImprimir.Text = "Imprimir Listas";
-			btnImprimir.TextAlign = ContentAlignment.MiddleRight;
-			btnImprimir.UseVisualStyleBackColor = true;
-			btnImprimir.Click += btnImprimir_Click;
+			btnEstado.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnEstado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnEstado.ImageAlign = ContentAlignment.MiddleLeft;
+			btnEstado.Location = new Point(592, 18);
+			btnEstado.Name = "btnEstado";
+			btnEstado.Padding = new Padding(16, 0, 25, 0);
+			btnEstado.Size = new Size(166, 39);
+			btnEstado.TabIndex = 22;
+			btnEstado.Text = "Estado de Cuadrilla";
+			btnEstado.TextAlign = ContentAlignment.MiddleRight;
+			btnEstado.UseVisualStyleBackColor = true;
+			btnEstado.Click += btnEstado_Click;
 			// 
 			// btnGuardar
 			// 
@@ -996,7 +995,7 @@
 		public ComboBox cboCuadrilla;
 		public ComboBox cboSemana;
 		private Button btnGuardar;
-		public Button btnImprimir;
+		public Button btnEstado;
 		private Label label7;
 		private Label label10;
 		private Label label9;

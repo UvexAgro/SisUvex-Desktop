@@ -221,6 +221,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ==========================================
+			// PREGUNTAR ORIENTACIÓN
+			// ==========================================
+
+			DialogResult resultado = MessageBox.Show(
+				"¿Cómo desea imprimir las listas?\n\n" +
+				"Sí = Vertical\n" +
+				"No = Horizontal",
+				"Orientación de impresión",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question);
+
+			if (resultado == DialogResult.Cancel)
+				return;
+
+			// Sí = Vertical
+			// No = Horizontal
+			bool horizontal =
+				resultado == DialogResult.No;
+
 			string idSemana =
 				cboSemana.SelectedValue.ToString();
 
@@ -228,16 +248,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				Cursor.Current = Cursors.WaitCursor;
 
-				// Cambia ClsJ por el nombre real de tu clase.
+				// ==========================================
+				// GENERAR PDF
+				// ==========================================
+
 				MemoryStream pdf =
-					cls.GenerarPdfListasCuadrillas(
+					cls.GenerarPdfListas(
 						cuadrillasSeleccionadas,
-						idSemana);
+						idSemana,
+						horizontal);
+
+				// ==========================================
+				// NOMBRE DEL ARCHIVO
+				// ==========================================
+
+				string nombreArchivo =
+					horizontal
+						? "ListasCuadrillasHorizontal.pdf"
+						: "ListasCuadrillasVertical.pdf";
+
+				// ==========================================
+				// GUARDAR PDF
+				// ==========================================
 
 				string ruta =
 					Path.Combine(
 						Path.GetTempPath(),
-						"ListasCuadrillas.pdf");
+						nombreArchivo);
 
 				using (FileStream archivo =
 					new FileStream(
@@ -247,6 +284,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					pdf.CopyTo(archivo);
 				}
+
+				// ==========================================
+				// ABRIR PDF
+				// ==========================================
 
 				System.Diagnostics.Process.Start(
 					new System.Diagnostics.ProcessStartInfo
@@ -258,7 +299,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al generar las listas:\n" + ex.Message,
+					"Error al generar el PDF:\n\n" +
+					ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);

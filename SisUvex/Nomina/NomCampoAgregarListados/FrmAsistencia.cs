@@ -207,35 +207,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				cboCuadrilla.SelectedValue?.ToString(),
 				out idWorkGroup);
 		}
-		private void btnImprimir_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				if (dgvAsistencia.Rows.Count == 0)
-				{
-					MessageBox.Show(
-						"No hay empleados para imprimir.",
-						"Imprimir asistencia",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
-
-					return;
-				}
-
-				MemoryStream ms =
-					_clsA.GenerarPdfAsistenciaCuadrilla(dgvAsistencia);
-
-				_clsA.ShowPdfViewer(ms);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"Error al generar el PDF:\n" + ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-			}
-		}
 
 		private void dgvAsistencia_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -1451,6 +1422,45 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				// Permanecer en el formulario
 				e.Cancel = true;
 			}
+		}
+
+		private void btnEstado_Click(object sender, EventArgs e)
+		{
+			if (cboSemana.SelectedIndex == -1)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			DataRowView semanaView =
+				cboSemana.SelectedItem as DataRowView;
+
+			if (semanaView == null)
+				return;
+
+			DataRow semana = semanaView.Row;
+
+			string sequencePer =
+				semana["c_sequence_per"].ToString().Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(semana["d_startDate_per"]);
+
+			DateTime fechaFin =
+				Convert.ToDateTime(semana["d_endDate_per"]);
+
+			FrmObservaciones frm =
+				new FrmObservaciones(
+					sequencePer,
+					fechaInicio,
+					fechaFin);
+
+			frm.ShowDialog();
 		}
 	}
 }
