@@ -1563,7 +1563,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// =====================================================
 
 			dgv.DefaultCellStyle.Font =
-				new Font("Segoe UI", 8F);
+				new Font("Segoe UI", 12F);
 
 			dgv.DefaultCellStyle.Padding =
 				new Padding(1, 0, 1, 0);

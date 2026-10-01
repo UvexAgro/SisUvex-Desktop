@@ -86,7 +86,7 @@
 			panel1.Controls.Add(dgvCuadrilla);
 			panel1.Location = new Point(12, 110);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(377, 897);
+			panel1.Size = new Size(444, 897);
 			panel1.TabIndex = 0;
 			// 
 			// btnMostrar
@@ -150,7 +150,7 @@
 			dgvCuadrilla.RowHeadersVisible = false;
 			dgvCuadrilla.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadrilla.Size = new Size(371, 719);
+			dgvCuadrilla.Size = new Size(438, 719);
 			dgvCuadrilla.TabIndex = 14;
 			dgvCuadrilla.CellPainting += dgvCuadrilla_CellPainting;
 			// 
@@ -189,7 +189,7 @@
 			pictureBox2.Anchor = AnchorStyles.None;
 			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
 			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(629, 222);
+			pictureBox2.Location = new Point(595, 222);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(120, 92);
 			pictureBox2.TabIndex = 17;
@@ -210,9 +210,9 @@
 			panel2.Controls.Add(lblCuadrilla);
 			panel2.Controls.Add(label4);
 			panel2.Controls.Add(dgvListado);
-			panel2.Location = new Point(392, 110);
+			panel2.Location = new Point(459, 110);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(1344, 897);
+			panel2.Size = new Size(1277, 897);
 			panel2.TabIndex = 1;
 			// 
 			// btnVertical
@@ -238,7 +238,7 @@
 			pnlSinEmpleados.Controls.Add(label7);
 			pnlSinEmpleados.Location = new Point(5, 239);
 			pnlSinEmpleados.Name = "pnlSinEmpleados";
-			pnlSinEmpleados.Size = new Size(1336, 627);
+			pnlSinEmpleados.Size = new Size(1269, 627);
 			pnlSinEmpleados.TabIndex = 41;
 			// 
 			// label8
@@ -248,7 +248,7 @@
 			label8.BackColor = Color.Transparent;
 			label8.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label8.ForeColor = Color.DimGray;
-			label8.Location = new Point(570, 377);
+			label8.Location = new Point(536, 377);
 			label8.Name = "label8";
 			label8.Size = new Size(239, 17);
 			label8.TabIndex = 2;
@@ -259,7 +259,7 @@
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label7.Location = new Point(554, 335);
+			label7.Location = new Point(520, 335);
 			label7.Name = "label7";
 			label7.Size = new Size(270, 25);
 			label7.TabIndex = 1;
@@ -272,7 +272,7 @@
 			panel5.Controls.Add(label6);
 			panel5.Controls.Add(lblNumeroTotal);
 			panel5.Controls.Add(lblTotalEmpleados);
-			panel5.Location = new Point(1100, 10);
+			panel5.Location = new Point(1033, 10);
 			panel5.Name = "panel5";
 			panel5.Size = new Size(200, 84);
 			panel5.TabIndex = 40;
@@ -312,7 +312,7 @@
 			panel4.BackColor = Color.Silver;
 			panel4.Location = new Point(21, 110);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(1304, 1);
+			panel4.Size = new Size(1237, 1);
 			panel4.TabIndex = 39;
 			// 
 			// btnQuitar
@@ -401,7 +401,7 @@
 			dgvListado.RowHeadersVisible = false;
 			dgvListado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListado.Size = new Size(1338, 711);
+			dgvListado.Size = new Size(1271, 711);
 			dgvListado.TabIndex = 13;
 			// 
 			// label1
