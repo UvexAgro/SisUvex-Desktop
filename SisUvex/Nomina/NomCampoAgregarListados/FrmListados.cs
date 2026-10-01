@@ -221,6 +221,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+			// ==========================================
+			// PREGUNTAR ORIENTACIÓN
+			// ==========================================
+
+			DialogResult resultado = MessageBox.Show(
+				"¿Cómo desea imprimir las listas?\n\n" +
+				"Sí = Vertical\n" +
+				"No = Horizontal",
+				"Orientación de impresión",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question);
+
+			if (resultado == DialogResult.Cancel)
+				return;
+
+			// Sí = Vertical
+			// No = Horizontal
+			bool horizontal =
+				resultado == DialogResult.No;
+
 			string idSemana =
 				cboSemana.SelectedValue.ToString();
 
@@ -228,16 +248,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				Cursor.Current = Cursors.WaitCursor;
 
-				// Cambia ClsJ por el nombre real de tu clase.
+				// ==========================================
+				// GENERAR PDF
+				// ==========================================
+
 				MemoryStream pdf =
-					cls.GenerarPdfListasCuadrillas(
+					cls.GenerarPdfListas(
 						cuadrillasSeleccionadas,
-						idSemana);
+						idSemana,
+						horizontal);
+
+				// ==========================================
+				// NOMBRE DEL ARCHIVO
+				// ==========================================
+
+				string nombreArchivo =
+					horizontal
+						? "ListasCuadrillasHorizontal.pdf"
+						: "ListasCuadrillasVertical.pdf";
+
+				// ==========================================
+				// GUARDAR PDF
+				// ==========================================
 
 				string ruta =
 					Path.Combine(
 						Path.GetTempPath(),
-						"ListasCuadrillas.pdf");
+						nombreArchivo);
 
 				using (FileStream archivo =
 					new FileStream(
@@ -247,6 +284,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					pdf.CopyTo(archivo);
 				}
+
+				// ==========================================
+				// ABRIR PDF
+				// ==========================================
 
 				System.Diagnostics.Process.Start(
 					new System.Diagnostics.ProcessStartInfo
@@ -258,7 +299,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al generar las listas:\n" + ex.Message,
+					"Error al generar el PDF:\n\n" +
+					ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -500,10 +542,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				// GENERAR PDF
 				// ==========================================
 
+				DialogResult resultado = MessageBox.Show(
+					"¿Desea imprimir en horizontal?\n\n" +
+					"Sí = Horizontal\n" +
+					"No = Vertical",
+					"Orientación",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question);
+
+				if (resultado == DialogResult.Cancel)
+					return;
+
+				bool horizontal = resultado == DialogResult.Yes;
+
 				MemoryStream pdf =
 					cls.PdfListasCuadrillas(
 						cuadrillasSeleccionadas,
-						idSemana);
+						idSemana,
+						horizontal);
 
 				// ==========================================
 				// GUARDAR PDF TEMPORAL
@@ -552,7 +608,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		private void btnVertical_Click(object sender, EventArgs e)
 		{
 			List<string> cuadrillasSeleccionadas =
-		   cls.ObtenerCuadrillasSeleccionadas();
+	   cls.ObtenerCuadrillasSeleccionadas();
 
 			if (cuadrillasSeleccionadas.Count == 0)
 			{
@@ -576,22 +632,64 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+
+			// ==========================================
+			// PREGUNTAR ORIENTACIÓN
+			// ==========================================
+
+			DialogResult resultado = MessageBox.Show(
+				"¿Desea imprimir en VERTICAL?\n\n" +
+				"Sí = Vertical\n" +
+				"No = Horizontal",
+				"Orientación de impresión",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question);
+
+			if (resultado == DialogResult.Cancel)
+				return;
+
+
+			// Sí = Vertical
+			// No = Horizontal
+			bool horizontal =
+				resultado == DialogResult.No;
+
+
 			string idSemana =
 				cboSemana.SelectedValue.ToString();
+
 
 			try
 			{
 				Cursor.Current = Cursors.WaitCursor;
 
+
+				// ==========================================
+				// GENERAR PDF
+				// ==========================================
+
 				MemoryStream pdf =
-					cls.GenerarPdfListasCuadrillasVertical(
+					cls.GenerarPdfListasCuadrillas(
 						cuadrillasSeleccionadas,
-						idSemana);
+						idSemana,
+						horizontal);
+
+
+				// ==========================================
+				// GUARDAR PDF
+				// ==========================================
+
+				string nombreArchivo =
+					horizontal
+						? "ListasCuadrillasHorizontal.pdf"
+						: "ListasCuadrillasVertical.pdf";
+
 
 				string ruta =
 					Path.Combine(
 						Path.GetTempPath(),
-						"ListasCuadrillasVertical.pdf");
+						nombreArchivo);
+
 
 				using (FileStream archivo =
 					new FileStream(
@@ -601,6 +699,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					pdf.CopyTo(archivo);
 				}
+
+
+				// ==========================================
+				// ABRIR PDF
+				// ==========================================
 
 				System.Diagnostics.Process.Start(
 					new System.Diagnostics.ProcessStartInfo
@@ -624,99 +727,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 		}
 
-		private void btnHorizontal_Click(object sender, EventArgs e)
+		
+
+		private void btnActividad_Click(object sender, EventArgs e)
 		{
-			// ==========================================
-			// OBTENER CUADRILLAS SELECCIONADAS
-			// ==========================================
-
-			List<string> cuadrillasSeleccionadas =
-				cls.ObtenerCuadrillasSeleccionadas();
-
-			if (cuadrillasSeleccionadas.Count == 0)
-			{
-				MessageBox.Show(
-					"Seleccione al menos una cuadrilla.",
-					"Imprimir listas",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-			// ==========================================
-			// VALIDAR SEMANA
-			// ==========================================
-
-			if (cboSemana.SelectedValue == null)
-			{
-				MessageBox.Show(
-					"Seleccione una semana.",
-					"Imprimir listas",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-			string idSemana =
-				cboSemana.SelectedValue.ToString();
-
-			try
-			{
-				Cursor.Current = Cursors.WaitCursor;
-
-				// ==========================================
-				// GENERAR PDF
-				// ==========================================
-
-				MemoryStream pdf =
-					cls.GenerarPdfListasCuadrillasHorizontal(
-						cuadrillasSeleccionadas,
-						idSemana);
-
-				// ==========================================
-				// GUARDAR TEMPORALMENTE
-				// ==========================================
-
-				string ruta =
-					Path.Combine(
-						Path.GetTempPath(),
-						"ListasCuadrillasHorizontal.pdf");
-
-				using (FileStream archivo =
-					new FileStream(
-						ruta,
-						FileMode.Create,
-						FileAccess.Write))
-				{
-					pdf.CopyTo(archivo);
-				}
-
-				// ==========================================
-				// ABRIR PDF
-				// ==========================================
-
-				System.Diagnostics.Process.Start(
-					new System.Diagnostics.ProcessStartInfo
-					{
-						FileName = ruta,
-						UseShellExecute = true
-					});
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"Error al generar las listas:\n\n" +
-					ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-			}
-			finally
-			{
-				Cursor.Current = Cursors.Default;
-			}
+			cls.ActividadEmpleadoSemana();
 		}
 	}
 }

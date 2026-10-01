@@ -28,15 +28,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmNomina));
 			dgvNomina = new DataGridView();
 			label1 = new Label();
 			panel1 = new Panel();
 			label2 = new Label();
 			pictureBox1 = new PictureBox();
-			cboCuadrilla = new ComboBox();
 			label4 = new Label();
 			label3 = new Label();
 			dtpFecha = new DateTimePicker();
@@ -55,6 +54,7 @@
 			tabPage3 = new TabPage();
 			tabControl2 = new TabControl();
 			tbpNomina = new TabPage();
+			btnSeleccionar = new Button();
 			tabPage4 = new TabPage();
 			tabPage1 = new TabPage();
 			cboSemana = new ComboBox();
@@ -63,6 +63,11 @@
 			label11 = new Label();
 			cboCuadrillaRevisar = new ComboBox();
 			label5 = new Label();
+			splitNomina = new SplitContainer();
+			pnlCSV = new Panel();
+			lblCuadrillas = new Label();
+			lbCSV = new ListBox();
+			label12 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -71,6 +76,10 @@
 			tbpNomina.SuspendLayout();
 			tabPage4.SuspendLayout();
 			tabPage1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)splitNomina).BeginInit();
+			splitNomina.Panel2.SuspendLayout();
+			splitNomina.SuspendLayout();
+			pnlCSV.SuspendLayout();
 			SuspendLayout();
 			// 
 			// dgvNomina
@@ -83,32 +92,32 @@
 			dgvNomina.BackgroundColor = SystemColors.ControlLightLight;
 			dgvNomina.BorderStyle = BorderStyle.Fixed3D;
 			dgvNomina.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvNomina.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvNomina.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvNomina.ColumnHeadersHeight = 29;
 			dgvNomina.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvNomina.EnableHeadersVisualStyles = false;
 			dgvNomina.ImeMode = ImeMode.NoControl;
-			dgvNomina.Location = new Point(12, 387);
+			dgvNomina.Location = new Point(3, 51);
 			dgvNomina.Name = "dgvNomina";
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvNomina.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvNomina.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvNomina.RowHeadersVisible = false;
 			dgvNomina.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvNomina.Size = new Size(1536, 719);
+			dgvNomina.Size = new Size(1509, 723);
 			dgvNomina.TabIndex = 4;
 			// 
 			// label1
@@ -131,7 +140,7 @@
 			panel1.Controls.Add(label1);
 			panel1.Location = new Point(12, 6);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(1536, 140);
+			panel1.Size = new Size(1819, 140);
 			panel1.TabIndex = 5;
 			// 
 			// label2
@@ -154,15 +163,6 @@
 			pictureBox1.Size = new Size(100, 107);
 			pictureBox1.TabIndex = 1;
 			pictureBox1.TabStop = false;
-			// 
-			// cboCuadrilla
-			// 
-			cboCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			cboCuadrilla.FormattingEnabled = true;
-			cboCuadrilla.Location = new Point(497, 45);
-			cboCuadrilla.Name = "cboCuadrilla";
-			cboCuadrilla.Size = new Size(189, 25);
-			cboCuadrilla.TabIndex = 3;
 			// 
 			// label4
 			// 
@@ -202,7 +202,7 @@
 			btnConsultar.ForeColor = Color.Black;
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(765, 36);
+			btnConsultar.Location = new Point(760, 38);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(25, 0, 25, 0);
 			btnConsultar.Size = new Size(165, 40);
@@ -286,21 +286,21 @@
 			// panel6
 			// 
 			panel6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel6.BackColor = Color.FromArgb(225, 239, 250);
+			panel6.BackColor = Color.FromArgb(35, 103, 149);
 			panel6.Controls.Add(label10);
-			panel6.Location = new Point(12, 343);
+			panel6.Location = new Point(3, 0);
 			panel6.Name = "panel6";
-			panel6.Size = new Size(1536, 42);
+			panel6.Size = new Size(1509, 48);
 			panel6.TabIndex = 8;
 			// 
 			// label10
 			// 
 			label10.AutoSize = true;
-			label10.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label10.ForeColor = Color.FromArgb(31, 95, 145);
-			label10.Location = new Point(13, 8);
+			label10.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label10.ForeColor = Color.White;
+			label10.Location = new Point(3, 8);
 			label10.Name = "label10";
-			label10.Size = new Size(179, 25);
+			label10.Size = new Size(199, 30);
 			label10.TabIndex = 0;
 			label10.Text = "Listado de Nomina";
 			// 
@@ -353,9 +353,9 @@
 			// tbpNomina
 			// 
 			tbpNomina.BackColor = Color.FromArgb(236, 243, 249);
+			tbpNomina.Controls.Add(btnSeleccionar);
 			tbpNomina.Controls.Add(btnConsultar);
 			tbpNomina.Controls.Add(label3);
-			tbpNomina.Controls.Add(cboCuadrilla);
 			tbpNomina.Controls.Add(dtpFecha);
 			tbpNomina.Controls.Add(label4);
 			tbpNomina.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -366,6 +366,23 @@
 			tbpNomina.Size = new Size(1041, 114);
 			tbpNomina.TabIndex = 0;
 			tbpNomina.Text = "NOMINA";
+			// 
+			// btnSeleccionar
+			// 
+			btnSeleccionar.BackColor = Color.White;
+			btnSeleccionar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnSeleccionar.ForeColor = Color.Black;
+			btnSeleccionar.Image = (Image)resources.GetObject("btnSeleccionar.Image");
+			btnSeleccionar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnSeleccionar.Location = new Point(497, 38);
+			btnSeleccionar.Name = "btnSeleccionar";
+			btnSeleccionar.Padding = new Padding(20, 0, 30, 0);
+			btnSeleccionar.Size = new Size(199, 40);
+			btnSeleccionar.TabIndex = 9;
+			btnSeleccionar.Text = "Seleccionar";
+			btnSeleccionar.TextAlign = ContentAlignment.MiddleRight;
+			btnSeleccionar.UseVisualStyleBackColor = false;
+			btnSeleccionar.Click += btnSeleccionar_Click;
 			// 
 			// tabPage4
 			// 
@@ -463,16 +480,75 @@
 			label5.TabIndex = 4;
 			label5.Text = "Cuadrilla :";
 			// 
+			// splitNomina
+			// 
+			splitNomina.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			splitNomina.Location = new Point(12, 329);
+			splitNomina.Name = "splitNomina";
+			// 
+			// splitNomina.Panel2
+			// 
+			splitNomina.Panel2.Controls.Add(panel6);
+			splitNomina.Panel2.Controls.Add(dgvNomina);
+			splitNomina.Size = new Size(1819, 777);
+			splitNomina.SplitterDistance = 300;
+			splitNomina.TabIndex = 11;
+			// 
+			// pnlCSV
+			// 
+			pnlCSV.Controls.Add(lblCuadrillas);
+			pnlCSV.Controls.Add(lbCSV);
+			pnlCSV.Controls.Add(label12);
+			pnlCSV.Location = new Point(1067, 152);
+			pnlCSV.Name = "pnlCSV";
+			pnlCSV.Size = new Size(764, 171);
+			pnlCSV.TabIndex = 12;
+			// 
+			// lblCuadrillas
+			// 
+			lblCuadrillas.AutoSize = true;
+			lblCuadrillas.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCuadrillas.Location = new Point(139, 7);
+			lblCuadrillas.Name = "lblCuadrillas";
+			lblCuadrillas.Size = new Size(0, 17);
+			lblCuadrillas.TabIndex = 12;
+			// 
+			// lbCSV
+			// 
+			lbCSV.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			lbCSV.BackColor = Color.FromArgb(236, 243, 249);
+			lbCSV.BorderStyle = BorderStyle.FixedSingle;
+			lbCSV.ColumnWidth = 200;
+			lbCSV.FormattingEnabled = true;
+			lbCSV.HorizontalScrollbar = true;
+			lbCSV.ItemHeight = 15;
+			lbCSV.Location = new Point(3, 40);
+			lbCSV.MultiColumn = true;
+			lbCSV.Name = "lbCSV";
+			lbCSV.Size = new Size(758, 122);
+			lbCSV.TabIndex = 11;
+			// 
+			// label12
+			// 
+			label12.AutoSize = true;
+			label12.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label12.ForeColor = Color.FromArgb(31, 95, 145);
+			label12.Location = new Point(3, 6);
+			label12.Name = "label12";
+			label12.Size = new Size(132, 17);
+			label12.TabIndex = 10;
+			label12.Text = "Cuadrilla con un csv:";
+			// 
 			// FrmNomina
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(244, 247, 251);
-			ClientSize = new Size(1560, 1118);
+			ClientSize = new Size(1843, 1118);
+			Controls.Add(pnlCSV);
+			Controls.Add(splitNomina);
 			Controls.Add(tabControl2);
-			Controls.Add(panel6);
 			Controls.Add(panel1);
-			Controls.Add(dgvNomina);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmNomina";
 			Text = "Nomina de Campo";
@@ -490,6 +566,11 @@
 			tabPage4.PerformLayout();
 			tabPage1.ResumeLayout(false);
 			tabPage1.PerformLayout();
+			splitNomina.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)splitNomina).EndInit();
+			splitNomina.ResumeLayout(false);
+			pnlCSV.ResumeLayout(false);
+			pnlCSV.PerformLayout();
 			ResumeLayout(false);
 		}
 
@@ -513,7 +594,6 @@
 		public TextBox txbDestajo;
 		public TextBox txbReferencia;
 		public TextBox txbJornada;
-		public ComboBox cboCuadrilla;
 		public DateTimePicker dtpFecha;
 		private Panel panel6;
 		private Label label10;
@@ -526,12 +606,20 @@
 		public TabPage tbpNomina;
 		private TabPage tabPage4;
 		private TabPage tabPage1;
-		private Button button1;
+		private Button btnSeleccionar;
 		public ComboBox cboLugarPago;
 		private Label label11;
 		public ComboBox cboCuadrillaRevisar;
 		private Label label5;
 		public ComboBox cboSemana;
 		private Label label6;
+		private Panel panel2;
+		private SplitContainer splitContainer1;
+		private SplitContainer splitNomina;
+		private Label label12;
+		public ListBox lbCSV;
+		private ListBox listBox1;
+		public Label lblCuadrillas;
+		public Panel pnlCSV;
 	}
 }

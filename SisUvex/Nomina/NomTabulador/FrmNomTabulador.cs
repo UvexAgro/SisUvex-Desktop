@@ -149,7 +149,28 @@ namespace SisUvex.Nomina.NomTabulador
 
 		private void btnActualizar_Click(object sender, EventArgs e)
 		{
-			cls.ActualizarTabulador();
+			try
+			{
+				// Actualizar la información en SQL
+				cls.ActualizarTabulador();
+
+				// Volver a consultar y cargar el DataGridView
+				cls.BeginFormCat();
+
+				MessageBox.Show(
+					"El tabulador se actualizó correctamente.",
+					"Actualizar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					ex.Message,
+					"Error al actualizar",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
 		}
 	}
 }

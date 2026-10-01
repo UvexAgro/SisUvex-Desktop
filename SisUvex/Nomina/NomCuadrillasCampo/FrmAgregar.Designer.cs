@@ -31,6 +31,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAgregar));
 			label1 = new Label();
 			groupBox1 = new GroupBox();
+			label6 = new Label();
+			cboDepartamento = new ComboBox();
 			flowLayoutPanel1 = new FlowLayoutPanel();
 			txbCuadrilla = new TextBox();
 			chkActivo = new CheckBox();
@@ -59,6 +61,8 @@
 			// groupBox1
 			// 
 			groupBox1.BackColor = SystemColors.Control;
+			groupBox1.Controls.Add(label6);
+			groupBox1.Controls.Add(cboDepartamento);
 			groupBox1.Controls.Add(flowLayoutPanel1);
 			groupBox1.Controls.Add(txbCuadrilla);
 			groupBox1.Controls.Add(chkActivo);
@@ -66,9 +70,27 @@
 			groupBox1.Controls.Add(label1);
 			groupBox1.Location = new Point(13, 99);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(340, 157);
+			groupBox1.Size = new Size(340, 198);
 			groupBox1.TabIndex = 2;
 			groupBox1.TabStop = false;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label6.Location = new Point(6, 101);
+			label6.Name = "label6";
+			label6.Size = new Size(103, 17);
+			label6.TabIndex = 7;
+			label6.Text = "Departamento: ";
+			// 
+			// cboDepartamento
+			// 
+			cboDepartamento.FormattingEnabled = true;
+			cboDepartamento.Location = new Point(6, 121);
+			cboDepartamento.Name = "cboDepartamento";
+			cboDepartamento.Size = new Size(242, 23);
+			cboDepartamento.TabIndex = 6;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -91,7 +113,7 @@
 			// chkActivo
 			// 
 			chkActivo.AutoSize = true;
-			chkActivo.Location = new Point(15, 122);
+			chkActivo.Location = new Point(8, 170);
 			chkActivo.Name = "chkActivo";
 			chkActivo.Size = new Size(60, 19);
 			chkActivo.TabIndex = 4;
@@ -102,7 +124,7 @@
 			// 
 			label2.AutoSize = true;
 			label2.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label2.Location = new Point(15, 104);
+			label2.Location = new Point(6, 150);
 			label2.Name = "label2";
 			label2.Size = new Size(52, 17);
 			label2.TabIndex = 3;
@@ -110,7 +132,7 @@
 			// 
 			// btnCancelar
 			// 
-			btnCancelar.Location = new Point(278, 263);
+			btnCancelar.Location = new Point(278, 303);
 			btnCancelar.Name = "btnCancelar";
 			btnCancelar.Size = new Size(75, 29);
 			btnCancelar.TabIndex = 103;
@@ -120,7 +142,7 @@
 			// 
 			// btnAccept
 			// 
-			btnAccept.Location = new Point(178, 263);
+			btnAccept.Location = new Point(178, 303);
 			btnAccept.Name = "btnAccept";
 			btnAccept.Size = new Size(75, 29);
 			btnAccept.TabIndex = 102;
@@ -182,7 +204,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(365, 300);
+			ClientSize = new Size(361, 341);
 			Controls.Add(label5);
 			Controls.Add(txbOrden);
 			Controls.Add(lblSubtitulo);
@@ -220,5 +242,7 @@
 		public Label lblSubtitulo;
 		public TextBox txbOrden;
 		private Label label5;
+		private Label label6;
+		public ComboBox cboDepartamento;
 	}
 }

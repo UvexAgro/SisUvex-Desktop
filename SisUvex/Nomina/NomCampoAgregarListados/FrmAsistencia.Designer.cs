@@ -39,11 +39,17 @@
 			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
 			tableLayoutPanel1 = new TableLayoutPanel();
 			panel2 = new Panel();
+			label18 = new Label();
+			cboDiaChecador = new ComboBox();
 			lblCuadrilla = new Label();
 			cboCuadrilla2 = new ComboBox();
 			btnGuardarCuadrilla = new Button();
 			btnAsignar = new Button();
 			panel9 = new Panel();
+			label17 = new Label();
+			label16 = new Label();
+			txbMonto = new TextBox();
+			cboConceptos = new ComboBox();
 			pictureBox1 = new PictureBox();
 			txbRegistro = new TextBox();
 			label6 = new Label();
@@ -69,8 +75,10 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			btnJalarActividad = new Button();
 			btnCAL = new Button();
 			panel10 = new Panel();
+			button2 = new Button();
 			label14 = new Label();
 			btnJalar = new Button();
 			cboDia = new ComboBox();
@@ -80,7 +88,7 @@
 			label13 = new Label();
 			pictureBox6 = new PictureBox();
 			panel3 = new Panel();
-			btnImprimir = new Button();
+			btnEstado = new Button();
 			btnGuardar = new Button();
 			dgvAsistencia = new DataGridView();
 			cboSemana = new ComboBox();
@@ -127,6 +135,8 @@
 			// 
 			// panel2
 			// 
+			panel2.Controls.Add(label18);
+			panel2.Controls.Add(cboDiaChecador);
 			panel2.Controls.Add(lblCuadrilla);
 			panel2.Controls.Add(cboCuadrilla2);
 			panel2.Controls.Add(btnGuardarCuadrilla);
@@ -144,6 +154,24 @@
 			panel2.Name = "panel2";
 			panel2.Size = new Size(779, 1142);
 			panel2.TabIndex = 1;
+			// 
+			// label18
+			// 
+			label18.AutoSize = true;
+			label18.Location = new Point(8, 220);
+			label18.Name = "label18";
+			label18.Size = new Size(30, 15);
+			label18.TabIndex = 41;
+			label18.Text = "Dia :";
+			// 
+			// cboDiaChecador
+			// 
+			cboDiaChecador.FormattingEnabled = true;
+			cboDiaChecador.Location = new Point(8, 238);
+			cboDiaChecador.Name = "cboDiaChecador";
+			cboDiaChecador.Size = new Size(89, 23);
+			cboDiaChecador.TabIndex = 40;
+			cboDiaChecador.SelectedIndexChanged += cboDiaChecador_SelectedIndexChanged;
 			// 
 			// lblCuadrilla
 			// 
@@ -202,6 +230,10 @@
 			panel9.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel9.BackColor = SystemColors.Control;
 			panel9.BorderStyle = BorderStyle.FixedSingle;
+			panel9.Controls.Add(label17);
+			panel9.Controls.Add(label16);
+			panel9.Controls.Add(txbMonto);
+			panel9.Controls.Add(cboConceptos);
 			panel9.Controls.Add(pictureBox1);
 			panel9.Controls.Add(txbRegistro);
 			panel9.Controls.Add(label6);
@@ -211,6 +243,50 @@
 			panel9.Name = "panel9";
 			panel9.Size = new Size(772, 383);
 			panel9.TabIndex = 1;
+			// 
+			// label17
+			// 
+			label17.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			label17.AutoSize = true;
+			label17.ForeColor = Color.DimGray;
+			label17.Location = new Point(13, 70);
+			label17.Name = "label17";
+			label17.Size = new Size(91, 15);
+			label17.TabIndex = 103;
+			label17.Text = "Agregar Ingreso";
+			label17.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// label16
+			// 
+			label16.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			label16.AutoSize = true;
+			label16.ForeColor = Color.DimGray;
+			label16.Location = new Point(3, 337);
+			label16.Name = "label16";
+			label16.Size = new Size(1154, 15);
+			label16.TabIndex = 102;
+			label16.Text = resources.GetString("label16.Text");
+			label16.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// txbMonto
+			// 
+			txbMonto.Enabled = false;
+			txbMonto.Font = new Font("Segoe UI", 12F);
+			txbMonto.Location = new Point(200, 84);
+			txbMonto.MaxLength = 15;
+			txbMonto.Name = "txbMonto";
+			txbMonto.Size = new Size(71, 29);
+			txbMonto.TabIndex = 101;
+			// 
+			// cboConceptos
+			// 
+			cboConceptos.DropDownStyle = ComboBoxStyle.DropDownList;
+			cboConceptos.FormattingEnabled = true;
+			cboConceptos.Location = new Point(10, 89);
+			cboConceptos.Name = "cboConceptos";
+			cboConceptos.Size = new Size(184, 23);
+			cboConceptos.TabIndex = 34;
+			cboConceptos.SelectedIndexChanged += cboConceptos_SelectedIndexChanged;
 			// 
 			// pictureBox1
 			// 
@@ -272,7 +348,7 @@
 			dgvReloj.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvReloj.EnableHeadersVisualStyles = false;
 			dgvReloj.ImeMode = ImeMode.NoControl;
-			dgvReloj.Location = new Point(-1, 103);
+			dgvReloj.Location = new Point(-1, 124);
 			dgvReloj.Name = "dgvReloj";
 			dgvReloj.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -286,8 +362,9 @@
 			dgvReloj.RowHeadersVisible = false;
 			dgvReloj.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvReloj.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvReloj.Size = new Size(768, 275);
+			dgvReloj.Size = new Size(768, 210);
 			dgvReloj.TabIndex = 30;
+			dgvReloj.CellContentClick += dgvReloj_CellContentClick;
 			// 
 			// pictureBox5
 			// 
@@ -529,12 +606,13 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(btnJalarActividad);
 			panel1.Controls.Add(btnCAL);
 			panel1.Controls.Add(panel10);
 			panel1.Controls.Add(label13);
 			panel1.Controls.Add(pictureBox6);
 			panel1.Controls.Add(panel3);
-			panel1.Controls.Add(btnImprimir);
+			panel1.Controls.Add(btnEstado);
 			panel1.Controls.Add(btnGuardar);
 			panel1.Controls.Add(dgvAsistencia);
 			panel1.Controls.Add(cboSemana);
@@ -547,6 +625,22 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
+			// 
+			// btnJalarActividad
+			// 
+			btnJalarActividad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnJalarActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnJalarActividad.Image = (Image)resources.GetObject("btnJalarActividad.Image");
+			btnJalarActividad.ImageAlign = ContentAlignment.MiddleLeft;
+			btnJalarActividad.Location = new Point(526, 137);
+			btnJalarActividad.Name = "btnJalarActividad";
+			btnJalarActividad.Padding = new Padding(20, 0, 30, 0);
+			btnJalarActividad.Size = new Size(232, 39);
+			btnJalarActividad.TabIndex = 38;
+			btnJalarActividad.Text = "Reutilizar Actividad ";
+			btnJalarActividad.TextAlign = ContentAlignment.MiddleRight;
+			btnJalarActividad.UseVisualStyleBackColor = true;
+			btnJalarActividad.Click += btnJalarActividad_Click;
 			// 
 			// btnCAL
 			// 
@@ -569,6 +663,7 @@
 			panel10.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel10.BackColor = SystemColors.Control;
 			panel10.BorderStyle = BorderStyle.FixedSingle;
+			panel10.Controls.Add(button2);
 			panel10.Controls.Add(label14);
 			panel10.Controls.Add(btnJalar);
 			panel10.Controls.Add(cboDia);
@@ -579,6 +674,22 @@
 			panel10.Name = "panel10";
 			panel10.Size = new Size(772, 383);
 			panel10.TabIndex = 34;
+			// 
+			// button2
+			// 
+			button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			button2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button2.Image = (Image)resources.GetObject("button2.Image");
+			button2.ImageAlign = ContentAlignment.MiddleLeft;
+			button2.Location = new Point(3, 58);
+			button2.Name = "button2";
+			button2.Padding = new Padding(20, 0, 20, 0);
+			button2.Size = new Size(232, 39);
+			button2.TabIndex = 38;
+			button2.Text = "Modificar Lote y Actividad";
+			button2.TextAlign = ContentAlignment.MiddleRight;
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// label14
 			// 
@@ -598,10 +709,10 @@
 			btnJalar.ImageAlign = ContentAlignment.MiddleLeft;
 			btnJalar.Location = new Point(535, 58);
 			btnJalar.Name = "btnJalar";
-			btnJalar.Padding = new Padding(20, 0, 30, 0);
+			btnJalar.Padding = new Padding(20, 0, 20, 0);
 			btnJalar.Size = new Size(232, 39);
 			btnJalar.TabIndex = 36;
-			btnJalar.Text = "Jalar Actividad y Lote";
+			btnJalar.Text = "Reutilizar Actividad y Lote";
 			btnJalar.TextAlign = ContentAlignment.MiddleRight;
 			btnJalar.UseVisualStyleBackColor = true;
 			btnJalar.Click += btnJalar_Click;
@@ -673,6 +784,7 @@
 			dgvCAL.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvCAL.Size = new Size(772, 275);
 			dgvCAL.TabIndex = 30;
+			dgvCAL.CellDoubleClick += dgvCAL_CellDoubleClick;
 			dgvCAL.ColumnHeaderMouseClick += dgvCAL_ColumnHeaderMouseClick;
 			dgvCAL.ColumnHeaderMouseDoubleClick += dgvCAL_ColumnHeaderMouseDoubleClick;
 			// 
@@ -706,21 +818,20 @@
 			panel3.Size = new Size(750, 1);
 			panel3.TabIndex = 23;
 			// 
-			// btnImprimir
+			// btnEstado
 			// 
-			btnImprimir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnImprimir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnImprimir.Image = (Image)resources.GetObject("btnImprimir.Image");
-			btnImprimir.ImageAlign = ContentAlignment.MiddleLeft;
-			btnImprimir.Location = new Point(592, 18);
-			btnImprimir.Name = "btnImprimir";
-			btnImprimir.Padding = new Padding(16, 0, 25, 0);
-			btnImprimir.Size = new Size(166, 39);
-			btnImprimir.TabIndex = 22;
-			btnImprimir.Text = "Imprimir Listas";
-			btnImprimir.TextAlign = ContentAlignment.MiddleRight;
-			btnImprimir.UseVisualStyleBackColor = true;
-			btnImprimir.Click += btnImprimir_Click;
+			btnEstado.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnEstado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnEstado.ImageAlign = ContentAlignment.MiddleLeft;
+			btnEstado.Location = new Point(592, 18);
+			btnEstado.Name = "btnEstado";
+			btnEstado.Padding = new Padding(16, 0, 25, 0);
+			btnEstado.Size = new Size(166, 39);
+			btnEstado.TabIndex = 22;
+			btnEstado.Text = "Estado de Cuadrilla";
+			btnEstado.TextAlign = ContentAlignment.MiddleRight;
+			btnEstado.UseVisualStyleBackColor = true;
+			btnEstado.Click += btnEstado_Click;
 			// 
 			// btnGuardar
 			// 
@@ -778,6 +889,8 @@
 			dgvAsistencia.TabIndex = 14;
 			dgvAsistencia.CellClick += dgvAsistencia_CellClick;
 			dgvAsistencia.CellContentClick += dgvAsistencia_CellContentClick;
+			dgvAsistencia.CellValueChanged += dgvAsistencia_CellValueChanged;
+			dgvAsistencia.CurrentCellDirtyStateChanged += dgvAsistencia_CurrentCellDirtyStateChanged;
 			// 
 			// cboSemana
 			// 
@@ -837,6 +950,7 @@
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "FrmAsistencia";
 			Text = "Lista de Asistencia ";
+			FormClosing += FrmAsistencia_FormClosing;
 			Load += FrmAsistencia_Load;
 			tableLayoutPanel1.ResumeLayout(false);
 			panel2.ResumeLayout(false);
@@ -881,7 +995,7 @@
 		public ComboBox cboCuadrilla;
 		public ComboBox cboSemana;
 		private Button btnGuardar;
-		public Button btnImprimir;
+		public Button btnEstado;
 		private Label label7;
 		private Label label10;
 		private Label label9;
@@ -924,5 +1038,13 @@
 		private Label lblCuadrilla;
 		public ComboBox cboCuadrilla2;
 		private Button button1;
+		public ComboBox cboConceptos;
+		public TextBox txbMonto;
+		private Label label16;
+		private Label label17;
+		private Label label18;
+		public ComboBox cboDiaChecador;
+		private Button btnJalarActividad;
+		private Button button2;
 	}
 }

@@ -59,11 +59,13 @@
 			label2 = new Label();
 			pictureBox1 = new PictureBox();
 			panel3 = new Panel();
+			cboPeriodo = new ComboBox();
+			label9 = new Label();
+			btnActividad = new Button();
 			cboSemana = new ComboBox();
 			label5 = new Label();
 			button1 = new Button();
 			btnActulizar = new Button();
-			btnHorizontal = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvCuadrilla).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -84,7 +86,7 @@
 			panel1.Controls.Add(dgvCuadrilla);
 			panel1.Location = new Point(12, 110);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(377, 897);
+			panel1.Size = new Size(444, 897);
 			panel1.TabIndex = 0;
 			// 
 			// btnMostrar
@@ -148,7 +150,7 @@
 			dgvCuadrilla.RowHeadersVisible = false;
 			dgvCuadrilla.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadrilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadrilla.Size = new Size(371, 719);
+			dgvCuadrilla.Size = new Size(438, 719);
 			dgvCuadrilla.TabIndex = 14;
 			dgvCuadrilla.CellPainting += dgvCuadrilla_CellPainting;
 			// 
@@ -177,7 +179,7 @@
 			btnImprimir.Padding = new Padding(16, 0, 25, 0);
 			btnImprimir.Size = new Size(141, 47);
 			btnImprimir.TabIndex = 21;
-			btnImprimir.Text = " Grupo de Listas";
+			btnImprimir.Text = "Imprimir";
 			btnImprimir.TextAlign = ContentAlignment.BottomCenter;
 			btnImprimir.UseVisualStyleBackColor = true;
 			btnImprimir.Click += btnImprimir_Click;
@@ -187,7 +189,7 @@
 			pictureBox2.Anchor = AnchorStyles.None;
 			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
 			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(558, 222);
+			pictureBox2.Location = new Point(595, 222);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(120, 92);
 			pictureBox2.TabIndex = 17;
@@ -197,7 +199,6 @@
 			// 
 			panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel2.BackColor = SystemColors.ControlLightLight;
-			panel2.Controls.Add(btnHorizontal);
 			panel2.Controls.Add(btnVertical);
 			panel2.Controls.Add(btnImprimir2);
 			panel2.Controls.Add(pnlSinEmpleados);
@@ -209,9 +210,9 @@
 			panel2.Controls.Add(lblCuadrilla);
 			panel2.Controls.Add(label4);
 			panel2.Controls.Add(dgvListado);
-			panel2.Location = new Point(392, 110);
+			panel2.Location = new Point(459, 110);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(1203, 897);
+			panel2.Size = new Size(1277, 897);
 			panel2.TabIndex = 1;
 			// 
 			// btnVertical
@@ -224,7 +225,7 @@
 			btnVertical.Padding = new Padding(16, 0, 25, 0);
 			btnVertical.Size = new Size(143, 47);
 			btnVertical.TabIndex = 42;
-			btnVertical.Text = "Vertical";
+			btnVertical.Text = "Grupos de Listas";
 			btnVertical.TextAlign = ContentAlignment.BottomCenter;
 			btnVertical.UseVisualStyleBackColor = true;
 			btnVertical.Click += btnVertical_Click;
@@ -237,7 +238,7 @@
 			pnlSinEmpleados.Controls.Add(label7);
 			pnlSinEmpleados.Location = new Point(5, 239);
 			pnlSinEmpleados.Name = "pnlSinEmpleados";
-			pnlSinEmpleados.Size = new Size(1195, 627);
+			pnlSinEmpleados.Size = new Size(1269, 627);
 			pnlSinEmpleados.TabIndex = 41;
 			// 
 			// label8
@@ -247,7 +248,7 @@
 			label8.BackColor = Color.Transparent;
 			label8.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label8.ForeColor = Color.DimGray;
-			label8.Location = new Point(499, 377);
+			label8.Location = new Point(536, 377);
 			label8.Name = "label8";
 			label8.Size = new Size(239, 17);
 			label8.TabIndex = 2;
@@ -258,7 +259,7 @@
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label7.Location = new Point(483, 335);
+			label7.Location = new Point(520, 335);
 			label7.Name = "label7";
 			label7.Size = new Size(270, 25);
 			label7.TabIndex = 1;
@@ -271,7 +272,7 @@
 			panel5.Controls.Add(label6);
 			panel5.Controls.Add(lblNumeroTotal);
 			panel5.Controls.Add(lblTotalEmpleados);
-			panel5.Location = new Point(959, 10);
+			panel5.Location = new Point(1033, 10);
 			panel5.Name = "panel5";
 			panel5.Size = new Size(200, 84);
 			panel5.TabIndex = 40;
@@ -311,7 +312,7 @@
 			panel4.BackColor = Color.Silver;
 			panel4.Location = new Point(21, 110);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(1163, 1);
+			panel4.Size = new Size(1237, 1);
 			panel4.TabIndex = 39;
 			// 
 			// btnQuitar
@@ -400,7 +401,7 @@
 			dgvListado.RowHeadersVisible = false;
 			dgvListado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvListado.Size = new Size(1197, 711);
+			dgvListado.Size = new Size(1271, 711);
 			dgvListado.TabIndex = 13;
 			// 
 			// label1
@@ -438,6 +439,9 @@
 			// 
 			panel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel3.BackColor = Color.FromArgb(245, 247, 250);
+			panel3.Controls.Add(cboPeriodo);
+			panel3.Controls.Add(label9);
+			panel3.Controls.Add(btnActividad);
 			panel3.Controls.Add(cboSemana);
 			panel3.Controls.Add(label5);
 			panel3.Controls.Add(button1);
@@ -447,14 +451,49 @@
 			panel3.Controls.Add(label1);
 			panel3.Location = new Point(12, 3);
 			panel3.Name = "panel3";
-			panel3.Size = new Size(1583, 89);
+			panel3.Size = new Size(1724, 89);
 			panel3.TabIndex = 2;
+			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(571, 40);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 49;
+			// 
+			// label9
+			// 
+			label9.AutoSize = true;
+			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label9.Location = new Point(571, 19);
+			label9.Name = "label9";
+			label9.Size = new Size(62, 17);
+			label9.TabIndex = 48;
+			label9.Text = "Periodo :";
+			// 
+			// btnActividad
+			// 
+			btnActividad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnActividad.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnActividad.Image = (Image)resources.GetObject("btnActividad.Image");
+			btnActividad.ImageAlign = ContentAlignment.MiddleLeft;
+			btnActividad.Location = new Point(1084, 21);
+			btnActividad.Name = "btnActividad";
+			btnActividad.Padding = new Padding(30, 0, 30, 0);
+			btnActividad.Size = new Size(170, 44);
+			btnActividad.TabIndex = 47;
+			btnActividad.Text = "Actividad";
+			btnActividad.TextAlign = ContentAlignment.MiddleRight;
+			btnActividad.UseVisualStyleBackColor = true;
+			btnActividad.Click += btnActividad_Click;
 			// 
 			// cboSemana
 			// 
 			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(614, 42);
+			cboSemana.Location = new Point(790, 40);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(288, 25);
 			cboSemana.TabIndex = 46;
@@ -463,7 +502,7 @@
 			// 
 			label5.AutoSize = true;
 			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(614, 21);
+			label5.Location = new Point(790, 19);
 			label5.Name = "label5";
 			label5.Size = new Size(63, 17);
 			label5.TabIndex = 45;
@@ -475,7 +514,7 @@
 			button1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			button1.Image = (Image)resources.GetObject("button1.Image");
 			button1.ImageAlign = ContentAlignment.MiddleLeft;
-			button1.Location = new Point(1401, 21);
+			button1.Location = new Point(1542, 21);
 			button1.Name = "button1";
 			button1.Padding = new Padding(30, 0, 30, 0);
 			button1.Size = new Size(166, 44);
@@ -491,7 +530,7 @@
 			btnActulizar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnActulizar.Image = (Image)resources.GetObject("btnActulizar.Image");
 			btnActulizar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnActulizar.Location = new Point(1119, 21);
+			btnActulizar.Location = new Point(1260, 21);
 			btnActulizar.Name = "btnActulizar";
 			btnActulizar.Padding = new Padding(30, 0, 30, 0);
 			btnActulizar.Size = new Size(276, 44);
@@ -501,26 +540,11 @@
 			btnActulizar.UseVisualStyleBackColor = true;
 			btnActulizar.Click += btnActulizar_Click;
 			// 
-			// btnHorizontal
-			// 
-			btnHorizontal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnHorizontal.Image = Properties.Resources.impresora;
-			btnHorizontal.ImageAlign = ContentAlignment.TopCenter;
-			btnHorizontal.Location = new Point(452, 125);
-			btnHorizontal.Name = "btnHorizontal";
-			btnHorizontal.Padding = new Padding(16, 0, 25, 0);
-			btnHorizontal.Size = new Size(141, 47);
-			btnHorizontal.TabIndex = 43;
-			btnHorizontal.Text = "Horizontal";
-			btnHorizontal.TextAlign = ContentAlignment.BottomCenter;
-			btnHorizontal.UseVisualStyleBackColor = true;
-			btnHorizontal.Click += btnHorizontal_Click;
-			// 
 			// FrmListados
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1607, 1008);
+			ClientSize = new Size(1748, 1008);
 			Controls.Add(panel3);
 			Controls.Add(panel2);
 			Controls.Add(panel1);
@@ -578,6 +602,8 @@
 		private Label label5;
 		public Button btnImprimir2;
 		public Button btnVertical;
-		public Button btnHorizontal;
+		public Button btnActividad;
+		public ComboBox cboPeriodo;
+		private Label label9;
 	}
 }

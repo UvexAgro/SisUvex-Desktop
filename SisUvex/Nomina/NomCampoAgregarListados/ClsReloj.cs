@@ -13,6 +13,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 	{
 		private SQLControl sql = new SQLControl();
 		public FrmAsistencia _frmA;
+		public ClsAjustesdeNomina clsAjuste;
 		public DataTable CargarAsistenciaReloj(string idWorkGroup, DateTime fechaInicio, DateTime fechaFin)
 		{
 			DataTable dt = new DataTable();
@@ -59,17 +60,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		}
 		public void CargarRelojChecador()
 		{
-			if (_frmA.cboCuadrilla.SelectedIndex == -1 || _frmA.cboSemana.SelectedIndex == -1)
+			if (_frmA.cboCuadrilla.SelectedIndex == -1 ||
+		_frmA.cboSemana.SelectedIndex == -1)
 				return;
 
-			string idWorkGroup = _frmA.cboCuadrilla.SelectedValue.ToString();
+			string idWorkGroup =_frmA.cboCuadrilla.SelectedValue.ToString();
 
-			DataRowView semana = (DataRowView)_frmA.cboSemana.SelectedItem;
+			DataRowView semana =(DataRowView)_frmA.cboSemana.SelectedItem;
 
-			DateTime fechaInicio = Convert.ToDateTime(semana["d_startDate_per"]).Date;
-			DateTime fechaFin = Convert.ToDateTime(semana["d_endDate_per"]).Date;
+			DateTime fechaInicio =Convert.ToDateTime(semana["d_startDate_per"]).Date;
 
-			DataTable dt = CargarAsistenciaReloj(idWorkGroup, fechaInicio, fechaFin);
+			DateTime fechaFin =Convert.ToDateTime(semana["d_endDate_per"]).Date;
+
+			DataTable dt =
+				CargarAsistenciaReloj(
+					idWorkGroup,
+					fechaInicio,
+					fechaFin);
 
 			if (dt == null)
 				return;
@@ -83,6 +90,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_frmA.dgvChecador.ClearSelection();
 			_frmA.dgvChecador.CurrentCell = null;
 			_frmA.dgvChecador.Invalidate();
+
+			// Aplicar nuevamente el filtro seleccionado
+			if (_frmA.cboDiaChecador.SelectedIndex != -1)
+			{
+				_frmA.clsAjuste.FiltrarDiaChecador(
+					_frmA.cboDiaChecador.Text.Trim());
+			}
 		}
 		public void MarcarPorEstado(string estado)
 		{
@@ -532,7 +546,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (_frmA.cboSemana.SelectedIndex == -1)
 				return;
 
-			DataRowView semana = (DataRowView)_frmA.cboSemana.SelectedItem;
+			DataRowView semana =
+				(DataRowView)_frmA.cboSemana.SelectedItem;
 
 			DateTime fechaInicio =
 				Convert.ToDateTime(semana["d_startDate_per"]).Date;
@@ -540,7 +555,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			DateTime fechaFin =
 				Convert.ToDateTime(semana["d_endDate_per"]).Date;
 
-			DataTable dtChecadas = new DataTable();
+			string secuenciaSemana =
+				semana["c_sequence_per"]
+				.ToString()
+				.Trim();
+
+			// =====================================================
+			// OBTENER ID ATTENDANCE
+			// =====================================================
+
+			string idWorkGroupEmployeeDaily = "";
 
 			SQLControl sql = new SQLControl();
 
@@ -548,42 +572,117 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.OpenConectionWrite();
 
-				string query = @"
-				WITH Checadas AS
-				(
-					SELECT
-						d_date,
-						d_time,
-						c_deviceName,
-						ROW_NUMBER() OVER (
-							PARTITION BY d_date
-							ORDER BY d_time ASC
-						) AS Primera,
-						ROW_NUMBER() OVER (
-							PARTITION BY d_date
-							ORDER BY d_time DESC
-						) AS Ultima
-					FROM [SisUvex].[dbo].[Nom_HikvisionIVMS]
-					WHERE TRY_CONVERT(int, id_employee) = TRY_CONVERT(int, @Codigo)
-					  AND d_date >= @FechaInicio
-					  AND d_date <= @FechaFin
-				)
-				SELECT
-					d_date,
-					d_time,
-					c_deviceName
-				FROM Checadas
-				WHERE Primera = 1
-				   OR Ultima = 1
-				ORDER BY d_date, d_time";
+				string queryId = @"
+            SELECT TOP 1
+                id_attendance
+            FROM Nom_EmployeeAttendanceWeekly
+            WHERE id_employee = @Empleado
+              AND c_sequence_per = @Semana
+            ORDER BY id_attendance DESC";
 
-				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd =
+					new SqlCommand(queryId, sql.cnn))
 				{
-					cmd.Parameters.AddWithValue("@Codigo", codigo);
-					cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
-					cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+					cmd.Parameters.AddWithValue(
+						"@Empleado",
+						codigo);
 
-					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					cmd.Parameters.AddWithValue(
+						"@Semana",
+						secuenciaSemana);
+
+					object resultado = cmd.ExecuteScalar();
+
+					if (resultado != null &&
+						resultado != DBNull.Value)
+					{
+						idWorkGroupEmployeeDaily =
+							resultado.ToString().Trim();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al obtener el registro diario del empleado:\n" +
+					ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// =====================================================
+			// GUARDAR ID PARA USARLO CON EL BOTÓN CONFIRMAR
+			// =====================================================
+
+			_frmA.IdWorkGroupEmployeeDailyActual =
+				idWorkGroupEmployeeDaily;
+
+			// =====================================================
+			// OBTENER CHECADAS
+			// =====================================================
+
+			DataTable dtChecadas = new DataTable();
+
+			sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+        WITH Checadas AS
+        (
+            SELECT
+                d_date,
+                d_time,
+                c_deviceName,
+                ROW_NUMBER() OVER (
+                    PARTITION BY d_date
+                    ORDER BY d_time ASC
+                ) AS Primera,
+                ROW_NUMBER() OVER (
+                    PARTITION BY d_date
+                    ORDER BY d_time DESC
+                ) AS Ultima
+            FROM [SisUvex].[dbo].[Nom_HikvisionIVMS]
+            WHERE TRY_CONVERT(int, id_employee)
+                  = TRY_CONVERT(int, @Codigo)
+              AND d_date >= @FechaInicio
+              AND d_date <= @FechaFin
+        )
+        SELECT
+            d_date,
+            d_time,
+            c_deviceName
+        FROM Checadas
+        WHERE Primera = 1
+           OR Ultima = 1
+        ORDER BY d_date, d_time";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.AddWithValue(
+						"@Codigo",
+						codigo);
+
+					cmd.Parameters.AddWithValue(
+						"@FechaInicio",
+						fechaInicio);
+
+					cmd.Parameters.AddWithValue(
+						"@FechaFin",
+						fechaFin);
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
 					{
 						da.Fill(dtChecadas);
 					}
@@ -592,18 +691,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al consultar las checadas:\n" + ex.Message,
+					"Error al consultar las checadas:\n" +
+					ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
+
+				return;
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			// Llenar la tabla del reloj
-			CrearTablaReloj(dtChecadas, fechaInicio, fechaFin);
+			// =====================================================
+			// CREAR TABLA DEL RELOJ
+			// =====================================================
+
+			CrearTablaReloj(
+				dtChecadas,
+				fechaInicio,
+				fechaFin);
+
+			// =====================================================
+			// AGREGAR BOTONES CONFIRMAR
+			// =====================================================
+
+			_frmA.clsAjuste.AgregarBotonesConfirmar(
+				fechaInicio);
 		}
 		private void CrearTablaReloj(DataTable dtChecadas, DateTime fechaInicio, DateTime fechaFin)
 		{

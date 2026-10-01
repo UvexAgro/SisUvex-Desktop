@@ -442,7 +442,17 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			if (dgv.Columns.Contains("id_attendance"))
 			{
 				string idWorkGroupEmployeeDaily =
-					dgv.CurrentRow.Cells["id_attendance"].Value.ToString();
+					dgv.CurrentRow.Cells["id_attendance"]
+					.Value?
+					.ToString()
+					.Trim();
+
+				if (string.IsNullOrWhiteSpace(idWorkGroupEmployeeDaily))
+				{
+					MessageBox.Show(
+						"No se encontró el registro del empleado.");
+					return;
+				}
 
 				if (MessageBox.Show(
 					"¿Desea eliminar el ingreso seleccionado?",
@@ -451,11 +461,16 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 					MessageBoxIcon.Question) == DialogResult.No)
 					return;
 
+				// Obtener la fecha del grid
+				string fecha =
+					frmDia.dtpDia.Value.ToString("yyyy-MM-dd");
+
 				query = $@"
-				EXEC sp_Nom_MiscellaneousIncome_Delete
-					NULL,
-					'{idWorkGroupEmployeeDaily}',
-					'{idConcepto}'";
+        EXEC sp_Nom_MiscellaneousIncome_Delete
+            NULL,
+            '{idWorkGroupEmployeeDaily}',
+            '{idConcepto}',
+            '{fecha}'";
 			}
 
 			// EMPAQUE

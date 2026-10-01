@@ -29,17 +29,21 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 		public string v_nameWorkGroup { get; set; }
 		public string c_order { get; set; }
 		public bool c_active { get; set; }
-				public string queryCatalog = @"
-		SELECT 
-			id_workGroup AS [Código],
-			c_order AS [Orden],
-			v_nameWorkGroup AS [Nombre de cuadrilla],
-			CASE 
-				WHEN c_active = 1 THEN 'Activa'
-				ELSE 'Inactiva'
-			END AS [Estado],
-			d_create AS [Fecha]
-		FROM Nom_WorkGroup";
+		public string id_department { get; set; }
+		public string queryCatalog = @"
+			SELECT 
+				w.id_workGroup AS [Código],
+				w.c_order AS [Orden],
+				w.v_nameWorkGroup AS [Nombre de cuadrilla],
+				d.c_name AS [Departamento],
+				CASE 
+					WHEN w.c_active = 1 THEN 'Activa'
+					ELSE 'Inactiva'
+				END AS [Estado],
+				w.d_create AS [Fecha]
+			FROM Nom_WorkGroup w
+			LEFT JOIN Cat_Departament d
+				ON w.id_department = d.id_department";
 
 		public void BeginFormCat()
 		{
@@ -66,12 +70,18 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand("sp_AddNomWorkGroup", sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_AddNomWorkGroup", sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
 					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar)
 						.Value = v_nameWorkGroup;
+
+					cmd.Parameters.Add("@id_department", SqlDbType.Char, 3)
+						.Value = string.IsNullOrWhiteSpace(id_department)
+							? DBNull.Value
+							: id_department;
 
 					cmd.Parameters.Add("@c_active", SqlDbType.Bit)
 						.Value = c_active;
@@ -114,20 +124,33 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand("sp_UpdateNomWorkGroup", sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_UpdateNomWorkGroup", sql.cnn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
-					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3).Value = id_workGroup;
-					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar).Value = v_nameWorkGroup;
-					cmd.Parameters.Add("@c_active", SqlDbType.Bit).Value = c_active;
-					cmd.Parameters.Add("@c_order", SqlDbType.Char, 3).Value =
-						string.IsNullOrWhiteSpace(c_order)
-							? DBNull.Value
-							: c_order.Trim().PadLeft(3, '0');
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 3)
+						.Value = id_workGroup;
 
-					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar).Value =
-						User.GetUserName();
+					cmd.Parameters.Add("@v_nameWorkGroup", SqlDbType.VarChar)
+						.Value = v_nameWorkGroup;
+
+					cmd.Parameters.Add("@id_department", SqlDbType.Char, 3)
+						.Value = string.IsNullOrWhiteSpace(id_department)
+							? DBNull.Value
+							: id_department;
+
+					cmd.Parameters.Add("@c_active", SqlDbType.Bit)
+						.Value = c_active;
+
+					cmd.Parameters.Add("@c_order", SqlDbType.Char, 3)
+						.Value =
+							string.IsNullOrWhiteSpace(c_order)
+								? DBNull.Value
+								: c_order.Trim().PadLeft(3, '0');
+
+					cmd.Parameters.Add("@userUpdate", SqlDbType.VarChar)
+						.Value = User.GetUserName();
 
 					cmd.ExecuteNonQuery();
 
@@ -136,7 +159,10 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Modificar Cuadrilla");
+				MessageBox.Show(
+					ex.Message,
+					"Modificar Cuadrilla");
+
 				return false;
 			}
 			finally
@@ -308,22 +334,28 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 		private void SetEntity()
 		{
 			v_nameWorkGroup = frmAdd.txbCuadrilla.Text.Trim();
+
 			c_active = frmAdd.chkActivo.Checked;
 
-			c_order = string.IsNullOrWhiteSpace(frmAdd.txbOrden.Text)
-				? null
-				: frmAdd.txbOrden.Text.Trim().PadLeft(3, '0');
+			c_order = frmAdd.txbOrden.Text.Trim();
+
+			if (frmAdd.cboDepartamento.SelectedValue != null)
+				id_department = frmAdd.cboDepartamento.SelectedValue.ToString();
+			else
+				id_department = null;
 		}
 		public void CargarDatosModificar()
 		{
 			try
 			{
 				string query = $@"
-            SELECT 
-                v_nameWorkGroup,
-                c_active
-            FROM Nom_WorkGroup
-            WHERE id_workGroup = '{idAddModify}'";
+        SELECT 
+            v_nameWorkGroup,
+            c_active,
+            id_department,
+            c_order
+        FROM Nom_WorkGroup
+        WHERE id_workGroup = '{idAddModify}'";
 
 				DataTable dt = ClsQuerysDB.GetDataTable(query);
 
@@ -341,13 +373,30 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 
 				DataRow row = dt.Rows[0];
 
+				// Nombre
 				frmAdd.txbCuadrilla.Text =
 					row["v_nameWorkGroup"].ToString();
 
-				frmAdd.txbCuadrilla.ForeColor = System.Drawing.Color.Black;
+				frmAdd.txbCuadrilla.ForeColor =
+					System.Drawing.Color.Black;
 
+				// Activo
 				frmAdd.chkActivo.Checked =
 					Convert.ToInt32(row["c_active"]) == 1;
+
+				// Departamento
+				if (row["id_department"] != DBNull.Value)
+				{
+					frmAdd.cboDepartamento.SelectedValue =
+						row["id_department"].ToString();
+				}
+
+				// Orden
+				if (row["c_order"] != DBNull.Value)
+				{
+					frmAdd.txbOrden.Text =
+						row["c_order"].ToString();
+				}
 			}
 			catch (Exception ex)
 			{
@@ -358,6 +407,31 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 					MessageBoxIcon.Error
 				);
 			}
+		}
+		public void CargarDepartamentos(ComboBox combo)
+		{
+			string query = @"
+        SELECT 
+            id_department,
+            c_code,
+            c_name
+        FROM Cat_Departament
+        WHERE b_active = 1
+        ORDER BY id_department";
+
+			DataTable dt = ClsQuerysDB.GetDataTable(query);
+
+			DataRow dr = dt.NewRow();
+			dr["id_department"] = "";
+			dr["c_code"] = "";
+			dr["c_name"] = "------ SELECCIONE DEPARTAMENTO ------";
+
+			dt.Rows.InsertAt(dr, 0);
+
+			combo.DataSource = dt;
+			combo.DisplayMember = "c_name";
+			combo.ValueMember = "id_department";
+			combo.SelectedIndex = 0;
 		}
 		private void EstiloGrid()
 		{
@@ -432,39 +506,43 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 				DataGridViewContentAlignment.MiddleLeft;
 
 			// Código
-			dgv.Columns[0].FillWeight = 15;
+			dgv.Columns[0].FillWeight = 12;
 			dgv.Columns[0].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// orden
-			dgv.Columns[1].FillWeight = 15;
+			// Orden
+			dgv.Columns[1].FillWeight = 12;
 			dgv.Columns[1].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
 			// Nombre de cuadrilla
-			dgv.Columns[2].FillWeight = 35;
+			dgv.Columns[2].FillWeight = 30;
+
+			// Departamento
+			dgv.Columns[3].FillWeight = 20;
 
 			// Estado
-			dgv.Columns[3].FillWeight = 20;
-			dgv.Columns[3].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
-
-			// Fecha de creación
-			dgv.Columns[4].FillWeight = 30;
+			dgv.Columns[4].FillWeight = 15;
 			dgv.Columns[4].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
+			// Fecha
+			dgv.Columns[5].FillWeight = 20;
+			dgv.Columns[5].DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
 			// Formato de fecha
-			dgv.Columns[4].DefaultCellStyle.Format =
+			dgv.Columns[5].DefaultCellStyle.Format =
 				"dd/MM/yyyy";
 
 			dgv.CellPainting += Dgv_CellPainting;
 		}
-		private void Dgv_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+		private void Dgv_CellPainting(object sender,DataGridViewCellPaintingEventArgs e)
 		{
 			DataGridView dgv = (DataGridView)sender;
 
-			if (e.RowIndex < 0 || e.ColumnIndex != 3)
+			// Estado = columna 4
+			if (e.RowIndex < 0 || e.ColumnIndex != 4)
 				return;
 
 			if (e.Value == null)
@@ -479,7 +557,8 @@ namespace SisUvex.Nomina.NomCuadrillasCampo
 				? System.Drawing.Color.FromArgb(34, 177, 76)
 				: System.Drawing.Color.FromArgb(220, 53, 69);
 
-			using (var brush = new System.Drawing.SolidBrush(colorPunto))
+			using (var brush =
+				new System.Drawing.SolidBrush(colorPunto))
 			{
 				int diametro = 8;
 
