@@ -177,14 +177,14 @@
 			dgvCuadroCosto.RowHeadersVisible = false;
 			dgvCuadroCosto.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvCuadroCosto.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvCuadroCosto.Size = new Size(774, 1014);
+			dgvCuadroCosto.Size = new Size(921, 1014);
 			dgvCuadroCosto.TabIndex = 19;
 			// 
 			// FrmCostos
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(784, 1154);
+			ClientSize = new Size(938, 1154);
 			Controls.Add(dgvCuadroCosto);
 			Controls.Add(panel2);
 			Icon = (Icon)resources.GetObject("$this.Icon");

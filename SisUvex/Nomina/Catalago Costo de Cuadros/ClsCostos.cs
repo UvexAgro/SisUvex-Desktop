@@ -27,11 +27,11 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 		ClsDGVCatalog? dgv;
 		private string queryCatalog = @"
 		SELECT
-			id_lot,
-			c_nombreCuadro,
-			i_lineas,
-			m_costo,
-			m_porcentajeLinea,
+			id_lot AS Código,
+			c_nombreCuadro AS Nombre,
+			v_lineas AS Lineas,
+			m_costo AS Costo,
+			m_porcentajeLinea AS Porcentaje,
 			v_userCreate,
 			d_create,
 			v_userUpdate,
@@ -43,6 +43,9 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 				queryCatalog + @"
         ORDER BY id_lot"
 			);
+
+			frm.dgvCuadroCosto.AutoGenerateColumns = true;
+			frm.dgvCuadroCosto.DataSource = dtCuadroCosto;
 
 			dgv = new ClsDGVCatalog(
 				frm.dgvCuadroCosto,
@@ -249,7 +252,7 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 					cmd.Parameters.Add("@c_nombreCuadro", SqlDbType.VarChar, 50)
 						.Value = c_nombreCuadro;
 
-					cmd.Parameters.Add("@i_lineas", SqlDbType.VarChar, 20)
+					cmd.Parameters.Add("@v_lineas", SqlDbType.VarChar, 20)
 						.Value = v_lineas;
 
 					cmd.Parameters.Add("@m_costo", SqlDbType.Decimal)
@@ -311,7 +314,7 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 					cmd.Parameters.Add("@c_nombreCuadro", SqlDbType.VarChar, 50)
 						.Value = c_nombreCuadro;
 
-					cmd.Parameters.Add("@i_lineas", SqlDbType.VarChar, 20)
+					cmd.Parameters.Add("@v_lineas", SqlDbType.VarChar, 20)
 						.Value = v_lineas;
 
 					cmd.Parameters.Add("@m_costo", SqlDbType.Decimal)
@@ -387,7 +390,7 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 				SELECT 
 					id_lot,
 					c_nombreCuadro,
-					i_lineas,
+					v_lineas,
 					m_costo,
 					m_porcentajeLinea
 				FROM Nom_CuadroCosto
@@ -460,6 +463,10 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 		{
 			DataGridView dgv = frm.dgvCuadroCosto;
 
+			// ==========================================
+			// CONFIGURACIÓN GENERAL
+			// ==========================================
+
 			dgv.ReadOnly = true;
 			dgv.AllowUserToAddRows = false;
 			dgv.AllowUserToDeleteRows = false;
@@ -471,20 +478,30 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 
 			dgv.MultiSelect = false;
 
+			// ==========================================
+			// TAMAÑO
+			// ==========================================
+
 			dgv.RowTemplate.Height = 32;
 			dgv.ColumnHeadersHeight = 38;
 
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
 
-			// Fondo
+			// ==========================================
+			// FONDO
+			// ==========================================
+
 			dgv.BackgroundColor =
 				System.Drawing.Color.White;
 
 			dgv.GridColor =
 				System.Drawing.Color.FromArgb(225, 225, 225);
 
-			// Encabezado
+			// ==========================================
+			// ENCABEZADO
+			// ==========================================
+
 			dgv.EnableHeadersVisualStyles = false;
 
 			dgv.ColumnHeadersDefaultCellStyle.BackColor =
@@ -497,14 +514,21 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 				new System.Drawing.Font(
 					"Segoe UI",
 					11F,
-					System.Drawing.FontStyle.Bold);
+					System.Drawing.FontStyle.Bold
+				);
 
 			dgv.ColumnHeadersDefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// Filas
+			// ==========================================
+			// FILAS
+			// ==========================================
+
 			dgv.DefaultCellStyle.Font =
-				new System.Drawing.Font("Segoe UI", 9F);
+				new System.Drawing.Font(
+					"Segoe UI",
+					9F
+				);
 
 			dgv.DefaultCellStyle.ForeColor =
 				System.Drawing.Color.FromArgb(50, 50, 50);
@@ -521,42 +545,72 @@ namespace SisUvex.Nomina.Catalago_Costo_de_Cuadros
 			dgv.DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleLeft;
 
-			// Lote
+			// ==========================================
+			// NOMBRES DE COLUMNAS
+			// ==========================================
+
+			dgv.Columns[0].HeaderText = "LOTE";
+			dgv.Columns[1].HeaderText = "NOMBRE";
+			dgv.Columns[2].HeaderText = "LÍNEAS";
+			dgv.Columns[3].HeaderText = "COSTO";
+			dgv.Columns[4].HeaderText = "% POR LÍNEA";
+
+			// ==========================================
+			// OCULTAR COLUMNAS DE AUDITORÍA
+			// ==========================================
+
+			dgv.Columns[5].Visible = false; // v_userCreate
+			dgv.Columns[6].Visible = false; // d_create
+			dgv.Columns[7].Visible = false; // v_userUpdate
+			dgv.Columns[8].Visible = false; // d_update
+
+			// ==========================================
+			// LOTE
+			// ==========================================
+
 			dgv.Columns[0].FillWeight = 15;
+
 			dgv.Columns[0].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// Nombre del lote
+			// ==========================================
+			// NOMBRE
+			// ==========================================
+
 			dgv.Columns[1].FillWeight = 30;
 
-			// Líneas
+			// ==========================================
+			// LÍNEAS
+			// ==========================================
+
 			dgv.Columns[2].FillWeight = 20;
+
 			dgv.Columns[2].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
-			// Costo
-			dgv.Columns[3].FillWeight = 15;
+			// ==========================================
+			// COSTO
+			// ==========================================
+
+			dgv.Columns[3].FillWeight = 20;
+
 			dgv.Columns[3].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleRight;
 
 			dgv.Columns[3].DefaultCellStyle.Format =
 				"$#,##0.00";
 
-			// Porcentaje
+			// ==========================================
+			// PORCENTAJE
+			// ==========================================
+
 			dgv.Columns[4].FillWeight = 15;
+
 			dgv.Columns[4].DefaultCellStyle.Alignment =
 				DataGridViewContentAlignment.MiddleCenter;
 
 			dgv.Columns[4].DefaultCellStyle.Format =
 				"0.00";
-
-			// Fecha
-			dgv.Columns[5].FillWeight = 15;
-			dgv.Columns[5].DefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
-
-			dgv.Columns[5].DefaultCellStyle.Format =
-				"dd/MM/yyyy";
 		}
 	}
 }
