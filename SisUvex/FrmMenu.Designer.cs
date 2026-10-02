@@ -67,6 +67,7 @@ namespace SisUvex
 			tamañoToolStripMenuItem1 = new ToolStripMenuItem();
 			nominaToolStripMenuItem = new ToolStripMenuItem();
 			actividadesDeTemporadaToolStripMenuItem = new ToolStripMenuItem();
+			departamentoToolStripMenuItem = new ToolStripMenuItem();
 			registroCuadrillaDeCampoToolStripMenuItem = new ToolStripMenuItem();
 			registroHorarioDeCampoToolStripMenuItem = new ToolStripMenuItem();
 			contratistaToolStripMenuItem1 = new ToolStripMenuItem();
@@ -190,7 +191,7 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			departamentoToolStripMenuItem = new ToolStripMenuItem();
+			costoPorLoteToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -445,7 +446,7 @@ namespace SisUvex
 			// 
 			// nominaToolStripMenuItem
 			// 
-			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actividadesDeTemporadaToolStripMenuItem, departamentoToolStripMenuItem, registroCuadrillaDeCampoToolStripMenuItem, registroHorarioDeCampoToolStripMenuItem, contratistaToolStripMenuItem1, cuadrillaToolStripMenuItem1, tabuladorToolStripMenuItem1, precioToolStripMenuItem, precioPorGTINToolStripMenuItem, ingresosDiversosToolStripMenuItem, dedudccionesToolStripMenuItem, fechasFestivasToolStripMenuItem, lugarDePagoToolStripMenuItem1 });
+			nominaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actividadesDeTemporadaToolStripMenuItem, departamentoToolStripMenuItem, registroCuadrillaDeCampoToolStripMenuItem, registroHorarioDeCampoToolStripMenuItem, contratistaToolStripMenuItem1, cuadrillaToolStripMenuItem1, tabuladorToolStripMenuItem1, costoPorLoteToolStripMenuItem, precioToolStripMenuItem, precioPorGTINToolStripMenuItem, ingresosDiversosToolStripMenuItem, dedudccionesToolStripMenuItem, fechasFestivasToolStripMenuItem, lugarDePagoToolStripMenuItem1 });
 			nominaToolStripMenuItem.Name = "nominaToolStripMenuItem";
 			nominaToolStripMenuItem.Size = new Size(180, 22);
 			nominaToolStripMenuItem.Text = "Nomina";
@@ -456,6 +457,13 @@ namespace SisUvex
 			actividadesDeTemporadaToolStripMenuItem.Size = new Size(225, 22);
 			actividadesDeTemporadaToolStripMenuItem.Text = "Actividades de Contrato";
 			actividadesDeTemporadaToolStripMenuItem.Click += actividadesDeTemporadaToolStripMenuItem_Click;
+			// 
+			// departamentoToolStripMenuItem
+			// 
+			departamentoToolStripMenuItem.Name = "departamentoToolStripMenuItem";
+			departamentoToolStripMenuItem.Size = new Size(225, 22);
+			departamentoToolStripMenuItem.Text = "Departamento";
+			departamentoToolStripMenuItem.Click += departamentoToolStripMenuItem_Click;
 			// 
 			// registroCuadrillaDeCampoToolStripMenuItem
 			// 
@@ -1304,12 +1312,12 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// departamentoToolStripMenuItem
+			// costoPorLoteToolStripMenuItem
 			// 
-			departamentoToolStripMenuItem.Name = "departamentoToolStripMenuItem";
-			departamentoToolStripMenuItem.Size = new Size(225, 22);
-			departamentoToolStripMenuItem.Text = "Departamento";
-			departamentoToolStripMenuItem.Click += departamentoToolStripMenuItem_Click;
+			costoPorLoteToolStripMenuItem.Name = "costoPorLoteToolStripMenuItem";
+			costoPorLoteToolStripMenuItem.Size = new Size(225, 22);
+			costoPorLoteToolStripMenuItem.Text = "Costo por Lote";
+			costoPorLoteToolStripMenuItem.Click += costoPorLoteToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1502,5 +1510,6 @@ namespace SisUvex
 		private ToolStripMenuItem catalogoVentanillaToolStripMenuItem;
 		private ToolStripMenuItem proveedoresToolStripMenuItem;
 		private ToolStripMenuItem departamentoToolStripMenuItem;
+		private ToolStripMenuItem costoPorLoteToolStripMenuItem;
 	}
 }

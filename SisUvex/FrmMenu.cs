@@ -932,5 +932,15 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat);
 		}
+
+		private void costoPorLoteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (!User.HasViewCatalogsPermission())
+				return;
+
+			Nomina.Catalago_Costo_de_Cuadros.FrmCostos cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat);
+		}
 	}
 }
