@@ -942,5 +942,15 @@ namespace SisUvex
 			cat.WindowState = FormWindowState.Maximized;
 			AbrirVentanaHijo(cat);
 		}
+
+		private void coAplicadoresToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (!User.HasViewCatalogsPermission())
+				return;
+
+			Nomina.Nom_de_aplicadores.FrmAplicadores cat = new();
+			cat.WindowState = FormWindowState.Maximized;
+			AbrirVentanaHijo(cat);
+		}
 	}
 }
