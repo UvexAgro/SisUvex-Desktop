@@ -83,20 +83,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void CargarSemanas()
+		public void CargarSemanas(string idPeriodo)
 		{
 			SQLControl sql = new SQLControl();
 
 			string query = @"
-		SELECT
-			id_period,
-			c_sequence_per,
-			d_startDate_per,
-			d_endDate_per,
-			v_name_per
-		FROM dbo.Payroll_AttendancePeriod
-		WHERE c_active = '1'
-		ORDER BY d_startDate_per DESC";
+			SELECT
+				id_period,
+				c_sequence_per,
+				d_startDate_per,
+				d_endDate_per,
+				v_name_per
+			FROM dbo.Payroll_AttendancePeriod
+			WHERE c_active = '1'
+			  AND id_period = @id_period
+			ORDER BY d_startDate_per DESC";
 
 			DataTable dt = new DataTable();
 
@@ -105,9 +106,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.Add(
+						"@id_period",
+						SqlDbType.Char,
+						2).Value = idPeriodo;
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -123,34 +132,53 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 
-			// Crear texto que se mostrará en el ComboBox
+			// ==========================================
+			// CREAR TEXTO DEL COMBO
+			// ==========================================
+
 			if (!dt.Columns.Contains("SemanaMostrar"))
 			{
-				dt.Columns.Add("SemanaMostrar", typeof(string));
+				dt.Columns.Add(
+					"SemanaMostrar",
+					typeof(string));
 			}
 
 			foreach (DataRow row in dt.Rows)
 			{
 				DateTime fechaInicio =
-					Convert.ToDateTime(row["d_startDate_per"]).Date;
+					Convert.ToDateTime(
+						row["d_startDate_per"]).Date;
 
 				DateTime fechaFin =
-					Convert.ToDateTime(row["d_endDate_per"]).Date;
+					Convert.ToDateTime(
+						row["d_endDate_per"]).Date;
 
 				row["SemanaMostrar"] =
-					"Semana " + row["c_sequence_per"].ToString().Trim() +
+					"Semana " +
+					row["c_sequence_per"].ToString().Trim() +
 					" | " +
 					fechaInicio.ToString("dd/MM/yyyy") +
 					" - " +
 					fechaFin.ToString("dd/MM/yyyy");
 			}
 
+			// ==========================================
+			// CARGAR COMBO
+			// ==========================================
+
 			frm.cboSemana.DataSource = null;
 
-			frm.cboSemana.DisplayMember = "SemanaMostrar";
-			frm.cboSemana.ValueMember = "c_sequence_per";
+			frm.cboSemana.DisplayMember =
+				"SemanaMostrar";
+
+			frm.cboSemana.ValueMember =
+				"c_sequence_per";
 
 			frm.cboSemana.DataSource = dt;
+
+			// ==========================================
+			// SELECCIONAR SEMANA ACTUAL
+			// ==========================================
 
 			SeleccionarSemanaActual(dt);
 		}
@@ -180,6 +208,103 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			frm.cboSemana.SelectedIndex = -1;
+		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                c_activo_tem
+            FROM dbo.Cat_Periods
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da =
+					new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar los períodos:\n\n" +
+					ex.Message,
+					"Períodos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+
+			// ==========================================
+			// COLUMNA PARA MOSTRAR
+			// ==========================================
+
+			if (!dt.Columns.Contains("PeriodoMostrar"))
+			{
+				dt.Columns.Add(
+					"PeriodoMostrar",
+					typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				row["PeriodoMostrar"] =
+					row["c_codigo_tem"].ToString().Trim()
+					+ " - "
+					+ row["v_nombre_tem"].ToString().Trim();
+			}
+
+
+			// ==========================================
+			// CONFIGURAR COMBO
+			// ==========================================
+
+			frm.cboPeriodo.DataSource = null;
+
+			frm.cboPeriodo.DisplayMember =
+				"PeriodoMostrar";
+
+			frm.cboPeriodo.ValueMember =
+				"c_codigo_tem";
+
+			frm.cboPeriodo.DataSource = dt;
+
+
+			// ==========================================
+			// SELECCIONAR PERÍODO ACTUAL
+			// ==========================================
+
+			DataRow[] periodoActual =
+				dt.Select("c_activo_tem = 1");
+
+			if (periodoActual.Length > 0)
+			{
+				frm.cboPeriodo.SelectedValue =
+					periodoActual[0]["c_codigo_tem"]
+					.ToString()
+					.Trim();
+			}
+			else
+			{
+				frm.cboPeriodo.SelectedIndex = -1;
+			}
 		}
 		public void CrearColumnasListado()
 		{
