@@ -83,20 +83,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-		public void CargarSemanas()
+		public void CargarSemanas(string idPeriodo)
 		{
 			SQLControl sql = new SQLControl();
 
 			string query = @"
-		SELECT
-			id_period,
-			c_sequence_per,
-			d_startDate_per,
-			d_endDate_per,
-			v_name_per
-		FROM dbo.Payroll_AttendancePeriod
-		WHERE c_active = '1'
-		ORDER BY d_startDate_per DESC";
+			SELECT
+				id_period,
+				c_sequence_per,
+				d_startDate_per,
+				d_endDate_per,
+				v_name_per
+			FROM dbo.Payroll_AttendancePeriod
+			WHERE c_active = '1'
+			  AND id_period = @id_period
+			ORDER BY d_startDate_per DESC";
 
 			DataTable dt = new DataTable();
 
@@ -105,9 +106,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.Add(
+						"@id_period",
+						SqlDbType.Char,
+						2).Value = idPeriodo;
+
+					using (SqlDataAdapter da =
+						new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -123,34 +132,53 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 
-			// Crear texto que se mostrará en el ComboBox
+			// ==========================================
+			// CREAR TEXTO DEL COMBO
+			// ==========================================
+
 			if (!dt.Columns.Contains("SemanaMostrar"))
 			{
-				dt.Columns.Add("SemanaMostrar", typeof(string));
+				dt.Columns.Add(
+					"SemanaMostrar",
+					typeof(string));
 			}
 
 			foreach (DataRow row in dt.Rows)
 			{
 				DateTime fechaInicio =
-					Convert.ToDateTime(row["d_startDate_per"]).Date;
+					Convert.ToDateTime(
+						row["d_startDate_per"]).Date;
 
 				DateTime fechaFin =
-					Convert.ToDateTime(row["d_endDate_per"]).Date;
+					Convert.ToDateTime(
+						row["d_endDate_per"]).Date;
 
 				row["SemanaMostrar"] =
-					"Semana " + row["c_sequence_per"].ToString().Trim() +
+					"Semana " +
+					row["c_sequence_per"].ToString().Trim() +
 					" | " +
 					fechaInicio.ToString("dd/MM/yyyy") +
 					" - " +
 					fechaFin.ToString("dd/MM/yyyy");
 			}
 
+			// ==========================================
+			// CARGAR COMBO
+			// ==========================================
+
 			frm.cboSemana.DataSource = null;
 
-			frm.cboSemana.DisplayMember = "SemanaMostrar";
-			frm.cboSemana.ValueMember = "c_sequence_per";
+			frm.cboSemana.DisplayMember =
+				"SemanaMostrar";
+
+			frm.cboSemana.ValueMember =
+				"c_sequence_per";
 
 			frm.cboSemana.DataSource = dt;
+
+			// ==========================================
+			// SELECCIONAR SEMANA ACTUAL
+			// ==========================================
 
 			SeleccionarSemanaActual(dt);
 		}
@@ -180,6 +208,103 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			frm.cboSemana.SelectedIndex = -1;
+		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                c_activo_tem
+            FROM dbo.Cat_Periods
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da =
+					new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar los períodos:\n\n" +
+					ex.Message,
+					"Períodos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+
+			// ==========================================
+			// COLUMNA PARA MOSTRAR
+			// ==========================================
+
+			if (!dt.Columns.Contains("PeriodoMostrar"))
+			{
+				dt.Columns.Add(
+					"PeriodoMostrar",
+					typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				row["PeriodoMostrar"] =
+					row["c_codigo_tem"].ToString().Trim()
+					+ " - "
+					+ row["v_nombre_tem"].ToString().Trim();
+			}
+
+
+			// ==========================================
+			// CONFIGURAR COMBO
+			// ==========================================
+
+			frm.cboPeriodo.DataSource = null;
+
+			frm.cboPeriodo.DisplayMember =
+				"PeriodoMostrar";
+
+			frm.cboPeriodo.ValueMember =
+				"c_codigo_tem";
+
+			frm.cboPeriodo.DataSource = dt;
+
+
+			// ==========================================
+			// SELECCIONAR PERÍODO ACTUAL
+			// ==========================================
+
+			DataRow[] periodoActual =
+				dt.Select("c_activo_tem = 1");
+
+			if (periodoActual.Length > 0)
+			{
+				frm.cboPeriodo.SelectedValue =
+					periodoActual[0]["c_codigo_tem"]
+					.ToString()
+					.Trim();
+			}
+			else
+			{
+				frm.cboPeriodo.SelectedIndex = -1;
+			}
 		}
 		public void CrearColumnasListado()
 		{
@@ -336,11 +461,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		}
 
 		public void ActualizarEmpleadosCuadrilla(
-	string idCuadrilla,
-	string secuenciaSemana,
-	DateTime fechaInicio,
-	DateTime fechaFin,
-	DataGridView dgvEmpleados)
+		string idCuadrilla,
+		string secuenciaSemana,
+		string idPeriodo,
+		DateTime fechaInicio,
+		DateTime fechaFin,
+		DataGridView dgvEmpleados)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -358,7 +484,11 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 							if (fila.IsNewRow)
 								continue;
 
-							string codigo = fila.Cells["Codigo"].Value?.ToString().Trim();
+							string codigo =
+								fila.Cells["Codigo"]
+								.Value?
+								.ToString()
+								.Trim();
 
 							if (string.IsNullOrWhiteSpace(codigo))
 								continue;
@@ -371,30 +501,40 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 							using (SqlCommand cmdExiste =
 								new SqlCommand(@"
-							SELECT COUNT(*)
-							FROM dbo.Nom_EmployeeAttendenceList
-							WHERE id_employee = @id_employee
-							  AND id_workGroup = @id_workGroup
-							  AND c_sequence_per = @c_sequence_per
-							  AND d_startDate_per = @d_startDate_per
-							  AND d_endDate_per = @d_endDate_per",
+                        SELECT COUNT(*)
+                        FROM dbo.Nom_EmployeeAttendenceList
+                        WHERE id_employee = @id_employee
+                          AND id_workGroup = @id_workGroup
+                          AND id_period = @id_period
+                          AND c_sequence_per = @c_sequence_per
+                          AND d_startDate_per = @d_startDate_per
+                          AND d_endDate_per = @d_endDate_per",
 									sql.cnn,
 									transaction))
 							{
 								cmdExiste.Parameters.Add(
 									"@id_employee",
 									SqlDbType.Char,
-									6).Value = codigo;
+									6).Value =
+									codigo;
 
 								cmdExiste.Parameters.Add(
 									"@id_workGroup",
 									SqlDbType.Char,
-									3).Value = idCuadrilla;
+									3).Value =
+									idCuadrilla;
+
+								cmdExiste.Parameters.Add(
+									"@id_period",
+									SqlDbType.Char,
+									2).Value =
+									idPeriodo;
 
 								cmdExiste.Parameters.Add(
 									"@c_sequence_per",
 									SqlDbType.Char,
-									2).Value = secuenciaSemana;
+									2).Value =
+									secuenciaSemana;
 
 								cmdExiste.Parameters.Add(
 									"@d_startDate_per",
@@ -428,11 +568,32 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 								cmd.CommandType =
 									CommandType.StoredProcedure;
 
+
+								// ======================================
+								// PERIODO
+								// ======================================
+
+								cmd.Parameters.Add(
+									"@id_period",
+									SqlDbType.Char,
+									2).Value =
+									idPeriodo;
+
+
+								// ======================================
+								// SEMANA
+								// ======================================
+
 								cmd.Parameters.Add(
 									"@c_sequence_per",
 									SqlDbType.Char,
 									2).Value =
 									secuenciaSemana;
+
+
+								// ======================================
+								// FECHAS
+								// ======================================
 
 								cmd.Parameters.Add(
 									"@d_startDate_per",
@@ -444,14 +605,20 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									SqlDbType.Date).Value =
 									fechaFin.Date;
 
+
+								// ======================================
+								// EMPLEADO
+								// ======================================
+
 								cmd.Parameters.Add(
 									"@id_employee",
 									SqlDbType.Char,
 									6).Value =
 									codigo;
 
+
 								// ======================================
-								// AQUÍ SE GUARDA EL ID REAL
+								// CUADRILLA
 								// ======================================
 
 								cmd.Parameters.Add(
@@ -460,11 +627,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 									3).Value =
 									idCuadrilla;
 
+
+								// ======================================
+								// USUARIO
+								// ======================================
+
 								cmd.Parameters.Add(
 									"@userCreate",
 									SqlDbType.VarChar,
 									100).Value =
 									User.GetUserName();
+
 
 								cmd.ExecuteNonQuery();
 							}
@@ -586,7 +759,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				frm.pnlSinEmpleados.Visible = true;
 			}
 		}
-		public bool CopiarEmpleadosSemanaAnterior(string secuenciaSemanaAnterior, DateTime fechaInicioAnterior, DateTime fechaFinAnterior, string secuenciaSemanaNueva, DateTime fechaInicioNueva, DateTime fechaFinNueva)
+		public bool CopiarEmpleadosSemanaAnterior(
+	string idPeriodoAnterior,
+	string secuenciaSemanaAnterior,
+	DateTime fechaInicioAnterior,
+	DateTime fechaFinAnterior,
+	string idPeriodoNueva,
+	string secuenciaSemanaNueva,
+	DateTime fechaInicioNueva,
+	DateTime fechaFinNueva)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -600,6 +781,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
+					// ==========================================
+					// SEMANA ANTERIOR
+					// ==========================================
+
+					cmd.Parameters.AddWithValue(
+						"@id_period_anterior",
+						idPeriodoAnterior);
+
 					cmd.Parameters.AddWithValue(
 						"@c_sequence_per_anterior",
 						secuenciaSemanaAnterior);
@@ -611,6 +800,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					cmd.Parameters.AddWithValue(
 						"@d_endDate_anterior",
 						fechaFinAnterior.Date);
+
+
+					// ==========================================
+					// SEMANA NUEVA
+					// ==========================================
+
+					cmd.Parameters.AddWithValue(
+						"@id_period_nueva",
+						idPeriodoNueva);
 
 					cmd.Parameters.AddWithValue(
 						"@c_sequence_per_nueva",
@@ -624,9 +822,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						"@d_endDate_nueva",
 						fechaFinNueva.Date);
 
+
+					// ==========================================
+					// USUARIO
+					// ==========================================
+
 					cmd.Parameters.AddWithValue(
 						"@userCreate",
 						User.GetUserName());
+
+
+					// ==========================================
+					// EJECUTAR
+					// ==========================================
 
 					int resultado = Convert.ToInt32(
 						cmd.ExecuteScalar());
@@ -1265,16 +1473,63 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// Obtener semana seleccionada (DESTINO)
-			if (!frm.ObtenerSemanaSeleccionada(
-				out string secuenciaSemanaNueva,
-				out DateTime fechaInicioNueva,
-				out DateTime fechaFinNueva))
+			// ==========================================
+			// OBTENER SEMANA SELECCIONADA
+			// ==========================================
+
+			DataRowView semanaSeleccionada =
+				frm.cboSemana.SelectedItem as DataRowView;
+
+			if (semanaSeleccionada == null)
 			{
+				MessageBox.Show(
+					"No se pudo obtener la semana seleccionada.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
 				return;
 			}
 
-			// Obtener semana anterior
+			string idPeriodo =
+				semanaSeleccionada["id_period"]?
+				.ToString()
+				.Trim();
+
+			string secuenciaSemana =
+				semanaSeleccionada["c_sequence_per"]?
+				.ToString()
+				.Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semanaSeleccionada["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semanaSeleccionada["d_endDate_per"]).Date;
+
+
+			// ==========================================
+			// VALIDAR ID PERIODO
+			// ==========================================
+
+			if (string.IsNullOrWhiteSpace(idPeriodo))
+			{
+				MessageBox.Show(
+					"La semana seleccionada no tiene un ID de período.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+
+			// ==========================================
+			// OBTENER SEMANA ANTERIOR
+			// ==========================================
+
 			int indiceSemanaAnterior =
 				frm.cboSemana.SelectedIndex + 1;
 
@@ -1289,7 +1544,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			DataRowView semanaAnterior = frm.cboSemana.Items[indiceSemanaAnterior] as DataRowView;
+			DataRowView semanaAnterior =
+				frm.cboSemana.Items[indiceSemanaAnterior]
+				as DataRowView;
 
 			if (semanaAnterior == null)
 			{
@@ -1302,26 +1559,60 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
+
+			// ==========================================
+			// DATOS DE LA SEMANA ANTERIOR
+			// ==========================================
+
+			string idPeriodoAnterior =
+				semanaAnterior["id_period"]?
+				.ToString()
+				.Trim();
+
 			string secuenciaSemanaAnterior =
-				semanaAnterior["c_sequence_per"]?.ToString();
+				semanaAnterior["c_sequence_per"]?
+				.ToString()
+				.Trim();
 
 			DateTime fechaInicioAnterior =
 				Convert.ToDateTime(
-					semanaAnterior["d_startDate_per"]);
+					semanaAnterior["d_startDate_per"]).Date;
 
 			DateTime fechaFinAnterior =
 				Convert.ToDateTime(
-					semanaAnterior["d_endDate_per"]);
+					semanaAnterior["d_endDate_per"]).Date;
 
 
-			// Verificar si la semana actual ya tiene empleados
+			// ==========================================
+			// VALIDAR ID PERIODO ANTERIOR
+			// ==========================================
+
+			if (string.IsNullOrWhiteSpace(idPeriodoAnterior))
+			{
+				MessageBox.Show(
+					"La semana anterior no tiene un ID de período.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+
+			// ==========================================
+			// VERIFICAR SI LA SEMANA ACTUAL YA TIENE EMPLEADOS
+			// ==========================================
+
 			bool existeDatos = ExisteEmpleadosSemana(
-				secuenciaSemanaNueva,
-				fechaInicioNueva,
-				fechaFinNueva);
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
 
 
-			// Si ya tiene datos, pedir confirmación
+			// ==========================================
+			// SI YA TIENE DATOS, PEDIR CONFIRMACIÓN
+			// ==========================================
+
 			if (existeDatos)
 			{
 				DialogResult resultado = MessageBox.Show(
@@ -1341,15 +1632,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 
-			// Copiar semana anterior → semana seleccionada
+			// ==========================================
+			// COPIAR SEMANA ANTERIOR → SEMANA ACTUAL
+			// ==========================================
+
 			bool copiado = CopiarEmpleadosSemanaAnterior(
+				idPeriodoAnterior,
 				secuenciaSemanaAnterior,
 				fechaInicioAnterior,
 				fechaFinAnterior,
-				secuenciaSemanaNueva,
-				fechaInicioNueva,
-				fechaFinNueva);
+				idPeriodo,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
 
+
+			// ==========================================
+			// RESULTADO
+			// ==========================================
 
 			if (copiado)
 			{
@@ -1360,20 +1660,30 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					MessageBoxIcon.Information);
 
 
-				// Mostrar la semana seleccionada
+				// ==========================================
+				// MOSTRAR LA SEMANA SELECCIONADA
+				// ==========================================
+
 				if (frm.dgvCuadrilla.CurrentRow != null)
 				{
 					string idCuadrilla =
-						frm.dgvCuadrilla.CurrentRow.Cells["Codigo"].Value?.ToString();
+						frm.dgvCuadrilla.CurrentRow
+						.Cells["Codigo"]
+						.Value?
+						.ToString()
+						.Trim();
 
-					CargarEmpleadosCuadrilla(
-						idCuadrilla,
-						secuenciaSemanaNueva,
-						fechaInicioNueva,
-						fechaFinNueva);
+					if (!string.IsNullOrWhiteSpace(idCuadrilla))
+					{
+						CargarEmpleadosCuadrilla(
+							idCuadrilla,
+							secuenciaSemana,
+							fechaInicio,
+							fechaFin);
 
-					ActualizarTotalEmpleados();
-					MostrarEmpleados();
+						ActualizarTotalEmpleados();
+						MostrarEmpleados();
+					}
 				}
 			}
 		}
