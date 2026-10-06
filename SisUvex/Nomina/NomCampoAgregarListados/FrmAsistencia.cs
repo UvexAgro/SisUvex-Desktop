@@ -438,17 +438,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				Convert.ToBoolean(celda.Value ?? false);
 
 
-			// =====================================================
-			// SI ESTÁ MARCANDO
-			// =====================================================
-
-			if (!marcado)
+			if (marcado)
 			{
+				// =================================================
+				// ESTÁ MARCANDO → PONER ASISTENCIA
+				// =================================================
+
 				string idCuadrilla =
 					cboCuadrilla.SelectedValue?
 					.ToString()
 					.Trim();
-
 
 				if (string.IsNullOrWhiteSpace(idCuadrilla))
 				{
@@ -458,9 +457,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning);
 
+					celda.Value = false;
 					return;
 				}
-
 
 				DialogResult resultado =
 					MessageBox.Show(
@@ -472,7 +471,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Question);
 
-
 				if (resultado == DialogResult.No)
 				{
 					celda.Value = false;
@@ -481,7 +479,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			else
 			{
 				// =================================================
-				// QUITAR ASISTENCIA
+				// ESTÁ DESMARCANDO → QUITAR ASISTENCIA
 				// =================================================
 
 				DialogResult resultado =
@@ -493,7 +491,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						"Confirmar asistencia",
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Question);
-
 
 				if (resultado == DialogResult.No)
 				{
