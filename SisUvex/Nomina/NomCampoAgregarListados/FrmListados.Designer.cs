@@ -462,6 +462,7 @@
 			cboPeriodo.Name = "cboPeriodo";
 			cboPeriodo.Size = new Size(135, 25);
 			cboPeriodo.TabIndex = 49;
+			cboPeriodo.SelectedIndexChanged += cboPeriodo_SelectedIndexChanged;
 			// 
 			// label9
 			// 

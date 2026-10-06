@@ -37,8 +37,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			cls.CargarCuadrillas();
 			cls.EstiloDgvCuadrilla();
-			cls.CargarSemanas();
+			cls.CargarPeriodos();
 			HasEditCatalogsPermission();
+			this.cboPeriodo.SelectedIndexChanged +=
+	cboPeriodo_SelectedIndexChanged;
 		}
 
 		private void btnMostrar_Click(object sender, EventArgs e)
@@ -59,6 +61,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ==========================================
 
 			if (!ObtenerSemanaSeleccionada(
+				out string idPeriodo,
 				out string secuenciaSemana,
 				out DateTime fechaInicio,
 				out DateTime fechaFin))
@@ -145,9 +148,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			if (!ObtenerSemanaSeleccionada(
-				out string secuenciaSemana,
-				out DateTime fechaInicio,
-				out DateTime fechaFin))
+			   out string idPeriodo,
+			   out string secuenciaSemana,
+			   out DateTime fechaInicio,
+			   out DateTime fechaFin))
 			{
 				return;
 			}
@@ -172,8 +176,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			FrmAgregar frmAgregar = new FrmAgregar();
 
-			// AQUÍ MANDAMOS EL id_workGroup
 			frmAgregar.IdCuadrilla = idCuadrilla;
+
+			frmAgregar.IdPeriodo = idPeriodo;
 
 			frmAgregar.FechaInicio = fechaInicio;
 			frmAgregar.FechaFin = fechaFin;
@@ -322,37 +327,62 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			frm.ShowDialog();
 		}
-		public bool ObtenerSemanaSeleccionada(out string secuenciaSemana, out DateTime fechaInicio, out DateTime fechaFin)
+		public bool ObtenerSemanaSeleccionada(out string idPeriodo, out string secuenciaSemana, out DateTime fechaInicio, out DateTime fechaFin)
 		{
+			idPeriodo = "";
 			secuenciaSemana = "";
 			fechaInicio = DateTime.MinValue;
 			fechaFin = DateTime.MinValue;
 
-			DataRowView semana = cboSemana.SelectedItem as DataRowView;
-
-			if (semana == null)
+			if (cboSemana.SelectedItem is not DataRowView fila)
 			{
 				MessageBox.Show(
 					"Seleccione una semana.",
 					"Semana",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
+					MessageBoxIcon.Warning);
 
 				return false;
 			}
 
+			idPeriodo =
+				fila["id_period"]?.ToString()?.Trim();
+
 			secuenciaSemana =
-				semana["c_sequence_per"]?.ToString();
+				fila["c_sequence_per"]?.ToString()?.Trim();
 
 			fechaInicio =
-				Convert.ToDateTime(semana["d_startDate_per"]);
+				Convert.ToDateTime(
+					fila["d_startDate_per"]).Date;
 
 			fechaFin =
-				Convert.ToDateTime(semana["d_endDate_per"]);
+				Convert.ToDateTime(
+					fila["d_endDate_per"]).Date;
+
+			if (string.IsNullOrWhiteSpace(idPeriodo))
+			{
+				MessageBox.Show(
+					"La semana seleccionada no tiene un ID de período.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return false;
+			}
+
+			if (string.IsNullOrWhiteSpace(secuenciaSemana))
+			{
+				MessageBox.Show(
+					"La semana seleccionada no tiene una secuencia.",
+					"Semana",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return false;
+			}
 
 			return true;
 		}
-
 		private void btnQuitar_Click(object sender, EventArgs e)
 		{
 			if (dgvListado.SelectedRows.Count == 0)
@@ -378,9 +408,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			if (!ObtenerSemanaSeleccionada(
-				out string secuenciaSemana,
-				out DateTime fechaInicio,
-				out DateTime fechaFin))
+			   out string idPeriodo,
+			   out string secuenciaSemana,
+			   out DateTime fechaInicio,
+			   out DateTime fechaFin))
 			{
 				return;
 			}
@@ -727,11 +758,27 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 		}
 
-		
+
 
 		private void btnActividad_Click(object sender, EventArgs e)
 		{
 			cls.ActividadEmpleadoSemana();
+		}
+
+		private void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null)
+				return;
+
+			string idPeriodo =
+				cboPeriodo.SelectedValue
+				.ToString()
+				.Trim();
+
+			if (string.IsNullOrWhiteSpace(idPeriodo))
+				return;
+
+			cls.CargarSemanas(idPeriodo);
 		}
 	}
 }

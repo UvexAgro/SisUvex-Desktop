@@ -110,23 +110,44 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 			frm.dtpFinal.Value =
 				Convert.ToDateTime(fila["d_endDate_per"]).Date;
 		}
-		public DataTable ConsultarEmpleado(string codigo)
+		public DataTable ConsultarEmpleado(
+		string codigo,
+		string secuenciaSemana,
+		DateTime fechaInicio,
+		DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
-
 			DataTable dt = new DataTable();
 
 			string query = @"
-			SELECT
-				id_employee AS Codigo,
+			SELECT DISTINCT
+				E.id_employee AS Codigo,
+
 				LTRIM(RTRIM(
-					ISNULL(v_lastNamePat, '') + ' ' +
-					ISNULL(v_lastNameMat, '') + ' ' +
-					ISNULL(v_name, '')
+					ISNULL(E.v_lastNamePat, '') + ' ' +
+					ISNULL(E.v_lastNameMat, '') + ' ' +
+					ISNULL(E.v_name, '')
 				)) AS Nombre,
-				id_paymentPlace AS LugarPago
-			FROM SisUvex.dbo.Nom_Employees
-			WHERE id_employee = @Empleado;";
+
+				E.id_paymentPlace AS LugarPago,
+
+				WG.c_order AS OrdenCuadrilla,
+				WG.v_nameWorkGroup AS Cuadrilla
+
+			FROM SisUvex.dbo.Nom_Employees E
+
+			INNER JOIN SisUvex.dbo.Nom_EmployeeAttendenceList A
+				ON A.id_employee = E.id_employee
+
+			INNER JOIN SisUvex.dbo.Nom_WorkGroup WG
+				ON WG.id_workGroup = A.id_workGroup
+
+			WHERE E.id_employee = @Empleado
+			  AND A.c_sequence_per = @SecuenciaSemana
+			  AND A.d_startDate_per = @FechaInicio
+			  AND A.d_endDate_per = @FechaFin
+
+			ORDER BY WG.c_order;";
 
 			try
 			{
@@ -134,7 +155,23 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.AddWithValue("@Empleado", codigo);
+					cmd.Parameters.Add(
+						"@Empleado",
+						SqlDbType.Char,
+						6).Value = codigo;
+
+					cmd.Parameters.Add(
+						"@SecuenciaSemana",
+						SqlDbType.Char,
+						2).Value = secuenciaSemana;
+
+					cmd.Parameters.Add(
+						"@FechaInicio",
+						SqlDbType.Date).Value = fechaInicio.Date;
+
+					cmd.Parameters.Add(
+						"@FechaFin",
+						SqlDbType.Date).Value = fechaFin.Date;
 
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
@@ -173,16 +210,60 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				return;
 			}
 
-			DataTable dt = ConsultarEmpleado(codigo);
+			// ==========================================
+			// OBTENER SEMANA SELECCIONADA
+			// ==========================================
+
+			DataRowView semana =
+				frm.cboSemana.SelectedItem as DataRowView;
+
+			if (semana == null)
+			{
+				MessageBox.Show(
+					"Seleccione una semana.",
+					"Consulta de empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			string secuenciaSemana =
+				semana["c_sequence_per"]?.ToString()?.Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semana["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semana["d_endDate_per"]).Date;
+
+
+			// ==========================================
+			// CONSULTAR EMPLEADO EN ESA SEMANA
+			// ==========================================
+
+			DataTable dt = ConsultarEmpleado(
+				codigo,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin);
+
+
+			// ==========================================
+			// VALIDAR EMPLEADO
+			// ==========================================
 
 			if (dt == null || dt.Rows.Count == 0)
 			{
 				frm.lblCodigo.Text = "-";
 				frm.lblNombre.Text = "-";
 				frm.lblLugardePago.Text = "-";
+				frm.lblCuadrilla.Text = "Sin cuadrilla";
 
 				MessageBox.Show(
-					"No se encontró el empleado.",
+					"No se encontró el empleado en la semana seleccionada.",
 					"Consulta de empleado",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
@@ -193,16 +274,42 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				return;
 			}
 
+
+			// ==========================================
+			// DATOS DEL EMPLEADO
+			// ==========================================
+
 			DataRow row = dt.Rows[0];
 
-			// Código
-			frm.lblCodigo.Text = row["Codigo"].ToString();
+			frm.lblCodigo.Text =
+				row["Codigo"].ToString();
 
-			// Apellidos primero y después nombre
-			frm.lblNombre.Text = row["Nombre"].ToString();
+			frm.lblNombre.Text =
+				row["Nombre"].ToString();
 
-			// Lugar de pago
-			frm.lblLugardePago.Text = row["LugarPago"].ToString();
+			frm.lblLugardePago.Text =
+				row["LugarPago"].ToString();
+
+
+			// ==========================================
+			// CUADRILLAS DE ESA SEMANA
+			// ==========================================
+
+			string cuadrillas = string.Join(
+				", ",
+				dt.AsEnumerable()
+				  .Select(r =>
+					  $"{r["OrdenCuadrilla"]?.ToString().Trim()} - " +
+					  $"{r["Cuadrilla"]?.ToString().Trim()}")
+				  .Distinct()
+			);
+
+			frm.lblCuadrilla.Text = cuadrillas;
+
+
+			// ==========================================
+			// LIMPIAR CÓDIGO
+			// ==========================================
 
 			frm.txbCodigo.Clear();
 		}

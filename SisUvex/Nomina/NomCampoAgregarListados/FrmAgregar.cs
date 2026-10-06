@@ -24,6 +24,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public ClsListados cls;
 		public ClsAsistencia _clsA;
 		public string IdCuadrilla { get; set; }
+		public string IdPeriodo { get; set; }
 		public string SecuenciaSemana { get; set; }
 		public DateTime FechaInicio { get; set; }
 		public DateTime FechaFin { get; set; }
@@ -219,6 +220,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cls.ActualizarEmpleadosCuadrilla(
 				IdCuadrilla,
 				SecuenciaSemana,
+				IdPeriodo,
 				FechaInicio,
 				FechaFin,
 				dgvListadoAgregar);

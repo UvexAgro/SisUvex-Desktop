@@ -16,6 +16,11 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 	{
 		internal ClsAplicadores cls;
 		public int maxCantidadLineas = 0;
+		private bool _hayCambios = false;
+		private bool _cargandoDatos = false;
+		private bool _cambiandoEmpleado = false;
+		private int _filaEmpleadoAnterior = -1;
+		private int _cuadrillaAnterior = -1;
 
 		public FrmAplicadores()
 		{
@@ -78,13 +83,204 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 
 		private void cboCuadrilla_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (_cargandoDatos || _cambiandoEmpleado)
+				return;
 
-			cls.CargarEmpleadosFechaCuadrilla();
+			int nuevaCuadrilla = cboCuadrilla.SelectedIndex;
+
+			// Primera carga
+			if (_cuadrillaAnterior == -1)
+			{
+				_cuadrillaAnterior = nuevaCuadrilla;
+
+				_cargandoDatos = true;
+
+				try
+				{
+					cls.CargarEmpleadosFechaCuadrilla();
+				}
+				finally
+				{
+					_cargandoDatos = false;
+				}
+
+				return;
+			}
+
+			// Si no cambió realmente
+			if (nuevaCuadrilla == _cuadrillaAnterior)
+				return;
+
+			// ==========================================
+			// VALIDAR CAMBIOS
+			// ==========================================
+
+			if (!ConfirmarCambiosSinGuardar())
+			{
+				_cambiandoEmpleado = true;
+
+				try
+				{
+					cboCuadrilla.SelectedIndex = _cuadrillaAnterior;
+				}
+				finally
+				{
+					_cambiandoEmpleado = false;
+				}
+
+				return;
+			}
+
+			// ==========================================
+			// CAMBIAR CUADRILLA
+			// ==========================================
+
+			_cuadrillaAnterior = nuevaCuadrilla;
+
+			_cargandoDatos = true;
+
+			try
+			{
+				cls.CargarEmpleadosFechaCuadrilla();
+			}
+			finally
+			{
+				_cargandoDatos = false;
+			}
 		}
-
+		
 		private void dgvEmpleados_SelectionChanged(object sender, EventArgs e)
 		{
+			if (_cargandoDatos || _cambiandoEmpleado)
+				return;
+
+			if (dgvEmpleados.CurrentRow == null)
+				return;
+
+			int nuevaFila = dgvEmpleados.CurrentRow.Index;
+
+			// Primera selección
+			if (_filaEmpleadoAnterior == -1)
+			{
+				_filaEmpleadoAnterior = nuevaFila;
+
+				cls.CargarDatosEmpleadoSeleccionado();
+
+				_hayCambios = false;
+
+				return;
+			}
+
+			// Si sigue siendo el mismo empleado
+			if (nuevaFila == _filaEmpleadoAnterior)
+				return;
+
+			// ==========================================
+			// VALIDAR CAMBIOS
+			// ==========================================
+
+			if (!ConfirmarCambiosSinGuardar())
+			{
+				_cambiandoEmpleado = true;
+
+				try
+				{
+					dgvEmpleados.ClearSelection();
+
+					if (_filaEmpleadoAnterior >= 0 &&
+						_filaEmpleadoAnterior < dgvEmpleados.Rows.Count)
+					{
+						dgvEmpleados.Rows[_filaEmpleadoAnterior].Selected = true;
+
+						dgvEmpleados.CurrentCell =
+							dgvEmpleados.Rows[_filaEmpleadoAnterior]
+							.Cells[0];
+					}
+				}
+				finally
+				{
+					_cambiandoEmpleado = false;
+				}
+
+				return;
+			}
+
+			// ==========================================
+			// ACEPTAR CAMBIO
+			// ==========================================
+
+			_filaEmpleadoAnterior = nuevaFila;
+
 			cls.CargarDatosEmpleadoSeleccionado();
+
+			_hayCambios = false;
+		}
+		private bool ConfirmarCambiosSinGuardar()
+		{
+			if (!_hayCambios)
+				return true;
+
+			DialogResult respuesta = MessageBox.Show(
+				"Tienes cambios sin guardar.\n\n" +
+				"¿Deseas guardar los cambios antes de continuar?",
+				"Cambios sin guardar",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Warning
+			);
+
+			// ==========================================
+			// SÍ → GUARDAR
+			// ==========================================
+
+			if (respuesta == DialogResult.Yes)
+			{
+				cls.GuardarCostosAplicador();
+
+				_hayCambios = false;
+
+				return true;
+			}
+
+			// ==========================================
+			// NO → DESCARTAR
+			// ==========================================
+
+			if (respuesta == DialogResult.No)
+			{
+				LimpiarCapturaEmpleado();
+
+				_hayCambios = false;
+
+				return true;
+			}
+
+			// ==========================================
+			// CANCELAR
+			// ==========================================
+
+			return false;
+		}
+		private void LimpiarCapturaEmpleado()
+		{
+			dgvDatos.Rows.Clear();
+
+			cboLote.SelectedIndex = -1;
+
+			txbLineas.Clear();
+			txbCosto.Clear();
+			txbImportePorcentaje.Clear();
+
+			nudCantidad.Value = 0;
+
+			txbHorasTrabajadas.Clear();
+			txbImporteHoras.Clear();
+
+			// Si tienes estos controles:
+			// lblTotalCuadro.Text = "$ 0.00";
+			// lblTotalHoras.Text = "$ 0.00";
+			// lblTotalPagar.Text = "$ 0.00";
+
+			cls.ActualizarDetalleCuadros();
 		}
 
 		private void cboLote_SelectedIndexChanged(object sender, EventArgs e)
@@ -118,11 +314,13 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 		private void btnAgregar_Click(object sender, EventArgs e)
 		{
 			cls.AgregarCuadroDetalle();
+			_hayCambios = true;
 		}
 
 		private void btnAgregarHoras_Click(object sender, EventArgs e)
 		{
 			cls.AgregarHorasDetalle();
+			_hayCambios = true;
 		}
 
 		private void dgvDatos_CellContentClick(object sender, DataGridViewCellEventArgs e)

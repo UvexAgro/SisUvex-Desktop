@@ -2063,5 +2063,6 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 				sql.CloseConectionWrite();
 			}
 		}
+
 	}
 }

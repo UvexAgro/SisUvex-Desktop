@@ -58,6 +58,8 @@
 			label4 = new Label();
 			dgvNomina = new DataGridView();
 			btnConsultar = new Button();
+			lblCuadrilla = new Label();
+			label16 = new Label();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			panel2.SuspendLayout();
@@ -209,6 +211,8 @@
 			// panel4
 			// 
 			panel4.BackColor = Color.FromArgb(236, 243, 249);
+			panel4.Controls.Add(lblCuadrilla);
+			panel4.Controls.Add(label16);
 			panel4.Controls.Add(btnBuscar);
 			panel4.Controls.Add(lblLugardePago);
 			panel4.Controls.Add(lblNombre);
@@ -221,7 +225,7 @@
 			panel4.Controls.Add(panel5);
 			panel4.Location = new Point(1, 247);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(1168, 200);
+			panel4.Size = new Size(1168, 225);
 			panel4.TabIndex = 9;
 			// 
 			// btnBuscar
@@ -393,6 +397,27 @@
 			btnConsultar.UseVisualStyleBackColor = false;
 			btnConsultar.Click += btnConsultar_Click;
 			// 
+			// lblCuadrilla
+			// 
+			lblCuadrilla.AutoSize = true;
+			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCuadrilla.Location = new Point(140, 198);
+			lblCuadrilla.Name = "lblCuadrilla";
+			lblCuadrilla.Size = new Size(13, 17);
+			lblCuadrilla.TabIndex = 39;
+			lblCuadrilla.Text = "-";
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label16.ForeColor = Color.FromArgb(31, 95, 145);
+			label16.Location = new Point(11, 196);
+			label16.Name = "label16";
+			label16.Size = new Size(67, 17);
+			label16.TabIndex = 38;
+			label16.Text = "Cuadrilla :";
+			// 
 			// FrmConsulta
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -454,5 +479,7 @@
 		private Button btnConsultar;
 		public Button btnBuscar;
 		public Label lblNombre;
+		public Label lblCuadrilla;
+		private Label label16;
 	}
 }
