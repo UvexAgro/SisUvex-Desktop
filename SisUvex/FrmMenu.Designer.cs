@@ -131,10 +131,10 @@ namespace SisUvex
 			nominaDeCampoToolStripMenuItem = new ToolStripMenuItem();
 			listasDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
 			registroDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
-			consultaDeActividadPorEmpleadoToolStripMenuItem = new ToolStripMenuItem();
-			consultarNominaToolStripMenuItem = new ToolStripMenuItem();
-			reporteDeAsistenciasASToolStripMenuItem = new ToolStripMenuItem();
 			coAplicadoresToolStripMenuItem = new ToolStripMenuItem();
+			consultarNominaToolStripMenuItem = new ToolStripMenuItem();
+			consultaDeActividadPorEmpleadoToolStripMenuItem = new ToolStripMenuItem();
+			reporteDeAsistenciasASToolStripMenuItem = new ToolStripMenuItem();
 			ajustesDeNominaToolStripMenuItem = new ToolStripMenuItem();
 			empaqueToolStripMenuItem = new ToolStripMenuItem();
 			mantenimientoToolStripMenuItem = new ToolStripMenuItem();
@@ -193,6 +193,7 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
+			relojChecadorToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -873,7 +874,7 @@ namespace SisUvex
 			// 
 			// nominaDeCampoToolStripMenuItem
 			// 
-			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, coAplicadoresToolStripMenuItem, consultarNominaToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem });
+			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { relojChecadorToolStripMenuItem, listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, coAplicadoresToolStripMenuItem, consultarNominaToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem });
 			nominaDeCampoToolStripMenuItem.Name = "nominaDeCampoToolStripMenuItem";
 			nominaDeCampoToolStripMenuItem.Size = new Size(189, 22);
 			nominaDeCampoToolStripMenuItem.Text = "Nomina de Campo";
@@ -892,12 +893,12 @@ namespace SisUvex
 			registroDeAsistenciaToolStripMenuItem.Text = "Registro de Asistencia";
 			registroDeAsistenciaToolStripMenuItem.Click += registroDeAsistenciaToolStripMenuItem_Click;
 			// 
-			// consultaDeActividadPorEmpleadoToolStripMenuItem
+			// coAplicadoresToolStripMenuItem
 			// 
-			consultaDeActividadPorEmpleadoToolStripMenuItem.Name = "consultaDeActividadPorEmpleadoToolStripMenuItem";
-			consultaDeActividadPorEmpleadoToolStripMenuItem.Size = new Size(267, 22);
-			consultaDeActividadPorEmpleadoToolStripMenuItem.Text = "Consulta de Actividad por Empleado";
-			consultaDeActividadPorEmpleadoToolStripMenuItem.Click += consultaDeActividadPorEmpleadoToolStripMenuItem_Click;
+			coAplicadoresToolStripMenuItem.Name = "coAplicadoresToolStripMenuItem";
+			coAplicadoresToolStripMenuItem.Size = new Size(267, 22);
+			coAplicadoresToolStripMenuItem.Text = "Aplicadores";
+			coAplicadoresToolStripMenuItem.Click += coAplicadoresToolStripMenuItem_Click;
 			// 
 			// consultarNominaToolStripMenuItem
 			// 
@@ -906,19 +907,19 @@ namespace SisUvex
 			consultarNominaToolStripMenuItem.Text = "Consultar y Generar CSV";
 			consultarNominaToolStripMenuItem.Click += consultarNominaToolStripMenuItem_Click;
 			// 
+			// consultaDeActividadPorEmpleadoToolStripMenuItem
+			// 
+			consultaDeActividadPorEmpleadoToolStripMenuItem.Name = "consultaDeActividadPorEmpleadoToolStripMenuItem";
+			consultaDeActividadPorEmpleadoToolStripMenuItem.Size = new Size(267, 22);
+			consultaDeActividadPorEmpleadoToolStripMenuItem.Text = "Consulta de Actividad por Empleado";
+			consultaDeActividadPorEmpleadoToolStripMenuItem.Click += consultaDeActividadPorEmpleadoToolStripMenuItem_Click;
+			// 
 			// reporteDeAsistenciasASToolStripMenuItem
 			// 
 			reporteDeAsistenciasASToolStripMenuItem.Name = "reporteDeAsistenciasASToolStripMenuItem";
 			reporteDeAsistenciasASToolStripMenuItem.Size = new Size(267, 22);
 			reporteDeAsistenciasASToolStripMenuItem.Text = "Reporte de asistencias (AS)";
 			reporteDeAsistenciasASToolStripMenuItem.Click += reporteDeAsistenciasASToolStripMenuItem_Click;
-			// 
-			// coAplicadoresToolStripMenuItem
-			// 
-			coAplicadoresToolStripMenuItem.Name = "coAplicadoresToolStripMenuItem";
-			coAplicadoresToolStripMenuItem.Size = new Size(267, 22);
-			coAplicadoresToolStripMenuItem.Text = "Aplicadores";
-			coAplicadoresToolStripMenuItem.Click += coAplicadoresToolStripMenuItem_Click;
 			// 
 			// ajustesDeNominaToolStripMenuItem
 			// 
@@ -1327,6 +1328,13 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
+			// relojChecadorToolStripMenuItem
+			// 
+			relojChecadorToolStripMenuItem.Name = "relojChecadorToolStripMenuItem";
+			relojChecadorToolStripMenuItem.Size = new Size(267, 22);
+			relojChecadorToolStripMenuItem.Text = "Reloj Checador  ";
+			relojChecadorToolStripMenuItem.Click += relojChecadorToolStripMenuItem_Click;
+			// 
 			// FrmMenu
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1520,5 +1528,6 @@ namespace SisUvex
 		private ToolStripMenuItem departamentoToolStripMenuItem;
 		private ToolStripMenuItem costoPorLoteToolStripMenuItem;
 		private ToolStripMenuItem coAplicadoresToolStripMenuItem;
+		private ToolStripMenuItem relojChecadorToolStripMenuItem;
 	}
 }
