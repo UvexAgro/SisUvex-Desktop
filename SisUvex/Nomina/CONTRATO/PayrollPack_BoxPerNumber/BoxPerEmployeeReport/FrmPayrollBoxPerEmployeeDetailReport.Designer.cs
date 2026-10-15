@@ -2,44 +2,21 @@
 {
     partial class FrmPayrollBoxPerEmployeeDetailReport
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPayrollBoxPerEmployeeDetailReport));
             lblTitle = new Label();
-            bgpInfo = new GroupBox();
-            lblSobrantesInfo = new Label();
-            dtpDate1 = new DateTimePicker();
-            btnExcel = new Button();
-            labelDate = new Label();
-            labelDateTo = new Label();
-            dtpDate2 = new DateTimePicker();
-            btnLoadReport = new Button();
             gpbFilters = new GroupBox();
             lblEmployeeAdvice = new Label();
             btnAddList = new Button();
@@ -53,13 +30,36 @@
             labelSeason = new Label();
             labelContractor = new Label();
             cboContractor = new ComboBox();
-            dgvReport = new DataGridView();
-            chbShowEmployees = new CheckBox();
-            chbShowReport = new CheckBox();
+            bgpInfo = new GroupBox();
+            lblSobrantesInfo = new Label();
+            dtpDate1 = new DateTimePicker();
+            btnExcel = new Button();
+            labelDate = new Label();
+            labelDateTo = new Label();
+            dtpDate2 = new DateTimePicker();
+            btnLoadReport = new Button();
             btnClearList = new Button();
-            bgpInfo.SuspendLayout();
+            pgrReport = new ProgressBar();
+            tabReport = new TabControl();
+            tabPageListado = new TabPage();
+            dgvListado = new DataGridView();
+            tabPageDetalle = new TabPage();
+            dgvDetalle = new DataGridView();
+            tabPageResumen = new TabPage();
+            dgvResumen = new DataGridView();
+            tabPageCajasEmp = new TabPage();
+            dgvCajasEmpleado = new DataGridView();
             gpbFilters.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
+            bgpInfo.SuspendLayout();
+            tabReport.SuspendLayout();
+            tabPageListado.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvListado).BeginInit();
+            tabPageDetalle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
+            tabPageResumen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
+            tabPageCajasEmp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvCajasEmpleado).BeginInit();
             SuspendLayout();
             // 
             // lblTitle
@@ -70,104 +70,9 @@
             lblTitle.Margin = new Padding(0);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(340, 21);
-            lblTitle.TabIndex = 73;
+            lblTitle.TabIndex = 0;
             lblTitle.Tag = "lotData";
             lblTitle.Text = "Reporte cajas por cada empleado detallado";
-            // 
-            // bgpInfo
-            // 
-            bgpInfo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            bgpInfo.Controls.Add(lblSobrantesInfo);
-            bgpInfo.Controls.Add(dtpDate1);
-            bgpInfo.Controls.Add(btnExcel);
-            bgpInfo.Controls.Add(labelDate);
-            bgpInfo.Controls.Add(labelDateTo);
-            bgpInfo.Controls.Add(dtpDate2);
-            bgpInfo.Controls.Add(btnLoadReport);
-            bgpInfo.Font = new Font("Segoe UI", 12F);
-            bgpInfo.Location = new Point(12, 593);
-            bgpInfo.Name = "bgpInfo";
-            bgpInfo.Size = new Size(859, 78);
-            bgpInfo.TabIndex = 76;
-            bgpInfo.TabStop = false;
-            bgpInfo.Text = "Reporte";
-            // 
-            // lblSobrantesInfo
-            // 
-            lblSobrantesInfo.AutoSize = true;
-            lblSobrantesInfo.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSobrantesInfo.ForeColor = Color.Gray;
-            lblSobrantesInfo.Location = new Point(17, 52);
-            lblSobrantesInfo.Name = "lblSobrantesInfo";
-            lblSobrantesInfo.Size = new Size(545, 15);
-            lblSobrantesInfo.TabIndex = 72;
-            lblSobrantesInfo.Text = "ℹ Si no hay empleados en el listado se generará de todos los empleados en la temporada seleccionada";
-            // 
-            // dtpDate1
-            // 
-            dtpDate1.Format = DateTimePickerFormat.Short;
-            dtpDate1.Location = new Point(118, 20);
-            dtpDate1.Name = "dtpDate1";
-            dtpDate1.Size = new Size(120, 29);
-            dtpDate1.TabIndex = 52;
-            // 
-            // btnExcel
-            // 
-            btnExcel.Font = new Font("Segoe UI", 12F);
-            btnExcel.Image = Properties.Resources.excelIcon;
-            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(753, 19);
-            btnExcel.Name = "btnExcel";
-            btnExcel.Padding = new Padding(0, 0, 4, 0);
-            btnExcel.Size = new Size(97, 31);
-            btnExcel.TabIndex = 71;
-            btnExcel.Text = "Excel";
-            btnExcel.TextAlign = ContentAlignment.TopLeft;
-            btnExcel.UseVisualStyleBackColor = true;
-            btnExcel.Click += btnExcel_Click;
-            // 
-            // labelDate
-            // 
-            labelDate.AutoSize = true;
-            labelDate.Location = new Point(12, 25);
-            labelDate.Margin = new Padding(0);
-            labelDate.Name = "labelDate";
-            labelDate.Size = new Size(103, 21);
-            labelDate.TabIndex = 50;
-            labelDate.Text = "Rango fechas";
-            // 
-            // labelDateTo
-            // 
-            labelDateTo.AutoSize = true;
-            labelDateTo.Location = new Point(244, 25);
-            labelDateTo.Margin = new Padding(0);
-            labelDateTo.Name = "labelDateTo";
-            labelDateTo.Size = new Size(22, 21);
-            labelDateTo.TabIndex = 51;
-            labelDateTo.Text = "al";
-            // 
-            // dtpDate2
-            // 
-            dtpDate2.Format = DateTimePickerFormat.Short;
-            dtpDate2.Location = new Point(269, 20);
-            dtpDate2.Name = "dtpDate2";
-            dtpDate2.Size = new Size(120, 29);
-            dtpDate2.TabIndex = 53;
-            // 
-            // btnLoadReport
-            // 
-            btnLoadReport.Font = new Font("Segoe UI", 12F);
-            btnLoadReport.Image = Properties.Resources.BuscarLupa1;
-            btnLoadReport.ImageAlign = ContentAlignment.MiddleRight;
-            btnLoadReport.Location = new Point(395, 19);
-            btnLoadReport.Name = "btnLoadReport";
-            btnLoadReport.Padding = new Padding(0, 0, 4, 0);
-            btnLoadReport.Size = new Size(142, 31);
-            btnLoadReport.TabIndex = 68;
-            btnLoadReport.Text = "Cargar reporte";
-            btnLoadReport.TextAlign = ContentAlignment.TopLeft;
-            btnLoadReport.UseVisualStyleBackColor = true;
-            btnLoadReport.Click += btnLoadReport_Click;
             // 
             // gpbFilters
             // 
@@ -188,7 +93,7 @@
             gpbFilters.Location = new Point(12, 33);
             gpbFilters.Name = "gpbFilters";
             gpbFilters.Size = new Size(859, 177);
-            gpbFilters.TabIndex = 74;
+            gpbFilters.TabIndex = 0;
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
             // 
@@ -328,145 +233,335 @@
             cboContractor.Size = new Size(190, 29);
             cboContractor.TabIndex = 24;
             // 
-            // dgvReport
+            // bgpInfo
             // 
-            dgvReport.AllowUserToAddRows = false;
-            dgvReport.AllowUserToDeleteRows = false;
-            dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dgvReport.BackgroundColor = SystemColors.Control;
-            dgvReport.BorderStyle = BorderStyle.Fixed3D;
-            dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvReport.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvReport.EnableHeadersVisualStyles = false;
-            dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 253);
-            dgvReport.Name = "dgvReport";
-            dgvReport.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvReport.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvReport.RowHeadersVisible = false;
-            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(858, 338);
-            dgvReport.TabIndex = 75;
-            dgvReport.CellContentClick += dgvReport_CellContentClick;
-            dgvReport.CellFormatting += dgvReport_CellFormatting;
+            bgpInfo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            bgpInfo.Controls.Add(btnClearList);
+            bgpInfo.Controls.Add(lblSobrantesInfo);
+            bgpInfo.Controls.Add(dtpDate1);
+            bgpInfo.Controls.Add(btnExcel);
+            bgpInfo.Controls.Add(labelDate);
+            bgpInfo.Controls.Add(labelDateTo);
+            bgpInfo.Controls.Add(dtpDate2);
+            bgpInfo.Controls.Add(btnLoadReport);
+            bgpInfo.Font = new Font("Segoe UI", 12F);
+            bgpInfo.Location = new Point(12, 216);
+            bgpInfo.Name = "bgpInfo";
+            bgpInfo.Size = new Size(859, 78);
+            bgpInfo.TabIndex = 76;
+            bgpInfo.TabStop = false;
+            bgpInfo.Text = "Reporte";
             // 
-            // chbShowEmployees
+            // lblSobrantesInfo
             // 
-            chbShowEmployees.Appearance = Appearance.Button;
-            chbShowEmployees.Font = new Font("Segoe UI", 12F);
-            chbShowEmployees.Image = Properties.Resources.verIcon16;
-            chbShowEmployees.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowEmployees.Location = new Point(114, 216);
-            chbShowEmployees.Name = "chbShowEmployees";
-            chbShowEmployees.Padding = new Padding(4, 0, 0, 0);
-            chbShowEmployees.Size = new Size(91, 31);
-            chbShowEmployees.TabIndex = 77;
-            chbShowEmployees.Text = "Listado";
-            chbShowEmployees.TextAlign = ContentAlignment.MiddleRight;
-            chbShowEmployees.UseVisualStyleBackColor = true;
-            chbShowEmployees.CheckedChanged += chbShowEmployees_CheckedChanged;
+            lblSobrantesInfo.AutoSize = true;
+            lblSobrantesInfo.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSobrantesInfo.ForeColor = Color.Gray;
+            lblSobrantesInfo.Location = new Point(17, 52);
+            lblSobrantesInfo.Name = "lblSobrantesInfo";
+            lblSobrantesInfo.Size = new Size(545, 15);
+            lblSobrantesInfo.TabIndex = 72;
+            lblSobrantesInfo.Text = "ℹ Si no hay empleados en el listado se generará de todos los empleados en la temporada seleccionada";
             // 
-            // chbShowReport
+            // dtpDate1
             // 
-            chbShowReport.Appearance = Appearance.Button;
-            chbShowReport.Font = new Font("Segoe UI", 12F);
-            chbShowReport.Image = Properties.Resources.verIcon16;
-            chbShowReport.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowReport.Location = new Point(211, 216);
-            chbShowReport.Name = "chbShowReport";
-            chbShowReport.Padding = new Padding(4, 0, 0, 0);
-            chbShowReport.Size = new Size(95, 31);
-            chbShowReport.TabIndex = 78;
-            chbShowReport.Text = "Reporte";
-            chbShowReport.TextAlign = ContentAlignment.MiddleRight;
-            chbShowReport.UseVisualStyleBackColor = true;
-            chbShowReport.CheckedChanged += chbShowReport_CheckedChanged;
+            dtpDate1.Format = DateTimePickerFormat.Short;
+            dtpDate1.Location = new Point(118, 20);
+            dtpDate1.Name = "dtpDate1";
+            dtpDate1.Size = new Size(120, 29);
+            dtpDate1.TabIndex = 52;
+            // 
+            // btnExcel
+            // 
+            btnExcel.Font = new Font("Segoe UI", 12F);
+            btnExcel.Image = Properties.Resources.excelIcon;
+            btnExcel.ImageAlign = ContentAlignment.MiddleRight;
+            btnExcel.Location = new Point(753, 19);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Padding = new Padding(0, 0, 4, 0);
+            btnExcel.Size = new Size(97, 31);
+            btnExcel.TabIndex = 71;
+            btnExcel.Text = "Excel";
+            btnExcel.TextAlign = ContentAlignment.TopLeft;
+            btnExcel.UseVisualStyleBackColor = true;
+            btnExcel.Click += btnExcel_Click;
+            // 
+            // labelDate
+            // 
+            labelDate.AutoSize = true;
+            labelDate.Location = new Point(12, 25);
+            labelDate.Margin = new Padding(0);
+            labelDate.Name = "labelDate";
+            labelDate.Size = new Size(103, 21);
+            labelDate.TabIndex = 50;
+            labelDate.Text = "Rango fechas";
+            // 
+            // labelDateTo
+            // 
+            labelDateTo.AutoSize = true;
+            labelDateTo.Location = new Point(244, 25);
+            labelDateTo.Margin = new Padding(0);
+            labelDateTo.Name = "labelDateTo";
+            labelDateTo.Size = new Size(22, 21);
+            labelDateTo.TabIndex = 51;
+            labelDateTo.Text = "al";
+            // 
+            // dtpDate2
+            // 
+            dtpDate2.Format = DateTimePickerFormat.Short;
+            dtpDate2.Location = new Point(269, 20);
+            dtpDate2.Name = "dtpDate2";
+            dtpDate2.Size = new Size(120, 29);
+            dtpDate2.TabIndex = 53;
+            // 
+            // btnLoadReport
+            // 
+            btnLoadReport.Font = new Font("Segoe UI", 12F);
+            btnLoadReport.Image = Properties.Resources.BuscarLupa1;
+            btnLoadReport.ImageAlign = ContentAlignment.MiddleRight;
+            btnLoadReport.Location = new Point(395, 19);
+            btnLoadReport.Name = "btnLoadReport";
+            btnLoadReport.Padding = new Padding(0, 0, 4, 0);
+            btnLoadReport.Size = new Size(142, 31);
+            btnLoadReport.TabIndex = 68;
+            btnLoadReport.Text = "Cargar reporte";
+            btnLoadReport.TextAlign = ContentAlignment.TopLeft;
+            btnLoadReport.UseVisualStyleBackColor = true;
+            btnLoadReport.Click += btnLoadReport_Click;
             // 
             // btnClearList
             // 
             btnClearList.Font = new Font("Segoe UI", 12F);
             btnClearList.Image = Properties.Resources.limpiarIcon16;
             btnClearList.ImageAlign = ContentAlignment.MiddleLeft;
-            btnClearList.Location = new Point(12, 216);
+            btnClearList.Location = new Point(543, 19);
             btnClearList.Name = "btnClearList";
             btnClearList.Padding = new Padding(5, 0, 0, 0);
             btnClearList.Size = new Size(96, 31);
-            btnClearList.TabIndex = 83;
+            btnClearList.TabIndex = 20;
             btnClearList.Text = "Limpiar";
             btnClearList.TextAlign = ContentAlignment.MiddleRight;
             btnClearList.UseVisualStyleBackColor = true;
             btnClearList.Click += btnClearList_Click;
+            // 
+            // pgrReport
+            // 
+            pgrReport.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pgrReport.Location = new Point(12, 300);
+            pgrReport.Maximum = 1000;
+            pgrReport.Name = "pgrReport";
+            pgrReport.Size = new Size(859, 12);
+            pgrReport.Style = ProgressBarStyle.Marquee;
+            pgrReport.TabIndex = 30;
+            pgrReport.Visible = false;
+            // 
+            // tabReport
+            // 
+            tabReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabReport.Controls.Add(tabPageListado);
+            tabReport.Controls.Add(tabPageDetalle);
+            tabReport.Controls.Add(tabPageResumen);
+            tabReport.Controls.Add(tabPageCajasEmp);
+            tabReport.Location = new Point(12, 318);
+            tabReport.Name = "tabReport";
+            tabReport.SelectedIndex = 0;
+            tabReport.Size = new Size(858, 354);
+            tabReport.TabIndex = 40;
+            tabReport.SelectedIndexChanged += tabReport_SelectedIndexChanged;
+            // 
+            // tabPageListado
+            // 
+            tabPageListado.Controls.Add(dgvListado);
+            tabPageListado.Location = new Point(4, 24);
+            tabPageListado.Name = "tabPageListado";
+            tabPageListado.Padding = new Padding(3);
+            tabPageListado.Size = new Size(850, 326);
+            tabPageListado.TabIndex = 0;
+            tabPageListado.Text = "Listado";
+            tabPageListado.UseVisualStyleBackColor = true;
+            // 
+            // dgvListado
+            // 
+            dgvListado.Location = new Point(0, 0);
+            dgvListado.Name = "dgvListado";
+            dgvListado.Size = new Size(240, 150);
+            dgvListado.TabIndex = 0;
+            dgvListado.CellContentClick += dgvListado_CellContentClick;
+            dgvListado.CellFormatting += dgvListado_CellFormatting;
+            // 
+            // tabPageDetalle
+            // 
+            tabPageDetalle.Controls.Add(dgvDetalle);
+            tabPageDetalle.Location = new Point(4, 24);
+            tabPageDetalle.Name = "tabPageDetalle";
+            tabPageDetalle.Padding = new Padding(3);
+            tabPageDetalle.Size = new Size(850, 295);
+            tabPageDetalle.TabIndex = 1;
+            tabPageDetalle.Text = "Reporte Detalle";
+            tabPageDetalle.UseVisualStyleBackColor = true;
+            // 
+            // dgvDetalle
+            // 
+            dgvDetalle.Location = new Point(0, 0);
+            dgvDetalle.Name = "dgvDetalle";
+            dgvDetalle.Size = new Size(240, 150);
+            dgvDetalle.TabIndex = 0;
+            dgvDetalle.CellFormatting += dgvDetalle_CellFormatting;
+            dgvDetalle.RowPostPaint += dgvDetalle_RowPostPaint;
+            // 
+            // tabPageResumen
+            // 
+            tabPageResumen.Controls.Add(dgvResumen);
+            tabPageResumen.Location = new Point(4, 24);
+            tabPageResumen.Name = "tabPageResumen";
+            tabPageResumen.Padding = new Padding(3);
+            tabPageResumen.Size = new Size(850, 295);
+            tabPageResumen.TabIndex = 2;
+            tabPageResumen.Text = "RESUMEN";
+            tabPageResumen.UseVisualStyleBackColor = true;
+            // 
+            // dgvResumen
+            // 
+            dgvResumen.Location = new Point(0, 0);
+            dgvResumen.Name = "dgvResumen";
+            dgvResumen.Size = new Size(240, 150);
+            dgvResumen.TabIndex = 0;
+            dgvResumen.CellFormatting += dgvResumen_CellFormatting;
+            // 
+            // tabPageCajasEmp
+            // 
+            tabPageCajasEmp.Controls.Add(dgvCajasEmpleado);
+            tabPageCajasEmp.Location = new Point(4, 24);
+            tabPageCajasEmp.Name = "tabPageCajasEmp";
+            tabPageCajasEmp.Padding = new Padding(3);
+            tabPageCajasEmp.Size = new Size(850, 295);
+            tabPageCajasEmp.TabIndex = 3;
+            tabPageCajasEmp.Text = "Cajas empleado";
+            tabPageCajasEmp.UseVisualStyleBackColor = true;
+            // 
+            // dgvCajasEmpleado
+            // 
+            dgvCajasEmpleado.Location = new Point(0, 0);
+            dgvCajasEmpleado.Name = "dgvCajasEmpleado";
+            dgvCajasEmpleado.Size = new Size(240, 150);
+            dgvCajasEmpleado.TabIndex = 0;
+            dgvCajasEmpleado.CellFormatting += dgvCajasEmpleado_CellFormatting;
             // 
             // FrmPayrollBoxPerEmployeeDetailReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(882, 684);
-            Controls.Add(btnClearList);
-            Controls.Add(chbShowReport);
-            Controls.Add(chbShowEmployees);
+            Controls.Add(pgrReport);
+            Controls.Add(tabReport);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
-            Controls.Add(dgvReport);
             Controls.Add(lblTitle);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPayrollBoxPerEmployeeDetailReport";
             Text = "Reporte cajas por cada empleado detallado";
             Load += FrmPayrollBoxPerEmployeeDetailReport_Load;
-            bgpInfo.ResumeLayout(false);
-            bgpInfo.PerformLayout();
             gpbFilters.ResumeLayout(false);
             gpbFilters.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
+            bgpInfo.ResumeLayout(false);
+            bgpInfo.PerformLayout();
+            tabReport.ResumeLayout(false);
+            tabPageListado.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvListado).EndInit();
+            tabPageDetalle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
+            tabPageResumen.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvResumen).EndInit();
+            tabPageCajasEmp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvCajasEmpleado).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
+        /// <summary>Configura las propiedades comunes de un DataGridView del reporte.</summary>
+        private static void ConfigureDgv(
+            DataGridView dgv,
+            DataGridViewCellStyle headerStyle,
+            DataGridViewCellStyle rowStyle,
+            bool readOnly)
+        {
+            DataGridViewCellStyle hs = new DataGridViewCellStyle
+            {
+                Alignment          = DataGridViewContentAlignment.MiddleCenter,
+                BackColor          = SystemColors.Control,
+                Font               = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                ForeColor          = SystemColors.WindowText,
+                SelectionBackColor = SystemColors.Control,
+                SelectionForeColor = SystemColors.WindowText,
+                WrapMode           = DataGridViewTriState.True,
+            };
+            DataGridViewCellStyle rs = new DataGridViewCellStyle
+            {
+                Alignment          = DataGridViewContentAlignment.MiddleLeft,
+                BackColor          = SystemColors.Control,
+                Font               = new Font("Segoe UI", 9F),
+                ForeColor          = SystemColors.WindowText,
+                SelectionBackColor = SystemColors.Control,
+                SelectionForeColor = SystemColors.WindowText,
+                WrapMode           = DataGridViewTriState.True,
+            };
+
+            dgv.AllowUserToAddRows    = false;
+            dgv.AllowUserToDeleteRows = false;
+            dgv.Anchor                = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgv.BackgroundColor       = SystemColors.Control;
+            dgv.BorderStyle           = BorderStyle.Fixed3D;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dgv.ColumnHeadersDefaultCellStyle = hs;
+            dgv.ColumnHeadersHeightSizeMode   = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgv.EnableHeadersVisualStyles     = false;
+            dgv.ImeMode               = ImeMode.NoControl;
+            dgv.Location              = new Point(0, 0);
+            dgv.ReadOnly              = readOnly;
+            dgv.RowHeadersDefaultCellStyle = rs;
+            dgv.RowHeadersVisible     = false;
+            dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgv.SelectionMode         = DataGridViewSelectionMode.FullRowSelect;
+            dgv.Size                  = new Size(850, 295);
+            dgv.Dock                  = DockStyle.Fill;
+            dgv.TabIndex              = 0;
+        }
+
         #endregion
 
-        public Label lblTitle;
-        private GroupBox bgpInfo;
-        private Button btnExcel;
-        private GroupBox gpbFilters;
-        private Button btnLoadReport;
-        public DateTimePicker dtpDate2;
-        public DateTimePicker dtpDate1;
-        private Label labelDateTo;
-        private Label labelDate;
-        public ComboBox cboSeason;
-        public ComboBox cboWorkGroup;
-        private Label labelWorkGroup;
-        private Label labelSeason;
-        private Label labelContractor;
-        public ComboBox cboContractor;
-        public DataGridView dgvReport;
-        public CheckBox chbShowEmployees;
-        private Label label1;
-        public RichTextBox txbIdEmployee;
-        public CheckBox chbShowReport;
-        private Button btnAddEmployee;
-        private Button btnSearchEmployee;
-        private Button btnClearList;
-        private Button btnAddList;
-        private Label lblSobrantesInfo;
-        public Label lblEmployeeAdvice;
+        // ── Campos del designer ───────────────────────────────────────────────
+        public  Label         lblTitle;
+        private GroupBox      bgpInfo;
+        private Button        btnExcel;
+        private GroupBox      gpbFilters;
+        private Button        btnLoadReport;
+        public  DateTimePicker dtpDate2;
+        public  DateTimePicker dtpDate1;
+        private Label         labelDateTo;
+        private Label         labelDate;
+        public  ComboBox      cboSeason;
+        public  ComboBox      cboWorkGroup;
+        private Label         labelWorkGroup;
+        private Label         labelSeason;
+        private Label         labelContractor;
+        public  ComboBox      cboContractor;
+        private Label         label1;
+        public  RichTextBox   txbIdEmployee;
+        private Button        btnAddEmployee;
+        private Button        btnSearchEmployee;
+        private Button        btnClearList;
+        private Button        btnAddList;
+        private Label         lblSobrantesInfo;
+        public  Label         lblEmployeeAdvice;
+        public  ProgressBar   pgrReport;
+        public  TabControl    tabReport;
+        private TabPage       tabPageListado;
+        private TabPage       tabPageDetalle;
+        private TabPage       tabPageResumen;
+        private TabPage       tabPageCajasEmp;
+        public  DataGridView  dgvListado;
+        public  DataGridView  dgvDetalle;
+        public  DataGridView  dgvResumen;
+        public  DataGridView  dgvCajasEmpleado;
     }
 }

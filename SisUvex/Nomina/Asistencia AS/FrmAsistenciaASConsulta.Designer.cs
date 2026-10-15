@@ -45,6 +45,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             labelDateTo = new Label();
             dtpDate2 = new DateTimePicker();
             btnLoadReport = new Button();
+            txbLastDays = new TextBox();
+            lblLastDays = new Label();
             btnModifyAttendance = new Button();
             btnExcel = new Button();
             gpbFilters = new GroupBox();
@@ -68,6 +70,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             labelLP = new Label();
             labelSeason = new Label();
             dgvReport = new DataGridView();
+            pgrReport = new ProgressBar();
             lblTitle = new Label();
             btnOpenFrmAttendanceType = new Button();
             bgpInfo.SuspendLayout();
@@ -150,6 +153,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             bgpInfo.Controls.Add(labelDateTo);
             bgpInfo.Controls.Add(dtpDate2);
             bgpInfo.Controls.Add(btnLoadReport);
+            bgpInfo.Controls.Add(txbLastDays);
+            bgpInfo.Controls.Add(lblLastDays);
             bgpInfo.Font = new Font("Segoe UI", 12F);
             bgpInfo.Location = new Point(12, 168);
             bgpInfo.Name = "bgpInfo";
@@ -177,7 +182,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblSobrantesInfo.Name = "lblSobrantesInfo";
             lblSobrantesInfo.Size = new Size(545, 15);
             lblSobrantesInfo.TabIndex = 72;
-            lblSobrantesInfo.Text = "ℹ Si no hay empleados en el listado se generará de todos los empleados en la temporada seleccionada";
+            lblSobrantesInfo.Text = "ℹ Sin listado: indica Últimos días (empleados con importe). Vacío = sin ese límite";
             // 
             // label2
             // 
@@ -239,6 +244,25 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnLoadReport.TextAlign = ContentAlignment.TopLeft;
             btnLoadReport.UseVisualStyleBackColor = true;
             btnLoadReport.Click += btnLoadReport_Click;
+            // 
+            // txbLastDays
+            // 
+            txbLastDays.Location = new Point(545, 20);
+            txbLastDays.MaxLength = 4;
+            txbLastDays.Name = "txbLastDays";
+            txbLastDays.Size = new Size(50, 29);
+            txbLastDays.TabIndex = 96;
+            txbLastDays.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblLastDays
+            // 
+            lblLastDays.AutoSize = true;
+            lblLastDays.Location = new Point(543, 52);
+            lblLastDays.Margin = new Padding(0);
+            lblLastDays.Name = "lblLastDays";
+            lblLastDays.Size = new Size(99, 21);
+            lblLastDays.TabIndex = 97;
+            lblLastDays.Text = "Últimos días";
             // 
             // btnModifyAttendance
             // 
@@ -472,8 +496,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.AllowUserToAddRows = false;
             dgvReport.AllowUserToDeleteRows = false;
             dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvReport.BackgroundColor = SystemColors.Control;
             dgvReport.BorderStyle = BorderStyle.Fixed3D;
             dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -488,7 +510,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 289);
+            dgvReport.Location = new Point(12, 303);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -500,13 +522,25 @@ namespace SisUvex.Nomina.Asistencia_AS
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvReport.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvReport.RowHeadersVisible = false;
-            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(909, 342);
+            dgvReport.Size = new Size(909, 328);
             dgvReport.TabIndex = 86;
             dgvReport.CellFormatting += dgvReport_CellFormatting;
             dgvReport.CellPainting += dgvReport_CellPainting;
             dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
+            dgvReport.CellValueChanged += dgvReport_CellValueChanged;
+            dgvReport.ColumnHeaderMouseClick += dgvReport_ColumnHeaderMouseClick;
+            dgvReport.CurrentCellDirtyStateChanged += dgvReport_CurrentCellDirtyStateChanged;
+            // 
+            // pgrReport
+            // 
+            pgrReport.Location = new Point(12, 285);
+            pgrReport.Maximum = 1000;
+            pgrReport.Name = "pgrReport";
+            pgrReport.Size = new Size(706, 16);
+            pgrReport.Style = ProgressBarStyle.Continuous;
+            pgrReport.TabIndex = 95;
             // 
             // lblTitle
             // 
@@ -547,6 +581,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             Controls.Add(chbShowEmployees);
             Controls.Add(bgpInfo);
             Controls.Add(gpbFilters);
+            Controls.Add(pgrReport);
             Controls.Add(dgvReport);
             Controls.Add(lblTitle);
             Controls.Add(btnModifyAttendance);
@@ -578,6 +613,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Label labelDateTo;
         public DateTimePicker dtpDate2;
         private Button btnLoadReport;
+        public TextBox txbLastDays;
+        private Label lblLastDays;
         private Button btnModifyAttendance;
         private GroupBox gpbFilters;
         public Label lblEmployeeAdvice;
@@ -591,6 +628,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Label labelLP;
         private Label labelSeason;
         public DataGridView dgvReport;
+        public ProgressBar pgrReport;
         public Label lblTitle;
         public ComboBox cboAttendenceType;
         private Label label2;

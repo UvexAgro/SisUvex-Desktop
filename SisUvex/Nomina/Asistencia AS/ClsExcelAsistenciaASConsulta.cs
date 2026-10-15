@@ -14,7 +14,10 @@ namespace SisUvex.Nomina.Asistencia_AS
     /// Hojas:
     ///   1. "Reporte Asistencias" – Código, Nombre completo, LP, Total + 1 columna por día
     ///      (encabezado con fila de mes/año fusionada y fila de día "dd").
-    ///   2. "DATA" – datos crudos de la tabla del reporte.
+    ///   2. "Inasistencias" – una columna por fecha con falta y conteo en ventana de 30 días.
+    ///   3. "Desglose inasistencias" – un bloque por empleado con el detalle de cada ventana.
+    ///   4. "Calendario" – vista por mes.
+    ///   5. "DATA" – datos crudos de la tabla del reporte.
     /// </summary>
     internal sealed class ClsExcelAsistenciaASConsulta
     {
@@ -70,9 +73,15 @@ namespace SisUvex.Nomina.Asistencia_AS
                 return;
             }
 
+            reportData = OrderReportRowsByName(reportData);
+
             using var wb = new XLWorkbook();
 
             var wsReport = CreateReportSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
+
+            ClsExcelAsistenciaASFaltas.AddFaltasSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, dateRange);
+
+            ClsExcelAsistenciaASDesglose.AddDesgloseSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, dateRange);
 
             ClsAsistenciaASCalendario.AddCalendarSheet(wb, reportData, days ?? new List<DateTime>(), attendanceStylesByPrefix, colorAsistencia, dateRange, legend);
 
@@ -272,6 +281,20 @@ namespace SisUvex.Nomina.Asistencia_AS
         }
 
         // ── Utilidades estáticas ──────────────────────────────────────────────
+
+        private static DataTable OrderReportRowsByName(DataTable reportData)
+        {
+            if (reportData.Rows.Count <= 1) return reportData;
+            if (!reportData.Columns.Contains(ClsAsistenciaASConsulta.ReportColNombre))
+                return reportData;
+
+            return reportData.AsEnumerable()
+                .OrderBy(r => r[ClsAsistenciaASConsulta.ReportColNombre]?.ToString() ?? string.Empty,
+                    ClsAsistenciaASConsulta.EmployeeNameComparer)
+                .ThenBy(r => r[ClsAsistenciaASConsulta.ReportColCodigo]?.ToString() ?? string.Empty,
+                    StringComparer.OrdinalIgnoreCase)
+                .CopyToDataTable();
+        }
 
         private static string SafeStr(DataRow row, string col)
             => row.Table.Columns.Contains(col) && row[col] != DBNull.Value

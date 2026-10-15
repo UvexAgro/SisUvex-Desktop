@@ -34,12 +34,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         private void btnExcel_Click(object sender, EventArgs e)
             => cls.BtnGenerateExcelReport();
 
-        private void chbShowEmployees_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowEmployees_CheckedChanged();
-
-        private void chbShowReport_CheckedChanged(object sender, EventArgs e)
-            => cls.ChbShowReport_CheckedChanged();
-
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)
@@ -49,7 +43,6 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 return;
             }
 
-            // Ctrl+V / Shift+Insert: forzar pegado como texto plano (sin formato de Excel).
             if ((e.Control && e.KeyCode == Keys.V) || (e.Shift && e.KeyCode == Keys.Insert))
             {
                 e.SuppressKeyPress = true;
@@ -57,11 +50,27 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             }
         }
 
-        private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-            => cls.DgvReport_CellFormatting(sender, e);
+        // ── Eventos del TabControl ────────────────────────────────────────────
 
-        private void dgvReport_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
+        private void tabReport_SelectedIndexChanged(object sender, EventArgs e)
+            => cls.TabReport_SelectedIndexChanged();
+
+        // ── Eventos CellFormatting por DGV ────────────────────────────────────
+
+        private void dgvListado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) { }
+
+        private void dgvListado_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+
+        private void dgvDetalle_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => cls.DgvDetalle_CellFormatting(sender, e);
+
+        private void dgvDetalle_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+            => cls.DgvDetalle_RowPostPaint(sender, e);
+
+        private void dgvResumen_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => cls.DgvResumen_CellFormatting(sender, e);
+
+        private void dgvCajasEmpleado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => cls.DgvCajasEmpleado_CellFormatting(sender, e);
     }
 }

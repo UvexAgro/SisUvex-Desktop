@@ -84,6 +84,21 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.DgvReport_CellPainting(sender, e);
         }
 
+        private void dgvReport_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            cls.DgvReport_ColumnHeaderMouseClick(sender, e);
+        }
+
+        private void dgvReport_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            cls.DgvReport_CurrentCellDirtyStateChanged(sender, e);
+        }
+
+        private void dgvReport_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            cls.DgvReport_CellValueChanged(sender, e);
+        }
+
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)
@@ -148,6 +163,47 @@ namespace SisUvex.Nomina.Asistencia_AS
         private void tsmiSelectAll_Click(object sender, EventArgs e)
         {
             txbIdEmployee.SelectAll();
+        }
+
+        /// <summary>
+        /// Bloquea filtros, botones y cambios de vista mientras hay una carga en curso,
+        /// para que Application.DoEvents de la barra de progreso no reentre en esas acciones.
+        /// </summary>
+        internal void SetOperationBusy(bool busy)
+        {
+            bool enabled = !busy;
+            gpbFilters.Enabled = enabled;
+            bgpInfo.Enabled = enabled;
+            btnClearList.Enabled = enabled;
+            chbShowEmployees.Enabled = enabled;
+            chbShowReport.Enabled = enabled;
+            chbShowReportCalendar.Enabled = enabled;
+            btnExcel.Enabled = enabled;
+            btnModifyAttendance.Enabled = enabled;
+            btnOpenFrmAttendanceType.Enabled = enabled;
+        }
+
+        /// <summary>
+        /// Cursor de espera. Hay que restaurar también <see cref="Cursor.Current"/> y el del MDI:
+        /// si no, tras Application.DoEvents el reloj se queda pegado aunque el formulario ya haya terminado.
+        /// </summary>
+        internal void SetWaitCursor(bool wait)
+        {
+            UseWaitCursor = wait;
+            Cursor = wait ? Cursors.WaitCursor : Cursors.Default;
+            Application.UseWaitCursor = wait;
+            Cursor.Current = wait ? Cursors.WaitCursor : Cursors.Default;
+
+            dgvReport.UseWaitCursor = wait;
+            if (!wait)
+                dgvReport.Cursor = Cursors.Default;
+
+            if (MdiParent != null)
+            {
+                MdiParent.UseWaitCursor = wait;
+                if (!wait)
+                    MdiParent.Cursor = Cursors.Default;
+            }
         }
     }
 }
