@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.Formula.Functions;
 
 namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 {
 	internal class ClsReloj
 	{
 		public FrmReloj frm;
-		public (bool, string?) ObtenerEmpleado(string codigo)
+		public (bool Encontrado, string? Nombre, string? LugarPago, string? Cuadrilla)ObtenerEmpleado(string codigo, string idPeriodo, string numeroSemana)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -20,36 +22,107 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(@"
-            SELECT LTRIM(RTRIM(CONCAT(
-                v_name, ' ',
-                v_lastNamePat, ' ',
-                v_lastNameMat
-            )))
-            FROM dbo.Nom_Employees
-            WHERE id_employee = @Codigo;", sql.cnn))
+            SELECT
+                LTRIM(RTRIM(CONCAT(
+                    e.v_name, ' ',
+                    e.v_lastNamePat, ' ',
+                    e.v_lastNameMat
+                ))) AS Nombre,
+
+                MAX(
+                    CASE
+                        WHEN pp.id_placePayment IS NOT NULL THEN
+                            CONCAT(
+                                LTRIM(RTRIM(pp.id_placePayment)),
+                                ' - ',
+                                LTRIM(RTRIM(pp.v_namePlace))
+                            )
+                    END
+                ) AS LugarPago,
+
+                COALESCE(
+                    STRING_AGG(
+                        CAST(
+                            CONCAT(
+                                LTRIM(RTRIM(wg.c_order)),
+                                ' - ',
+                                LTRIM(RTRIM(wg.v_nameWorkGroup))
+                            ) AS VARCHAR(MAX)
+                        ),
+                        ', '
+                    ),
+                    'Sin cuadrilla'
+                ) AS Cuadrilla
+
+            FROM dbo.Nom_Employees e
+
+            LEFT JOIN dbo.Nom_EmployeeAttendenceList ea
+                ON ea.id_employee = e.id_employee
+                AND ea.id_period = @IdPeriodo
+                AND ea.c_sequence_per = @NumeroSemana
+
+            LEFT JOIN dbo.Nom_PlacePayment pp
+                ON pp.id_placePayment = ea.id_paymentPlace
+
+            LEFT JOIN dbo.Nom_WorkGroup wg
+                ON wg.id_workGroup = ea.id_workGroup
+                AND wg.c_active = '1'
+
+            WHERE e.id_employee = @Codigo
+
+            GROUP BY
+                e.id_employee,
+                e.v_name,
+                e.v_lastNamePat,
+                e.v_lastNameMat;",
+					sql.cnn))
 				{
 					cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 6)
 						.Value = codigo.Trim().PadLeft(6, '0');
 
-					object result = cmd.ExecuteScalar();
+					cmd.Parameters.Add("@IdPeriodo", SqlDbType.Char, 2)
+						.Value = idPeriodo.Trim();
 
-					if (result != null && result != DBNull.Value)
-						return (true, result.ToString());
+					cmd.Parameters.Add("@NumeroSemana", SqlDbType.Char, 2)
+						.Value = numeroSemana.Trim();
 
-					return (false, null);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							return (
+								true,
+								reader["Nombre"]?.ToString(),
+								reader["LugarPago"] == DBNull.Value
+									? null
+									: reader["LugarPago"].ToString(),
+								reader["Cuadrilla"]?.ToString() ?? "Sin cuadrilla"
+							);
+						}
+					}
+
+					return (false, null, null, null);
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Buscar empleado");
-				return (false, null);
+				MessageBox.Show(
+					ex.Message,
+					"Buscar empleado",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return (false, null, null, null);
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 		}
-		public DataTable ObtenerChecadas(string? codigoEmpleado, DateTime fecha)
+		public DataTable ObtenerChecadas(
+	string? codigoEmpleado,
+	DateTime fechaInicio,
+	DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 			DataTable dt = new DataTable();
@@ -92,8 +165,8 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
                 )), 6)
 
             WHERE
-                h.d_date >= @Fecha
-                AND h.d_date < DATEADD(DAY, 1, @Fecha)
+                h.d_date >= @FechaInicio
+                AND h.d_date < DATEADD(DAY, 1, @FechaFin)
 
                 AND (
                     @Codigo IS NULL
@@ -112,7 +185,8 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
             ORDER BY
                 e.v_lastNamePat,
                 e.v_lastNameMat,
-                e.v_name;",
+                e.v_name,
+                CAST(h.d_date AS DATE);",
 					sql.cnn))
 				{
 					string codigo = codigoEmpleado?.Trim() ?? "";
@@ -122,8 +196,11 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 							? DBNull.Value
 							: codigo.PadLeft(6, '0');
 
-					cmd.Parameters.Add("@Fecha", SqlDbType.Date)
-						.Value = fecha.Date;
+					cmd.Parameters.Add("@FechaInicio", SqlDbType.Date)
+						.Value = fechaInicio.Date;
+
+					cmd.Parameters.Add("@FechaFin", SqlDbType.Date)
+						.Value = fechaFin.Date;
 
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
@@ -148,6 +225,328 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.CloseConectionWrite();
 			}
 		}
+		public void CargarSemanas()
+		{
+			SQLControl sql = new SQLControl();
+
+			string query = @"
+			SELECT
+				id_period,
+				c_sequence_per,
+				d_startDate_per,
+				d_endDate_per,
+				v_name_per
+			FROM dbo.Payroll_AttendancePeriod
+			WHERE c_active = '1'
+			ORDER BY d_startDate_per DESC";
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar las semanas:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// Crear texto para mostrar en el ComboBox
+			if (!dt.Columns.Contains("SemanaMostrar"))
+			{
+				dt.Columns.Add("SemanaMostrar", typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				DateTime fechaInicio =
+					Convert.ToDateTime(row["d_startDate_per"]).Date;
+
+				DateTime fechaFin =
+					Convert.ToDateTime(row["d_endDate_per"]).Date;
+
+				row["SemanaMostrar"] =
+					"Semana " +
+					row["c_sequence_per"].ToString().Trim() +
+					" | " +
+					fechaInicio.ToString("dd/MM/yyyy") +
+					" - " +
+					fechaFin.ToString("dd/MM/yyyy");
+			}
+
+			// Cargar ComboBox
+			frm.cboSemana.DataSource = null;
+			frm.cboSemana.DisplayMember = "SemanaMostrar";
+			frm.cboSemana.ValueMember = "c_sequence_per";
+			frm.cboSemana.DataSource = dt;
+			SeleccionarSemanaActual(dt);
+		}
+		public DataTable CrearVistaSemanal(DataTable checadas,DateTime fechaInicio,DateTime fechaFin)
+		{
+			DataTable resultado = new DataTable();
+
+			fechaInicio = fechaInicio.Date;
+			fechaFin = fechaFin.Date;
+
+			if (fechaInicio > fechaFin)
+				return resultado;
+
+			resultado.Columns.Add("Codigo", typeof(string));
+			resultado.Columns.Add("Empleado", typeof(string));
+
+			CultureInfo cultura = new CultureInfo("es-MX");
+
+			// Crear columnas en orden cronológico
+			for (DateTime fecha = fechaInicio;
+				 fecha <= fechaFin;
+				 fecha = fecha.AddDays(1))
+			{
+				string dia = fecha.ToString("ddd", cultura).ToUpper();
+				string fechaTexto = fecha.ToString("dd/MM");
+
+				resultado.Columns.Add($"{dia} {fechaTexto} E", typeof(string));
+				resultado.Columns.Add($"{dia} {fechaTexto} S", typeof(string));
+			}
+
+			// Procesar checadas ordenadas por fecha y empleado
+			var registrosOrdenados = checadas.AsEnumerable()
+				.Where(r =>
+				{
+					DateTime fecha = Convert.ToDateTime(r["Fecha"]).Date;
+					return fecha >= fechaInicio && fecha <= fechaFin;
+				})
+				.OrderBy(r => r["Empleado"]?.ToString())
+				.ThenBy(r => Convert.ToDateTime(r["Fecha"]).Date);
+
+			foreach (DataRow registro in registrosOrdenados)
+			{
+				string codigo = registro["Codigo"].ToString() ?? "";
+				string empleado = registro["Empleado"].ToString() ?? "";
+
+				DataRow? fila = resultado.AsEnumerable()
+					.FirstOrDefault(r => r["Codigo"].ToString() == codigo);
+
+				if (fila == null)
+				{
+					fila = resultado.NewRow();
+
+					fila["Codigo"] = codigo;
+					fila["Empleado"] = empleado;
+
+					foreach (DataColumn columna in resultado.Columns)
+					{
+						if (columna.ColumnName != "Codigo" &&
+							columna.ColumnName != "Empleado")
+						{
+							fila[columna.ColumnName] = "--";
+						}
+					}
+
+					resultado.Rows.Add(fila);
+				}
+
+				DateTime fechaRegistro =
+					Convert.ToDateTime(registro["Fecha"]).Date;
+
+				string sufijo =
+					fechaRegistro.ToString("ddd", cultura).ToUpper()
+					+ " " + fechaRegistro.ToString("dd/MM");
+
+				string columnaEntrada = sufijo + " E";
+				string columnaSalida = sufijo + " S";
+
+				if (resultado.Columns.Contains(columnaEntrada))
+				{
+					fila[columnaEntrada] =
+						FormatearHora(registro["Primera Checada"]);
+				}
+
+				if (resultado.Columns.Contains(columnaSalida))
+				{
+					fila[columnaSalida] =
+						FormatearHora(registro["Última Checada"]);
+				}
+			}
+
+			return resultado;
+		}
+		public void ConfigurarColumnasSemanales()
+		{
+			DataGridView dgv = frm.dgvLista;
+
+			dgv.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.None;
+
+			if (dgv.Columns.Contains("Codigo"))
+			{
+				dgv.Columns["Codigo"].Width = 80;
+				dgv.Columns["Codigo"].Frozen = true;
+			}
+
+			if (dgv.Columns.Contains("Empleado"))
+			{
+				dgv.Columns["Empleado"].Width = 230;
+				dgv.Columns["Empleado"].Frozen = true;
+				dgv.Columns["Empleado"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleLeft;
+			}
+
+			foreach (DataGridViewColumn columna in dgv.Columns)
+			{
+				if (columna.Name != "Codigo" &&
+					columna.Name != "Empleado")
+				{
+					columna.Width = 65;
+					columna.DefaultCellStyle.Alignment =
+						DataGridViewContentAlignment.MiddleCenter;
+				}
+			}
+
+			dgv.ScrollBars = ScrollBars.Both;
+		}
+		private string FormatearHora(object valor)
+		{
+			if (valor == null || valor == DBNull.Value)
+				return "--";
+
+			if (valor is TimeSpan hora)
+				return hora.ToString(@"hh\:mm");
+
+			if (valor is DateTime fecha)
+				return fecha.ToString("HH:mm");
+
+			string texto = valor.ToString() ?? "";
+
+			if (TimeSpan.TryParse(texto, out TimeSpan horaConvertida))
+				return horaConvertida.ToString(@"hh\:mm");
+
+			return texto;
+		}
+		public void ConsultarAsistencia(DateTime fechaInicio, DateTime fechaFin)
+		{
+			ClsReloj reloj = new ClsReloj();
+
+			string codigo = frm.txbCodigo.Text.Trim();
+
+			// Validar rango de fechas
+			if (fechaInicio.Date > fechaFin.Date)
+			{
+				MessageBox.Show(
+					"La fecha inicial no puede ser mayor que la fecha final.",
+					"Rango de fechas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+				return;
+			}
+
+			// Si se escribió un código, buscar sus datos
+			if (!string.IsNullOrWhiteSpace(codigo))
+			{
+				codigo = codigo.PadLeft(6, '0');
+
+				if (frm.cboSemana.SelectedItem is not DataRowView semana)
+				{
+					MessageBox.Show("Selecciona una semana.");
+					return;
+				}
+
+				string idPeriodo = semana["id_period"].ToString()!.Trim();
+				string numeroSemana = semana["c_sequence_per"].ToString()!.Trim();
+
+				var empleado = reloj.ObtenerEmpleado(
+					codigo,
+					idPeriodo,
+					numeroSemana);
+
+				if (!empleado.Encontrado)
+				{
+					frm.txbEmpleado.Clear();
+					frm.txbLugardePago.Clear();
+					frm.txbCuadrilla.Clear();
+
+					MessageBox.Show("No se encontró el empleado.");
+
+					frm.txbCodigo.Focus();
+					frm.txbCodigo.SelectAll();
+					return;
+				}
+
+				frm.txbEmpleado.Text = empleado.Nombre ?? "";
+				frm.txbLugardePago.Text = empleado.LugarPago ?? "";
+				frm.txbCuadrilla.Text = empleado.Cuadrilla ?? "Sin cuadrilla";
+			}
+			else
+			{
+				// Sin código, consultar a todos los empleados
+				frm.txbEmpleado.Clear();
+				frm.txbLugardePago.Clear();
+				frm.txbCuadrilla.Clear();
+			}
+
+			// Consultar checadas por rango de fechas
+			DataTable checadas = reloj.ObtenerChecadas(
+				string.IsNullOrWhiteSpace(codigo) ? null : codigo,
+				fechaInicio,
+				fechaFin);
+
+			// Convertir los datos al formato de columnas por día
+			DataTable vista = reloj.CrearVistaSemanal(
+				checadas,
+				fechaInicio,
+				fechaFin);
+
+			frm.dgvLista.DataSource = vista;
+
+			ConfigurarGridReloj();
+			ConfigurarColumnasSemanales();
+
+			if (vista.Rows.Count == 0)
+			{
+				MessageBox.Show(
+					"No se encontraron checadas para las fechas seleccionadas.",
+					"Consulta de asistencia",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+		}
+		private void SeleccionarSemanaActual(DataTable dt)
+		{
+			DateTime hoy = DateTime.Today;
+
+			for (int i = 0; i < dt.Rows.Count; i++)
+			{
+				DateTime fechaInicio =
+					Convert.ToDateTime(dt.Rows[i]["d_startDate_per"]).Date;
+
+				DateTime fechaFin =
+					Convert.ToDateTime(dt.Rows[i]["d_endDate_per"]).Date;
+
+				if (hoy >= fechaInicio && hoy <= fechaFin)
+				{
+					frm.cboSemana.SelectedIndex = i;
+					return;
+				}
+			}
+
+			// Si hoy no pertenece a ninguna semana activa
+			frm.cboSemana.SelectedIndex = -1;
+		}
 		public void ConfigurarGridReloj()
 		{
 			DataGridView dgv = frm.dgvLista;
@@ -161,7 +560,7 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			dgv.RowHeadersVisible = false;
 			dgv.AutoGenerateColumns = true;
 
-			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			dgv.AutoSizeColumnsMode =DataGridViewAutoSizeColumnsMode.None;
 			dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 			dgv.RowTemplate.Height = 35;
 
