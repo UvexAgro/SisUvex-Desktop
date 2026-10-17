@@ -353,21 +353,22 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 					Color.White;
 			}
 		}
+
+
 		public void GuardarGrupo()
 		{
-			if (frm.cboGrupos.SelectedIndex == -1)
+			if (frm.cboGrupos.SelectedIndex == -1 ||
+				frm.cboGrupos.SelectedValue == null)
 			{
 				MessageBox.Show(
 					"Seleccione un grupo de horario.",
 					"Aviso",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
-
 				return;
 			}
 
-			string idGrupo =
-				frm.cboGrupos.SelectedValue.ToString();
+			string idGrupo = frm.cboGrupos.SelectedValue.ToString()!;
 
 			SQLControl sql = new SQLControl();
 
@@ -375,70 +376,76 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlTransaction transaccion =
-					sql.cnn.BeginTransaction())
+				using (SqlTransaction transaccion = sql.cnn.BeginTransaction())
 				{
 					try
 					{
-						// Eliminar las asignaciones anteriores
-						using (SqlCommand cmdDelete = new SqlCommand(
-							@"DELETE FROM Cat_WorkGroupTeam
-					  WHERE id_workGroup = @id_workGroup",
-							sql.cnn,
-							transaccion))
+						// Eliminar asignaciones anteriores del grupo seleccionado.
+						using (SqlCommand cmdDelete = new SqlCommand(@"
+                    DELETE FROM dbo.Cat_WorkGroupTeam
+                    WHERE id_workGroup = @id_workGroup;",
+							sql.cnn, transaccion))
 						{
-							cmdDelete.Parameters.AddWithValue(
-								"@id_workGroup",
-								idGrupo);
+							cmdDelete.Parameters.Add(
+								"@id_workGroup", SqlDbType.Char, 3
+							).Value = idGrupo;
 
 							cmdDelete.ExecuteNonQuery();
 						}
 
-						// Guardar las cuadrillas que quedaron asignadas
-						foreach (DataGridViewRow fila
-							in frm.dgvCuadrillaAsignada.Rows)
+						// Guardar las cuadrillas asignadas.
+						foreach (DataGridViewRow fila in
+								 frm.dgvCuadrillaAsignada.Rows)
 						{
 							if (fila.IsNewRow)
 								continue;
 
-							string idCuadrillaTexto =
-								fila.Cells["ID"].Value?.ToString();
+							object valorId = fila.Cells["ID"].Value;
 
-							if (string.IsNullOrWhiteSpace(idCuadrillaTexto))
+							if (valorId == null || valorId == DBNull.Value)
 								continue;
 
-							int idCuadrilla =
-								Convert.ToInt32(idCuadrillaTexto);
+							string idCuadrilla = valorId.ToString()!.Trim();
 
-							using (SqlCommand cmdInsert = new SqlCommand(
-								@"INSERT INTO Cat_WorkGroupTeam
-						  (
-							id_workGroup,
-							id_workTeam,
-							v_userCreate,
-							d_create
-						  )
-						  VALUES
-						  (
-							@id_workGroup,
-							@id_workTeam,
-							@v_userCreate,
-							GETDATE()
-						  )",
-								sql.cnn,
-								transaccion))
+							if (!int.TryParse(idCuadrilla, out int numeroId) ||
+								numeroId < 0 || numeroId > 999)
 							{
-								cmdInsert.Parameters.AddWithValue(
-									"@id_workGroup",
-									idGrupo);
+								throw new Exception(
+									$"El ID de cuadrilla '{idCuadrilla}' no es válido.");
+							}
 
-								cmdInsert.Parameters.AddWithValue(
-									"@id_workTeam",
-									idCuadrilla);
+							// Formato de tres caracteres: 1 -> 001, 11 -> 011.
+							idCuadrilla = numeroId.ToString("D3");
 
-								cmdInsert.Parameters.AddWithValue(
-									"@v_userCreate",
-									User.GetUserName());
+							using (SqlCommand cmdInsert = new SqlCommand(@"
+                        INSERT INTO dbo.Cat_WorkGroupTeam
+                        (
+                            id_workGroup,
+                            id_workTeam,
+                            v_userCreate,
+                            d_create
+                        )
+                        VALUES
+                        (
+                            @id_workGroup,
+                            @id_workTeam,
+                            @v_userCreate,
+                            GETDATE()
+                        );",
+								sql.cnn, transaccion))
+							{
+								cmdInsert.Parameters.Add(
+									"@id_workGroup", SqlDbType.Char, 3
+								).Value = idGrupo;
+
+								// Ahora se guarda como CHAR(3).
+								cmdInsert.Parameters.Add(
+									"@id_workTeam", SqlDbType.Char, 3
+								).Value = idCuadrilla;
+
+								cmdInsert.Parameters.Add(
+									"@v_userCreate", SqlDbType.VarChar, 50
+								).Value = User.GetUserName();
 
 								cmdInsert.ExecuteNonQuery();
 							}
@@ -454,6 +461,7 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				}
 
 				sql.CloseConectionWrite();
+
 				CargarCuadrillasDisponibles();
 				CargarCuadrillasAsignadas();
 				CargarHorarios();
@@ -481,6 +489,8 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 					MessageBoxIcon.Error);
 			}
 		}
+
+
 		public void CargarHorarios()
 		{
 			DataTable dt = new DataTable();
