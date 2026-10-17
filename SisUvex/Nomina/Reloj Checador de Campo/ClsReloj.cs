@@ -119,10 +119,11 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.CloseConectionWrite();
 			}
 		}
+
 		public DataTable ObtenerChecadas(
-	string? codigoEmpleado,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+			string? codigoEmpleado,
+			DateTime fechaInicio,
+			DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 			DataTable dt = new DataTable();
@@ -131,70 +132,17 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand(@"
-            SELECT
-                RIGHT(
-                    '000000' + LTRIM(RTRIM(
-                        CAST(h.id_employee AS VARCHAR(20))
-                    )), 6
-                ) AS Codigo,
-
-                LTRIM(RTRIM(CONCAT(
-                    e.v_lastNamePat, ' ',
-                    e.v_lastNameMat, ' ',
-                    e.v_name
-                ))) AS Empleado,
-
-                CAST(h.d_date AS DATE) AS Fecha,
-
-                MIN(CAST(h.d_time AS TIME))
-                    AS [Primera Checada],
-
-                MAX(CAST(h.d_time AS TIME))
-                    AS [Última Checada]
-
-            FROM dbo.Nom_HikvisionIVMS h
-
-            LEFT JOIN dbo.Nom_Employees e
-                ON RIGHT('000000' + LTRIM(RTRIM(
-                    CAST(e.id_employee AS VARCHAR(20))
-                )), 6)
-                =
-                RIGHT('000000' + LTRIM(RTRIM(
-                    CAST(h.id_employee AS VARCHAR(20))
-                )), 6)
-
-            WHERE
-                h.d_date >= @FechaInicio
-                AND h.d_date < DATEADD(DAY, 1, @FechaFin)
-
-                AND (
-                    @Codigo IS NULL
-                    OR RIGHT('000000' + LTRIM(RTRIM(
-                        CAST(h.id_employee AS VARCHAR(20))
-                    )), 6) = @Codigo
-                )
-
-            GROUP BY
-                h.id_employee,
-                e.v_lastNamePat,
-                e.v_lastNameMat,
-                e.v_name,
-                CAST(h.d_date AS DATE)
-
-            ORDER BY
-                e.v_lastNamePat,
-                e.v_lastNameMat,
-                e.v_name,
-                CAST(h.d_date AS DATE);",
-					sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"dbo.sp_GetClockInsBySchedule", sql.cnn))
 				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
 					string codigo = codigoEmpleado?.Trim() ?? "";
 
-					cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 6)
+					cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 20)
 						.Value = string.IsNullOrWhiteSpace(codigo)
 							? DBNull.Value
-							: codigo.PadLeft(6, '0');
+							: codigo;
 
 					cmd.Parameters.Add("@FechaInicio", SqlDbType.Date)
 						.Value = fechaInicio.Date;
@@ -225,6 +173,8 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.CloseConectionWrite();
 			}
 		}
+
+
 		public void CargarSemanas()
 		{
 			SQLControl sql = new SQLControl();
