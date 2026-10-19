@@ -277,7 +277,7 @@
 			button2.BackgroundImageLayout = ImageLayout.Zoom;
 			button2.Image = (Image)resources.GetObject("button2.Image");
 			button2.ImageAlign = ContentAlignment.MiddleLeft;
-			button2.Location = new Point(7, 762);
+			button2.Location = new Point(3, 678);
 			button2.Name = "button2";
 			button2.Padding = new Padding(20, 0, 20, 0);
 			button2.Size = new Size(137, 34);
@@ -292,9 +292,9 @@
 			panel15.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel15.BackColor = Color.FromArgb(35, 103, 149);
 			panel15.Controls.Add(label26);
-			panel15.Location = new Point(3, 802);
+			panel15.Location = new Point(3, 714);
 			panel15.Name = "panel15";
-			panel15.Size = new Size(1484, 36);
+			panel15.Size = new Size(1484, 42);
 			panel15.TabIndex = 5;
 			// 
 			// label26
@@ -330,7 +330,7 @@
 			dgvTodoDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvTodoDatos.EnableHeadersVisualStyles = false;
 			dgvTodoDatos.ImeMode = ImeMode.NoControl;
-			dgvTodoDatos.Location = new Point(3, 837);
+			dgvTodoDatos.Location = new Point(4, 759);
 			dgvTodoDatos.Name = "dgvTodoDatos";
 			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle4.BackColor = SystemColors.Control;
@@ -343,7 +343,7 @@
 			dgvTodoDatos.RowHeadersVisible = false;
 			dgvTodoDatos.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvTodoDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvTodoDatos.Size = new Size(1483, 247);
+			dgvTodoDatos.Size = new Size(1483, 318);
 			dgvTodoDatos.TabIndex = 129;
 			// 
 			// panel9
@@ -623,7 +623,7 @@
 			dgvDatos.RowHeadersVisible = false;
 			dgvDatos.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvDatos.Size = new Size(1483, 219);
+			dgvDatos.Size = new Size(1483, 135);
 			dgvDatos.TabIndex = 6;
 			dgvDatos.CellContentClick += dgvDatos_CellContentClick;
 			// 
