@@ -13,7 +13,7 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 	internal class ClsReloj
 	{
 		public FrmReloj frm;
-		public (bool Encontrado, string? Nombre, string? LugarPago, string? Cuadrilla)ObtenerEmpleado(string codigo, string idPeriodo, string numeroSemana)
+		public (bool Encontrado, string? Nombre, string? LugarPago, string? Cuadrilla) ObtenerEmpleado(string codigo, string idPeriodo, string numeroSemana)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -119,10 +119,11 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.CloseConectionWrite();
 			}
 		}
+
 		public DataTable ObtenerChecadas(
-	string? codigoEmpleado,
-	DateTime fechaInicio,
-	DateTime fechaFin)
+			string? codigoEmpleado,
+			DateTime fechaInicio,
+			DateTime fechaFin)
 		{
 			SQLControl sql = new SQLControl();
 			DataTable dt = new DataTable();
@@ -131,70 +132,17 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd = new SqlCommand(@"
-            SELECT
-                RIGHT(
-                    '000000' + LTRIM(RTRIM(
-                        CAST(h.id_employee AS VARCHAR(20))
-                    )), 6
-                ) AS Codigo,
-
-                LTRIM(RTRIM(CONCAT(
-                    e.v_lastNamePat, ' ',
-                    e.v_lastNameMat, ' ',
-                    e.v_name
-                ))) AS Empleado,
-
-                CAST(h.d_date AS DATE) AS Fecha,
-
-                MIN(CAST(h.d_time AS TIME))
-                    AS [Primera Checada],
-
-                MAX(CAST(h.d_time AS TIME))
-                    AS [Última Checada]
-
-            FROM dbo.Nom_HikvisionIVMS h
-
-            LEFT JOIN dbo.Nom_Employees e
-                ON RIGHT('000000' + LTRIM(RTRIM(
-                    CAST(e.id_employee AS VARCHAR(20))
-                )), 6)
-                =
-                RIGHT('000000' + LTRIM(RTRIM(
-                    CAST(h.id_employee AS VARCHAR(20))
-                )), 6)
-
-            WHERE
-                h.d_date >= @FechaInicio
-                AND h.d_date < DATEADD(DAY, 1, @FechaFin)
-
-                AND (
-                    @Codigo IS NULL
-                    OR RIGHT('000000' + LTRIM(RTRIM(
-                        CAST(h.id_employee AS VARCHAR(20))
-                    )), 6) = @Codigo
-                )
-
-            GROUP BY
-                h.id_employee,
-                e.v_lastNamePat,
-                e.v_lastNameMat,
-                e.v_name,
-                CAST(h.d_date AS DATE)
-
-            ORDER BY
-                e.v_lastNamePat,
-                e.v_lastNameMat,
-                e.v_name,
-                CAST(h.d_date AS DATE);",
-					sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"dbo.sp_GetClockInsBySchedule", sql.cnn))
 				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
 					string codigo = codigoEmpleado?.Trim() ?? "";
 
-					cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 6)
+					cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 20)
 						.Value = string.IsNullOrWhiteSpace(codigo)
 							? DBNull.Value
-							: codigo.PadLeft(6, '0');
+							: codigo;
 
 					cmd.Parameters.Add("@FechaInicio", SqlDbType.Date)
 						.Value = fechaInicio.Date;
@@ -225,6 +173,8 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				sql.CloseConectionWrite();
 			}
 		}
+
+
 		public void CargarSemanas()
 		{
 			SQLControl sql = new SQLControl();
@@ -297,7 +247,10 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			frm.cboSemana.DataSource = dt;
 			SeleccionarSemanaActual(dt);
 		}
-		public DataTable CrearVistaSemanal(DataTable checadas,DateTime fechaInicio,DateTime fechaFin)
+		public DataTable CrearVistaSemanal(
+	DataTable checadas,
+	DateTime fechaInicio,
+	DateTime fechaFin)
 		{
 			DataTable resultado = new DataTable();
 
@@ -312,7 +265,7 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 
 			CultureInfo cultura = new CultureInfo("es-MX");
 
-			// Crear columnas en orden cronológico
+			// Crear una sola columna por cada día
 			for (DateTime fecha = fechaInicio;
 				 fecha <= fechaFin;
 				 fecha = fecha.AddDays(1))
@@ -320,11 +273,10 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				string dia = fecha.ToString("ddd", cultura).ToUpper();
 				string fechaTexto = fecha.ToString("dd/MM");
 
-				resultado.Columns.Add($"{dia} {fechaTexto} E", typeof(string));
-				resultado.Columns.Add($"{dia} {fechaTexto} S", typeof(string));
+				resultado.Columns.Add($"{dia} {fechaTexto}", typeof(string));
 			}
 
-			// Procesar checadas ordenadas por fecha y empleado
+			// Ordenar las checadas por empleado y fecha
 			var registrosOrdenados = checadas.AsEnumerable()
 				.Where(r =>
 				{
@@ -336,11 +288,12 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 
 			foreach (DataRow registro in registrosOrdenados)
 			{
-				string codigo = registro["Codigo"].ToString() ?? "";
-				string empleado = registro["Empleado"].ToString() ?? "";
+				string codigo = registro["Codigo"]?.ToString() ?? "";
+				string empleado = registro["Empleado"]?.ToString() ?? "";
 
 				DataRow? fila = resultado.AsEnumerable()
-					.FirstOrDefault(r => r["Codigo"].ToString() == codigo);
+					.FirstOrDefault(r =>
+						r["Codigo"].ToString() == codigo);
 
 				if (fila == null)
 				{
@@ -349,6 +302,7 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 					fila["Codigo"] = codigo;
 					fila["Empleado"] = empleado;
 
+					// Inicializar todos los días sin checadas
 					foreach (DataColumn columna in resultado.Columns)
 					{
 						if (columna.ColumnName != "Codigo" &&
@@ -364,35 +318,35 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 				DateTime fechaRegistro =
 					Convert.ToDateTime(registro["Fecha"]).Date;
 
-				string sufijo =
-					fechaRegistro.ToString("ddd", cultura).ToUpper()
-					+ " " + fechaRegistro.ToString("dd/MM");
+				string dia = fechaRegistro.ToString("ddd", cultura).ToUpper();
+				string fechaTexto = fechaRegistro.ToString("dd/MM");
+				string nombreColumna = $"{dia} {fechaTexto}";
 
-				string columnaEntrada = sufijo + " E";
-				string columnaSalida = sufijo + " S";
-
-				if (resultado.Columns.Contains(columnaEntrada))
+				if (resultado.Columns.Contains(nombreColumna))
 				{
-					fila[columnaEntrada] =
+					string entrada =
 						FormatearHora(registro["Primera Checada"]);
-				}
 
-				if (resultado.Columns.Contains(columnaSalida))
-				{
-					fila[columnaSalida] =
+					string salida =
 						FormatearHora(registro["Última Checada"]);
+
+					fila[nombreColumna] =
+						$"{entrada}{Environment.NewLine}{salida}";
 				}
 			}
 
 			return resultado;
 		}
+	
+	
 		public void ConfigurarColumnasSemanales()
 		{
 			DataGridView dgv = frm.dgvLista;
 
-			dgv.AutoSizeColumnsMode =
-				DataGridViewAutoSizeColumnsMode.None;
+			// No usar Fill porque puede distribuir los anchos de forma desigual
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
+			// Columnas fijas
 			if (dgv.Columns.Contains("Codigo"))
 			{
 				dgv.Columns["Codigo"].Width = 80;
@@ -403,23 +357,49 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			{
 				dgv.Columns["Empleado"].Width = 230;
 				dgv.Columns["Empleado"].Frozen = true;
+
 				dgv.Columns["Empleado"].DefaultCellStyle.Alignment =
 					DataGridViewContentAlignment.MiddleLeft;
 			}
 
-			foreach (DataGridViewColumn columna in dgv.Columns)
+			// Calcular espacio disponible para los días
+			int anchoCodigo = dgv.Columns.Contains("Codigo")
+				? dgv.Columns["Codigo"].Width : 0;
+
+			int anchoEmpleado = dgv.Columns.Contains("Empleado")
+				? dgv.Columns["Empleado"].Width : 0;
+
+			int cantidadDias = dgv.Columns.Count - 2;
+
+			if (cantidadDias > 0)
 			{
-				if (columna.Name != "Codigo" &&
-					columna.Name != "Empleado")
+				int anchoDisponible = dgv.ClientSize.Width
+					- anchoCodigo
+					- anchoEmpleado
+					- SystemInformation.VerticalScrollBarWidth
+					- 4;
+
+				int anchoDia = Math.Max(65, anchoDisponible / cantidadDias);
+
+				foreach (DataGridViewColumn columna in dgv.Columns)
 				{
-					columna.Width = 65;
-					columna.DefaultCellStyle.Alignment =
-						DataGridViewContentAlignment.MiddleCenter;
+					if (columna.Name != "Codigo" &&
+						columna.Name != "Empleado")
+					{
+						columna.Width = anchoDia;
+
+						columna.DefaultCellStyle.Alignment =
+							DataGridViewContentAlignment.MiddleCenter;
+					}
 				}
 			}
 
+			dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+			dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgv.ScrollBars = ScrollBars.Both;
 		}
+
+
 		private string FormatearHora(object valor)
 		{
 			if (valor == null || valor == DBNull.Value)
@@ -547,6 +527,7 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			// Si hoy no pertenece a ninguna semana activa
 			frm.cboSemana.SelectedIndex = -1;
 		}
+		
 		public void ConfigurarGridReloj()
 		{
 			DataGridView dgv = frm.dgvLista;
@@ -560,9 +541,12 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			dgv.RowHeadersVisible = false;
 			dgv.AutoGenerateColumns = true;
 
-			dgv.AutoSizeColumnsMode =DataGridViewAutoSizeColumnsMode.None;
-			dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-			dgv.RowTemplate.Height = 35;
+			dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+			// Permitir entrada y salida en dos líneas
+			dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+			dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			dgv.RowTemplate.Height = 40;
 
 			// Encabezados: azul de nómina
 			dgv.EnableHeadersVisualStyles = false;
@@ -593,11 +577,11 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 
 			dgv.DefaultCellStyle.BackColor = Color.White;
 
-			// Filas alternadas: azul muy claro de nómina
+			// Filas alternadas
 			dgv.AlternatingRowsDefaultCellStyle.BackColor =
 				Color.FromArgb(241, 247, 252);
 
-			// Selección: azul de nómina
+			// Selección
 			dgv.DefaultCellStyle.SelectionBackColor =
 				Color.FromArgb(31, 111, 170);
 

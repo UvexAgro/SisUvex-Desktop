@@ -28,11 +28,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReloj));
 			dgvLista = new DataGridView();
 			groupBox1 = new GroupBox();
+			label15 = new Label();
+			label14 = new Label();
+			label13 = new Label();
+			label12 = new Label();
 			txbLugardePago = new TextBox();
 			txbCuadrilla = new TextBox();
 			label11 = new Label();
@@ -58,10 +62,6 @@
 			pictureBox1 = new PictureBox();
 			label3 = new Label();
 			label4 = new Label();
-			label12 = new Label();
-			label13 = new Label();
-			label14 = new Label();
-			label15 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			panel2.SuspendLayout();
@@ -78,28 +78,28 @@
 			dgvLista.BackgroundColor = SystemColors.ControlLightLight;
 			dgvLista.BorderStyle = BorderStyle.Fixed3D;
 			dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.BackColor = SystemColors.Control;
-			dataGridViewCellStyle5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvLista.ColumnHeadersHeight = 29;
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
 			dgvLista.Location = new Point(2, 507);
 			dgvLista.Name = "dgvLista";
-			dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle6.BackColor = SystemColors.Control;
-			dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -141,6 +141,50 @@
 			groupBox1.TabIndex = 5;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Filtro de Busqueda";
+			// 
+			// label15
+			// 
+			label15.AutoSize = true;
+			label15.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label15.ForeColor = Color.DimGray;
+			label15.Location = new Point(540, 211);
+			label15.Name = "label15";
+			label15.Size = new Size(275, 13);
+			label15.TabIndex = 46;
+			label15.Text = "Limpia el filtro del empleado para consultar a todos.";
+			// 
+			// label14
+			// 
+			label14.AutoSize = true;
+			label14.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label14.ForeColor = Color.DimGray;
+			label14.Location = new Point(6, 29);
+			label14.Name = "label14";
+			label14.Size = new Size(571, 13);
+			label14.TabIndex = 45;
+			label14.Text = "Escribe el código y presiona Enter o utiliza «Buscar Empleado» para buscar el Empleado cargar la información.";
+			// 
+			// label13
+			// 
+			label13.AutoSize = true;
+			label13.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label13.ForeColor = Color.DimGray;
+			label13.Location = new Point(670, 360);
+			label13.Name = "label13";
+			label13.Size = new Size(543, 26);
+			label13.TabIndex = 44;
+			label13.Text = "Selecciona un rango de fecha y presiona el botón. Si ingresaste un código, se consultará ese empleado; \r\nsi lo dejas vacío, se consultarán todos.";
+			// 
+			// label12
+			// 
+			label12.AutoSize = true;
+			label12.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label12.ForeColor = Color.DimGray;
+			label12.Location = new Point(9, 360);
+			label12.Name = "label12";
+			label12.Size = new Size(510, 26);
+			label12.TabIndex = 43;
+			label12.Text = "Selecciona una semana y presiona el botón. Si ingresaste un código, se consultará ese empleado; \r\nsi lo dejas vacío, se consultarán todos.";
 			// 
 			// txbLugardePago
 			// 
@@ -201,7 +245,7 @@
 			btnBuscar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
 			btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnBuscar.Location = new Point(272, 55);
+			btnBuscar.Location = new Point(272, 59);
 			btnBuscar.Name = "btnBuscar";
 			btnBuscar.Padding = new Padding(20, 0, 20, 0);
 			btnBuscar.Size = new Size(197, 34);
@@ -216,7 +260,7 @@
 			btnConsultarSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultarSemana.Image = (Image)resources.GetObject("btnConsultarSemana.Image");
 			btnConsultarSemana.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultarSemana.Location = new Point(354, 309);
+			btnConsultarSemana.Location = new Point(354, 313);
 			btnConsultarSemana.Name = "btnConsultarSemana";
 			btnConsultarSemana.Padding = new Padding(20, 0, 20, 0);
 			btnConsultarSemana.Size = new Size(152, 33);
@@ -317,7 +361,7 @@
 			btnConsultar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(982, 309);
+			btnConsultar.Location = new Point(982, 312);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(20, 0, 20, 0);
 			btnConsultar.Size = new Size(152, 33);
@@ -407,50 +451,6 @@
 			label4.Size = new Size(579, 37);
 			label4.TabIndex = 8;
 			label4.Text = "Consulta de Asistencia en el Reloj Checador ";
-			// 
-			// label12
-			// 
-			label12.AutoSize = true;
-			label12.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label12.ForeColor = Color.DimGray;
-			label12.Location = new Point(9, 360);
-			label12.Name = "label12";
-			label12.Size = new Size(510, 26);
-			label12.TabIndex = 43;
-			label12.Text = "Selecciona una semana y presiona el botón. Si ingresaste un código, se consultará ese empleado; \r\nsi lo dejas vacío, se consultarán todos.";
-			// 
-			// label13
-			// 
-			label13.AutoSize = true;
-			label13.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label13.ForeColor = Color.DimGray;
-			label13.Location = new Point(670, 360);
-			label13.Name = "label13";
-			label13.Size = new Size(543, 26);
-			label13.TabIndex = 44;
-			label13.Text = "Selecciona un rango de fecha y presiona el botón. Si ingresaste un código, se consultará ese empleado; \r\nsi lo dejas vacío, se consultarán todos.";
-			// 
-			// label14
-			// 
-			label14.AutoSize = true;
-			label14.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label14.ForeColor = Color.DimGray;
-			label14.Location = new Point(6, 29);
-			label14.Name = "label14";
-			label14.Size = new Size(571, 13);
-			label14.TabIndex = 45;
-			label14.Text = "Escribe el código y presiona Enter o utiliza «Buscar Empleado» para buscar el Empleado cargar la información.";
-			// 
-			// label15
-			// 
-			label15.AutoSize = true;
-			label15.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label15.ForeColor = Color.DimGray;
-			label15.Location = new Point(540, 211);
-			label15.Name = "label15";
-			label15.Size = new Size(275, 13);
-			label15.TabIndex = 46;
-			label15.Text = "Limpia el filtro del empleado para consultar a todos.";
 			// 
 			// FrmReloj
 			// 
