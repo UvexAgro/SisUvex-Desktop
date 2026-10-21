@@ -75,6 +75,7 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			btnModificarFaltas = new Button();
 			btnJalarActividad = new Button();
 			btnCAL = new Button();
 			panel10 = new Panel();
@@ -606,6 +607,7 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(btnModificarFaltas);
 			panel1.Controls.Add(btnJalarActividad);
 			panel1.Controls.Add(btnCAL);
 			panel1.Controls.Add(panel10);
@@ -626,13 +628,29 @@
 			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
 			// 
+			// btnModificarFaltas
+			// 
+			btnModificarFaltas.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnModificarFaltas.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnModificarFaltas.Image = (Image)resources.GetObject("btnModificarFaltas.Image");
+			btnModificarFaltas.ImageAlign = ContentAlignment.MiddleLeft;
+			btnModificarFaltas.Location = new Point(407, 18);
+			btnModificarFaltas.Name = "btnModificarFaltas";
+			btnModificarFaltas.Padding = new Padding(16, 0, 25, 0);
+			btnModificarFaltas.Size = new Size(179, 39);
+			btnModificarFaltas.TabIndex = 39;
+			btnModificarFaltas.Text = "Modificar Faltas";
+			btnModificarFaltas.TextAlign = ContentAlignment.MiddleRight;
+			btnModificarFaltas.UseVisualStyleBackColor = true;
+			btnModificarFaltas.Click += btnModificarFaltas_Click;
+			// 
 			// btnJalarActividad
 			// 
 			btnJalarActividad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			btnJalarActividad.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnJalarActividad.Image = (Image)resources.GetObject("btnJalarActividad.Image");
 			btnJalarActividad.ImageAlign = ContentAlignment.MiddleLeft;
-			btnJalarActividad.Location = new Point(526, 137);
+			btnJalarActividad.Location = new Point(539, 162);
 			btnJalarActividad.Name = "btnJalarActividad";
 			btnJalarActividad.Padding = new Padding(20, 0, 30, 0);
 			btnJalarActividad.Size = new Size(232, 39);
@@ -648,7 +666,7 @@
 			btnCAL.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnCAL.Image = (Image)resources.GetObject("btnCAL.Image");
 			btnCAL.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCAL.Location = new Point(526, 87);
+			btnCAL.Location = new Point(539, 98);
 			btnCAL.Name = "btnCAL";
 			btnCAL.Padding = new Padding(20, 0, 30, 0);
 			btnCAL.Size = new Size(232, 39);
@@ -839,7 +857,7 @@
 			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
 			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(592, 182);
+			btnGuardar.Location = new Point(592, 222);
 			btnGuardar.Name = "btnGuardar";
 			btnGuardar.Padding = new Padding(20, 0, 30, 0);
 			btnGuardar.Size = new Size(166, 39);
@@ -895,7 +913,7 @@
 			// cboSemana
 			// 
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(8, 195);
+			cboSemana.Location = new Point(7, 171);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(288, 23);
 			cboSemana.TabIndex = 4;
@@ -905,7 +923,7 @@
 			// 
 			label4.AutoSize = true;
 			label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label4.Location = new Point(8, 175);
+			label4.Location = new Point(7, 151);
 			label4.Name = "label4";
 			label4.Size = new Size(53, 13);
 			label4.TabIndex = 3;
@@ -1046,5 +1064,6 @@
 		public ComboBox cboDiaChecador;
 		private Button btnJalarActividad;
 		private Button button2;
+		public Button btnModificarFaltas;
 	}
 }
