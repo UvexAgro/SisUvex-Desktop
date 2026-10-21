@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using NPOI.SS.Formula.Functions;
+using SisUvex.Nomina.Asistencia_AS;
 using SisUvex.Nomina.Reporte_de_Asistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.ClsAsistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.FrmAgregarLoteyActividad;
@@ -1458,6 +1460,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					fechaFin);
 
 			frm.ShowDialog();
+		}
+
+		private void btnModificarFaltas_Click(object sender, EventArgs e)
+		{
+			FrmAsistenciaASConsulta frm = new FrmAsistenciaASConsulta();
+			frm.Show();
 		}
 	}
 }

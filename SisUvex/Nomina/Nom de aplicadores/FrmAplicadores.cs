@@ -37,7 +37,8 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 		}
 		private void FrmAplicadores_Load(object sender, EventArgs e)
 		{
-			txbImportePorcentaje.ReadOnly = true;
+			
+		txbImportePorcentaje.ReadOnly = true;
 			txbCodigo.ReadOnly = true;
 			txbNombre.ReadOnly = true;
 			txbTarifa.ReadOnly = true;
