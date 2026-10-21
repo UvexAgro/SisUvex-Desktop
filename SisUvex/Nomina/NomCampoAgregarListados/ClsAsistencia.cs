@@ -1569,6 +1569,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+
+
 		public bool GuardarAsistencia()
 		{
 			_frmA.dgvAsistencia.EndEdit();
@@ -1588,12 +1590,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				semana["c_sequence_per"].ToString().Trim();
 
 			DateTime fechaInicio =
-				Convert.ToDateTime(
-					semana["d_startDate_per"]).Date;
+				Convert.ToDateTime(semana["d_startDate_per"]).Date;
 
 			DateTime fechaFin =
-				Convert.ToDateTime(
-					semana["d_endDate_per"]).Date;
+				Convert.ToDateTime(semana["d_endDate_per"]).Date;
 
 			string usuario = User.GetUserName();
 
@@ -1607,18 +1607,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-		"Vie",
-		"Sab",
-		"Dom",
-		"Lun",
-		"Mar",
-		"Mie",
-		"Jue"
+		"Vie", "Sab", "Dom", "Lun", "Mar", "Mie", "Jue"
 	};
 
+			string[] columnasAsistencia =
+			{
+		"c_vie",
+		"c_sab",
+		"c_dom",
+		"c_lun",
+		"c_mar",
+		"c_mie",
+		"c_jue"
+	};
+
+			string[] columnasGrupo =
+			{
+		"id_workGroup_vie",
+		"id_workGroup_sab",
+		"id_workGroup_dom",
+		"id_workGroup_lun",
+		"id_workGroup_mar",
+		"id_workGroup_mie",
+		"id_workGroup_jue"
+	};
 
 			// ==========================================
-			// CARGAR LO QUE YA EXISTE EN LA SEMANA
+			// CARGAR ASISTENCIA EXISTENTE
 			// ==========================================
 
 			DataTable dtAsistencia =
@@ -1630,6 +1645,48 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (dtAsistencia == null)
 				return false;
 
+			// ==========================================
+			// VALIDAR COLUMNAS DEVUELTAS
+			// ==========================================
+
+			if (!dtAsistencia.Columns.Contains("id_employee"))
+			{
+				MessageBox.Show(
+					"El procedimiento no devuelve la columna id_employee.",
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+
+			foreach (string columna in columnasAsistencia)
+			{
+				if (!dtAsistencia.Columns.Contains(columna))
+				{
+					MessageBox.Show(
+						$"El procedimiento no devuelve la columna {columna}.",
+						"Error de columnas",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+
+					return false;
+				}
+			}
+
+			foreach (string columna in columnasGrupo)
+			{
+				if (!dtAsistencia.Columns.Contains(columna))
+				{
+					MessageBox.Show(
+						$"El procedimiento no devuelve la columna {columna}.",
+						"Error de columnas",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+
+					return false;
+				}
+			}
 
 			// ==========================================
 			// VALIDAR DUPLICADOS
@@ -1643,63 +1700,49 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 				string idEmployee =
-					fila.Cells["Codigo"].Value?
-					.ToString()
-					.Trim();
+					fila.Cells["Codigo"].Value?.ToString().Trim();
 
 				string empleado =
-					fila.Cells["Empleado"].Value?
-					.ToString()
-					.Trim();
+					fila.Cells["Empleado"].Value?.ToString().Trim();
 
 				if (string.IsNullOrWhiteSpace(idEmployee))
 					continue;
 
-
-				DataRow[] registros =
-					dtAsistencia.Select(
-						$"id_employee = '{idEmployee.Replace("'", "''")}'");
+				DataRow[] registros = dtAsistencia.Select(
+					$"id_employee = '{idEmployee.Replace("'", "''")}'");
 
 				DataRow existente =
-					registros.Length > 0
-					? registros[0]
-					: null;
+					registros.Length > 0 ? registros[0] : null;
 
+				if (existente == null)
+					continue;
 
 				for (int d = 0; d < dias.Length; d++)
 				{
 					bool asistenciaNueva =
-						ObtenerValorCheckBox(
-							fila,
-							dias[d]);
+						ObtenerValorCheckBox(fila, dias[d]);
 
 					if (!asistenciaNueva)
 						continue;
 
-
-					if (existente == null)
-						continue;
-
-
-					string columnaAsistencia = "c_" + dias[d].ToLower();
-
-					string columnaGrupo =
-						"id_workGroup_" + dias[d].ToLower();
-
 					string valorAsistencia =
-						existente[columnaAsistencia]?.ToString()?.Trim() ?? "2";
+						existente[columnasAsistencia[d]] == DBNull.Value
+						? ""
+						: existente[columnasAsistencia[d]]
+							.ToString().Trim();
 
-					// 0 = Falta, 1 = Asistencia, 2 = Checkbox vacío
-					bool asistenciaExistente =
-						valorAsistencia == "0" || valorAsistencia == "1";
+					// 0 = Falta, 1 = Asistencia.
+					bool asistenciaAnterior =
+						valorAsistencia == "0" ||
+						valorAsistencia == "1";
 
 					string grupoExistente =
-						existente[columnaGrupo]?
-						.ToString()
-						.Trim();
+						existente[columnasGrupo[d]] == DBNull.Value
+						? ""
+						: existente[columnasGrupo[d]]
+							.ToString().Trim();
 
-
-					if (asistenciaExistente &&
+					if (asistenciaAnterior &&
 						!string.IsNullOrWhiteSpace(grupoExistente) &&
 						grupoExistente != idCuadrillaActual)
 					{
@@ -1712,9 +1755,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 
-
 			// ==========================================
-			// SI HAY CONFLICTOS NO GUARDAR
+			// SI HAY CONFLICTOS, NO GUARDAR
 			// ==========================================
 
 			if (conflictos.Count > 0)
@@ -1731,9 +1773,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return false;
 			}
 
-
 			// ==========================================
-			// GUARDAR
+			// GUARDAR ASISTENCIAS
 			// ==========================================
 
 			foreach (DataGridViewRow fila in _frmA.dgvAsistencia.Rows)
@@ -1742,114 +1783,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					continue;
 
 				string idEmployee =
-					fila.Cells["Codigo"].Value?
-					.ToString()
-					.Trim();
+					fila.Cells["Codigo"].Value?.ToString().Trim();
 
 				if (string.IsNullOrWhiteSpace(idEmployee))
 					continue;
 
-
-				// ==========================================
-				// BUSCAR REGISTRO EXISTENTE
-				// ==========================================
-
-				DataRow[] registros =
-					dtAsistencia.Select(
-						$"id_employee = '{idEmployee.Replace("'", "''")}'");
+				DataRow[] registros = dtAsistencia.Select(
+					$"id_employee = '{idEmployee.Replace("'", "''")}'");
 
 				DataRow existente =
-					registros.Length > 0
-					? registros[0]
-					: null;
-
-
-				// ==========================================
-				// ASISTENCIAS ACTUALES DEL GRID
-				// ==========================================
+					registros.Length > 0 ? registros[0] : null;
 
 				bool[] asistencias = new bool[7];
+				string[] cuadrillas = new string[7];
 
+				// Leer las asistencias seleccionadas en el grid.
 				for (int d = 0; d < dias.Length; d++)
 				{
 					asistencias[d] =
-						ObtenerValorCheckBox(
-							fila,
-							dias[d]);
+						ObtenerValorCheckBox(fila, dias[d]);
 				}
 
-
-				// ==========================================
-				// CUADRILLAS
-				// ==========================================
-
-				string[] cuadrillas = new string[7];
-
+				// Determinar qué cuadrilla corresponde a cada día.
 				for (int d = 0; d < dias.Length; d++)
 				{
-					string columnaB =
-						"b_" + dias[d].ToLower();
-
-					string columnaGrupo =
-						"id_workGroup_" + dias[d].ToLower();
-
-
-					// ======================================
-					// NO EXISTE REGISTRO TODAVÍA
-					// ======================================
-
 					if (existente == null)
 					{
 						cuadrillas[d] =
-							asistencias[d]
-							? idCuadrillaActual
-							: "";
+							asistencias[d] ? idCuadrillaActual : "";
 
 						continue;
 					}
 
+					string valorAsistencia =
+						existente[columnasAsistencia[d]] == DBNull.Value
+						? ""
+						: existente[columnasAsistencia[d]]
+							.ToString().Trim();
 
 					bool asistenciaExistente =
-						existente[columnaB] != DBNull.Value &&
-						Convert.ToBoolean(
-							existente[columnaB]);
-
+						valorAsistencia == "0" ||
+						valorAsistencia == "1";
 
 					string grupoExistente =
-						existente[columnaGrupo]?
-						.ToString()
-						.Trim();
+						existente[columnasGrupo[d]] == DBNull.Value
+						? ""
+						: existente[columnasGrupo[d]]
+							.ToString().Trim();
 
-
-					// ======================================
-					// EL DÍA YA ESTÁ EN OTRA CUADRILLA
-					// ======================================
-
+					// Conservar los registros de otra cuadrilla.
 					if (asistenciaExistente &&
 						!string.IsNullOrWhiteSpace(grupoExistente) &&
 						grupoExistente != idCuadrillaActual)
 					{
-						// CONSERVAR
 						asistencias[d] = true;
 						cuadrillas[d] = grupoExistente;
 					}
 					else
 					{
-						// ==================================
-						// ES DE LA CUADRILLA ACTUAL
-						// ==================================
-
 						cuadrillas[d] =
-							asistencias[d]
-							? idCuadrillaActual
-							: "";
+							asistencias[d] ? idCuadrillaActual : "";
 					}
 				}
 
-
-				// ==========================================
+				// ======================================
 				// GUARDAR SEMANA
-				// ==========================================
+				// ======================================
 
 				GuardarAsistenciaSemanal(
 					cSequencePer,
@@ -1857,30 +1856,16 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					fechaFin,
 					idEmployee,
 
-					asistencias[0],
-					cuadrillas[0],
-
-					asistencias[1],
-					cuadrillas[1],
-
-					asistencias[2],
-					cuadrillas[2],
-
-					asistencias[3],
-					cuadrillas[3],
-
-					asistencias[4],
-					cuadrillas[4],
-
-					asistencias[5],
-					cuadrillas[5],
-
-					asistencias[6],
-					cuadrillas[6],
+					asistencias[0], cuadrillas[0],
+					asistencias[1], cuadrillas[1],
+					asistencias[2], cuadrillas[2],
+					asistencias[3], cuadrillas[3],
+					asistencias[4], cuadrillas[4],
+					asistencias[5], cuadrillas[5],
+					asistencias[6], cuadrillas[6],
 
 					usuario);
 			}
-
 
 			MessageBox.Show(
 				"La asistencia se guardó correctamente.",
@@ -1890,6 +1875,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return true;
 		}
+
+
 		private bool ObtenerValorCheckBox(DataGridViewRow fila, string columna)
 		{
 			object valor =

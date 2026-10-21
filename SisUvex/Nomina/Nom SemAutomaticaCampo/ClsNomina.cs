@@ -892,7 +892,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			WHERE TRY_CONVERT(INT, aw.c_sequence_per) =
 				  TRY_CONVERT(INT, @Semana)
 
-			  AND aw.b_{prefijo} = 1
+			 AND aw.c_{prefijo} = '1'
 		";
 
 
