@@ -175,9 +175,12 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 
 			string idCuadrilla = "";
 
-			if (frmDia.cboCuadrillaCampo.SelectedValue != null)
+			if (frmDia.cboCuadrillaCampo.SelectedIndex > 0 &&
+				frmDia.cboCuadrillaCampo.SelectedValue != null &&
+				frmDia.cboCuadrillaCampo.SelectedValue != DBNull.Value)
 			{
-				idCuadrilla = frmDia.cboCuadrillaCampo.SelectedValue.ToString();
+				idCuadrilla =
+					frmDia.cboCuadrillaCampo.SelectedValue.ToString();
 			}
 
 			string filtroCuadrilla = "";
@@ -233,7 +236,7 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		WHERE
 			'{fecha}' BETWEEN wg.d_startDate_per AND wg.d_endDate_per
 
-			AND wg.b_{sufijo} = 1
+			AND wg.c_{sufijo} = '1'
 
 			{filtroCuadrilla}
 
@@ -344,10 +347,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 				ClsQuerysDB.ExecuteQuery(query);
 				insertados++;
 			}
-
-			MessageBox.Show(
-				$"Insertados: {insertados}\n" +
-				$"Omitidos (ya existían): {omitidos}");
 		}
 		public void ActualizarIngreso(DateTime fecha)
 		{
@@ -596,13 +595,15 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			DataTable dt = CboCuadrillaCampo();
 
 			DataRow dr = dt.NewRow();
+			dr["ID"] = DBNull.Value;
 			dr["Código"] = "";
-			dr["Nombre"] = " ------ TODAS ------ ";
+			dr["Nombre"] = "------ TODAS ------";
+
 			dt.Rows.InsertAt(dr, 0);
 
 			combo.DataSource = dt.Copy();
 			combo.DisplayMember = "Nombre";
-			combo.ValueMember = "Código";
+			combo.ValueMember = "ID"; // Aquí está la corrección
 			combo.SelectedIndex = 0;
 
 			cargando = false;
@@ -615,12 +616,15 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 			sql.OpenConectionWrite();
 
 			string query = @"
-			SELECT 
-				g.id_workGroup AS Código,
-				g.id_workGroup + ' - ' + g.v_nameWorkGroup AS Nombre
-			FROM Nom_WorkGroup g
-			WHERE g.c_active = 1
-			ORDER BY g.id_workGroup";
+        SELECT 
+            g.id_workGroup AS ID,
+            g.c_order AS Código,
+            g.c_order + ' - ' + g.v_nameWorkGroup AS Nombre
+        FROM Nom_WorkGroup g
+        WHERE g.c_active = 1
+        ORDER BY
+            TRY_CONVERT(INT, g.c_order) ASC,
+            g.c_order ASC";
 
 			SqlCommand cmd = new SqlCommand(query, sql.cnn);
 
