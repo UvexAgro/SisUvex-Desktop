@@ -25,8 +25,6 @@ namespace SisUvex.Nomina.Ingresos_Diversos
 		ClsDeducciones clsDeu;
 
 
-		public string empleadoValor;
-
 		public FrmListaAsitencia(FrmMenu frmMenu)
 		{
 			InitializeComponent();
