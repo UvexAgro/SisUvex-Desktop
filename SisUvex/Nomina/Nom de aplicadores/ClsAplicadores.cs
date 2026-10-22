@@ -102,37 +102,37 @@ namespace SisUvex.Nomina.Nom_de_aplicadores
 				{
 					case DayOfWeek.Friday:
 						columnaCuadrilla = "id_workGroup_vie";
-						columnaAsistencia = "b_vie";
+						columnaAsistencia = "c_vie";
 						break;
 
 					case DayOfWeek.Saturday:
 						columnaCuadrilla = "id_workGroup_sab";
-						columnaAsistencia = "b_sab";
+						columnaAsistencia = "c_sab";
 						break;
 
 					case DayOfWeek.Sunday:
 						columnaCuadrilla = "id_workGroup_dom";
-						columnaAsistencia = "b_dom";
+						columnaAsistencia = "c_dom";
 						break;
 
 					case DayOfWeek.Monday:
 						columnaCuadrilla = "id_workGroup_lun";
-						columnaAsistencia = "b_lun";
+						columnaAsistencia = "c_lun";
 						break;
 
 					case DayOfWeek.Tuesday:
 						columnaCuadrilla = "id_workGroup_mar";
-						columnaAsistencia = "b_mar";
+						columnaAsistencia = "c_mar";
 						break;
 
 					case DayOfWeek.Wednesday:
 						columnaCuadrilla = "id_workGroup_mie";
-						columnaAsistencia = "b_mie";
+						columnaAsistencia = "c_mie";
 						break;
 
 					case DayOfWeek.Thursday:
 						columnaCuadrilla = "id_workGroup_jue";
-						columnaAsistencia = "b_jue";
+						columnaAsistencia = "c_jue";
 						break;
 				}
 
