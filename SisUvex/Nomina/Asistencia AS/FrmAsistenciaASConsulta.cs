@@ -99,6 +99,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.DgvReport_CellValueChanged(sender, e);
         }
 
+        private void dgvReport_SelectionChanged(object sender, EventArgs e)
+        {
+            cls.DgvReport_SelectionChanged();
+        }
+
         private void txbIdEmployee_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)

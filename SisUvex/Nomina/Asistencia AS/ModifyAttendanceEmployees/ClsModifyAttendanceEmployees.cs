@@ -588,11 +588,13 @@ internal class ClsModifyAttendanceEmployees
             foreach (DataGridViewColumn col in dgv.Columns)
             {
                 if (TryParseDayColumn(col.Name, out _))
-                    col.Width = 44;
+                    col.Width = 48;
                 else
                     dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.DisplayedCells);
             }
         }
+
+        DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
     }
 
     private void ApplyDayColumnHeaders()
@@ -828,6 +830,8 @@ internal class ClsModifyAttendanceEmployees
     /// </summary>
     public void DgvPivot_SelectionChanged()
     {
+        DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, frm.dgvPivot);
+
         if (frm.dgvPivot.SelectedCells.Count != 1) return;
 
         DataGridViewCell cell = frm.dgvPivot.SelectedCells[0];

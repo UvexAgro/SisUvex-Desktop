@@ -73,6 +73,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             pgrReport = new ProgressBar();
             lblTitle = new Label();
             btnOpenFrmAttendanceType = new Button();
+            lblSelectedDaysCaption = new Label();
+            lblSelectedDays = new Label();
             bgpInfo.SuspendLayout();
             gpbFilters.SuspendLayout();
             cmsIdEmployee.SuspendLayout();
@@ -532,6 +534,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.CellValueChanged += dgvReport_CellValueChanged;
             dgvReport.ColumnHeaderMouseClick += dgvReport_ColumnHeaderMouseClick;
             dgvReport.CurrentCellDirtyStateChanged += dgvReport_CurrentCellDirtyStateChanged;
+            dgvReport.SelectionChanged += dgvReport_SelectionChanged;
             // 
             // pgrReport
             // 
@@ -568,6 +571,30 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnOpenFrmAttendanceType.UseVisualStyleBackColor = true;
             btnOpenFrmAttendanceType.Click += btnOpenFrmAttendanceType_Click;
             // 
+            // lblSelectedDaysCaption
+            // 
+            lblSelectedDaysCaption.AutoSize = true;
+            lblSelectedDaysCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSelectedDaysCaption.ForeColor = Color.DarkGray;
+            lblSelectedDaysCaption.Location = new Point(726, 257);
+            lblSelectedDaysCaption.Margin = new Padding(0);
+            lblSelectedDaysCaption.Name = "lblSelectedDaysCaption";
+            lblSelectedDaysCaption.Size = new Size(151, 21);
+            lblSelectedDaysCaption.TabIndex = 98;
+            lblSelectedDaysCaption.Text = "Días seleccionados:";
+            // 
+            // lblSelectedDays
+            // 
+            lblSelectedDays.AutoSize = true;
+            lblSelectedDays.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSelectedDays.ForeColor = Color.DarkGray;
+            lblSelectedDays.Location = new Point(877, 257);
+            lblSelectedDays.Margin = new Padding(0);
+            lblSelectedDays.Name = "lblSelectedDays";
+            lblSelectedDays.Size = new Size(19, 21);
+            lblSelectedDays.TabIndex = 99;
+            lblSelectedDays.Text = "0";
+            // 
             // FrmAsistenciaASConsulta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -585,6 +612,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             Controls.Add(dgvReport);
             Controls.Add(lblTitle);
             Controls.Add(btnModifyAttendance);
+            Controls.Add(lblSelectedDaysCaption);
+            Controls.Add(lblSelectedDays);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaASConsulta";
             Text = "Reporte de asistencias";
@@ -642,5 +671,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         private ToolStripMenuItem tsmiDelete;
         private ToolStripSeparator tssIdEmployee2;
         private ToolStripMenuItem tsmiSelectAll;
+        private Label lblSelectedDaysCaption;
+        public Label lblSelectedDays;
     }
 }

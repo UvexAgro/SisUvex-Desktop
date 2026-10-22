@@ -724,6 +724,12 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         // ── Coloreado de celdas del reporte (evento CellFormatting) ───────────
 
+        public void DgvReport_SelectionChanged()
+        {
+            if (frm == null) return;
+            DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, frm.dgvReport);
+        }
+
         public void DgvReport_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             if (frm == null) return;
@@ -1340,6 +1346,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     dgv.ReadOnly = true;
                     dgv.AutoGenerateColumns = true;
                     dgv.DataSource = null;
+                    dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
+                    dgv.MultiSelect = true;
                     dgv.DataSource = _dtReportPreview;
                     ReportRange(1, 4, from, to);
 
@@ -1355,7 +1363,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     {
                         DataGridViewColumn col = dgv.Columns[i];
                         if (TryParseDayColumn(col.Name, out _))
-                            col.Width = 44;
+                            col.Width = 48;
                         else
                             dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
 
@@ -1364,6 +1372,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 SetViewButtons(employees: false, report: true, calendar: false);
+                DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
             finally
@@ -1406,6 +1415,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     frm.dgvReport.AutoGenerateColumns = true;
                     frm.dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
                     frm.dgvReport.DataSource = null;
+                    frm.dgvReport.SelectionMode = DataGridViewSelectionMode.CellSelect;
+                    frm.dgvReport.MultiSelect = true;
                     frm.dgvReport.DataSource = dtCalendar;
                     ReportRange(1, 2, buildTo, LerpRange(from, to, 0.80));
 
@@ -1417,6 +1428,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 SetViewButtons(employees: false, report: false, calendar: true);
+                DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, frm.dgvReport);
                 AdvanceTo(to);
             }
             finally
@@ -1484,6 +1496,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     dgv.ReadOnly = false;
                     dgv.AutoGenerateColumns = true;
                     dgv.DataSource = null;
+                    dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                     dgv.DataSource = _dtEmployeeList;
                     ReportRange(1, 4, from, to);
                     ApplyCheckBoxColumnToSel();
@@ -1505,6 +1518,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 SyncHeaderSelFromRows();
 
                 SetViewButtons(employees: true, report: false, calendar: false);
+                DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
             finally
