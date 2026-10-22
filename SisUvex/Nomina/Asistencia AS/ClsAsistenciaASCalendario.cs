@@ -133,6 +133,59 @@ namespace SisUvex.Nomina.Asistencia_AS
             return (int)Math.Ceiling((offset + daysInMonth) / 7.0);
         }
 
+        /// <summary>True si el grid está en vista calendario (tiene la columna oculta de tipo de fila).</summary>
+        internal static bool IsCalendarGrid(DataGridView dgv)
+            => dgv.Columns.Contains(ColKind);
+
+        /// <summary>True si la columna es un hueco de día del calendario (<c>CD_*</c>).</summary>
+        internal static bool IsDaySlotColumn(string? columnName)
+            => !string.IsNullOrEmpty(columnName) && columnName.StartsWith(SlotPrefix, StringComparison.Ordinal);
+
+        /// <summary>
+        /// Días únicos seleccionados: el número y el prefijo de un mismo día cuentan como 1,
+        /// aunque ambas celdas estén marcadas.
+        /// </summary>
+        internal static int CountSelectedDays(DataGridView dgv)
+        {
+            if (dgv.IsDisposed || dgv.SelectedCells.Count == 0)
+                return 0;
+
+            var unique = new HashSet<(int PairRow, int ColumnIndex)>();
+
+            foreach (DataGridViewCell cell in dgv.SelectedCells)
+            {
+                if (cell.RowIndex < 0 || cell.ColumnIndex < 0 || cell.ColumnIndex >= dgv.Columns.Count)
+                    continue;
+                if (!IsDaySlotColumn(dgv.Columns[cell.ColumnIndex].Name))
+                    continue;
+
+                string kind = GetRowKind(dgv, cell.RowIndex);
+                if (kind != KindNum && kind != KindVal)
+                    continue;
+
+                int pairRow = kind == KindNum ? cell.RowIndex : cell.RowIndex - 1;
+                if (pairRow < 0 || GetRowKind(dgv, pairRow) != KindNum)
+                    continue;
+
+                object? dayNumber = dgv.Rows[pairRow].Cells[cell.ColumnIndex].Value;
+                if (string.IsNullOrWhiteSpace(dayNumber?.ToString()))
+                    continue;
+
+                unique.Add((pairRow, cell.ColumnIndex));
+            }
+
+            return unique.Count;
+        }
+
+        private static string GetRowKind(DataGridView dgv, int rowIndex)
+        {
+            if (rowIndex < 0 || rowIndex >= dgv.Rows.Count) return string.Empty;
+            if (dgv.Rows[rowIndex].DataBoundItem is DataRowView drv
+                && drv.Row.Table.Columns.Contains(ColKind))
+                return drv[ColKind]?.ToString() ?? string.Empty;
+            return string.Empty;
+        }
+
         private static string SlotName(int blockIndex, int weekday)      => $"{SlotPrefix}{blockIndex}_{weekday}";
         private static string SlotColorName(int blockIndex, int weekday) => $"{ColorPrefix}{blockIndex}_{weekday}";
         private static string GapName(int blockIndex)                   => $"{GapPrefix}{blockIndex}";
