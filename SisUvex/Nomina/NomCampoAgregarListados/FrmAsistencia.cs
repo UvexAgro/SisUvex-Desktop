@@ -433,18 +433,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// =====================================================
-			// ESTADO ACTUAL DEL CHECKBOX
+			// ESTADO ACTUAL DE LA CELDA
 			// =====================================================
 
-			bool marcado =
-				Convert.ToBoolean(celda.Value ?? false);
+			int estado = celda.Value == null ||
+						 celda.Value == DBNull.Value
+				? 2
+				: Convert.ToInt32(celda.Value);
 
+			// 1 = asistencia
+			// 0 = falta
+			// 2 = vacío
 
-			if (marcado)
+			if (estado == 1)
 			{
-				// =================================================
-				// ESTÁ MARCANDO → PONER ASISTENCIA
-				// =================================================
+				// =============================================
+				// MARCANDO ASISTENCIA
+				// =============================================
 
 				string idCuadrilla =
 					cboCuadrilla.SelectedValue?
@@ -459,45 +464,39 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning);
 
-					celda.Value = false;
+					celda.Value = 2;
 					return;
 				}
 
-				DialogResult resultado =
-					MessageBox.Show(
-						$"¿Está segura de ponerle la asistencia?\n\n" +
-						$"Empleado: {empleado}\n" +
-						$"Código: {codigo}\n" +
-						$"Día: {dia}",
-						"Confirmar asistencia",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question);
+				DialogResult resultado = MessageBox.Show(
+					$"¿Está segura de ponerle la asistencia?\n\n" +
+					$"Empleado: {empleado}\n" +
+					$"Código: {codigo}\n" +
+					$"Día: {dia}",
+					"Confirmar asistencia",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question);
 
 				if (resultado == DialogResult.No)
-				{
-					celda.Value = false;
-				}
+					celda.Value = 2;
 			}
-			else
+			else if (estado == 0)
 			{
-				// =================================================
-				// ESTÁ DESMARCANDO → QUITAR ASISTENCIA
-				// =================================================
+				// =============================================
+				// REGISTRANDO FALTA
+				// =============================================
 
-				DialogResult resultado =
-					MessageBox.Show(
-						$"¿Está segura de quitarle la asistencia?\n\n" +
-						$"Empleado: {empleado}\n" +
-						$"Código: {codigo}\n" +
-						$"Día: {dia}",
-						"Confirmar asistencia",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question);
+				DialogResult resultado = MessageBox.Show(
+					$"¿Está segura de registrar la falta?\n\n" +
+					$"Empleado: {empleado}\n" +
+					$"Código: {codigo}\n" +
+					$"Día: {dia}",
+					"Confirmar falta",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question);
 
 				if (resultado == DialogResult.No)
-				{
-					celda.Value = true;
-				}
+					celda.Value = 1;
 			}
 		}
 
