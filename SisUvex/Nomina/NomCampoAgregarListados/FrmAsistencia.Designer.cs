@@ -944,7 +944,7 @@
 			cboCuadrilla.FormattingEnabled = true;
 			cboCuadrilla.Location = new Point(8, 107);
 			cboCuadrilla.Name = "cboCuadrilla";
-			cboCuadrilla.Size = new Size(191, 23);
+			cboCuadrilla.Size = new Size(287, 23);
 			cboCuadrilla.TabIndex = 1;
 			cboCuadrilla.SelectedIndexChanged += cboCuadrilla_SelectedIndexChanged;
 			// 

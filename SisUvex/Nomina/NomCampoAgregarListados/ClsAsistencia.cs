@@ -397,6 +397,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 				DataRow asistencia = registros[0];
 
+
 				foreach (string dia in dias)
 				{
 					string sufijo = dia.ToLowerInvariant();
@@ -406,20 +407,22 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					string grupo =
 						asistencia[$"id_workGroup_{sufijo}"]?
-						.ToString()?.Trim() ?? "";
-
+							.ToString()?.Trim() ?? "";
 
 					int estado = 2;
 
-					if (grupo == idCuadrilla &&
-						int.TryParse(valorAsistencia, out int valor) &&
+					if (int.TryParse(valorAsistencia, out int valor) &&
 						(valor == 0 || valor == 1 || valor == 2))
 					{
-						estado = valor;
+						// Mostrar el estado de SQL solamente si
+						// pertenece a la cuadrilla seleccionada.
+						if (grupo == idCuadrilla)
+							estado = valor;
 					}
 
 					empleado[dia] = estado;
 				}
+
 			}
 
 			// ==========================================
@@ -486,6 +489,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		}
 
 
+
 		private void AplicarFaltasYColores(
 			DateTime fechaInicio,
 			DateTime fechaFin)
@@ -499,9 +503,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-				"Vie", "Sab", "Dom", "Lun",
-				"Mar", "Mie", "Jue"
-			};
+		"Vie", "Sab", "Dom", "Lun",
+		"Mar", "Mie", "Jue"
+	};
 
 			foreach (DataGridViewRow fila in _frmA.dgvAsistencia.Rows)
 			{
@@ -548,7 +552,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					// Guardar prefijo para dibujarlo dentro de la celda.
 					celda.Tag = prefijo;
 
-					// Aplicar color configurado.
+					// Aplicar el color configurado para el prefijo.
 					if (!string.IsNullOrWhiteSpace(colorHex))
 					{
 						Color color = ColorTranslator.FromHtml(colorHex);
@@ -560,11 +564,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					// Identificar faltas justificadas e injustificadas.
 					bool esFalta = tipo == "03" || tipo == "04";
 
-					// Ninguna regla debe habilitar una celda bloqueada.
+					// Conservar el valor de asistencia del checkbox.
+					// No asignar false, porque podría cambiar el estado a vacío.
 					celda.ReadOnly = bloqueadaOtraCuadrilla || esFalta;
-
-					if (esFalta)
-						celda.Value = false;
 				}
 			}
 
@@ -1845,24 +1847,23 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			return true;
 		}
 
-		private int ObtenerEstadoCheckBox(
-			DataGridViewRow fila,
-			string columna)
+		private int ObtenerEstadoCheckBox(DataGridViewRow fila, string columna)
 		{
 			object valor = fila.Cells[columna].Value;
 
 			if (valor == null || valor == DBNull.Value)
-				return 2; // Vacío
+				return 2;
 
-			// Compatible con celdas booleanas antiguas.
-			if (valor is bool marcado)
-				return marcado ? 1 : 2;
-
+			// Conservar los estados numéricos 0, 1 y 2.
 			if (int.TryParse(valor.ToString(), out int estado))
 			{
 				if (estado == 0 || estado == 1 || estado == 2)
 					return estado;
 			}
+
+			// Compatibilidad con valores booleanos.
+			if (valor is bool marcado)
+				return marcado ? 1 : 2;
 
 			return 2;
 		}
@@ -2019,15 +2020,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			if (valor != null && valor != DBNull.Value)
 			{
-				if (valor is bool marcado)
-				{
-					estado = marcado ? 1 : 2;
-				}
-				else if (int.TryParse(
-					valor.ToString(), out int numero))
+				if (int.TryParse(valor.ToString(), out int numero))
 				{
 					if (numero == 0 || numero == 1 || numero == 2)
 						estado = numero;
+				}
+				else if (valor is bool marcado)
+				{
+					estado = marcado ? 1 : 2;
 				}
 			}
 
