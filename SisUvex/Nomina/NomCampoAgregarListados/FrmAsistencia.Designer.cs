@@ -857,7 +857,7 @@
 			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
 			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(592, 222);
+			btnGuardar.Location = new Point(598, 222);
 			btnGuardar.Name = "btnGuardar";
 			btnGuardar.Padding = new Padding(20, 0, 30, 0);
 			btnGuardar.Size = new Size(166, 39);
@@ -944,7 +944,7 @@
 			cboCuadrilla.FormattingEnabled = true;
 			cboCuadrilla.Location = new Point(8, 107);
 			cboCuadrilla.Name = "cboCuadrilla";
-			cboCuadrilla.Size = new Size(191, 23);
+			cboCuadrilla.Size = new Size(287, 23);
 			cboCuadrilla.TabIndex = 1;
 			cboCuadrilla.SelectedIndexChanged += cboCuadrilla_SelectedIndexChanged;
 			// 
