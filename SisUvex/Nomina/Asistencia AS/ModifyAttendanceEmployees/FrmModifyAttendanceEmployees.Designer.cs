@@ -37,6 +37,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             lblDefaultType = new Label();
             cboDefaultType = new ComboBox();
             gpbApply = new GroupBox();
+            lblSelectedDays = new Label();
+            label2 = new Label();
             label1 = new Label();
             btnApply = new Button();
             txbComments = new TextBox();
@@ -48,8 +50,6 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             btnDiscard = new Button();
             btnSave = new Button();
             lblHelp = new Label();
-            lblSelectedDays = new Label();
-            label2 = new Label();
             gpbApply.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPivot).BeginInit();
             SuspendLayout();
@@ -82,7 +82,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             lblPending.AutoSize = true;
             lblPending.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblPending.ForeColor = Color.DarkOrange;
-            lblPending.Location = new Point(490, 64);
+            lblPending.Location = new Point(341, 122);
             lblPending.Margin = new Padding(0);
             lblPending.Name = "lblPending";
             lblPending.Size = new Size(90, 21);
@@ -92,7 +92,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // lblDefaultType
             // 
             lblDefaultType.AutoSize = true;
-            lblDefaultType.Location = new Point(618, 66);
+            lblDefaultType.ForeColor = SystemColors.ControlDark;
+            lblDefaultType.Location = new Point(618, 15);
             lblDefaultType.Margin = new Padding(0);
             lblDefaultType.Name = "lblDefaultType";
             lblDefaultType.Size = new Size(132, 15);
@@ -102,8 +103,9 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // cboDefaultType
             // 
             cboDefaultType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDefaultType.Enabled = false;
             cboDefaultType.FormattingEnabled = true;
-            cboDefaultType.Location = new Point(750, 63);
+            cboDefaultType.Location = new Point(750, 12);
             cboDefaultType.Margin = new Padding(0, 3, 3, 3);
             cboDefaultType.Name = "cboDefaultType";
             cboDefaultType.Size = new Size(220, 23);
@@ -113,29 +115,57 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // gpbApply
             // 
             gpbApply.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbApply.Controls.Add(lblHelp);
             gpbApply.Controls.Add(lblSelectedDays);
+            gpbApply.Controls.Add(btnClose);
             gpbApply.Controls.Add(label2);
             gpbApply.Controls.Add(label1);
+            gpbApply.Controls.Add(btnDiscard);
             gpbApply.Controls.Add(btnApply);
             gpbApply.Controls.Add(txbComments);
             gpbApply.Controls.Add(lblComments);
+            gpbApply.Controls.Add(btnSave);
             gpbApply.Controls.Add(cboApplyType);
             gpbApply.Controls.Add(lblApplyType);
             gpbApply.Controls.Add(lblPending);
             gpbApply.Font = new Font("Segoe UI", 10F);
-            gpbApply.Location = new Point(12, 92);
+            gpbApply.Location = new Point(12, 67);
             gpbApply.Name = "gpbApply";
-            gpbApply.Size = new Size(958, 114);
+            gpbApply.Size = new Size(958, 158);
             gpbApply.TabIndex = 3;
             gpbApply.TabStop = false;
             gpbApply.Text = "Aplicar a la selección de celdas";
+            // 
+            // lblSelectedDays
+            // 
+            lblSelectedDays.AutoSize = true;
+            lblSelectedDays.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSelectedDays.ForeColor = Color.DarkGray;
+            lblSelectedDays.Location = new Point(240, 94);
+            lblSelectedDays.Margin = new Padding(0);
+            lblSelectedDays.Name = "lblSelectedDays";
+            lblSelectedDays.Size = new Size(19, 21);
+            lblSelectedDays.TabIndex = 13;
+            lblSelectedDays.Text = "0";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.DarkGray;
+            label2.Location = new Point(94, 94);
+            label2.Margin = new Padding(0);
+            label2.Name = "label2";
+            label2.Size = new Size(151, 21);
+            label2.TabIndex = 14;
+            label2.Text = "Días seleccionados:";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label1.ForeColor = Color.Gray;
-            label1.Location = new Point(1, 69);
+            label1.Location = new Point(510, 12);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(445, 15);
@@ -147,7 +177,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             btnApply.Font = new Font("Segoe UI", 11F);
             btnApply.Image = Properties.Resources.downIcon16;
             btnApply.ImageAlign = ContentAlignment.MiddleLeft;
-            btnApply.Location = new Point(806, 29);
+            btnApply.Location = new Point(410, 63);
             btnApply.Name = "btnApply";
             btnApply.Padding = new Padding(4, 0, 1, 0);
             btnApply.Size = new Size(96, 29);
@@ -160,17 +190,17 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // txbComments
             // 
             txbComments.Font = new Font("Segoe UI", 11F);
-            txbComments.Location = new Point(490, 30);
+            txbComments.Location = new Point(94, 64);
             txbComments.Margin = new Padding(0, 3, 3, 3);
             txbComments.Name = "txbComments";
-            txbComments.Size = new Size(300, 27);
+            txbComments.Size = new Size(310, 27);
             txbComments.TabIndex = 3;
             // 
             // lblComments
             // 
             lblComments.AutoSize = true;
             lblComments.Font = new Font("Segoe UI", 11F);
-            lblComments.Location = new Point(403, 33);
+            lblComments.Location = new Point(7, 67);
             lblComments.Margin = new Padding(0);
             lblComments.Name = "lblComments";
             lblComments.Size = new Size(87, 20);
@@ -182,7 +212,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             cboApplyType.DropDownStyle = ComboBoxStyle.DropDownList;
             cboApplyType.Font = new Font("Segoe UI", 11F);
             cboApplyType.FormattingEnabled = true;
-            cboApplyType.Location = new Point(56, 29);
+            cboApplyType.Location = new Point(94, 30);
             cboApplyType.Margin = new Padding(0, 3, 3, 3);
             cboApplyType.Name = "cboApplyType";
             cboApplyType.Size = new Size(310, 28);
@@ -192,7 +222,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // 
             lblApplyType.AutoSize = true;
             lblApplyType.Font = new Font("Segoe UI", 11F);
-            lblApplyType.Location = new Point(17, 33);
+            lblApplyType.Location = new Point(55, 34);
             lblApplyType.Margin = new Padding(0);
             lblApplyType.Name = "lblApplyType";
             lblApplyType.Size = new Size(39, 20);
@@ -218,7 +248,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             dgvPivot.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPivot.EnableHeadersVisualStyles = false;
             dgvPivot.ImeMode = ImeMode.NoControl;
-            dgvPivot.Location = new Point(12, 212);
+            dgvPivot.Location = new Point(12, 231);
             dgvPivot.Name = "dgvPivot";
             dgvPivot.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -232,7 +262,7 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             dgvPivot.RowHeadersVisible = false;
             dgvPivot.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvPivot.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dgvPivot.Size = new Size(958, 399);
+            dgvPivot.Size = new Size(958, 423);
             dgvPivot.TabIndex = 5;
             dgvPivot.CellFormatting += dgvPivot_CellFormatting;
             dgvPivot.CellPainting += dgvPivot_CellPainting;
@@ -241,9 +271,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // 
             // btnClose
             // 
-            btnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnClose.Font = new Font("Segoe UI", 11F);
-            btnClose.Location = new Point(895, 623);
+            btnClose.Location = new Point(263, 118);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(75, 31);
             btnClose.TabIndex = 8;
@@ -253,9 +282,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // 
             // btnDiscard
             // 
-            btnDiscard.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnDiscard.Font = new Font("Segoe UI", 11F);
-            btnDiscard.Location = new Point(769, 623);
+            btnDiscard.Location = new Point(137, 118);
             btnDiscard.Name = "btnDiscard";
             btnDiscard.Size = new Size(120, 31);
             btnDiscard.TabIndex = 7;
@@ -265,9 +293,8 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // 
             // btnSave
             // 
-            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSave.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            btnSave.Location = new Point(639, 623);
+            btnSave.Location = new Point(7, 118);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(124, 31);
             btnSave.TabIndex = 6;
@@ -277,56 +304,27 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
             // 
             // lblHelp
             // 
-            lblHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblHelp.AutoSize = true;
             lblHelp.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             lblHelp.ForeColor = Color.Gray;
-            lblHelp.Location = new Point(14, 629);
+            lblHelp.Location = new Point(651, 30);
             lblHelp.Margin = new Padding(0);
             lblHelp.Name = "lblHelp";
             lblHelp.Size = new Size(304, 15);
             lblHelp.TabIndex = 9;
             lblHelp.Text = "ℹ Los cambios no se guardan hasta presionar \"Guardar\"";
             // 
-            // lblSelectedDays
-            // 
-            lblSelectedDays.AutoSize = true;
-            lblSelectedDays.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSelectedDays.ForeColor = Color.DarkGray;
-            lblSelectedDays.Location = new Point(636, 85);
-            lblSelectedDays.Margin = new Padding(0);
-            lblSelectedDays.Name = "lblSelectedDays";
-            lblSelectedDays.Size = new Size(19, 21);
-            lblSelectedDays.TabIndex = 13;
-            lblSelectedDays.Text = "0";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.DarkGray;
-            label2.Location = new Point(490, 85);
-            label2.Margin = new Padding(0);
-            label2.Name = "label2";
-            label2.Size = new Size(151, 21);
-            label2.TabIndex = 14;
-            label2.Text = "Días seleccionados:";
-            // 
             // FrmModifyAttendanceEmployees
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(982, 666);
-            Controls.Add(lblHelp);
-            Controls.Add(btnClose);
-            Controls.Add(btnDiscard);
-            Controls.Add(btnSave);
             Controls.Add(dgvPivot);
-            Controls.Add(gpbApply);
             Controls.Add(cboDefaultType);
             Controls.Add(lblDefaultType);
             Controls.Add(lblPeriodo);
             Controls.Add(lblTitle);
+            Controls.Add(gpbApply);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(700, 400);
             Name = "FrmModifyAttendanceEmployees";
