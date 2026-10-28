@@ -749,72 +749,161 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 		}
+
+
 		public bool GuardarNotaCuadrilla(
-	string idCuadrilla,
-	string secuenciaSemana,
-	DateTime fechaInicio,
-	DateTime fechaFin,
-	DateTime fecha,
-	string nota)
+			string idCuadrilla,
+			string secuenciaSemana,
+			DateTime fechaInicio,
+			DateTime fechaFin,
+			DateTime fecha,
+			string nota)
 		{
+			SqlTransaction transaccion = null;
+
 			try
 			{
-				using (SqlConnection conexion =
-					new SqlConnection(SQLControl.cadenaConexion))
+				string notaLimpia = string.IsNullOrWhiteSpace(nota)
+					? null
+					: nota.Trim();
+
+				sql.OpenConectionWrite();
+
+				transaccion = sql.cnn.BeginTransaction(
+					IsolationLevel.Serializable);
+
+				string consulta = @"
+            DECLARE @filas INT;
+
+            -- 1. Actualizar el registro si ya existe.
+            UPDATE dbo.Nom_WorkGroupStatus
+            SET c_notas = @nota,
+                v_userUpdate = @usuario,
+                d_update = GETDATE()
+            WHERE id_workGroup = @idCuadrilla
+              AND c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin
+              AND d_fecha = @fecha;
+
+            SET @filas = @@ROWCOUNT;
+
+            -- 2. Si no existe, crear registro solo
+            -- cuando se haya escrito una nota.
+            IF @filas = 0 AND @nota IS NOT NULL
+            BEGIN
+                DECLARE @nuevoId INT;
+
+                SELECT @nuevoId =
+                    ISNULL(
+                        MAX(TRY_CONVERT(INT, id_Registro)),
+                        0
+                    ) + 1
+                FROM dbo.Nom_WorkGroupStatus
+                    WITH (UPDLOCK, HOLDLOCK);
+
+                IF @nuevoId > 999
+                    THROW 50001,
+                        'Se agotaron los identificadores de tres dígitos.',
+                        1;
+
+                INSERT INTO dbo.Nom_WorkGroupStatus
+                (
+                    id_Registro,
+                    id_Status,
+                    id_workGroup,
+                    c_sequence_per,
+                    d_startDate_per,
+                    d_endDate_per,
+                    d_fecha,
+                    c_observaciones,
+                    c_notas,
+                    v_userCreate,
+                    d_create
+                )
+                VALUES
+                (
+                    RIGHT(
+                        '000' + CAST(@nuevoId AS VARCHAR(3)),
+                        3
+                    ),
+                    'PEN',
+                    @idCuadrilla,
+                    @secuenciaSemana,
+                    @fechaInicio,
+                    @fechaFin,
+                    @fecha,
+                    NULL,
+                    @nota,
+                    @usuario,
+                    GETDATE()
+                );
+					END;";
+
+				using (SqlCommand comando =
+					new SqlCommand(consulta, sql.cnn, transaccion))
 				{
-					conexion.Open();
+					comando.Parameters.Add(
+						"@idCuadrilla", SqlDbType.Char, 3).Value =
+						idCuadrilla.Trim();
 
-					string consulta = @"
-                UPDATE dbo.Nom_WorkGroupStatus
-                SET c_notas = @nota,
-                    v_userUpdate = SYSTEM_USER,
-                    d_update = GETDATE()
-                WHERE id_workGroup = @idCuadrilla
-                  AND c_sequence_per = @secuenciaSemana
-                  AND d_startDate_per = @fechaInicio
-                  AND d_endDate_per = @fechaFin
-                  AND d_fecha = @fecha;";
+					comando.Parameters.Add(
+						"@secuenciaSemana", SqlDbType.Char, 2).Value =
+						secuenciaSemana.Trim();
 
-					using (SqlCommand comando =
-						new SqlCommand(consulta, conexion))
-					{
-						comando.Parameters.AddWithValue(
-							"@idCuadrilla", idCuadrilla);
+					comando.Parameters.Add(
+						"@fechaInicio", SqlDbType.Date).Value =
+						fechaInicio.Date;
 
-						comando.Parameters.AddWithValue(
-							"@secuenciaSemana", secuenciaSemana);
+					comando.Parameters.Add(
+						"@fechaFin", SqlDbType.Date).Value =
+						fechaFin.Date;
 
-						comando.Parameters.AddWithValue(
-							"@fechaInicio", fechaInicio.Date);
+					comando.Parameters.Add(
+						"@fecha", SqlDbType.Date).Value =
+						fecha.Date;
 
-						comando.Parameters.AddWithValue(
-							"@fechaFin", fechaFin.Date);
+					comando.Parameters.Add(
+						"@nota", SqlDbType.NVarChar, -1).Value =
+						(object)notaLimpia ?? DBNull.Value;
 
-						comando.Parameters.AddWithValue(
-							"@fecha", fecha.Date);
+					comando.Parameters.Add(
+						"@usuario", SqlDbType.VarChar, 50).Value =
+						Environment.UserName;
 
-						comando.Parameters.Add(
-							"@nota", SqlDbType.NVarChar, -1).Value =
-							string.IsNullOrWhiteSpace(nota)
-								? DBNull.Value
-								: nota;
-
-						return comando.ExecuteNonQuery() > 0;
-					}
+					comando.ExecuteNonQuery();
 				}
+
+				transaccion.Commit();
+				return true;
 			}
 			catch (Exception ex)
 			{
+				try
+				{
+					transaccion?.Rollback();
+				}
+				catch
+				{
+					// La transacción podría haberse cerrado.
+				}
+
 				MessageBox.Show(
-					"No se pudo guardar la nota.\n\n" +
-					"Detalle: " + ex.Message,
+					"No se pudo guardar la nota.\n\nDetalle: "
+					+ ex.Message,
 					"Error al guardar",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 
 				return false;
 			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
 		}
+
+
 		public bool GuardarTerminadasSeleccionadas(List<DataGridViewCell> celdas)
 		{
 			if (celdas == null || celdas.Count == 0)
