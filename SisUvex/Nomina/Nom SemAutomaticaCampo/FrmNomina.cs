@@ -26,6 +26,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			cls.frm ??= this;
 
 			InicializarListaCuadrillas();
+			
 		}
 		public List<string> ObtenerIdsCuadrillasSeleccionadas()
 		{
