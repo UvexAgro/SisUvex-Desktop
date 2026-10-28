@@ -23,6 +23,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			public DateTime Fecha { get; set; }
 			public string IdStatus { get; set; }
 			public string Observaciones { get; set; }
+			public string Nota { get; set; } = "";
 		}
 
 		public void CargarCuadrillas()
@@ -141,17 +142,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			{
 				sql.CloseConectionWrite();
 			}
-
-			// Cargar ComboBox
-			frmO.cboEstado.DataSource = dt;
-
-			// Lo que se muestra
-			frmO.cboEstado.DisplayMember = "c_status";
-
-			// Lo que realmente devuelve
-			frmO.cboEstado.ValueMember = "id_status";
-
-			frmO.cboEstado.SelectedIndex = -1;
 		}
 		public void CargarEstadoCuadrillas(
 	string sequencePer,
@@ -160,64 +150,33 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			DataTable dt = new DataTable();
 
-			string query = @"
-			SELECT
-				WG.id_workGroup,
-				WG.c_order,
-				WG.v_nameWorkGroup,
-				D.d_fecha,
-				S.id_Registro,
-				S.id_Status,
-				CS.c_status,
-				S.c_observaciones
-			FROM dbo.Nom_WorkGroup WG
-			CROSS JOIN
-			(
-				SELECT DATEADD(DAY, N, @fechaInicio) AS d_fecha
-				FROM
-				(
-					SELECT TOP (DATEDIFF(DAY, @fechaInicio, @fechaFin) + 1)
-						ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) - 1 AS N
-					FROM sys.objects
-				) X
-			) D
-			LEFT JOIN dbo.Nom_WorkGroupStatus S
-				ON S.id_workGroup = WG.id_workGroup
-				AND S.d_fecha = D.d_fecha
-				AND S.c_sequence_per = @sequencePer
-			LEFT JOIN dbo.Cat_StatusCuadrilla CS
-				ON CS.id_status = S.id_Status
-			WHERE WG.c_active = 1
-			ORDER BY
-				CASE
-					WHEN WG.c_order IS NULL OR WG.c_order = '' THEN 1
-					ELSE 0
-				END,
-				WG.c_order,
-				WG.id_workGroup,
-				D.d_fecha;";
-
 			try
 			{
 				sql.OpenConectionWrite();
 
-				using (SqlCommand cmd =
-					new SqlCommand(query, sql.cnn))
+				using (SqlCommand cmd = new SqlCommand(
+					"dbo.sp_GetEstadoDeCuadrillas",
+					sql.cnn))
 				{
-					cmd.Parameters.AddWithValue(
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add(
 						"@sequencePer",
-						sequencePer);
+						SqlDbType.Char,
+						2
+					).Value = sequencePer.Trim();
 
-					cmd.Parameters.AddWithValue(
+					cmd.Parameters.Add(
 						"@fechaInicio",
-						fechaInicio.Date);
+						SqlDbType.Date
+					).Value = fechaInicio.Date;
 
-					cmd.Parameters.AddWithValue(
+					cmd.Parameters.Add(
 						"@fechaFin",
-						fechaFin.Date);
+						SqlDbType.Date
+					).Value = fechaFin.Date;
 
-					using (SqlDataAdapter da =
-						new SqlDataAdapter(cmd))
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
 						da.Fill(dt);
 					}
@@ -226,22 +185,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al cargar el estado de las cuadrillas:\n" +
-					ex.Message,
+					"Error al validar las cuadrillas:\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
+
+				return;
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			CrearTablaEstado(
-				dt,
-				fechaInicio,
-				fechaFin);
+			CrearTablaEstado(dt, fechaInicio, fechaFin);
 		}
+
 		private void CrearTablaEstado(
 	DataTable dt,
 	DateTime fechaInicio,
@@ -359,46 +317,39 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				foreach (DataRow dato in grupo)
 				{
 					DateTime fecha =
-						Convert.ToDateTime(
-							dato["d_fecha"]);
+						Convert.ToDateTime(dato["d_fecha"]);
 
 					string columna =
-						"F_" +
-						fecha.ToString("yyyyMMdd");
+						"F_" + fecha.ToString("yyyyMMdd");
 
 					DataGridViewCell celda =
 						row.Cells[columna];
 
 					// Estado visible
 					string estado =
-						dato["c_status"] == DBNull.Value
+						dato["Estado"] == DBNull.Value
 							? ""
-							: dato["c_status"].ToString();
+							: dato["Estado"].ToString();
 
 					celda.Value = estado;
 
-					// =================================================
-					// INFORMACIÓN DEL REGISTRO
-					// =================================================
-
+					// Información del registro y de la nota
 					celda.Tag = new DatosEstado
 					{
-						IdRegistro =
-							dato["id_Registro"] == DBNull.Value
-								? ""
-								: dato["id_Registro"].ToString(),
-
+						IdRegistro = "",
 						Fecha = fecha,
-
-						IdStatus =
-							dato["id_Status"] == DBNull.Value
-								? ""
-								: dato["id_Status"].ToString(),
+						IdStatus = "",
 
 						Observaciones =
-							dato["c_observaciones"] == DBNull.Value
+							dato["Observaciones"] == DBNull.Value
 								? ""
-								: dato["c_observaciones"].ToString()
+								: dato["Observaciones"].ToString(),
+
+						Nota =
+							dato.Table.Columns.Contains("c_notas") &&
+							dato["c_notas"] != DBNull.Value
+								? dato["c_notas"].ToString()
+								: ""
 					};
 				}
 			}
@@ -413,267 +364,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				AjustarFilasAlAlto();
 			}));
 		}
-		public bool GuardarEstadoCuadrilla()
-		{
-			if (frmO.cboCuadrilla2.SelectedIndex == -1 ||
-				frmO.cboCuadrilla2.SelectedValue == null)
-			{
-				MessageBox.Show(
-					"Seleccione una cuadrilla.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return false;
-			}
-
-			if (frmO.cboDia.SelectedIndex == -1)
-			{
-				MessageBox.Show(
-					"Seleccione un día.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return false;
-			}
-
-			if (frmO.cboEstado.SelectedIndex == -1 ||
-				frmO.cboEstado.SelectedValue == null)
-			{
-				MessageBox.Show(
-					"Seleccione un estado.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return false;
-			}
-
-			string idWorkGroup =
-				frmO.cboCuadrilla2.SelectedValue.ToString();
-
-			string idStatus =
-				frmO.cboEstado.SelectedValue.ToString();
-
-			string sequencePer =
-				frmO.txbSemana.Text.Trim();
-
-			DateTime fechaInicio =
-				frmO.dtpInicio.Value.Date;
-
-			DateTime fechaFin =
-				frmO.dtpFinal.Value.Date;
-
-			// El índice representa el día de la semana
-			DateTime fecha =
-				fechaInicio.AddDays(frmO.cboDia.SelectedIndex);
-
-			string observaciones =
-				frmO.txbObservaciones.Text.Trim();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				using (SqlCommand cmd = new SqlCommand(
-					"sp_AddWorkGroupStatus",
-					sql.cnn))
-				{
-					cmd.CommandType =
-						CommandType.StoredProcedure;
-
-					cmd.Parameters.AddWithValue(
-						"@id_Registro",
-						ObtenerNuevoIdRegistro());
-
-					cmd.Parameters.AddWithValue(
-						"@id_Status",
-						idStatus);
-
-					cmd.Parameters.AddWithValue(
-						"@id_workGroup",
-						idWorkGroup);
-
-					cmd.Parameters.AddWithValue(
-						"@c_sequence_per",
-						sequencePer);
-
-					cmd.Parameters.AddWithValue(
-						"@d_startDate_per",
-						fechaInicio);
-
-					cmd.Parameters.AddWithValue(
-						"@d_endDate_per",
-						fechaFin);
-
-					cmd.Parameters.AddWithValue(
-						"@d_fecha",
-						fecha);
-
-					cmd.Parameters.AddWithValue(
-						"@c_observaciones",
-						string.IsNullOrWhiteSpace(observaciones)
-							? (object)DBNull.Value
-							: observaciones);
-
-					cmd.Parameters.AddWithValue(
-						"@v_userCreate",
-						Environment.UserName);
-
-					cmd.ExecuteNonQuery();
-				}
-
-				MessageBox.Show(
-					"Registro guardado correctamente.",
-					"Guardado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-
-				CargarEstadoCuadrillas(
-				sequencePer,
-				fechaInicio,
-				fechaFin);
-
-				// Guardado correctamente
-				return true;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"Error al guardar el estado:\n" + ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-
-				// No se guardó
-				return false;
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-		}
-		private string ObtenerNuevoIdRegistro()
-		{
-			string query = @"
-        SELECT RIGHT(
-            '000' +
-            CAST(
-                ISNULL(
-                    MAX(CAST(id_Registro AS INT)),
-                    0
-                ) + 1
-                AS VARCHAR(3)
-            ),
-            3
-        )
-        FROM dbo.Nom_WorkGroupStatus";
-
-			using (SqlCommand cmd =
-				   new SqlCommand(query, sql.cnn))
-			{
-				return cmd.ExecuteScalar().ToString();
-			}
-		}
-		public bool ModificarEstadoCuadrilla()
-		{
-			if (string.IsNullOrWhiteSpace(idRegistroSeleccionado))
-			{
-				MessageBox.Show(
-					"Seleccione un registro para modificar.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return false;
-			}
-
-			if (frmO.cboEstado.SelectedIndex == -1 ||
-				frmO.cboEstado.SelectedValue == null)
-			{
-				MessageBox.Show(
-					"Seleccione un estado.",
-					"Aviso",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return false;
-			}
-
-			string idStatus =
-				frmO.cboEstado.SelectedValue.ToString();
-
-			string observaciones =
-				frmO.txbObservaciones.Text.Trim();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				using (SqlCommand cmd = new SqlCommand(
-					"sp_UpdateWorkGroupStatus",
-					sql.cnn))
-				{
-					cmd.CommandType =
-						CommandType.StoredProcedure;
-
-					cmd.Parameters.AddWithValue(
-						"@id_Registro",
-						idRegistroSeleccionado);
-
-					cmd.Parameters.AddWithValue(
-						"@id_Status",
-						idStatus);
-
-					cmd.Parameters.AddWithValue(
-						"@c_observaciones",
-						string.IsNullOrWhiteSpace(observaciones)
-							? (object)DBNull.Value
-							: observaciones);
-
-					cmd.Parameters.AddWithValue(
-						"@v_userUpdate",
-						Environment.UserName);
-
-					cmd.ExecuteNonQuery();
-				}
-
-				MessageBox.Show(
-					"Registro modificado correctamente.",
-					"Modificado",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				// ==========================================
-				// RECARGAR TABLA
-				// ==========================================
-
-				CargarEstadoCuadrillas(
-					frmO.txbSemana.Text.Trim(),
-					frmO.dtpInicio.Value,
-					frmO.dtpFinal.Value);
-
-				// Modificación correcta
-				return true;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"Error al modificar el registro:\n" +
-					ex.Message,
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-
-				return false;
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-		}
+		
+		
 		private void EstilizarDgvEstado()
 		{
 			DataGridView dgv = frmO.dgvEstado;
@@ -714,7 +406,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			dgv.MultiSelect =
 				false;
 
-			// SOLO SELECCIONA UNA CELDA
+			// Permitir seleccionar varias celdas
+			dgv.MultiSelect = true;
+
 			dgv.SelectionMode =
 				DataGridViewSelectionMode.CellSelect;
 
@@ -918,6 +612,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				fila.Height = altoFila;
 			}
 		}
+
+
 		private void dgvEstado_CellPainting(
 	object sender,
 	DataGridViewCellPaintingEventArgs e)
@@ -938,55 +634,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 
 			string estado =
-				e.Value?.ToString()?.Trim().ToUpper();
+				Convert.ToString(e.Value)?.Trim().ToUpperInvariant() ?? "";
 
-			if (string.IsNullOrWhiteSpace(estado))
-				return;
+			bool seleccionada =
+				(e.State & DataGridViewElementStates.Selected) != 0;
+
+			// Obtener la nota guardada en el Tag
+			DatosEstado datos =
+				dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Tag
+					as DatosEstado;
+
+			bool tieneNota =
+				datos != null &&
+				!string.IsNullOrWhiteSpace(datos.Nota);
 
 			Color fondo;
 			Color texto;
 
-			switch (estado)
+			if (seleccionada)
 			{
-				case "TERMINADA":
+				fondo = Color.FromArgb(0, 80, 200);
+				texto = Color.White;
+			}
+			else
+			{
+				switch (estado)
+				{
+					case "TERMINADA":
+						fondo = Color.FromArgb(205, 239, 215);
+						texto = Color.FromArgb(25, 115, 55);
+						break;
 
-					fondo = Color.FromArgb(205, 239, 215);
-					texto = Color.FromArgb(25, 115, 55);
+					case "EN PROCESO":
+						fondo = Color.FromArgb(255, 239, 190);
+						texto = Color.FromArgb(150, 100, 0);
+						break;
 
-					break;
+					case "PENDIENTE":
+						fondo = Color.FromArgb(255, 215, 218);
+						texto = Color.FromArgb(180, 40, 50);
+						break;
 
-				case "EN PROCESO":
+					default:
+						// Dejar que el DataGridView pinte normalmente
+						// las celdas vacías que no están seleccionadas.
+						if (!tieneNota)
+						{
+							e.Handled = false;
+							return;
+						}
 
-					fondo = Color.FromArgb(255, 239, 190);
-					texto = Color.FromArgb(150, 100, 0);
-
-					break;
-
-				case "PENDIENTE":
-
-					fondo = Color.FromArgb(255, 215, 218);
-					texto = Color.FromArgb(180, 40, 50);
-
-					break;
-
-				default:
-					return;
+						fondo = dgv.DefaultCellStyle.BackColor;
+						texto = dgv.DefaultCellStyle.ForeColor;
+						break;
+				}
 			}
 
 			e.Handled = true;
 
-			// Pintar fondo de la celda
-			using (SolidBrush brush =
-				new SolidBrush(fondo))
+			// Fondo
+			using (SolidBrush brush = new SolidBrush(fondo))
 			{
-				e.Graphics.FillRectangle(
-					brush,
-					e.CellBounds);
+				e.Graphics.FillRectangle(brush, e.CellBounds);
 			}
 
-			// Borde de la celda
-			using (Pen pen =
-				new Pen(Color.FromArgb(180, 205, 225)))
+			// Borde
+			using (Pen pen = new Pen(Color.FromArgb(180, 205, 225)))
 			{
 				e.Graphics.DrawRectangle(
 					pen,
@@ -996,20 +709,322 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					e.CellBounds.Height - 1);
 			}
 
-			// Texto
-			TextRenderer.DrawText(
-				e.Graphics,
-				estado,
-				new Font(
-					"Segoe UI",
-					8F,
-					FontStyle.Bold),
-				e.CellBounds,
-				texto,
-				TextFormatFlags.HorizontalCenter |
-				TextFormatFlags.VerticalCenter |
-				TextFormatFlags.NoPrefix);
+			// Texto del estado
+			if (!string.IsNullOrWhiteSpace(estado))
+			{
+				TextRenderer.DrawText(
+					e.Graphics,
+					estado,
+					new Font("Segoe UI", 8F, FontStyle.Bold),
+					e.CellBounds,
+					texto,
+					TextFormatFlags.HorizontalCenter |
+					TextFormatFlags.VerticalCenter |
+					TextFormatFlags.NoPrefix);
+			}
+
+			// Triángulo rojo tipo Excel
+			if (tieneNota)
+			{
+				int tamaño = 9;
+
+				Point[] puntos =
+				{
+			new Point(
+				e.CellBounds.Right - tamaño,
+				e.CellBounds.Top),
+
+			new Point(
+				e.CellBounds.Right,
+				e.CellBounds.Top),
+
+			new Point(
+				e.CellBounds.Right,
+				e.CellBounds.Top + tamaño)
+		};
+
+				using (SolidBrush brush = new SolidBrush(Color.Red))
+				{
+					e.Graphics.FillPolygon(brush, puntos);
+				}
+			}
 		}
-		
+		public bool GuardarNotaCuadrilla(
+	string idCuadrilla,
+	string secuenciaSemana,
+	DateTime fechaInicio,
+	DateTime fechaFin,
+	DateTime fecha,
+	string nota)
+		{
+			try
+			{
+				using (SqlConnection conexion =
+					new SqlConnection(SQLControl.cadenaConexion))
+				{
+					conexion.Open();
+
+					string consulta = @"
+                UPDATE dbo.Nom_WorkGroupStatus
+                SET c_notas = @nota,
+                    v_userUpdate = SYSTEM_USER,
+                    d_update = GETDATE()
+                WHERE id_workGroup = @idCuadrilla
+                  AND c_sequence_per = @secuenciaSemana
+                  AND d_startDate_per = @fechaInicio
+                  AND d_endDate_per = @fechaFin
+                  AND d_fecha = @fecha;";
+
+					using (SqlCommand comando =
+						new SqlCommand(consulta, conexion))
+					{
+						comando.Parameters.AddWithValue(
+							"@idCuadrilla", idCuadrilla);
+
+						comando.Parameters.AddWithValue(
+							"@secuenciaSemana", secuenciaSemana);
+
+						comando.Parameters.AddWithValue(
+							"@fechaInicio", fechaInicio.Date);
+
+						comando.Parameters.AddWithValue(
+							"@fechaFin", fechaFin.Date);
+
+						comando.Parameters.AddWithValue(
+							"@fecha", fecha.Date);
+
+						comando.Parameters.Add(
+							"@nota", SqlDbType.NVarChar, -1).Value =
+							string.IsNullOrWhiteSpace(nota)
+								? DBNull.Value
+								: nota;
+
+						return comando.ExecuteNonQuery() > 0;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al guardar la nota: " + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+		}
+		public bool GuardarTerminadasSeleccionadas(List<DataGridViewCell> celdas)
+		{
+			if (celdas == null || celdas.Count == 0)
+				return false;
+
+			string secuencia = frmO.txbSemana.Text.Trim();
+			DateTime inicio = frmO.dtpInicio.Value.Date;
+			DateTime fin = frmO.dtpFinal.Value.Date;
+
+			SqlTransaction transaccion = null;
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				transaccion = sql.cnn.BeginTransaction();
+
+				string consulta = @"
+				IF EXISTS
+				(
+					SELECT 1
+					FROM dbo.Nom_WorkGroupStatus WITH (UPDLOCK, HOLDLOCK)
+					WHERE id_workGroup = @id_workGroup
+					  AND c_sequence_per = @secuencia
+					  AND d_startDate_per = @inicio
+					  AND d_endDate_per = @fin
+					  AND d_fecha = @fecha
+				)
+				BEGIN
+					UPDATE dbo.Nom_WorkGroupStatus
+					SET id_Status = 'TER',
+						v_userUpdate = @usuario,
+						d_update = GETDATE()
+					WHERE id_workGroup = @id_workGroup
+					  AND c_sequence_per = @secuencia
+					  AND d_startDate_per = @inicio
+					  AND d_endDate_per = @fin
+					  AND d_fecha = @fecha;
+				END
+				ELSE
+				BEGIN
+					DECLARE @nuevoId CHAR(3);
+
+					SELECT @nuevoId =
+						RIGHT(
+							'000' + CAST(
+								ISNULL(MAX(TRY_CONVERT(INT, id_Registro)), 0) + 1
+								AS VARCHAR(3)
+							),
+							3
+						)
+					FROM dbo.Nom_WorkGroupStatus WITH (UPDLOCK, HOLDLOCK);
+
+					IF TRY_CONVERT(INT, @nuevoId) IS NULL
+						THROW 50001, 'No se pudo generar el identificador.', 1;
+
+					INSERT INTO dbo.Nom_WorkGroupStatus
+					(
+						id_Registro,
+						id_Status,
+						id_workGroup,
+						c_sequence_per,
+						d_startDate_per,
+						d_endDate_per,
+						d_fecha,
+						c_observaciones,
+						v_userCreate,
+						d_create
+					)
+					VALUES
+					(
+						@nuevoId,
+						'TER',
+						@id_workGroup,
+						@secuencia,
+						@inicio,
+						@fin,
+						@fecha,
+						NULL,
+						@usuario,
+						GETDATE()
+					);
+				END;";
+
+				foreach (DataGridViewCell celda in celdas)
+				{
+					string idCuadrilla =
+						frmO.dgvEstado.Rows[celda.RowIndex]
+							.Cells["id_workGroup"].Value?.ToString();
+
+					DateTime fecha =
+						Convert.ToDateTime(
+							frmO.dgvEstado.Columns[celda.ColumnIndex].Tag);
+
+					using (SqlCommand cmd =
+						new SqlCommand(consulta, sql.cnn, transaccion))
+					{
+						cmd.Parameters.Add(
+							"@id_workGroup", SqlDbType.Char, 3).Value =
+							idCuadrilla;
+
+						cmd.Parameters.Add(
+							"@secuencia", SqlDbType.Char, 2).Value =
+							secuencia;
+
+						cmd.Parameters.Add(
+							"@inicio", SqlDbType.Date).Value = inicio;
+
+						cmd.Parameters.Add(
+							"@fin", SqlDbType.Date).Value = fin;
+
+						cmd.Parameters.Add(
+							"@fecha", SqlDbType.Date).Value = fecha;
+
+						cmd.Parameters.Add(
+							"@usuario", SqlDbType.VarChar, 50).Value =
+							Environment.UserName;
+
+						cmd.ExecuteNonQuery();
+					}
+				}
+
+				transaccion.Commit();
+
+				CargarEstadoCuadrillas(secuencia, inicio, fin);
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				try
+				{
+					transaccion?.Rollback();
+				}
+				catch
+				{
+					// La transacción podría haberse cerrado.
+				}
+
+				MessageBox.Show(
+					"Error al guardar las terminaciones:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+		public bool EliminarNotaCuadrilla(
+	string idCuadrilla,
+	string secuenciaSemana,
+	DateTime fechaInicio,
+	DateTime fechaFin,
+	DateTime fecha)
+		{
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string consulta = @"
+            UPDATE dbo.Nom_WorkGroupStatus
+            SET c_notas = NULL,
+                v_userUpdate = @usuario,
+                d_update = GETDATE()
+            WHERE id_workGroup = @idCuadrilla
+              AND c_sequence_per = @secuenciaSemana
+              AND d_startDate_per = @fechaInicio
+              AND d_endDate_per = @fechaFin
+              AND d_fecha = @fecha;";
+
+				using (SqlCommand cmd = new SqlCommand(consulta, sql.cnn))
+				{
+					cmd.Parameters.Add("@idCuadrilla", SqlDbType.Char, 3).Value =
+						idCuadrilla;
+
+					cmd.Parameters.Add("@secuenciaSemana", SqlDbType.Char, 2).Value =
+						secuenciaSemana;
+
+					cmd.Parameters.Add("@fechaInicio", SqlDbType.Date).Value =
+						fechaInicio.Date;
+
+					cmd.Parameters.Add("@fechaFin", SqlDbType.Date).Value =
+						fechaFin.Date;
+
+					cmd.Parameters.Add("@fecha", SqlDbType.Date).Value =
+						fecha.Date;
+
+					cmd.Parameters.Add("@usuario", SqlDbType.VarChar, 50).Value =
+						Environment.UserName;
+
+					return cmd.ExecuteNonQuery() > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al eliminar la nota:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 	}
 }

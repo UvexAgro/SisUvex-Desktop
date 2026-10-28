@@ -17,6 +17,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		internal ClsObservaciones clsO;
 		private bool modoModificar = false;
 		private bool cargandoFormulario = true;
+		private ContextMenuStrip menuNotas = new ContextMenuStrip();
+		private DataGridViewCell celdaNotaSeleccionada;
 		public FrmObservaciones(string semana, DateTime fechaInicio, DateTime fechaFin)
 		{
 			InitializeComponent();
@@ -33,224 +35,59 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			txbSemana.ReadOnly = true;
 			dtpInicio.Enabled = false;
 			dtpFinal.Enabled = false;
+			ConfigurarSeleccionMultiple();
+			ConfigurarMenuNotas();
+			dgvEstado.ShowCellToolTips = true;
+
+			dgvEstado.CellMouseEnter -= dgvEstado_CellMouseEnter;
+			dgvEstado.CellMouseEnter += dgvEstado_CellMouseEnter;
 		}
-		private void HabilitarCampos()
+		private void ConfigurarSeleccionMultiple()
 		{
-			cboCuadrilla2.Enabled = true;
-			cboDia.Enabled = true;
-			cboEstado.Enabled = true;
-			txbObservaciones.Enabled = true;
+			dgvEstado.MultiSelect = true;
+
+			dgvEstado.SelectionMode =
+				DataGridViewSelectionMode.CellSelect;
+
+			dgvEstado.ReadOnly = true;
+
+			dgvEstado.EditMode =
+				DataGridViewEditMode.EditProgrammatically;
 		}
-		private void BloquearCampos()
-		{
-			cboCuadrilla2.Enabled = false;
-			cboDia.Enabled = false;
-			cboEstado.Enabled = false;
-			txbObservaciones.Enabled = false;
-		}
-		private void EstadoGuardado()
-		{
-			// Campos bloqueados
-			BloquearCampos();
-
-			// Botones
-			btnAgregar.Enabled = true;
-			btnModificar.Enabled = true;
-			btnGuardar.Enabled = false;
-		}
-		private void EstadoAgregar()
-		{
-			// Campos habilitados
-			HabilitarCampos();
-
-			// Botones
-			btnAgregar.Enabled = false;
-			btnModificar.Enabled = false;
-			btnGuardar.Enabled = true;
-		}
-		private void EstadoModificar()
-		{
-			// Campos habilitados
-			HabilitarCampos();
-
-			// Botones
-			btnAgregar.Enabled = false;
-			btnModificar.Enabled = false;
-			btnGuardar.Enabled = true;
-		}
-		private void EstadoNormal()
-		{
-			// ==========================================
-			// CONTROLES DE DATOS BLOQUEADOS
-			// ==========================================
-
-			cboCuadrilla2.Enabled = false;
-			cboDia.Enabled = false;
-			cboEstado.Enabled = false;
-			txbObservaciones.ReadOnly = true;
-
-
-			// ==========================================
-			// BOTONES
-			// ==========================================
-
-			btnAgregar.Enabled = true;
-			btnModificar.Enabled = true;
-			btnCancelar.Enabled = true;
-			btnGuardar.Enabled = false;
-		}
-
+	
 		private void FrmObservaciones_Load(object sender, EventArgs e)
 		{
 			clsO.CargarCuadrillas();
 			clsO.CargarEstados();
-			cboEstado.DrawMode = DrawMode.OwnerDrawFixed;
-			cboEstado.DropDownStyle = ComboBoxStyle.DropDownList;
-			cboEstado.ItemHeight = 28;
-
-			cboEstado.DrawItem += cboEstado_DrawItem;
-			clsO.CargarEstadoCuadrillas(
-				   txbSemana.Text.Trim(),
-				   dtpInicio.Value,
-				   dtpFinal.Value);
-
-			cargandoFormulario = false;
-
-			// Estado inicial
-			BloquearCampos();
-
-			btnAgregar.Enabled = true;
-			btnModificar.Enabled = true;
-			btnGuardar.Enabled = true;
 
 			cboDia.Items.Clear();
-
-			cboDia.Items.Add("VIE");
-			cboDia.Items.Add("SAB");
-			cboDia.Items.Add("DOM");
-			cboDia.Items.Add("LUN");
-			cboDia.Items.Add("MAR");
-			cboDia.Items.Add("MIE");
-			cboDia.Items.Add("JUE");
+			cboDia.Items.AddRange(new object[]
+			{
+			"VIE", "SAB", "DOM", "LUN", "MAR", "MIE", "JUE"
+			});
 
 			cboDia.SelectedIndex = 0;
 
-		}
+			clsO.CargarEstadoCuadrillas(
+				txbSemana.Text.Trim(),
+				dtpInicio.Value.Date,
+				dtpFinal.Value.Date);
 
-		private void cboEstado_DrawItem(object sender, DrawItemEventArgs e)
+			DeshabilitarDetalleDia();
+
+		}
+		private void DeshabilitarDetalleDia()
 		{
-			if (e.Index < 0)
-				return;
-
-			string estado = cboEstado.GetItemText(cboEstado.Items[e.Index]);
-
-			Color colorEstado;
-
-			switch (estado)
-			{
-				case "TERMINADA":
-					colorEstado = Color.FromArgb(40, 167, 69);
-					break;
-
-				case "EN PROCESO":
-					colorEstado = Color.FromArgb(255, 193, 7);
-					break;
-
-				case "PENDIENTE":
-					colorEstado = Color.FromArgb(220, 53, 69);
-					break;
-
-				default:
-					colorEstado = Color.Gray;
-					break;
-			}
-
-			// Fondo
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-			{
-				e.Graphics.FillRectangle(
-					new SolidBrush(Color.FromArgb(235, 240, 250)),
-					e.Bounds);
-			}
-			else
-			{
-				e.Graphics.FillRectangle(
-					new SolidBrush(Color.White),
-					e.Bounds);
-			}
-
-			// Círculo
-			using (SolidBrush brush =
-				   new SolidBrush(colorEstado))
-			{
-				e.Graphics.FillEllipse(
-					brush,
-					e.Bounds.Left + 8,
-					e.Bounds.Top + 7,
-					14,
-					14);
-			}
-
-			// Texto
-			Color colorTexto =
-				(e.State & DrawItemState.Selected) == DrawItemState.Selected
-				? Color.FromArgb(30, 30, 30)
-				: Color.FromArgb(30, 30, 30);
-
-			using (SolidBrush brushTexto =
-				   new SolidBrush(colorTexto))
-			{
-				e.Graphics.DrawString(
-					estado,
-					e.Font,
-					brushTexto,
-					e.Bounds.Left + 30,
-					e.Bounds.Top + 5);
-			}
-
-			e.DrawFocusRectangle();
+			cboCuadrilla2.Enabled = false;
+			cboDia.Enabled = false;
+		
+			txbObservaciones.Enabled = false;
 		}
 
-		private void btnGuardar_Click(object sender, EventArgs e)
-		{
-			bool guardado;
-
-			if (modoModificar)
-			{
-				guardado = clsO.ModificarEstadoCuadrilla();
-			}
-			else
-			{
-				guardado = clsO.GuardarEstadoCuadrilla();
-			}
-
-			if (!guardado)
-				return;
-
-			modoModificar = false;
-
-			EstadoGuardado();
-		}
-
-		private void btnAgregar_Click(object sender, EventArgs e)
-		{
-			modoModificar = false;
-
-			clsO.idRegistroSeleccionado = "";
-
-			// Limpiar datos
-			cboCuadrilla2.SelectedIndex = -1;
-			cboDia.SelectedIndex = -1;
-			cboEstado.SelectedIndex = -1;
-
-			txbObservaciones.Clear();
-
-			// Habilitar campos
-			EstadoAgregar();
-		}
-
+	
 		private void dgvEstado_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
+
 			if (e.RowIndex < 0)
 				return;
 
@@ -291,8 +128,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// CARGAR CUADRILLA EN EL DETALLE
 			// =====================================================
 
-			cboCuadrilla2.SelectedValue =
-				idCuadrilla;
+			cboCuadrilla2.SelectedValue = idCuadrilla;
 
 			// =====================================================
 			// CARGAR DÍA
@@ -304,57 +140,158 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (indiceDia >= 0 &&
 				indiceDia < cboDia.Items.Count)
 			{
-				cboDia.SelectedIndex =
-					indiceDia;
+				cboDia.SelectedIndex = indiceDia;
 			}
 
 			// =====================================================
 			// OBTENER DATOS DE LA CELDA
 			// =====================================================
+
 			DatosEstado datos =
 				celda.Tag as DatosEstado;
 
 			if (datos != null)
 			{
-				// Estado
-				if (!string.IsNullOrWhiteSpace(datos.IdStatus))
-				{
-					cboEstado.SelectedValue =
-						datos.IdStatus;
-				}
-				else
-				{
-					cboEstado.SelectedIndex = -1;
-				}
-
 				// Observaciones
 				txbObservaciones.Text =
 					datos.Observaciones ?? "";
 
-				// GUARDAR ID DEL REGISTRO
+				// Guardar ID del registro
 				clsO.idRegistroSeleccionado =
 					datos.IdRegistro;
 			}
 			else
 			{
-				cboEstado.SelectedIndex = -1;
 				txbObservaciones.Clear();
-
 				clsO.idRegistroSeleccionado = "";
-
-				MessageBox.Show(
-					"La celda no tiene DatosEstado.",
-					"Prueba");
 			}
 		}
-
-		private void btnModificar_Click(object sender, EventArgs e)
+		public void dgvEstado_Resize(object sender, EventArgs e)
 		{
-			if (string.IsNullOrWhiteSpace(
-			clsO.idRegistroSeleccionado))
+			clsO.AjustarFilasAlAlto();
+		}
+		private void MostrarEditorNota()
+		{
+			if (celdaNotaSeleccionada == null)
+				return;
+
+			DatosEstado datos =
+				celdaNotaSeleccionada.Tag as DatosEstado;
+
+			if (datos == null)
+				return;
+
+			string notaActual = datos.Nota ?? "";
+
+			using (Form ventana = new Form())
+			using (TextBox txtNota = new TextBox())
+			using (Button btnAceptar = new Button())
+			using (Button btnCancelar = new Button())
+			{
+				ventana.Text = "Nota de la cuadrilla";
+				ventana.StartPosition = FormStartPosition.CenterParent;
+				ventana.Size = new Size(400, 250);
+				ventana.FormBorderStyle = FormBorderStyle.FixedDialog;
+				ventana.MaximizeBox = false;
+				ventana.MinimizeBox = false;
+
+				txtNota.Multiline = true;
+				txtNota.ScrollBars = ScrollBars.Vertical;
+				txtNota.Dock = DockStyle.Top;
+				txtNota.Height = 145;
+				txtNota.Text = notaActual;
+
+				btnAceptar.Text = "Guardar";
+				btnAceptar.DialogResult = DialogResult.OK;
+				btnAceptar.SetBounds(205, 165, 80, 30);
+
+				btnCancelar.Text = "Cancelar";
+				btnCancelar.DialogResult = DialogResult.Cancel;
+				btnCancelar.SetBounds(295, 165, 80, 30);
+
+				ventana.Controls.Add(txtNota);
+				ventana.Controls.Add(btnAceptar);
+				ventana.Controls.Add(btnCancelar);
+
+				ventana.AcceptButton = btnAceptar;
+				ventana.CancelButton = btnCancelar;
+
+				if (ventana.ShowDialog(this) == DialogResult.OK)
+				{
+					string nuevaNota = txtNota.Text.Trim();
+
+					string idCuadrilla = dgvEstado.Rows[
+						celdaNotaSeleccionada.RowIndex]
+						.Cells["id_workGroup"].Value?.ToString() ?? "";
+
+					DateTime fecha = datos.Fecha;
+
+					bool guardado = clsO.GuardarNotaCuadrilla(
+						idCuadrilla,
+						txbSemana.Text.Trim(),
+						dtpInicio.Value.Date,
+						dtpFinal.Value.Date,
+						fecha,
+						nuevaNota);
+
+					if (!guardado)
+					{
+						MessageBox.Show(
+							"No se pudo guardar la nota.",
+							"Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error);
+
+						return;
+					}
+
+					datos.Nota = nuevaNota;
+					celdaNotaSeleccionada.Tag = datos;
+					celdaNotaSeleccionada.ToolTipText = nuevaNota;
+
+					dgvEstado.InvalidateCell(celdaNotaSeleccionada);
+				}
+			}
+		}
+		private void EliminarNotaSeleccionada()
+		{
+			if (celdaNotaSeleccionada == null)
+				return;
+
+			DatosEstado datos =
+				celdaNotaSeleccionada.Tag as DatosEstado;
+
+			if (datos == null ||
+				string.IsNullOrWhiteSpace(datos.Nota))
+			{
+				MessageBox.Show("Esta celda no tiene una nota.");
+				return;
+			}
+
+			DialogResult respuesta = MessageBox.Show(
+				"¿Deseas eliminar permanentemente esta nota?",
+				"Confirmar eliminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (respuesta != DialogResult.Yes)
+				return;
+
+			string idCuadrilla =
+				dgvEstado.Rows[celdaNotaSeleccionada.RowIndex]
+					.Cells["id_workGroup"].Value?.ToString() ?? "";
+
+			bool eliminado = clsO.EliminarNotaCuadrilla(
+				idCuadrilla,
+				txbSemana.Text.Trim(),
+				dtpInicio.Value.Date,
+				dtpFinal.Value.Date,
+				datos.Fecha);
+
+			if (!eliminado)
 			{
 				MessageBox.Show(
-					"Seleccione un día con información para modificar.",
+					"No se encontró la nota para eliminar.",
 					"Aviso",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
@@ -362,21 +299,143 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			modoModificar = true;
+			datos.Nota = "";
+			celdaNotaSeleccionada.Tag = datos;
+			celdaNotaSeleccionada.ToolTipText = "";
 
-			EstadoModificar();
+			dgvEstado.InvalidateCell(celdaNotaSeleccionada);
+
+			MessageBox.Show(
+				"Nota eliminada correctamente.",
+				"Listo",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
+		}
+		private void ConfigurarMenuNotas()
+		{
+			menuNotas.ShowImageMargin = false;
+			menuNotas.ShowCheckMargin = false;
+			menuNotas.Padding = Padding.Empty;
+			menuNotas.Margin = Padding.Empty;
+			menuNotas.Font = new Font("Segoe UI", 8F);
+			menuNotas.AutoSize = true;
+
+			var agregar = new ToolStripMenuItem("Agregar nota");
+			var editar = new ToolStripMenuItem("Editar nota");
+			var eliminar = new ToolStripMenuItem("Eliminar nota");
+
+			// Reducir espacio vertical y horizontal
+			agregar.Padding = new Padding(4, 0, 4, 0);
+			editar.Padding = new Padding(4, 0, 4, 0);
+			eliminar.Padding = new Padding(4, 0, 4, 0);
+
+			agregar.Margin = Padding.Empty;
+			editar.Margin = Padding.Empty;
+			eliminar.Margin = Padding.Empty;
+
+			agregar.Click += (s, e) => MostrarEditorNota();
+			editar.Click += (s, e) => MostrarEditorNota();
+			eliminar.Click += (s, e) => EliminarNotaSeleccionada();
+
+			menuNotas.Items.Clear();
+			menuNotas.Items.Add(agregar);
+			menuNotas.Items.Add(editar);
+			menuNotas.Items.Add(eliminar);
+
+			dgvEstado.CellMouseDown += (s, e) =>
+			{
+				if (e.Button != MouseButtons.Right ||
+					e.RowIndex < 0 ||
+					e.ColumnIndex < 3)
+					return;
+
+				celdaNotaSeleccionada =
+					dgvEstado.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+				dgvEstado.CurrentCell = celdaNotaSeleccionada;
+
+				DatosEstado datos =
+					celdaNotaSeleccionada.Tag as DatosEstado;
+
+				bool tieneNota =
+					datos != null &&
+					!string.IsNullOrWhiteSpace(datos.Nota);
+
+				agregar.Enabled = !tieneNota;
+				editar.Enabled = tieneNota;
+				eliminar.Enabled = tieneNota;
+
+				Rectangle rectCelda =
+				dgvEstado.GetCellDisplayRectangle(
+					e.ColumnIndex,
+					e.RowIndex,
+					true);
+
+				Point posicion = new Point(
+					rectCelda.Right,
+					rectCelda.Top);
+
+				menuNotas.Show(dgvEstado, posicion);
+			};
 		}
 
-		private void btnCancelar_Click(object sender, EventArgs e)
+		private void dgvEstado_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
 		{
-			modoModificar = false;
+			if (e.RowIndex < 0 || e.ColumnIndex < 3)
+				return;
 
-			EstadoNormal();
+			DataGridViewCell celda =
+				dgvEstado.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+			if (celda.Tag is DatosEstado datos &&
+				!string.IsNullOrWhiteSpace(datos.Nota))
+			{
+				celda.ToolTipText = datos.Nota;
+			}
+			else
+			{
+				celda.ToolTipText = "";
+			}
 		}
 
-		public void dgvEstado_Resize(object sender, EventArgs e)
+		private void btnConfirmar_Click(object sender, EventArgs e)
 		{
-			clsO.AjustarFilasAlAlto();
+			var celdas = dgvEstado.SelectedCells
+		   .Cast<DataGridViewCell>()
+		   .Where(c =>
+			   c.RowIndex >= 0 &&
+			   c.ColumnIndex >= 3 &&
+			   dgvEstado.Columns[c.ColumnIndex].Name.StartsWith("F_"))
+		   .ToList();
+
+			if (celdas.Count == 0)
+			{
+				MessageBox.Show(
+					"Selecciona uno o varios días de diferentes cuadrillas.",
+					"Aviso",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			DialogResult respuesta = MessageBox.Show(
+				$"¿Quieres pasar a TERMINADAS las {celdas.Count} celdas seleccionadas?",
+				"Confirmar terminación",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (respuesta != DialogResult.Yes)
+				return;
+
+			if (clsO.GuardarTerminadasSeleccionadas(celdas))
+			{
+				MessageBox.Show(
+					"Los días seleccionados se guardaron como TERMINADA.",
+					"Guardado correcto",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
 		}
 	}
 }
