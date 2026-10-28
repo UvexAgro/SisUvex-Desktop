@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReloj));
 			dgvLista = new DataGridView();
 			groupBox1 = new GroupBox();
@@ -59,9 +59,9 @@
 			txbEmpleado = new TextBox();
 			label1 = new Label();
 			panel2 = new Panel();
-			pictureBox1 = new PictureBox();
 			label3 = new Label();
 			label4 = new Label();
+			pictureBox1 = new PictureBox();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			panel2.SuspendLayout();
@@ -78,32 +78,32 @@
 			dgvLista.BackgroundColor = SystemColors.ControlLightLight;
 			dgvLista.BorderStyle = BorderStyle.Fixed3D;
 			dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvLista.ColumnHeadersHeight = 29;
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
-			dgvLista.Location = new Point(2, 507);
+			dgvLista.Location = new Point(2, 548);
 			dgvLista.Name = "dgvLista";
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvLista.Size = new Size(1513, 651);
+			dgvLista.Size = new Size(1513, 610);
 			dgvLista.TabIndex = 4;
 			// 
 			// groupBox1
@@ -135,7 +135,7 @@
 			groupBox1.Controls.Add(txbEmpleado);
 			groupBox1.Controls.Add(label1);
 			groupBox1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			groupBox1.Location = new Point(3, 101);
+			groupBox1.Location = new Point(3, 142);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(1270, 400);
 			groupBox1.TabIndex = 5;
@@ -413,44 +413,50 @@
 			// panel2
 			// 
 			panel2.BackColor = Color.FromArgb(35, 103, 149);
+			panel2.BackgroundImage = (Image)resources.GetObject("panel2.BackgroundImage");
+			panel2.BackgroundImageLayout = ImageLayout.Stretch;
 			panel2.Controls.Add(pictureBox1);
 			panel2.Controls.Add(label3);
 			panel2.Controls.Add(label4);
 			panel2.Location = new Point(2, 3);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(1271, 95);
+			panel2.Size = new Size(1271, 133);
 			panel2.TabIndex = 7;
-			// 
-			// pictureBox1
-			// 
-			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(11, 10);
-			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(83, 69);
-			pictureBox1.TabIndex = 10;
-			pictureBox1.TabStop = false;
 			// 
 			// label3
 			// 
 			label3.AutoSize = true;
+			label3.BackColor = Color.Transparent;
+			label3.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label3.ForeColor = Color.White;
-			label3.Location = new Point(100, 61);
+			label3.Location = new Point(100, 64);
 			label3.Name = "label3";
-			label3.Size = new Size(903, 15);
+			label3.Size = new Size(1043, 17);
 			label3.TabIndex = 9;
 			label3.Text = "Consulta los registros de entrada y salida de cada empleado, seleccionando una fecha específica y buscando por su código o nombre para revisar sus horarios de checada.";
 			// 
 			// label4
 			// 
 			label4.AutoSize = true;
+			label4.BackColor = Color.Transparent;
 			label4.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label4.ForeColor = Color.White;
-			label4.Location = new Point(100, 10);
+			label4.Location = new Point(100, 27);
 			label4.Name = "label4";
 			label4.Size = new Size(579, 37);
 			label4.TabIndex = 8;
 			label4.Text = "Consulta de Asistencia en el Reloj Checador ";
+			// 
+			// pictureBox1
+			// 
+			pictureBox1.BackColor = Color.Transparent;
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(11, 10);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(83, 107);
+			pictureBox1.TabIndex = 10;
+			pictureBox1.TabStop = false;
 			// 
 			// FrmReloj
 			// 
@@ -484,7 +490,6 @@
 		private Button btnConsultar;
 		private Panel panel2;
 		private Label label4;
-		private PictureBox pictureBox1;
 		private Label label6;
 		private Panel panel1;
 		private Label label5;
@@ -507,5 +512,6 @@
 		private Label label14;
 		private Label label13;
 		private Label label15;
+		private PictureBox pictureBox1;
 	}
 }

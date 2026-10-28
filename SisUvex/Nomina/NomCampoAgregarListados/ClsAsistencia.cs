@@ -659,16 +659,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// Guardar el motivo del bloqueo independientemente del prefijo.
 			celda.ReadOnly = otraCuadrilla;
 
+
+
 			if (otraCuadrilla)
 			{
 				celda.Tag = celda.Tag ?? "";
+
+				string nombreCuadrilla = ObtenerNombreCuadrilla(
+					grupoAsignado.Trim());
+
 				celda.ToolTipText =
-					"El empleado tiene asistencia asignada a otra cuadrilla.";
+					$"El empleado tiene asistencia asignada a la cuadrilla: {nombreCuadrilla}.";
 			}
 			else
 			{
 				celda.ToolTipText = "";
 			}
+
+
 		}
 
 		public void AgregarSeleccionador()
@@ -3367,6 +3375,43 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
 		}
+
+		private string ObtenerNombreCuadrilla(string idCuadrilla)
+		{
+			string nombre = idCuadrilla;
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT v_nameWorkGroup
+            FROM dbo.Nom_WorkGroup
+            WHERE id_workGroup = @id_workGroup";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 4)
+						.Value = idCuadrilla.Trim();
+
+					object resultado = cmd.ExecuteScalar();
+
+					if (resultado != null && resultado != DBNull.Value)
+						nombre = resultado.ToString().Trim();
+				}
+			}
+			catch
+			{
+				// Si ocurre un error, se conserva el código.
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return nombre;
+		}
+
 	}
 }
 

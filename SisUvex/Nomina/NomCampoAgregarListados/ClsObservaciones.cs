@@ -806,8 +806,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			catch (Exception ex)
 			{
 				MessageBox.Show(
-					"Error al guardar la nota: " + ex.Message,
-					"Error",
+					"No se pudo guardar la nota.\n\n" +
+					"Detalle: " + ex.Message,
+					"Error al guardar",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 

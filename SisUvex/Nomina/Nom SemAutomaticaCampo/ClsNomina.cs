@@ -280,84 +280,93 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				sql.CloseConectionWrite();
 			}
 		}
+
 		private void ConfigurarDgvNomina()
 		{
 			DataGridView dgv = frm.dgvNomina;
 
+			Color texto = Color.FromArgb(35, 65, 90);
+			Color encabezado = Color.FromArgb(226, 235, 243);
+			Color filaAlterna = Color.FromArgb(243, 247, 251);
+			Color seleccion = Color.FromArgb(216, 233, 246);
+			Color borde = Color.FromArgb(232, 238, 244);
+
 			dgv.AutoGenerateColumns = true;
 			dgv.AllowUserToAddRows = false;
 			dgv.AllowUserToDeleteRows = false;
+			dgv.AllowUserToResizeRows = false;
 			dgv.ReadOnly = true;
 
-			// Fondo
+			// Fondo general
 			dgv.BackgroundColor = Color.White;
 			dgv.BorderStyle = BorderStyle.None;
+			dgv.GridColor = borde;
+
+			// Quitar encabezado lateral
+			dgv.RowHeadersVisible = false;
 
 			// Filas
-			dgv.RowHeadersVisible = false;
-			dgv.RowTemplate.Height = 32;
+			dgv.RowTemplate.Height = 30;
+			dgv.RowHeadersWidthSizeMode =
+				DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 
 			// Selección
-			dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			dgv.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
 			dgv.MultiSelect = false;
 
-			// ENCABEZADO
+			// Evitar el estilo predeterminado de Windows
 			dgv.EnableHeadersVisualStyles = false;
 
-			dgv.ColumnHeadersDefaultCellStyle.BackColor =
-				Color.FromArgb(47, 117, 163);
-
-			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
-				Color.White;
-
+			// Encabezados
+			dgv.ColumnHeadersDefaultCellStyle.BackColor = encabezado;
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor = texto;
 			dgv.ColumnHeadersDefaultCellStyle.Font =
 				new Font("Segoe UI", 9F, FontStyle.Bold);
 
 			dgv.ColumnHeadersDefaultCellStyle.Alignment =
-				DataGridViewContentAlignment.MiddleCenter;
+				DataGridViewContentAlignment.MiddleLeft;
 
-			// IMPORTANTE:
-			// Mantiene el encabezado azul aunque selecciones una columna
-			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(47, 117, 163);
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = encabezado;
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = texto;
+			dgv.ColumnHeadersDefaultCellStyle.Padding =
+				new Padding(7, 0, 4, 0);
 
-			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
-				Color.White;
+			dgv.ColumnHeadersHeight = 42;
+			dgv.ColumnHeadersHeightSizeMode =
+				DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-			dgv.ColumnHeadersHeight = 38;
-
-			// Filas normales
+			// Celdas normales
+			dgv.DefaultCellStyle.BackColor = Color.White;
+			dgv.DefaultCellStyle.ForeColor = texto;
 			dgv.DefaultCellStyle.Font =
 				new Font("Segoe UI", 9F);
 
-			dgv.DefaultCellStyle.ForeColor =
-				Color.FromArgb(35, 55, 77);
-
-			dgv.DefaultCellStyle.BackColor =
-				Color.White;
+			dgv.DefaultCellStyle.SelectionBackColor = seleccion;
+			dgv.DefaultCellStyle.SelectionForeColor = texto;
+			dgv.DefaultCellStyle.Padding =
+				new Padding(6, 2, 6, 2);
 
 			// Filas alternadas
-			dgv.AlternatingRowsDefaultCellStyle.BackColor =
-				Color.FromArgb(241, 247, 252);
+			dgv.AlternatingRowsDefaultCellStyle.BackColor = filaAlterna;
+			dgv.AlternatingRowsDefaultCellStyle.ForeColor = texto;
+			dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = seleccion;
+			dgv.AlternatingRowsDefaultCellStyle.SelectionForeColor = texto;
 
-			// Selección
-			dgv.DefaultCellStyle.SelectionBackColor =
-				Color.FromArgb(31, 111, 170);
-
-			dgv.DefaultCellStyle.SelectionForeColor =
-				Color.White;
-
-			// Líneas
-			dgv.GridColor =
-				Color.FromArgb(220, 230, 238);
-
+			// Líneas horizontales discretas
 			dgv.CellBorderStyle =
 				DataGridViewCellBorderStyle.SingleHorizontal;
 
-			// Ajuste de columnas
+			dgv.ColumnHeadersBorderStyle =
+				DataGridViewHeaderBorderStyle.Single;
+
 			dgv.AutoSizeColumnsMode =
 				DataGridViewAutoSizeColumnsMode.Fill;
+
+			dgv.AutoSizeRowsMode =
+				DataGridViewAutoSizeRowsMode.None;
 		}
+
 		public void GenerarArchivoCsv()
 		{
 			DataTable dt = GetDtCSV();

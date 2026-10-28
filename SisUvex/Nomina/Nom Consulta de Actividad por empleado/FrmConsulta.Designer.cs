@@ -45,6 +45,8 @@
 			panel3 = new Panel();
 			label3 = new Label();
 			panel4 = new Panel();
+			lblCuadrilla = new Label();
+			label16 = new Label();
 			btnBuscar = new Button();
 			lblLugardePago = new Label();
 			lblNombre = new Label();
@@ -58,8 +60,6 @@
 			label4 = new Label();
 			dgvNomina = new DataGridView();
 			btnConsultar = new Button();
-			lblCuadrilla = new Label();
-			label16 = new Label();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			panel2.SuspendLayout();
@@ -73,6 +73,8 @@
 			// 
 			panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel1.BackColor = Color.FromArgb(35, 103, 149);
+			panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+			panel1.BackgroundImageLayout = ImageLayout.Stretch;
 			panel1.Controls.Add(label2);
 			panel1.Controls.Add(pictureBox1);
 			panel1.Controls.Add(label1);
@@ -84,6 +86,7 @@
 			// label2
 			// 
 			label2.AutoSize = true;
+			label2.BackColor = Color.Transparent;
 			label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label2.ForeColor = SystemColors.ControlLightLight;
 			label2.Location = new Point(144, 73);
@@ -94,6 +97,7 @@
 			// 
 			// pictureBox1
 			// 
+			pictureBox1.BackColor = Color.Transparent;
 			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
 			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
 			pictureBox1.Location = new Point(33, 16);
@@ -105,6 +109,7 @@
 			// label1
 			// 
 			label1.AutoSize = true;
+			label1.BackColor = Color.Transparent;
 			label1.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label1.ForeColor = SystemColors.ControlLightLight;
 			label1.Location = new Point(144, 16);
@@ -227,6 +232,27 @@
 			panel4.Name = "panel4";
 			panel4.Size = new Size(1168, 225);
 			panel4.TabIndex = 9;
+			// 
+			// lblCuadrilla
+			// 
+			lblCuadrilla.AutoSize = true;
+			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCuadrilla.Location = new Point(140, 198);
+			lblCuadrilla.Name = "lblCuadrilla";
+			lblCuadrilla.Size = new Size(13, 17);
+			lblCuadrilla.TabIndex = 39;
+			lblCuadrilla.Text = "-";
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label16.ForeColor = Color.FromArgb(31, 95, 145);
+			label16.Location = new Point(11, 196);
+			label16.Name = "label16";
+			label16.Size = new Size(67, 17);
+			label16.TabIndex = 38;
+			label16.Text = "Cuadrilla :";
 			// 
 			// btnBuscar
 			// 
@@ -396,27 +422,6 @@
 			btnConsultar.TextAlign = ContentAlignment.MiddleRight;
 			btnConsultar.UseVisualStyleBackColor = false;
 			btnConsultar.Click += btnConsultar_Click;
-			// 
-			// lblCuadrilla
-			// 
-			lblCuadrilla.AutoSize = true;
-			lblCuadrilla.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			lblCuadrilla.Location = new Point(140, 198);
-			lblCuadrilla.Name = "lblCuadrilla";
-			lblCuadrilla.Size = new Size(13, 17);
-			lblCuadrilla.TabIndex = 39;
-			lblCuadrilla.Text = "-";
-			// 
-			// label16
-			// 
-			label16.AutoSize = true;
-			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label16.ForeColor = Color.FromArgb(31, 95, 145);
-			label16.Location = new Point(11, 196);
-			label16.Name = "label16";
-			label16.Size = new Size(67, 17);
-			label16.TabIndex = 38;
-			label16.Text = "Cuadrilla :";
 			// 
 			// FrmConsulta
 			// 
