@@ -34,8 +34,8 @@
 			dgvNomina = new DataGridView();
 			label1 = new Label();
 			panel1 = new Panel();
-			label2 = new Label();
 			pictureBox1 = new PictureBox();
+			label2 = new Label();
 			label4 = new Label();
 			label3 = new Label();
 			dtpFecha = new DateTimePicker();
@@ -123,9 +123,10 @@
 			// label1
 			// 
 			label1.AutoSize = true;
+			label1.BackColor = Color.Transparent;
 			label1.Font = new Font("Segoe UI", 36F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label1.ForeColor = SystemColors.ControlLightLight;
-			label1.Location = new Point(180, 16);
+			label1.Location = new Point(207, 3);
 			label1.Name = "label1";
 			label1.Size = new Size(462, 65);
 			label1.TabIndex = 0;
@@ -135,34 +136,38 @@
 			// 
 			panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel1.BackColor = Color.FromArgb(35, 103, 149);
-			panel1.Controls.Add(label2);
-			panel1.Controls.Add(pictureBox1);
+			panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+			panel1.BackgroundImageLayout = ImageLayout.Stretch;
 			panel1.Controls.Add(label1);
+			panel1.Controls.Add(pictureBox1);
+			panel1.Controls.Add(label2);
 			panel1.Location = new Point(12, 6);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(1819, 140);
 			panel1.TabIndex = 5;
 			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label2.ForeColor = SystemColors.ControlLightLight;
-			label2.Location = new Point(180, 91);
-			label2.Name = "label2";
-			label2.Size = new Size(381, 32);
-			label2.TabIndex = 2;
-			label2.Text = "Consulta general de nómina diaria";
-			// 
 			// pictureBox1
 			// 
+			pictureBox1.BackColor = Color.Transparent;
 			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
 			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(33, 16);
+			pictureBox1.Location = new Point(21, 16);
 			pictureBox1.Name = "pictureBox1";
 			pictureBox1.Size = new Size(100, 107);
 			pictureBox1.TabIndex = 1;
 			pictureBox1.TabStop = false;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.BackColor = Color.Transparent;
+			label2.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label2.ForeColor = SystemColors.ControlLightLight;
+			label2.Location = new Point(222, 82);
+			label2.Name = "label2";
+			label2.Size = new Size(381, 32);
+			label2.TabIndex = 2;
+			label2.Text = "Consulta general de nómina diaria";
 			// 
 			// label4
 			// 
