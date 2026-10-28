@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmObservaciones));
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			dtpFinal = new DateTimePicker();
 			dtpInicio = new DateTimePicker();
 			txbSemana = new TextBox();
@@ -43,14 +43,8 @@
 			label2 = new Label();
 			dgvEstado = new DataGridView();
 			groupBox1 = new GroupBox();
-			btnCancelar = new Button();
-			btnAgregar = new Button();
-			btnGuardar = new Button();
-			btnModificar = new Button();
 			txbObservaciones = new TextBox();
 			label10 = new Label();
-			label9 = new Label();
-			cboEstado = new ComboBox();
 			label8 = new Label();
 			cboDia = new ComboBox();
 			label7 = new Label();
@@ -60,17 +54,14 @@
 			label12 = new Label();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			panel6 = new Panel();
+			label15 = new Label();
 			pictureBox3 = new PictureBox();
 			label13 = new Label();
 			panel5 = new Panel();
+			label11 = new Label();
 			pictureBox4 = new PictureBox();
 			label3 = new Label();
-			panel4 = new Panel();
-			pictureBox2 = new PictureBox();
-			label14 = new Label();
-			label11 = new Label();
-			label15 = new Label();
-			label16 = new Label();
+			btnConfirmar = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvEstado).BeginInit();
@@ -82,8 +73,6 @@
 			((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
 			panel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
-			panel4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
 			SuspendLayout();
 			// 
 			// dtpFinal
@@ -149,7 +138,7 @@
 			panel1.Controls.Add(label2);
 			panel1.Location = new Point(5, 7);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(1255, 75);
+			panel1.Size = new Size(1617, 75);
 			panel1.TabIndex = 25;
 			// 
 			// pictureBox1
@@ -194,14 +183,14 @@
 			dgvEstado.BackgroundColor = SystemColors.ControlLightLight;
 			dgvEstado.BorderStyle = BorderStyle.Fixed3D;
 			dgvEstado.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvEstado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvEstado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvEstado.ColumnHeadersHeight = 29;
 			dgvEstado.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvEstado.EnableHeadersVisualStyles = false;
@@ -209,146 +198,59 @@
 			dgvEstado.Location = new Point(5, 138);
 			dgvEstado.Name = "dgvEstado";
 			dgvEstado.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvEstado.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvEstado.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvEstado.RowHeadersVisible = false;
 			dgvEstado.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvEstado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvEstado.Size = new Size(961, 646);
+			dgvEstado.Size = new Size(1165, 646);
 			dgvEstado.TabIndex = 26;
 			dgvEstado.CellClick += dgvEstado_CellClick;
+			dgvEstado.CellMouseEnter += dgvEstado_CellMouseEnter;
 			dgvEstado.Resize += dgvEstado_Resize;
 			// 
 			// groupBox1
 			// 
+			groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			groupBox1.BackColor = Color.FromArgb(236, 243, 249);
-			groupBox1.Controls.Add(btnCancelar);
-			groupBox1.Controls.Add(btnAgregar);
-			groupBox1.Controls.Add(btnGuardar);
-			groupBox1.Controls.Add(btnModificar);
 			groupBox1.Controls.Add(txbObservaciones);
 			groupBox1.Controls.Add(label10);
-			groupBox1.Controls.Add(label9);
-			groupBox1.Controls.Add(cboEstado);
 			groupBox1.Controls.Add(label8);
 			groupBox1.Controls.Add(cboDia);
 			groupBox1.Controls.Add(label7);
 			groupBox1.Controls.Add(cboCuadrilla2);
 			groupBox1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			groupBox1.Location = new Point(972, 131);
+			groupBox1.Location = new Point(1180, 130);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(288, 654);
+			groupBox1.Size = new Size(442, 808);
 			groupBox1.TabIndex = 27;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Detalle del dia";
 			// 
-			// btnCancelar
-			// 
-			btnCancelar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnCancelar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnCancelar.Image = (Image)resources.GetObject("btnCancelar.Image");
-			btnCancelar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCancelar.Location = new Point(9, 552);
-			btnCancelar.Name = "btnCancelar";
-			btnCancelar.Padding = new Padding(85, 0, 80, 0);
-			btnCancelar.Size = new Size(272, 39);
-			btnCancelar.TabIndex = 46;
-			btnCancelar.Text = "Cancelar";
-			btnCancelar.TextAlign = ContentAlignment.MiddleRight;
-			btnCancelar.UseVisualStyleBackColor = true;
-			btnCancelar.Click += btnCancelar_Click;
-			// 
-			// btnAgregar
-			// 
-			btnAgregar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnAgregar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnAgregar.Image = (Image)resources.GetObject("btnAgregar.Image");
-			btnAgregar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnAgregar.Location = new Point(9, 453);
-			btnAgregar.Name = "btnAgregar";
-			btnAgregar.Padding = new Padding(85, 0, 85, 0);
-			btnAgregar.Size = new Size(273, 39);
-			btnAgregar.TabIndex = 45;
-			btnAgregar.Text = "Agregar";
-			btnAgregar.TextAlign = ContentAlignment.MiddleRight;
-			btnAgregar.UseVisualStyleBackColor = true;
-			btnAgregar.Click += btnAgregar_Click;
-			// 
-			// btnGuardar
-			// 
-			btnGuardar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnGuardar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnGuardar.Image = (Image)resources.GetObject("btnGuardar.Image");
-			btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnGuardar.Location = new Point(9, 603);
-			btnGuardar.Name = "btnGuardar";
-			btnGuardar.Padding = new Padding(85, 0, 80, 0);
-			btnGuardar.Size = new Size(272, 39);
-			btnGuardar.TabIndex = 44;
-			btnGuardar.Text = "Guardar";
-			btnGuardar.TextAlign = ContentAlignment.MiddleRight;
-			btnGuardar.UseVisualStyleBackColor = true;
-			btnGuardar.Click += btnGuardar_Click;
-			// 
-			// btnModificar
-			// 
-			btnModificar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btnModificar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			btnModificar.Image = (Image)resources.GetObject("btnModificar.Image");
-			btnModificar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnModificar.Location = new Point(9, 500);
-			btnModificar.Name = "btnModificar";
-			btnModificar.Padding = new Padding(85, 0, 75, 0);
-			btnModificar.Size = new Size(272, 39);
-			btnModificar.TabIndex = 28;
-			btnModificar.Text = "Modificar";
-			btnModificar.TextAlign = ContentAlignment.MiddleRight;
-			btnModificar.UseVisualStyleBackColor = true;
-			btnModificar.Click += btnModificar_Click;
-			// 
 			// txbObservaciones
 			// 
-			txbObservaciones.Location = new Point(6, 300);
+			txbObservaciones.Location = new Point(6, 246);
 			txbObservaciones.Multiline = true;
 			txbObservaciones.Name = "txbObservaciones";
 			txbObservaciones.ScrollBars = ScrollBars.Vertical;
-			txbObservaciones.Size = new Size(276, 136);
+			txbObservaciones.Size = new Size(429, 556);
 			txbObservaciones.TabIndex = 43;
 			// 
 			// label10
 			// 
 			label10.AutoSize = true;
 			label10.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label10.Location = new Point(6, 280);
+			label10.Location = new Point(9, 215);
 			label10.Name = "label10";
 			label10.Size = new Size(100, 17);
 			label10.TabIndex = 42;
 			label10.Text = "Observaciones:";
-			// 
-			// label9
-			// 
-			label9.AutoSize = true;
-			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label9.Location = new Point(14, 193);
-			label9.Name = "label9";
-			label9.Size = new Size(56, 17);
-			label9.TabIndex = 41;
-			label9.Text = "Estado :";
-			// 
-			// cboEstado
-			// 
-			cboEstado.FormattingEnabled = true;
-			cboEstado.Location = new Point(14, 221);
-			cboEstado.Name = "cboEstado";
-			cboEstado.Size = new Size(260, 29);
-			cboEstado.TabIndex = 40;
-			cboEstado.DrawItem += cboEstado_DrawItem;
 			// 
 			// label8
 			// 
@@ -389,6 +291,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
+			tableLayoutPanel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 			tableLayoutPanel1.ColumnCount = 1;
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56.61882F));
@@ -399,17 +302,18 @@
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size = new Size(1255, 151);
+			tableLayoutPanel1.Size = new Size(1169, 151);
 			tableLayoutPanel1.TabIndex = 28;
 			// 
 			// panel2
 			// 
+			panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel2.BackColor = Color.FromArgb(236, 243, 249);
 			panel2.Controls.Add(label12);
 			panel2.Controls.Add(tableLayoutPanel2);
 			panel2.Location = new Point(4, 4);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(1247, 143);
+			panel2.Size = new Size(1161, 143);
 			panel2.TabIndex = 0;
 			// 
 			// label12
@@ -424,37 +328,49 @@
 			// 
 			// tableLayoutPanel2
 			// 
-			tableLayoutPanel2.ColumnCount = 3;
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+			tableLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			tableLayoutPanel2.ColumnCount = 2;
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
 			tableLayoutPanel2.Controls.Add(panel6, 1, 0);
 			tableLayoutPanel2.Controls.Add(panel5, 0, 0);
-			tableLayoutPanel2.Controls.Add(panel4, 2, 0);
 			tableLayoutPanel2.Location = new Point(3, 36);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
 			tableLayoutPanel2.RowCount = 1;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.Size = new Size(1241, 104);
+			tableLayoutPanel2.Size = new Size(1152, 104);
 			tableLayoutPanel2.TabIndex = 30;
 			// 
 			// panel6
 			// 
+			panel6.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel6.BackColor = Color.White;
 			panel6.Controls.Add(label15);
 			panel6.Controls.Add(pictureBox3);
 			panel6.Controls.Add(label13);
 			panel6.Font = new Font("Segoe UI Semibold", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			panel6.Location = new Point(416, 3);
+			panel6.Location = new Point(579, 3);
 			panel6.Name = "panel6";
-			panel6.Size = new Size(407, 98);
+			panel6.Size = new Size(570, 98);
 			panel6.TabIndex = 1;
+			// 
+			// label15
+			// 
+			label15.Anchor = AnchorStyles.None;
+			label15.AutoSize = true;
+			label15.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label15.Location = new Point(211, 53);
+			label15.Name = "label15";
+			label15.Size = new Size(235, 15);
+			label15.TabIndex = 7;
+			label15.Text = "La cuadrilla terminó sus actividades del día.";
 			// 
 			// pictureBox3
 			// 
+			pictureBox3.Anchor = AnchorStyles.None;
 			pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
 			pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox3.Location = new Point(25, 21);
+			pictureBox3.Location = new Point(121, 21);
 			pictureBox3.Name = "pictureBox3";
 			pictureBox3.Size = new Size(59, 61);
 			pictureBox3.TabIndex = 4;
@@ -462,9 +378,10 @@
 			// 
 			// label13
 			// 
+			label13.Anchor = AnchorStyles.None;
 			label13.AutoSize = true;
 			label13.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label13.Location = new Point(115, 21);
+			label13.Location = new Point(211, 21);
 			label13.Name = "label13";
 			label13.Size = new Size(91, 21);
 			label13.TabIndex = 1;
@@ -472,20 +389,32 @@
 			// 
 			// panel5
 			// 
+			panel5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel5.BackColor = Color.White;
 			panel5.Controls.Add(label11);
 			panel5.Controls.Add(pictureBox4);
 			panel5.Controls.Add(label3);
 			panel5.Location = new Point(3, 3);
 			panel5.Name = "panel5";
-			panel5.Size = new Size(407, 98);
+			panel5.Size = new Size(570, 98);
 			panel5.TabIndex = 1;
+			// 
+			// label11
+			// 
+			label11.Anchor = AnchorStyles.None;
+			label11.AutoSize = true;
+			label11.Location = new Point(204, 53);
+			label11.Name = "label11";
+			label11.Size = new Size(261, 30);
+			label11.TabIndex = 6;
+			label11.Text = "La cuadrilla puede  tener asistencia , pero le falta\r\n actividad o lote.";
 			// 
 			// pictureBox4
 			// 
+			pictureBox4.Anchor = AnchorStyles.None;
 			pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
 			pictureBox4.BackgroundImageLayout = ImageLayout.Center;
-			pictureBox4.Location = new Point(25, 21);
+			pictureBox4.Location = new Point(121, 21);
 			pictureBox4.Name = "pictureBox4";
 			pictureBox4.Size = new Size(59, 61);
 			pictureBox4.TabIndex = 5;
@@ -493,79 +422,35 @@
 			// 
 			// label3
 			// 
+			label3.Anchor = AnchorStyles.None;
 			label3.AutoSize = true;
 			label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label3.Location = new Point(108, 21);
+			label3.Location = new Point(204, 21);
 			label3.Name = "label3";
 			label3.Size = new Size(93, 21);
 			label3.TabIndex = 0;
 			label3.Text = "En Proceso";
 			// 
-			// panel4
+			// btnConfirmar
 			// 
-			panel4.BackColor = Color.White;
-			panel4.Controls.Add(label16);
-			panel4.Controls.Add(pictureBox2);
-			panel4.Controls.Add(label14);
-			panel4.Location = new Point(829, 3);
-			panel4.Name = "panel4";
-			panel4.Size = new Size(405, 98);
-			panel4.TabIndex = 0;
-			// 
-			// pictureBox2
-			// 
-			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
-			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(24, 21);
-			pictureBox2.Name = "pictureBox2";
-			pictureBox2.Size = new Size(59, 61);
-			pictureBox2.TabIndex = 3;
-			pictureBox2.TabStop = false;
-			// 
-			// label14
-			// 
-			label14.AutoSize = true;
-			label14.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label14.Location = new Point(109, 21);
-			label14.Name = "label14";
-			label14.Size = new Size(88, 21);
-			label14.TabIndex = 2;
-			label14.Text = "Pendiente";
-			// 
-			// label11
-			// 
-			label11.AutoSize = true;
-			label11.Location = new Point(108, 53);
-			label11.Name = "label11";
-			label11.Size = new Size(261, 30);
-			label11.TabIndex = 6;
-			label11.Text = "La cuadrilla puede  tener asistencia , pero le falta\r\n actividad o lote.";
-			// 
-			// label15
-			// 
-			label15.AutoSize = true;
-			label15.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label15.Location = new Point(115, 53);
-			label15.Name = "label15";
-			label15.Size = new Size(235, 15);
-			label15.TabIndex = 7;
-			label15.Text = "La cuadrilla terminó sus actividades del día.";
-			// 
-			// label16
-			// 
-			label16.AutoSize = true;
-			label16.Location = new Point(118, 53);
-			label16.Name = "label16";
-			label16.Size = new Size(259, 15);
-			label16.TabIndex = 8;
-			label16.Text = "Aún no se ha registrado datos por falta de listas.";
+			btnConfirmar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btnConfirmar.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			btnConfirmar.ImageAlign = ContentAlignment.MiddleLeft;
+			btnConfirmar.Location = new Point(991, 94);
+			btnConfirmar.Name = "btnConfirmar";
+			btnConfirmar.Size = new Size(179, 39);
+			btnConfirmar.TabIndex = 47;
+			btnConfirmar.Text = "Terminada";
+			btnConfirmar.UseVisualStyleBackColor = true;
+			btnConfirmar.Click += btnConfirmar_Click;
 			// 
 			// FrmObservaciones
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(244, 247, 251);
-			ClientSize = new Size(1265, 945);
+			ClientSize = new Size(1627, 945);
+			Controls.Add(btnConfirmar);
 			Controls.Add(tableLayoutPanel1);
 			Controls.Add(groupBox1);
 			Controls.Add(dgvEstado);
@@ -596,9 +481,6 @@
 			panel5.ResumeLayout(false);
 			panel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
-			panel4.ResumeLayout(false);
-			panel4.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -616,33 +498,24 @@
 		private GroupBox groupBox1;
 		private Label label7;
 		private Label label10;
-		private Label label9;
 		private Label label8;
 		public ComboBox cboDia;
-		public Button btnModificar;
-		private Button btnGuardar;
 		private PictureBox pictureBox1;
 		private TableLayoutPanel tableLayoutPanel1;
 		private Panel panel2;
 		private Label label12;
 		public ComboBox cboCuadrilla2;
-		public ComboBox cboEstado;
-		public Button btnAgregar;
 		public TextBox txbObservaciones;
 		public TextBox txbSemana;
-		public Button btnCancelar;
 		private TableLayoutPanel tableLayoutPanel2;
 		private Panel panel5;
 		private Label label3;
-		private Panel panel4;
 		private PictureBox pictureBox3;
 		private Label label13;
 		private PictureBox pictureBox4;
-		private PictureBox pictureBox2;
-		private Label label14;
 		public Panel panel6;
 		private Label label15;
 		private Label label11;
-		private Label label16;
+		public Button btnConfirmar;
 	}
 }
