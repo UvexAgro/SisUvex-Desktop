@@ -523,9 +523,9 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			// Días
 			string[] dias =
 			{
-		"VIE", "SAB", "DOM", "LUN",
-		"MAR", "MIE", "JUE"
-	};
+				"VIE", "SAB", "DOM", "LUN",
+				"MAR", "MIE", "JUE"
+			};
 
 			foreach (string dia in dias)
 			{
