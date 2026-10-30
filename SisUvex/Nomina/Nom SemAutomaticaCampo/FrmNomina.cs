@@ -18,7 +18,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		public ClsNomina cls;
 		bool cargando = false;
 		private ClsListaCuadrillas listaCuadrillas;
-		public List<object> cuadrillasSeleccionadas =new List<object>();
+		private bool mostrarOtrasCuadrillas = false;
+		public List<object> cuadrillasSeleccionadas = new List<object>();
 		public FrmNomina()
 		{
 			InitializeComponent();
@@ -26,7 +27,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			cls.frm ??= this;
 
 			InicializarListaCuadrillas();
-			
+
 		}
 		public List<string> ObtenerIdsCuadrillasSeleccionadas()
 		{
@@ -146,6 +147,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			DataTable dt = cls.ConsultarNominaSemana();
 
 			dgvNomina.DataSource = dt;
+
 		}
 
 		private void cboCuadrillaRevisar_SelectedIndexChanged(object sender, EventArgs e)
@@ -159,19 +161,11 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			if (cboSemana.SelectedIndex < 0)
 				return;
 
-			// Quitar Lugar de Pago
 			cargando = true;
 			cboLugarPago.SelectedIndex = 0;
 			cargando = false;
 
-			DataTable dt = cls.ConsultarNominaSemana();
-
-			dgvNomina.DataSource = dt;
-
-			DiseñarDgvNomina();
-			ConfigurarColumnasNomina();
-
-			dgvNomina.ClearSelection();
+			ConsultarYMostrarNomina();
 		}
 
 		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
@@ -182,18 +176,10 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			if (cboSemana.SelectedIndex < 0)
 				return;
 
-			// Solo consultar si ya eligió Cuadrilla o Lugar de Pago
 			if (cboCuadrillaRevisar.SelectedIndex > 0 ||
 				cboLugarPago.SelectedIndex > 0)
 			{
-				DataTable dt = cls.ConsultarNominaSemana();
-
-				dgvNomina.DataSource = dt;
-
-				DiseñarDgvNomina();
-				ConfigurarColumnasNomina();
-
-				dgvNomina.ClearSelection();
+				ConsultarYMostrarNomina();
 			}
 		}
 
@@ -208,20 +194,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			if (cboSemana.SelectedIndex < 0)
 				return;
 
-			// Quitar Cuadrilla
 			cargando = true;
 			cboCuadrillaRevisar.SelectedIndex = 0;
 			cargando = false;
 
-			DataTable dt = cls.ConsultarNominaSemana();
-
-			dgvNomina.DataSource = dt;
-
-			DiseñarDgvNomina();
-			ConfigurarColumnasNomina();
-
-			dgvNomina.ClearSelection();
+			ConsultarYMostrarNomina();
 		}
+		
 		private void DiseñarDgvNomina()
 		{
 			// =========================================================
@@ -465,7 +444,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		{
 			splitNomina.Panel1Collapsed = false;
 		}
-		private void ListaCuadrillas_Aceptado(object? sender,EventArgs e)
+		private void ListaCuadrillas_Aceptado(object? sender, EventArgs e)
 		{
 			cuadrillasSeleccionadas =
 				listaCuadrillas.ObtenerSeleccionados();
@@ -489,6 +468,116 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			// y agregar la cantidad
 			btnSeleccionar.Text =
 				$" Seleccionadas ({cuadrillasSeleccionadas.Count})";
+		}
+		private void ConsultarYMostrarNomina()
+		{
+			DataTable dt = cls.ConsultarNominaSemana();
+
+			mostrarOtrasCuadrillas = true;
+
+			dgvNomina.DataSource = dt;
+
+			DiseñarDgvNomina();
+			cls.ConfigurarDgvNominaReevisar();
+			ConfigurarColumnasNomina();
+			OcultarColumnasAuxiliares();
+
+			dgvNomina.CellFormatting -= dgvNomina_CellFormatting;
+			dgvNomina.CellFormatting += dgvNomina_CellFormatting;
+
+			dgvNomina.ClearSelection();
+		}
+
+		private void dgvNomina_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+		{
+			// Solo aplicar en revisión de nómina
+			if (!mostrarOtrasCuadrillas)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			string columna = dgvNomina.Columns[e.ColumnIndex].Name;
+
+			string[] dias =
+			{
+				"VIE", "SAB", "DOM", "LUN",
+				"MAR", "MIE", "JUE"
+			};
+
+			if (!dias.Contains(columna))
+				return;
+
+			string columnaOtra = columna + "_OTRA";
+
+			if (!dgvNomina.Columns.Contains(columnaOtra))
+				return;
+
+			DataGridViewRow fila = dgvNomina.Rows[e.RowIndex];
+
+			object valorOtra = fila.Cells[columnaOtra].Value;
+
+			if (valorOtra == null ||
+				valorOtra == DBNull.Value ||
+				string.IsNullOrWhiteSpace(valorOtra.ToString()))
+				return;
+
+			string informacion = valorOtra.ToString();
+
+			string[] partes = informacion.Split(
+				new string[] { " - $" },
+				StringSplitOptions.None);
+
+			if (partes.Length == 2)
+			{
+				e.Value = partes[0] +
+						  Environment.NewLine +
+						  "$" + partes[1];
+			}
+			else
+			{
+				e.Value = informacion;
+			}
+
+			e.CellStyle.BackColor = Color.FromArgb(255, 228, 155);
+			e.CellStyle.ForeColor = Color.FromArgb(128, 85, 0);
+
+			e.CellStyle.SelectionBackColor =
+				Color.FromArgb(255, 228, 155);
+
+			e.CellStyle.SelectionForeColor =
+				Color.FromArgb(128, 85, 0);
+
+			e.CellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			e.CellStyle.WrapMode = DataGridViewTriState.True;
+
+			fila.Cells[e.ColumnIndex].ToolTipText =
+				"Trabajó en otra cuadrilla: " + informacion;
+
+			e.FormattingApplied = true;
+		}
+		private void OcultarColumnasAuxiliares()
+		{
+			string[] columnas =
+			{
+		"VIE_OTRA",
+		"SAB_OTRA",
+		"DOM_OTRA",
+		"LUN_OTRA",
+		"MAR_OTRA",
+		"MIE_OTRA",
+		"JUE_OTRA"
+	};
+
+			foreach (string columna in columnas)
+			{
+				if (dgvNomina.Columns.Contains(columna))
+				{
+					dgvNomina.Columns[columna].Visible = false;
+				}
+			}
 		}
 	}
 }

@@ -119,6 +119,7 @@
 			dgvNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvNomina.Size = new Size(1509, 723);
 			dgvNomina.TabIndex = 4;
+			dgvNomina.CellFormatting += dgvNomina_CellFormatting;
 			// 
 			// label1
 			// 

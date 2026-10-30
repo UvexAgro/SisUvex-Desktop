@@ -1196,5 +1196,51 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				frm.dtpFecha.Value
 			);
 		}
+		public void ConfigurarDgvNominaReevisar()
+		{
+			frm.dgvNomina.AutoGenerateColumns = true;
+
+			frm.dgvNomina.AllowUserToAddRows = false;
+			frm.dgvNomina.AllowUserToDeleteRows = false;
+			frm.dgvNomina.ReadOnly = true;
+
+			frm.dgvNomina.RowHeadersVisible = false;
+			frm.dgvNomina.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
+
+			frm.dgvNomina.MultiSelect = false;
+
+			frm.dgvNomina.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.None;
+
+			frm.dgvNomina.RowTemplate.Height = 38;
+
+			frm.dgvNomina.DefaultCellStyle.Font =
+				new Font("Segoe UI", 9F);
+
+			frm.dgvNomina.DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			frm.dgvNomina.DefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(190, 225, 245);
+
+			frm.dgvNomina.DefaultCellStyle.SelectionForeColor =
+				Color.FromArgb(25, 60, 85);
+
+			frm.dgvNomina.ColumnHeadersDefaultCellStyle.BackColor =
+				Color.FromArgb(35, 103, 149);
+
+			frm.dgvNomina.ColumnHeadersDefaultCellStyle.ForeColor =
+				Color.White;
+
+			frm.dgvNomina.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 9F, FontStyle.Bold);
+
+			frm.dgvNomina.EnableHeadersVisualStyles = false;
+
+			frm.dgvNomina.ColumnHeadersHeight = 38;
+			frm.dgvNomina.ColumnHeadersHeightSizeMode =
+				DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+		}
 	}
 }
