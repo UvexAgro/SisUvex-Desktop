@@ -475,19 +475,84 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			mostrarOtrasCuadrillas = true;
 
+			dgvNomina.SuspendLayout();
+
 			dgvNomina.DataSource = dt;
 
 			DiseñarDgvNomina();
 			cls.ConfigurarDgvNominaReevisar();
 			ConfigurarColumnasNomina();
+
 			OcultarColumnasAuxiliares();
 
 			dgvNomina.CellFormatting -= dgvNomina_CellFormatting;
 			dgvNomina.CellFormatting += dgvNomina_CellFormatting;
 
 			dgvNomina.ClearSelection();
-		}
 
+			dgvNomina.ResumeLayout();
+
+			// Esperar a que termine de dibujarse el DataGridView
+			dgvNomina.BeginInvoke(new Action(() =>
+			{
+				AjustarDgvNomina();
+
+				dgvNomina.Refresh();
+			}));
+		}
+		private void AjustarDgvNomina()
+		{
+			if (dgvNomina.Columns.Count == 0)
+				return;
+
+			dgvNomina.SuspendLayout();
+
+			dgvNomina.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.Fill;
+
+			// Columnas principales
+			if (dgvNomina.Columns.Contains("FOLIO"))
+				dgvNomina.Columns["FOLIO"].FillWeight = 65;
+
+			if (dgvNomina.Columns.Contains("NOMBRE"))
+				dgvNomina.Columns["NOMBRE"].FillWeight = 190;
+
+			if (dgvNomina.Columns.Contains("DT"))
+				dgvNomina.Columns["DT"].FillWeight = 55;
+
+			// Días
+			string[] dias =
+			{
+		"VIE", "SAB", "DOM", "LUN",
+		"MAR", "MIE", "JUE"
+	};
+
+			foreach (string dia in dias)
+			{
+				if (dgvNomina.Columns.Contains(dia))
+					dgvNomina.Columns[dia].FillWeight = 75;
+			}
+
+			if (dgvNomina.Columns.Contains("DESCTOS"))
+				dgvNomina.Columns["DESCTOS"].FillWeight = 85;
+
+			if (dgvNomina.Columns.Contains("IMPORTE NETO"))
+				dgvNomina.Columns["IMPORTE NETO"].FillWeight = 105;
+
+			if (dgvNomina.Columns.Contains("SEMANA"))
+				dgvNomina.Columns["SEMANA"].FillWeight = 60;
+
+			if (dgvNomina.Columns.Contains("LP"))
+				dgvNomina.Columns["LP"].FillWeight = 55;
+
+			// Altura para los nombres de otras cuadrillas
+			foreach (DataGridViewRow fila in dgvNomina.Rows)
+			{
+				fila.Height = 42;
+			}
+
+			dgvNomina.ResumeLayout();
+		}
 		private void dgvNomina_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			// Solo aplicar en revisión de nómina
