@@ -79,7 +79,6 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 				clsH.GuardarHorario();
 			}
 
-			// Actualizar el combo de grupos
 			cls.CargarGrupos();
 		}
 

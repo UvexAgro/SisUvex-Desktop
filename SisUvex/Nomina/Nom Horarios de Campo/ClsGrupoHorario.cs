@@ -510,8 +510,11 @@ namespace SisUvex.Nomina.Nom_Horarios_de_Campo
 			if (string.IsNullOrWhiteSpace(idGrupo))
 				return;
 
-			// Guardamos el ID que se va a modificar
+			// Guardar el ID del grupo que se modificará
 			idGrupoModificar = idGrupo;
+
+			// IMPORTANTE: activar modo modificación
+			frm.modificando = true;
 
 			// Habilitar campos
 			frm.txbNombre.Enabled = true;
