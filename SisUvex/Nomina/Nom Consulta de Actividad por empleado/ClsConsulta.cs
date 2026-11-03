@@ -372,11 +372,49 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				return;
 			}
 
-			// Copiar el detalle
+			// =========================================================
+			// 1. COPIAR DETALLE DE ACTIVIDADES
+			// =========================================================
+
 			DataTable dt = ds.Tables[0].Copy();
 
+
+			// =====================================================
+			// 2. DESGLOSE DE DESCUENTOS
+			// =====================================================
+
+			if (ds.Tables.Count > 2 && ds.Tables[2].Rows.Count > 0)
+			{
+				DataTable descuentos = ds.Tables[2];
+
+				// Encabezado del desglose
+				DataRow filaTitulo = dt.NewRow();
+
+				filaTitulo["ACTIVIDAD"] = "DESGLOSE DE DESCUENTOS";
+
+				dt.Rows.Add(filaTitulo);
+
+				// Agregar cada descuento
+				foreach (DataRow descuento in descuentos.Rows)
+				{
+					DataRow filaDescuento = dt.NewRow();
+
+					filaDescuento["FECHA"] = DBNull.Value;
+					filaDescuento["LOTE"] = "";
+
+					filaDescuento["ACTIVIDAD"] =
+						"DESCUENTO: " + descuento["DESCRIPCION"].ToString();
+
+					filaDescuento["IMPORTE"] =
+						descuento["IMPORTE"];
+
+					dt.Rows.Add(filaDescuento);
+				}
+			}
+
+
 			// =========================================================
-			// AGREGAR RESUMEN
+			// 3. AGREGAR RESUMEN DE NÓMINA
 			// =========================================================
 
 			if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
@@ -412,12 +450,11 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 
 			// =========================================================
-			// CARGAR DGV
+			// 4. CARGAR DATAGRIDVIEW
 			// =========================================================
 
 			frm.dgvNomina.DataSource = dt;
 
-			// Aplicar diseño DESPUÉS de cargar
 			DiseñarDgvNomina();
 		}
 		private void DiseñarDgvNomina()
@@ -666,7 +703,54 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 					actividad =
 						fila.Cells["ACTIVIDAD"].Value.ToString().Trim();
 				}
+				// =====================================================
+				// DESGLOSE DE DESCUENTOS
+				// =====================================================
 
+				if (actividad == "DESGLOSE DE DESCUENTOS")
+				{
+					fila.DefaultCellStyle.Font =
+						new Font("Segoe UI", 9F, FontStyle.Bold);
+
+					fila.DefaultCellStyle.BackColor =
+						Color.FromArgb(225, 235, 243);
+
+					fila.DefaultCellStyle.ForeColor =
+						Color.FromArgb(35, 103, 149);
+
+					fila.DefaultCellStyle.SelectionBackColor =
+						Color.FromArgb(225, 235, 243);
+
+					fila.DefaultCellStyle.SelectionForeColor =
+						Color.FromArgb(35, 103, 149);
+
+					fila.Height = 32;
+				}
+
+
+				// =====================================================
+				// DESCUENTOS INDIVIDUALES
+				// =====================================================
+
+				if (actividad.StartsWith("DESCUENTO:"))
+				{
+					fila.DefaultCellStyle.Font =
+						new Font("Segoe UI", 9F);
+
+					fila.DefaultCellStyle.BackColor =
+						Color.FromArgb(255, 248, 238);
+
+					fila.DefaultCellStyle.ForeColor =
+						Color.FromArgb(120, 85, 40);
+
+					fila.DefaultCellStyle.SelectionBackColor =
+						Color.FromArgb(255, 248, 238);
+
+					fila.DefaultCellStyle.SelectionForeColor =
+						Color.FromArgb(120, 85, 40);
+
+					fila.Height = 34;
+				}
 
 				// =====================================================
 				// IMPORTE

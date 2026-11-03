@@ -373,6 +373,7 @@
 			// 
 			dgvNomina.AllowUserToAddRows = false;
 			dgvNomina.AllowUserToDeleteRows = false;
+			dgvNomina.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			dgvNomina.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			dgvNomina.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			dgvNomina.BackgroundColor = SystemColors.ControlLightLight;
@@ -403,7 +404,7 @@
 			dgvNomina.RowHeadersVisible = false;
 			dgvNomina.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvNomina.Size = new Size(1162, 404);
+			dgvNomina.Size = new Size(1162, 613);
 			dgvNomina.TabIndex = 10;
 			// 
 			// btnConsultar
@@ -413,7 +414,7 @@
 			btnConsultar.ForeColor = Color.Black;
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(994, 902);
+			btnConsultar.Location = new Point(1001, 1097);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(40, 0, 40, 0);
 			btnConsultar.Size = new Size(165, 40);
@@ -428,7 +429,7 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(244, 247, 251);
-			ClientSize = new Size(1171, 954);
+			ClientSize = new Size(1171, 1149);
 			Controls.Add(btnConsultar);
 			Controls.Add(dgvNomina);
 			Controls.Add(panel4);
