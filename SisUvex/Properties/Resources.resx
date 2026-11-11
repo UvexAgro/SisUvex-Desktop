@@ -145,6 +145,9 @@
   <data name="reiniciar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciar1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="csv2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\csv2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="usuario" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\usuario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -157,8 +160,11 @@
   <data name="verIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\verIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="upIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\upIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="cerrado" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cerrado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="imprimirIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\imprimirIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pallet16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\pallet16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -168,9 +174,6 @@
   </data>
   <data name="caja" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\caja.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="esparragoss" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\esparragoss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="limpiarIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\limpiarIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -186,9 +189,6 @@
   </data>
   <data name="x (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\x (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cerrado" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cerrado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="csv1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\csv1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,9 +211,6 @@
   <data name="reiniciarMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciarMini.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="modifyFileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\modifyFileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="candado (1)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\candado (1)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -225,6 +222,9 @@
   </data>
   <data name="Instrucciones cargar excel asistencia de empaque" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Instrucciones cargar excel asistencia de empaque.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buscarIcon32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\buscarIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="esparragoSinColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\esparragoSinColor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -283,8 +283,8 @@
   <data name="reiniciar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reiniciar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="mas+16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\mas+16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="upIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\upIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PrintIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PrintIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -298,23 +298,26 @@
   <data name="esparragos 24 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\esparragos 24 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="imprimirIcon322" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\imprimirIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="xIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\xIcon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="uvaSinColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\uvaSinColor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="resumen1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\resumen1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EsparragoColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EsparragoColor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="esparragoss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\esparragoss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="EsparragoColor1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EsparragoColor1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AddRowIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\AddRowIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="uvaSinColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\uvaSinColor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EsparragoColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EsparragoColor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="excelIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\excelIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -331,14 +334,14 @@
   <data name="advertenciaRojo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\advertenciaRojo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="imprimirIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\imprimirIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="mas+16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mas+16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\fileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="imprimirIcon322" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\imprimirIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="resumen1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resumen1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="advertenciaVerde" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\advertenciaVerde.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -370,10 +373,10 @@
   <data name="personIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\personIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="buscarIcon32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons\buscarIcon32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="modifyFileIcon16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\modifyFileIcon16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="csv2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\csv2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="logoUvex" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logoUvex.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
