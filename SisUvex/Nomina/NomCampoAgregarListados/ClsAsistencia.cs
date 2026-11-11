@@ -29,6 +29,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		public FrmListados frm;
 		public FrmAgregar frmA;
 		public BindingSource bsActividades = new BindingSource();
+		private List<EliminacionAsistenciaPendiente>
+	eliminacionesPendientes =
+	new List<EliminacionAsistenciaPendiente>();
 		public class Semana
 		{
 			public string Secuencia { get; set; }
@@ -1564,26 +1567,26 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			string[] dias =
 			{
-		"Vie", "Sab", "Dom", "Lun",
-		"Mar", "Mie", "Jue"
-	};
+			"Vie", "Sab", "Dom", "Lun",
+			"Mar", "Mie", "Jue"
+			};
 
 			string[] columnasAsistencia =
 			{
-		"c_vie", "c_sab", "c_dom", "c_lun",
-		"c_mar", "c_mie", "c_jue"
-	};
+			"c_vie", "c_sab", "c_dom", "c_lun",
+			"c_mar", "c_mie", "c_jue"
+			};
 
 			string[] columnasGrupo =
 			{
-		"id_workGroup_vie",
-		"id_workGroup_sab",
-		"id_workGroup_dom",
-		"id_workGroup_lun",
-		"id_workGroup_mar",
-		"id_workGroup_mie",
-		"id_workGroup_jue"
-	};
+				"id_workGroup_vie",
+				"id_workGroup_sab",
+				"id_workGroup_dom",
+				"id_workGroup_lun",
+				"id_workGroup_mar",
+				"id_workGroup_mie",
+				"id_workGroup_jue"
+			};
 
 			// ==========================================
 			// CARGAR ASISTENCIA EXISTENTE
@@ -1844,7 +1847,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					return false;
 				}
+
 			}
+
+			// ==========================================
+			// APLICAR ELIMINACIONES PENDIENTES
+			// ==========================================
+
+			if (!AplicarEliminacionesPendientes())
+			{
+				return false;
+			}
+
+			// ==========================================
+			// CONFIRMAR GUARDADO
+			// ==========================================
 
 			MessageBox.Show(
 				"La asistencia se guardó correctamente.",
@@ -3411,7 +3428,174 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return nombre;
 		}
+		public DateTime ObtenerFechaDia(string dia)
+		{
+			DataRow semana = ObtenerSemanaSeleccionada();
 
+			if (semana == null)
+				throw new InvalidOperationException(
+					"No hay una semana seleccionada.");
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(semana["d_startDate_per"]).Date;
+
+			string[] dias =
+			{
+		"Vie", "Sab", "Dom", "Lun",
+		"Mar", "Mie", "Jue"
+	};
+
+			int indice = Array.IndexOf(dias, dia);
+
+			if (indice < 0)
+				throw new ArgumentException("Día no válido.");
+
+			return fechaInicio.AddDays(indice);
+		}
+		public DataTable ObtenerTiposAsistenciaEmpleadoDia(
+	string codigo,
+	DateTime fecha)
+		{
+			DataTable dt = new DataTable();
+
+			SQLControl conexion = new SQLControl();
+
+			try
+			{
+				conexion.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                A.id_attendance,
+                A.id_attendanceType,
+                T.v_name,
+                T.v_prefix
+            FROM SisUvex.dbo.Nom_Attendance_AS A
+            INNER JOIN SisUvex.dbo.Nom_AttendanceType T
+                ON A.id_attendanceType = T.id_attendanceType
+            WHERE A.id_employee = @empleado
+              AND A.d_attendance >= @fecha
+              AND A.d_attendance < DATEADD(DAY, 1, @fecha);";
+
+				using (SqlCommand cmd = new SqlCommand(query, conexion.cnn))
+				{
+					cmd.Parameters.Add("@empleado", SqlDbType.Char, 6)
+						.Value = codigo;
+
+					cmd.Parameters.Add("@fecha", SqlDbType.Date)
+						.Value = fecha.Date;
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			finally
+			{
+				conexion.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+		private class EliminacionAsistenciaPendiente
+		{
+			public string CodigoEmpleado { get; set; }
+			public DateTime Fecha { get; set; }
+			public bool DesdeFecha { get; set; }
+			public List<string> TiposAsistencia { get; set; }
+		}
+		public void AgregarEliminacionPendiente(
+	string codigo,
+	DateTime fecha,
+	bool desdeFecha)
+		{
+			DataTable tipos = ObtenerTiposAsistenciaEmpleadoDia(
+				codigo,
+				fecha);
+
+			if (tipos == null || tipos.Rows.Count == 0)
+				return;
+
+			List<string> idsTipos = tipos.AsEnumerable()
+				.Select(r => r["id_attendanceType"].ToString().Trim())
+				.Distinct()
+				.ToList();
+
+			eliminacionesPendientes.Add(
+				new EliminacionAsistenciaPendiente
+				{
+					CodigoEmpleado = codigo,
+					Fecha = fecha.Date,
+					DesdeFecha = desdeFecha,
+					TiposAsistencia = idsTipos
+				});
+		}
+		private bool AplicarEliminacionesPendientes()
+		{
+			if (eliminacionesPendientes.Count == 0)
+				return true;
+
+			SQLControl conexion = new SQLControl();
+
+			try
+			{
+				conexion.OpenConectionWrite();
+
+				foreach (var pendiente in eliminacionesPendientes)
+				{
+					string parametros = string.Join(",",
+						pendiente.TiposAsistencia
+							.Select((tipo, i) => $"@tipo{i}"));
+
+					string query = $@"
+                DELETE FROM SisUvex.dbo.Nom_Attendance_AS
+                WHERE id_employee = @empleado
+                  AND d_attendance >= @fecha
+                  {(pendiente.DesdeFecha
+							? ""
+							: "AND d_attendance < DATEADD(DAY, 1, @fecha)")}
+                  AND id_attendanceType IN ({parametros});";
+
+					using (SqlCommand cmd = new SqlCommand(query, conexion.cnn))
+					{
+						cmd.Parameters.Add("@empleado", SqlDbType.Char, 6)
+							.Value = pendiente.CodigoEmpleado;
+
+						cmd.Parameters.Add("@fecha", SqlDbType.Date)
+							.Value = pendiente.Fecha.Date;
+
+						for (int i = 0;
+							 i < pendiente.TiposAsistencia.Count;
+							 i++)
+						{
+							cmd.Parameters.Add(
+								$"@tipo{i}", SqlDbType.VarChar, 10)
+								.Value = pendiente.TiposAsistencia[i];
+						}
+
+						cmd.ExecuteNonQuery();
+					}
+				}
+
+				eliminacionesPendientes.Clear();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al eliminar los registros especiales:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return false;
+			}
+			finally
+			{
+				conexion.CloseConectionWrite();
+			}
+		}
 	}
 }
 

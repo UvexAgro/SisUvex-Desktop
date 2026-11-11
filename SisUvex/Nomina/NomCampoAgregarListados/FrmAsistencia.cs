@@ -447,10 +447,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			if (estado == 1)
 			{
-				// =============================================
-				// MARCANDO ASISTENCIA
-				// =============================================
-
 				string idCuadrilla =
 					cboCuadrilla.SelectedValue?
 					.ToString()
@@ -468,17 +464,72 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					return;
 				}
 
-				DialogResult resultado = MessageBox.Show(
-					$"¿Está segura de ponerle la asistencia?\n\n" +
-					$"Empleado: {empleado}\n" +
-					$"Código: {codigo}\n" +
-					$"Día: {dia}",
-					"Confirmar asistencia",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Question);
+				// Obtener la fecha correspondiente al día seleccionado.
+				DateTime fecha = _clsA.ObtenerFechaDia(dia);
 
-				if (resultado == DialogResult.No)
-					celda.Value = 2;
+				// Buscar cualquier tipo de asistencia especial.
+				DataTable tipos = _clsA.ObtenerTiposAsistenciaEmpleadoDia(
+					codigo,
+					fecha);
+
+				if (tipos.Rows.Count > 0)
+				{
+					string descripcion = string.Join(
+						Environment.NewLine,
+						tipos.AsEnumerable().Select(r =>
+							"- " + r["v_name"].ToString().Trim()));
+
+					DialogResult resultado = MessageBox.Show(
+						$"El empleado tiene un registro especial para este día:\n\n" +
+						$"Empleado: {empleado}\n" +
+						$"Código: {codigo}\n" +
+						$"Día: {dia}\n\n" +
+						$"{descripcion}\n\n" +
+						"¿Qué deseas hacer?\n\n" +
+						"SÍ = Quitar solamente este día.\n" +
+						"NO = Quitar este día y los días restantes.\n" +
+						"CANCELAR = Conservar los registros.",
+						"Modificar asistencia especial",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question);
+
+					if (resultado == DialogResult.Cancel)
+					{
+						celda.Value = 2;
+						return;
+					}
+
+					bool desdeFecha = resultado == DialogResult.No;
+
+					// Registrar la eliminación para aplicarla al guardar.
+					_clsA.AgregarEliminacionPendiente(
+						codigo,
+						fecha,
+						desdeFecha);
+
+					// Quitar visualmente el tipo especial.
+					celda.Tag = null;
+					celda.Style.BackColor = dgvAsistencia.DefaultCellStyle.BackColor;
+					celda.Style.SelectionBackColor =
+						dgvAsistencia.DefaultCellStyle.SelectionBackColor;
+				}
+				else
+				{
+					DialogResult resultado = MessageBox.Show(
+						$"¿Está segura de ponerle la asistencia?\n\n" +
+						$"Empleado: {empleado}\n" +
+						$"Código: {codigo}\n" +
+						$"Día: {dia}",
+						"Confirmar asistencia",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question);
+
+					if (resultado == DialogResult.No)
+					{
+						celda.Value = 2;
+						return;
+					}
+				}
 			}
 			else if (estado == 0)
 			{
