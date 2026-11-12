@@ -129,6 +129,7 @@ namespace SisUvex
 			altaDeEmpleadosSinRegistroToolStripMenuItem = new ToolStripMenuItem();
 			sUAToolStripMenuItem = new ToolStripMenuItem();
 			nominaDeCampoToolStripMenuItem = new ToolStripMenuItem();
+			relojChecadorToolStripMenuItem = new ToolStripMenuItem();
 			listasDeCuadrillasToolStripMenuItem = new ToolStripMenuItem();
 			registroDeAsistenciaToolStripMenuItem = new ToolStripMenuItem();
 			coAplicadoresToolStripMenuItem = new ToolStripMenuItem();
@@ -193,7 +194,7 @@ namespace SisUvex
 			statusStrip1 = new StatusStrip();
 			tsslUsuario = new ToolStripStatusLabel();
 			nombreYCódigo2x1ToolStripMenuItem = new ToolStripMenuItem();
-			relojChecadorToolStripMenuItem = new ToolStripMenuItem();
+			generarRecibosToolStripMenuItem = new ToolStripMenuItem();
 			contextMenuStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			statusStrip1.SuspendLayout();
@@ -874,10 +875,17 @@ namespace SisUvex
 			// 
 			// nominaDeCampoToolStripMenuItem
 			// 
-			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { relojChecadorToolStripMenuItem, listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, coAplicadoresToolStripMenuItem, consultarNominaToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem });
+			nominaDeCampoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { relojChecadorToolStripMenuItem, listasDeCuadrillasToolStripMenuItem, registroDeAsistenciaToolStripMenuItem, coAplicadoresToolStripMenuItem, consultarNominaToolStripMenuItem, consultaDeActividadPorEmpleadoToolStripMenuItem, reporteDeAsistenciasASToolStripMenuItem, generarRecibosToolStripMenuItem });
 			nominaDeCampoToolStripMenuItem.Name = "nominaDeCampoToolStripMenuItem";
 			nominaDeCampoToolStripMenuItem.Size = new Size(189, 22);
 			nominaDeCampoToolStripMenuItem.Text = "Nomina de Campo";
+			// 
+			// relojChecadorToolStripMenuItem
+			// 
+			relojChecadorToolStripMenuItem.Name = "relojChecadorToolStripMenuItem";
+			relojChecadorToolStripMenuItem.Size = new Size(267, 22);
+			relojChecadorToolStripMenuItem.Text = "Reloj Checador  ";
+			relojChecadorToolStripMenuItem.Click += relojChecadorToolStripMenuItem_Click;
 			// 
 			// listasDeCuadrillasToolStripMenuItem
 			// 
@@ -1328,12 +1336,12 @@ namespace SisUvex
 			nombreYCódigo2x1ToolStripMenuItem.Name = "nombreYCódigo2x1ToolStripMenuItem";
 			nombreYCódigo2x1ToolStripMenuItem.Size = new Size(32, 19);
 			// 
-			// relojChecadorToolStripMenuItem
+			// generarRecibosToolStripMenuItem
 			// 
-			relojChecadorToolStripMenuItem.Name = "relojChecadorToolStripMenuItem";
-			relojChecadorToolStripMenuItem.Size = new Size(267, 22);
-			relojChecadorToolStripMenuItem.Text = "Reloj Checador  ";
-			relojChecadorToolStripMenuItem.Click += relojChecadorToolStripMenuItem_Click;
+			generarRecibosToolStripMenuItem.Name = "generarRecibosToolStripMenuItem";
+			generarRecibosToolStripMenuItem.Size = new Size(267, 22);
+			generarRecibosToolStripMenuItem.Text = "Generar Recibos";
+			generarRecibosToolStripMenuItem.Click += generarRecibosToolStripMenuItem_Click;
 			// 
 			// FrmMenu
 			// 
@@ -1529,5 +1537,6 @@ namespace SisUvex
 		private ToolStripMenuItem costoPorLoteToolStripMenuItem;
 		private ToolStripMenuItem coAplicadoresToolStripMenuItem;
 		private ToolStripMenuItem relojChecadorToolStripMenuItem;
+		private ToolStripMenuItem generarRecibosToolStripMenuItem;
 	}
 }

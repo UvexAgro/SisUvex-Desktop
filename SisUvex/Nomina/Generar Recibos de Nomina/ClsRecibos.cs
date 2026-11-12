@@ -282,6 +282,8 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		// ==========================================
 		// CONSULTAR EMPLEADOS POR LUGAR DE PAGO
 		// ==========================================
+
+
 		public DataTable ObtenerRecibos()
 		{
 			SQLControl sql = new SQLControl();
@@ -293,7 +295,8 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				return dt;
 			}
 
-			DataRowView semana = frm.cboSemana.SelectedItem as DataRowView;
+			DataRowView semana =
+				frm.cboSemana.SelectedItem as DataRowView;
 
 			if (semana == null)
 				return dt;
@@ -332,112 +335,53 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				string query;
 
 				// =========================================
-				// RECIBO CON IMPUESTOS (CFDI)
+				// RECIBO CFDI
 				// =========================================
+
 				if (frm.rbCfdi.Checked)
 				{
 					columnas = @"
-				R.c_codigo_emp AS Codigo,
-				R.v_nomtrabajador_emp AS NombreCompleto,
-				R.c_codigo_lug AS CodigoLugarPago,
-				P.v_namePlace AS LugarPago,
-				RP.v_descripcion_reg AS RegistroPatronal,
-				R.c_numimss_emp AS NumeroIMSS,
-				R.n_diastrabajados_rec AS DiasTrabajados,
+                R.c_codigo_emp AS Codigo,
+                R.v_nomtrabajador_emp AS NombreCompleto,
+                R.c_codigo_lug AS CodigoLugarPago,
+                P.v_namePlace AS LugarPago,
+                RP.v_descripcion_reg AS RegistroPatronal,
+                R.c_numimss_emp AS NumeroIMSS,
+                R.n_diastrabajados_rec AS DiasTrabajados,
 
-				-- PERCEPCIONES
-				(
-					ISNULL(R.n_totalpercepcalc_rec, 0)
-					- ISNULL(R.n_septimodia_rec, 0)
-					- ISNULL(R.n_aguinaldo_rec, 0)
-					- ISNULL(R.n_vacacion_rec, 0)
-					- ISNULL(R.n_primavac_rec, 0)
-					- ISNULL(R.n_primadomi_rec, 0)
-					- ISNULL(R.n_primadomig_rec, 0)
-					- ISNULL(R.n_productividad_rec, 0)
-					- ISNULL(R.n_asistencia_rec, 0)
-					- ISNULL(R.n_otraspercep_rec, 0)
-				) AS SueldoOrdinario,
+                -- SUELDO ORDINARIO
+                (
+                    ISNULL(R.n_totalpercepcalc_rec, 0)
+                    - ISNULL(R.n_septimodia_rec, 0)
+                    - ISNULL(R.n_horasextras_rec, 0)
+                    - ISNULL(R.n_primadomi_rec, 0)
+                    - ISNULL(R.n_primadomig_rec, 0)
+                    - ISNULL(R.n_productividad_rec, 0)
+                ) AS SueldoOrdinario,
 
-				R.n_septimodia_rec AS SeptimoDia,
-				R.n_aguinaldo_rec AS ProporcionalAguinaldo,
-				R.n_vacacion_rec AS ProporcionalVacaciones,
-				R.n_primavac_rec AS PrimaVacacional,
-				R.n_primadomi_rec AS Domingo,
-				R.n_primadomig_rec AS PrimaDominical,
-				R.n_productividad_rec AS Productividad,
-				R.n_asistencia_rec AS Asistencia,
-				R.n_otraspercep_rec AS Bonos,
+                R.n_septimodia_rec AS SeptimoDia,
+                R.n_horasextras_rec AS HorasExtras,
+                R.n_primadomi_rec AS Domingo,
+                R.n_primadomig_rec AS PrimaDominical,
+                R.n_productividad_rec AS Productividad,
 
-				R.n_isptcal_rec AS ISPT,
-				R.n_otrosdcalc_rec AS OtrasDeducciones,
+                -- DEDUCCIONES
+                R.n_isptcal_rec AS ISPT,
+                R.n_otrosdcalc_rec AS OtrasDeducciones,
 
-				R.n_totalpercepcalc_rec AS TotalPercepciones,
+                R.n_totalpercepcalc_rec AS TotalPercepciones,
 
-				(
-					ISNULL(R.n_isptcal_rec, 0)
-					+ ISNULL(R.n_otrosdcalc_rec, 0)
-				) AS TotalDeducciones,
+                (
+                    ISNULL(R.n_isptcal_rec, 0)
+                    + ISNULL(R.n_otrosdcalc_rec, 0)
+                ) AS TotalDeducciones,
 
-				R.n_importeneto_rec AS ImporteNeto,
+                R.n_importeneto_rec AS ImporteNeto,
 
-				R.v_uuid_rec AS UUID,
-				R.d_fechatimbre_rec AS FechaTimbrado,
-				R.n_importecfdi_rec AS ImporteCFDI";
-
-					query = @"
-                SELECT
-                    @Semana AS Semana,
-                    " + columnas + @"
-                FROM AgroSmart_SanAndres.dbo.nomrecibo R
-
-                LEFT JOIN dbo.Nom_PlacePayment P
-                    ON P.id_placePayment = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
-                    ON LP.c_codigo_lug = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
-                    ON RP.c_codigo_reg = LP.c_codigo_reg
-
-                WHERE
-                    R.d_ultdia_rec >= @FechaInicial
-                    AND R.d_ultdia_rec < DATEADD(DAY, 1, @FechaFinal)
-
-                    AND (@LugarPago = ''
-                        OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago)
-
-                    AND (@CodigoEmpleado = ''
-                        OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado)
-
-                UNION ALL
-
-                SELECT
-                    R.c_secuencia_per AS Semana,
-                    " + columnas + @"
-                FROM AgroSmart_SanAndres.dbo.nomrecibo_hist R
-
-                LEFT JOIN dbo.Nom_PlacePayment P
-                    ON P.id_placePayment = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
-                    ON LP.c_codigo_lug = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
-                    ON RP.c_codigo_reg = LP.c_codigo_reg
-
-                WHERE
-                    LTRIM(RTRIM(R.c_secuencia_per)) = @Semana
-
-                    AND (@LugarPago = ''
-                        OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago)
-
-                    AND (@CodigoEmpleado = ''
-                        OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado)
-
-                ORDER BY " + orden + " " + direccion + ";";
+                R.v_uuid_rec AS UUID,
+                R.d_fechatimbre_rec AS FechaTimbrado,
+                R.n_importecfdi_rec AS ImporteCFDI";
 				}
-
 				// =========================================
 				// RECIBO NORMAL
 				// =========================================
@@ -462,75 +406,121 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 R.n_totalpercep_rec AS TotalPercepciones,
                 R.n_totaldeduc_rec AS TotalDeducciones,
                 R.n_importeneto_rec AS ImporteNeto";
-
-					query = @"
-                SELECT
-                    @Semana AS Semana,
-                    " + columnas + @"
-                FROM AgroSmart_SanAndres.dbo.nomrecibo R
-
-                LEFT JOIN dbo.Nom_PlacePayment P
-                    ON P.id_placePayment = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
-                    ON LP.c_codigo_lug = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
-                    ON RP.c_codigo_reg = LP.c_codigo_reg
-
-                WHERE
-                    R.d_ultdia_rec >= @FechaInicial
-                    AND R.d_ultdia_rec < DATEADD(DAY, 1, @FechaFinal)
-
-                    AND (@LugarPago = ''
-                        OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago)
-
-                    AND (@CodigoEmpleado = ''
-                        OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado)
-
-                UNION ALL
-
-                SELECT
-                    R.c_secuencia_per AS Semana,
-                    " + columnas + @"
-                FROM AgroSmart_SanAndres.dbo.nomrecibo_hist R
-
-                LEFT JOIN dbo.Nom_PlacePayment P
-                    ON P.id_placePayment = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
-                    ON LP.c_codigo_lug = R.c_codigo_lug
-
-                LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
-                    ON RP.c_codigo_reg = LP.c_codigo_reg
-
-                WHERE
-                    LTRIM(RTRIM(R.c_secuencia_per)) = @Semana
-
-                    AND (@LugarPago = ''
-                        OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago)
-
-                    AND (@CodigoEmpleado = ''
-                        OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado)
-
-                ORDER BY " + orden + " " + direccion + ";";
 				}
+
+				// =========================================
+				// CONSULTA ACTUAL E HISTÓRICA
+				// =========================================
+
+				query = @"
+
+        -- =====================================
+        -- RECIBOS DE LA TABLA ACTUAL
+        -- =====================================
+
+        SELECT
+            @Semana AS Semana,
+            " + columnas + @"
+
+        FROM AgroSmart_SanAndres.dbo.nomrecibo R
+
+        LEFT JOIN dbo.Nom_PlacePayment P
+            ON P.id_placePayment = R.c_codigo_lug
+
+        LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
+            ON LP.c_codigo_lug = R.c_codigo_lug
+
+        LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
+            ON RP.c_codigo_reg = LP.c_codigo_reg
+
+        WHERE
+            @FechaFinal >= CAST(GETDATE() AS DATE)
+
+            AND NOT EXISTS
+            (
+                SELECT 1
+                FROM AgroSmart_SanAndres.dbo.nomrecibo_hist H
+                WHERE LTRIM(RTRIM(
+                    CONVERT(VARCHAR(20), H.c_secuencia_per)
+                )) = @Semana
+            )
+
+            AND
+            (
+                @LugarPago = ''
+                OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago
+            )
+
+            AND
+            (
+                @CodigoEmpleado = ''
+                OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado
+            )
+
+        UNION ALL
+
+        -- =====================================
+        -- RECIBOS DE LA TABLA HISTÓRICA
+        -- =====================================
+
+        SELECT
+            R.c_secuencia_per AS Semana,
+            " + columnas + @"
+
+        FROM AgroSmart_SanAndres.dbo.nomrecibo_hist R
+
+        LEFT JOIN dbo.Nom_PlacePayment P
+            ON P.id_placePayment = R.c_codigo_lug
+
+        LEFT JOIN AgroSmart_SanAndres.dbo.nomlugarp LP
+            ON LP.c_codigo_lug = R.c_codigo_lug
+
+        LEFT JOIN AgroSmart_SanAndres.dbo.nomregistrop RP
+            ON RP.c_codigo_reg = LP.c_codigo_reg
+
+        WHERE
+            LTRIM(RTRIM(
+                CONVERT(VARCHAR(20), R.c_secuencia_per)
+            )) = @Semana
+
+            AND
+            (
+                @LugarPago = ''
+                OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago
+            )
+
+            AND
+            (
+                @CodigoEmpleado = ''
+                OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado
+            )
+
+        ORDER BY " + orden + " " + direccion + ";";
+
+				// =========================================
+				// EJECUTAR CONSULTA
+				// =========================================
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
-					cmd.Parameters.Add("@Semana", SqlDbType.VarChar, 20)
+					cmd.Parameters.Add(
+						"@Semana", SqlDbType.VarChar, 20)
 						.Value = numeroSemana;
 
-					cmd.Parameters.Add("@FechaInicial", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@FechaInicial", SqlDbType.Date)
 						.Value = fechaInicial;
 
-					cmd.Parameters.Add("@FechaFinal", SqlDbType.Date)
+					cmd.Parameters.Add(
+						"@FechaFinal", SqlDbType.Date)
 						.Value = fechaFinal;
 
-					cmd.Parameters.Add("@LugarPago", SqlDbType.VarChar, 10)
+					cmd.Parameters.Add(
+						"@LugarPago", SqlDbType.VarChar, 10)
 						.Value = lugarPago;
 
-					cmd.Parameters.Add("@CodigoEmpleado", SqlDbType.VarChar, 10)
+					cmd.Parameters.Add(
+						"@CodigoEmpleado", SqlDbType.VarChar, 10)
 						.Value = codigoEmpleado;
 
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
@@ -556,22 +546,43 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		}
 
 
+
+
 		public void ConsultarRecibos()
 		{
 			DataTable dt = ObtenerRecibos();
 
+			frm.dgvRecibo.DataSource = null;
 			frm.dgvRecibo.DataSource = dt;
+
+			// =====================================
+			// CONFIGURACIÓN Y ESTILO
+			// =====================================
 
 			frm.dgvRecibo.ReadOnly = true;
 			frm.dgvRecibo.AllowUserToAddRows = false;
 			frm.dgvRecibo.AllowUserToDeleteRows = false;
+			frm.dgvRecibo.AllowUserToResizeRows = false;
+
 			frm.dgvRecibo.SelectionMode =
 				DataGridViewSelectionMode.FullRowSelect;
 
+			frm.dgvRecibo.MultiSelect = false;
+
+			// No forzar todas las columnas al mismo espacio
 			frm.dgvRecibo.AutoSizeColumnsMode =
-				DataGridViewAutoSizeColumnsMode.Fill;
+				DataGridViewAutoSizeColumnsMode.None;
+
+			// Aplicar diseño profesional
+			AplicarEstiloDgvRecibos(frm.dgvRecibo);
+			AgregarBotonQuitar();
+			ActualizarResumen(dt);
 
 			frm.dgvRecibo.ClearSelection();
+
+			// =====================================
+			// SIN RESULTADOS
+			// =====================================
 
 			if (dt.Rows.Count == 0)
 			{
@@ -581,6 +592,364 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 			}
+		}
+
+
+		public DataTable ObtenerDesgloseDeducciones(
+			string codigoEmpleado,
+			string semana)
+		{
+			DataTable dt = new DataTable();
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            ;WITH Descuentos AS
+            (
+                SELECT
+                    c_codigo_emp,
+                    c_secuencia_per,
+                    c_codigo_ded,
+                    n_importe_dxs,
+                    n_saldo_dxs,
+                    c_consecutivop_din
+                FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana_hist
+
+                UNION ALL
+
+                SELECT
+                    c_codigo_emp,
+                    c_numsem_dxs AS c_secuencia_per,
+                    c_codigo_ded,
+                    n_importe_dxs,
+                    n_saldo_dxs,
+                    c_consecutivop_din
+                FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana
+            )
+
+            SELECT
+                x.c_codigo_ded AS CodigoDescuento,
+                d.v_descripcion_ded AS Concepto,
+
+                CAST(
+                    ISNULL(x.n_importe_dxs, 0)
+                    AS DECIMAL(18,2)
+                ) AS Importe,
+
+                CAST(
+                    ISNULL(x.n_saldo_dxs, 0)
+                    AS DECIMAL(18,2)
+                ) AS SaldoRestante,
+
+                x.c_consecutivop_din AS Consecutivo
+
+            FROM Descuentos x
+
+            INNER JOIN AgroSmart_SanAndres.dbo.nomdeduccion d
+                ON d.c_codigo_ded = x.c_codigo_ded
+
+            WHERE
+                LTRIM(RTRIM(x.c_codigo_emp)) = @Empleado
+                AND LTRIM(RTRIM(x.c_secuencia_per)) = @Semana
+                AND ISNULL(x.n_importe_dxs, 0) > 0
+
+            ORDER BY d.c_ordenrecibo_ded;";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.Add("@Empleado",
+						SqlDbType.VarChar, 20).Value =
+						codigoEmpleado.Trim();
+
+					cmd.Parameters.Add("@Semana",
+						SqlDbType.VarChar, 20).Value =
+						semana.Trim();
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al obtener las deducciones:\n" + ex.Message,
+					"Recibos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			return dt;
+		}
+
+		public void AplicarEstiloDgvRecibos(DataGridView dgv)
+		{
+			dgv.SuspendLayout();
+
+			// =====================================
+			// CONFIGURACIÓN GENERAL
+			// =====================================
+
+			dgv.BorderStyle = BorderStyle.None;
+			dgv.BackgroundColor = Color.White;
+			dgv.GridColor = Color.FromArgb(225, 229, 233);
+
+			dgv.RowHeadersVisible = false;
+			dgv.AllowUserToAddRows = false;
+			dgv.AllowUserToDeleteRows = false;
+			dgv.AllowUserToResizeRows = false;
+			dgv.MultiSelect = false;
+			dgv.ReadOnly = true;
+
+			dgv.SelectionMode =
+				DataGridViewSelectionMode.FullRowSelect;
+
+			dgv.AutoSizeColumnsMode =
+				DataGridViewAutoSizeColumnsMode.None;
+
+			dgv.AutoSizeRowsMode =
+				DataGridViewAutoSizeRowsMode.None;
+
+			// =====================================
+			// ENCABEZADOS
+			// =====================================
+
+			dgv.EnableHeadersVisualStyles = false;
+
+			dgv.ColumnHeadersDefaultCellStyle.BackColor =
+				Color.FromArgb(220, 232, 245);
+
+			dgv.ColumnHeadersDefaultCellStyle.ForeColor =
+				Color.FromArgb(35, 65, 95);
+
+			dgv.ColumnHeadersDefaultCellStyle.Font =
+				new Font("Segoe UI", 9F, FontStyle.Bold);
+
+			dgv.ColumnHeadersDefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(220, 232, 245);
+
+			dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor =
+				Color.FromArgb(35, 65, 95);
+
+			dgv.ColumnHeadersHeight = 40;
+
+			// =====================================
+			// FILAS
+			// =====================================
+
+			dgv.DefaultCellStyle.BackColor =
+				Color.White;
+
+			dgv.DefaultCellStyle.ForeColor =
+				Color.FromArgb(45, 55, 65);
+
+			dgv.DefaultCellStyle.Font =
+				new Font("Segoe UI", 9F);
+
+			dgv.DefaultCellStyle.SelectionBackColor =
+				Color.FromArgb(211, 229, 247);
+
+			dgv.DefaultCellStyle.SelectionForeColor =
+				Color.FromArgb(35, 65, 95);
+
+			dgv.AlternatingRowsDefaultCellStyle.BackColor =
+				Color.FromArgb(243, 246, 250);
+
+			dgv.GridColor =
+				Color.FromArgb(225, 231, 238);
+
+			// =====================================
+			// BORDES Y SELECCIÓN
+			// =====================================
+
+			dgv.CellBorderStyle =
+				DataGridViewCellBorderStyle.SingleHorizontal;
+
+			dgv.ColumnHeadersBorderStyle =
+				DataGridViewHeaderBorderStyle.None;
+
+			dgv.AdvancedCellBorderStyle.Left =
+				DataGridViewAdvancedCellBorderStyle.None;
+
+			dgv.AdvancedCellBorderStyle.Right =
+				DataGridViewAdvancedCellBorderStyle.None;
+
+			dgv.AdvancedCellBorderStyle.Top =
+				DataGridViewAdvancedCellBorderStyle.None;
+
+			dgv.AdvancedCellBorderStyle.Bottom =
+				DataGridViewAdvancedCellBorderStyle.Single;
+
+			// =====================================
+			// ANCHOS DE COLUMNAS
+			// =====================================
+
+			AjustarColumna(dgv, "Semana", 65);
+			AjustarColumna(dgv, "Codigo", 85);
+			AjustarColumna(dgv, "NombreCompleto", 220);
+			AjustarColumna(dgv, "CodigoLugarPago", 95);
+			AjustarColumna(dgv, "LugarPago", 145);
+			AjustarColumna(dgv, "RegistroPatronal", 125);
+			AjustarColumna(dgv, "NumeroIMSS", 120);
+			AjustarColumna(dgv, "DiasTrabajados", 85);
+
+			// Importes
+			string[] importes =
+			{
+		"SueldoOrdinario",
+		"SeptimoDia",
+		"HorasExtras",
+		"Domingo",
+		"PrimaDominical",
+		"Productividad",
+		"ISPT",
+		"OtrasDeducciones",
+		"TotalPercepciones",
+		"TotalDeducciones",
+		"ImporteNeto",
+		"ImporteCFDI"
+	};
+
+			foreach (string columna in importes)
+			{
+				AjustarColumna(dgv, columna, 105);
+
+				if (dgv.Columns.Contains(columna))
+				{
+					dgv.Columns[columna].DefaultCellStyle.Alignment =
+						DataGridViewContentAlignment.MiddleRight;
+
+					dgv.Columns[columna].DefaultCellStyle.Format =
+						"N2";
+				}
+			}
+
+			// Datos fiscales
+			AjustarColumna(dgv, "UUID", 220);
+			AjustarColumna(dgv, "FechaTimbrado", 135);
+
+			// =====================================
+			// ALINEACIÓN DE DATOS
+			// =====================================
+
+			if (dgv.Columns.Contains("Codigo"))
+				dgv.Columns["Codigo"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+			if (dgv.Columns.Contains("Semana"))
+				dgv.Columns["Semana"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+			if (dgv.Columns.Contains("DiasTrabajados"))
+				dgv.Columns["DiasTrabajados"].DefaultCellStyle.Alignment =
+					DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.ResumeLayout();
+		}
+
+		private void AjustarColumna(
+			DataGridView dgv,
+			string nombre,
+			int ancho)
+		{
+			if (dgv.Columns.Contains(nombre))
+			{
+				dgv.Columns[nombre].Width = ancho;
+				dgv.Columns[nombre].MinimumWidth = ancho;
+				dgv.Columns[nombre].SortMode =
+					DataGridViewColumnSortMode.NotSortable;
+			}
+		}
+		private void ActualizarResumen(DataTable dt)
+		{
+			int total = dt.Rows.Count;
+
+			bool esCfdi = frm.rbCfdi.Checked;
+			bool esNormal = frm.rbNormal.Checked;
+
+			frm.lblEmpleados.Text =
+				$" {total:N0}";
+
+			frm.lblCfdi.Text =
+				$" {(esCfdi ? total : 0):N0}";
+
+			frm.lblNormal.Text =
+				$" {(esNormal ? total : 0):N0}";
+		}
+		private void AgregarBotonQuitar()
+		{
+			DataGridView dgv = frm.dgvRecibo;
+
+			if (dgv.Columns.Contains("Quitar"))
+				dgv.Columns.Remove("Quitar");
+
+			DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+
+			btn.Name = "Quitar";
+			btn.HeaderText = "";
+			btn.Text = "−";
+			btn.UseColumnTextForButtonValue = true;
+			btn.Width = 35;
+			btn.MinimumWidth = 35;
+			btn.FlatStyle = FlatStyle.Flat;
+			btn.ReadOnly = false;
+
+			btn.DefaultCellStyle.Font =
+				new Font("Segoe UI", 14, FontStyle.Bold);
+
+			btn.DefaultCellStyle.ForeColor =
+				Color.FromArgb(190, 55, 55);
+
+			btn.DefaultCellStyle.Alignment =
+				DataGridViewContentAlignment.MiddleCenter;
+
+			dgv.Columns.Add(btn);
+
+			// Colocar antes de Semana
+			if (dgv.Columns.Contains("Semana"))
+			{
+				btn.DisplayIndex =
+					dgv.Columns["Semana"].DisplayIndex;
+			}
+		}
+		public void ActualizarResumenDesdeGrid()
+		{
+			DataTable dt = new DataTable();
+
+			foreach (DataGridViewColumn columna in frm.dgvRecibo.Columns)
+			{
+				if (columna.Name != "Quitar")
+					dt.Columns.Add(columna.Name);
+			}
+
+			foreach (DataGridViewRow fila in frm.dgvRecibo.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				DataRow nuevaFila = dt.NewRow();
+
+				foreach (DataColumn columna in dt.Columns)
+				{
+					nuevaFila[columna.ColumnName] =
+						fila.Cells[columna.ColumnName].Value ?? DBNull.Value;
+				}
+
+				dt.Rows.Add(nuevaFila);
+			}
+
+			ActualizarResumen(dt);
 		}
 	}
 }
