@@ -320,11 +320,16 @@ internal class ClsModifyAttendanceEmployees
 
     /// <summary>
     /// Deja sólo empleados con registros de asistencia/inasistencia y los ordena por apellidos y nombre.
+    /// Si llegan menos de <see cref="ClsAsistenciaASConsulta.KeepAllListedIfFewerThan"/>, se conservan todos
+    /// para poder editarlos aunque no tengan datos en el rango.
     /// </summary>
     private bool KeepEmployees(HashSet<string> codesWithRecords)
     {
-        _employees = ClsAsistenciaASConsulta.OrderEmployeesByName(
-            _employees.Where(e => codesWithRecords.Contains(e.Code)));
+        IEnumerable<(string Code, string FullName, string Lp)> kept = _employees.Count < ClsAsistenciaASConsulta.KeepAllListedIfFewerThan
+            ? _employees
+            : _employees.Where(e => codesWithRecords.Contains(e.Code));
+
+        _employees = ClsAsistenciaASConsulta.OrderEmployeesByName(kept);
 
         if (_employees.Count > 0)
         {

@@ -168,11 +168,13 @@ namespace SisUvex.Nomina.Asistencia_AS
             // cboAttendenceType
             // 
             cboAttendenceType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboAttendenceType.Enabled = false;
+            cboAttendenceType.Font = new Font("Segoe UI", 9F);
             cboAttendenceType.FormattingEnabled = true;
             cboAttendenceType.Location = new Point(662, 23);
             cboAttendenceType.Margin = new Padding(0, 3, 3, 3);
             cboAttendenceType.Name = "cboAttendenceType";
-            cboAttendenceType.Size = new Size(241, 29);
+            cboAttendenceType.Size = new Size(241, 23);
             cboAttendenceType.TabIndex = 92;
             // 
             // lblSobrantesInfo
@@ -182,17 +184,19 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblSobrantesInfo.ForeColor = Color.Gray;
             lblSobrantesInfo.Location = new Point(17, 52);
             lblSobrantesInfo.Name = "lblSobrantesInfo";
-            lblSobrantesInfo.Size = new Size(545, 15);
+            lblSobrantesInfo.Size = new Size(429, 15);
             lblSobrantesInfo.TabIndex = 72;
             lblSobrantesInfo.Text = "ℹ Sin listado: indica Últimos días (empleados con importe). Vacío = sin ese límite";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(662, 52);
+            label2.Font = new Font("Segoe UI", 9F);
+            label2.ForeColor = SystemColors.ControlDark;
+            label2.Location = new Point(662, 46);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(173, 21);
+            label2.Size = new Size(132, 15);
             label2.TabIndex = 91;
             label2.Text = "Inasistencia por defecto";
             // 
@@ -262,7 +266,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblLastDays.Location = new Point(543, 52);
             lblLastDays.Margin = new Padding(0);
             lblLastDays.Name = "lblLastDays";
-            lblLastDays.Size = new Size(99, 21);
+            lblLastDays.Size = new Size(96, 21);
             lblLastDays.TabIndex = 97;
             lblLastDays.Text = "Últimos días";
             // 

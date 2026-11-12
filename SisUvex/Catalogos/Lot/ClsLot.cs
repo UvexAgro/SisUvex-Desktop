@@ -2,7 +2,6 @@
 using SisUvex.Catalogos.Metods.DataGridViews;
 using System.Data;
 using SisUvex.Catalogos.Metods;
-using System.Data.SqlClient;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Extentions;
 using SisUvex.Catalogos.Metods.Querys;
@@ -18,7 +17,6 @@ namespace SisUvex.Catalogos.Lot
     {
         private static string _columnActive2 = ClsObject.Column.active + "2";
         private static string _columnVariety = "var";
-        SQLControl sql = new SQLControl();
         ClsControls controlList;
         public FrmLotAdd _frmAdd;
         public FrmLotCat _frmCat;
@@ -51,42 +49,15 @@ namespace SisUvex.Catalogos.Lot
 
         private void ProcedureRemoveRecover(bool active)
         {
-            try
-            {
-                string idLot, idVariety;
+            if (_frmCat.dgvCatalog.Rows.Count == 0 || _frmCat.dgvCatalog.SelectedRows.Count == 0)
+                return;
 
-                if (_frmCat.dgvCatalog.Rows.Count == 0)
-                    return;
-                else
-                {
-                    idLot = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString();
-                    idVariety = _frmCat.dgvCatalog.SelectedRows[0].Cells[_columnVariety].Value.ToString();
-                }
+            string idLot = _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.id].Value.ToString()!;
+            string idVariety = _frmCat.dgvCatalog.SelectedRows[0].Cells[_columnVariety].Value.ToString()!;
 
-                string procedureName = "sp_PackLotRemove";
-
-                if (active)
-                    procedureName = "sp_PackLotRecover";
-
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new(procedureName, sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@idLot", idLot);
-                cmd.Parameters.AddWithValue("@idVariety", idVariety);
-                cmd.Parameters.AddWithValue("@userUpdate", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
+            bool ok = ELot.ActiveProcedure(idLot, idVariety, active ? "1" : "0");
+            if (ok)
                 _frmCat.dgvCatalog.SelectedRows[0].Cells[ClsObject.Column.active].Value = active ? "1" : "0";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo eliminar");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
         }
 
         public void BtnRecover()
@@ -178,9 +149,11 @@ namespace SisUvex.Catalogos.Lot
         {
             ClsComboBoxes.CboLoadActives(_frmAdd.cboVariety, ClsObject.Variety.Cbo);
             ClsComboBoxes.CboLoadAll(_frmAdd.cboFarm, ClsObject.Farm.Cbo);
+            ELot.LoadRowAxisCombo(_frmAdd.cboRowAxis);
 
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboVariety, _frmAdd.txbIdVariety);
             ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboFarm, _frmAdd.txbIdFarm);
+            ClsComboBoxes.CboApplyTextChangedEvent(_frmAdd.cboRowAxis, _frmAdd.txbIdRowAxis);
 
             ClsComboBoxes.CboApplyClickEvent(_frmAdd.cboVariety, _frmAdd.chbActiveVariety);
         }
@@ -219,6 +192,21 @@ namespace SisUvex.Catalogos.Lot
 
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboVariety, eLot.idVariety);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboFarm, eLot.idFarm);
+            ClsComboBoxes.CboSelectIndexWithTextInValueMember(_frmAdd.cboRowAxis, eLot.rowAxis);
+        }
+
+        private ELot SetEntity()
+        {
+            eLot = new ELot();
+            eLot.idLot = _frmAdd.spnId.Text.Trim();
+            eLot.idVariety = _frmAdd.txbIdVariety.Text.Trim();
+            eLot.nameLot = _frmAdd.txbName.Text.Trim();
+            eLot.ha = _frmAdd.nudHa.Value;
+            eLot.date = _frmAdd.dtpDate.Value;
+            eLot.active = _frmAdd.chbActive.Checked ? 1 : 0;
+            eLot.idFarm = _frmAdd.txbIdFarm.Text.Trim();
+            eLot.rowAxis = _frmAdd.cboRowAxis.ComboValueOrNull();
+            return eLot;
         }
 
         public void btnSearchNameWithIdLot()
@@ -259,9 +247,10 @@ namespace SisUvex.Catalogos.Lot
             }
 
             if (_frmAdd.AddIsUpdate)
+            {
                 InsertLotInDGV();
-
-            _frmAdd.Close();
+                _frmAdd.Close();
+            }
         }
 
         public bool IsLotDisponible()
@@ -286,68 +275,22 @@ namespace SisUvex.Catalogos.Lot
 
         public void AddProcedure()
         {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackLotAdd", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", _frmAdd.spnId.Text);
-                cmd.Parameters.AddWithValue("@active", _frmAdd.chbActive.Checked ? "1" : "0");
-                cmd.Parameters.AddWithValue("@name", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@idVariety", _frmAdd.txbIdVariety.Text);
-                cmd.Parameters.AddWithValue("@ha", _frmAdd.nudHa.Value.ToString());
-                cmd.Parameters.AddWithValue("@year", _frmAdd.dtpDate.Value);
-                cmd.Parameters.AddWithValue("@idFarm", _frmAdd.txbIdFarm.Text);
+            ELot addEntity = SetEntity();
+            var result = addEntity.AddProcedure();
+            _frmAdd.AddIsUpdate = result.success;
 
-                cmd.Parameters.AddWithValue("@user", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                _frmAdd.AddIsUpdate = true;
-
+            if (result.success)
                 MessageBox.Show("Se añadió el lote: " + _frmAdd.spnId.Text + "\n con variedad: " + _frmAdd.txbIdVariety.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo añadir");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
         }
 
         public void ModifyProcedure()
         {
-            try
-            {
-                sql.OpenConectionWrite();
-                SqlCommand cmd = new SqlCommand("sp_PackLotModify", sql.cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", _frmAdd.spnId.Text);
-                cmd.Parameters.AddWithValue("@name", _frmAdd.txbName.Text);
-                cmd.Parameters.AddWithValue("@idVariety", _frmAdd.txbIdVariety.Text);
-                cmd.Parameters.AddWithValue("@ha", _frmAdd.nudHa.Value.ToString());
-                cmd.Parameters.AddWithValue("@year", _frmAdd.dtpDate.Value);
-                cmd.Parameters.AddWithValue("@active", _frmAdd.chbActive.Checked ? "1" : "0");
-                cmd.Parameters.AddWithValue("@idFarm", _frmAdd.txbIdFarm.Text);
+            ELot modifyEntity = SetEntity();
+            var result = modifyEntity.ModifyProcedure();
+            _frmAdd.AddIsUpdate = result.success;
 
-                cmd.Parameters.AddWithValue("@user", User.GetUserName());
-
-                cmd.ExecuteNonQuery();
-
-                _frmAdd.AddIsUpdate = true;
-
-                MessageBox.Show("Se modificó el lote: " + _frmAdd.spnId.Text + "\n con variedad: " + _frmAdd.txbIdVariety.Text, "Catálogo añadir", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Catálogo modificar");
-            }
-            finally
-            {
-                sql.CloseConectionWrite();
-            }
+            if (result.success)
+                MessageBox.Show("Se modificó el lote: " + _frmAdd.spnId.Text + "\n con variedad: " + _frmAdd.txbIdVariety.Text, "Catálogo modificar", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void InsertLotInDGV()
@@ -396,10 +339,31 @@ namespace SisUvex.Catalogos.Lot
                     drv.EndEdit();
                 }
 
-                // Seleccionar la última fila del DataGridView
-                _frmCat.dgvCatalog.ClearSelection();
-                _frmCat.dgvCatalog.Rows[_frmCat.dgvCatalog.Rows.Count - 1].Selected = true;
-                _frmCat.dgvCatalog.FirstDisplayedScrollingRowIndex = _frmCat.dgvCatalog.Rows.Count - 1;
+                SelectLotRow(dr[ClsObject.Column.id].ToString(), dr[_columnVariety].ToString());
+            }
+        }
+
+        private void SelectLotRow(string? idLot, string? idVariety)
+        {
+            DataGridView dgv = _frmCat.dgvCatalog;
+            if (dgv.Rows.Count == 0 || string.IsNullOrEmpty(idLot))
+                return;
+
+            foreach (DataGridViewRow dgvRow in dgv.Rows)
+            {
+                if (dgvRow.Cells[ClsObject.Column.id].Value?.ToString() != idLot)
+                    continue;
+                if (dgvRow.Cells[_columnVariety].Value?.ToString() != idVariety)
+                    continue;
+
+                DataGridViewCell? visibleCell = dgvRow.Cells.Cast<DataGridViewCell>().FirstOrDefault(c => c.Visible);
+                if (visibleCell == null)
+                    return;
+
+                dgv.CurrentCell = visibleCell;
+                dgvRow.Selected = true;
+                dgv.FirstDisplayedScrollingRowIndex = dgvRow.Index;
+                return;
             }
         }
 

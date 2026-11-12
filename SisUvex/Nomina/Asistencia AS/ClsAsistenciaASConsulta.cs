@@ -49,6 +49,11 @@ namespace SisUvex.Nomina.Asistencia_AS
         internal const string ValueAsistencia  = "A";
         /// <summary>Tamaño de la ventana de "últimos N días" usada por <see cref="ReportColFaltas30"/>.</summary>
         internal const int Faltas30Dias = 30;
+        /// <summary>
+        /// Si el listado tiene menos de este número de empleados marcados, el reporte y modificar
+        /// los incluyen todos aunque no tengan asistencia/importe en el rango (para poder editarlos).
+        /// </summary>
+        internal const int KeepAllListedIfFewerThan = 5;
         internal const string DayColumnPrefix  = "D_";
 
         internal static readonly CultureInfo CultureEs = CultureInfo.GetCultureInfo("es-MX");
@@ -507,10 +512,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             BeginProgress();
             try
             {
+                bool keepAllListed = listedCodes != null && listedCodes.Count < KeepAllListedIfFewerThan;
                 List<string> employeeCodes;
                 int omittedLastDays = 0;
 
-                if (lastDays is int n)
+                if (lastDays is int n && !keepAllListed)
                 {
                     DateTime lastStart = date2.AddDays(-n);
                     HashSet<string> withImporte = FetchEmployeeCodesWithImporte(lastStart, date2, listedCodes);
@@ -544,9 +550,13 @@ namespace SisUvex.Nomina.Asistencia_AS
                 DataTable dtInasistencias = FetchInasistenciasQuery(employeeCodes, date1, date2);
                 AdvanceTo(280);
 
-                HashSet<string> codesWithRecords = CollectEmployeeCodesWithAttendanceRecords(dtAsistencias, dtInasistencias);
-                int omitted = employeeCodes.Count(c => !codesWithRecords.Contains(c));
-                employeeCodes = employeeCodes.Where(c => codesWithRecords.Contains(c)).ToList();
+                int omitted = 0;
+                if (!keepAllListed)
+                {
+                    HashSet<string> codesWithRecords = CollectEmployeeCodesWithAttendanceRecords(dtAsistencias, dtInasistencias);
+                    omitted = employeeCodes.Count(c => !codesWithRecords.Contains(c));
+                    employeeCodes = employeeCodes.Where(c => codesWithRecords.Contains(c)).ToList();
+                }
 
                 if (employeeCodes.Count == 0)
                 {
@@ -654,7 +664,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                             .Select(r => r[ReportColCodigo]?.ToString()?.Trim() ?? string.Empty)
                             .Where(c => !string.IsNullOrWhiteSpace(c)),
                         StringComparer.OrdinalIgnoreCase);
-                    employees = employees.Where(e => inReport.Contains(e.Code)).ToList();
+                    if (employeeCodes.Count >= KeepAllListedIfFewerThan)
+                        employees = employees.Where(e => inReport.Contains(e.Code)).ToList();
                 }
 
                 if (employees.Count == 0)
