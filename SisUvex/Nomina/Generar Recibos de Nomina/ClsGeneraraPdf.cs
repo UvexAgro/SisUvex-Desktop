@@ -23,9 +23,8 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 	public class ClsGeneraraPdf
 	{
 		public FrmRecibos frm;
-
-
-
+		public ClsRecibos cls = new ClsRecibos();
+		DeviceRgb grisPagoNeto = new DeviceRgb(190, 190, 190);
 		public void GenerarPDF()
 		{
 			try
@@ -58,9 +57,11 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				using (SaveFileDialog guardar = new SaveFileDialog())
 				{
 					guardar.Filter = "Archivo PDF (*.pdf)|*.pdf";
+					string nombreArchivo = ObtenerNombreArchivo(filas);
+
 					guardar.FileName = esCfdi
-						? "Recibos_CFDI.pdf"
-						: "Recibos_Normales.pdf";
+						? $"{nombreArchivo}_CFDI.pdf"
+						: $"{nombreArchivo}_Normal.pdf";
 
 					guardar.Title = "Guardar recibos";
 
@@ -81,13 +82,15 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 								documento.Add(
 									new AreaBreak(AreaBreakType.NEXT_PAGE));
 							}
+							float alturaRecibo = esCfdi ? 391 : 380;
+
 							Div recibo = new Div()
 								.SetWidth(UnitValue.CreatePercentValue(100))
-								.SetHeight(391)
-								.SetMinHeight(391)
-								.SetMaxHeight(391)
+								.SetHeight(alturaRecibo)
+								.SetMinHeight(alturaRecibo)
+								.SetMaxHeight(alturaRecibo)
 								.SetMargin(0)
-								.SetPadding(2)
+								.SetPadding(esCfdi ? 2 : 3)
 								.SetBorder(new SolidBorder(
 									new DeviceRgb(65, 65, 65), 0.5f));
 
@@ -116,7 +119,41 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxIcon.Error);
 			}
 		}
+		private string ObtenerNombreArchivo(List<DataGridViewRow> filas)
+		{
+			// Si es un solo empleado, utilizar su código
+			if (filas.Count == 1)
+			{
+				string codigo = filas[0].Cells["Codigo"].Value?.ToString().Trim();
 
+				return $"Recibo_{codigo}";
+			}
+
+			// Buscar la columna del lugar de pago
+			string[] columnasLugar =
+			{
+		"LugarPago",
+		"Lugar de pago",
+		"c_codigo_lug"
+	};
+
+			string nombreColumna = columnasLugar.FirstOrDefault(
+				c => frm.dgvRecibo.Columns.Contains(c));
+
+			if (nombreColumna != null)
+			{
+				var lugares = filas
+					.Select(f => f.Cells[nombreColumna].Value?.ToString().Trim())
+					.Where(v => !string.IsNullOrWhiteSpace(v))
+					.Distinct()
+					.ToList();
+
+				if (lugares.Count == 1)
+					return $"Recibos_{lugares[0]}";
+			}
+
+			return "Recibos_Varios_Lugares";
+		}
 
 
 		private iText.Layout.Element.Image CrearFranjaCurva()
@@ -227,6 +264,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 
 
+
 		private void CrearReciboCFDI(
 			Div contenedor,
 			DataGridViewRow fila)
@@ -244,11 +282,17 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			contenedor.SetPadding(2);
 
+			// =========================================
 			// ENCABEZADO
+			// =========================================
+
 			AgregarEncabezado(
 				contenedor, bold, negro, grisOscuro);
 
+			// =========================================
 			// DATOS DEL EMPLEADO
+			// =========================================
+
 			Table datos = new Table(
 				UnitValue.CreatePercentArray(
 					new float[] { 20, 30, 20, 30 }))
@@ -275,7 +319,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			AgregarDato(datos, "Días de Salario:",
 				Valor(fila, "DiasTrabajados"), bold, regular);
 
-			// Completar las cuatro columnas de la última fila
 			AgregarCeldaVacia(datos);
 			AgregarCeldaVacia(datos);
 
@@ -283,76 +326,167 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			AgregarLinea(contenedor, negro, 1, 4);
 
+			// =========================================
 			// TABLA PRINCIPAL
+			// =========================================
+
 			Table principal = new Table(
-				UnitValue.CreatePercentArray(new float[] { 52, 48 }))
+				UnitValue.CreatePercentArray(
+					new float[] { 52, 48 }))
 				.UseAllAvailableWidth();
 
+			// =========================================
 			// PERCEPCIONES
+			// =========================================
+
 			Table percepciones = new Table(
-				UnitValue.CreatePercentArray(new float[] { 72, 28 }))
+				UnitValue.CreatePercentArray(
+					new float[] { 72, 28 }))
 				.UseAllAvailableWidth();
 
 			EncabezadoSeccion(
 				percepciones, "PERCEPCIONES", gris, bold);
 
-			AgregarConcepto(percepciones, "Sueldo Ordinario:",
-				Valor(fila, "SueldoOrdinario"), regular, bold);
+			AgregarConcepto(
+				percepciones,
+				"Sueldo Ordinario:",
+				Valor(fila, "SueldoOrdinario"),
+				regular,
+				bold);
 
-			AgregarConcepto(percepciones, "Séptimo Día:",
-				Valor(fila, "SeptimoDia"), regular, bold);
+			AgregarConcepto(
+				percepciones,
+				"Séptimo Día:",
+				Valor(fila, "SeptimoDia"),
+				regular,
+				bold);
 
-			AgregarConcepto(percepciones, "Propor. Aguinaldo:",
-				Valor(fila, "ProporcionalAguinaldo"), regular, bold);
+			AgregarConcepto(
+			percepciones,
+			"Horas Extras:",
+			Valor(fila, "HorasExtras"),
+			regular,
+			bold);
 
-			AgregarConcepto(percepciones, "Propor. Vacaciones:",
-				Valor(fila, "ProporcionalVacaciones"), regular, bold);
+			AgregarConcepto(
+				percepciones,
+				"Domingo:",
+				Valor(fila, "Domingo"),
+				regular,
+				bold);
 
-			AgregarConcepto(percepciones, "Prima Vacacional:",
-				Valor(fila, "PrimaVacacional"), regular, bold);
+			AgregarConcepto(
+				percepciones,
+				"Prima Dominical:",
+				Valor(fila, "PrimaDominical"),
+				regular,
+				bold);
 
-			AgregarConcepto(percepciones, "Domingo:",
-				Valor(fila, "Domingo"), regular, bold);
+			AgregarConcepto(
+				percepciones,
+				"Productividad:",
+				Valor(fila, "Productividad"),
+				regular,
+				bold);
 
-			AgregarConcepto(percepciones, "Prima Dominical:",
-				Valor(fila, "PrimaDominical"), regular, bold);
+			AgregarTotal(
+				percepciones,
+				"Total Percepciones:",
+				Valor(fila, "TotalPercepciones"),
+				bold,
+				gris);
 
-			AgregarConcepto(percepciones, "Productividad:",
-				Valor(fila, "Productividad"), regular, bold);
-
-			AgregarConcepto(percepciones, "Asistencia:",
-				Valor(fila, "Asistencia"), regular, bold);
-
-			AgregarConcepto(percepciones, "Bonos:",
-				Valor(fila, "Bonos"), regular, bold);
-
-			AgregarTotal(percepciones, "Total Percepciones:",
-				Valor(fila, "TotalPercepciones"), bold, gris);
-
+			// =========================================
 			// DEDUCCIONES
+			// =========================================
+
 			Table deducciones = new Table(
-				UnitValue.CreatePercentArray(new float[] { 72, 28 }))
+				UnitValue.CreatePercentArray(
+					new float[] { 72, 28 }))
 				.UseAllAvailableWidth();
 
 			EncabezadoSeccion(
 				deducciones, "DEDUCCIONES", gris, bold);
 
-			AgregarConcepto(deducciones, "ISPT 4%:",
-				Valor(fila, "ISPT"), regular, bold);
+			// ACUMULADOR DEL TOTAL
+			decimal totalDeducciones = 0;
 
-			AgregarConcepto(deducciones, "Deducciones:",
-				Valor(fila, "OtrasDeducciones"), regular, bold);
+			// =========================================
+			// ISPT
+			// =========================================
 
-			AgregarTotal(deducciones, "Total Deducción:",
-				Valor(fila, "TotalDeducciones"), bold, gris);
+			decimal ispt = 0;
 
+			decimal.TryParse(
+				Valor(fila, "ISPT"),
+				NumberStyles.Any,
+				CultureInfo.CurrentCulture,
+				out ispt);
+
+			AgregarConcepto(
+				deducciones,
+				"ISPT:",
+				ispt.ToString("N2"),
+				regular,
+				bold);
+
+			totalDeducciones += ispt;
+
+			// =========================================
+			// DESGLOSE DE DESCUENTOS
+			// =========================================
+
+			DataTable dtDeducciones =
+				cls.ObtenerDesgloseDeducciones(
+					Valor(fila, "Codigo"),
+					Valor(fila, "Semana"));
+
+			if (dtDeducciones != null)
+			{
+				foreach (DataRow descuento in dtDeducciones.Rows)
+				{
+					string concepto =
+						descuento["Concepto"].ToString().Trim();
+
+					decimal importe = 0;
+
+					if (descuento["Importe"] != DBNull.Value)
+					{
+						importe = Convert.ToDecimal(
+							descuento["Importe"]);
+					}
+
+					AgregarConcepto(
+						deducciones,
+						concepto,
+						importe.ToString("N2"),
+						regular,
+						bold);
+
+					totalDeducciones += importe;
+				}
+			}
+
+			// =========================================
+			// TOTAL REAL DE DEDUCCIONES
+			// =========================================
+
+			AgregarTotal(
+				deducciones,
+				"Total Deducción:",
+				totalDeducciones.ToString("N2"),
+				bold,
+				gris);
+
+			// =========================================
 			// PAGO NETO
+			// =========================================
 			Table neto = CrearTablaPagoNeto(
 				"PAGO NETO:",
 				Valor(fila, "ImporteNeto"),
 				bold,
 				blanco,
-				grisOscuro);
+				grisPagoNeto);
 
 			deducciones.AddCell(
 				new Cell(1, 2)
@@ -360,7 +494,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					.SetBorder(Border.NO_BORDER)
 					.SetPadding(0));
 
+			// =========================================
 			// DISTRIBUCIÓN DE LAS DOS COLUMNAS
+			// =========================================
+
 			principal.AddCell(
 				new Cell()
 					.Add(percepciones)
@@ -379,7 +516,11 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			contenedor.Add(principal);
 
+			// =========================================
 			// TEXTO LEGAL
+			// =========================================
+			contenedor.Add(
+							new Div().SetHeight(12));
 			contenedor.Add(
 				new Paragraph(
 					"RECIBÍ DE LA EMPRESA ARRIBA MENCIONADA LA CANTIDAD NETA A QUE ESTE DOCUMENTO SE REFIERE. " +
@@ -393,15 +534,25 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					.SetMarginBottom(1)
 					.SetKeepTogether(true));
 
+			// =========================================
+			// ESPACIO ANTES DE LAS FIRMAS CFDI
+			// =========================================
+
+			contenedor.Add(
+				new Div().SetHeight(12));
+
 			// FIRMAS
 			AgregarFirmas(contenedor, bold);
 		}
+
 
 
 		private string ObtenerFecha(DateTime fecha)
 		{
 			return fecha.ToString("dd/MM/yyyy");
 		}
+
+
 
 
 
@@ -420,10 +571,11 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			DeviceRgb grisOscuro = new DeviceRgb(55, 55, 55);
 			DeviceRgb blanco = new DeviceRgb(255, 255, 255);
 
-			contenedor.SetPadding(5);
+			contenedor.SetPadding(3);
 
+			// ENCABEZADO
 			AgregarEncabezado(
-			contenedor, bold, negro, grisOscuro, true);
+				contenedor, bold, negro, grisOscuro, true);
 
 			// DATOS DEL EMPLEADO
 			Table datos = new Table(
@@ -459,15 +611,18 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			contenedor.Add(datos);
 
-			AgregarLinea(contenedor, negro, 1, 4);
+			AgregarLinea(contenedor, negro, 1, 5);
 
-			// CUERPO
+			// CUERPO: DOS COLUMNAS
 			Table cuerpo = new Table(
 				UnitValue.CreatePercentArray(
 					new float[] { 51, 49 }))
 				.UseAllAvailableWidth();
 
-			// PERCEPCIONES DIARIAS
+			// =========================================
+			// IZQUIERDA: PERCEPCIONES DIARIAS
+			// =========================================
+
 			Table diarias = new Table(
 				UnitValue.CreatePercentArray(
 					new float[] { 65, 35 }))
@@ -498,37 +653,89 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					bold);
 			}
 
-			// TOTALES
-			Table totales = new Table(
+			// TOTAL DE PERCEPCIONES DEBAJO DE LOS DÍAS
+			AgregarTotal(
+				diarias,
+				"Total Percepciones:",
+				Valor(fila, "TotalPercepciones"),
+				bold,
+				gris);
+
+			// =========================================
+			// DERECHA: DEDUCCIONES
+			// =========================================
+
+			Table deducciones = new Table(
 				UnitValue.CreatePercentArray(
-					new float[] { 65, 35 }))
+					new float[] { 72, 28 }))
 				.UseAllAvailableWidth();
 
 			EncabezadoSeccion(
-				totales, "TOTALES", gris, bold);
+				deducciones, "DEDUCCIONES", gris, bold);
 
-			AgregarConcepto(totales, "Total Percepciones:",
-				Valor(fila, "TotalPercepciones"), regular, bold);
+			// OBTENER DESCUENTOS
+			DataTable dtDeducciones =
+				cls.ObtenerDesgloseDeducciones(
+					Valor(fila, "Codigo"),
+					Valor(fila, "Semana"));
 
-			AgregarConcepto(totales, "Descuentos:",
-				Valor(fila, "TotalDeducciones"), regular, bold);
+			decimal totalDeducciones = 0;
 
-			Table neto = CrearTablaPagoNeto(
-				"NETO A PAGAR:",
-				Valor(fila, "ImporteNeto"),
+			// MOSTRAR CADA DESCUENTO
+			if (dtDeducciones != null)
+			{
+				foreach (DataRow descuento in dtDeducciones.Rows)
+				{
+					string concepto =
+						descuento["Concepto"].ToString().Trim();
+
+					decimal importe = 0;
+
+					decimal.TryParse(
+						descuento["Importe"].ToString(),
+						NumberStyles.Any,
+						CultureInfo.InvariantCulture,
+						out importe);
+
+					AgregarConcepto(
+						deducciones,
+						concepto,
+						importe.ToString("N2"),
+						regular,
+						bold);
+
+					totalDeducciones += importe;
+				}
+			}
+
+			// TOTAL DE DEDUCCIONES
+			AgregarTotal(
+				deducciones,
+				"Total Descuentos:",
+				Valor(fila, "TotalDeducciones"),
 				bold,
-				blanco,
-				grisOscuro);
+				gris);
 
-			neto.SetMarginTop(22);
+			// NETO A PAGAR
+			Table neto = CrearTablaPagoNeto(
+			"PAGO NETO:",
+			Valor(fila, "ImporteNeto"),
+			bold,
+			blanco,
+			grisPagoNeto);
 
-			totales.AddCell(
+			neto.SetMarginTop(12);
+
+			deducciones.AddCell(
 				new Cell(1, 2)
 					.Add(neto)
 					.SetBorder(Border.NO_BORDER)
 					.SetPadding(0));
 
-			// COLUMNAS
+			// =========================================
+			// DISTRIBUCIÓN DE LAS DOS COLUMNAS
+			// =========================================
+
 			cuerpo.AddCell(
 				new Cell()
 					.Add(diarias)
@@ -537,7 +744,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			cuerpo.AddCell(
 				new Cell()
-					.Add(totales)
+					.Add(deducciones)
 					.SetBorderLeft(
 						new SolidBorder(grisOscuro, 0.8f))
 					.SetBorderTop(Border.NO_BORDER)
@@ -546,10 +753,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					.SetPaddingLeft(7));
 
 			contenedor.Add(cuerpo);
-
-			// ESPACIO PARA DISTRIBUIR LAS FIRMAS
-			contenedor.Add(
-				new Div().SetHeight(65));
 
 			// FIRMAS
 			AgregarFirmas(contenedor, bold);
@@ -562,7 +765,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			Table firmas = new Table(
 				UnitValue.CreatePercentArray(new float[] { 50, 50 }))
 				.UseAllAvailableWidth()
-				.SetMarginTop(5)
+				.SetMarginTop(8)
 				.SetMarginBottom(0)
 				.SetKeepTogether(true);
 
@@ -570,7 +773,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				"Firma del Trabajador", bold));
 
 			firmas.AddCell(CrearCeldaFirma(
-				"Firma del Patrón", bold));
+				"Firma del Empleador", bold));
 
 			contenedor.Add(firmas);
 		}
@@ -633,8 +836,13 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			return "0.00";
 		}
 
-	
-		private void AgregarDato(Table tabla,string etiqueta,string valor,PdfFont bold,PdfFont regular)
+
+		private void AgregarDato(
+	Table tabla,
+	string etiqueta,
+	string valor,
+	PdfFont bold,
+	PdfFont regular)
 		{
 			tabla.AddCell(
 				new Cell()
@@ -643,7 +851,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 						.SetFontSize(7.5f)
 						.SetMargin(0))
 					.SetBorder(Border.NO_BORDER)
-					.SetPadding(2));
+					.SetPaddingTop(3)
+					.SetPaddingBottom(3)
+					.SetPaddingLeft(3)
+					.SetPaddingRight(2));
 
 			tabla.AddCell(
 				new Cell()
@@ -652,7 +863,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 						.SetFontSize(7.5f)
 						.SetMargin(0))
 					.SetBorder(Border.NO_BORDER)
-					.SetPadding(2));
+					.SetPaddingTop(3)
+					.SetPaddingBottom(3)
+					.SetPaddingLeft(2)
+					.SetPaddingRight(3));
 		}
 
 		private void AgregarCeldaVacia(Table tabla)
@@ -666,92 +880,107 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 
 		private void EncabezadoSeccion(
-			Table tabla,
-			string titulo,
-			DeviceRgb gris,
-			PdfFont bold)
+	Table tabla,
+	string titulo,
+	DeviceRgb gris,
+	PdfFont bold)
 		{
 			tabla.AddHeaderCell(
 				new Cell(1, 2)
 					.Add(new Paragraph(titulo)
 						.SetFont(bold)
-						.SetFontSize(10)
+						.SetFontSize(9.5f)
 						.SetFontColor(new DeviceRgb(35, 35, 35))
 						.SetTextAlignment(TextAlignment.CENTER)
 						.SetMargin(0))
 					.SetBackgroundColor(gris)
 					.SetBorder(Border.NO_BORDER)
-					.SetPadding(5));
+					.SetPaddingTop(7)
+					.SetPaddingBottom(7)
+					.SetPaddingLeft(5)
+					.SetPaddingRight(5));
 		}
 
 
 
 
 		private void AgregarConcepto(
-			Table tabla,
-			string concepto,
-			string importe,
-			PdfFont regular,
-			PdfFont bold)
+	Table tabla,
+	string concepto,
+	string importe,
+	PdfFont regular,
+	PdfFont bold)
 		{
-			DeviceRgb linea = new DeviceRgb(210, 210, 210);
+			DeviceRgb linea = new DeviceRgb(220, 220, 220);
 
 			tabla.AddCell(
 				new Cell()
 					.Add(new Paragraph(concepto)
 						.SetFont(regular)
 						.SetFontSize(8)
-						.SetFixedLeading(9)
+						.SetFixedLeading(10)
 						.SetMargin(0))
 					.SetBorderBottom(new SolidBorder(linea, 0.5f))
 					.SetBorderLeft(Border.NO_BORDER)
 					.SetBorderRight(Border.NO_BORDER)
 					.SetBorderTop(Border.NO_BORDER)
-					.SetPadding(2));
+					.SetPaddingTop(3)
+					.SetPaddingBottom(3)
+					.SetPaddingLeft(4)
+					.SetPaddingRight(3));
 
 			tabla.AddCell(
 				new Cell()
 					.Add(new Paragraph(Dinero(importe))
 						.SetFont(regular)
 						.SetFontSize(8)
-						.SetFixedLeading(9)
+						.SetFixedLeading(10)
 						.SetTextAlignment(TextAlignment.RIGHT)
 						.SetMargin(0))
 					.SetBorderBottom(new SolidBorder(linea, 0.5f))
 					.SetBorderLeft(Border.NO_BORDER)
 					.SetBorderRight(Border.NO_BORDER)
 					.SetBorderTop(Border.NO_BORDER)
-					.SetPadding(2));
+					.SetPaddingTop(3)
+					.SetPaddingBottom(3)
+					.SetPaddingLeft(3)
+					.SetPaddingRight(4));
 		}
 
 
 		private void AgregarTotal(
-			Table tabla,
-			string concepto,
-			string importe,
-			PdfFont bold,
-			DeviceRgb gris)
+		Table tabla,
+		string concepto,
+		string importe,
+		PdfFont bold,
+		DeviceRgb gris)
 		{
 			tabla.AddCell(
 				new Cell()
 					.Add(new Paragraph(concepto)
 						.SetFont(bold)
-						.SetFontSize(9)
+						.SetFontSize(8.5f)
 						.SetMargin(0))
 					.SetBackgroundColor(gris)
 					.SetBorder(Border.NO_BORDER)
-					.SetPadding(5));
+					.SetPaddingTop(6)
+					.SetPaddingBottom(6)
+					.SetPaddingLeft(5)
+					.SetPaddingRight(3));
 
 			tabla.AddCell(
 				new Cell()
 					.Add(new Paragraph(Dinero(importe))
 						.SetFont(bold)
-						.SetFontSize(9)
+						.SetFontSize(8.5f)
 						.SetTextAlignment(TextAlignment.RIGHT)
 						.SetMargin(0))
 					.SetBackgroundColor(gris)
 					.SetBorder(Border.NO_BORDER)
-					.SetPadding(5));
+					.SetPaddingTop(6)
+					.SetPaddingBottom(6)
+					.SetPaddingLeft(3)
+					.SetPaddingRight(5));
 		}
 
 		private Cell CeldaLogo(DeviceRgb fondo)
@@ -760,7 +989,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			using (MemoryStream ms = new MemoryStream())
 			{
-				Properties.Resources.logoUvex.Save(
+				Properties.Resources.logo.Save(
 					ms, ImageFormat.Png);
 
 				imagenBytes = ms.ToArray();
@@ -772,25 +1001,18 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			logo.ScaleToFit(48, 43);
 
-			Table cuadroLogo = new Table(1)
-				.SetWidth(58)
-				.SetHeight(48);
-
-			cuadroLogo.AddCell(
-				new Cell()
-					.Add(logo)
-					.SetBackgroundColor(fondo)
-					.SetTextAlignment(TextAlignment.CENTER)
-					.SetVerticalAlignment(VerticalAlignment.MIDDLE)
-					.SetPadding(2)
-					.SetBorder(Border.NO_BORDER));
-
 			return new Cell()
-				.Add(cuadroLogo)
+				.Add(logo)
+				.SetWidth(58)
+				.SetHeight(48)
+				.SetBackgroundColor(
+					new DeviceRgb(255, 255, 255))
 				.SetBorder(Border.NO_BORDER)
-				.SetPadding(0)
-				.SetVerticalAlignment(VerticalAlignment.MIDDLE)
-				.SetTextAlignment(TextAlignment.LEFT);
+				.SetPadding(2)
+				.SetVerticalAlignment(
+					VerticalAlignment.MIDDLE)
+				.SetTextAlignment(
+					TextAlignment.LEFT);
 		}
 
 
@@ -834,6 +1056,96 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			return neto;
 		}
+
+		public void GenerarPDFParaImprimir()
+		{
+			try
+			{
+				var filas = frm.dgvRecibo.Rows
+					.Cast<DataGridViewRow>()
+					.Where(f =>
+						!f.IsNewRow &&
+						f.Cells["Codigo"].Value != null &&
+						!string.IsNullOrWhiteSpace(
+							f.Cells["Codigo"].Value.ToString()))
+					.ToList();
+
+				if (filas.Count == 0)
+				{
+					MessageBox.Show(
+						"No hay recibos para imprimir.",
+						"Recibos",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+					return;
+				}
+
+				if (!frm.rbCfdi.Checked && !frm.rbNormal.Checked)
+				{
+					MessageBox.Show("Selecciona el tipo de recibo.");
+					return;
+				}
+
+				bool esCfdi = frm.rbCfdi.Checked;
+
+				string carpeta = System.IO.Path.Combine(
+				System.IO.Path.GetTempPath(),
+				"SisUvex_Impresiones");
+
+				System.IO.Directory.CreateDirectory(carpeta);
+
+				string nombre = $"Recibos_{Guid.NewGuid():N}.pdf";
+
+				string ruta = System.IO.Path.Combine(carpeta, nombre);
+
+				using (PdfWriter writer = new PdfWriter(ruta))
+				using (PdfDocument pdf = new PdfDocument(writer))
+				using (Document documento = new Document(pdf, PageSize.LETTER))
+				{
+					documento.SetMargins(0, 0, 0, 0);
+
+					for (int i = 0; i < filas.Count; i++)
+					{
+						if (i > 0 && i % 2 == 0)
+							documento.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+						float altura = esCfdi ? 391 : 380;
+
+						Div recibo = new Div()
+							.SetWidth(UnitValue.CreatePercentValue(100))
+							.SetHeight(altura)
+							.SetMinHeight(altura)
+							.SetMaxHeight(altura)
+							.SetMargin(0)
+							.SetPadding(esCfdi ? 2 : 3)
+							.SetBorder(new SolidBorder(
+								new DeviceRgb(65, 65, 65), 0.5f));
+
+						if (esCfdi)
+							CrearReciboCFDI(recibo, filas[i]);
+						else
+							CrearReciboNormal(recibo, filas[i]);
+
+						documento.Add(recibo);
+					}
+				}
+
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = ruta,
+					UseShellExecute = true
+				});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al preparar los recibos:\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+		}
+
 
 	}
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
 using SisUvex.Nomina.NomCampoAgregarListados;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 {
@@ -19,13 +20,15 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		public FrmRecibos()
 		{
 			InitializeComponent();
-
+			this.StartPosition = FormStartPosition.CenterScreen;
 			cls = new ClsRecibos();
 			cls.frm = this;
 
 			clsG = new ClsGeneraraPdf();
 			clsG.frm = this;
 
+			dgvRecibo.CellContentClick -= dgvRecibo_CellContentClick;
+			dgvRecibo.CellContentClick += dgvRecibo_CellContentClick;
 		}
 
 		private void FrmRecibos_Load(object sender, EventArgs e)
@@ -106,6 +109,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			txbCodigo.Clear();
 			txbNombre.Clear();
 
+			// Limpiar lugar de pago
+			cboLugarPago.SelectedIndex = -1;
+			cboLugarPago.Text = "";
+
 			// Quitar selección
 			dgvRecibo.ClearSelection();
 
@@ -116,6 +123,42 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		private void btnPdf_Click(object sender, EventArgs e)
 		{
 			clsG.GenerarPDF();
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			clsG.GenerarPDFParaImprimir();
+		}
+
+		private void dgvRecibo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			if (dgvRecibo.Columns[e.ColumnIndex].Name != "Quitar")
+				return;
+
+			if (e.RowIndex >= dgvRecibo.Rows.Count)
+				return;
+
+			// Obtener el registro exacto
+			DataRowView registro =
+				dgvRecibo.Rows[e.RowIndex].DataBoundItem as DataRowView;
+
+			if (registro == null)
+				return;
+
+			// Quitar solamente ese registro
+			DataTable dt = registro.Row.Table;
+			dt.Rows.Remove(registro.Row);
+
+			// Actualizar resumen
+			cls.ActualizarResumenDesdeGrid();
 		}
 	}
 }

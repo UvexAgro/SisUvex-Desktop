@@ -52,6 +52,7 @@
 			label6 = new Label();
 			label17 = new Label();
 			panel5 = new Panel();
+			pictureBox9 = new PictureBox();
 			label5 = new Label();
 			label4 = new Label();
 			panel6 = new Panel();
@@ -80,6 +81,9 @@
 			pictureBox7 = new PictureBox();
 			label15 = new Label();
 			panel11 = new Panel();
+			lblNormal = new Label();
+			lblCfdi = new Label();
+			lblEmpleados = new Label();
 			btnPdf = new Button();
 			button2 = new Button();
 			button1 = new Button();
@@ -91,7 +95,6 @@
 			panel12 = new Panel();
 			pictureBox8 = new PictureBox();
 			label16 = new Label();
-			pictureBox9 = new PictureBox();
 			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -101,6 +104,7 @@
 			panel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
 			panel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
 			panel6.SuspendLayout();
 			panel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
@@ -113,7 +117,6 @@
 			panel11.SuspendLayout();
 			panel12.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
-			((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
 			SuspendLayout();
 			// 
 			// dtpFechaFinal
@@ -344,8 +347,19 @@
 			panel5.Controls.Add(label4);
 			panel5.Location = new Point(2, 0);
 			panel5.Name = "panel5";
-			panel5.Size = new Size(1024, 68);
+			panel5.Size = new Size(1175, 68);
 			panel5.TabIndex = 8;
+			// 
+			// pictureBox9
+			// 
+			pictureBox9.BackColor = Color.Transparent;
+			pictureBox9.BackgroundImage = (Image)resources.GetObject("pictureBox9.BackgroundImage");
+			pictureBox9.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox9.Location = new Point(2, 7);
+			pictureBox9.Name = "pictureBox9";
+			pictureBox9.Size = new Size(56, 50);
+			pictureBox9.TabIndex = 9;
+			pictureBox9.TabStop = false;
 			// 
 			// label5
 			// 
@@ -631,8 +645,9 @@
 			dgvRecibo.RowHeadersVisible = false;
 			dgvRecibo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvRecibo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvRecibo.Size = new Size(1024, 430);
+			dgvRecibo.Size = new Size(1175, 553);
 			dgvRecibo.TabIndex = 18;
+			dgvRecibo.CellContentClick += dgvRecibo_CellContentClick;
 			// 
 			// panel10
 			// 
@@ -640,9 +655,9 @@
 			panel10.BackColor = Color.FromArgb(220, 232, 244);
 			panel10.Controls.Add(pictureBox7);
 			panel10.Controls.Add(label15);
-			panel10.Location = new Point(2, 844);
+			panel10.Location = new Point(2, 3);
 			panel10.Name = "panel10";
-			panel10.Size = new Size(1030, 40);
+			panel10.Size = new Size(1176, 40);
 			panel10.TabIndex = 17;
 			// 
 			// pictureBox7
@@ -670,7 +685,11 @@
 			// 
 			panel11.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			panel11.BackColor = Color.FromArgb(242, 245, 249);
+			panel11.Controls.Add(lblNormal);
+			panel11.Controls.Add(lblCfdi);
+			panel11.Controls.Add(lblEmpleados);
 			panel11.Controls.Add(btnPdf);
+			panel11.Controls.Add(panel10);
 			panel11.Controls.Add(button2);
 			panel11.Controls.Add(button1);
 			panel11.Controls.Add(panel15);
@@ -679,10 +698,43 @@
 			panel11.Controls.Add(label19);
 			panel11.Controls.Add(label18);
 			panel11.Controls.Add(label17);
-			panel11.Location = new Point(2, 844);
+			panel11.Location = new Point(2, 964);
 			panel11.Name = "panel11";
-			panel11.Size = new Size(1030, 158);
+			panel11.Size = new Size(1181, 157);
 			panel11.TabIndex = 16;
+			// 
+			// lblNormal
+			// 
+			lblNormal.AutoSize = true;
+			lblNormal.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblNormal.ForeColor = Color.Black;
+			lblNormal.Location = new Point(74, 132);
+			lblNormal.Name = "lblNormal";
+			lblNormal.Size = new Size(0, 17);
+			lblNormal.TabIndex = 24;
+			lblNormal.TextAlign = ContentAlignment.MiddleCenter;
+			// 
+			// lblCfdi
+			// 
+			lblCfdi.AutoSize = true;
+			lblCfdi.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblCfdi.ForeColor = Color.Black;
+			lblCfdi.Location = new Point(159, 93);
+			lblCfdi.Name = "lblCfdi";
+			lblCfdi.Size = new Size(0, 17);
+			lblCfdi.TabIndex = 23;
+			lblCfdi.TextAlign = ContentAlignment.MiddleCenter;
+			// 
+			// lblEmpleados
+			// 
+			lblEmpleados.AutoSize = true;
+			lblEmpleados.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblEmpleados.ForeColor = Color.Black;
+			lblEmpleados.Location = new Point(93, 62);
+			lblEmpleados.Name = "lblEmpleados";
+			lblEmpleados.Size = new Size(0, 17);
+			lblEmpleados.TabIndex = 22;
+			lblEmpleados.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// btnPdf
 			// 
@@ -690,12 +742,12 @@
 			btnPdf.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnPdf.Image = (Image)resources.GetObject("btnPdf.Image");
 			btnPdf.ImageAlign = ContentAlignment.MiddleLeft;
-			btnPdf.Location = new Point(510, 82);
+			btnPdf.Location = new Point(478, 82);
 			btnPdf.Name = "btnPdf";
 			btnPdf.Padding = new Padding(25, 0, 25, 0);
-			btnPdf.Size = new Size(145, 41);
+			btnPdf.Size = new Size(177, 41);
 			btnPdf.TabIndex = 21;
-			btnPdf.Text = "Imprimir";
+			btnPdf.Text = "Formato Pdf";
 			btnPdf.TextAlign = ContentAlignment.MiddleRight;
 			btnPdf.UseVisualStyleBackColor = false;
 			btnPdf.Click += btnPdf_Click;
@@ -714,6 +766,7 @@
 			button2.Text = "Cancelar";
 			button2.TextAlign = ContentAlignment.MiddleRight;
 			button2.UseVisualStyleBackColor = false;
+			button2.Click += button2_Click;
 			// 
 			// button1
 			// 
@@ -729,6 +782,7 @@
 			button1.Text = "Imprimir";
 			button1.TextAlign = ContentAlignment.MiddleRight;
 			button1.UseVisualStyleBackColor = false;
+			button1.Click += button1_Click;
 			// 
 			// panel15
 			// 
@@ -759,7 +813,7 @@
 			label19.AutoSize = true;
 			label19.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label19.ForeColor = Color.Black;
-			label19.Location = new Point(11, 126);
+			label19.Location = new Point(12, 132);
 			label19.Name = "label19";
 			label19.Size = new Size(56, 17);
 			label19.TabIndex = 16;
@@ -786,7 +840,7 @@
 			panel12.Controls.Add(label16);
 			panel12.Location = new Point(2, 369);
 			panel12.Name = "panel12";
-			panel12.Size = new Size(1024, 40);
+			panel12.Size = new Size(1175, 40);
 			panel12.TabIndex = 18;
 			// 
 			// pictureBox8
@@ -810,25 +864,13 @@
 			label16.TabIndex = 7;
 			label16.Text = "Empleados  Econtrados";
 			// 
-			// pictureBox9
-			// 
-			pictureBox9.BackColor = Color.Transparent;
-			pictureBox9.BackgroundImage = Properties.Resources.logoUvex;
-			pictureBox9.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox9.Location = new Point(2, 7);
-			pictureBox9.Name = "pictureBox9";
-			pictureBox9.Size = new Size(56, 50);
-			pictureBox9.TabIndex = 9;
-			pictureBox9.TabStop = false;
-			// 
 			// FrmRecibos
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.White;
-			ClientSize = new Size(1032, 1005);
+			ClientSize = new Size(1183, 1124);
 			Controls.Add(panel12);
-			Controls.Add(panel10);
 			Controls.Add(panel11);
 			Controls.Add(dgvRecibo);
 			Controls.Add(btnLimpiar);
@@ -857,6 +899,7 @@
 			((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
 			panel5.ResumeLayout(false);
 			panel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
 			panel6.ResumeLayout(false);
 			panel6.PerformLayout();
 			panel7.ResumeLayout(false);
@@ -876,7 +919,6 @@
 			panel12.ResumeLayout(false);
 			panel12.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox8).EndInit();
-			((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -943,5 +985,10 @@
 		public RadioButton rbNormal;
 		private Button btnPdf;
 		private PictureBox pictureBox9;
+		public Label lblNormal;
+		public Label lblCfdi;
+		public Label lblEmpleados;
+		private Label label21;
+		private Label label20;
 	}
 }
