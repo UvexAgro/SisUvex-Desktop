@@ -98,9 +98,15 @@ namespace SisUvex.Configuracion
             if (!File.Exists(rutaConf))
             {
                 //1.- Crear xmlTemp
-                string textoBase = "<Configuracion>\r\n\t<server></server>\r\n\t<dbConn></dbConn>\r\n\t<userConn></userConn>\r\n\t<passConn></passConn>\r\n\t<dbWrite></dbWrite>\r\n\t<userWrite></userWrite>\r\n\t<passWrite></passWrite>\r\n\t<dbEmployees></dbEmployees>\r\n\t<lastLogin></lastLogin>\r\n</Configuracion>\r\n";
-
-                File.WriteAllText(rutaTemp, textoBase);
+                XDocument doc = new XDocument(
+                    new XElement("Configuracion",
+                        new XElement("currentServer", "1"),
+                        GrupoVacio("servidor1"),
+                        GrupoVacio("servidor2"),
+                        new XElement("lastLogin", "")
+                    )
+                );
+                doc.Save(rutaTemp);
 
                 //2.- Crear xmlConf
                 File.WriteAllText(rutaConf, "");
@@ -110,6 +116,20 @@ namespace SisUvex.Configuracion
                 File.Delete(rutaTemp);
             }
             
+        }
+
+        private static XElement GrupoVacio(string nombre)
+        {
+            return new XElement(nombre,
+                new XElement("server", ""),
+                new XElement("dbConn", ""),
+                new XElement("userConn", ""),
+                new XElement("passConn", ""),
+                new XElement("dbWrite", ""),
+                new XElement("userWrite", ""),
+                new XElement("passWrite", ""),
+                new XElement("dbEmployees", "")
+            );
         }
     }
 }

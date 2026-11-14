@@ -15,6 +15,7 @@ namespace SisUvex
     public class SQLControl
     {
         static public string cadenaConexion = "";
+        public static int currentServer = 1;
         public SqlConnection cnn = new SqlConnection();
         public SqlTransaction transaction;
         public ClsXmlArchivos xml = new ClsXmlArchivos();
@@ -46,14 +47,48 @@ namespace SisUvex
                     MessageBox.Show(e.Message, "[Error : SQLControl]");
                 }
             }
-            server = ClsConfig.Server;
-            dbConn = ClsConfig.DbConn;
-            userConn = ClsConfig.UserConn;
-            passConn = ClsConfig.PassConn;
-            dbWrite = ClsConfig.DbWrite;
-            userWrite = ClsConfig.UserWrite;
-            passWrite = ClsConfig.PassWrite;
-            dbEmployees = ClsConfig.DbEmployees;
+
+            AplicarServidorActual();
+        }
+
+        private void AplicarServidorActual()
+        {
+            currentServer = ClsConfig.CurrentServer == 2 ? 2 : 1;
+
+            switch (currentServer)
+            {
+                case 2:
+                    server = ClsConfig.Servidor2.Server;
+                    dbConn = ClsConfig.Servidor2.DbConn;
+                    userConn = ClsConfig.Servidor2.UserConn;
+                    passConn = ClsConfig.Servidor2.PassConn;
+                    dbWrite = ClsConfig.Servidor2.DbWrite;
+                    userWrite = ClsConfig.Servidor2.UserWrite;
+                    passWrite = ClsConfig.Servidor2.PassWrite;
+                    dbEmployees = ClsConfig.Servidor2.DbEmployees;
+                    break;
+                default:
+                    currentServer = 1;
+                    server = ClsConfig.Servidor1.Server;
+                    dbConn = ClsConfig.Servidor1.DbConn;
+                    userConn = ClsConfig.Servidor1.UserConn;
+                    passConn = ClsConfig.Servidor1.PassConn;
+                    dbWrite = ClsConfig.Servidor1.DbWrite;
+                    userWrite = ClsConfig.Servidor1.UserWrite;
+                    passWrite = ClsConfig.Servidor1.PassWrite;
+                    dbEmployees = ClsConfig.Servidor1.DbEmployees;
+                    break;
+            }
+
+            ClsConfig.CurrentServer = currentServer;
+            ClsConfig.Server = server;
+            ClsConfig.DbConn = dbConn;
+            ClsConfig.UserConn = userConn;
+            ClsConfig.PassConn = passConn;
+            ClsConfig.DbWrite = dbWrite;
+            ClsConfig.UserWrite = userWrite;
+            ClsConfig.PassWrite = passWrite;
+            ClsConfig.DbEmployees = dbEmployees;
         }
 
         public string WriteSvr()
