@@ -25,18 +25,23 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		public FrmRecibos frm;
 		public ClsRecibos cls = new ClsRecibos();
 		DeviceRgb grisPagoNeto = new DeviceRgb(190, 190, 190);
+
 		public void GenerarPDF()
 		{
 			try
 			{
 				var filas = frm.dgvRecibo.Rows
-				.Cast<DataGridViewRow>()
-				.Where(f =>
-					!f.IsNewRow &&
-					f.Cells["Codigo"].Value != null &&
-					!string.IsNullOrWhiteSpace(
-						f.Cells["Codigo"].Value.ToString()))
-				.ToList();
+					.Cast<DataGridViewRow>()
+					.Where(f =>
+						!f.IsNewRow &&
+						f.Cells["Codigo"].Value != null &&
+						!string.IsNullOrWhiteSpace(
+							f.Cells["Codigo"].Value.ToString()))
+					.OrderBy(f =>
+						f.Cells["CodigoLugarPago"].Value?.ToString().Trim())
+					.ThenBy(f =>
+						f.Cells["NombreCompleto"].Value?.ToString().Trim())
+					.ToList();
 
 				if (filas.Count == 0)
 				{
@@ -57,6 +62,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				using (SaveFileDialog guardar = new SaveFileDialog())
 				{
 					guardar.Filter = "Archivo PDF (*.pdf)|*.pdf";
+
 					string nombreArchivo = ObtenerNombreArchivo(filas);
 
 					guardar.FileName = esCfdi
@@ -72,16 +78,39 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					using (PdfDocument pdf = new PdfDocument(writer))
 					using (Document documento = new Document(pdf, PageSize.LETTER))
 					{
-						// Sin margen vertical: dos mitades de 396 puntos
 						documento.SetMargins(0, 0, 0, 0);
+
+						string ultimoLugarPago = null;
+						int recibosEnPagina = 0;
 
 						for (int i = 0; i < filas.Count; i++)
 						{
-							if (i > 0 && i % 2 == 0)
+							string lugarPago = filas[i]
+								.Cells["CodigoLugarPago"]
+								.Value?.ToString()
+								.Trim() ?? "";
+
+							// Nueva hoja cuando cambia el lugar de pago
+							if (ultimoLugarPago != null &&
+								!string.Equals(
+									ultimoLugarPago,
+									lugarPago,
+									StringComparison.OrdinalIgnoreCase))
 							{
 								documento.Add(
 									new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+								recibosEnPagina = 0;
 							}
+							// Máximo dos recibos por hoja
+							else if (recibosEnPagina >= 2)
+							{
+								documento.Add(
+									new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+								recibosEnPagina = 0;
+							}
+
 							float alturaRecibo = esCfdi ? 391 : 380;
 
 							Div recibo = new Div()
@@ -100,6 +129,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 								CrearReciboNormal(recibo, filas[i]);
 
 							documento.Add(recibo);
+
+							recibosEnPagina++;
+							ultimoLugarPago = lugarPago;
 						}
 					}
 
@@ -119,6 +151,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxIcon.Error);
 			}
 		}
+
 		private string ObtenerNombreArchivo(List<DataGridViewRow> filas)
 		{
 			// Si es un solo empleado, utilizar su código
@@ -132,10 +165,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			// Buscar la columna del lugar de pago
 			string[] columnasLugar =
 			{
-		"LugarPago",
-		"Lugar de pago",
-		"c_codigo_lug"
-	};
+				"LugarPago",
+				"Lugar de pago",
+				"c_codigo_lug"
+			};
 
 			string nombreColumna = columnasLugar.FirstOrDefault(
 				c => frm.dgvRecibo.Columns.Contains(c));
@@ -265,6 +298,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 
 
+
 		private void CrearReciboCFDI(
 			Div contenedor,
 			DataGridViewRow fila)
@@ -313,6 +347,12 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			AgregarDato(datos, "Empleado:",
 				Valor(fila, "NombreCompleto"), bold, regular);
 
+			string codigoLugar = Valor(fila, "CodigoLugarPago");
+			string nombreLugar = Valor(fila, "LugarPago");
+
+			AgregarDato(datos, "Lugar de Pago:",
+				$"{codigoLugar} - {nombreLugar}", bold, regular);
+
 			AgregarDato(datos, "al:",
 				ObtenerFecha(frm.dtpFechaFinal.Value), bold, regular);
 
@@ -351,43 +391,37 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				percepciones,
 				"Sueldo Ordinario:",
 				Valor(fila, "SueldoOrdinario"),
-				regular,
-				bold);
+				regular, bold);
 
 			AgregarConcepto(
 				percepciones,
 				"Séptimo Día:",
 				Valor(fila, "SeptimoDia"),
-				regular,
-				bold);
+				regular, bold);
 
 			AgregarConcepto(
-			percepciones,
-			"Horas Extras:",
-			Valor(fila, "HorasExtras"),
-			regular,
-			bold);
+				percepciones,
+				"Horas Extras:",
+				Valor(fila, "HorasExtras"),
+				regular, bold);
 
 			AgregarConcepto(
 				percepciones,
 				"Domingo:",
 				Valor(fila, "Domingo"),
-				regular,
-				bold);
+				regular, bold);
 
 			AgregarConcepto(
 				percepciones,
 				"Prima Dominical:",
 				Valor(fila, "PrimaDominical"),
-				regular,
-				bold);
+				regular, bold);
 
 			AgregarConcepto(
 				percepciones,
 				"Productividad:",
 				Valor(fila, "Productividad"),
-				regular,
-				bold);
+				regular, bold);
 
 			AgregarTotal(
 				percepciones,
@@ -408,38 +442,20 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			EncabezadoSeccion(
 				deducciones, "DEDUCCIONES", gris, bold);
 
-			// ACUMULADOR DEL TOTAL
 			decimal totalDeducciones = 0;
 
 			// =========================================
-			// ISPT
-			// =========================================
-
-			decimal ispt = 0;
-
-			decimal.TryParse(
-				Valor(fila, "ISPT"),
-				NumberStyles.Any,
-				CultureInfo.CurrentCulture,
-				out ispt);
-
-			AgregarConcepto(
-				deducciones,
-				"ISPT:",
-				ispt.ToString("N2"),
-				regular,
-				bold);
-
-			totalDeducciones += ispt;
-
-			// =========================================
-			// DESGLOSE DE DESCUENTOS
+			// OBTENER DESCUENTOS
 			// =========================================
 
 			DataTable dtDeducciones =
 				cls.ObtenerDesgloseDeducciones(
 					Valor(fila, "Codigo"),
 					Valor(fila, "Semana"));
+
+			// =========================================
+			// MOSTRAR DESCUENTOS
+			// =========================================
 
 			if (dtDeducciones != null)
 			{
@@ -450,11 +466,11 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 					decimal importe = 0;
 
-					if (descuento["Importe"] != DBNull.Value)
-					{
-						importe = Convert.ToDecimal(
-							descuento["Importe"]);
-					}
+					decimal.TryParse(
+						descuento["Importe"].ToString(),
+						NumberStyles.Any,
+						CultureInfo.InvariantCulture,
+						out importe);
 
 					AgregarConcepto(
 						deducciones,
@@ -468,7 +484,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			}
 
 			// =========================================
-			// TOTAL REAL DE DEDUCCIONES
+			// TOTAL DE DEDUCCIONES
 			// =========================================
 
 			AgregarTotal(
@@ -479,8 +495,73 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				gris);
 
 			// =========================================
+			// INFORMACIÓN DE PRÉSTAMOS
+			// =========================================
+
+			Table informacionPrestamos = new Table(
+				UnitValue.CreatePercentArray(
+					new float[] { 72, 28 }))
+				.UseAllAvailableWidth()
+				.SetMarginTop(7);
+
+			bool tienePrestamos = false;
+
+			if (dtDeducciones != null &&
+				dtDeducciones.Columns.Contains("SaldoPendiente"))
+			{
+				foreach (DataRow descuento in dtDeducciones.Rows)
+				{
+					decimal saldoPendiente = 0;
+
+					decimal.TryParse(
+						descuento["SaldoPendiente"].ToString(),
+						NumberStyles.Any,
+						CultureInfo.InvariantCulture,
+						out saldoPendiente);
+
+					if (saldoPendiente > 0)
+					{
+						if (!tienePrestamos)
+						{
+							EncabezadoSeccion(
+								informacionPrestamos,
+								"INFORMACIÓN DE PRÉSTAMOS",
+								gris,
+								bold);
+
+							tienePrestamos = true;
+						}
+
+						string concepto =
+							descuento["Concepto"].ToString().Trim();
+
+						AgregarConcepto(
+						informacionPrestamos,
+						"Saldo pendiente:",
+						saldoPendiente.ToString("N2"),
+						regular,
+						bold);
+					}
+				}
+			}
+
+			// =========================================
+			// COLUMNA DERECHA
+			// =========================================
+
+			Div columnaDerecha = new Div();
+
+			columnaDerecha.Add(deducciones);
+
+			if (tienePrestamos)
+			{
+				columnaDerecha.Add(informacionPrestamos);
+			}
+
+			// =========================================
 			// PAGO NETO
 			// =========================================
+
 			Table neto = CrearTablaPagoNeto(
 				"PAGO NETO:",
 				Valor(fila, "ImporteNeto"),
@@ -488,11 +569,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				blanco,
 				grisPagoNeto);
 
-			deducciones.AddCell(
-				new Cell(1, 2)
-					.Add(neto)
-					.SetBorder(Border.NO_BORDER)
-					.SetPadding(0));
+			neto.SetMarginTop(12);
+
+			columnaDerecha.Add(neto);
 
 			// =========================================
 			// DISTRIBUCIÓN DE LAS DOS COLUMNAS
@@ -506,7 +585,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			principal.AddCell(
 				new Cell()
-					.Add(deducciones)
+					.Add(columnaDerecha)
 					.SetBorderLeft(
 						new SolidBorder(grisOscuro, 0.8f))
 					.SetBorderTop(Border.NO_BORDER)
@@ -519,8 +598,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			// =========================================
 			// TEXTO LEGAL
 			// =========================================
-			contenedor.Add(
-							new Div().SetHeight(12));
+
+			contenedor.Add(new Div().SetHeight(12));
+
 			contenedor.Add(
 				new Paragraph(
 					"RECIBÍ DE LA EMPRESA ARRIBA MENCIONADA LA CANTIDAD NETA A QUE ESTE DOCUMENTO SE REFIERE. " +
@@ -535,13 +615,11 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					.SetKeepTogether(true));
 
 			// =========================================
-			// ESPACIO ANTES DE LAS FIRMAS CFDI
+			// ESPACIO ANTES DE LAS FIRMAS
 			// =========================================
 
-			contenedor.Add(
-				new Div().SetHeight(12));
+			contenedor.Add(new Div().SetHeight(12));
 
-			// FIRMAS
 			AgregarFirmas(contenedor, bold);
 		}
 
@@ -551,6 +629,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		{
 			return fecha.ToString("dd/MM/yyyy");
 		}
+
 
 
 
@@ -573,11 +652,17 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			contenedor.SetPadding(3);
 
+			// =========================================
 			// ENCABEZADO
+			// =========================================
+
 			AgregarEncabezado(
 				contenedor, bold, negro, grisOscuro, true);
 
+			// =========================================
 			// DATOS DEL EMPLEADO
+			// =========================================
+
 			Table datos = new Table(
 				UnitValue.CreatePercentArray(
 					new float[] { 20, 30, 20, 30 }))
@@ -597,8 +682,13 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			AgregarDato(datos, "Desde:",
 				ObtenerFecha(frm.dtpFechaInicial.Value), bold, regular);
 
+			string codigoLugar = Valor(fila, "CodigoLugarPago");
+			string nombreLugar = Valor(fila, "LugarPago");
+
+			string lugarPago = $"{codigoLugar} - {nombreLugar}";
+
 			AgregarDato(datos, "Lugar de Pago:",
-				Valor(fila, "LugarPago"), bold, regular);
+				lugarPago, bold, regular);
 
 			AgregarDato(datos, "Hasta:",
 				ObtenerFecha(frm.dtpFechaFinal.Value), bold, regular);
@@ -613,14 +703,17 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			AgregarLinea(contenedor, negro, 1, 5);
 
+			// =========================================
 			// CUERPO: DOS COLUMNAS
+			// =========================================
+
 			Table cuerpo = new Table(
 				UnitValue.CreatePercentArray(
 					new float[] { 51, 49 }))
 				.UseAllAvailableWidth();
 
 			// =========================================
-			// IZQUIERDA: PERCEPCIONES DIARIAS
+			// PERCEPCIONES DIARIAS
 			// =========================================
 
 			Table diarias = new Table(
@@ -653,7 +746,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					bold);
 			}
 
-			// TOTAL DE PERCEPCIONES DEBAJO DE LOS DÍAS
 			AgregarTotal(
 				diarias,
 				"Total Percepciones:",
@@ -662,7 +754,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				gris);
 
 			// =========================================
-			// DERECHA: DEDUCCIONES
+			// DEDUCCIONES
 			// =========================================
 
 			Table deducciones = new Table(
@@ -673,15 +765,15 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			EncabezadoSeccion(
 				deducciones, "DEDUCCIONES", gris, bold);
 
-			// OBTENER DESCUENTOS
 			DataTable dtDeducciones =
 				cls.ObtenerDesgloseDeducciones(
 					Valor(fila, "Codigo"),
 					Valor(fila, "Semana"));
 
-			decimal totalDeducciones = 0;
+			// =========================================
+			// MOSTRAR DESCUENTOS
+			// =========================================
 
-			// MOSTRAR CADA DESCUENTO
 			if (dtDeducciones != null)
 			{
 				foreach (DataRow descuento in dtDeducciones.Rows)
@@ -703,12 +795,13 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 						importe.ToString("N2"),
 						regular,
 						bold);
-
-					totalDeducciones += importe;
 				}
 			}
 
+			// =========================================
 			// TOTAL DE DEDUCCIONES
+			// =========================================
+
 			AgregarTotal(
 				deducciones,
 				"Total Descuentos:",
@@ -716,21 +809,84 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				bold,
 				gris);
 
-			// NETO A PAGAR
+			// =========================================
+			// INFORMACIÓN DE PRÉSTAMOS
+			// =========================================
+
+			Table informacionPrestamos = new Table(
+				UnitValue.CreatePercentArray(
+					new float[] { 72, 28 }))
+				.UseAllAvailableWidth()
+				.SetMarginTop(7);
+
+			bool tienePrestamos = false;
+
+			if (dtDeducciones != null &&
+				dtDeducciones.Columns.Contains("SaldoPendiente"))
+			{
+				foreach (DataRow descuento in dtDeducciones.Rows)
+				{
+					decimal saldoPendiente = 0;
+
+					decimal.TryParse(
+						descuento["SaldoPendiente"].ToString(),
+						NumberStyles.Any,
+						CultureInfo.InvariantCulture,
+						out saldoPendiente);
+
+					if (saldoPendiente > 0)
+					{
+						if (!tienePrestamos)
+						{
+							EncabezadoSeccion(
+								informacionPrestamos,
+								"INFORMACIÓN DE PRÉSTAMOS",
+								gris,
+								bold);
+
+							tienePrestamos = true;
+						}
+
+						string concepto =
+							descuento["Concepto"].ToString().Trim();
+
+						AgregarConcepto(
+						informacionPrestamos,
+						"Saldo pendiente:",
+						saldoPendiente.ToString("N2"),
+						regular,
+						bold);
+					}
+				}
+			}
+
+			// =========================================
+			// COLUMNA DERECHA
+			// =========================================
+
+			Div columnaDerecha = new Div();
+
+			columnaDerecha.Add(deducciones);
+
+			if (tienePrestamos)
+			{
+				columnaDerecha.Add(informacionPrestamos);
+			}
+
+			// =========================================
+			// PAGO NETO
+			// =========================================
+
 			Table neto = CrearTablaPagoNeto(
-			"PAGO NETO:",
-			Valor(fila, "ImporteNeto"),
-			bold,
-			blanco,
-			grisPagoNeto);
+				"PAGO NETO:",
+				Valor(fila, "ImporteNeto"),
+				bold,
+				blanco,
+				grisPagoNeto);
 
 			neto.SetMarginTop(12);
 
-			deducciones.AddCell(
-				new Cell(1, 2)
-					.Add(neto)
-					.SetBorder(Border.NO_BORDER)
-					.SetPadding(0));
+			columnaDerecha.Add(neto);
 
 			// =========================================
 			// DISTRIBUCIÓN DE LAS DOS COLUMNAS
@@ -744,7 +900,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			cuerpo.AddCell(
 				new Cell()
-					.Add(deducciones)
+					.Add(columnaDerecha)
 					.SetBorderLeft(
 						new SolidBorder(grisOscuro, 0.8f))
 					.SetBorderTop(Border.NO_BORDER)
@@ -754,7 +910,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			contenedor.Add(cuerpo);
 
+			// =========================================
 			// FIRMAS
+			// =========================================
+
 			AgregarFirmas(contenedor, bold);
 		}
 
@@ -1057,6 +1216,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			return neto;
 		}
 
+
 		public void GenerarPDFParaImprimir()
 		{
 			try
@@ -1068,6 +1228,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 						f.Cells["Codigo"].Value != null &&
 						!string.IsNullOrWhiteSpace(
 							f.Cells["Codigo"].Value.ToString()))
+					.OrderBy(f =>
+						f.Cells["CodigoLugarPago"].Value?.ToString().Trim())
+					.ThenBy(f =>
+						f.Cells["NombreCompleto"].Value?.ToString().Trim())
 					.ToList();
 
 				if (filas.Count == 0)
@@ -1089,13 +1253,12 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				bool esCfdi = frm.rbCfdi.Checked;
 
 				string carpeta = System.IO.Path.Combine(
-				System.IO.Path.GetTempPath(),
-				"SisUvex_Impresiones");
+					System.IO.Path.GetTempPath(),
+					"SisUvex_Impresiones");
 
 				System.IO.Directory.CreateDirectory(carpeta);
 
 				string nombre = $"Recibos_{Guid.NewGuid():N}.pdf";
-
 				string ruta = System.IO.Path.Combine(carpeta, nombre);
 
 				using (PdfWriter writer = new PdfWriter(ruta))
@@ -1104,10 +1267,36 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				{
 					documento.SetMargins(0, 0, 0, 0);
 
+					string ultimoLugarPago = null;
+					int recibosEnPagina = 0;
+
 					for (int i = 0; i < filas.Count; i++)
 					{
-						if (i > 0 && i % 2 == 0)
-							documento.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+						string lugarPago = filas[i]
+							.Cells["CodigoLugarPago"]
+							.Value?.ToString()
+							.Trim() ?? "";
+
+						// Si cambia el lugar de pago, iniciar otra hoja
+						if (ultimoLugarPago != null &&
+							!string.Equals(
+								ultimoLugarPago,
+								lugarPago,
+								StringComparison.OrdinalIgnoreCase))
+						{
+							documento.Add(
+								new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+							recibosEnPagina = 0;
+						}
+						// Máximo dos recibos por hoja
+						else if (recibosEnPagina >= 2)
+						{
+							documento.Add(
+								new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+							recibosEnPagina = 0;
+						}
 
 						float altura = esCfdi ? 391 : 380;
 
@@ -1127,6 +1316,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 							CrearReciboNormal(recibo, filas[i]);
 
 						documento.Add(recibo);
+
+						recibosEnPagina++;
+						ultimoLugarPago = lugarPago;
 					}
 				}
 
@@ -1145,7 +1337,5 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxIcon.Error);
 			}
 		}
-
-
 	}
 }
