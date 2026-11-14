@@ -919,7 +919,6 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 250);
-            CancelButton = btnLectura1;
             ClientSize = new Size(960, 670);
             Controls.Add(pnlBarra);
             Controls.Add(pnlServidor1);

@@ -653,6 +653,16 @@ namespace SisUvex.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap imgPantallaCarga {
+            get {
+                object obj = ResourceManager.GetObject("imgPantallaCarga", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Pantalla_de_carga_verde {
             get {
                 object obj = ResourceManager.GetObject("Pantalla de carga verde", resourceCulture);
