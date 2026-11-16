@@ -50,6 +50,14 @@ namespace SisUvex.Catalogos.Lot
             cls.OpenFrmModify();
         }
 
+        private void dgvCatalog_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            cls.OpenFrmModify();
+        }
+
         private void btnSearchVariety_Click(object sender, EventArgs e)
         {
 

@@ -72,10 +72,14 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         // ── Estado interno ────────────────────────────────────────────────────
         /// <summary>Tabla maestra del listado de empleados (con columna "Sel." checkbox).</summary>
         private DataTable _dtEmployeeList = BuildEmptyEmployeeListTable();
-        /// <summary>Tabla del reporte pivot cargado por btnLoadReport.</summary>
+        /// <summary>Tabla del reporte pivot (Reporte Detalle) cargado por btnLoadReport.</summary>
         private DataTable? _dtReportPreview;
+        /// <summary>Datos crudos de la última consulta (para generar tabs RESUMEN y Cajas empleado).</summary>
+        private DataTable? _dtRawData;
 
-        private bool _showingReport = false;
+        // Índice de la fila "TOTAL GENERAL" en los DGVs de resumen (–1 = no cargado)
+        private int _resumeTotalRowIndex    = -1;
+        private int _cajasEmpTotalRowIndex  = -1;
 
         // ── Inicio del formulario ─────────────────────────────────────────────
 
@@ -408,6 +412,9 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 return;
             }
 
+            frm.pgrReport.Visible = true;
+            Application.DoEvents();
+
             try
             {
                 DataTable rawData = FetchReportData();
@@ -418,15 +425,26 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                     return;
                 }
 
+                _dtRawData       = rawData;
                 _dtReportPreview = BuildReportPreview(rawData,
                     frm.dtpDate1.Value.Date, frm.dtpDate2.Value.Date);
 
-                ShowReport();
+                // Invalidar caches de tabs de resumen
+                _resumeTotalRowIndex   = -1;
+                _cajasEmpTotalRowIndex = -1;
+
+                // Cambiar al tab Reporte Detalle y cargarlo
+                frm.tabReport.SelectedIndex = 1;
+                ShowDetalle();
                 SetAdvice(string.Empty, isError: false);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error al cargar reporte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                frm.pgrReport.Visible = false;
             }
         }
 
@@ -437,14 +455,18 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
             if (frm == null) return;
 
             DataTable rawData;
-            try
+            if (_dtRawData != null && _dtRawData.Rows.Count > 0)
             {
-                rawData = FetchReportData();
+                rawData = _dtRawData;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.ToString(), "Error al consultar datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                try { rawData = FetchReportData(); }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Error al consultar datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             if (rawData.Rows.Count == 0)
@@ -468,30 +490,18 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 dateRange);
         }
 
-        // ── Alternar vista DGV ────────────────────────────────────────────────
+        // ── Cambio de tab ─────────────────────────────────────────────────────
 
-        public void ChbShowEmployees_CheckedChanged()
+        public void TabReport_SelectedIndexChanged()
         {
             if (frm == null) return;
-            if (frm.chbShowEmployees.Checked)
-                ShowEmployeeList();
-        }
-
-        public void ChbShowReport_CheckedChanged()
-        {
-            if (frm == null) return;
-            if (!frm.chbShowReport.Checked) return;
-
-            if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
+            switch (frm.tabReport.SelectedIndex)
             {
-                SystemSounds.Exclamation.Play();
-                frm.chbShowReport.Checked = false;
-                frm.chbShowEmployees.Checked = true;
-                SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
-                return;
+                case 0: ShowEmployeeList();   break;
+                case 1: ShowDetalle();        break;
+                case 2: ShowResumen();        break;
+                case 3: ShowCajasEmpleado();  break;
             }
-
-            ShowReport();
         }
 
         // ── Helpers DGV ──────────────────────────────────────────────────────
@@ -500,47 +510,187 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         {
             if (frm == null) return;
 
-            _showingReport = false;
-
-            frm.dgvReport.ReadOnly = false;
-            frm.dgvReport.AutoGenerateColumns = true;
-            frm.dgvReport.DataSource = null;
-            frm.dgvReport.DataSource = _dtEmployeeList;
+            frm.dgvListado.ReadOnly           = false;
+            frm.dgvListado.AutoGenerateColumns = true;
+            frm.dgvListado.DataSource         = null;
+            frm.dgvListado.DataSource         = _dtEmployeeList;
             ApplyCheckBoxColumnToSel();
             HideColumnsInDgv(_columnsToHideInDgv);
-
-            frm.chbShowEmployees.Checked = true;
-            frm.chbShowReport.Checked = false;
         }
 
-        /// <summary>
-        /// Oculta en el DGV las columnas cuyo nombre esté en <paramref name="columnsToHide"/>.
-        /// Se ignoran nombres de columna que no existan. Solo aplica al listado (no al reporte).
-        /// </summary>
         private void HideColumnsInDgv(IEnumerable<string> columnsToHide)
         {
             if (frm == null) return;
             foreach (string col in columnsToHide)
-            {
-                if (frm.dgvReport.Columns.Contains(col))
-                    frm.dgvReport.Columns[col].Visible = false;
-            }
+                if (frm.dgvListado.Columns.Contains(col))
+                    frm.dgvListado.Columns[col].Visible = false;
         }
 
-        private void ShowReport()
+        private void ShowDetalle()
         {
-            if (frm == null || _dtReportPreview == null) return;
+            if (frm == null) return;
+            if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                frm.tabReport.SelectedIndex = 0;
+                SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
+                return;
+            }
 
-            _showingReport = true;
             ClassifyReportRows();
+            frm.dgvDetalle.AutoGenerateColumns = true;
+            frm.dgvDetalle.DataSource          = null;
+            frm.dgvDetalle.DataSource          = _dtReportPreview;
+        }
 
-            frm.dgvReport.ReadOnly = true;
-            frm.dgvReport.AutoGenerateColumns = true;
-            frm.dgvReport.DataSource = null;
-            frm.dgvReport.DataSource = _dtReportPreview;
+        private void ShowResumen()
+        {
+            if (frm == null) return;
+            if (_dtRawData == null || _dtRawData.Rows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                frm.tabReport.SelectedIndex = 0;
+                SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
+                return;
+            }
 
-            frm.chbShowReport.Checked = true;
-            frm.chbShowEmployees.Checked = false;
+            DataTable dt = BuildResumePreviewDt(_dtRawData);
+            _resumeTotalRowIndex = dt.Rows.Count - 1;
+            frm.dgvResumen.AutoGenerateColumns = true;
+            frm.dgvResumen.DataSource          = null;
+            frm.dgvResumen.DataSource          = dt;
+            SetColumnWidths(frm.dgvResumen, new Dictionary<string, int>
+            {
+                ["CONTRATISTA"] = 100,
+                ["CUADRILLA"]   = 100,
+                ["NÚMERO"]      = 65,
+                ["CÓDIGO"]      = 50,
+                ["NOMBRE"]      = 210,
+                ["DÍAS"]        = 55,
+                ["TOTAL"]       = 75,
+            });
+        }
+
+        private void ShowCajasEmpleado()
+        {
+            if (frm == null) return;
+            if (_dtRawData == null || _dtRawData.Rows.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                frm.tabReport.SelectedIndex = 0;
+                SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
+                return;
+            }
+
+            DataTable dt = BuildCajasEmpleadoPreviewDt(_dtRawData);
+            _cajasEmpTotalRowIndex = dt.Rows.Count - 1;
+            frm.dgvCajasEmpleado.AutoGenerateColumns = true;
+            frm.dgvCajasEmpleado.DataSource          = null;
+            frm.dgvCajasEmpleado.DataSource          = dt;
+            SetColumnWidths(frm.dgvCajasEmpleado, new Dictionary<string, int>
+            {
+                ["CÓDIGO"] = 50,
+                ["NOMBRE"] = 210,
+                ["DÍAS"]   = 55,
+                ["TOTAL"]  = 75,
+            });
+        }
+
+        private static void SetColumnWidths(DataGridView dgv, Dictionary<string, int> widths)
+        {
+            foreach (var (col, w) in widths)
+                if (dgv.Columns.Contains(col))
+                    dgv.Columns[col].Width = w;
+        }
+
+        private void ShowReport() => ShowDetalle();
+
+        // ── CellFormatting por DGV ────────────────────────────────────────────
+
+        // Columnas fijas de cada tab plano (no reciben color verde ni amarillo de datos)
+        private static readonly HashSet<string> ResumenFixedCols = new(StringComparer.OrdinalIgnoreCase)
+            { "CONTRATISTA", "CUADRILLA", "NÚMERO", "CÓDIGO", "NOMBRE", "DÍAS" };
+
+        private static readonly HashSet<string> CajasEmpFixedCols = new(StringComparer.OrdinalIgnoreCase)
+            { "CÓDIGO", "NOMBRE", "DÍAS" };
+
+        public void DgvResumen_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (frm == null || e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            string colName = frm.dgvResumen.Columns[e.ColumnIndex].DataPropertyName
+                          ?? frm.dgvResumen.Columns[e.ColumnIndex].Name;
+            ApplyFlatDgvFormatting(e, _resumeTotalRowIndex, colName, ResumenFixedCols);
+        }
+
+        public void DgvCajasEmpleado_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (frm == null || e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            string colName = frm.dgvCajasEmpleado.Columns[e.ColumnIndex].DataPropertyName
+                          ?? frm.dgvCajasEmpleado.Columns[e.ColumnIndex].Name;
+            ApplyFlatDgvFormatting(e, _cajasEmpTotalRowIndex, colName, CajasEmpFixedCols);
+        }
+
+        /// <summary>
+        /// Formato para las tablas planas (RESUMEN / Cajas empleado):
+        /// – Fila TOTAL GENERAL: amarillo + negrita en toda la fila.
+        /// – Columna TOTAL (datos): amarillo + negrita.
+        /// – Columnas fijas de texto (CÓDIGO, NOMBRE, etc.): solo color de fila alternado.
+        /// – Columnas de empaque con valor: verde.
+        /// – Resto: color de fila alternado.
+        /// </summary>
+        private static void ApplyFlatDgvFormatting(
+            DataGridViewCellFormattingEventArgs e,
+            int totalRowIndex,
+            string colName,
+            HashSet<string> fixedCols)
+        {
+            var colorTotal    = Color.FromArgb(0xFF, 0xC0, 0x00);
+            var colorValue    = Color.FromArgb(0xC5, 0xDF, 0xB4);
+            var colorEvenRow  = Color.FromArgb(0xE8, 0xF0, 0xF7);
+            var colorOddRow   = Color.White;
+
+            bool isTotal = e.RowIndex == totalRowIndex;
+            bool isEven  = (e.RowIndex % 2 == 0);
+            Color rowBg  = isEven ? colorEvenRow : colorOddRow;
+
+            // ── Fila TOTAL GENERAL ─────────────────────────────────────────
+            if (isTotal)
+            {
+                e.CellStyle.BackColor          = colorTotal;
+                e.CellStyle.SelectionBackColor = ControlPaint.Dark(colorTotal, 0.1f);
+                e.CellStyle.Font               = new Font(e.CellStyle.Font ?? SystemFonts.DefaultFont, FontStyle.Bold);
+                return;
+            }
+
+            // ── Columna TOTAL (datos) ─────────────────────────────────────
+            if (string.Equals(colName, "TOTAL", StringComparison.OrdinalIgnoreCase))
+            {
+                e.CellStyle.BackColor          = colorTotal;
+                e.CellStyle.SelectionBackColor = ControlPaint.Dark(colorTotal, 0.1f);
+                e.CellStyle.Font               = new Font(e.CellStyle.Font ?? SystemFonts.DefaultFont, FontStyle.Bold);
+                return;
+            }
+
+            // ── Columnas fijas de texto ───────────────────────────────────
+            if (fixedCols.Contains(colName))
+            {
+                e.CellStyle.BackColor          = rowBg;
+                e.CellStyle.SelectionBackColor = ControlPaint.Dark(rowBg, 0.05f);
+                return;
+            }
+
+            // ── Columnas de empaque ───────────────────────────────────────
+            string? val = e.Value?.ToString();
+            if (!string.IsNullOrWhiteSpace(val))
+            {
+                e.CellStyle.BackColor          = colorValue;
+                e.CellStyle.SelectionBackColor = ControlPaint.Dark(colorValue, 0.1f);
+            }
+            else
+            {
+                e.CellStyle.BackColor          = rowBg;
+                e.CellStyle.SelectionBackColor = ControlPaint.Dark(rowBg, 0.05f);
+            }
         }
 
         // ── Clasificación de filas para colorear el DGV ───────────────────────
@@ -584,12 +734,72 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
 
         // ── Colorear celdas del DGV reporte (evento CellFormatting) ──────────
 
-        public void DgvReport_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        // Cuántas columnas fijas (de izquierda a derecha) se funden visualmente
+        // en las filas de título del empleado:
+        //   0: CODIGO / NOMBRE / LP  |  1: FECHA  |  2: CUADRILLA  |  3: CONTRATISTA
+        private const int TitleMergeCount = 4;
+
+        /// <summary>
+        /// Simula celdas fusionadas en la fila de título del empleado usando RowPostPaint.
+        /// Este evento se dispara DESPUÉS de pintar todas las celdas de la fila y su
+        /// Graphics NO está restringido al ancho de una sola celda, por lo que podemos
+        /// dibujar texto que abarque varias columnas sin ningún problema de clip.
+        /// </summary>
+        public void DgvDetalle_RowPostPaint(object? sender, DataGridViewRowPostPaintEventArgs e)
         {
-            if (!_showingReport || frm == null || _dtReportPreview == null) return;
+            if (frm == null || e.RowIndex < 0 || e.RowIndex >= _rowKinds.Count) return;
+            if (_rowKinds[e.RowIndex] != RowKind.Title) return;
+
+            var dgv = frm.dgvDetalle;
+
+            // GetCellDisplayRectangle devuelve la posición real de la celda 0 en
+            // coordenadas cliente del DGV (ya incluye desplazamiento por scroll y
+            // por el encabezado de fila si está visible).
+            var cell0 = dgv.GetCellDisplayRectangle(0, e.RowIndex, cutOverflow: false);
+            if (cell0.Width == 0) return;
+
+            // Ancho total de las columnas que se van a fusionar visualmente
+            int mergedWidth = 0;
+            for (int ci = 0; ci < TitleMergeCount && ci < dgv.Columns.Count; ci++)
+                if (dgv.Columns[ci].Visible)
+                    mergedWidth += dgv.Columns[ci].Width;
+
+            var merged = new Rectangle(cell0.X, cell0.Y, mergedWidth, cell0.Height);
+
+            // ── Fondo (sobreescribe lo que pintaron las celdas individuales) ──
+            using var bg = new SolidBrush(ColorTitle);
+            e.Graphics.FillRectangle(bg, merged);
+
+            // ── Texto del empleado (negrita, sin restricción de clip de celda) ──
+            string text = string.Empty;
+            if (_dtReportPreview != null && e.RowIndex < _dtReportPreview.Rows.Count)
+                text = _dtReportPreview.Rows[e.RowIndex]["CODIGO / NOMBRE / LP"]?.ToString() ?? string.Empty;
+
+            Font font   = GetBoldFont() ?? dgv.DefaultCellStyle.Font ?? SystemFonts.DefaultFont;
+            var  textRF = new RectangleF(merged.X + 5, merged.Y, merged.Width - 10, merged.Height);
+            using var fgBrush = new SolidBrush(SystemColors.ControlText);
+            using var sf = new System.Drawing.StringFormat
+            {
+                Alignment     = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center,
+                Trimming      = StringTrimming.EllipsisCharacter,
+                FormatFlags   = StringFormatFlags.NoWrap,
+            };
+            e.Graphics.DrawString(text, font, fgBrush, textRF, sf);
+
+            // ── Borde derecho del bloque fusionado ──
+            using var gridPen = new Pen(dgv.GridColor);
+            e.Graphics.DrawLine(gridPen,
+                merged.Right - 1, merged.Top,
+                merged.Right - 1, merged.Bottom - 1);
+        }
+
+        public void DgvDetalle_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (frm == null || _dtReportPreview == null) return;
             if (e.RowIndex < 0 || e.RowIndex >= _rowKinds.Count || e.ColumnIndex < 0) return;
 
-            string colName = frm.dgvReport.Columns[e.ColumnIndex].DataPropertyName ?? string.Empty;
+            string colName = frm.dgvDetalle.Columns[e.ColumnIndex].DataPropertyName ?? string.Empty;
 
             switch (_rowKinds[e.RowIndex])
             {
@@ -633,29 +843,31 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
         private Font GetBoldFont()
         {
             if (_boldFont != null) return _boldFont;
-            var baseFont = frm?.dgvReport.DefaultCellStyle.Font ?? SystemFonts.DefaultFont;
+            var baseFont = frm?.dgvDetalle.DefaultCellStyle.Font ?? SystemFonts.DefaultFont;
             return _boldFont = new Font(baseFont, FontStyle.Bold);
         }
 
         private void RefreshEmployeeDgv()
         {
-            if (frm == null || _showingReport) return;
-            ShowEmployeeList();
+            if (frm == null) return;
+            // Solo refrescar si el tab de Listado está activo
+            if (frm.tabReport.SelectedIndex == 0)
+                ShowEmployeeList();
         }
 
         /// <summary>
-        /// Convierte la columna "Sel." en una columna de checkboxes en el DGV.
+        /// Convierte la columna "Sel." en una columna de checkboxes en el DGV del listado.
         /// </summary>
         private void ApplyCheckBoxColumnToSel()
         {
             if (frm == null) return;
-            if (!frm.dgvReport.Columns.Contains(ColSel)) return;
+            if (!frm.dgvListado.Columns.Contains(ColSel)) return;
 
-            var col = frm.dgvReport.Columns[ColSel];
+            var col = frm.dgvListado.Columns[ColSel];
             if (col is DataGridViewCheckBoxColumn) return;
 
             int ordinal = col.Index;
-            frm.dgvReport.Columns.Remove(col);
+            frm.dgvListado.Columns.Remove(col);
 
             var chkCol = new DataGridViewCheckBoxColumn
             {
@@ -667,7 +879,7 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 Width            = 45,
                 DisplayIndex     = ordinal,
             };
-            frm.dgvReport.Columns.Insert(ordinal, chkCol);
+            frm.dgvListado.Columns.Insert(ordinal, chkCol);
         }
 
         // ── Helpers listado ───────────────────────────────────────────────────
@@ -788,6 +1000,194 @@ namespace SisUvex.Nomina.CONTRATO.PayrollPack_BoxPerNumber.BoxPerEmployeeReport
                 .Where(c => !string.IsNullOrWhiteSpace(c))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
+        }
+
+        // ── Vistas previas planas para RESUMEN y Cajas empleado ─────────────
+
+        /// <summary>
+        /// Construye la DataTable para el DGV "RESUMEN":
+        /// CONTRATISTA | CUADRILLA | NÚMERO | CÓDIGO | NOMBRE | [empaques] | DÍAS | TOTAL
+        /// Última fila = TOTAL GENERAL.
+        /// </summary>
+        private static DataTable BuildResumePreviewDt(DataTable rawData)
+        {
+            var empaques = GetEmpaques(rawData);
+            var dt = new DataTable();
+            dt.Columns.Add("CONTRATISTA", typeof(string));
+            dt.Columns.Add("CUADRILLA",   typeof(string));
+            dt.Columns.Add("NÚMERO",      typeof(string));
+            dt.Columns.Add("CÓDIGO",      typeof(string));
+            dt.Columns.Add("NOMBRE",      typeof(string));
+            foreach (string emp in empaques) dt.Columns.Add(emp, typeof(string));
+            dt.Columns.Add("DÍAS",  typeof(string));
+            dt.Columns.Add("TOTAL", typeof(string));
+
+            decimal[] colTotals = new decimal[empaques.Count];
+            int totalDias = 0;
+            decimal grandTotal = 0m;
+
+            var groups = rawData.AsEnumerable()
+                .GroupBy(r => (
+                    Contratista: SafeStr(r, ReportColumns.Contratista),
+                    Cuadrilla:   SafeStr(r, ReportColumns.Cuadrilla),
+                    Codigo:      SafeStr(r, ReportColumns.Codigo),
+                    Nombre:      SafeStr(r, ReportColumns.Nombre)))
+                .OrderBy(g => g.Key.Contratista).ThenBy(g => g.Key.Cuadrilla)
+                .ThenBy(g => g.Key.Nombre).ThenBy(g => g.Key.Codigo);
+
+            foreach (var g in groups)
+            {
+                string numero = ResolveNumero(g.ToList(), rawData);
+                DataRow row = dt.NewRow();
+                row["CONTRATISTA"] = g.Key.Contratista;
+                row["CUADRILLA"]   = g.Key.Cuadrilla;
+                row["NÚMERO"]      = numero;
+                row["CÓDIGO"]      = g.Key.Codigo;
+                row["NOMBRE"]      = g.Key.Nombre;
+
+                decimal rowTotal = 0m;
+                for (int i = 0; i < empaques.Count; i++)
+                {
+                    decimal val = g.Where(r => SafeStr(r, ReportColumns.Empaque) == empaques[i])
+                                   .Sum(r => ToDecimal(r[ReportColumns.Cajas]));
+                    row[empaques[i]] = val == 0m ? string.Empty : val.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+                    colTotals[i] += val;
+                    rowTotal += val;
+                }
+
+                int dias = g.Select(r => NormalizeDate(r[ReportColumns.Fecha]))
+                             .Where(d => d != DateTime.MinValue).Distinct().Count();
+                row["DÍAS"]  = dias.ToString();
+                row["TOTAL"] = rowTotal.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+                totalDias += dias;
+                grandTotal += rowTotal;
+                dt.Rows.Add(row);
+            }
+
+            // Fila total general
+            DataRow totRow = dt.NewRow();
+            totRow["CONTRATISTA"] = "TOTAL GENERAL";
+            for (int i = 0; i < empaques.Count; i++)
+                totRow[empaques[i]] = colTotals[i] == 0m ? string.Empty
+                    : colTotals[i].ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+            totRow["DÍAS"]  = totalDias.ToString();
+            totRow["TOTAL"] = grandTotal.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+            dt.Rows.Add(totRow);
+
+            return dt;
+        }
+
+        /// <summary>
+        /// Construye la DataTable para el DGV "Cajas empleado":
+        /// CÓDIGO | NOMBRE | [empaques] | DÍAS | TOTAL
+        /// Última fila = TOTAL GENERAL.
+        /// </summary>
+        private static DataTable BuildCajasEmpleadoPreviewDt(DataTable rawData)
+        {
+            var empaques = GetEmpaques(rawData);
+            var dt = new DataTable();
+            dt.Columns.Add("CÓDIGO", typeof(string));
+            dt.Columns.Add("NOMBRE", typeof(string));
+            foreach (string emp in empaques) dt.Columns.Add(emp, typeof(string));
+            dt.Columns.Add("DÍAS",  typeof(string));
+            dt.Columns.Add("TOTAL", typeof(string));
+
+            decimal[] colTotals = new decimal[empaques.Count];
+            int totalDias = 0;
+            decimal grandTotal = 0m;
+
+            var groups = rawData.AsEnumerable()
+                .GroupBy(r => (
+                    Codigo: SafeStr(r, ReportColumns.Codigo),
+                    Nombre: SafeStr(r, ReportColumns.Nombre)))
+                .OrderBy(g => g.Key.Nombre).ThenBy(g => g.Key.Codigo);
+
+            foreach (var g in groups)
+            {
+                DataRow row = dt.NewRow();
+                row["CÓDIGO"] = g.Key.Codigo;
+                row["NOMBRE"] = g.Key.Nombre;
+
+                decimal rowTotal = 0m;
+                for (int i = 0; i < empaques.Count; i++)
+                {
+                    decimal val = g.Where(r => SafeStr(r, ReportColumns.Empaque) == empaques[i])
+                                   .Sum(r => ToDecimal(r[ReportColumns.Cajas]));
+                    row[empaques[i]] = val == 0m ? string.Empty : val.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+                    colTotals[i] += val;
+                    rowTotal += val;
+                }
+
+                int dias = g.Select(r => NormalizeDate(r[ReportColumns.Fecha]))
+                             .Where(d => d != DateTime.MinValue).Distinct().Count();
+                row["DÍAS"]  = dias.ToString();
+                row["TOTAL"] = rowTotal.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+                totalDias += dias;
+                grandTotal += rowTotal;
+                dt.Rows.Add(row);
+            }
+
+            DataRow totRow = dt.NewRow();
+            totRow["CÓDIGO"] = "TOTAL GENERAL";
+            for (int i = 0; i < empaques.Count; i++)
+                totRow[empaques[i]] = colTotals[i] == 0m ? string.Empty
+                    : colTotals[i].ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+            totRow["DÍAS"]  = totalDias.ToString();
+            totRow["TOTAL"] = grandTotal.ToString("0.##", ClsPayrollBoxPerEmployeeReportExcel.CultureEs);
+            dt.Rows.Add(totRow);
+
+            return dt;
+        }
+
+        // ── Helpers para los Build*PreviewDt ─────────────────────────────────
+
+        private static List<string> GetEmpaques(DataTable rawData)
+            => rawData.AsEnumerable()
+                .Select(r => SafeStr(r, ReportColumns.Empaque))
+                .Where(e => !string.IsNullOrWhiteSpace(e))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(e => e, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+        private static string SafeStr(DataRow r, string col)
+            => r.Table.Columns.Contains(col)
+                ? r[col]?.ToString()?.Trim() ?? string.Empty
+                : string.Empty;
+
+        private static decimal ToDecimal(object? v)
+            => v == null || v == DBNull.Value ? 0m : Convert.ToDecimal(v);
+
+        private static string ResolveNumero(List<DataRow> rows, DataTable _)
+        {
+            DateTime lastDate = rows
+                .Select(r => NormalizeDate(r[ReportColumns.Fecha]))
+                .Where(d => d != DateTime.MinValue)
+                .DefaultIfEmpty(DateTime.MinValue).Max();
+
+            if (lastDate == DateTime.MinValue) return string.Empty;
+
+            var lastDayNums = rows
+                .Where(r => NormalizeDate(r[ReportColumns.Fecha]) == lastDate)
+                .Select(r => SafeStr(r, "NUMERO"))
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+
+            if (lastDayNums.Count == 1) return lastDayNums[0];
+
+            foreach (var day in rows
+                .Select(r => NormalizeDate(r[ReportColumns.Fecha]))
+                .Where(d => d != DateTime.MinValue && d < lastDate)
+                .Distinct().OrderByDescending(d => d))
+            {
+                var dayNums = rows
+                    .Where(r => NormalizeDate(r[ReportColumns.Fecha]) == day)
+                    .Select(r => SafeStr(r, "NUMERO"))
+                    .Where(n => !string.IsNullOrWhiteSpace(n))
+                    .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                if (dayNums.Count == 1) return dayNums[0];
+            }
+
+            return lastDayNums.FirstOrDefault() ?? string.Empty;
         }
 
         // ── Vista previa del reporte para el DGV ─────────────────────────────

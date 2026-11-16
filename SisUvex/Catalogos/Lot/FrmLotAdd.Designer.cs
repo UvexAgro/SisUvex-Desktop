@@ -56,6 +56,9 @@
             cboFarm = new ComboBox();
             label5 = new Label();
             label6 = new Label();
+            txbIdRowAxis = new TextBox();
+            cboRowAxis = new ComboBox();
+            lblRowAxis = new Label();
             ((System.ComponentModel.ISupportInitialize)nudHa).BeginInit();
             SuspendLayout();
             // 
@@ -187,7 +190,7 @@
             // 
             // btnAccept
             // 
-            btnAccept.Location = new Point(500, 260);
+            btnAccept.Location = new Point(500, 295);
             btnAccept.Name = "btnAccept";
             btnAccept.Size = new Size(75, 29);
             btnAccept.TabIndex = 11;
@@ -197,7 +200,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(581, 260);
+            btnCancel.Location = new Point(581, 295);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 29);
             btnCancel.TabIndex = 12;
@@ -219,7 +222,7 @@
             // 
             lblHa.AutoSize = true;
             lblHa.Font = new Font("Segoe UI", 12F);
-            lblHa.Location = new Point(81, 221);
+            lblHa.Location = new Point(81, 256);
             lblHa.Name = "lblHa";
             lblHa.Size = new Size(81, 21);
             lblHa.TabIndex = 75;
@@ -230,7 +233,7 @@
             nudHa.DecimalPlaces = 2;
             nudHa.Font = new Font("Segoe UI", 12F);
             nudHa.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            nudHa.Location = new Point(168, 219);
+            nudHa.Location = new Point(168, 254);
             nudHa.Maximum = new decimal(new int[] { 999999, 0, 0, 131072 });
             nudHa.Name = "nudHa";
             nudHa.Size = new Size(85, 29);
@@ -241,7 +244,7 @@
             // 
             lblDate.AutoSize = true;
             lblDate.Font = new Font("Segoe UI", 12F);
-            lblDate.Location = new Point(12, 259);
+            lblDate.Location = new Point(12, 294);
             lblDate.Name = "lblDate";
             lblDate.Size = new Size(150, 21);
             lblDate.TabIndex = 77;
@@ -252,7 +255,7 @@
             dtpDate.CustomFormat = " dd    'de'MMMM'de'   yyyy";
             dtpDate.Font = new Font("Segoe UI", 12F);
             dtpDate.Format = DateTimePickerFormat.Custom;
-            dtpDate.Location = new Point(168, 253);
+            dtpDate.Location = new Point(168, 288);
             dtpDate.Name = "dtpDate";
             dtpDate.RightToLeft = RightToLeft.No;
             dtpDate.Size = new Size(259, 29);
@@ -295,7 +298,7 @@
             // 
             label3.AutoSize = true;
             label3.ForeColor = Color.Crimson;
-            label3.Location = new Point(159, 221);
+            label3.Location = new Point(159, 256);
             label3.Name = "label3";
             label3.Size = new Size(12, 15);
             label3.TabIndex = 82;
@@ -305,7 +308,7 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = Color.Crimson;
-            label4.Location = new Point(159, 255);
+            label4.Location = new Point(159, 290);
             label4.Name = "label4";
             label4.Size = new Size(12, 15);
             label4.TabIndex = 83;
@@ -352,11 +355,45 @@
             label6.TabIndex = 88;
             label6.Text = "Campo:";
             // 
+            // txbIdRowAxis
+            // 
+            txbIdRowAxis.Enabled = false;
+            txbIdRowAxis.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            txbIdRowAxis.Location = new Point(168, 219);
+            txbIdRowAxis.Name = "txbIdRowAxis";
+            txbIdRowAxis.Size = new Size(46, 29);
+            txbIdRowAxis.TabIndex = 9;
+            txbIdRowAxis.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cboRowAxis
+            // 
+            cboRowAxis.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboRowAxis.Font = new Font("Segoe UI", 12F);
+            cboRowAxis.FormattingEnabled = true;
+            cboRowAxis.ItemHeight = 21;
+            cboRowAxis.Location = new Point(220, 219);
+            cboRowAxis.Name = "cboRowAxis";
+            cboRowAxis.Size = new Size(355, 29);
+            cboRowAxis.TabIndex = 10;
+            // 
+            // lblRowAxis
+            // 
+            lblRowAxis.AutoSize = true;
+            lblRowAxis.Font = new Font("Segoe UI", 12F);
+            lblRowAxis.Location = new Point(66, 222);
+            lblRowAxis.Name = "lblRowAxis";
+            lblRowAxis.Size = new Size(96, 21);
+            lblRowAxis.TabIndex = 90;
+            lblRowAxis.Text = "Orientación:";
+            // 
             // FrmLotAdd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(663, 299);
+            ClientSize = new Size(663, 334);
+            Controls.Add(txbIdRowAxis);
+            Controls.Add(cboRowAxis);
+            Controls.Add(lblRowAxis);
             Controls.Add(txbIdFarm);
             Controls.Add(cboFarm);
             Controls.Add(label5);
@@ -426,5 +463,8 @@
         public ComboBox cboFarm;
         private Label label5;
         private Label label6;
+        public TextBox txbIdRowAxis;
+        public ComboBox cboRowAxis;
+        private Label lblRowAxis;
     }
 }

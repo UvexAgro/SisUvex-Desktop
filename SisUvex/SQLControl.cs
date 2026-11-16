@@ -15,6 +15,7 @@ namespace SisUvex
     public class SQLControl
     {
         static public string cadenaConexion = "";
+        public static int currentServer = 1;
         public SqlConnection cnn = new SqlConnection();
         public SqlTransaction transaction;
         public ClsXmlArchivos xml = new ClsXmlArchivos();
@@ -46,16 +47,27 @@ namespace SisUvex
                     MessageBox.Show(e.Message, "[Error : SQLControl]");
                 }
             }
-            server = ClsConfig.Server;
-            dbConn = ClsConfig.DbConn;
-            userConn = ClsConfig.UserConn;
-            passConn = ClsConfig.PassConn;
-            dbWrite = ClsConfig.DbWrite;
-            userWrite = ClsConfig.UserWrite;
-            passWrite = ClsConfig.PassWrite;
-            dbEmployees = ClsConfig.DbEmployees;
+
+            AplicarServidorActual();
         }
 
+        private void AplicarServidorActual()
+        {
+            // Servidor en uso: el que esté seleccionado en la lista de servidores guardados en este equipo.
+            ConexionServidor activo = ClsConfig.ServidorActivo;
+            currentServer = ClsConfig.NumeroServidorActivo;
+
+            server = activo.Server;
+            dbConn = activo.DbConn;
+            userConn = activo.UserConn;
+            passConn = activo.PassConn;
+            dbWrite = activo.DbWrite;
+            userWrite = activo.UserWrite;
+            passWrite = activo.PassWrite;
+            dbEmployees = activo.DbEmployees;
+
+            ClsConfig.AplicarServidorActivo();
+        }
         public string WriteSvr()
         {
             cadenaConexion = $"Data Source = {server}; Initial Catalog = {dbWrite};TrustServerCertificate=true; Persist Security Info = True; User ID = {userWrite}; Password = {passWrite}";
