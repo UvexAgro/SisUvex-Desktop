@@ -28,10 +28,12 @@
             txbServer = new AntdUI.Input();
             txbNombre = new AntdUI.Input();
             btnEliminar = new AntdUI.Button();
+            tagEnUso = new AntdUI.Tag();
             pnlColor = new AntdUI.Panel();
             lblColorTitulo = new AntdUI.Label();
             colorServidor = new AntdUI.ColorPicker();
             lblColorAyuda = new AntdUI.Label();
+            btnUsar = new AntdUI.Button();
             pnlEmpleados = new AntdUI.Panel();
             txbDbEmployees = new AntdUI.Input();
             lblEmpleados = new AntdUI.Label();
@@ -61,8 +63,6 @@
             picDb = new PictureBox();
             pnlSep = new AntdUI.Panel();
             lblTitulo = new AntdUI.Label();
-            tagEnUso = new AntdUI.Tag();
-            btnUsar = new AntdUI.Button();
             lblServer = new AntdUI.Label();
             pnlBarra.SuspendLayout();
             pnlServidor.SuspendLayout();
@@ -79,8 +79,8 @@
             pnlBarra.Back = Color.White;
             pnlBarra.BorderColor = Color.FromArgb(228, 228, 238);
             pnlBarra.BorderWidth = 1F;
-            pnlBarra.Controls.Add(lblEntorno);
             pnlBarra.Controls.Add(tagIndicador);
+            pnlBarra.Controls.Add(lblEntorno);
             pnlBarra.Controls.Add(btnImportar);
             pnlBarra.Controls.Add(btnExportar);
             pnlBarra.Location = new Point(16, 12);
@@ -106,7 +106,7 @@
             tagIndicador.BorderWidth = 0F;
             tagIndicador.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             tagIndicador.ForeColor = Color.FromArgb(47, 125, 40);
-            tagIndicador.Location = new Point(148, 10);
+            tagIndicador.Location = new Point(129, 10);
             tagIndicador.Name = "tagIndicador";
             tagIndicador.Radius = 14;
             tagIndicador.Size = new Size(168, 28);
@@ -190,7 +190,9 @@
             pnlServidor.Controls.Add(txbServer);
             pnlServidor.Controls.Add(txbNombre);
             pnlServidor.Controls.Add(btnEliminar);
+            pnlServidor.Controls.Add(tagEnUso);
             pnlServidor.Controls.Add(pnlColor);
+            pnlServidor.Controls.Add(btnUsar);
             pnlServidor.Controls.Add(pnlEmpleados);
             pnlServidor.Controls.Add(pnlEscritura);
             pnlServidor.Controls.Add(pnlLectura);
@@ -201,7 +203,7 @@
             pnlServidor.Location = new Point(16, 124);
             pnlServidor.Name = "pnlServidor";
             pnlServidor.Radius = 10;
-            pnlServidor.Size = new Size(668, 640);
+            pnlServidor.Size = new Size(668, 453);
             pnlServidor.TabIndex = 4;
             // 
             // txbServer
@@ -210,7 +212,7 @@
             txbServer.Font = new Font("Segoe UI", 9F);
             txbServer.Location = new Point(110, 96);
             txbServer.Name = "txbServer";
-            txbServer.Size = new Size(538, 30);
+            txbServer.Size = new Size(256, 30);
             txbServer.TabIndex = 4;
             // 
             // txbNombre
@@ -219,7 +221,7 @@
             txbNombre.Font = new Font("Segoe UI", 9F);
             txbNombre.Location = new Point(110, 60);
             txbNombre.Name = "txbNombre";
-            txbNombre.Size = new Size(538, 30);
+            txbNombre.Size = new Size(256, 30);
             txbNombre.TabIndex = 2;
             // 
             // btnEliminar
@@ -230,12 +232,25 @@
             btnEliminar.DefaultBorderColor = Color.FromArgb(214, 48, 49);
             btnEliminar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnEliminar.ForeColor = Color.FromArgb(214, 48, 49);
-            btnEliminar.Location = new Point(16, 592);
+            btnEliminar.Location = new Point(16, 410);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(170, 36);
             btnEliminar.TabIndex = 9;
             btnEliminar.Text = "Eliminar servidor";
             btnEliminar.Click += btnEliminar_Click;
+            // 
+            // tagEnUso
+            // 
+            tagEnUso.BackColor = Color.FromArgb(240, 230, 250);
+            tagEnUso.BorderWidth = 0F;
+            tagEnUso.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            tagEnUso.ForeColor = Color.FromArgb(122, 44, 166);
+            tagEnUso.Location = new Point(572, 55);
+            tagEnUso.Name = "tagEnUso";
+            tagEnUso.Radius = 12;
+            tagEnUso.Size = new Size(84, 26);
+            tagEnUso.TabIndex = 3;
+            tagEnUso.Text = "En uso";
             // 
             // pnlColor
             // 
@@ -245,10 +260,10 @@
             pnlColor.Controls.Add(lblColorTitulo);
             pnlColor.Controls.Add(colorServidor);
             pnlColor.Controls.Add(lblColorAyuda);
-            pnlColor.Location = new Point(483, 478);
+            pnlColor.Location = new Point(334, 306);
             pnlColor.Name = "pnlColor";
             pnlColor.Radius = 8;
-            pnlColor.Size = new Size(169, 98);
+            pnlColor.Size = new Size(318, 98);
             pnlColor.TabIndex = 8;
             // 
             // lblColorTitulo
@@ -258,7 +273,7 @@
             lblColorTitulo.ForeColor = Color.FromArgb(122, 44, 166);
             lblColorTitulo.Location = new Point(12, 6);
             lblColorTitulo.Name = "lblColorTitulo";
-            lblColorTitulo.Size = new Size(288, 22);
+            lblColorTitulo.Size = new Size(153, 22);
             lblColorTitulo.TabIndex = 0;
             lblColorTitulo.Text = "Color del servidor";
             // 
@@ -281,6 +296,22 @@
             lblColorAyuda.TabIndex = 2;
             lblColorAyuda.Text = "Identifica este servidor.";
             // 
+            // btnUsar
+            // 
+            btnUsar.BorderWidth = 1.5F;
+            btnUsar.Cursor = Cursors.Hand;
+            btnUsar.DefaultBack = Color.FromArgb(150, 84, 190);
+            btnUsar.DefaultBorderColor = Color.FromArgb(214, 188, 236);
+            btnUsar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnUsar.ForeColor = Color.White;
+            btnUsar.Location = new Point(476, 52);
+            btnUsar.Name = "btnUsar";
+            btnUsar.Radius = 10;
+            btnUsar.Size = new Size(180, 32);
+            btnUsar.TabIndex = 4;
+            btnUsar.Text = "Usar este servidor";
+            btnUsar.Click += btnUsar_Click;
+            // 
             // pnlEmpleados
             // 
             pnlEmpleados.Back = Color.FromArgb(250, 250, 254);
@@ -290,10 +321,10 @@
             pnlEmpleados.Controls.Add(lblEmpleados);
             pnlEmpleados.Controls.Add(lblBdEmp);
             pnlEmpleados.Controls.Add(btnEmpleados);
-            pnlEmpleados.Location = new Point(16, 478);
+            pnlEmpleados.Location = new Point(16, 306);
             pnlEmpleados.Name = "pnlEmpleados";
             pnlEmpleados.Radius = 8;
-            pnlEmpleados.Size = new Size(461, 98);
+            pnlEmpleados.Size = new Size(312, 98);
             pnlEmpleados.TabIndex = 7;
             // 
             // txbDbEmployees
@@ -302,7 +333,7 @@
             txbDbEmployees.Font = new Font("Segoe UI", 9F);
             txbDbEmployees.Location = new Point(99, 30);
             txbDbEmployees.Name = "txbDbEmployees";
-            txbDbEmployees.Size = new Size(347, 30);
+            txbDbEmployees.Size = new Size(201, 30);
             txbDbEmployees.TabIndex = 2;
             // 
             // lblEmpleados
@@ -334,7 +365,7 @@
             btnEmpleados.DefaultBack = Color.White;
             btnEmpleados.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             btnEmpleados.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEmpleados.Location = new Point(324, 64);
+            btnEmpleados.Location = new Point(178, 64);
             btnEmpleados.Name = "btnEmpleados";
             btnEmpleados.Size = new Size(122, 30);
             btnEmpleados.TabIndex = 3;
@@ -354,10 +385,10 @@
             pnlEscritura.Controls.Add(lblUserWrite);
             pnlEscritura.Controls.Add(lblPassWrite);
             pnlEscritura.Controls.Add(btnEscritura);
-            pnlEscritura.Location = new Point(16, 308);
+            pnlEscritura.Location = new Point(334, 138);
             pnlEscritura.Name = "pnlEscritura";
             pnlEscritura.Radius = 8;
-            pnlEscritura.Size = new Size(636, 162);
+            pnlEscritura.Size = new Size(318, 162);
             pnlEscritura.TabIndex = 6;
             // 
             // txbBdWrite
@@ -366,7 +397,7 @@
             txbBdWrite.Font = new Font("Segoe UI", 9F);
             txbBdWrite.Location = new Point(99, 30);
             txbBdWrite.Name = "txbBdWrite";
-            txbBdWrite.Size = new Size(525, 30);
+            txbBdWrite.Size = new Size(207, 30);
             txbBdWrite.TabIndex = 2;
             // 
             // txbUserWrite
@@ -375,7 +406,7 @@
             txbUserWrite.Font = new Font("Segoe UI", 9F);
             txbUserWrite.Location = new Point(99, 62);
             txbUserWrite.Name = "txbUserWrite";
-            txbUserWrite.Size = new Size(525, 30);
+            txbUserWrite.Size = new Size(207, 30);
             txbUserWrite.TabIndex = 4;
             // 
             // txbPassWrite
@@ -384,7 +415,7 @@
             txbPassWrite.Font = new Font("Segoe UI", 9F);
             txbPassWrite.Location = new Point(99, 94);
             txbPassWrite.Name = "txbPassWrite";
-            txbPassWrite.Size = new Size(525, 30);
+            txbPassWrite.Size = new Size(207, 30);
             txbPassWrite.TabIndex = 6;
             txbPassWrite.UseSystemPasswordChar = true;
             // 
@@ -439,7 +470,7 @@
             btnEscritura.DefaultBack = Color.White;
             btnEscritura.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             btnEscritura.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEscritura.Location = new Point(503, 126);
+            btnEscritura.Location = new Point(184, 128);
             btnEscritura.Name = "btnEscritura";
             btnEscritura.Size = new Size(122, 30);
             btnEscritura.TabIndex = 7;
@@ -462,7 +493,7 @@
             pnlLectura.Location = new Point(16, 138);
             pnlLectura.Name = "pnlLectura";
             pnlLectura.Radius = 8;
-            pnlLectura.Size = new Size(636, 162);
+            pnlLectura.Size = new Size(312, 162);
             pnlLectura.TabIndex = 5;
             // 
             // txbBdConn
@@ -471,7 +502,7 @@
             txbBdConn.Font = new Font("Segoe UI", 9F);
             txbBdConn.Location = new Point(99, 30);
             txbBdConn.Name = "txbBdConn";
-            txbBdConn.Size = new Size(525, 30);
+            txbBdConn.Size = new Size(201, 30);
             txbBdConn.TabIndex = 2;
             // 
             // txbUserConn
@@ -480,7 +511,7 @@
             txbUserConn.Font = new Font("Segoe UI", 9F);
             txbUserConn.Location = new Point(99, 62);
             txbUserConn.Name = "txbUserConn";
-            txbUserConn.Size = new Size(525, 30);
+            txbUserConn.Size = new Size(201, 30);
             txbUserConn.TabIndex = 4;
             // 
             // txbPassConn
@@ -489,7 +520,7 @@
             txbPassConn.Font = new Font("Segoe UI", 9F);
             txbPassConn.Location = new Point(99, 94);
             txbPassConn.Name = "txbPassConn";
-            txbPassConn.Size = new Size(525, 30);
+            txbPassConn.Size = new Size(201, 30);
             txbPassConn.TabIndex = 6;
             txbPassConn.UseSystemPasswordChar = true;
             // 
@@ -544,7 +575,7 @@
             btnLectura.DefaultBack = Color.White;
             btnLectura.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             btnLectura.ForeColor = Color.FromArgb(51, 65, 85);
-            btnLectura.Location = new Point(503, 126);
+            btnLectura.Location = new Point(178, 128);
             btnLectura.Name = "btnLectura";
             btnLectura.Size = new Size(122, 30);
             btnLectura.TabIndex = 7;
@@ -559,7 +590,7 @@
             btnGuardar.Cursor = Cursors.Hand;
             btnGuardar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(438, 592);
+            btnGuardar.Location = new Point(438, 410);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(210, 36);
             btnGuardar.TabIndex = 10;
@@ -585,8 +616,6 @@
             pnlHead.Controls.Add(picDb);
             pnlHead.Controls.Add(pnlSep);
             pnlHead.Controls.Add(lblTitulo);
-            pnlHead.Controls.Add(tagEnUso);
-            pnlHead.Controls.Add(btnUsar);
             pnlHead.Location = new Point(0, 0);
             pnlHead.Name = "pnlHead";
             pnlHead.Radius = 10;
@@ -623,35 +652,6 @@
             lblTitulo.TabIndex = 2;
             lblTitulo.Text = "Servidor 1";
             // 
-            // tagEnUso
-            // 
-            tagEnUso.BackColor = Color.FromArgb(240, 230, 250);
-            tagEnUso.BorderWidth = 0F;
-            tagEnUso.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
-            tagEnUso.ForeColor = Color.FromArgb(122, 44, 166);
-            tagEnUso.Location = new Point(570, 10);
-            tagEnUso.Name = "tagEnUso";
-            tagEnUso.Radius = 12;
-            tagEnUso.Size = new Size(84, 26);
-            tagEnUso.TabIndex = 3;
-            tagEnUso.Text = "En uso";
-            // 
-            // btnUsar
-            // 
-            btnUsar.BorderWidth = 1.5F;
-            btnUsar.Cursor = Cursors.Hand;
-            btnUsar.DefaultBack = Color.FromArgb(150, 84, 190);
-            btnUsar.DefaultBorderColor = Color.FromArgb(214, 188, 236);
-            btnUsar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnUsar.ForeColor = Color.White;
-            btnUsar.Location = new Point(474, 7);
-            btnUsar.Name = "btnUsar";
-            btnUsar.Radius = 10;
-            btnUsar.Size = new Size(180, 32);
-            btnUsar.TabIndex = 4;
-            btnUsar.Text = "Usar este servidor";
-            btnUsar.Click += btnUsar_Click;
-            // 
             // lblServer
             // 
             lblServer.BackColor = Color.Transparent;
@@ -661,14 +661,14 @@
             lblServer.Name = "lblServer";
             lblServer.Size = new Size(80, 30);
             lblServer.TabIndex = 3;
-            lblServer.Text = "Servidor:";
+            lblServer.Text = "Instancia:";
             // 
             // FrmConfiguracion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 250);
-            ClientSize = new Size(700, 780);
+            ClientSize = new Size(700, 594);
             Controls.Add(cmbServidores);
             Controls.Add(pnlBarra);
             Controls.Add(lblSeleccionado);
