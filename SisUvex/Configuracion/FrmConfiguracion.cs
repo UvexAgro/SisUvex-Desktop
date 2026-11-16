@@ -1,53 +1,31 @@
 ﻿using System.Data.SqlClient;
 using SisUvex;
+using SisUvex.Inicio;
 
 namespace SisUvex.Configuracion
 {
     public partial class FrmConfiguracion : AntdUI.BaseForm
     {
-        private static readonly Color Morado = Color.FromArgb(122, 44, 166);
-        private static readonly Color MoradoClaro = Color.FromArgb(237, 226, 250);
-        private static readonly Color Verde = Color.FromArgb(72, 158, 44);
-        private static readonly Color VerdeClaro = Color.FromArgb(231, 244, 226);
-        private static readonly Color VerdeTexto = Color.FromArgb(47, 125, 40);
+        private const string Titulo = "Configuración de conexión";
 
         public bool isFrmLoginScreen = true;
 
         private readonly ClsConfig conf = new ClsConfig();
         private bool configuracionCargada;
-        private ColumnaServidor col1 = null!;
-        private ColumnaServidor col2 = null!;
+        private bool cargandoUI;
+        private int indiceSeleccionado;   // posición (desde 0) del servidor que se muestra en la tarjeta
 
         public FrmConfiguracion()
         {
             InitializeComponent();
-            picDb1.Image = CrearIconoBaseDatos(Color.White);
-            picDb2.Image = CrearIconoBaseDatos(Color.White);
-            col1 = new ColumnaServidor
-            {
-                Server = txbServer1,
-                DbConn = txbBdConn1,
-                UserConn = txbUserConn1,
-                PassConn = txbPassConn1,
-                DbWrite = txbBdWrite1,
-                UserWrite = txbUserWrite1,
-                PassWrite = txbPassWrite1,
-                DbEmployees = txbDbEmployees1
-            };
-            col2 = new ColumnaServidor
-            {
-                Server = txbServer2,
-                DbConn = txbBdConn2,
-                UserConn = txbUserConn2,
-                PassConn = txbPassConn2,
-                DbWrite = txbBdWrite2,
-                UserWrite = txbUserWrite2,
-                PassWrite = txbPassWrite2,
-                DbEmployees = txbDbEmployees2
-            };
+            picDb.Image = CrearIconoBaseDatos(Color.White);
+            colorServidor.ValueChanged += colorServidor_ValueChanged;
+
             Cargar();
-            MostrarEntornoActivo();
+            LlenarCombo(ClsConfig.NumeroServidorActivo - 1);
         }
+
+        // ------------------------------------------------------------------ carga / pantalla
 
         private void Cargar()
         {
@@ -57,67 +35,95 @@ namespace SisUvex.Configuracion
                 xml.PutInTempFile();
                 conf.Leer();
                 xml.DeleteXmlConTemp();
-                Llenar(col1, ClsConfig.Servidor1);
-                Llenar(col2, ClsConfig.Servidor2);
                 configuracionCargada = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private static void Llenar(ColumnaServidor columna, ConexionServidor conexion)
+        private static string NombreVisible(ConexionServidor s, int indice)
         {
-            columna.Server.Text = conexion.Server ?? "";
-            columna.DbConn.Text = conexion.DbConn ?? "";
-            columna.UserConn.Text = conexion.UserConn ?? "";
-            columna.PassConn.Text = conexion.PassConn ?? "";
-            columna.DbWrite.Text = conexion.DbWrite ?? "";
-            columna.UserWrite.Text = conexion.UserWrite ?? "";
-            columna.PassWrite.Text = conexion.PassWrite ?? "";
-            columna.DbEmployees.Text = conexion.DbEmployees ?? "";
+            return string.IsNullOrWhiteSpace(s.Nombre) ? $"Servidor {indice + 1}" : s.Nombre.Trim();
         }
 
-        private static void Tomar(ColumnaServidor columna, ConexionServidor conexion)
+        private static string ColorAHex(Color c)
         {
-            conexion.Server = columna.Server.Text;
-            conexion.DbConn = columna.DbConn.Text;
-            conexion.UserConn = columna.UserConn.Text;
-            conexion.PassConn = columna.PassConn.Text;
-            conexion.DbWrite = columna.DbWrite.Text;
-            conexion.UserWrite = columna.UserWrite.Text;
-            conexion.PassWrite = columna.PassWrite.Text;
-            conexion.DbEmployees = columna.DbEmployees.Text;
+            return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
         }
 
-        private static void CopiarPlanos(ConexionServidor conexion)
+        /// <summary>Recarga el combobox con los servidores guardados y muestra el indicado.</summary>
+        private void LlenarCombo(int seleccionar)
         {
-            ClsConfig.Server = conexion.Server ?? "";
-            ClsConfig.DbConn = conexion.DbConn ?? "";
-            ClsConfig.UserConn = conexion.UserConn ?? "";
-            ClsConfig.PassConn = conexion.PassConn ?? "";
-            ClsConfig.DbWrite = conexion.DbWrite ?? "";
-            ClsConfig.UserWrite = conexion.UserWrite ?? "";
-            ClsConfig.PassWrite = conexion.PassWrite ?? "";
-            ClsConfig.DbEmployees = conexion.DbEmployees ?? "";
+            cargandoUI = true;
+            try
+            {
+                cmbServidores.Items.Clear();
+                for (int i = 0; i < ClsConfig.Servidores.Count; i++)
+                    cmbServidores.Items.Add(NombreVisible(ClsConfig.Servidores[i], i));
+
+                seleccionar = Math.Min(Math.Max(seleccionar, 0), ClsConfig.Servidores.Count - 1);
+                cmbServidores.SelectedIndex = seleccionar;
+                indiceSeleccionado = seleccionar;
+            }
+            finally
+            {
+                cargandoUI = false;
+            }
+
+            MostrarServidor(indiceSeleccionado);
+            MostrarServidorActivo();
         }
 
-        private void MostrarEntornoActivo()
+        /// <summary>Muestra en la tarjeta los parámetros del servidor indicado.</summary>
+        private void MostrarServidor(int indice)
         {
-            bool servidor2 = ClsConfig.CurrentServer == 2;
+            ConexionServidor s = ClsConfig.Servidores[indice];
+            bool esActivo = indice + 1 == ClsConfig.NumeroServidorActivo;
 
-            tagIndicador.Text = servidor2 ? "●  Servidor 2" : "●  Servidor 1";
-            tagIndicador.BackColor = servidor2 ? VerdeClaro : MoradoClaro;
-            tagIndicador.ForeColor = servidor2 ? VerdeTexto : Morado;
+            txbNombre.Text = NombreVisible(s, indice);
+            txbServer.Text = s.Server ?? "";
+            txbBdConn.Text = s.DbConn ?? "";
+            txbUserConn.Text = s.UserConn ?? "";
+            txbPassConn.Text = s.PassConn ?? "";
+            txbBdWrite.Text = s.DbWrite ?? "";
+            txbUserWrite.Text = s.UserWrite ?? "";
+            txbPassWrite.Text = s.PassWrite ?? "";
+            txbDbEmployees.Text = s.DbEmployees ?? "";
 
-            btnCambiar.Text = servidor2 ? "Cambiar a Servidor 1" : "Cambiar a Servidor 2";
-            btnCambiar.DefaultBack = servidor2 ? MoradoClaro : VerdeClaro;
-            btnCambiar.DefaultBorderColor = servidor2 ? Morado : Verde;
-            btnCambiar.ForeColor = servidor2 ? Morado : VerdeTexto;
+            colorServidor.Value = s.ObtenerColor();
+            pnlHead.Back = s.ObtenerColor();
+            lblTitulo.Text = NombreVisible(s, indice);
+            lblColorAyuda.Text = indice == 0
+                ? "Servidor 1: la imagen de inicio no se tiñe."
+                : "Tiñe la imagen de la pantalla de inicio.";
 
-            tagEnUso1.Visible = !servidor2;
-            tagEnUso2.Visible = servidor2;
+            tagEnUso.Visible = esActivo;
+            btnUsar.Visible = !esActivo;
+            btnEliminar.Enabled = ClsConfig.Servidores.Count > 1;
+        }
+
+        /// <summary>Indicador superior: nombre y color del servidor en uso.</summary>
+        private void MostrarServidorActivo()
+        {
+            ConexionServidor activo = ClsConfig.ServidorActivo;
+            Color color = activo.ObtenerColor();
+            string texto = "●  " + NombreVisible(activo, ClsConfig.NumeroServidorActivo - 1);
+
+            tagIndicador.Text = texto;
+            tagIndicador.BackColor = GraficosLogin.Mezclar(color, Color.White, 0.85F);
+            tagIndicador.ForeColor = GraficosLogin.Mezclar(color, Color.Black, 0.30F);
+
+            int ancho = TextRenderer.MeasureText(texto, tagIndicador.Font).Width + 36;
+            tagIndicador.Width = Math.Min(Math.Max(ancho, 120), 290);
+        }
+
+        private void colorServidor_ValueChanged(object? sender, EventArgs e)
+        {
+            if (cargandoUI)
+                return;
+            pnlHead.Back = colorServidor.Value;
         }
 
         private static Bitmap CrearIconoBaseDatos(Color color)
@@ -139,147 +145,343 @@ namespace SisUvex.Configuracion
             return bmp;
         }
 
-        private void btnCambiar_Click(object sender, EventArgs e)
+        // ------------------------------------------------------------------ edición
+
+        private bool Igual(ConexionServidor s, int indice)
         {
-            if (!configuracionCargada)
+            return NombreVisible(s, indice) == txbNombre.Text.Trim()
+                && (s.Server ?? "") == txbServer.Text
+                && (s.DbConn ?? "") == txbBdConn.Text
+                && (s.UserConn ?? "") == txbUserConn.Text
+                && (s.PassConn ?? "") == txbPassConn.Text
+                && (s.DbWrite ?? "") == txbBdWrite.Text
+                && (s.UserWrite ?? "") == txbUserWrite.Text
+                && (s.PassWrite ?? "") == txbPassWrite.Text
+                && (s.DbEmployees ?? "") == txbDbEmployees.Text
+                && string.Equals(ColorAHex(s.ObtenerColor()), ColorAHex(colorServidor.Value), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool HayCambiosSinGuardar()
+        {
+            if (indiceSeleccionado < 0 || indiceSeleccionado >= ClsConfig.Servidores.Count)
+                return false;
+            return !Igual(ClsConfig.Servidores[indiceSeleccionado], indiceSeleccionado);
+        }
+
+        private bool ConfirmarDescartarCambios()
+        {
+            if (!HayCambiosSinGuardar())
+                return true;
+
+            return MessageBox.Show("Hay cambios sin guardar en el servidor seleccionado. ¿Desea descartarlos?",
+                Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        private bool VerificarCargada()
+        {
+            if (configuracionCargada)
+                return true;
+
+            MessageBox.Show("No se pudo leer la configuración de conexión.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        private void cmbServidores_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cargandoUI)
+                return;
+
+            int nuevo = cmbServidores.SelectedIndex;
+            if (nuevo < 0 || nuevo == indiceSeleccionado)
+                return;
+
+            // Se pregunta fuera del evento para no interferir con el cierre de la lista desplegable.
+            BeginInvoke(new Action(() =>
             {
-                MessageBox.Show("No se pudo leer la configuración de conexión.", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (!ConfirmarDescartarCambios())
+                {
+                    cargandoUI = true;
+                    cmbServidores.SelectedIndex = indiceSeleccionado;
+                    cargandoUI = false;
+                    return;
+                }
+
+                indiceSeleccionado = nuevo;
+                MostrarServidor(nuevo);
+            }));
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            if (!VerificarCargada() || !ConfirmarDescartarCambios())
+                return;
+
+            ConexionServidor nuevo = ClsConfig.NuevoServidor(ClsConfig.Servidores.Count + 1);
+
+            // El nombre debe ser único.
+            int numero = ClsConfig.Servidores.Count + 1;
+            while (ClsConfig.Servidores.Any((s) => string.Equals(s.Nombre, nuevo.Nombre, StringComparison.OrdinalIgnoreCase)))
+                nuevo.Nombre = $"Servidor {++numero}";
+
+            ClsConfig.Servidores.Add(nuevo);
+            try
+            {
+                Persistir();
+            }
+            catch (Exception ex)
+            {
+                ClsConfig.Servidores.Remove(nuevo);
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            int nuevo = ClsConfig.CurrentServer == 2 ? 1 : 2;
-            string mensaje = HayCambiosSinGuardar()
-                ? $"Hay cambios sin guardar. Se perderán y la aplicación operará en Servidor {nuevo} al reiniciar. ¿Desea continuar?"
-                : $"La aplicación operará en Servidor {nuevo} y se reiniciará. ¿Desea continuar?";
-            if (MessageBox.Show(mensaje, "Configuración de conexión", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            LlenarCombo(ClsConfig.Servidores.Count - 1);
+            txbNombre.Focus();
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            if (!VerificarCargada())
                 return;
 
-            int anterior = ClsConfig.CurrentServer;
+            string nombre = txbNombre.Text.Trim();
+            if (nombre.Length == 0)
+            {
+                MessageBox.Show("Escriba un nombre para identificar el servidor.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txbNombre.Focus();
+                return;
+            }
+
+            for (int i = 0; i < ClsConfig.Servidores.Count; i++)
+            {
+                if (i != indiceSeleccionado && string.Equals(NombreVisible(ClsConfig.Servidores[i], i), nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show($"Ya existe otro servidor llamado \"{nombre}\". Use un nombre distinto.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txbNombre.Focus();
+                    return;
+                }
+            }
+
+            try
+            {
+                bool esActivo = indiceSeleccionado + 1 == ClsConfig.NumeroServidorActivo;
+                ConexionServidor s = ClsConfig.Servidores[indiceSeleccionado];
+                s.Nombre = nombre;
+                s.Color = ColorAHex(colorServidor.Value);
+                s.Server = txbServer.Text;
+                s.DbConn = txbBdConn.Text;
+                s.UserConn = txbUserConn.Text;
+                s.PassConn = txbPassConn.Text;
+                s.DbWrite = txbBdWrite.Text;
+                s.UserWrite = txbUserWrite.Text;
+                s.PassWrite = txbPassWrite.Text;
+                s.DbEmployees = txbDbEmployees.Text;
+                Persistir();
+
+                if (esActivo)
+                {
+                    MessageBox.Show($"Servidor \"{nombre}\" guardado. Se reiniciará la aplicación.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Application.Restart();
+                    return;
+                }
+
+                MessageBox.Show($"Servidor \"{nombre}\" guardado.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LlenarCombo(indiceSeleccionado);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnUsar_Click(object sender, EventArgs e)
+        {
+            if (!VerificarCargada())
+                return;
+
+            int nuevo = indiceSeleccionado + 1;
+            if (nuevo == ClsConfig.NumeroServidorActivo)
+                return;
+
+            string nombre = NombreVisible(ClsConfig.Servidores[indiceSeleccionado], indiceSeleccionado);
+            string mensaje = HayCambiosSinGuardar()
+                ? $"Hay cambios sin guardar. Se perderán y la aplicación operará en \"{nombre}\" al reiniciar. ¿Desea continuar?"
+                : $"La aplicación operará en \"{nombre}\" y se reiniciará. ¿Desea continuar?";
+            if (MessageBox.Show(mensaje, Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            int anterior = ClsConfig.NumeroServidorActivo;
             try
             {
                 ClsConfig.CurrentServer = nuevo;
                 SQLControl.currentServer = nuevo;
                 Persistir();
-                MostrarEntornoActivo();
                 Application.Restart();
             }
             catch (Exception ex)
             {
                 ClsConfig.CurrentServer = anterior;
                 SQLControl.currentServer = anterior;
-                MostrarEntornoActivo();
-                MessageBox.Show(ex.Message, "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClsConfig.AplicarServidorActivo();
+                MostrarServidorActivo();
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnGuardar1_Click(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
-            GuardarServidor(1);
-        }
+            if (!VerificarCargada())
+                return;
 
-        private void btnGuardar2_Click(object sender, EventArgs e)
-        {
-            GuardarServidor(2);
-        }
-
-        private void btnLectura1_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 1 · Lectura", txbServer1.Text, txbBdConn1.Text, txbUserConn1.Text, txbPassConn1.Text);
-        }
-
-        private void btnEscritura1_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 1 · Escritura", txbServer1.Text, txbBdWrite1.Text, txbUserWrite1.Text, txbPassWrite1.Text);
-        }
-
-        private void btnEmpleados1_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 1 · Empleados", txbServer1.Text, txbDbEmployees1.Text, txbUserWrite1.Text, txbPassWrite1.Text);
-        }
-
-        private void btnLectura2_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 2 · Lectura", txbServer2.Text, txbBdConn2.Text, txbUserConn2.Text, txbPassConn2.Text);
-        }
-
-        private void btnEscritura2_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 2 · Escritura", txbServer2.Text, txbBdWrite2.Text, txbUserWrite2.Text, txbPassWrite2.Text);
-        }
-
-        private void btnEmpleados2_Click(object sender, EventArgs e)
-        {
-            Probar("Servidor 2 · Empleados", txbServer2.Text, txbDbEmployees2.Text, txbUserWrite2.Text, txbPassWrite2.Text);
-        }
-
-        private void GuardarServidor(int numero)
-        {
-            if (!configuracionCargada)
+            if (ClsConfig.Servidores.Count <= 1)
             {
-                MessageBox.Show("No se pudo leer la configuración de conexión.", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe existir al menos un servidor configurado.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
+            if (indiceSeleccionado + 1 == ClsConfig.NumeroServidorActivo)
+            {
+                MessageBox.Show("No se puede eliminar el servidor que está en uso. Seleccione otro y use \"Usar este servidor\" primero.",
+                    Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            ConexionServidor s = ClsConfig.Servidores[indiceSeleccionado];
+            string nombre = NombreVisible(s, indiceSeleccionado);
+            if (MessageBox.Show($"¿Eliminar el servidor \"{nombre}\"? Esta acción no se puede deshacer.",
+                Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+
+            int indice = indiceSeleccionado;
+            int activo = ClsConfig.NumeroServidorActivo;
             try
             {
-                bool esActivo = ClsConfig.CurrentServer == numero;
-                Tomar(numero == 2 ? col2 : col1, numero == 2 ? ClsConfig.Servidor2 : ClsConfig.Servidor1);
+                ClsConfig.Servidores.RemoveAt(indice);
+                if (indice + 1 < activo)
+                    ClsConfig.CurrentServer = activo - 1;      // el servidor en uso se recorre una posición
+                SQLControl.currentServer = ClsConfig.NumeroServidorActivo;
                 Persistir();
-
-                if (esActivo)
-                {
-                    MessageBox.Show($"Servidor {numero} guardado. Se reiniciará la aplicación.", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Application.Restart();
-                    return;
-                }
-
-                MessageBox.Show($"Servidor {numero} guardado.", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LlenarCombo(Math.Min(indice, ClsConfig.Servidores.Count - 1));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Cargar();
+                LlenarCombo(ClsConfig.NumeroServidorActivo - 1);
             }
         }
 
+        /// <summary>Escribe en el archivo cifrado de configuración toda la lista de servidores.</summary>
         private void Persistir()
         {
             ClsXmlArchivos xml = new ClsXmlArchivos();
             xml.PutInTempFile();
-            ConexionServidor activo = ClsConfig.CurrentServer == 2 ? ClsConfig.Servidor2 : ClsConfig.Servidor1;
-            CopiarPlanos(activo);
+            ClsConfig.AplicarServidorActivo();
             conf.Guardar();
             xml.PutInConfFile();
         }
 
-        private bool HayCambiosSinGuardar()
+        // ------------------------------------------------------------------ exportar / importar
+
+        private void btnExportar_Click(object sender, EventArgs e)
         {
-            return !Igual(col1, ClsConfig.Servidor1) || !Igual(col2, ClsConfig.Servidor2);
+            if (HayCambiosSinGuardar() &&
+                MessageBox.Show("Hay cambios sin guardar que no se incluirán en el archivo exportado. ¿Desea continuar?",
+                    Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            using SaveFileDialog dialogo = new SaveFileDialog
+            {
+                Title = "Exportar configuración de conexiones",
+                Filter = "Archivo de configuración SisUvex (*.xml)|*.xml",
+                DefaultExt = "xml",
+                AddExtension = true,
+                OverwritePrompt = true,
+                FileName = ClsXmlArchivos.NombreArchivoConfiguracion,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (dialogo.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
+            {
+                ClsXmlArchivos.ExportarConfiguracion(dialogo.FileName);
+                MessageBox.Show($"Configuración exportada correctamente:\n{dialogo.FileName}", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo exportar la configuración.\n{ex.Message}", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private static bool Igual(ColumnaServidor columna, ConexionServidor conexion)
+        private void btnImportar_Click(object sender, EventArgs e)
         {
-            return (conexion.Server ?? "") == columna.Server.Text
-                && (conexion.DbConn ?? "") == columna.DbConn.Text
-                && (conexion.UserConn ?? "") == columna.UserConn.Text
-                && (conexion.PassConn ?? "") == columna.PassConn.Text
-                && (conexion.DbWrite ?? "") == columna.DbWrite.Text
-                && (conexion.UserWrite ?? "") == columna.UserWrite.Text
-                && (conexion.PassWrite ?? "") == columna.PassWrite.Text
-                && (conexion.DbEmployees ?? "") == columna.DbEmployees.Text;
+            using OpenFileDialog dialogo = new OpenFileDialog
+            {
+                Title = "Importar configuración de conexiones",
+                Filter = "Archivo de configuración SisUvex (*.xml)|*.xml",
+                CheckFileExists = true,
+                Multiselect = false,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (dialogo.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            if (!ClsXmlArchivos.ValidarArchivoConfiguracion(dialogo.FileName, out int servidores, out string error))
+            {
+                MessageBox.Show(error, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string mensaje = $"El archivo contiene {servidores} servidor(es). Reemplazará la configuración actual de este equipo " +
+                             $"(se conserva una copia de respaldo) y la aplicación se reiniciará.\n\n¿Desea continuar?";
+            if (MessageBox.Show(mensaje, Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            try
+            {
+                ClsXmlArchivos.ImportarConfiguracion(dialogo.FileName);
+                MessageBox.Show("Configuración importada correctamente. Se reiniciará la aplicación.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Application.Restart();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo importar la configuración.\n{ex.Message}", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void Probar(string titulo, string svr, string bd, string user, string pass)
+        // ------------------------------------------------------------------ pruebas de conexión (no guardan ni cierran)
+
+        private void btnLectura_Click(object sender, EventArgs e)
         {
+            Probar("Lectura", txbServer.Text, txbBdConn.Text, txbUserConn.Text, txbPassConn.Text);
+        }
+
+        private void btnEscritura_Click(object sender, EventArgs e)
+        {
+            Probar("Escritura", txbServer.Text, txbBdWrite.Text, txbUserWrite.Text, txbPassWrite.Text);
+        }
+
+        private void btnEmpleados_Click(object sender, EventArgs e)
+        {
+            Probar("Empleados", txbServer.Text, txbDbEmployees.Text, txbUserWrite.Text, txbPassWrite.Text);
+        }
+
+        private void Probar(string baseDatos, string svr, string bd, string user, string pass)
+        {
+            string titulo = $"{txbNombre.Text.Trim()} · {baseDatos}";
             string cadenaConexion = $"Data Source = {svr}; Initial Catalog = {bd};TrustServerCertificate=true; Persist Security Info = True; User ID = {user}; Password = {pass}";
             using SqlConnection connection = new SqlConnection(cadenaConexion);
             try
             {
                 connection.Open();
-                MessageBox.Show($"Conexión exitosa a SQL Server.\n{titulo}", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Conexión exitosa a SQL Server.\n{titulo}", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al intentar conectar ({titulo}): {ex.Message}", "Configuración de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al intentar conectar ({titulo}): {ex.Message}", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -289,18 +491,6 @@ namespace SisUvex.Configuracion
             {
                 Application.Exit();
             }
-        }
-
-        private sealed class ColumnaServidor
-        {
-            public AntdUI.Input Server { get; set; } = null!;
-            public AntdUI.Input DbConn { get; set; } = null!;
-            public AntdUI.Input UserConn { get; set; } = null!;
-            public AntdUI.Input PassConn { get; set; } = null!;
-            public AntdUI.Input DbWrite { get; set; } = null!;
-            public AntdUI.Input UserWrite { get; set; } = null!;
-            public AntdUI.Input PassWrite { get; set; } = null!;
-            public AntdUI.Input DbEmployees { get; set; } = null!;
         }
     }
 }

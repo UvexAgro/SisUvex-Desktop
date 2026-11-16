@@ -50,14 +50,19 @@ namespace SisUvex.Inicio
                 txbPassword.Focus();
         }
 
-        /// <summary>Muestra qué servidor está en uso: texto de conexión y, para el Servidor 2, la imagen en blanco y negro.</summary>
+        /// <summary>
+        /// Muestra qué servidor está en uso: su nombre, el texto de conexión y, salvo el servidor 1,
+        /// la imagen teñida con el color del servidor.
+        /// </summary>
         private void MostrarServidorActivo()
         {
-            int servidor = ClsConfig.CurrentServer == 2 ? 2 : 1;
+            ConexionServidor activo = ClsConfig.ServidorActivo;
 
-            lblServidorActivo.Text = $"Servidor {servidor}";
+            lblServidorActivo.Text = string.IsNullOrWhiteSpace(activo.Nombre)
+                ? $"Servidor {ClsConfig.NumeroServidorActivo}"
+                : activo.Nombre;
             lblCadenaConexion.Text = $"{ClsConfig.Server}\\{ClsConfig.DbConn} && {ClsConfig.DbWrite}";
-            pnlImagen.EscalaGrises = servidor == 2;
+            pnlImagen.ColorFiltro = ClsConfig.NumeroServidorActivo == 1 ? null : activo.ObtenerColor();
         }
 
         public void ValidarConexion()

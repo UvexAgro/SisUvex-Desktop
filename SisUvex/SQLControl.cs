@@ -53,44 +53,21 @@ namespace SisUvex
 
         private void AplicarServidorActual()
         {
-            currentServer = ClsConfig.CurrentServer == 2 ? 2 : 1;
+            // Servidor en uso: el que esté seleccionado en la lista de servidores guardados en este equipo.
+            ConexionServidor activo = ClsConfig.ServidorActivo;
+            currentServer = ClsConfig.NumeroServidorActivo;
 
-            switch (currentServer)
-            {
-                case 2:
-                    server = ClsConfig.Servidor2.Server;
-                    dbConn = ClsConfig.Servidor2.DbConn;
-                    userConn = ClsConfig.Servidor2.UserConn;
-                    passConn = ClsConfig.Servidor2.PassConn;
-                    dbWrite = ClsConfig.Servidor2.DbWrite;
-                    userWrite = ClsConfig.Servidor2.UserWrite;
-                    passWrite = ClsConfig.Servidor2.PassWrite;
-                    dbEmployees = ClsConfig.Servidor2.DbEmployees;
-                    break;
-                default:
-                    currentServer = 1;
-                    server = ClsConfig.Servidor1.Server;
-                    dbConn = ClsConfig.Servidor1.DbConn;
-                    userConn = ClsConfig.Servidor1.UserConn;
-                    passConn = ClsConfig.Servidor1.PassConn;
-                    dbWrite = ClsConfig.Servidor1.DbWrite;
-                    userWrite = ClsConfig.Servidor1.UserWrite;
-                    passWrite = ClsConfig.Servidor1.PassWrite;
-                    dbEmployees = ClsConfig.Servidor1.DbEmployees;
-                    break;
-            }
+            server = activo.Server;
+            dbConn = activo.DbConn;
+            userConn = activo.UserConn;
+            passConn = activo.PassConn;
+            dbWrite = activo.DbWrite;
+            userWrite = activo.UserWrite;
+            passWrite = activo.PassWrite;
+            dbEmployees = activo.DbEmployees;
 
-            ClsConfig.CurrentServer = currentServer;
-            ClsConfig.Server = server;
-            ClsConfig.DbConn = dbConn;
-            ClsConfig.UserConn = userConn;
-            ClsConfig.PassConn = passConn;
-            ClsConfig.DbWrite = dbWrite;
-            ClsConfig.UserWrite = userWrite;
-            ClsConfig.PassWrite = passWrite;
-            ClsConfig.DbEmployees = dbEmployees;
+            ClsConfig.AplicarServidorActivo();
         }
-
         public string WriteSvr()
         {
             cadenaConexion = $"Data Source = {server}; Initial Catalog = {dbWrite};TrustServerCertificate=true; Persist Security Info = True; User ID = {userWrite}; Password = {passWrite}";
