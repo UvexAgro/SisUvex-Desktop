@@ -22,7 +22,7 @@
             btnImportar = new AntdUI.Button();
             btnExportar = new AntdUI.Button();
             lblSeleccionado = new AntdUI.Label();
-            cmbServidores = new AntdUI.Select();
+            cmbServidores = new SelectorServidores();
             btnAgregar = new AntdUI.Button();
             pnlServidor = new AntdUI.Panel();
             txbServer = new AntdUI.Input();
@@ -164,6 +164,7 @@
             cmbServidores.Name = "cmbServidores";
             cmbServidores.Size = new Size(357, 36);
             cmbServidores.TabIndex = 2;
+            cmbServidores.UseContextMenu = false;
             cmbServidores.SelectedIndexChanged += cmbServidores_SelectedIndexChanged;
             // 
             // btnAgregar
@@ -700,7 +701,7 @@
         private AntdUI.Button btnImportar;
         private AntdUI.Button btnExportar;
         private AntdUI.Label lblSeleccionado;
-        private AntdUI.Select cmbServidores;
+        private SelectorServidores cmbServidores;
         private AntdUI.Button btnAgregar;
         private AntdUI.Panel pnlServidor;
         private AntdUI.Panel pnlHead;

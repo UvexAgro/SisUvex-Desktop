@@ -15,6 +15,11 @@ namespace SisUvex.Configuracion
         private bool cargandoUI;
         private int indiceSeleccionado;   // posición (desde 0) del servidor que se muestra en la tarjeta
 
+        // Servidor nuevo todavía sin guardar: solo existe en pantalla hasta que se pulsa "Guardar cambios".
+        // Se muestra como una opción extra al final del combobox (posición = cantidad de servidores guardados).
+        private ConexionServidor? borrador;
+        private bool EsBorrador => borrador != null && indiceSeleccionado == ClsConfig.Servidores.Count;
+
         public FrmConfiguracion()
         {
             InitializeComponent();
@@ -62,8 +67,11 @@ namespace SisUvex.Configuracion
                 cmbServidores.Items.Clear();
                 for (int i = 0; i < ClsConfig.Servidores.Count; i++)
                     cmbServidores.Items.Add(NombreVisible(ClsConfig.Servidores[i], i));
+                if (borrador != null)
+                    cmbServidores.Items.Add("Nuevo servidor (sin guardar)");
 
-                seleccionar = Math.Min(Math.Max(seleccionar, 0), ClsConfig.Servidores.Count - 1);
+                int total = ClsConfig.Servidores.Count + (borrador != null ? 1 : 0);
+                seleccionar = Math.Min(Math.Max(seleccionar, 0), total - 1);
                 cmbServidores.SelectedIndex = seleccionar;
                 indiceSeleccionado = seleccionar;
             }
@@ -79,8 +87,9 @@ namespace SisUvex.Configuracion
         /// <summary>Muestra en la tarjeta los parámetros del servidor indicado.</summary>
         private void MostrarServidor(int indice)
         {
-            ConexionServidor s = ClsConfig.Servidores[indice];
-            bool esActivo = indice + 1 == ClsConfig.NumeroServidorActivo;
+            bool nuevo = borrador != null && indice == ClsConfig.Servidores.Count;
+            ConexionServidor s = nuevo ? borrador! : ClsConfig.Servidores[indice];
+            bool esActivo = !nuevo && indice + 1 == ClsConfig.NumeroServidorActivo;
 
             txbNombre.Text = NombreVisible(s, indice);
             txbServer.Text = s.Server ?? "";
@@ -100,8 +109,9 @@ namespace SisUvex.Configuracion
                 : "Tiñe la imagen de la pantalla de inicio.";
 
             tagEnUso.Visible = esActivo;
-            btnUsar.Visible = !esActivo;
-            btnEliminar.Enabled = ClsConfig.Servidores.Count > 1;
+            btnUsar.Visible = !esActivo && !nuevo;
+            btnEliminar.Text = nuevo ? "Descartar nuevo" : "Eliminar servidor";
+            btnEliminar.Enabled = nuevo || ClsConfig.Servidores.Count > 1;
         }
 
         /// <summary>Indicador superior: nombre y color del servidor en uso.</summary>
@@ -163,18 +173,26 @@ namespace SisUvex.Configuracion
 
         private bool HayCambiosSinGuardar()
         {
+            if (EsBorrador)
+                return true;    // un servidor nuevo no existe hasta que se guarde
             if (indiceSeleccionado < 0 || indiceSeleccionado >= ClsConfig.Servidores.Count)
                 return false;
             return !Igual(ClsConfig.Servidores[indiceSeleccionado], indiceSeleccionado);
         }
 
+        /// <summary>Si hay algo sin guardar pregunta si se descarta; si se acepta y era un servidor nuevo, lo elimina del combobox.</summary>
         private bool ConfirmarDescartarCambios()
         {
             if (!HayCambiosSinGuardar())
                 return true;
 
-            return MessageBox.Show("Hay cambios sin guardar en el servidor seleccionado. ¿Desea descartarlos?",
-                Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            string mensaje = EsBorrador
+                ? "El servidor nuevo todavía no se ha guardado. Si continúa, no se agregará. ¿Desea descartarlo?"
+                : "Hay cambios sin guardar en el servidor seleccionado. ¿Desea descartarlos?";
+            if (MessageBox.Show(mensaje, Titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return false;
+
+            return true;
         }
 
         private bool VerificarCargada()
@@ -206,6 +224,13 @@ namespace SisUvex.Configuracion
                     return;
                 }
 
+                if (borrador != null)
+                {
+                    borrador = null;       // se descarta el servidor nuevo sin guardar
+                    LlenarCombo(nuevo);
+                    return;
+                }
+
                 indiceSeleccionado = nuevo;
                 MostrarServidor(nuevo);
             }));
@@ -213,32 +238,37 @@ namespace SisUvex.Configuracion
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (!VerificarCargada() || !ConfirmarDescartarCambios())
+            if (!VerificarCargada())
+                return;
+
+            // Solo puede haber un servidor nuevo a la vez: si ya existe el borrador, se vuelve a él.
+            if (borrador != null)
+            {
+                if (!EsBorrador)
+                {
+                    if (!ConfirmarDescartarCambios())
+                        return;
+                    LlenarCombo(ClsConfig.Servidores.Count);
+                }
+                txbNombre.Focus();
+                return;
+            }
+
+            if (!ConfirmarDescartarCambios())
                 return;
 
             ConexionServidor nuevo = ClsConfig.NuevoServidor(ClsConfig.Servidores.Count + 1);
 
-            // El nombre debe ser único.
+            // El nombre sugerido debe ser único.
             int numero = ClsConfig.Servidores.Count + 1;
             while (ClsConfig.Servidores.Any((s) => string.Equals(s.Nombre, nuevo.Nombre, StringComparison.OrdinalIgnoreCase)))
                 nuevo.Nombre = $"Servidor {++numero}";
 
-            ClsConfig.Servidores.Add(nuevo);
-            try
-            {
-                Persistir();
-            }
-            catch (Exception ex)
-            {
-                ClsConfig.Servidores.Remove(nuevo);
-                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            LlenarCombo(ClsConfig.Servidores.Count - 1);
+            // Todavía no se agrega a la lista ni al archivo: solo se muestra en pantalla.
+            borrador = nuevo;
+            LlenarCombo(ClsConfig.Servidores.Count);
             txbNombre.Focus();
         }
-
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (!VerificarCargada())
@@ -260,6 +290,12 @@ namespace SisUvex.Configuracion
                     txbNombre.Focus();
                     return;
                 }
+            }
+
+            if (EsBorrador)
+            {
+                GuardarServidorNuevo(nombre);
+                return;
             }
 
             try
@@ -292,6 +328,38 @@ namespace SisUvex.Configuracion
             {
                 MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>Agrega a la lista (y al archivo) el servidor nuevo. Solo ocurre al pulsar "Guardar cambios".</summary>
+        private void GuardarServidorNuevo(string nombre)
+        {
+            ConexionServidor s = borrador!;
+            s.Nombre = nombre;
+            s.Color = ColorAHex(colorServidor.Value);
+            s.Server = txbServer.Text;
+            s.DbConn = txbBdConn.Text;
+            s.UserConn = txbUserConn.Text;
+            s.PassConn = txbPassConn.Text;
+            s.DbWrite = txbBdWrite.Text;
+            s.UserWrite = txbUserWrite.Text;
+            s.PassWrite = txbPassWrite.Text;
+            s.DbEmployees = txbDbEmployees.Text;
+
+            ClsConfig.Servidores.Add(s);
+            try
+            {
+                Persistir();
+            }
+            catch (Exception ex)
+            {
+                ClsConfig.Servidores.Remove(s);     // no se pudo guardar: sigue siendo un borrador
+                MessageBox.Show(ex.Message, Titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            borrador = null;
+            LlenarCombo(ClsConfig.Servidores.Count - 1);
+            MessageBox.Show($"Servidor \"{nombre}\" agregado.", Titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnUsar_Click(object sender, EventArgs e)
@@ -332,6 +400,14 @@ namespace SisUvex.Configuracion
         {
             if (!VerificarCargada())
                 return;
+
+            if (EsBorrador)
+            {
+                // "Descartar nuevo": el servidor nunca llegó a guardarse.
+                borrador = null;
+                LlenarCombo(ClsConfig.NumeroServidorActivo - 1);
+                return;
+            }
 
             if (ClsConfig.Servidores.Count <= 1)
             {
