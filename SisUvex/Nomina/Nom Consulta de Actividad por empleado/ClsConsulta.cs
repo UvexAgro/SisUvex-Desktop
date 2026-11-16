@@ -352,6 +352,7 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 			return ds;
 		}
+
 		public void CargarActividadesEmpleado(string empleado)
 		{
 			if (string.IsNullOrWhiteSpace(empleado) || empleado == "-")
@@ -378,23 +379,20 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 			DataTable dt = ds.Tables[0].Copy();
 
-
-			// =====================================================
+			// =========================================================
 			// 2. DESGLOSE DE DESCUENTOS
-			// =====================================================
+			// =========================================================
 
 			if (ds.Tables.Count > 2 && ds.Tables[2].Rows.Count > 0)
 			{
 				DataTable descuentos = ds.Tables[2];
 
-				// Encabezado del desglose
 				DataRow filaTitulo = dt.NewRow();
 
 				filaTitulo["ACTIVIDAD"] = "DESGLOSE DE DESCUENTOS";
 
 				dt.Rows.Add(filaTitulo);
 
-				// Agregar cada descuento
 				foreach (DataRow descuento in descuentos.Rows)
 				{
 					DataRow filaDescuento = dt.NewRow();
@@ -412,16 +410,44 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				}
 			}
 
+			// =========================================================
+			// 3. SALDO PENDIENTE DE PRÉSTAMO
+			// =========================================================
+
+			if (ds.Tables.Count > 4 && ds.Tables[4].Rows.Count > 0)
+			{
+				decimal saldoPendiente = 0;
+
+				if (ds.Tables[4].Rows[0]["SALDO_PENDIENTE"] != DBNull.Value)
+				{
+					saldoPendiente = Convert.ToDecimal(
+						ds.Tables[4].Rows[0]["SALDO_PENDIENTE"]);
+				}
+
+				if (saldoPendiente > 0)
+				{
+					DataRow filaSaldo = dt.NewRow();
+
+					filaSaldo["FECHA"] = DBNull.Value;
+					filaSaldo["LOTE"] = "";
+
+					filaSaldo["ACTIVIDAD"] =
+						"SALDO PENDIENTE DE PRÉSTAMO";
+
+					filaSaldo["IMPORTE"] = saldoPendiente;
+
+					dt.Rows.Add(filaSaldo);
+				}
+			}
 
 			// =========================================================
-			// 3. AGREGAR RESUMEN DE NÓMINA
+			// 4. AGREGAR RESUMEN DE NÓMINA
 			// =========================================================
 
 			if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
 			{
 				DataRow resumen = ds.Tables[1].Rows[0];
 
-				// IMPORTE
 				DataRow filaImporte = dt.NewRow();
 
 				filaImporte["ACTIVIDAD"] = "IMPORTE";
@@ -429,8 +455,6 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 				dt.Rows.Add(filaImporte);
 
-
-				// DESCUENTO
 				DataRow filaDescuento = dt.NewRow();
 
 				filaDescuento["ACTIVIDAD"] = "DESCUENTO";
@@ -438,8 +462,6 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 				dt.Rows.Add(filaDescuento);
 
-
-				// TOTAL A PAGAR
 				DataRow filaTotal = dt.NewRow();
 
 				filaTotal["ACTIVIDAD"] = "TOTAL A PAGAR";
@@ -448,15 +470,15 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				dt.Rows.Add(filaTotal);
 			}
 
-
 			// =========================================================
-			// 4. CARGAR DATAGRIDVIEW
+			// 5. CARGAR DATAGRIDVIEW
 			// =========================================================
 
 			frm.dgvNomina.DataSource = dt;
 
 			DiseñarDgvNomina();
 		}
+
 		private void DiseñarDgvNomina()
 		{
 			DataGridView dgv = frm.dgvNomina;
