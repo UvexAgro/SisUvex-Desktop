@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
@@ -177,7 +177,7 @@ namespace SisUvex.Inicio
     public class PanelImagenFondo : Panel
     {
         private Image? _imagen;
-        private bool _escalaGrises;
+        private Color? _colorFiltro;
 
         public PanelImagenFondo()
         {
@@ -188,8 +188,9 @@ namespace SisUvex.Inicio
         [Category("Appearance")]
         public Image? Imagen { get => _imagen; set { _imagen = value; Invalidate(); } }
 
-        [Category("Appearance"), DefaultValue(false)]
-        public bool EscalaGrises { get => _escalaGrises; set { _escalaGrises = value; Invalidate(); } }
+        /// <summary>Color con el que se tiñe la imagen (en tonos de gris). Null = imagen original.</summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Color? ColorFiltro { get => _colorFiltro; set { _colorFiltro = value; Invalidate(); } }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -213,19 +214,23 @@ namespace SisUvex.Inicio
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                 using ImageAttributes atributos = new ImageAttributes();
-                if (_escalaGrises)
+                if (_colorFiltro.HasValue)
                 {
+                    // Blanco y negro "teñido": las sombras toman el color del servidor y las luces siguen blancas.
+                    // salida = gris * (1 - t) + t, con t proporcional a cada componente del color.
+                    Color c = _colorFiltro.Value;
+                    const float fuerza = 0.65F;
+                    float tr = fuerza * c.R / 255F, tg = fuerza * c.G / 255F, tb = fuerza * c.B / 255F;
                     ColorMatrix matriz = new ColorMatrix(new float[][]
                     {
-                        new float[] { 0.299F, 0.299F, 0.299F, 0, 0 },
-                        new float[] { 0.587F, 0.587F, 0.587F, 0, 0 },
-                        new float[] { 0.114F, 0.114F, 0.114F, 0, 0 },
+                        new float[] { 0.299F * (1 - tr), 0.299F * (1 - tg), 0.299F * (1 - tb), 0, 0 },
+                        new float[] { 0.587F * (1 - tr), 0.587F * (1 - tg), 0.587F * (1 - tb), 0, 0 },
+                        new float[] { 0.114F * (1 - tr), 0.114F * (1 - tg), 0.114F * (1 - tb), 0, 0 },
                         new float[] { 0, 0, 0, 1, 0 },
-                        new float[] { 0, 0, 0, 0, 1 }
+                        new float[] { tr, tg, tb, 0, 1 }
                     });
                     atributos.SetColorMatrix(matriz);
-                }
-                atributos.SetWrapMode(WrapMode.TileFlipXY);
+                }                atributos.SetWrapMode(WrapMode.TileFlipXY);
 
                 g.DrawImage(_imagen, new Rectangle(0, 0, Width, Height),
                     origen.X, origen.Y, origen.Width, origen.Height, GraphicsUnit.Pixel, atributos);

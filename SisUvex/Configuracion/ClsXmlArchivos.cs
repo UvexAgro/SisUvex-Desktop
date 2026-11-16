@@ -101,8 +101,9 @@ namespace SisUvex.Configuracion
                 XDocument doc = new XDocument(
                     new XElement("Configuracion",
                         new XElement("currentServer", "1"),
-                        GrupoVacio("servidor1"),
-                        GrupoVacio("servidor2"),
+                        new XElement("servidores",
+                            ClsConfig.GrupoXml("servidor", ClsConfig.NuevoServidor(1))
+                        ),
                         new XElement("lastLogin", "")
                     )
                 );
@@ -118,18 +119,82 @@ namespace SisUvex.Configuracion
             
         }
 
-        private static XElement GrupoVacio(string nombre)
+        public const string ExtensionConfiguracion = ".xml";
+        public const string NombreArchivoConfiguracion = "configuracion.xml";
+
+        /// <summary>Copia el archivo de configuración (cifrado) al destino elegido por el usuario.</summary>
+        public static void ExportarConfiguracion(string destino)
         {
-            return new XElement(nombre,
-                new XElement("server", ""),
-                new XElement("dbConn", ""),
-                new XElement("userConn", ""),
-                new XElement("passConn", ""),
-                new XElement("dbWrite", ""),
-                new XElement("userWrite", ""),
-                new XElement("passWrite", ""),
-                new XElement("dbEmployees", "")
-            );
+            if (!File.Exists(rutaConf))
+                throw new FileNotFoundException("No existe un archivo de configuración para exportar.");
+
+            File.Copy(rutaConf, destino, true);
+        }
+
+        /// <summary>
+        /// Verifica que el archivo sea una configuración válida de SisUvex (extensión, cifrado y estructura).
+        /// Devuelve la cantidad de servidores que contiene.
+        /// </summary>
+        public static bool ValidarArchivoConfiguracion(string archivo, out int servidores, out string error)
+        {
+            servidores = 0;
+            error = "";
+
+            if (!string.Equals(Path.GetExtension(archivo), ExtensionConfiguracion, StringComparison.OrdinalIgnoreCase))
+            {
+                error = $"El archivo debe ser de tipo \"{ExtensionConfiguracion}\".";
+                return false;
+            }
+
+            string temporal = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".tmp");
+            try
+            {
+                DecryptFile(archivo, temporal);
+                XDocument doc = XDocument.Load(temporal);
+                XElement raiz = doc.Element("Configuracion");
+                if (raiz == null)
+                    throw new FormatException("Sin nodo Configuracion");
+
+                XElement contenedor = raiz.Element("servidores");
+                if (contenedor != null)
+                    servidores = contenedor.Elements("servidor").Count();
+                else if (raiz.Element("servidor1") != null || raiz.Element("servidor2") != null)
+                    servidores = (raiz.Element("servidor1") != null ? 1 : 0) + (raiz.Element("servidor2") != null ? 1 : 0);
+                else if (raiz.Element("server") != null && raiz.Element("dbConn") != null)
+                    servidores = 1;
+
+                if (servidores == 0)
+                {
+                    error = "El archivo no contiene ningún servidor configurado.";
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                error = "El archivo no es una configuración válida de SisUvex.";
+                return false;
+            }
+            finally
+            {
+                try { if (File.Exists(temporal)) File.Delete(temporal); } catch (Exception) { }
+            }
+        }
+
+        /// <summary>Guarda el archivo importado con el nombre y en la carpeta que corresponden (respaldando el actual).</summary>
+        public static void ImportarConfiguracion(string archivo)
+        {
+            if (File.Exists(rutaConf))
+                File.Copy(rutaConf, rutaConf + ".antes-importar.bak", true);
+
+            File.Copy(archivo, rutaConf, true);
+            DeleteTemporal();
+        }
+
+        private static void DeleteTemporal()
+        {
+            if (File.Exists(rutaTemp))
+                File.Delete(rutaTemp);
         }
     }
 }

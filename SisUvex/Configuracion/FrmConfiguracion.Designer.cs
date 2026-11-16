@@ -19,84 +19,59 @@
             pnlBarra = new AntdUI.Panel();
             lblEntorno = new AntdUI.Label();
             tagIndicador = new AntdUI.Tag();
-            btnCambiar = new AntdUI.Button();
-            pnlServidor1 = new AntdUI.Panel();
-            lblServer1 = new AntdUI.Label();
-            txbServer1 = new AntdUI.Input();
-            pnlLectura1 = new AntdUI.Panel();
-            lblLectura1 = new AntdUI.Label();
-            lblBdConn1 = new AntdUI.Label();
-            txbBdConn1 = new AntdUI.Input();
-            lblUserConn1 = new AntdUI.Label();
-            txbUserConn1 = new AntdUI.Input();
-            lblPassConn1 = new AntdUI.Label();
-            txbPassConn1 = new AntdUI.Input();
-            btnLectura1 = new AntdUI.Button();
-            pnlEscritura1 = new AntdUI.Panel();
-            lblEscritura1 = new AntdUI.Label();
-            lblBdWrite1 = new AntdUI.Label();
-            txbBdWrite1 = new AntdUI.Input();
-            lblUserWrite1 = new AntdUI.Label();
-            txbUserWrite1 = new AntdUI.Input();
-            lblPassWrite1 = new AntdUI.Label();
-            txbPassWrite1 = new AntdUI.Input();
-            btnEscritura1 = new AntdUI.Button();
-            pnlEmpleados1 = new AntdUI.Panel();
-            lblEmpleados1 = new AntdUI.Label();
-            lblBdEmp1 = new AntdUI.Label();
-            txbDbEmployees1 = new AntdUI.Input();
-            btnEmpleados1 = new AntdUI.Button();
-            btnGuardar1 = new AntdUI.Button();
-            pnlServidor2 = new AntdUI.Panel();
-            pnlHead2 = new AntdUI.Panel();
-            picDb2 = new PictureBox();
-            pnlSep2 = new AntdUI.Panel();
-            lblTitulo2 = new AntdUI.Label();
-            tagEnUso2 = new AntdUI.Tag();
-            lblServer2 = new AntdUI.Label();
-            txbServer2 = new AntdUI.Input();
-            pnlLectura2 = new AntdUI.Panel();
-            lblLectura2 = new AntdUI.Label();
-            lblBdConn2 = new AntdUI.Label();
-            txbBdConn2 = new AntdUI.Input();
-            lblUserConn2 = new AntdUI.Label();
-            txbUserConn2 = new AntdUI.Input();
-            lblPassConn2 = new AntdUI.Label();
-            txbPassConn2 = new AntdUI.Input();
-            btnLectura2 = new AntdUI.Button();
-            pnlEscritura2 = new AntdUI.Panel();
-            lblEscritura2 = new AntdUI.Label();
-            lblBdWrite2 = new AntdUI.Label();
-            txbBdWrite2 = new AntdUI.Input();
-            lblUserWrite2 = new AntdUI.Label();
-            txbUserWrite2 = new AntdUI.Input();
-            lblPassWrite2 = new AntdUI.Label();
-            txbPassWrite2 = new AntdUI.Input();
-            btnEscritura2 = new AntdUI.Button();
-            pnlEmpleados2 = new AntdUI.Panel();
-            lblEmpleados2 = new AntdUI.Label();
-            lblBdEmp2 = new AntdUI.Label();
-            txbDbEmployees2 = new AntdUI.Input();
-            btnEmpleados2 = new AntdUI.Button();
-            btnGuardar2 = new AntdUI.Button();
-            tagEnUso1 = new AntdUI.Tag();
-            lblTitulo1 = new AntdUI.Label();
-            pnlSep1 = new AntdUI.Panel();
-            picDb1 = new PictureBox();
-            pnlHead1 = new AntdUI.Panel();
+            btnImportar = new AntdUI.Button();
+            btnExportar = new AntdUI.Button();
+            lblSeleccionado = new AntdUI.Label();
+            cmbServidores = new SelectorServidores();
+            btnAgregar = new AntdUI.Button();
+            pnlServidor = new AntdUI.Panel();
+            txbServer = new AntdUI.Input();
+            txbNombre = new AntdUI.Input();
+            btnEliminar = new AntdUI.Button();
+            tagEnUso = new AntdUI.Tag();
+            pnlColor = new AntdUI.Panel();
+            lblColorTitulo = new AntdUI.Label();
+            colorServidor = new AntdUI.ColorPicker();
+            lblColorAyuda = new AntdUI.Label();
+            btnUsar = new AntdUI.Button();
+            pnlEmpleados = new AntdUI.Panel();
+            txbDbEmployees = new AntdUI.Input();
+            lblEmpleados = new AntdUI.Label();
+            lblBdEmp = new AntdUI.Label();
+            btnEmpleados = new AntdUI.Button();
+            pnlEscritura = new AntdUI.Panel();
+            txbBdWrite = new AntdUI.Input();
+            txbUserWrite = new AntdUI.Input();
+            txbPassWrite = new AntdUI.Input();
+            lblEscritura = new AntdUI.Label();
+            lblBdWrite = new AntdUI.Label();
+            lblUserWrite = new AntdUI.Label();
+            lblPassWrite = new AntdUI.Label();
+            btnEscritura = new AntdUI.Button();
+            pnlLectura = new AntdUI.Panel();
+            txbBdConn = new AntdUI.Input();
+            txbUserConn = new AntdUI.Input();
+            txbPassConn = new AntdUI.Input();
+            lblLectura = new AntdUI.Label();
+            lblBdConn = new AntdUI.Label();
+            lblUserConn = new AntdUI.Label();
+            lblPassConn = new AntdUI.Label();
+            btnLectura = new AntdUI.Button();
+            btnGuardar = new AntdUI.Button();
+            lblNombre = new AntdUI.Label();
+            pnlHead = new AntdUI.Panel();
+            picDb = new PictureBox();
+            pnlSep = new AntdUI.Panel();
+            lblTitulo = new AntdUI.Label();
+            lblServer = new AntdUI.Label();
             pnlBarra.SuspendLayout();
-            pnlServidor1.SuspendLayout();
-            pnlLectura1.SuspendLayout();
-            pnlEscritura1.SuspendLayout();
-            pnlEmpleados1.SuspendLayout();
-            pnlServidor2.SuspendLayout();
-            pnlHead2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picDb2).BeginInit();
-            pnlLectura2.SuspendLayout();
-            pnlEscritura2.SuspendLayout();
-            pnlEmpleados2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picDb1).BeginInit();
-            pnlHead1.SuspendLayout();
+            pnlServidor.SuspendLayout();
+            pnlColor.SuspendLayout();
+            pnlEmpleados.SuspendLayout();
+            pnlEscritura.SuspendLayout();
+            pnlLectura.SuspendLayout();
+            pnlHead.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picDb).BeginInit();
             SuspendLayout();
             // 
             // pnlBarra
@@ -106,11 +81,12 @@
             pnlBarra.BorderWidth = 1F;
             pnlBarra.Controls.Add(tagIndicador);
             pnlBarra.Controls.Add(lblEntorno);
-            pnlBarra.Controls.Add(btnCambiar);
+            pnlBarra.Controls.Add(btnImportar);
+            pnlBarra.Controls.Add(btnExportar);
             pnlBarra.Location = new Point(16, 12);
             pnlBarra.Name = "pnlBarra";
             pnlBarra.Radius = 10;
-            pnlBarra.Size = new Size(930, 48);
+            pnlBarra.Size = new Size(668, 48);
             pnlBarra.TabIndex = 0;
             // 
             // lblEntorno
@@ -120,809 +96,585 @@
             lblEntorno.ForeColor = Color.FromArgb(30, 41, 59);
             lblEntorno.Location = new Point(16, 10);
             lblEntorno.Name = "lblEntorno";
-            lblEntorno.Size = new Size(130, 26);
+            lblEntorno.Size = new Size(130, 28);
             lblEntorno.TabIndex = 0;
-            lblEntorno.Text = "Entorno activo";
+            lblEntorno.Text = "Servidor activo";
             // 
             // tagIndicador
             // 
-            tagIndicador.BackColor = Color.FromArgb(237, 226, 250);
+            tagIndicador.BackColor = Color.FromArgb(232, 246, 229);
             tagIndicador.BorderWidth = 0F;
             tagIndicador.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            tagIndicador.ForeColor = Color.FromArgb(122, 44, 166);
-            tagIndicador.Location = new Point(115, 10);
+            tagIndicador.ForeColor = Color.FromArgb(47, 125, 40);
+            tagIndicador.Location = new Point(129, 10);
             tagIndicador.Name = "tagIndicador";
             tagIndicador.Radius = 14;
-            tagIndicador.Size = new Size(110, 28);
+            tagIndicador.Size = new Size(168, 28);
             tagIndicador.TabIndex = 1;
             tagIndicador.Text = "●  Servidor 1";
             // 
-            // btnCambiar
-            // 
-            btnCambiar.BorderWidth = 1F;
-            btnCambiar.Cursor = Cursors.Hand;
-            btnCambiar.DefaultBack = Color.FromArgb(232, 246, 229);
-            btnCambiar.DefaultBorderColor = Color.FromArgb(72, 158, 44);
-            btnCambiar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnCambiar.ForeColor = Color.FromArgb(47, 125, 40);
-            btnCambiar.Location = new Point(760, 8);
-            btnCambiar.Name = "btnCambiar";
-            btnCambiar.Size = new Size(162, 32);
-            btnCambiar.TabIndex = 2;
-            btnCambiar.Text = "Cambiar a Servidor 2";
-            btnCambiar.Click += btnCambiar_Click;
-            // 
-            // pnlServidor1
-            // 
-            pnlServidor1.Back = Color.White;
-            pnlServidor1.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlServidor1.BorderWidth = 1F;
-            pnlServidor1.Controls.Add(txbServer1);
-            pnlServidor1.Controls.Add(pnlHead1);
-            pnlServidor1.Controls.Add(lblServer1);
-            pnlServidor1.Controls.Add(pnlLectura1);
-            pnlServidor1.Controls.Add(pnlEscritura1);
-            pnlServidor1.Controls.Add(pnlEmpleados1);
-            pnlServidor1.Controls.Add(btnGuardar1);
-            pnlServidor1.Location = new Point(16, 72);
-            pnlServidor1.Name = "pnlServidor1";
-            pnlServidor1.Radius = 10;
-            pnlServidor1.Size = new Size(462, 582);
-            pnlServidor1.TabIndex = 1;
-            // 
-            // lblServer1
-            // 
-            lblServer1.BackColor = Color.Transparent;
-            lblServer1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblServer1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblServer1.Location = new Point(28, 48);
-            lblServer1.Name = "lblServer1";
-            lblServer1.Size = new Size(90, 26);
-            lblServer1.TabIndex = 1;
-            lblServer1.Text = "Servidor:";
-            // 
-            // txbServer1
-            // 
-            txbServer1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbServer1.Font = new Font("Segoe UI", 9F);
-            txbServer1.Location = new Point(83, 47);
-            txbServer1.Name = "txbServer1";
-            txbServer1.Size = new Size(368, 30);
-            txbServer1.TabIndex = 2;
-            // 
-            // pnlLectura1
-            // 
-            pnlLectura1.Back = Color.FromArgb(250, 250, 254);
-            pnlLectura1.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlLectura1.BorderWidth = 1F;
-            pnlLectura1.Controls.Add(txbBdConn1);
-            pnlLectura1.Controls.Add(txbUserConn1);
-            pnlLectura1.Controls.Add(txbPassConn1);
-            pnlLectura1.Controls.Add(btnLectura1);
-            pnlLectura1.Controls.Add(lblLectura1);
-            pnlLectura1.Controls.Add(lblBdConn1);
-            pnlLectura1.Controls.Add(lblUserConn1);
-            pnlLectura1.Controls.Add(lblPassConn1);
-            pnlLectura1.Location = new Point(16, 84);
-            pnlLectura1.Name = "pnlLectura1";
-            pnlLectura1.Radius = 8;
-            pnlLectura1.Size = new Size(430, 162);
-            pnlLectura1.TabIndex = 3;
-            // 
-            // lblLectura1
-            // 
-            lblLectura1.BackColor = Color.Transparent;
-            lblLectura1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblLectura1.ForeColor = Color.FromArgb(122, 44, 166);
-            lblLectura1.Location = new Point(12, 6);
-            lblLectura1.Name = "lblLectura1";
-            lblLectura1.Size = new Size(300, 22);
-            lblLectura1.TabIndex = 0;
-            lblLectura1.Text = "Lectura";
-            // 
-            // lblBdConn1
-            // 
-            lblBdConn1.BackColor = Color.Transparent;
-            lblBdConn1.Font = new Font("Segoe UI", 9F);
-            lblBdConn1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdConn1.Location = new Point(12, 32);
-            lblBdConn1.Name = "lblBdConn1";
-            lblBdConn1.Size = new Size(108, 26);
-            lblBdConn1.TabIndex = 1;
-            lblBdConn1.Text = "Base de datos:";
-            // 
-            // txbBdConn1
-            // 
-            txbBdConn1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbBdConn1.Font = new Font("Segoe UI", 9F);
-            txbBdConn1.Location = new Point(99, 30);
-            txbBdConn1.Name = "txbBdConn1";
-            txbBdConn1.Size = new Size(324, 30);
-            txbBdConn1.TabIndex = 2;
-            // 
-            // lblUserConn1
-            // 
-            lblUserConn1.BackColor = Color.Transparent;
-            lblUserConn1.Font = new Font("Segoe UI", 9F);
-            lblUserConn1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblUserConn1.Location = new Point(12, 64);
-            lblUserConn1.Name = "lblUserConn1";
-            lblUserConn1.Size = new Size(108, 26);
-            lblUserConn1.TabIndex = 3;
-            lblUserConn1.Text = "Usuario:";
-            // 
-            // txbUserConn1
-            // 
-            txbUserConn1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbUserConn1.Font = new Font("Segoe UI", 9F);
-            txbUserConn1.Location = new Point(99, 62);
-            txbUserConn1.Name = "txbUserConn1";
-            txbUserConn1.Size = new Size(324, 30);
-            txbUserConn1.TabIndex = 4;
-            // 
-            // lblPassConn1
-            // 
-            lblPassConn1.BackColor = Color.Transparent;
-            lblPassConn1.Font = new Font("Segoe UI", 9F);
-            lblPassConn1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblPassConn1.Location = new Point(12, 96);
-            lblPassConn1.Name = "lblPassConn1";
-            lblPassConn1.Size = new Size(108, 26);
-            lblPassConn1.TabIndex = 5;
-            lblPassConn1.Text = "Contraseña:";
-            // 
-            // txbPassConn1
-            // 
-            txbPassConn1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbPassConn1.Font = new Font("Segoe UI", 9F);
-            txbPassConn1.Location = new Point(99, 94);
-            txbPassConn1.Name = "txbPassConn1";
-            txbPassConn1.Size = new Size(324, 30);
-            txbPassConn1.TabIndex = 6;
-            txbPassConn1.UseSystemPasswordChar = true;
-            // 
-            // btnLectura1
-            // 
-            btnLectura1.BorderWidth = 1F;
-            btnLectura1.Cursor = Cursors.Hand;
-            btnLectura1.DefaultBack = Color.White;
-            btnLectura1.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnLectura1.ForeColor = Color.FromArgb(51, 65, 85);
-            btnLectura1.Location = new Point(301, 126);
-            btnLectura1.Name = "btnLectura1";
-            btnLectura1.Size = new Size(122, 30);
-            btnLectura1.TabIndex = 7;
-            btnLectura1.Text = "Probar conexión";
-            btnLectura1.Click += btnLectura1_Click;
-            // 
-            // pnlEscritura1
-            // 
-            pnlEscritura1.Back = Color.FromArgb(250, 250, 254);
-            pnlEscritura1.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlEscritura1.BorderWidth = 1F;
-            pnlEscritura1.Controls.Add(txbBdWrite1);
-            pnlEscritura1.Controls.Add(txbUserWrite1);
-            pnlEscritura1.Controls.Add(txbPassWrite1);
-            pnlEscritura1.Controls.Add(btnEscritura1);
-            pnlEscritura1.Controls.Add(lblEscritura1);
-            pnlEscritura1.Controls.Add(lblBdWrite1);
-            pnlEscritura1.Controls.Add(lblUserWrite1);
-            pnlEscritura1.Controls.Add(lblPassWrite1);
-            pnlEscritura1.Location = new Point(16, 254);
-            pnlEscritura1.Name = "pnlEscritura1";
-            pnlEscritura1.Radius = 8;
-            pnlEscritura1.Size = new Size(430, 162);
-            pnlEscritura1.TabIndex = 4;
-            // 
-            // lblEscritura1
-            // 
-            lblEscritura1.BackColor = Color.Transparent;
-            lblEscritura1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEscritura1.ForeColor = Color.FromArgb(122, 44, 166);
-            lblEscritura1.Location = new Point(12, 6);
-            lblEscritura1.Name = "lblEscritura1";
-            lblEscritura1.Size = new Size(300, 22);
-            lblEscritura1.TabIndex = 0;
-            lblEscritura1.Text = "Escritura";
-            // 
-            // lblBdWrite1
-            // 
-            lblBdWrite1.BackColor = Color.Transparent;
-            lblBdWrite1.Font = new Font("Segoe UI", 9F);
-            lblBdWrite1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdWrite1.Location = new Point(12, 32);
-            lblBdWrite1.Name = "lblBdWrite1";
-            lblBdWrite1.Size = new Size(108, 26);
-            lblBdWrite1.TabIndex = 1;
-            lblBdWrite1.Text = "Base de datos:";
-            // 
-            // txbBdWrite1
-            // 
-            txbBdWrite1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbBdWrite1.Font = new Font("Segoe UI", 9F);
-            txbBdWrite1.Location = new Point(99, 30);
-            txbBdWrite1.Name = "txbBdWrite1";
-            txbBdWrite1.Size = new Size(324, 30);
-            txbBdWrite1.TabIndex = 2;
-            // 
-            // lblUserWrite1
-            // 
-            lblUserWrite1.BackColor = Color.Transparent;
-            lblUserWrite1.Font = new Font("Segoe UI", 9F);
-            lblUserWrite1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblUserWrite1.Location = new Point(12, 64);
-            lblUserWrite1.Name = "lblUserWrite1";
-            lblUserWrite1.Size = new Size(108, 26);
-            lblUserWrite1.TabIndex = 3;
-            lblUserWrite1.Text = "Usuario:";
-            // 
-            // txbUserWrite1
-            // 
-            txbUserWrite1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbUserWrite1.Font = new Font("Segoe UI", 9F);
-            txbUserWrite1.Location = new Point(99, 62);
-            txbUserWrite1.Name = "txbUserWrite1";
-            txbUserWrite1.Size = new Size(324, 30);
-            txbUserWrite1.TabIndex = 4;
-            // 
-            // lblPassWrite1
-            // 
-            lblPassWrite1.BackColor = Color.Transparent;
-            lblPassWrite1.Font = new Font("Segoe UI", 9F);
-            lblPassWrite1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblPassWrite1.Location = new Point(12, 96);
-            lblPassWrite1.Name = "lblPassWrite1";
-            lblPassWrite1.Size = new Size(108, 26);
-            lblPassWrite1.TabIndex = 5;
-            lblPassWrite1.Text = "Contraseña:";
-            // 
-            // txbPassWrite1
-            // 
-            txbPassWrite1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbPassWrite1.Font = new Font("Segoe UI", 9F);
-            txbPassWrite1.Location = new Point(99, 94);
-            txbPassWrite1.Name = "txbPassWrite1";
-            txbPassWrite1.Size = new Size(324, 30);
-            txbPassWrite1.TabIndex = 6;
-            txbPassWrite1.UseSystemPasswordChar = true;
-            // 
-            // btnEscritura1
-            // 
-            btnEscritura1.BorderWidth = 1F;
-            btnEscritura1.Cursor = Cursors.Hand;
-            btnEscritura1.DefaultBack = Color.White;
-            btnEscritura1.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnEscritura1.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEscritura1.Location = new Point(301, 126);
-            btnEscritura1.Name = "btnEscritura1";
-            btnEscritura1.Size = new Size(122, 30);
-            btnEscritura1.TabIndex = 7;
-            btnEscritura1.Text = "Probar conexión";
-            btnEscritura1.Click += btnEscritura1_Click;
-            // 
-            // pnlEmpleados1
-            // 
-            pnlEmpleados1.Back = Color.FromArgb(250, 250, 254);
-            pnlEmpleados1.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlEmpleados1.BorderWidth = 1F;
-            pnlEmpleados1.Controls.Add(txbDbEmployees1);
-            pnlEmpleados1.Controls.Add(btnEmpleados1);
-            pnlEmpleados1.Controls.Add(lblEmpleados1);
-            pnlEmpleados1.Controls.Add(lblBdEmp1);
-            pnlEmpleados1.Location = new Point(16, 424);
-            pnlEmpleados1.Name = "pnlEmpleados1";
-            pnlEmpleados1.Radius = 8;
-            pnlEmpleados1.Size = new Size(430, 98);
-            pnlEmpleados1.TabIndex = 5;
-            // 
-            // lblEmpleados1
-            // 
-            lblEmpleados1.BackColor = Color.Transparent;
-            lblEmpleados1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEmpleados1.ForeColor = Color.FromArgb(122, 44, 166);
-            lblEmpleados1.Location = new Point(12, 6);
-            lblEmpleados1.Name = "lblEmpleados1";
-            lblEmpleados1.Size = new Size(300, 22);
-            lblEmpleados1.TabIndex = 0;
-            lblEmpleados1.Text = "Base de datos de empleados";
-            // 
-            // lblBdEmp1
-            // 
-            lblBdEmp1.BackColor = Color.Transparent;
-            lblBdEmp1.Font = new Font("Segoe UI", 9F);
-            lblBdEmp1.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdEmp1.Location = new Point(12, 32);
-            lblBdEmp1.Name = "lblBdEmp1";
-            lblBdEmp1.Size = new Size(108, 26);
-            lblBdEmp1.TabIndex = 1;
-            lblBdEmp1.Text = "Base de datos:";
-            // 
-            // txbDbEmployees1
-            // 
-            txbDbEmployees1.BorderColor = Color.FromArgb(206, 212, 224);
-            txbDbEmployees1.Font = new Font("Segoe UI", 9F);
-            txbDbEmployees1.Location = new Point(99, 30);
-            txbDbEmployees1.Name = "txbDbEmployees1";
-            txbDbEmployees1.Size = new Size(324, 30);
-            txbDbEmployees1.TabIndex = 2;
-            // 
-            // btnEmpleados1
-            // 
-            btnEmpleados1.BorderWidth = 1F;
-            btnEmpleados1.Cursor = Cursors.Hand;
-            btnEmpleados1.DefaultBack = Color.White;
-            btnEmpleados1.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnEmpleados1.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEmpleados1.Location = new Point(301, 62);
-            btnEmpleados1.Name = "btnEmpleados1";
-            btnEmpleados1.Size = new Size(122, 30);
-            btnEmpleados1.TabIndex = 3;
-            btnEmpleados1.Text = "Probar conexión";
-            btnEmpleados1.Click += btnEmpleados1_Click;
-            // 
-            // btnGuardar1
-            // 
-            btnGuardar1.BackActive = Color.FromArgb(100, 34, 146);
-            btnGuardar1.BackColor = Color.FromArgb(122, 44, 166);
-            btnGuardar1.BackHover = Color.FromArgb(140, 66, 186);
-            btnGuardar1.Cursor = Cursors.Hand;
-            btnGuardar1.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnGuardar1.ForeColor = Color.White;
-            btnGuardar1.Location = new Point(239, 534);
-            btnGuardar1.Name = "btnGuardar1";
-            btnGuardar1.Size = new Size(210, 36);
-            btnGuardar1.TabIndex = 6;
-            btnGuardar1.Text = "Guardar Servidor 1";
-            btnGuardar1.Type = AntdUI.TTypeMini.Primary;
-            btnGuardar1.Click += btnGuardar1_Click;
-            // 
-            // pnlServidor2
-            // 
-            pnlServidor2.Back = Color.White;
-            pnlServidor2.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlServidor2.BorderWidth = 1F;
-            pnlServidor2.Controls.Add(txbServer2);
-            pnlServidor2.Controls.Add(pnlHead2);
-            pnlServidor2.Controls.Add(lblServer2);
-            pnlServidor2.Controls.Add(pnlLectura2);
-            pnlServidor2.Controls.Add(pnlEscritura2);
-            pnlServidor2.Controls.Add(pnlEmpleados2);
-            pnlServidor2.Controls.Add(btnGuardar2);
-            pnlServidor2.Location = new Point(484, 72);
-            pnlServidor2.Name = "pnlServidor2";
-            pnlServidor2.Radius = 10;
-            pnlServidor2.Size = new Size(462, 582);
-            pnlServidor2.TabIndex = 2;
-            // 
-            // pnlHead2
-            // 
-            pnlHead2.Back = Color.FromArgb(72, 158, 44);
-            pnlHead2.Controls.Add(picDb2);
-            pnlHead2.Controls.Add(pnlSep2);
-            pnlHead2.Controls.Add(lblTitulo2);
-            pnlHead2.Controls.Add(tagEnUso2);
-            pnlHead2.Location = new Point(0, 0);
-            pnlHead2.Name = "pnlHead2";
-            pnlHead2.Radius = 10;
-            pnlHead2.RadiusAlign = AntdUI.TAlignRound.Top;
-            pnlHead2.Size = new Size(462, 40);
-            pnlHead2.TabIndex = 0;
-            // 
-            // picDb2
-            // 
-            picDb2.BackColor = Color.Transparent;
-            picDb2.InitialImage = Properties.Resources.database_50;
-            picDb2.Location = new Point(12, 7);
-            picDb2.Name = "picDb2";
-            picDb2.Size = new Size(30, 26);
-            picDb2.SizeMode = PictureBoxSizeMode.CenterImage;
-            picDb2.TabIndex = 0;
-            picDb2.TabStop = false;
-            // 
-            // pnlSep2
-            // 
-            pnlSep2.Back = Color.FromArgb(110, 255, 255, 255);
-            pnlSep2.Location = new Point(50, 10);
-            pnlSep2.Name = "pnlSep2";
-            pnlSep2.Size = new Size(1, 20);
-            pnlSep2.TabIndex = 1;
-            // 
-            // lblTitulo2
-            // 
-            lblTitulo2.BackColor = Color.FromArgb(72, 158, 44);
-            lblTitulo2.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblTitulo2.ForeColor = Color.White;
-            lblTitulo2.Location = new Point(62, 5);
-            lblTitulo2.Name = "lblTitulo2";
-            lblTitulo2.Size = new Size(200, 30);
-            lblTitulo2.TabIndex = 2;
-            lblTitulo2.Text = "Servidor 2";
-            // 
-            // tagEnUso2
-            // 
-            tagEnUso2.BackColor = Color.FromArgb(231, 244, 226);
-            tagEnUso2.BorderWidth = 0F;
-            tagEnUso2.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
-            tagEnUso2.ForeColor = Color.FromArgb(72, 158, 44);
-            tagEnUso2.Location = new Point(375, 8);
-            tagEnUso2.Name = "tagEnUso2";
-            tagEnUso2.Radius = 12;
-            tagEnUso2.Size = new Size(72, 24);
-            tagEnUso2.TabIndex = 3;
-            tagEnUso2.Text = "En uso";
-            tagEnUso2.Visible = false;
-            // 
-            // lblServer2
-            // 
-            lblServer2.BackColor = Color.Transparent;
-            lblServer2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblServer2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblServer2.Location = new Point(27, 48);
-            lblServer2.Name = "lblServer2";
-            lblServer2.Size = new Size(90, 26);
-            lblServer2.TabIndex = 1;
-            lblServer2.Text = "Servidor:";
-            // 
-            // txbServer2
-            // 
-            txbServer2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbServer2.Font = new Font("Segoe UI", 9F);
-            txbServer2.Location = new Point(82, 48);
-            txbServer2.Name = "txbServer2";
-            txbServer2.Size = new Size(368, 30);
-            txbServer2.TabIndex = 2;
-            // 
-            // pnlLectura2
-            // 
-            pnlLectura2.Back = Color.FromArgb(250, 250, 254);
-            pnlLectura2.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlLectura2.BorderWidth = 1F;
-            pnlLectura2.Controls.Add(txbBdConn2);
-            pnlLectura2.Controls.Add(txbUserConn2);
-            pnlLectura2.Controls.Add(txbPassConn2);
-            pnlLectura2.Controls.Add(btnLectura2);
-            pnlLectura2.Controls.Add(lblLectura2);
-            pnlLectura2.Controls.Add(lblBdConn2);
-            pnlLectura2.Controls.Add(lblUserConn2);
-            pnlLectura2.Controls.Add(lblPassConn2);
-            pnlLectura2.Location = new Point(16, 84);
-            pnlLectura2.Name = "pnlLectura2";
-            pnlLectura2.Radius = 8;
-            pnlLectura2.Size = new Size(430, 162);
-            pnlLectura2.TabIndex = 3;
-            // 
-            // lblLectura2
-            // 
-            lblLectura2.BackColor = Color.Transparent;
-            lblLectura2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblLectura2.ForeColor = Color.FromArgb(72, 158, 44);
-            lblLectura2.Location = new Point(12, 6);
-            lblLectura2.Name = "lblLectura2";
-            lblLectura2.Size = new Size(300, 22);
-            lblLectura2.TabIndex = 0;
-            lblLectura2.Text = "Lectura";
-            // 
-            // lblBdConn2
-            // 
-            lblBdConn2.BackColor = Color.Transparent;
-            lblBdConn2.Font = new Font("Segoe UI", 9F);
-            lblBdConn2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdConn2.Location = new Point(12, 32);
-            lblBdConn2.Name = "lblBdConn2";
-            lblBdConn2.Size = new Size(108, 26);
-            lblBdConn2.TabIndex = 1;
-            lblBdConn2.Text = "Base de datos:";
-            // 
-            // txbBdConn2
-            // 
-            txbBdConn2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbBdConn2.Font = new Font("Segoe UI", 9F);
-            txbBdConn2.Location = new Point(99, 30);
-            txbBdConn2.Name = "txbBdConn2";
-            txbBdConn2.Size = new Size(324, 30);
-            txbBdConn2.TabIndex = 2;
-            // 
-            // lblUserConn2
-            // 
-            lblUserConn2.BackColor = Color.Transparent;
-            lblUserConn2.Font = new Font("Segoe UI", 9F);
-            lblUserConn2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblUserConn2.Location = new Point(12, 64);
-            lblUserConn2.Name = "lblUserConn2";
-            lblUserConn2.Size = new Size(108, 26);
-            lblUserConn2.TabIndex = 3;
-            lblUserConn2.Text = "Usuario:";
-            // 
-            // txbUserConn2
-            // 
-            txbUserConn2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbUserConn2.Font = new Font("Segoe UI", 9F);
-            txbUserConn2.Location = new Point(99, 62);
-            txbUserConn2.Name = "txbUserConn2";
-            txbUserConn2.Size = new Size(324, 30);
-            txbUserConn2.TabIndex = 4;
-            // 
-            // lblPassConn2
-            // 
-            lblPassConn2.BackColor = Color.Transparent;
-            lblPassConn2.Font = new Font("Segoe UI", 9F);
-            lblPassConn2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblPassConn2.Location = new Point(12, 96);
-            lblPassConn2.Name = "lblPassConn2";
-            lblPassConn2.Size = new Size(108, 26);
-            lblPassConn2.TabIndex = 5;
-            lblPassConn2.Text = "Contraseña:";
-            // 
-            // txbPassConn2
-            // 
-            txbPassConn2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbPassConn2.Font = new Font("Segoe UI", 9F);
-            txbPassConn2.Location = new Point(99, 94);
-            txbPassConn2.Name = "txbPassConn2";
-            txbPassConn2.Size = new Size(324, 30);
-            txbPassConn2.TabIndex = 6;
-            txbPassConn2.UseSystemPasswordChar = true;
-            // 
-            // btnLectura2
-            // 
-            btnLectura2.BorderWidth = 1F;
-            btnLectura2.Cursor = Cursors.Hand;
-            btnLectura2.DefaultBack = Color.White;
-            btnLectura2.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnLectura2.ForeColor = Color.FromArgb(51, 65, 85);
-            btnLectura2.Location = new Point(301, 126);
-            btnLectura2.Name = "btnLectura2";
-            btnLectura2.Size = new Size(122, 30);
-            btnLectura2.TabIndex = 7;
-            btnLectura2.Text = "Probar conexión";
-            btnLectura2.Click += btnLectura2_Click;
-            // 
-            // pnlEscritura2
-            // 
-            pnlEscritura2.Back = Color.FromArgb(250, 250, 254);
-            pnlEscritura2.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlEscritura2.BorderWidth = 1F;
-            pnlEscritura2.Controls.Add(txbBdWrite2);
-            pnlEscritura2.Controls.Add(txbUserWrite2);
-            pnlEscritura2.Controls.Add(txbPassWrite2);
-            pnlEscritura2.Controls.Add(btnEscritura2);
-            pnlEscritura2.Controls.Add(lblEscritura2);
-            pnlEscritura2.Controls.Add(lblBdWrite2);
-            pnlEscritura2.Controls.Add(lblUserWrite2);
-            pnlEscritura2.Controls.Add(lblPassWrite2);
-            pnlEscritura2.Location = new Point(16, 254);
-            pnlEscritura2.Name = "pnlEscritura2";
-            pnlEscritura2.Radius = 8;
-            pnlEscritura2.Size = new Size(430, 162);
-            pnlEscritura2.TabIndex = 4;
-            // 
-            // lblEscritura2
-            // 
-            lblEscritura2.BackColor = Color.Transparent;
-            lblEscritura2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEscritura2.ForeColor = Color.FromArgb(72, 158, 44);
-            lblEscritura2.Location = new Point(12, 6);
-            lblEscritura2.Name = "lblEscritura2";
-            lblEscritura2.Size = new Size(300, 22);
-            lblEscritura2.TabIndex = 0;
-            lblEscritura2.Text = "Escritura";
-            // 
-            // lblBdWrite2
-            // 
-            lblBdWrite2.BackColor = Color.Transparent;
-            lblBdWrite2.Font = new Font("Segoe UI", 9F);
-            lblBdWrite2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdWrite2.Location = new Point(12, 32);
-            lblBdWrite2.Name = "lblBdWrite2";
-            lblBdWrite2.Size = new Size(108, 26);
-            lblBdWrite2.TabIndex = 1;
-            lblBdWrite2.Text = "Base de datos:";
-            // 
-            // txbBdWrite2
-            // 
-            txbBdWrite2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbBdWrite2.Font = new Font("Segoe UI", 9F);
-            txbBdWrite2.Location = new Point(99, 30);
-            txbBdWrite2.Name = "txbBdWrite2";
-            txbBdWrite2.Size = new Size(324, 30);
-            txbBdWrite2.TabIndex = 2;
-            // 
-            // lblUserWrite2
-            // 
-            lblUserWrite2.BackColor = Color.Transparent;
-            lblUserWrite2.Font = new Font("Segoe UI", 9F);
-            lblUserWrite2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblUserWrite2.Location = new Point(12, 64);
-            lblUserWrite2.Name = "lblUserWrite2";
-            lblUserWrite2.Size = new Size(108, 26);
-            lblUserWrite2.TabIndex = 3;
-            lblUserWrite2.Text = "Usuario:";
-            // 
-            // txbUserWrite2
-            // 
-            txbUserWrite2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbUserWrite2.Font = new Font("Segoe UI", 9F);
-            txbUserWrite2.Location = new Point(99, 62);
-            txbUserWrite2.Name = "txbUserWrite2";
-            txbUserWrite2.Size = new Size(324, 30);
-            txbUserWrite2.TabIndex = 4;
-            // 
-            // lblPassWrite2
-            // 
-            lblPassWrite2.BackColor = Color.Transparent;
-            lblPassWrite2.Font = new Font("Segoe UI", 9F);
-            lblPassWrite2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblPassWrite2.Location = new Point(12, 96);
-            lblPassWrite2.Name = "lblPassWrite2";
-            lblPassWrite2.Size = new Size(108, 26);
-            lblPassWrite2.TabIndex = 5;
-            lblPassWrite2.Text = "Contraseña:";
-            // 
-            // txbPassWrite2
-            // 
-            txbPassWrite2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbPassWrite2.Font = new Font("Segoe UI", 9F);
-            txbPassWrite2.Location = new Point(99, 94);
-            txbPassWrite2.Name = "txbPassWrite2";
-            txbPassWrite2.Size = new Size(324, 30);
-            txbPassWrite2.TabIndex = 6;
-            txbPassWrite2.UseSystemPasswordChar = true;
-            // 
-            // btnEscritura2
-            // 
-            btnEscritura2.BorderWidth = 1F;
-            btnEscritura2.Cursor = Cursors.Hand;
-            btnEscritura2.DefaultBack = Color.White;
-            btnEscritura2.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnEscritura2.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEscritura2.Location = new Point(301, 126);
-            btnEscritura2.Name = "btnEscritura2";
-            btnEscritura2.Size = new Size(122, 30);
-            btnEscritura2.TabIndex = 7;
-            btnEscritura2.Text = "Probar conexión";
-            btnEscritura2.Click += btnEscritura2_Click;
-            // 
-            // pnlEmpleados2
-            // 
-            pnlEmpleados2.Back = Color.FromArgb(250, 250, 254);
-            pnlEmpleados2.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlEmpleados2.BorderWidth = 1F;
-            pnlEmpleados2.Controls.Add(txbDbEmployees2);
-            pnlEmpleados2.Controls.Add(btnEmpleados2);
-            pnlEmpleados2.Controls.Add(lblEmpleados2);
-            pnlEmpleados2.Controls.Add(lblBdEmp2);
-            pnlEmpleados2.Location = new Point(16, 424);
-            pnlEmpleados2.Name = "pnlEmpleados2";
-            pnlEmpleados2.Radius = 8;
-            pnlEmpleados2.Size = new Size(430, 98);
-            pnlEmpleados2.TabIndex = 5;
-            // 
-            // lblEmpleados2
-            // 
-            lblEmpleados2.BackColor = Color.Transparent;
-            lblEmpleados2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEmpleados2.ForeColor = Color.FromArgb(72, 158, 44);
-            lblEmpleados2.Location = new Point(12, 6);
-            lblEmpleados2.Name = "lblEmpleados2";
-            lblEmpleados2.Size = new Size(300, 22);
-            lblEmpleados2.TabIndex = 0;
-            lblEmpleados2.Text = "Base de datos de empleados";
-            // 
-            // lblBdEmp2
-            // 
-            lblBdEmp2.BackColor = Color.Transparent;
-            lblBdEmp2.Font = new Font("Segoe UI", 9F);
-            lblBdEmp2.ForeColor = Color.FromArgb(51, 65, 85);
-            lblBdEmp2.Location = new Point(12, 32);
-            lblBdEmp2.Name = "lblBdEmp2";
-            lblBdEmp2.Size = new Size(108, 26);
-            lblBdEmp2.TabIndex = 1;
-            lblBdEmp2.Text = "Base de datos:";
-            // 
-            // txbDbEmployees2
-            // 
-            txbDbEmployees2.BorderColor = Color.FromArgb(206, 212, 224);
-            txbDbEmployees2.Font = new Font("Segoe UI", 9F);
-            txbDbEmployees2.Location = new Point(99, 30);
-            txbDbEmployees2.Name = "txbDbEmployees2";
-            txbDbEmployees2.Size = new Size(324, 30);
-            txbDbEmployees2.TabIndex = 2;
-            // 
-            // btnEmpleados2
-            // 
-            btnEmpleados2.BorderWidth = 1F;
-            btnEmpleados2.Cursor = Cursors.Hand;
-            btnEmpleados2.DefaultBack = Color.White;
-            btnEmpleados2.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            btnEmpleados2.ForeColor = Color.FromArgb(51, 65, 85);
-            btnEmpleados2.Location = new Point(301, 62);
-            btnEmpleados2.Name = "btnEmpleados2";
-            btnEmpleados2.Size = new Size(122, 30);
-            btnEmpleados2.TabIndex = 3;
-            btnEmpleados2.Text = "Probar conexión";
-            btnEmpleados2.Click += btnEmpleados2_Click;
-            // 
-            // btnGuardar2
-            // 
-            btnGuardar2.BackActive = Color.FromArgb(58, 136, 34);
-            btnGuardar2.BackColor = Color.FromArgb(72, 158, 44);
-            btnGuardar2.BackHover = Color.FromArgb(90, 176, 60);
-            btnGuardar2.Cursor = Cursors.Hand;
-            btnGuardar2.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnGuardar2.ForeColor = Color.White;
-            btnGuardar2.Location = new Point(239, 534);
-            btnGuardar2.Name = "btnGuardar2";
-            btnGuardar2.Size = new Size(210, 36);
-            btnGuardar2.TabIndex = 6;
-            btnGuardar2.Text = "Guardar Servidor 2";
-            btnGuardar2.Type = AntdUI.TTypeMini.Primary;
-            btnGuardar2.Click += btnGuardar2_Click;
-            // 
-            // tagEnUso1
-            // 
-            tagEnUso1.BackColor = Color.FromArgb(240, 230, 250);
-            tagEnUso1.BorderWidth = 0F;
-            tagEnUso1.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
-            tagEnUso1.ForeColor = Color.FromArgb(122, 44, 166);
-            tagEnUso1.Location = new Point(374, 8);
-            tagEnUso1.Name = "tagEnUso1";
-            tagEnUso1.Radius = 12;
-            tagEnUso1.Size = new Size(72, 24);
-            tagEnUso1.TabIndex = 3;
-            tagEnUso1.Text = "En uso";
-            // 
-            // lblTitulo1
-            // 
-            lblTitulo1.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblTitulo1.ForeColor = Color.White;
-            lblTitulo1.Location = new Point(62, 5);
-            lblTitulo1.Name = "lblTitulo1";
-            lblTitulo1.Size = new Size(200, 30);
-            lblTitulo1.TabIndex = 2;
-            lblTitulo1.Text = "Servidor 1";
-            // 
-            // pnlSep1
-            // 
-            pnlSep1.Back = Color.FromArgb(110, 255, 255, 255);
-            pnlSep1.Location = new Point(50, 10);
-            pnlSep1.Name = "pnlSep1";
-            pnlSep1.Size = new Size(1, 20);
-            pnlSep1.TabIndex = 1;
-            // 
-            // picDb1
-            // 
-            picDb1.BackColor = Color.Transparent;
-            picDb1.Location = new Point(12, 7);
-            picDb1.Name = "picDb1";
-            picDb1.Size = new Size(30, 26);
-            picDb1.SizeMode = PictureBoxSizeMode.CenterImage;
-            picDb1.TabIndex = 0;
-            picDb1.TabStop = false;
-            // 
-            // pnlHead1
-            // 
-            pnlHead1.Back = Color.FromArgb(122, 44, 166);
-            pnlHead1.BackColor = Color.Transparent;
-            pnlHead1.Controls.Add(picDb1);
-            pnlHead1.Controls.Add(pnlSep1);
-            pnlHead1.Controls.Add(lblTitulo1);
-            pnlHead1.Controls.Add(tagEnUso1);
-            pnlHead1.Location = new Point(0, 0);
-            pnlHead1.Name = "pnlHead1";
-            pnlHead1.Radius = 10;
-            pnlHead1.RadiusAlign = AntdUI.TAlignRound.Top;
-            pnlHead1.Size = new Size(462, 40);
-            pnlHead1.TabIndex = 0;
+            // btnImportar
+            // 
+            btnImportar.BorderWidth = 1.5F;
+            btnImportar.Cursor = Cursors.Hand;
+            btnImportar.DefaultBack = Color.White;
+            btnImportar.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnImportar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnImportar.ForeColor = Color.FromArgb(122, 44, 166);
+            btnImportar.Location = new Point(452, 8);
+            btnImportar.Name = "btnImportar";
+            btnImportar.Radius = 16;
+            btnImportar.Size = new Size(98, 32);
+            btnImportar.TabIndex = 2;
+            btnImportar.Text = "Importar";
+            btnImportar.Click += btnImportar_Click;
+            // 
+            // btnExportar
+            // 
+            btnExportar.BorderWidth = 1.5F;
+            btnExportar.Cursor = Cursors.Hand;
+            btnExportar.DefaultBack = Color.White;
+            btnExportar.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnExportar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnExportar.ForeColor = Color.FromArgb(122, 44, 166);
+            btnExportar.Location = new Point(558, 8);
+            btnExportar.Name = "btnExportar";
+            btnExportar.Radius = 16;
+            btnExportar.Size = new Size(98, 32);
+            btnExportar.TabIndex = 3;
+            btnExportar.Text = "Exportar";
+            btnExportar.Click += btnExportar_Click;
+            // 
+            // lblSeleccionado
+            // 
+            lblSeleccionado.BackColor = Color.Transparent;
+            lblSeleccionado.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            lblSeleccionado.ForeColor = Color.FromArgb(30, 41, 59);
+            lblSeleccionado.Location = new Point(18, 71);
+            lblSeleccionado.Name = "lblSeleccionado";
+            lblSeleccionado.Size = new Size(180, 36);
+            lblSeleccionado.TabIndex = 1;
+            lblSeleccionado.Text = "Servidor seleccionado";
+            // 
+            // cmbServidores
+            // 
+            cmbServidores.BorderColor = Color.FromArgb(206, 212, 224);
+            cmbServidores.Font = new Font("Segoe UI", 10.5F);
+            cmbServidores.Location = new Point(164, 72);
+            cmbServidores.Name = "cmbServidores";
+            cmbServidores.Size = new Size(357, 36);
+            cmbServidores.TabIndex = 2;
+            cmbServidores.UseContextMenu = false;
+            cmbServidores.SelectedIndexChanged += cmbServidores_SelectedIndexChanged;
+            // 
+            // btnAgregar
+            // 
+            btnAgregar.BorderWidth = 1.5F;
+            btnAgregar.Cursor = Cursors.Hand;
+            btnAgregar.DefaultBack = Color.FromArgb(237, 226, 250);
+            btnAgregar.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnAgregar.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            btnAgregar.ForeColor = Color.FromArgb(122, 44, 166);
+            btnAgregar.Location = new Point(527, 70);
+            btnAgregar.Name = "btnAgregar";
+            btnAgregar.Radius = 10;
+            btnAgregar.Size = new Size(157, 40);
+            btnAgregar.TabIndex = 3;
+            btnAgregar.Text = "+  Agregar servidor";
+            btnAgregar.Click += btnAgregar_Click;
+            // 
+            // pnlServidor
+            // 
+            pnlServidor.Back = Color.White;
+            pnlServidor.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlServidor.BorderWidth = 1F;
+            pnlServidor.Controls.Add(txbServer);
+            pnlServidor.Controls.Add(txbNombre);
+            pnlServidor.Controls.Add(btnEliminar);
+            pnlServidor.Controls.Add(tagEnUso);
+            pnlServidor.Controls.Add(pnlColor);
+            pnlServidor.Controls.Add(btnUsar);
+            pnlServidor.Controls.Add(pnlEmpleados);
+            pnlServidor.Controls.Add(pnlEscritura);
+            pnlServidor.Controls.Add(pnlLectura);
+            pnlServidor.Controls.Add(btnGuardar);
+            pnlServidor.Controls.Add(lblNombre);
+            pnlServidor.Controls.Add(pnlHead);
+            pnlServidor.Controls.Add(lblServer);
+            pnlServidor.Location = new Point(16, 124);
+            pnlServidor.Name = "pnlServidor";
+            pnlServidor.Radius = 10;
+            pnlServidor.Size = new Size(668, 453);
+            pnlServidor.TabIndex = 4;
+            // 
+            // txbServer
+            // 
+            txbServer.BorderColor = Color.FromArgb(206, 212, 224);
+            txbServer.Font = new Font("Segoe UI", 9F);
+            txbServer.Location = new Point(110, 96);
+            txbServer.Name = "txbServer";
+            txbServer.Size = new Size(256, 30);
+            txbServer.TabIndex = 4;
+            // 
+            // txbNombre
+            // 
+            txbNombre.BorderColor = Color.FromArgb(206, 212, 224);
+            txbNombre.Font = new Font("Segoe UI", 9F);
+            txbNombre.Location = new Point(110, 60);
+            txbNombre.Name = "txbNombre";
+            txbNombre.Size = new Size(256, 30);
+            txbNombre.TabIndex = 2;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.BorderWidth = 1F;
+            btnEliminar.Cursor = Cursors.Hand;
+            btnEliminar.DefaultBack = Color.White;
+            btnEliminar.DefaultBorderColor = Color.FromArgb(214, 48, 49);
+            btnEliminar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnEliminar.ForeColor = Color.FromArgb(214, 48, 49);
+            btnEliminar.Location = new Point(16, 410);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(170, 36);
+            btnEliminar.TabIndex = 9;
+            btnEliminar.Text = "Eliminar servidor";
+            btnEliminar.Click += btnEliminar_Click;
+            // 
+            // tagEnUso
+            // 
+            tagEnUso.BackColor = Color.FromArgb(240, 230, 250);
+            tagEnUso.BorderWidth = 0F;
+            tagEnUso.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            tagEnUso.ForeColor = Color.FromArgb(122, 44, 166);
+            tagEnUso.Location = new Point(572, 55);
+            tagEnUso.Name = "tagEnUso";
+            tagEnUso.Radius = 12;
+            tagEnUso.Size = new Size(84, 26);
+            tagEnUso.TabIndex = 3;
+            tagEnUso.Text = "En uso";
+            // 
+            // pnlColor
+            // 
+            pnlColor.Back = Color.FromArgb(250, 250, 254);
+            pnlColor.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlColor.BorderWidth = 1F;
+            pnlColor.Controls.Add(lblColorTitulo);
+            pnlColor.Controls.Add(colorServidor);
+            pnlColor.Controls.Add(lblColorAyuda);
+            pnlColor.Location = new Point(334, 306);
+            pnlColor.Name = "pnlColor";
+            pnlColor.Radius = 8;
+            pnlColor.Size = new Size(318, 98);
+            pnlColor.TabIndex = 8;
+            // 
+            // lblColorTitulo
+            // 
+            lblColorTitulo.BackColor = Color.Transparent;
+            lblColorTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblColorTitulo.ForeColor = Color.FromArgb(122, 44, 166);
+            lblColorTitulo.Location = new Point(12, 6);
+            lblColorTitulo.Name = "lblColorTitulo";
+            lblColorTitulo.Size = new Size(153, 22);
+            lblColorTitulo.TabIndex = 0;
+            lblColorTitulo.Text = "Color del servidor";
+            // 
+            // colorServidor
+            // 
+            colorServidor.Location = new Point(12, 34);
+            colorServidor.Name = "colorServidor";
+            colorServidor.ShowText = true;
+            colorServidor.Size = new Size(150, 32);
+            colorServidor.TabIndex = 1;
+            // 
+            // lblColorAyuda
+            // 
+            lblColorAyuda.BackColor = Color.Transparent;
+            lblColorAyuda.Font = new Font("Segoe UI", 8.25F);
+            lblColorAyuda.ForeColor = Color.FromArgb(100, 116, 139);
+            lblColorAyuda.Location = new Point(12, 68);
+            lblColorAyuda.Name = "lblColorAyuda";
+            lblColorAyuda.Size = new Size(150, 24);
+            lblColorAyuda.TabIndex = 2;
+            lblColorAyuda.Text = "Identifica este servidor.";
+            // 
+            // btnUsar
+            // 
+            btnUsar.BorderWidth = 1.5F;
+            btnUsar.Cursor = Cursors.Hand;
+            btnUsar.DefaultBack = Color.FromArgb(150, 84, 190);
+            btnUsar.DefaultBorderColor = Color.FromArgb(214, 188, 236);
+            btnUsar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnUsar.ForeColor = Color.White;
+            btnUsar.Location = new Point(476, 52);
+            btnUsar.Name = "btnUsar";
+            btnUsar.Radius = 10;
+            btnUsar.Size = new Size(180, 32);
+            btnUsar.TabIndex = 4;
+            btnUsar.Text = "Usar este servidor";
+            btnUsar.Click += btnUsar_Click;
+            // 
+            // pnlEmpleados
+            // 
+            pnlEmpleados.Back = Color.FromArgb(250, 250, 254);
+            pnlEmpleados.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlEmpleados.BorderWidth = 1F;
+            pnlEmpleados.Controls.Add(txbDbEmployees);
+            pnlEmpleados.Controls.Add(lblEmpleados);
+            pnlEmpleados.Controls.Add(lblBdEmp);
+            pnlEmpleados.Controls.Add(btnEmpleados);
+            pnlEmpleados.Location = new Point(16, 306);
+            pnlEmpleados.Name = "pnlEmpleados";
+            pnlEmpleados.Radius = 8;
+            pnlEmpleados.Size = new Size(312, 98);
+            pnlEmpleados.TabIndex = 7;
+            // 
+            // txbDbEmployees
+            // 
+            txbDbEmployees.BorderColor = Color.FromArgb(206, 212, 224);
+            txbDbEmployees.Font = new Font("Segoe UI", 9F);
+            txbDbEmployees.Location = new Point(99, 30);
+            txbDbEmployees.Name = "txbDbEmployees";
+            txbDbEmployees.Size = new Size(201, 30);
+            txbDbEmployees.TabIndex = 2;
+            // 
+            // lblEmpleados
+            // 
+            lblEmpleados.BackColor = Color.Transparent;
+            lblEmpleados.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblEmpleados.ForeColor = Color.FromArgb(122, 44, 166);
+            lblEmpleados.Location = new Point(12, 6);
+            lblEmpleados.Name = "lblEmpleados";
+            lblEmpleados.Size = new Size(288, 22);
+            lblEmpleados.TabIndex = 0;
+            lblEmpleados.Text = "Base de datos de empleados";
+            // 
+            // lblBdEmp
+            // 
+            lblBdEmp.BackColor = Color.Transparent;
+            lblBdEmp.Font = new Font("Segoe UI", 9F);
+            lblBdEmp.ForeColor = Color.FromArgb(51, 65, 85);
+            lblBdEmp.Location = new Point(12, 32);
+            lblBdEmp.Name = "lblBdEmp";
+            lblBdEmp.Size = new Size(108, 26);
+            lblBdEmp.TabIndex = 1;
+            lblBdEmp.Text = "Base de datos:";
+            // 
+            // btnEmpleados
+            // 
+            btnEmpleados.BorderWidth = 1F;
+            btnEmpleados.Cursor = Cursors.Hand;
+            btnEmpleados.DefaultBack = Color.White;
+            btnEmpleados.DefaultBorderColor = Color.FromArgb(206, 212, 224);
+            btnEmpleados.ForeColor = Color.FromArgb(51, 65, 85);
+            btnEmpleados.Location = new Point(178, 64);
+            btnEmpleados.Name = "btnEmpleados";
+            btnEmpleados.Size = new Size(122, 30);
+            btnEmpleados.TabIndex = 3;
+            btnEmpleados.Text = "Probar conexión";
+            btnEmpleados.Click += btnEmpleados_Click;
+            // 
+            // pnlEscritura
+            // 
+            pnlEscritura.Back = Color.FromArgb(250, 250, 254);
+            pnlEscritura.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlEscritura.BorderWidth = 1F;
+            pnlEscritura.Controls.Add(txbBdWrite);
+            pnlEscritura.Controls.Add(txbUserWrite);
+            pnlEscritura.Controls.Add(txbPassWrite);
+            pnlEscritura.Controls.Add(lblEscritura);
+            pnlEscritura.Controls.Add(lblBdWrite);
+            pnlEscritura.Controls.Add(lblUserWrite);
+            pnlEscritura.Controls.Add(lblPassWrite);
+            pnlEscritura.Controls.Add(btnEscritura);
+            pnlEscritura.Location = new Point(334, 138);
+            pnlEscritura.Name = "pnlEscritura";
+            pnlEscritura.Radius = 8;
+            pnlEscritura.Size = new Size(318, 162);
+            pnlEscritura.TabIndex = 6;
+            // 
+            // txbBdWrite
+            // 
+            txbBdWrite.BorderColor = Color.FromArgb(206, 212, 224);
+            txbBdWrite.Font = new Font("Segoe UI", 9F);
+            txbBdWrite.Location = new Point(99, 30);
+            txbBdWrite.Name = "txbBdWrite";
+            txbBdWrite.Size = new Size(207, 30);
+            txbBdWrite.TabIndex = 2;
+            // 
+            // txbUserWrite
+            // 
+            txbUserWrite.BorderColor = Color.FromArgb(206, 212, 224);
+            txbUserWrite.Font = new Font("Segoe UI", 9F);
+            txbUserWrite.Location = new Point(99, 62);
+            txbUserWrite.Name = "txbUserWrite";
+            txbUserWrite.Size = new Size(207, 30);
+            txbUserWrite.TabIndex = 4;
+            // 
+            // txbPassWrite
+            // 
+            txbPassWrite.BorderColor = Color.FromArgb(206, 212, 224);
+            txbPassWrite.Font = new Font("Segoe UI", 9F);
+            txbPassWrite.Location = new Point(99, 94);
+            txbPassWrite.Name = "txbPassWrite";
+            txbPassWrite.Size = new Size(207, 30);
+            txbPassWrite.TabIndex = 6;
+            txbPassWrite.UseSystemPasswordChar = true;
+            // 
+            // lblEscritura
+            // 
+            lblEscritura.BackColor = Color.Transparent;
+            lblEscritura.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblEscritura.ForeColor = Color.FromArgb(122, 44, 166);
+            lblEscritura.Location = new Point(12, 6);
+            lblEscritura.Name = "lblEscritura";
+            lblEscritura.Size = new Size(612, 22);
+            lblEscritura.TabIndex = 0;
+            lblEscritura.Text = "Escritura";
+            // 
+            // lblBdWrite
+            // 
+            lblBdWrite.BackColor = Color.Transparent;
+            lblBdWrite.Font = new Font("Segoe UI", 9F);
+            lblBdWrite.ForeColor = Color.FromArgb(51, 65, 85);
+            lblBdWrite.Location = new Point(12, 32);
+            lblBdWrite.Name = "lblBdWrite";
+            lblBdWrite.Size = new Size(108, 26);
+            lblBdWrite.TabIndex = 1;
+            lblBdWrite.Text = "Base de datos:";
+            // 
+            // lblUserWrite
+            // 
+            lblUserWrite.BackColor = Color.Transparent;
+            lblUserWrite.Font = new Font("Segoe UI", 9F);
+            lblUserWrite.ForeColor = Color.FromArgb(51, 65, 85);
+            lblUserWrite.Location = new Point(12, 64);
+            lblUserWrite.Name = "lblUserWrite";
+            lblUserWrite.Size = new Size(108, 26);
+            lblUserWrite.TabIndex = 3;
+            lblUserWrite.Text = "Usuario:";
+            // 
+            // lblPassWrite
+            // 
+            lblPassWrite.BackColor = Color.Transparent;
+            lblPassWrite.Font = new Font("Segoe UI", 9F);
+            lblPassWrite.ForeColor = Color.FromArgb(51, 65, 85);
+            lblPassWrite.Location = new Point(12, 96);
+            lblPassWrite.Name = "lblPassWrite";
+            lblPassWrite.Size = new Size(108, 26);
+            lblPassWrite.TabIndex = 5;
+            lblPassWrite.Text = "Contraseña:";
+            // 
+            // btnEscritura
+            // 
+            btnEscritura.BorderWidth = 1F;
+            btnEscritura.Cursor = Cursors.Hand;
+            btnEscritura.DefaultBack = Color.White;
+            btnEscritura.DefaultBorderColor = Color.FromArgb(206, 212, 224);
+            btnEscritura.ForeColor = Color.FromArgb(51, 65, 85);
+            btnEscritura.Location = new Point(184, 128);
+            btnEscritura.Name = "btnEscritura";
+            btnEscritura.Size = new Size(122, 30);
+            btnEscritura.TabIndex = 7;
+            btnEscritura.Text = "Probar conexión";
+            btnEscritura.Click += btnEscritura_Click;
+            // 
+            // pnlLectura
+            // 
+            pnlLectura.Back = Color.FromArgb(250, 250, 254);
+            pnlLectura.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlLectura.BorderWidth = 1F;
+            pnlLectura.Controls.Add(txbBdConn);
+            pnlLectura.Controls.Add(txbUserConn);
+            pnlLectura.Controls.Add(txbPassConn);
+            pnlLectura.Controls.Add(lblLectura);
+            pnlLectura.Controls.Add(lblBdConn);
+            pnlLectura.Controls.Add(lblUserConn);
+            pnlLectura.Controls.Add(lblPassConn);
+            pnlLectura.Controls.Add(btnLectura);
+            pnlLectura.Location = new Point(16, 138);
+            pnlLectura.Name = "pnlLectura";
+            pnlLectura.Radius = 8;
+            pnlLectura.Size = new Size(312, 162);
+            pnlLectura.TabIndex = 5;
+            // 
+            // txbBdConn
+            // 
+            txbBdConn.BorderColor = Color.FromArgb(206, 212, 224);
+            txbBdConn.Font = new Font("Segoe UI", 9F);
+            txbBdConn.Location = new Point(99, 30);
+            txbBdConn.Name = "txbBdConn";
+            txbBdConn.Size = new Size(201, 30);
+            txbBdConn.TabIndex = 2;
+            // 
+            // txbUserConn
+            // 
+            txbUserConn.BorderColor = Color.FromArgb(206, 212, 224);
+            txbUserConn.Font = new Font("Segoe UI", 9F);
+            txbUserConn.Location = new Point(99, 62);
+            txbUserConn.Name = "txbUserConn";
+            txbUserConn.Size = new Size(201, 30);
+            txbUserConn.TabIndex = 4;
+            // 
+            // txbPassConn
+            // 
+            txbPassConn.BorderColor = Color.FromArgb(206, 212, 224);
+            txbPassConn.Font = new Font("Segoe UI", 9F);
+            txbPassConn.Location = new Point(99, 94);
+            txbPassConn.Name = "txbPassConn";
+            txbPassConn.Size = new Size(201, 30);
+            txbPassConn.TabIndex = 6;
+            txbPassConn.UseSystemPasswordChar = true;
+            // 
+            // lblLectura
+            // 
+            lblLectura.BackColor = Color.Transparent;
+            lblLectura.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblLectura.ForeColor = Color.FromArgb(122, 44, 166);
+            lblLectura.Location = new Point(12, 6);
+            lblLectura.Name = "lblLectura";
+            lblLectura.Size = new Size(612, 22);
+            lblLectura.TabIndex = 0;
+            lblLectura.Text = "Lectura";
+            // 
+            // lblBdConn
+            // 
+            lblBdConn.BackColor = Color.Transparent;
+            lblBdConn.Font = new Font("Segoe UI", 9F);
+            lblBdConn.ForeColor = Color.FromArgb(51, 65, 85);
+            lblBdConn.Location = new Point(12, 32);
+            lblBdConn.Name = "lblBdConn";
+            lblBdConn.Size = new Size(108, 26);
+            lblBdConn.TabIndex = 1;
+            lblBdConn.Text = "Base de datos:";
+            // 
+            // lblUserConn
+            // 
+            lblUserConn.BackColor = Color.Transparent;
+            lblUserConn.Font = new Font("Segoe UI", 9F);
+            lblUserConn.ForeColor = Color.FromArgb(51, 65, 85);
+            lblUserConn.Location = new Point(12, 64);
+            lblUserConn.Name = "lblUserConn";
+            lblUserConn.Size = new Size(108, 26);
+            lblUserConn.TabIndex = 3;
+            lblUserConn.Text = "Usuario:";
+            // 
+            // lblPassConn
+            // 
+            lblPassConn.BackColor = Color.Transparent;
+            lblPassConn.Font = new Font("Segoe UI", 9F);
+            lblPassConn.ForeColor = Color.FromArgb(51, 65, 85);
+            lblPassConn.Location = new Point(12, 96);
+            lblPassConn.Name = "lblPassConn";
+            lblPassConn.Size = new Size(108, 26);
+            lblPassConn.TabIndex = 5;
+            lblPassConn.Text = "Contraseña:";
+            // 
+            // btnLectura
+            // 
+            btnLectura.BorderWidth = 1F;
+            btnLectura.Cursor = Cursors.Hand;
+            btnLectura.DefaultBack = Color.White;
+            btnLectura.DefaultBorderColor = Color.FromArgb(206, 212, 224);
+            btnLectura.ForeColor = Color.FromArgb(51, 65, 85);
+            btnLectura.Location = new Point(178, 128);
+            btnLectura.Name = "btnLectura";
+            btnLectura.Size = new Size(122, 30);
+            btnLectura.TabIndex = 7;
+            btnLectura.Text = "Probar conexión";
+            btnLectura.Click += btnLectura_Click;
+            // 
+            // btnGuardar
+            // 
+            btnGuardar.BackActive = Color.FromArgb(100, 34, 146);
+            btnGuardar.BackColor = Color.FromArgb(122, 44, 166);
+            btnGuardar.BackHover = Color.FromArgb(140, 66, 186);
+            btnGuardar.Cursor = Cursors.Hand;
+            btnGuardar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnGuardar.ForeColor = Color.White;
+            btnGuardar.Location = new Point(438, 410);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(210, 36);
+            btnGuardar.TabIndex = 10;
+            btnGuardar.Text = "Guardar cambios";
+            btnGuardar.Type = AntdUI.TTypeMini.Primary;
+            btnGuardar.Click += btnGuardar_Click;
+            // 
+            // lblNombre
+            // 
+            lblNombre.BackColor = Color.Transparent;
+            lblNombre.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblNombre.ForeColor = Color.FromArgb(51, 65, 85);
+            lblNombre.Location = new Point(28, 60);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(80, 30);
+            lblNombre.TabIndex = 1;
+            lblNombre.Text = "Nombre:";
+            // 
+            // pnlHead
+            // 
+            pnlHead.Back = Color.FromArgb(122, 44, 166);
+            pnlHead.BackColor = Color.Transparent;
+            pnlHead.Controls.Add(picDb);
+            pnlHead.Controls.Add(pnlSep);
+            pnlHead.Controls.Add(lblTitulo);
+            pnlHead.Location = new Point(0, 0);
+            pnlHead.Name = "pnlHead";
+            pnlHead.Radius = 10;
+            pnlHead.RadiusAlign = AntdUI.TAlignRound.Top;
+            pnlHead.Size = new Size(668, 46);
+            pnlHead.TabIndex = 0;
+            // 
+            // picDb
+            // 
+            picDb.BackColor = Color.Transparent;
+            picDb.Location = new Point(12, 10);
+            picDb.Name = "picDb";
+            picDb.Size = new Size(30, 26);
+            picDb.SizeMode = PictureBoxSizeMode.CenterImage;
+            picDb.TabIndex = 0;
+            picDb.TabStop = false;
+            // 
+            // pnlSep
+            // 
+            pnlSep.Back = Color.FromArgb(255, 255, 255);
+            pnlSep.Location = new Point(50, 13);
+            pnlSep.Name = "pnlSep";
+            pnlSep.Size = new Size(1, 20);
+            pnlSep.TabIndex = 1;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.BackColor = Color.Transparent;
+            lblTitulo.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.White;
+            lblTitulo.Location = new Point(62, 8);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(400, 30);
+            lblTitulo.TabIndex = 2;
+            lblTitulo.Text = "Servidor 1";
+            // 
+            // lblServer
+            // 
+            lblServer.BackColor = Color.Transparent;
+            lblServer.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblServer.ForeColor = Color.FromArgb(51, 65, 85);
+            lblServer.Location = new Point(28, 96);
+            lblServer.Name = "lblServer";
+            lblServer.Size = new Size(80, 30);
+            lblServer.TabIndex = 3;
+            lblServer.Text = "Instancia:";
             // 
             // FrmConfiguracion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 250);
-            ClientSize = new Size(960, 670);
+            ClientSize = new Size(700, 594);
+            Controls.Add(cmbServidores);
             Controls.Add(pnlBarra);
-            Controls.Add(pnlServidor1);
-            Controls.Add(pnlServidor2);
+            Controls.Add(lblSeleccionado);
+            Controls.Add(btnAgregar);
+            Controls.Add(pnlServidor);
             Font = new Font("Segoe UI", 9F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -933,88 +685,63 @@
             Text = "Configuración de conexiones";
             FormClosing += FrmConfiguracion_FormClosing;
             pnlBarra.ResumeLayout(false);
-            pnlServidor1.ResumeLayout(false);
-            pnlLectura1.ResumeLayout(false);
-            pnlEscritura1.ResumeLayout(false);
-            pnlEmpleados1.ResumeLayout(false);
-            pnlServidor2.ResumeLayout(false);
-            pnlHead2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picDb2).EndInit();
-            pnlLectura2.ResumeLayout(false);
-            pnlEscritura2.ResumeLayout(false);
-            pnlEmpleados2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picDb1).EndInit();
-            pnlHead1.ResumeLayout(false);
+            pnlServidor.ResumeLayout(false);
+            pnlColor.ResumeLayout(false);
+            pnlEmpleados.ResumeLayout(false);
+            pnlEscritura.ResumeLayout(false);
+            pnlLectura.ResumeLayout(false);
+            pnlHead.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picDb).EndInit();
             ResumeLayout(false);
         }
 
         private AntdUI.Panel pnlBarra;
         private AntdUI.Label lblEntorno;
         private AntdUI.Tag tagIndicador;
-        private AntdUI.Button btnCambiar;
-        private AntdUI.Panel pnlServidor1;
-        private AntdUI.Label lblServer1;
-        private AntdUI.Input txbServer1;
-        private AntdUI.Panel pnlLectura1;
-        private AntdUI.Label lblLectura1;
-        private AntdUI.Label lblBdConn1;
-        private AntdUI.Input txbBdConn1;
-        private AntdUI.Label lblUserConn1;
-        private AntdUI.Input txbUserConn1;
-        private AntdUI.Label lblPassConn1;
-        private AntdUI.Input txbPassConn1;
-        private AntdUI.Button btnLectura1;
-        private AntdUI.Panel pnlEscritura1;
-        private AntdUI.Label lblEscritura1;
-        private AntdUI.Label lblBdWrite1;
-        private AntdUI.Input txbBdWrite1;
-        private AntdUI.Label lblUserWrite1;
-        private AntdUI.Input txbUserWrite1;
-        private AntdUI.Label lblPassWrite1;
-        private AntdUI.Input txbPassWrite1;
-        private AntdUI.Button btnEscritura1;
-        private AntdUI.Panel pnlEmpleados1;
-        private AntdUI.Label lblEmpleados1;
-        private AntdUI.Label lblBdEmp1;
-        private AntdUI.Input txbDbEmployees1;
-        private AntdUI.Button btnEmpleados1;
-        private AntdUI.Button btnGuardar1;
-        private AntdUI.Panel pnlServidor2;
-        private AntdUI.Panel pnlHead2;
-        private PictureBox picDb2;
-        private AntdUI.Panel pnlSep2;
-        private AntdUI.Label lblTitulo2;
-        private AntdUI.Tag tagEnUso2;
-        private AntdUI.Label lblServer2;
-        private AntdUI.Input txbServer2;
-        private AntdUI.Panel pnlLectura2;
-        private AntdUI.Label lblLectura2;
-        private AntdUI.Label lblBdConn2;
-        private AntdUI.Input txbBdConn2;
-        private AntdUI.Label lblUserConn2;
-        private AntdUI.Input txbUserConn2;
-        private AntdUI.Label lblPassConn2;
-        private AntdUI.Input txbPassConn2;
-        private AntdUI.Button btnLectura2;
-        private AntdUI.Panel pnlEscritura2;
-        private AntdUI.Label lblEscritura2;
-        private AntdUI.Label lblBdWrite2;
-        private AntdUI.Input txbBdWrite2;
-        private AntdUI.Label lblUserWrite2;
-        private AntdUI.Input txbUserWrite2;
-        private AntdUI.Label lblPassWrite2;
-        private AntdUI.Input txbPassWrite2;
-        private AntdUI.Button btnEscritura2;
-        private AntdUI.Panel pnlEmpleados2;
-        private AntdUI.Label lblEmpleados2;
-        private AntdUI.Label lblBdEmp2;
-        private AntdUI.Input txbDbEmployees2;
-        private AntdUI.Button btnEmpleados2;
-        private AntdUI.Button btnGuardar2;
-        private AntdUI.Panel pnlHead1;
-        private PictureBox picDb1;
-        private AntdUI.Panel pnlSep1;
-        private AntdUI.Label lblTitulo1;
-        private AntdUI.Tag tagEnUso1;
+        private AntdUI.Button btnImportar;
+        private AntdUI.Button btnExportar;
+        private AntdUI.Label lblSeleccionado;
+        private SelectorServidores cmbServidores;
+        private AntdUI.Button btnAgregar;
+        private AntdUI.Panel pnlServidor;
+        private AntdUI.Panel pnlHead;
+        private PictureBox picDb;
+        private AntdUI.Panel pnlSep;
+        private AntdUI.Label lblTitulo;
+        private AntdUI.Tag tagEnUso;
+        private AntdUI.Button btnUsar;
+        private AntdUI.Label lblNombre;
+        private AntdUI.Input txbNombre;
+        private AntdUI.Label lblServer;
+        private AntdUI.Input txbServer;
+        private AntdUI.Panel pnlLectura;
+        private AntdUI.Label lblLectura;
+        private AntdUI.Label lblBdConn;
+        private AntdUI.Input txbBdConn;
+        private AntdUI.Label lblUserConn;
+        private AntdUI.Input txbUserConn;
+        private AntdUI.Label lblPassConn;
+        private AntdUI.Input txbPassConn;
+        private AntdUI.Button btnLectura;
+        private AntdUI.Panel pnlEscritura;
+        private AntdUI.Label lblEscritura;
+        private AntdUI.Label lblBdWrite;
+        private AntdUI.Input txbBdWrite;
+        private AntdUI.Label lblUserWrite;
+        private AntdUI.Input txbUserWrite;
+        private AntdUI.Label lblPassWrite;
+        private AntdUI.Input txbPassWrite;
+        private AntdUI.Button btnEscritura;
+        private AntdUI.Panel pnlEmpleados;
+        private AntdUI.Label lblEmpleados;
+        private AntdUI.Label lblBdEmp;
+        private AntdUI.Input txbDbEmployees;
+        private AntdUI.Button btnEmpleados;
+        private AntdUI.Panel pnlColor;
+        private AntdUI.Label lblColorTitulo;
+        private AntdUI.ColorPicker colorServidor;
+        private AntdUI.Label lblColorAyuda;
+        private AntdUI.Button btnEliminar;
+        private AntdUI.Button btnGuardar;
     }
 }
