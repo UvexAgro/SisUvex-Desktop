@@ -45,16 +45,22 @@ namespace SisUvex.Configuracion
             XElement servidor1 = configuracion.Element("servidor1");
             XElement servidor2 = configuracion.Element("servidor2");
 
-            if (servidor1 != null || servidor2 != null)
+            // Formato antiguo: los parámetros de conexión están directamente bajo <Configuracion>
+            // (sin <servidor1>/<servidor2>). Se migran al Servidor 1 y se reescribe el archivo en el formato nuevo.
+            bool formatoAntiguo = servidor1 == null && servidor2 == null;
+
+            if (formatoAntiguo)
+            {
+                Servidor2.Server = Servidor2.DbConn = Servidor2.UserConn = Servidor2.PassConn = "";
+                Servidor2.DbWrite = Servidor2.UserWrite = Servidor2.PassWrite = Servidor2.DbEmployees = "";
+                LeerGrupo(configuracion, Servidor1);
+                CurrentServer = 1;
+            }
+            else
             {
                 LeerGrupo(servidor1, Servidor1);
                 LeerGrupo(servidor2, Servidor2);
                 CurrentServer = configuracion.Element("currentServer")?.Value == "2" ? 2 : 1;
-            }
-            else
-            {
-                LeerGrupo(configuracion, Servidor1);
-                CurrentServer = 1;
             }
 
             lastLogin = Valor(configuracion, "lastLogin");
@@ -64,6 +70,30 @@ namespace SisUvex.Configuracion
             PrintCode = Valor(configuracion, "printCode");
 
             AplicarServidorActivo();
+
+            if (formatoAntiguo)
+                MigrarArchivoAntiguo();
+        }
+
+        /// <summary>
+        /// Convierte el archivo de configuración del formato antiguo al nuevo (dos servidores).
+        /// Deja una copia del archivo original y, si algo falla, no interrumpe la lectura (los datos ya quedaron en memoria).
+        /// </summary>
+        private void MigrarArchivoAntiguo()
+        {
+            try
+            {
+                string respaldo = ClsXmlArchivos.rutaConf + ".antiguo.bak";
+                if (File.Exists(ClsXmlArchivos.rutaConf) && !File.Exists(respaldo))
+                    File.Copy(ClsXmlArchivos.rutaConf, respaldo);
+
+                Guardar();                             // escribe el XML temporal con el formato nuevo
+                new ClsXmlArchivos().PutInConfFile();  // lo cifra sobre configuracion.xml y borra el temporal
+            }
+            catch (Exception)
+            {
+                // Si no se pudo reescribir, se volverá a intentar en la siguiente lectura.
+            }
         }
 
         public void Guardar()
