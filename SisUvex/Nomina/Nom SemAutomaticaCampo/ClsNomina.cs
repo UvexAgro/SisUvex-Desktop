@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -654,11 +654,17 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					if (sueldo <= 0)
 						continue;
 				}
-				else
-				{
+				
 					// Sueldo normal sin el adicional festivo.
-					sueldo = total - pagoFestivo;
-				}
+					else
+					{
+						// Tomar el sueldo normal de Salario Diario.
+						sueldo = Convert.ToDecimal(
+							dr["Salario Diario"] == DBNull.Value
+								? 0
+								: dr["Salario Diario"]);
+					}
+				
 
 				string fechaFormateada =
 					Convert.ToDateTime(dr["Fecha"])
