@@ -20,12 +20,15 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		private ClsListaCuadrillas listaCuadrillas;
 		private bool mostrarOtrasCuadrillas = false;
 		public List<object> cuadrillasSeleccionadas = new List<object>();
+		private bool festivoEstabaSeleccionado;
 		public FrmNomina()
 		{
 			InitializeComponent();
 			cls ??= new ClsNomina();
 			cls.frm ??= this;
 
+			rbFestivo.MouseDown += rbFestivo_MouseDown;
+			rbFestivo.Click += rbFestivo_Click;
 			InicializarListaCuadrillas();
 
 		}
@@ -63,7 +66,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			splitNomina.Panel1Collapsed = true;
 		}
-
+		
 		private void FrmNomina_Load(object sender, EventArgs e)
 		{
 			cls.CargarCuadrillaCampoCheck(listaCuadrillas);
@@ -73,6 +76,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			txbReferencia.Text = dtpFecha.Value.ToString("yyyyMMdd");
 			txbJornada.Text = "8";
 			txbDestajo.Text = "0";
+
 			cls.CargarCuadrillasConCsv(lbCSV, dtpFecha.Value.Date);
 		}
 
@@ -200,7 +204,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			ConsultarYMostrarNomina();
 		}
-		
+
 		private void DiseñarDgvNomina()
 		{
 			// =========================================================
@@ -642,6 +646,19 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				{
 					dgvNomina.Columns[columna].Visible = false;
 				}
+			}
+		}
+
+		private void rbFestivo_MouseDown(object sender, MouseEventArgs e)
+		{
+			festivoEstabaSeleccionado = rbFestivo.Checked;
+		}
+
+		private void rbFestivo_Click(object sender, EventArgs e)
+		{
+			if (festivoEstabaSeleccionado)
+			{
+				rbFestivo.Checked = false;
 			}
 		}
 	}

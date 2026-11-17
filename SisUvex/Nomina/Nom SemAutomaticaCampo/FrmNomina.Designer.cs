@@ -56,6 +56,12 @@
 			tbpNomina = new TabPage();
 			btnSeleccionar = new Button();
 			tabPage4 = new TabPage();
+			label14 = new Label();
+			label13 = new Label();
+			txbReferenciaFestivo = new TextBox();
+			textBox1 = new TextBox();
+			txbActividad = new TextBox();
+			rbFestivo = new RadioButton();
 			tabPage1 = new TabPage();
 			cboSemana = new ComboBox();
 			label6 = new Label();
@@ -68,6 +74,10 @@
 			lblCuadrillas = new Label();
 			lbCSV = new ListBox();
 			label12 = new Label();
+			label15 = new Label();
+			panel3 = new Panel();
+			panel4 = new Panel();
+			label16 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -220,21 +230,21 @@
 			// 
 			// txbReferencia
 			// 
-			txbReferencia.Location = new Point(86, 43);
+			txbReferencia.Location = new Point(94, 43);
 			txbReferencia.Name = "txbReferencia";
 			txbReferencia.Size = new Size(100, 27);
 			txbReferencia.TabIndex = 13;
 			// 
 			// txbDestajo
 			// 
-			txbDestajo.Location = new Point(518, 43);
+			txbDestajo.Location = new Point(469, 44);
 			txbDestajo.Name = "txbDestajo";
 			txbDestajo.Size = new Size(100, 27);
 			txbDestajo.TabIndex = 12;
 			// 
 			// txbJornada
 			// 
-			txbJornada.Location = new Point(295, 43);
+			txbJornada.Location = new Point(283, 43);
 			txbJornada.Name = "txbJornada";
 			txbJornada.Size = new Size(100, 27);
 			txbJornada.TabIndex = 11;
@@ -244,7 +254,7 @@
 			label9.AutoSize = true;
 			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label9.ForeColor = Color.FromArgb(31, 95, 145);
-			label9.Location = new Point(452, 49);
+			label9.Location = new Point(403, 50);
 			label9.Name = "label9";
 			label9.Size = new Size(60, 17);
 			label9.TabIndex = 10;
@@ -255,7 +265,7 @@
 			label8.AutoSize = true;
 			label8.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label8.ForeColor = Color.FromArgb(31, 95, 145);
-			label8.Location = new Point(226, 49);
+			label8.Location = new Point(214, 49);
 			label8.Name = "label8";
 			label8.Size = new Size(63, 17);
 			label8.TabIndex = 9;
@@ -268,7 +278,7 @@
 			btnCSV.ForeColor = Color.Black;
 			btnCSV.Image = (Image)resources.GetObject("btnCSV.Image");
 			btnCSV.ImageAlign = ContentAlignment.MiddleLeft;
-			btnCSV.Location = new Point(667, 36);
+			btnCSV.Location = new Point(848, 30);
 			btnCSV.Name = "btnCSV";
 			btnCSV.Padding = new Padding(35, 0, 35, 0);
 			btnCSV.Size = new Size(165, 40);
@@ -283,7 +293,7 @@
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label7.ForeColor = Color.FromArgb(31, 95, 145);
-			label7.Location = new Point(7, 48);
+			label7.Location = new Point(15, 48);
 			label7.Name = "label7";
 			label7.Size = new Size(77, 17);
 			label7.TabIndex = 2;
@@ -393,6 +403,16 @@
 			// tabPage4
 			// 
 			tabPage4.BackColor = Color.FromArgb(236, 243, 249);
+			tabPage4.Controls.Add(label16);
+			tabPage4.Controls.Add(panel4);
+			tabPage4.Controls.Add(panel3);
+			tabPage4.Controls.Add(label15);
+			tabPage4.Controls.Add(label14);
+			tabPage4.Controls.Add(label13);
+			tabPage4.Controls.Add(txbReferenciaFestivo);
+			tabPage4.Controls.Add(textBox1);
+			tabPage4.Controls.Add(txbActividad);
+			tabPage4.Controls.Add(rbFestivo);
 			tabPage4.Controls.Add(btnCSV);
 			tabPage4.Controls.Add(txbDestajo);
 			tabPage4.Controls.Add(label9);
@@ -406,6 +426,64 @@
 			tabPage4.Size = new Size(1041, 114);
 			tabPage4.TabIndex = 1;
 			tabPage4.Text = "CSV";
+			// 
+			// label14
+			// 
+			label14.AutoSize = true;
+			label14.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label14.ForeColor = Color.FromArgb(31, 95, 145);
+			label14.Location = new Point(616, 86);
+			label14.Name = "label14";
+			label14.Size = new Size(77, 17);
+			label14.TabIndex = 19;
+			label14.Text = "Referencia :";
+			// 
+			// label13
+			// 
+			label13.AutoSize = true;
+			label13.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label13.ForeColor = Color.FromArgb(31, 95, 145);
+			label13.Location = new Point(622, 53);
+			label13.Name = "label13";
+			label13.Size = new Size(71, 17);
+			label13.TabIndex = 18;
+			label13.Text = "Actividad :";
+			// 
+			// txbReferenciaFestivo
+			// 
+			txbReferenciaFestivo.Location = new Point(699, 81);
+			txbReferenciaFestivo.Name = "txbReferenciaFestivo";
+			txbReferenciaFestivo.Size = new Size(100, 27);
+			txbReferenciaFestivo.TabIndex = 17;
+			// 
+			// textBox1
+			// 
+			textBox1.Location = new Point(470, 44);
+			textBox1.Name = "textBox1";
+			textBox1.Size = new Size(100, 27);
+			textBox1.TabIndex = 16;
+			// 
+			// txbActividad
+			// 
+			txbActividad.Location = new Point(699, 48);
+			txbActividad.Name = "txbActividad";
+			txbActividad.Size = new Size(100, 27);
+			txbActividad.TabIndex = 15;
+			// 
+			// rbFestivo
+			// 
+			rbFestivo.AutoSize = true;
+			rbFestivo.BackColor = Color.Transparent;
+			rbFestivo.ForeColor = Color.FromArgb(31, 95, 145);
+			rbFestivo.Location = new Point(699, 18);
+			rbFestivo.Name = "rbFestivo";
+			rbFestivo.Size = new Size(75, 24);
+			rbFestivo.TabIndex = 14;
+			rbFestivo.TabStop = true;
+			rbFestivo.Text = "Festivo";
+			rbFestivo.UseVisualStyleBackColor = false;
+			rbFestivo.Click += rbFestivo_Click;
+			rbFestivo.MouseDown += rbFestivo_MouseDown;
 			// 
 			// tabPage1
 			// 
@@ -545,6 +623,46 @@
 			label12.TabIndex = 10;
 			label12.Text = "Cuadrilla con un csv:";
 			// 
+			// label15
+			// 
+			label15.AutoSize = true;
+			label15.BackColor = Color.Transparent;
+			label15.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label15.ForeColor = Color.Black;
+			label15.Location = new Point(15, 18);
+			label15.Name = "label15";
+			label15.Size = new Size(128, 13);
+			label15.TabIndex = 3;
+			label15.Text = "Datos para CSV normal.";
+			// 
+			// panel3
+			// 
+			panel3.BackColor = Color.Gray;
+			panel3.Location = new Point(589, 8);
+			panel3.Name = "panel3";
+			panel3.Size = new Size(2, 100);
+			panel3.TabIndex = 20;
+			// 
+			// panel4
+			// 
+			panel4.BackColor = Color.Gray;
+			panel4.Location = new Point(831, 8);
+			panel4.Name = "panel4";
+			panel4.Size = new Size(2, 100);
+			panel4.TabIndex = 21;
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.BackColor = Color.Transparent;
+			label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label16.ForeColor = Color.Black;
+			label16.Location = new Point(597, 2);
+			label16.Name = "label16";
+			label16.Size = new Size(128, 13);
+			label16.TabIndex = 22;
+			label16.Text = "Datos para CSV Festivo.";
+			// 
 			// FrmNomina
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -627,5 +745,16 @@
 		private ListBox listBox1;
 		public Label lblCuadrillas;
 		public Panel pnlCSV;
+		public RadioButton rbFestivo;
+		private Label label14;
+		private Label label13;
+		public TextBox txbReferenciaFestivo;
+		public TextBox textBox1;
+		public TextBox txbActividad;
+		private RadioButton radioButton1;
+		private Label label16;
+		private Panel panel4;
+		private Panel panel3;
+		private Label label15;
 	}
 }
