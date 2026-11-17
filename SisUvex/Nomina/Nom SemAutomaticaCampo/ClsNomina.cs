@@ -251,8 +251,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				// MOSTRAR RESULTADO
 				// =====================================================
 
-				frm.dgvNomina.DataSource =
-					dtFinal;
+				frm.dgvNomina.DataSource = dtFinal;
 
 				// Ocultar columna interna
 				if (frm.dgvNomina.Columns.Contains("id_workGroup_CSV"))
@@ -260,6 +259,16 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					frm.dgvNomina.Columns["id_workGroup_CSV"].Visible = false;
 				}
 
+				// =====================================================
+				// MOSTRAR U OCULTAR PAGO FESTIVO
+				// =====================================================
+
+				bool esFestivo = EsDiaFestivo(fecha);
+
+				if (frm.dgvNomina.Columns.Contains("Pago Festivo"))
+				{
+					frm.dgvNomina.Columns["Pago Festivo"].Visible = esFestivo;
+				}
 
 				ConfigurarDgvNomina();
 
@@ -367,34 +376,333 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				DataGridViewAutoSizeRowsMode.None;
 		}
 
+
 		public void GenerarArchivoCsv()
 		{
-			DataTable dt = GetDtCSV();
+			DataTable dtNomina = GetDtNomina();
 
-			if (dt == null || dt.Rows.Count == 0)
+			if (dtNomina == null || dtNomina.Rows.Count == 0)
+			{
+				MessageBox.Show(
+					"No hay datos para generar.",
+					"Reporte CSV",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 				return;
+			}
 
+			bool esFestivo = frm.rbFestivo.Checked;
+
+			// =====================================================
+			// VALIDAR REFERENCIAS
+			// =====================================================
+
+			string referenciaNormal = frm.txbReferencia.Text.Trim();
+			string referenciaFestivo = frm.txbReferenciaFestivo.Text.Trim();
+			string actividadFestivo = frm.txbActividad.Text.Trim();
+
+			if (string.IsNullOrWhiteSpace(referenciaNormal))
+			{
+				MessageBox.Show("Captura la referencia de la nómina normal.");
+				return;
+			}
+
+			if (esFestivo)
+			{
+				if (string.IsNullOrWhiteSpace(referenciaFestivo))
+				{
+					MessageBox.Show("Captura la referencia de la nómina festiva.");
+					return;
+				}
+
+				if (string.IsNullOrWhiteSpace(actividadFestivo))
+				{
+					MessageBox.Show("Captura la actividad del pago festivo.");
+					return;
+				}
+			}
+
+			DateTime fechaNomina =
+				Convert.ToDateTime(dtNomina.Rows[0]["Fecha"]);
+
+			// =====================================================
+			// PREPARAR DATOS DE LOS CSV
+			// =====================================================
+
+			DataTable dtNormal =
+				GetDtCSV(false, referenciaNormal, "");
+
+			DataTable dtFestivo = null;
+
+			if (esFestivo)
+			{
+				dtFestivo = GetDtCSV(
+					true,
+					referenciaFestivo,
+					actividadFestivo);
+
+				if (dtFestivo == null || dtFestivo.Rows.Count == 0)
+				{
+					MessageBox.Show(
+						"No existen importes de pago festivo para generar el segundo archivo.",
+						"CSV Festivo",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+
+					return;
+				}
+			}
+
+			// =====================================================
+			// SELECCIONAR UBICACIÓN
+			// =====================================================
+
+			string rutaNormal;
+			string rutaFestivo = "";
+
+			using (SaveFileDialog sfd = new SaveFileDialog())
+			{
+				sfd.Filter = "Archivo CSV (*.csv)|*.csv";
+				sfd.FileName = $"{fechaNomina:yyyy-MM-dd}.csv";
+
+				if (sfd.ShowDialog() != DialogResult.OK)
+					return;
+
+				rutaNormal = sfd.FileName;
+
+				rutaFestivo = Path.Combine(
+					Path.GetDirectoryName(rutaNormal),
+					Path.GetFileNameWithoutExtension(rutaNormal)
+					+ "_Festivo.csv");
+			}
+
+			try
+			{
+				// =====================================================
+				// GENERAR CSV NORMAL
+				// =====================================================
+
+				GuardarArchivoCsv(dtNormal, rutaNormal);
+
+				// =====================================================
+				// GENERAR CSV FESTIVO
+				// =====================================================
+
+				if (esFestivo)
+				{
+					GuardarArchivoCsv(dtFestivo, rutaFestivo);
+				}
+
+				// =====================================================
+				// OBTENER CUADRILLAS
+				// =====================================================
+
+				if (!dtNomina.Columns.Contains("id_workGroup_CSV"))
+				{
+					MessageBox.Show(
+						"El listado no contiene el ID de las cuadrillas.",
+						"CSV",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+				List<string> idsCuadrillas =
+					dtNomina.AsEnumerable()
+						.Select(r =>
+							r["id_workGroup_CSV"]?.ToString()?.Trim())
+						.Where(x => !string.IsNullOrWhiteSpace(x))
+						.Distinct()
+						.ToList();
+
+				// =====================================================
+				// REGISTRAR CSV GENERADO
+				// SE REGISTRA UNA SOLA VEZ POR CUADRILLA
+				// =====================================================
+
+				SQLControl sql = new SQLControl();
+
+				try
+				{
+					sql.OpenConectionWrite();
+
+					foreach (string idCuadrilla in idsCuadrillas)
+					{
+						using (SqlCommand cmd = new SqlCommand(
+							"sp_AddCsvGenerated", sql.cnn))
+						{
+							cmd.CommandType = CommandType.StoredProcedure;
+
+							cmd.Parameters.Add(
+								"@IdWorkGroup",
+								SqlDbType.Char,
+								3).Value = idCuadrilla;
+
+							cmd.Parameters.Add(
+								"@FechaNomina",
+								SqlDbType.Date).Value = fechaNomina.Date;
+
+							cmd.ExecuteNonQuery();
+						}
+					}
+				}
+				finally
+				{
+					sql.CloseConectionWrite();
+				}
+
+				// =====================================================
+				// MENSAJE FINAL
+				// =====================================================
+
+				string mensaje;
+
+				if (esFestivo)
+				{
+					mensaje =
+						"Se generaron los dos archivos correctamente.\n\n" +
+						"NÓMINA NORMAL\n" +
+						"Referencia: " + referenciaNormal + "\n" +
+						"Archivo: " + Path.GetFileName(rutaNormal) + "\n\n" +
+						"NÓMINA FESTIVA\n" +
+						"Referencia: " + referenciaFestivo + "\n" +
+						"Actividad: " + actividadFestivo + "\n" +
+						"Archivo: " + Path.GetFileName(rutaFestivo);
+				}
+				else
+				{
+					mensaje =
+						"El archivo CSV se generó correctamente.\n\n" +
+						"Referencia: " + referenciaNormal + "\n" +
+						"Archivo: " + Path.GetFileName(rutaNormal);
+				}
+
+				DialogResult resultado = MessageBox.Show(
+					mensaje + "\n\n¿Deseas abrir los archivos?",
+					"CSV generado",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Information);
+
+				if (resultado == DialogResult.Yes)
+				{
+					AbrirArchivoCsv(rutaNormal);
+
+					if (esFestivo)
+						AbrirArchivoCsv(rutaFestivo);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al generar los archivos CSV:\n\n" + ex.Message,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
+		}
+
+
+		private DataTable GetDtCSV(
+			bool soloFestivo,
+			string referencia,
+			string actividadFestivo)
+		{
+			DataTable dtNomina = GetDtNomina();
+
+			if (dtNomina == null || dtNomina.Rows.Count == 0)
+				return null;
+
+			DataTable dtCsv = new DataTable();
+
+			dtCsv.Columns.Add("Fecha", typeof(string));
+			dtCsv.Columns.Add("Referencia", typeof(string));
+			dtCsv.Columns.Add("Codigo", typeof(string));
+			dtCsv.Columns.Add("Sueldo", typeof(string));
+			dtCsv.Columns.Add("Lote", typeof(string));
+			dtCsv.Columns.Add("Actividad", typeof(string));
+			dtCsv.Columns.Add("TotalCajas", typeof(string));
+			dtCsv.Columns.Add("HorasTrabajadas", typeof(string));
+
+			string jornada = frm.txbJornada.Text.Trim();
+			string destajo = string.IsNullOrWhiteSpace(frm.txbDestajo.Text)
+			? "0"
+			: frm.txbDestajo.Text.Trim();
+
+			foreach (DataRow dr in dtNomina.Rows)
+			{
+				decimal total = Convert.ToDecimal(
+					dr["Total"] == DBNull.Value ? 0 : dr["Total"]);
+
+				decimal pagoFestivo = 0;
+
+				if (dtNomina.Columns.Contains("Pago Festivo"))
+				{
+					pagoFestivo = Convert.ToDecimal(
+						dr["Pago Festivo"] == DBNull.Value
+							? 0
+							: dr["Pago Festivo"]);
+				}
+
+				decimal sueldo;
+
+				if (soloFestivo)
+				{
+					sueldo = pagoFestivo;
+
+					// No incluir empleados sin pago festivo.
+					if (sueldo <= 0)
+						continue;
+				}
+				else
+				{
+					// Sueldo normal sin el adicional festivo.
+					sueldo = total - pagoFestivo;
+				}
+
+				string fechaFormateada =
+					Convert.ToDateTime(dr["Fecha"])
+						.ToString("yyyy/MM/dd");
+
+				string actividad = soloFestivo
+					? actividadFestivo
+					: dr["Código Actividad"].ToString();
+
+				dtCsv.Rows.Add(
+					fechaFormateada,
+					referencia,
+					dr["Código Empleado"].ToString(),
+					ClsValues.FormatZeros(
+						sueldo.ToString("0.00"),
+						"0000.00"),
+					dr["Código Lote"].ToString(),
+					actividad,
+					destajo,
+					jornada
+				);
+			}
+
+			return dtCsv;
+		}
+
+		private void AbrirArchivoCsv(string ruta)
+		{
+			System.Diagnostics.Process.Start(
+				new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "notepad.exe",
+					Arguments = $"\"{ruta}\"",
+					UseShellExecute = true
+				});
+		}
+
+		private void GuardarArchivoCsv(DataTable dt, string ruta)
+		{
 			string separador =
 				CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Archivo CSV (*.csv)|*.csv";
-
-			DateTime fechaNomina =
-				Convert.ToDateTime(dt.Rows[0]["Fecha"]);
-
-			sfd.FileName =
-				$"Nomina{fechaNomina:yyyy-MM-dd}.csv";
-
-			if (sfd.ShowDialog() != DialogResult.OK)
-				return;
-
-			// =====================================================
-			// GENERAR ARCHIVO CSV
-			// =====================================================
-
 			using (StreamWriter sw = new StreamWriter(
-				sfd.FileName,
+				ruta,
 				false,
 				Encoding.UTF8))
 			{
@@ -415,189 +723,22 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 					}).ToArray();
 
-					sw.WriteLine(
-						string.Join(separador, campos));
+					sw.WriteLine(string.Join(separador, campos));
 				}
 			}
 
-			// =====================================================
-			// VERIFICAR QUE EL ARCHIVO SE HAYA CREADO
-			// =====================================================
-
-			if (!File.Exists(sfd.FileName))
+			if (!File.Exists(ruta))
 			{
-				MessageBox.Show(
-					$"El archivo no se pudo guardar:\n{sfd.FileName}",
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-
-				return;
-			}
-
-			// =====================================================
-			// OBTENER CUADRILLAS DEL DGV
-			// =====================================================
-
-			DataTable dtNomina =
-				frm.dgvNomina.DataSource as DataTable;
-
-			if (dtNomina == null ||
-				!dtNomina.Columns.Contains("id_workGroup_CSV"))
-			{
-				MessageBox.Show(
-					"El listado de nómina no contiene el ID de las cuadrillas.",
-					"CSV",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-			List<string> idsCuadrillas =
-				dtNomina.AsEnumerable()
-					.Select(r =>
-						r["id_workGroup_CSV"]
-							?.ToString()
-							.Trim())
-					.Where(x =>
-						!string.IsNullOrWhiteSpace(x))
-					.Distinct()
-					.ToList();
-
-			// =====================================================
-			// REGISTRAR CSV GENERADO
-			// =====================================================
-
-			SQLControl sql = new SQLControl();
-
-			try
-			{
-				sql.OpenConectionWrite();
-
-				foreach (string idCuadrilla in idsCuadrillas)
-				{
-					using (SqlCommand cmd =
-						new SqlCommand(
-							"sp_AddCsvGenerated",
-							sql.cnn))
-					{
-						cmd.CommandType =
-							CommandType.StoredProcedure;
-
-						cmd.Parameters.Add(
-							"@IdWorkGroup",
-							SqlDbType.Char,
-							3
-						).Value = idCuadrilla;
-
-						cmd.Parameters.Add(
-							"@FechaNomina",
-							SqlDbType.Date
-						).Value = fechaNomina.Date;
-
-						cmd.ExecuteNonQuery();
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					"El CSV se generó correctamente, pero no se pudo registrar " +
-					"el estado de las cuadrillas:\n\n" +
-					ex.Message,
-					"Registro de CSV",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-			}
-			finally
-			{
-				sql.CloseConectionWrite();
-			}
-
-			// =====================================================
-			// MENSAJE FINAL
-			// =====================================================
-
-			DialogResult result = MessageBox.Show(
-				"Reporte en CSV generado correctamente.\n\n" +
-				"¿Deseas abrir el archivo?",
-				"Reporte generado",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Information);
-
-			if (result == DialogResult.Yes)
-			{
-				System.Diagnostics.Process.Start(
-					new System.Diagnostics.ProcessStartInfo
-					{
-						FileName = "notepad.exe",
-						Arguments = $"\"{sfd.FileName}\"",
-						UseShellExecute = true
-					});
+				throw new Exception(
+					"No se pudo guardar el archivo:\n" + ruta);
 			}
 		}
-		private DataTable GetDtCSV()
+
+		private DataTable GetDtNomina()
 		{
-			DataTable dtNomina = frm.dgvNomina.DataSource as DataTable;
-
-			if (dtNomina == null || dtNomina.Rows.Count == 0)
-			{
-				MessageBox.Show(
-					"No hay datos para generar.",
-					"Reporte CSV",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return null;
-			}
-
-			foreach (DataColumn col in dtNomina.Columns)
-			{
-				Console.WriteLine(col.ColumnName);
-			}
-
-			// Valores de los TextBox
-			string referencia = frm.txbReferencia.Text;
-			string jornada = frm.txbJornada.Text;
-			string destajo = frm.txbDestajo.Text;
-
-			DataTable dtCsv = new DataTable();
-
-			dtCsv.Columns.Add("Fecha", typeof(string));
-			dtCsv.Columns.Add("Referencia", typeof(string));
-			dtCsv.Columns.Add("Codigo", typeof(string));
-			dtCsv.Columns.Add("Sueldo", typeof(string));
-			dtCsv.Columns.Add("Lote", typeof(string));
-			dtCsv.Columns.Add("Actividad", typeof(string));
-			dtCsv.Columns.Add("TotalCajas", typeof(string));
-			dtCsv.Columns.Add("HorasTrabajadas", typeof(string));
-
-			foreach (DataRow dr in dtNomina.Rows)
-			{
-				string fechaFormateada =
-					Convert.ToDateTime(dr["Fecha"])
-					.ToString("yyyy/MM/dd");
-
-				string sueldo =
-					ClsValues.FormatZeros(
-						dr["Total"].ToString(),
-						"0000.00");
-
-				dtCsv.Rows.Add(
-					fechaFormateada,       // Fecha
-					referencia,            // Referencia
-					dr["Código Empleado"], // Codigo
-					sueldo,                // Sueldo
-					dr["Código Lote"],     // Lote
-					dr["Código Actividad"],// Actividad
-					destajo,               // TotalCajas
-					jornada                // HorasTrabajadas
-				);
-			}
-
-			return dtCsv;
+			return frm.dgvNomina.DataSource as DataTable;
 		}
+
 		public void CargarLugarPago(ComboBox combo)
 		{
 			cargando = true;
@@ -1241,6 +1382,38 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			frm.dgvNomina.ColumnHeadersHeight = 38;
 			frm.dgvNomina.ColumnHeadersHeightSizeMode =
 				DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+		}
+		public bool EsDiaFestivo(DateTime fecha)
+		{
+			SQLControl sql = new SQLControl();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT CASE
+                WHEN EXISTS
+                (
+                    SELECT 1
+                    FROM dbo.Cat_Festivos
+                    WHERE CONVERT(DATE, d_fecha) = @Fecha
+                )
+                THEN 1
+                ELSE 0
+            END";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				{
+					cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.Date;
+
+					return Convert.ToInt32(cmd.ExecuteScalar()) == 1;
+				}
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
 		}
 	}
 }

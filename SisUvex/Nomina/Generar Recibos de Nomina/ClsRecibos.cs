@@ -16,6 +16,14 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		private DataView dvLugaresPago;
 		private bool filtrandoLugarPago = false;
 		public FrmRecibos frm;
+
+		private CheckedListBox clbLugaresPago;
+		private ToolStripControlHost hostLugares;
+		private ToolStripDropDown menuLugares;
+		private bool cargandoLugares = false;
+
+		private List<string> codigosLugaresSeleccionados =
+			new List<string>();
 		public void CargarSemanas()
 		{
 			SQLControl sql = new SQLControl();
@@ -114,35 +122,38 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			frm.dtpFechaFinal.Value =
 				Convert.ToDateTime(fila["d_endDate_per"]).Date;
 		}
-		public void CargarLugarPago(ComboBox combo)
-		{
-			cargando = true;
 
-			dtLugaresPago = CboLugarPago();
+		//public void CargarLugarPago(ComboBox combo)
+		//{
+		//	cargando = true;
 
-			DataRow dr = dtLugaresPago.NewRow();
-			dr["Código"] = "";
-			dr["Nombre"] = "------ selecciona ------";
+		//	dtLugaresPago = CboLugarPago();
 
-			dtLugaresPago.Rows.InsertAt(dr, 0);
+		//	DataRow dr = dtLugaresPago.NewRow();
+		//	dr["Código"] = "";
+		//	dr["Nombre"] = "------ selecciona ------";
 
-			dvLugaresPago = new DataView(dtLugaresPago);
+		//	dtLugaresPago.Rows.InsertAt(dr, 0);
 
-			combo.DataSource = dvLugaresPago;
-			combo.DisplayMember = "Nombre";
-			combo.ValueMember = "Código";
+		//	dvLugaresPago = new DataView(dtLugaresPago);
 
-			combo.DropDownStyle = ComboBoxStyle.DropDown;
-			combo.AutoCompleteMode = AutoCompleteMode.None;
+		//	combo.DataSource = dvLugaresPago;
+		//	combo.DisplayMember = "Nombre";
+		//	combo.ValueMember = "Código";
 
-			combo.SelectedIndex = 0;
+		//	combo.DropDownStyle = ComboBoxStyle.DropDown;
+		//	combo.AutoCompleteMode = AutoCompleteMode.None;
 
-			// Registrar evento de búsqueda
-			combo.TextUpdate -= comboLugarPago_TextUpdate;
-			combo.TextUpdate += comboLugarPago_TextUpdate;
+		//	combo.SelectedIndex = 0;
 
-			cargando = false;
-		}
+		//	// Registrar evento de búsqueda
+		//	combo.TextUpdate -= comboLugarPago_TextUpdate;
+		//	combo.TextUpdate += comboLugarPago_TextUpdate;
+
+		//	cargando = false;
+		//}
+
+
 		public DataTable CboLugarPago()
 		{
 			SQLControl sql = new SQLControl();
@@ -167,6 +178,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			return dt;
 		}
+
 		private void comboLugarPago_TextUpdate(object sender, EventArgs e)
 		{
 			if (cargando || filtrandoLugarPago)
@@ -284,6 +296,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		// ==========================================
 
 
+
 		public DataTable ObtenerRecibos()
 		{
 			SQLControl sql = new SQLControl();
@@ -304,14 +317,30 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			string numeroSemana =
 				semana["c_sequence_per"].ToString().Trim();
 
-			DateTime fechaInicial =
-				Convert.ToDateTime(semana["d_startDate_per"]).Date;
-
-			DateTime fechaFinal =
-				Convert.ToDateTime(semana["d_endDate_per"]).Date;
-
-			string lugarPago = ObtenerCodigoLugarPago();
 			string codigoEmpleado = frm.txbCodigo.Text.Trim();
+
+			// =========================================
+			// LUGARES DE PAGO SELECCIONADOS
+			// =========================================
+
+			List<string> lugaresSeleccionados =
+				ObtenerCodigosLugaresPago();
+
+			string filtroLugares = "";
+
+			if (lugaresSeleccionados.Count > 0)
+			{
+				filtroLugares =
+					" AND LTRIM(RTRIM(R.c_codigo_lug)) IN (" +
+					string.Join(",",
+						lugaresSeleccionados.Select(
+							(x, i) => "@Lugar" + i)) +
+					")";
+			}
+
+			// =========================================
+			// ORDENAMIENTO
+			// =========================================
 
 			string orden = frm.cboOrdenar.SelectedIndex == 1
 				? "Codigo"
@@ -349,7 +378,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 R.c_numimss_emp AS NumeroIMSS,
                 R.n_diastrabajados_rec AS DiasTrabajados,
 
-                -- SUELDO ORDINARIO
                 (
                     ISNULL(R.n_totalpercepcalc_rec, 0)
                     - ISNULL(R.n_septimodia_rec, 0)
@@ -365,7 +393,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 R.n_primadomig_rec AS PrimaDominical,
                 R.n_productividad_rec AS Productividad,
 
-                -- DEDUCCIONES
                 R.n_isptcal_rec AS ISPT,
                 R.n_otrosdcalc_rec AS OtrasDeducciones,
 
@@ -434,9 +461,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
             ON RP.c_codigo_reg = LP.c_codigo_reg
 
         WHERE
-            @FechaFinal >= CAST(GETDATE() AS DATE)
-
-            AND NOT EXISTS
+            NOT EXISTS
             (
                 SELECT 1
                 FROM AgroSmart_SanAndres.dbo.nomrecibo_hist H
@@ -445,11 +470,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 )) = @Semana
             )
 
-            AND
-            (
-                @LugarPago = ''
-                OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago
-            )
+            " + filtroLugares + @"
 
             AND
             (
@@ -483,11 +504,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 CONVERT(VARCHAR(20), R.c_secuencia_per)
             )) = @Semana
 
-            AND
-            (
-                @LugarPago = ''
-                OR LTRIM(RTRIM(R.c_codigo_lug)) = @LugarPago
-            )
+            " + filtroLugares + @"
 
             AND
             (
@@ -495,7 +512,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
                 OR LTRIM(RTRIM(R.c_codigo_emp)) = @CodigoEmpleado
             )
 
-        ORDER BY " + orden + " " + direccion + ";";
+			   ORDER BY
+			LugarPago ASC,
+			NombreCompleto ASC;";
 
 				// =========================================
 				// EJECUTAR CONSULTA
@@ -508,20 +527,17 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 						.Value = numeroSemana;
 
 					cmd.Parameters.Add(
-						"@FechaInicial", SqlDbType.Date)
-						.Value = fechaInicial;
-
-					cmd.Parameters.Add(
-						"@FechaFinal", SqlDbType.Date)
-						.Value = fechaFinal;
-
-					cmd.Parameters.Add(
-						"@LugarPago", SqlDbType.VarChar, 10)
-						.Value = lugarPago;
-
-					cmd.Parameters.Add(
 						"@CodigoEmpleado", SqlDbType.VarChar, 10)
 						.Value = codigoEmpleado;
+
+					// Parámetros individuales para cada lugar
+					for (int i = 0; i < lugaresSeleccionados.Count; i++)
+					{
+						cmd.Parameters.Add(
+							"@Lugar" + i,
+							SqlDbType.VarChar,
+							10).Value = lugaresSeleccionados[i];
+					}
 
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
@@ -595,6 +611,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		}
 
 
+
 		public DataTable ObtenerDesgloseDeducciones(
 			string codigoEmpleado,
 			string semana)
@@ -607,56 +624,58 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				sql.OpenConectionWrite();
 
 				string query = @"
-            ;WITH Descuentos AS
-            (
-                SELECT
-                    c_codigo_emp,
-                    c_secuencia_per,
-                    c_codigo_ded,
-                    n_importe_dxs,
-                    n_saldo_dxs,
-                    c_consecutivop_din
-                FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana_hist
+      
+				;WITH Descuentos AS
+				(
+					SELECT
+						c_codigo_emp,
+						c_secuencia_per,
+						c_codigo_ded,
+						n_importe_dxs,
+						n_saldo_dxs,
+						c_consecutivop_din
+					FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana_hist
 
-                UNION ALL
+					UNION ALL
 
-                SELECT
-                    c_codigo_emp,
-                    c_numsem_dxs AS c_secuencia_per,
-                    c_codigo_ded,
-                    n_importe_dxs,
-                    n_saldo_dxs,
-                    c_consecutivop_din
-                FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana
-            )
+					SELECT
+						c_codigo_emp,
+						c_numsem_dxs AS c_secuencia_per,
+						c_codigo_ded,
+						n_importe_dxs,
+						n_saldo_dxs,
+						c_consecutivop_din
+					FROM AgroSmart_SanAndres.dbo.nomdeduccionsemana
+				)
 
-            SELECT
-                x.c_codigo_ded AS CodigoDescuento,
-                d.v_descripcion_ded AS Concepto,
+				SELECT
+					x.c_codigo_ded AS CodigoDescuento,
+					d.v_descripcion_ded AS Concepto,
 
-                CAST(
-                    ISNULL(x.n_importe_dxs, 0)
-                    AS DECIMAL(18,2)
-                ) AS Importe,
+					CAST(
+						ISNULL(x.n_importe_dxs, 0)
+						AS DECIMAL(18,2)
+					) AS Importe,
 
-                CAST(
-                    ISNULL(x.n_saldo_dxs, 0)
-                    AS DECIMAL(18,2)
-                ) AS SaldoRestante,
+					CAST(
+						ISNULL(x.n_saldo_dxs, 0)
+						AS DECIMAL(18,2)
+					) AS SaldoPendiente,
 
-                x.c_consecutivop_din AS Consecutivo
+					x.c_consecutivop_din AS Consecutivo
 
-            FROM Descuentos x
+				FROM Descuentos x
 
-            INNER JOIN AgroSmart_SanAndres.dbo.nomdeduccion d
-                ON d.c_codigo_ded = x.c_codigo_ded
+				INNER JOIN AgroSmart_SanAndres.dbo.nomdeduccion d
+					ON d.c_codigo_ded = x.c_codigo_ded
 
-            WHERE
-                LTRIM(RTRIM(x.c_codigo_emp)) = @Empleado
-                AND LTRIM(RTRIM(x.c_secuencia_per)) = @Semana
-                AND ISNULL(x.n_importe_dxs, 0) > 0
+				WHERE
+					LTRIM(RTRIM(x.c_codigo_emp)) = @Empleado
+					AND LTRIM(RTRIM(x.c_secuencia_per)) = @Semana
+					AND ISNULL(x.n_importe_dxs, 0) > 0
 
-            ORDER BY d.c_ordenrecibo_ded;";
+				ORDER BY d.c_ordenrecibo_ded; ";
+
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
@@ -950,6 +969,167 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			}
 
 			ActualizarResumen(dt);
+		}
+		public void CargarLugarPago(ComboBox combo)
+		{
+			cargando = true;
+
+			try
+			{
+				dtLugaresPago = CboLugarPago();
+
+				combo.DataSource = null;
+				combo.Items.Clear();
+
+				combo.DataSource = null;
+				combo.DropDownStyle = ComboBoxStyle.DropDown;
+				combo.Text = "Selecciona lugares";
+				combo.AutoCompleteMode = AutoCompleteMode.None;
+				combo.AutoCompleteSource = AutoCompleteSource.None;
+
+				CrearSelectorMultipleLugares(combo);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar lugares de pago:\n" + ex.Message);
+			}
+			finally
+			{
+				cargando = false;
+			}
+		}
+		private void CrearSelectorMultipleLugares(ComboBox combo)
+		{
+			clbLugaresPago = new CheckedListBox();
+
+			clbLugaresPago.CheckOnClick = true;
+			clbLugaresPago.BorderStyle = BorderStyle.None;
+			clbLugaresPago.IntegralHeight = false;
+			clbLugaresPago.Width = 300;
+			clbLugaresPago.Height = 250;
+			clbLugaresPago.Font = new Font("Segoe UI", 9F);
+
+			foreach (DataRow fila in dtLugaresPago.Rows)
+			{
+				clbLugaresPago.Items.Add(
+					new LugarPagoItem
+					{
+						Codigo = fila["Código"].ToString().Trim(),
+						Nombre = fila["Nombre"].ToString().Trim()
+					});
+			}
+
+			clbLugaresPago.DisplayMember = "Nombre";
+
+			hostLugares = new ToolStripControlHost(clbLugaresPago)
+			{
+				AutoSize = false,
+				Size = new Size(305, 255),
+				Padding = new Padding(3)
+			};
+
+			menuLugares = new ToolStripDropDown();
+			menuLugares.Items.Add(hostLugares);
+
+			clbLugaresPago.ItemCheck -= clbLugaresPago_ItemCheck;
+			clbLugaresPago.ItemCheck += clbLugaresPago_ItemCheck;
+
+			combo.DropDown -= cboLugarPago_DropDown;
+			combo.DropDown += cboLugarPago_DropDown;
+		}
+		private class LugarPagoItem
+		{
+			public string Codigo { get; set; }
+			public string Nombre { get; set; }
+
+			public override string ToString()
+			{
+				return Nombre;
+			}
+		}
+		private void cboLugarPago_DropDown(
+	object sender,
+	EventArgs e)
+		{
+			ComboBox combo = sender as ComboBox;
+
+			if (combo == null || menuLugares == null)
+				return;
+
+			combo.DroppedDown = false;
+
+			if (frm.IsHandleCreated)
+			{
+				frm.BeginInvoke(new Action(() =>
+				{
+					if (menuLugares != null)
+					{
+						menuLugares.Show(
+							combo,
+							0,
+							combo.Height);
+					}
+				}));
+			}
+		}
+		private void clbLugaresPago_ItemCheck(
+	object sender,
+	ItemCheckEventArgs e)
+		{
+			if (cargandoLugares)
+				return;
+
+			if (frm.IsHandleCreated)
+			{
+				frm.BeginInvoke(new Action(() =>
+				{
+					ActualizarLugaresSeleccionados();
+				}));
+			}
+		}
+		private void ActualizarLugaresSeleccionados()
+		{
+			codigosLugaresSeleccionados.Clear();
+
+			List<string> nombres = new List<string>();
+
+			foreach (LugarPagoItem item in clbLugaresPago.CheckedItems)
+			{
+				codigosLugaresSeleccionados.Add(item.Codigo);
+				nombres.Add(item.Nombre);
+			}
+
+			if (nombres.Count == 0)
+			{
+				frm.cboLugarPago.Text = "------ selecciona lugares ------";
+			}
+			else if (nombres.Count == 1)
+			{
+				frm.cboLugarPago.Text = nombres[0];
+			}
+			else
+			{
+				frm.cboLugarPago.Text =
+					nombres.Count + " lugares seleccionados";
+			}
+		}
+		private void cboLugarPago_Click(object sender, EventArgs e)
+		{
+			ComboBox combo = sender as ComboBox;
+
+			if (combo == null || menuLugares == null)
+				return;
+
+			menuLugares.Show(
+				combo,
+				0,
+				combo.Height);
+		}
+	
+		private List<string> ObtenerCodigosLugaresPago()
+		{
+			return new List<string>(codigosLugaresSeleccionados);
 		}
 	}
 }

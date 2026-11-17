@@ -339,6 +339,7 @@
 			// 
 			// panel5
 			// 
+			panel5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel5.BackColor = Color.FromArgb(35, 103, 149);
 			panel5.BackgroundImage = (Image)resources.GetObject("panel5.BackgroundImage");
 			panel5.BackgroundImageLayout = ImageLayout.Stretch;
@@ -347,7 +348,7 @@
 			panel5.Controls.Add(label4);
 			panel5.Location = new Point(2, 0);
 			panel5.Name = "panel5";
-			panel5.Size = new Size(1175, 68);
+			panel5.Size = new Size(1230, 68);
 			panel5.TabIndex = 8;
 			// 
 			// pictureBox9
@@ -418,7 +419,7 @@
 			cboLugarPago.FormattingEnabled = true;
 			cboLugarPago.Location = new Point(101, 57);
 			cboLugarPago.Name = "cboLugarPago";
-			cboLugarPago.Size = new Size(234, 23);
+			cboLugarPago.Size = new Size(334, 23);
 			cboLugarPago.TabIndex = 16;
 			// 
 			// txbNombre
@@ -645,19 +646,18 @@
 			dgvRecibo.RowHeadersVisible = false;
 			dgvRecibo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvRecibo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgvRecibo.Size = new Size(1175, 553);
+			dgvRecibo.Size = new Size(1232, 437);
 			dgvRecibo.TabIndex = 18;
 			dgvRecibo.CellContentClick += dgvRecibo_CellContentClick;
 			// 
 			// panel10
 			// 
-			panel10.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel10.BackColor = Color.FromArgb(220, 232, 244);
 			panel10.Controls.Add(pictureBox7);
 			panel10.Controls.Add(label15);
 			panel10.Location = new Point(2, 3);
 			panel10.Name = "panel10";
-			panel10.Size = new Size(1176, 40);
+			panel10.Size = new Size(1112, 40);
 			panel10.TabIndex = 17;
 			// 
 			// pictureBox7
@@ -683,7 +683,7 @@
 			// 
 			// panel11
 			// 
-			panel11.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			panel11.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 			panel11.BackColor = Color.FromArgb(242, 245, 249);
 			panel11.Controls.Add(lblNormal);
 			panel11.Controls.Add(lblCfdi);
@@ -698,9 +698,9 @@
 			panel11.Controls.Add(label19);
 			panel11.Controls.Add(label18);
 			panel11.Controls.Add(label17);
-			panel11.Location = new Point(2, 964);
+			panel11.Location = new Point(2, 848);
 			panel11.Name = "panel11";
-			panel11.Size = new Size(1181, 157);
+			panel11.Size = new Size(1116, 157);
 			panel11.TabIndex = 16;
 			// 
 			// lblNormal
@@ -840,7 +840,7 @@
 			panel12.Controls.Add(label16);
 			panel12.Location = new Point(2, 369);
 			panel12.Name = "panel12";
-			panel12.Size = new Size(1175, 40);
+			panel12.Size = new Size(1231, 40);
 			panel12.TabIndex = 18;
 			// 
 			// pictureBox8
@@ -869,7 +869,7 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.White;
-			ClientSize = new Size(1183, 1124);
+			ClientSize = new Size(1238, 1009);
 			Controls.Add(panel12);
 			Controls.Add(panel11);
 			Controls.Add(dgvRecibo);
