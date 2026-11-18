@@ -256,7 +256,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
-		private DataRow ObtenerSemanaSeleccionada()
+		public DataRow ObtenerSemanaSeleccionada()
 		{
 			if (_frmA.cboSemana.SelectedIndex == -1)
 				return null;
@@ -1406,6 +1406,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 
+
 		public bool GuardarAsistenciaSemanal(
 			string cSequencePer,
 			DateTime fechaInicio,
@@ -1432,6 +1433,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			int asistenciaJue,
 			string cuadrillaJue,
+
+			// HORAS DE CADA DÍA
+			string hourVie,
+			string hourSab,
+			string hourDom,
+			string hourLun,
+			string hourMar,
+			string hourMie,
+			string hourJue,
 
 			string usuario)
 		{
@@ -1464,12 +1474,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					cmd.Parameters.Add("@id_workGroup_vie", SqlDbType.Char, 4)
 						.Value = cuadrillaVie ?? "";
 
+					cmd.Parameters.Add("@hour_vie", SqlDbType.Char, 1)
+						.Value = hourVie;
+
 					// SÁBADO
 					cmd.Parameters.Add("@c_sab", SqlDbType.Int)
 						.Value = asistenciaSab;
 
 					cmd.Parameters.Add("@id_workGroup_sab", SqlDbType.Char, 4)
 						.Value = cuadrillaSab ?? "";
+
+					cmd.Parameters.Add("@hour_sab", SqlDbType.Char, 1)
+						.Value = hourSab;
 
 					// DOMINGO
 					cmd.Parameters.Add("@c_dom", SqlDbType.Int)
@@ -1478,12 +1494,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					cmd.Parameters.Add("@id_workGroup_dom", SqlDbType.Char, 4)
 						.Value = cuadrillaDom ?? "";
 
+					cmd.Parameters.Add("@hour_dom", SqlDbType.Char, 1)
+						.Value = hourDom;
+
 					// LUNES
 					cmd.Parameters.Add("@c_lun", SqlDbType.Int)
 						.Value = asistenciaLun;
 
 					cmd.Parameters.Add("@id_workGroup_lun", SqlDbType.Char, 4)
 						.Value = cuadrillaLun ?? "";
+
+					cmd.Parameters.Add("@hour_lun", SqlDbType.Char, 1)
+						.Value = hourLun;
 
 					// MARTES
 					cmd.Parameters.Add("@c_mar", SqlDbType.Int)
@@ -1492,6 +1514,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					cmd.Parameters.Add("@id_workGroup_mar", SqlDbType.Char, 4)
 						.Value = cuadrillaMar ?? "";
 
+					cmd.Parameters.Add("@hour_mar", SqlDbType.Char, 1)
+						.Value = hourMar;
+
 					// MIÉRCOLES
 					cmd.Parameters.Add("@c_mie", SqlDbType.Int)
 						.Value = asistenciaMie;
@@ -1499,12 +1524,18 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					cmd.Parameters.Add("@id_workGroup_mie", SqlDbType.Char, 4)
 						.Value = cuadrillaMie ?? "";
 
+					cmd.Parameters.Add("@hour_mie", SqlDbType.Char, 1)
+						.Value = hourMie;
+
 					// JUEVES
 					cmd.Parameters.Add("@c_jue", SqlDbType.Int)
 						.Value = asistenciaJue;
 
 					cmd.Parameters.Add("@id_workGroup_jue", SqlDbType.Char, 4)
 						.Value = cuadrillaJue ?? "";
+
+					cmd.Parameters.Add("@hour_jue", SqlDbType.Char, 1)
+						.Value = hourJue;
 
 					// USUARIO
 					cmd.Parameters.Add("@user", SqlDbType.VarChar, 100)
@@ -1530,7 +1561,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
-
 
 		public bool GuardarAsistencia()
 		{
@@ -1559,22 +1589,42 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			string usuario = User.GetUserName();
 
 			string idCuadrillaActual =
-				_frmA.cboCuadrilla.SelectedValue?
-				.ToString().Trim();
+				_frmA.cboCuadrilla.SelectedValue?.ToString().Trim();
 
 			if (string.IsNullOrWhiteSpace(idCuadrillaActual))
 				return false;
 
+			// ==========================================
+			// HORAS DE LA SEMANA
+			// ==========================================
+
+			string horas = _frmA.txbHoras.Text.Trim();
+
+			if (string.IsNullOrWhiteSpace(horas))
+				horas = "8";
+
+			if (horas != "8")
+			{
+				MessageBox.Show("Las horas deben ser 8.");
+				return false;
+			}
+
+			string[] horasSemana =
+			{
+				horas, horas, horas, horas,
+				horas, horas, horas
+			};
+
 			string[] dias =
 			{
-			"Vie", "Sab", "Dom", "Lun",
-			"Mar", "Mie", "Jue"
+				"Vie", "Sab", "Dom", "Lun",
+				"Mar", "Mie", "Jue"
 			};
 
 			string[] columnasAsistencia =
 			{
-			"c_vie", "c_sab", "c_dom", "c_lun",
-			"c_mar", "c_mie", "c_jue"
+				"c_vie", "c_sab", "c_dom", "c_lun",
+				"c_mar", "c_mie", "c_jue"
 			};
 
 			string[] columnasGrupo =
@@ -1600,47 +1650,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (dtAsistencia == null)
 				return false;
 
-			// ==========================================
-			// VALIDAR COLUMNAS
-			// ==========================================
-
 			if (!dtAsistencia.Columns.Contains("id_employee"))
-			{
-				MessageBox.Show(
-					"El procedimiento no devuelve la columna id_employee.",
-					"Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-
 				return false;
-			}
 
 			foreach (string columna in columnasAsistencia)
 			{
 				if (!dtAsistencia.Columns.Contains(columna))
-				{
-					MessageBox.Show(
-						$"El procedimiento no devuelve la columna {columna}.",
-						"Error de columnas",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error);
-
 					return false;
-				}
 			}
 
 			foreach (string columna in columnasGrupo)
 			{
 				if (!dtAsistencia.Columns.Contains(columna))
-				{
-					MessageBox.Show(
-						$"El procedimiento no devuelve la columna {columna}.",
-						"Error de columnas",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error);
-
 					return false;
-				}
 			}
 
 			// ==========================================
@@ -1677,15 +1699,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					int estadoNuevo =
 						ObtenerEstadoCheckBox(fila, dias[d]);
 
-					// Solo validar faltas y asistencias.
 					if (estadoNuevo != 0 && estadoNuevo != 1)
 						continue;
 
 					string valorAsistencia =
 						existente[columnasAsistencia[d]] == DBNull.Value
 							? ""
-							: existente[columnasAsistencia[d]]
-								.ToString().Trim();
+							: existente[columnasAsistencia[d]].ToString().Trim();
 
 					bool registroAnterior =
 						valorAsistencia == "0" ||
@@ -1694,8 +1714,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					string grupoExistente =
 						existente[columnasGrupo[d]] == DBNull.Value
 							? ""
-							: existente[columnasGrupo[d]]
-								.ToString().Trim();
+							: existente[columnasGrupo[d]].ToString().Trim();
 
 					if (registroAnterior &&
 						!string.IsNullOrWhiteSpace(grupoExistente) &&
@@ -1724,7 +1743,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// ==========================================
-			// GUARDAR ASISTENCIAS
+			// GUARDAR ASISTENCIAS Y HORAS
 			// ==========================================
 
 			foreach (DataGridViewRow fila in _frmA.dgvAsistencia.Rows)
@@ -1744,27 +1763,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DataRow existente =
 					registros.Length > 0 ? registros[0] : null;
 
-				// Los estados ahora son números, no booleanos.
 				int[] asistencias = new int[7];
 				string[] cuadrillas = new string[7];
 
-				// ======================================
-				// LEER LOS TRES ESTADOS DE CADA DÍA
-				// ======================================
-
+				// Leer estados
 				for (int d = 0; d < dias.Length; d++)
 				{
 					asistencias[d] =
 						ObtenerEstadoCheckBox(fila, dias[d]);
 				}
 
-				// ======================================
-				// DETERMINAR LA CUADRILLA DE CADA DÍA
-				// ======================================
-
+				// Determinar cuadrillas
 				for (int d = 0; d < dias.Length; d++)
 				{
-					// Si todavía no existe registro semanal.
 					if (existente == null)
 					{
 						cuadrillas[d] =
@@ -1778,8 +1789,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					string valorAsistencia =
 						existente[columnasAsistencia[d]] == DBNull.Value
 							? ""
-							: existente[columnasAsistencia[d]]
-								.ToString().Trim();
+							: existente[columnasAsistencia[d]].ToString().Trim();
 
 					bool registroAnterior =
 						valorAsistencia == "0" ||
@@ -1788,18 +1798,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					string grupoExistente =
 						existente[columnasGrupo[d]] == DBNull.Value
 							? ""
-							: existente[columnasGrupo[d]]
-								.ToString().Trim();
-
-					// ==================================
-					// CONSERVAR OTRA CUADRILLA
-					// ==================================
+							: existente[columnasGrupo[d]].ToString().Trim();
 
 					if (registroAnterior &&
 						!string.IsNullOrWhiteSpace(grupoExistente) &&
 						grupoExistente != idCuadrillaActual)
 					{
-						// Conservar el estado y la cuadrilla original.
 						asistencias[d] =
 							Convert.ToInt32(valorAsistencia);
 
@@ -1807,8 +1811,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					}
 					else
 					{
-						// Solo asignar cuadrilla a falta o asistencia.
-						// El vacío siempre queda en estado 2.
 						cuadrillas[d] =
 							(asistencias[d] == 0 || asistencias[d] == 1)
 								? idCuadrillaActual
@@ -1817,7 +1819,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 
 				// ======================================
-				// GUARDAR LOS SIETE DÍAS
+				// GUARDAR LOS SIETE DÍAS Y SUS HORAS
 				// ======================================
 
 				bool guardado = GuardarAsistenciaSemanal(
@@ -1826,28 +1828,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					fechaFin,
 					idEmployee,
 
-					asistencias[0], cuadrillas[0], // Viernes
-					asistencias[1], cuadrillas[1], // Sábado
-					asistencias[2], cuadrillas[2], // Domingo
-					asistencias[3], cuadrillas[3], // Lunes
-					asistencias[4], cuadrillas[4], // Martes
-					asistencias[5], cuadrillas[5], // Miércoles
-					asistencias[6], cuadrillas[6], // Jueves
+					asistencias[0], cuadrillas[0],
+					asistencias[1], cuadrillas[1],
+					asistencias[2], cuadrillas[2],
+					asistencias[3], cuadrillas[3],
+					asistencias[4], cuadrillas[4],
+					asistencias[5], cuadrillas[5],
+					asistencias[6], cuadrillas[6],
+
+					horasSemana[0],
+					horasSemana[1],
+					horasSemana[2],
+					horasSemana[3],
+					horasSemana[4],
+					horasSemana[5],
+					horasSemana[6],
 
 					usuario);
 
 				if (!guardado)
 				{
 					MessageBox.Show(
-						$"No se pudo guardar la asistencia del empleado " +
-						$"{idEmployee}.",
+						$"No se pudo guardar la asistencia del empleado {idEmployee}.",
 						"Error al guardar",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error);
 
 					return false;
 				}
-
 			}
 
 			// ==========================================
@@ -1855,16 +1863,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			// ==========================================
 
 			if (!AplicarEliminacionesPendientes())
-			{
 				return false;
-			}
-
-			// ==========================================
-			// CONFIRMAR GUARDADO
-			// ==========================================
 
 			MessageBox.Show(
-				"La asistencia se guardó correctamente.",
+				"La asistencia y las horas se guardaron correctamente.",
 				"Asistencia",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
@@ -1872,7 +1874,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			return true;
 		}
 
-		private int ObtenerEstadoCheckBox(DataGridViewRow fila, string columna)
+
+		public int ObtenerEstadoCheckBox(DataGridViewRow fila, string columna)
 		{
 			object valor = fila.Cells[columna].Value;
 
@@ -3596,6 +3599,62 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				conexion.CloseConectionWrite();
 			}
 		}
+
+		public bool ActualizarHoraDia(
+			string cSequencePer,
+			DateTime fechaInicio,
+			DateTime fechaFin,
+			string idEmployee,
+			string idCuadrilla,
+			string dia,
+			string horas)
+		{
+			try
+			{
+				sql.OpenConectionWrite();
+
+				using (SqlCommand cmd = new SqlCommand(
+					"sp_UpdateHorasAsistenciaDia", sql.cnn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
+						.Value = cSequencePer;
+
+					cmd.Parameters.Add("@d_startDate_per", SqlDbType.Date)
+						.Value = fechaInicio.Date;
+
+					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
+						.Value = fechaFin.Date;
+
+					cmd.Parameters.Add("@id_employee", SqlDbType.Char, 6)
+						.Value = idEmployee;
+
+					cmd.Parameters.Add("@id_workGroup", SqlDbType.Char, 4)
+						.Value = idCuadrilla;
+
+					cmd.Parameters.Add("@dia", SqlDbType.VarChar, 3)
+						.Value = dia;
+
+					cmd.Parameters.Add("@hour", SqlDbType.Char, 1)
+						.Value = horas;
+
+					cmd.ExecuteNonQuery();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error al actualizar horas");
+				return false;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
+
 	}
 }
 

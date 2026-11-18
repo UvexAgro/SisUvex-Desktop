@@ -75,6 +75,11 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			label20 = new Label();
+			button5 = new Button();
+			cboDia1 = new ComboBox();
+			label19 = new Label();
+			txbHoras = new TextBox();
 			btnModificarFaltas = new Button();
 			btnJalarActividad = new Button();
 			btnCAL = new Button();
@@ -607,6 +612,11 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(label20);
+			panel1.Controls.Add(button5);
+			panel1.Controls.Add(cboDia1);
+			panel1.Controls.Add(label19);
+			panel1.Controls.Add(txbHoras);
 			panel1.Controls.Add(btnModificarFaltas);
 			panel1.Controls.Add(btnJalarActividad);
 			panel1.Controls.Add(btnCAL);
@@ -627,6 +637,52 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
+			// 
+			// label20
+			// 
+			label20.AutoSize = true;
+			label20.Location = new Point(56, 218);
+			label20.Name = "label20";
+			label20.Size = new Size(30, 15);
+			label20.TabIndex = 43;
+			label20.Text = "Dia :";
+			// 
+			// button5
+			// 
+			button5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button5.ImageAlign = ContentAlignment.MiddleLeft;
+			button5.Location = new Point(157, 234);
+			button5.Name = "button5";
+			button5.Size = new Size(55, 27);
+			button5.TabIndex = 43;
+			button5.Text = "Aplicar";
+			button5.TextAlign = ContentAlignment.MiddleRight;
+			button5.UseVisualStyleBackColor = true;
+			button5.Click += button5_Click;
+			// 
+			// cboDia1
+			// 
+			cboDia1.FormattingEnabled = true;
+			cboDia1.Location = new Point(56, 236);
+			cboDia1.Name = "cboDia1";
+			cboDia1.Size = new Size(89, 23);
+			cboDia1.TabIndex = 42;
+			// 
+			// label19
+			// 
+			label19.AutoSize = true;
+			label19.Location = new Point(5, 218);
+			label19.Name = "label19";
+			label19.Size = new Size(44, 15);
+			label19.TabIndex = 42;
+			label19.Text = "Horas :";
+			// 
+			// txbHoras
+			// 
+			txbHoras.Location = new Point(7, 236);
+			txbHoras.Name = "txbHoras";
+			txbHoras.Size = new Size(41, 23);
+			txbHoras.TabIndex = 40;
 			// 
 			// btnModificarFaltas
 			// 
@@ -1065,5 +1121,10 @@
 		private Button btnJalarActividad;
 		private Button button2;
 		public Button btnModificarFaltas;
+		private Button button5;
+		private Label label19;
+		public TextBox txbHoras;
+		private Label label20;
+		public ComboBox cboDia1;
 	}
 }

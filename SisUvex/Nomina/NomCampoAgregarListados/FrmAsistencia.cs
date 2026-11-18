@@ -87,6 +87,21 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cboDiaChecador.Items.Add("JUE");
 
 			cboDiaChecador.SelectedIndex = 0;
+			txbHoras.Text = "8";
+
+
+			cboDia1.Items.Clear();
+
+			cboDia1.Items.Add("TODOS");
+			cboDia1.Items.Add("VIE");
+			cboDia1.Items.Add("SAB");
+			cboDia1.Items.Add("DOM");
+			cboDia1.Items.Add("LUN");
+			cboDia1.Items.Add("MAR");
+			cboDia1.Items.Add("MIE");
+			cboDia1.Items.Add("JUE");
+
+			cboDia1.SelectedIndex = 0;
 
 			HasEditCatalogsPermission();
 
@@ -1516,6 +1531,182 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 		{
 			FrmAsistenciaASConsulta frm = new FrmAsistenciaASConsulta();
 			frm.Show();
+		}
+
+		private void button5_Click(object sender, EventArgs e)
+		{
+			dgvAsistencia.EndEdit();
+
+			string horas = txbHoras.Text.Trim();
+
+			if (string.IsNullOrWhiteSpace(horas) ||
+				horas.Length != 1 ||
+				!char.IsDigit(horas[0]))
+			{
+				MessageBox.Show("Ingresa una cantidad de horas válida.");
+				return;
+			}
+
+			string diaSeleccionado =
+				cboDia1.Text.Trim().ToUpper();
+
+			string dia = diaSeleccionado switch
+			{
+				"VIE" => "VIE",
+				"VIERNES" => "VIE",
+
+				"SÁB" => "SAB",
+				"SAB" => "SAB",
+				"SÁBADO" => "SAB",
+				"SABADO" => "SAB",
+
+				"DOM" => "DOM",
+				"DOMINGO" => "DOM",
+
+				"LUN" => "LUN",
+				"LUNES" => "LUN",
+
+				"MAR" => "MAR",
+				"MARTES" => "MAR",
+
+				"MIÉ" => "MIE",
+				"MIE" => "MIE",
+				"MIÉRCOLES" => "MIE",
+				"MIERCOLES" => "MIE",
+
+				"JUE" => "JUE",
+				"JUEVES" => "JUE",
+
+				_ => ""
+			};
+
+			if (string.IsNullOrEmpty(dia))
+			{
+				MessageBox.Show("Selecciona un día específico.");
+				return;
+			}
+
+			DataRow semana = _clsA.ObtenerSemanaSeleccionada();
+
+			if (semana == null)
+				return;
+
+			string secuencia =
+				semana["c_sequence_per"].ToString().Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(semana["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(semana["d_endDate_per"]).Date;
+
+			string idCuadrilla =
+				cboCuadrilla.SelectedValue?.ToString().Trim();
+
+			if (string.IsNullOrWhiteSpace(idCuadrilla))
+				return;
+
+			int seleccionados = 0;
+			int actualizados = 0;
+			int sinAsistencia = 0;
+
+			foreach (DataGridViewRow fila in dgvAsistencia.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				// ======================================
+				// VALIDAR CHECKBOX DE SELECCIÓN
+				// ======================================
+
+				bool seleccionado =
+					fila.Cells[0].Value != null &&
+					fila.Cells[0].Value != DBNull.Value &&
+					Convert.ToBoolean(fila.Cells[0].Value);
+
+				if (!seleccionado)
+					continue;
+
+				seleccionados++;
+
+				string idEmployee =
+					fila.Cells["Codigo"].Value?.ToString().Trim();
+
+				if (string.IsNullOrWhiteSpace(idEmployee))
+					continue;
+
+				// ======================================
+				// VALIDAR ASISTENCIA DEL DÍA
+				// ======================================
+
+				int estado = _clsA.ObtenerEstadoCheckBox(
+					fila,
+					dia switch
+					{
+						"VIE" => "Vie",
+						"SAB" => "Sab",
+						"DOM" => "Dom",
+						"LUN" => "Lun",
+						"MAR" => "Mar",
+						"MIE" => "Mie",
+						"JUE" => "Jue",
+						_ => ""
+					});
+
+				// Solamente empleados con asistencia.
+				if (estado != 1)
+				{
+					sinAsistencia++;
+					continue;
+				}
+
+				// ======================================
+				// ACTUALIZAR HORAS
+				// ======================================
+
+				bool guardado = _clsA.ActualizarHoraDia(
+					secuencia,
+					fechaInicio,
+					fechaFin,
+					idEmployee,
+					idCuadrilla,
+					dia,
+					horas);
+
+				if (!guardado)
+					return;
+
+				actualizados++;
+			}
+
+			// ==========================================
+			// VALIDAR SELECCIÓN
+			// ==========================================
+
+			if (seleccionados == 0)
+			{
+				MessageBox.Show(
+					"Selecciona al menos un empleado.",
+					"Aplicar horas",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+
+				return;
+			}
+
+			// ==========================================
+			// RESULTADO
+			// ==========================================
+
+			MessageBox.Show(
+				$"Empleados seleccionados: {seleccionados}\n" +
+				$"Horas actualizadas: {actualizados}\n" +
+				$"Sin asistencia: {sinAsistencia}\n\n" +
+				$"Día: {dia}\n" +
+				$"Horas asignadas: {horas}",
+				"Horas actualizadas",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
 		}
 	}
 }
