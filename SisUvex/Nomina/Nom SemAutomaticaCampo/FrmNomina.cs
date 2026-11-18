@@ -66,7 +66,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			splitNomina.Panel1Collapsed = true;
 		}
-		
+
 		private void FrmNomina_Load(object sender, EventArgs e)
 		{
 			cls.CargarCuadrillaCampoCheck(listaCuadrillas);
@@ -660,6 +660,13 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			{
 				rbFestivo.Checked = false;
 			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			dgvNomina.DataSource = null;
+			dgvNomina.Rows.Clear();
+			dgvNomina.Columns.Clear();
 		}
 	}
 }

@@ -56,6 +56,10 @@
 			tbpNomina = new TabPage();
 			btnSeleccionar = new Button();
 			tabPage4 = new TabPage();
+			label16 = new Label();
+			panel4 = new Panel();
+			panel3 = new Panel();
+			label15 = new Label();
 			label14 = new Label();
 			label13 = new Label();
 			txbReferenciaFestivo = new TextBox();
@@ -74,10 +78,7 @@
 			lblCuadrillas = new Label();
 			lbCSV = new ListBox();
 			label12 = new Label();
-			label15 = new Label();
-			panel3 = new Panel();
-			panel4 = new Panel();
-			label16 = new Label();
+			button1 = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -303,6 +304,7 @@
 			// 
 			panel6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel6.BackColor = Color.FromArgb(35, 103, 149);
+			panel6.Controls.Add(button1);
 			panel6.Controls.Add(label10);
 			panel6.Location = new Point(3, 0);
 			panel6.Name = "panel6";
@@ -426,6 +428,46 @@
 			tabPage4.Size = new Size(1041, 114);
 			tabPage4.TabIndex = 1;
 			tabPage4.Text = "CSV";
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.BackColor = Color.Transparent;
+			label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label16.ForeColor = Color.Black;
+			label16.Location = new Point(597, 2);
+			label16.Name = "label16";
+			label16.Size = new Size(128, 13);
+			label16.TabIndex = 22;
+			label16.Text = "Datos para CSV Festivo.";
+			// 
+			// panel4
+			// 
+			panel4.BackColor = Color.Gray;
+			panel4.Location = new Point(831, 8);
+			panel4.Name = "panel4";
+			panel4.Size = new Size(2, 100);
+			panel4.TabIndex = 21;
+			// 
+			// panel3
+			// 
+			panel3.BackColor = Color.Gray;
+			panel3.Location = new Point(589, 8);
+			panel3.Name = "panel3";
+			panel3.Size = new Size(2, 100);
+			panel3.TabIndex = 20;
+			// 
+			// label15
+			// 
+			label15.AutoSize = true;
+			label15.BackColor = Color.Transparent;
+			label15.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label15.ForeColor = Color.Black;
+			label15.Location = new Point(15, 18);
+			label15.Name = "label15";
+			label15.Size = new Size(128, 13);
+			label15.TabIndex = 3;
+			label15.Text = "Datos para CSV normal.";
 			// 
 			// label14
 			// 
@@ -623,45 +665,22 @@
 			label12.TabIndex = 10;
 			label12.Text = "Cuadrilla con un csv:";
 			// 
-			// label15
+			// button1
 			// 
-			label15.AutoSize = true;
-			label15.BackColor = Color.Transparent;
-			label15.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label15.ForeColor = Color.Black;
-			label15.Location = new Point(15, 18);
-			label15.Name = "label15";
-			label15.Size = new Size(128, 13);
-			label15.TabIndex = 3;
-			label15.Text = "Datos para CSV normal.";
-			// 
-			// panel3
-			// 
-			panel3.BackColor = Color.Gray;
-			panel3.Location = new Point(589, 8);
-			panel3.Name = "panel3";
-			panel3.Size = new Size(2, 100);
-			panel3.TabIndex = 20;
-			// 
-			// panel4
-			// 
-			panel4.BackColor = Color.Gray;
-			panel4.Location = new Point(831, 8);
-			panel4.Name = "panel4";
-			panel4.Size = new Size(2, 100);
-			panel4.TabIndex = 21;
-			// 
-			// label16
-			// 
-			label16.AutoSize = true;
-			label16.BackColor = Color.Transparent;
-			label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label16.ForeColor = Color.Black;
-			label16.Location = new Point(597, 2);
-			label16.Name = "label16";
-			label16.Size = new Size(128, 13);
-			label16.TabIndex = 22;
-			label16.Text = "Datos para CSV Festivo.";
+			button1.BackColor = Color.White;
+			button1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button1.ForeColor = Color.Black;
+			button1.Image = (Image)resources.GetObject("button1.Image");
+			button1.ImageAlign = ContentAlignment.MiddleLeft;
+			button1.Location = new Point(230, 8);
+			button1.Name = "button1";
+			button1.Padding = new Padding(25, 0, 25, 0);
+			button1.Size = new Size(143, 35);
+			button1.TabIndex = 10;
+			button1.Text = "Limpiar";
+			button1.TextAlign = ContentAlignment.MiddleRight;
+			button1.UseVisualStyleBackColor = false;
+			button1.Click += button1_Click;
 			// 
 			// FrmNomina
 			// 
@@ -756,5 +775,6 @@
 		private Panel panel4;
 		private Panel panel3;
 		private Label label15;
+		private Button button1;
 	}
 }
