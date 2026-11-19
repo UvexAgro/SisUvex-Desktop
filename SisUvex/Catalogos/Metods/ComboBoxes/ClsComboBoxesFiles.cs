@@ -2,8 +2,8 @@
 using SisUvex.Catalogos.Metods.Querys;
 
 using System.Data;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 namespace SisUvex.Catalogos.Metods.ComboBoxes
 {
     internal class ClsComboBoxFiles
@@ -12,6 +12,11 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
         private static string rutaConsultaCbo = Path.Combine(dataDirectory, "querys", "cbo");
         private static Dictionary<string, string> cboFiles = new Dictionary<string, string>();
         private static Dictionary<string, string> lastUpdateDates = new Dictionary<string, string>();
+
+        //CACHE EN MEMORIA PARA NO REPETIR ALTER/CHECKS DE CHANGE TRACKING EN LA MISMA SESION
+        private static bool dbChangeTrackingReady = false;
+        private static readonly HashSet<string> tablesWithChangeTracking = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly Regex safeSqlName = new(@"^[A-Za-z_][A-Za-z0-9_]*$", RegexOptions.Compiled);
 
         public static DataTable GetCboCatalogDataTable(string catalogName)
         {
@@ -26,10 +31,11 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             if (!lastUpdateDates.ContainsKey(catalogName)) //SI NO CONTIENE EL NOMBRE DEL CATALOGO EN EL DICCIONARIO, LO AGREGA CON LA FECHA MINIMA
                 lastUpdateDates[catalogName] = DateTime.MinValue.ToString();
 
-            string lastUpdateDate = lastUpdateDates[catalogName]; //OBTIENE LA FECHA DE ACTUALIZACION DEL CATALOGO EN EL DICCIONARIO
-            string databaseLastUpdateDate = GetDataBaseLastUpdateDate(catalogName); //OBTIENE LA LA FECHA DE LA ULTIMA ACTUALIZACION EN LA BASE DE DATOS DE PARA ESE CATALOGO SEGUN CUALES REFERENCIAS TIENE
+            string lastUpdateDate = lastUpdateDates[catalogName]; //OBTIENE EL WATERMARK LOCAL DEL CATALOGO EN EL DICCIONARIO
+            //OBTIENE EL WATERMARK DE CHANGE TRACKING EN BD PARA LAS TABLAS QUE USA ESE CATALOGO
+            string databaseLastUpdateDate = GetDataBaseLastUpdateDate(catalogName, out bool forceRefresh);
 
-            if (lastUpdateDate != databaseLastUpdateDate)
+            if (forceRefresh) //HUBO CAMBIOS EN EL GRUPO DE TABLAS O SE HABILITO CT POR PRIMERA VEZ
             {
                 dataTable = GetDataTableForFile(catalogName); //OBTIENE EL DATATABLE SEGUN EL NOMBRE DEL CATALOGO
 
@@ -42,15 +48,37 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     JsonSerializer.Serialize(fileStream, serializedData);
                 }
 
-                lastUpdateDates[catalogName] = databaseLastUpdateDate; // ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION EN EL DICCIONARIO
-                SaveLastUpdateDates(); // ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION EN EL ARCHIVO DE LAS FECHAS DE ACTUALIZACIONES
+                lastUpdateDates[catalogName] = databaseLastUpdateDate; // ACTUALIZA EL WATERMARK EN EL DICCIONARIO
+                SaveLastUpdateDates(); // ACTUALIZA EL WATERMARK EN EL ARCHIVO DE LAS FECHAS/VERSIONES DE ACTUALIZACIONES
             }
-            else if (File.Exists(cboFiles[catalogName])) // SI NO HA HABIDO ACTUALIZACIONES, ENTONCES JALA DIRECTO DEL ARCHIVO DEL CATALOGO
+            else
             {
-                using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Open))
+                //SI SOLO SUBIO LA VERSION GLOBAL POR OTRA TABLA, AVANZA EL WATERMARK LOCAL SIN RECONSULTAR
+                if (lastUpdateDate != databaseLastUpdateDate)
                 {
-                    var serializedData = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(fileStream);
-                    dataTable = ConvertListToDataTable(serializedData);
+                    lastUpdateDates[catalogName] = databaseLastUpdateDate;
+                    SaveLastUpdateDates();
+                }
+
+                if (File.Exists(cboFiles[catalogName])) // SI NO HA HABIDO ACTUALIZACIONES DEL GRUPO, JALA DIRECTO DEL ARCHIVO
+                {
+                    using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Open))
+                    {
+                        var serializedData = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(fileStream);
+                        dataTable = ConvertListToDataTable(serializedData);
+                    }
+                }
+                else //SI NO HAY ARCHIVO LOCAL, CONSULTA BD UNA VEZ
+                {
+                    dataTable = GetDataTableForFile(catalogName);
+                    string directoryPath = Path.GetDirectoryName(cboFiles[catalogName]);
+                    if (!Directory.Exists(directoryPath))
+                        Directory.CreateDirectory(directoryPath);
+                    using (FileStream fileStream = new FileStream(cboFiles[catalogName], FileMode.Create))
+                    {
+                        var serializedData = ConvertDataTableToList(dataTable);
+                        JsonSerializer.Serialize(fileStream, serializedData);
+                    }
                 }
             }
             // PARA MOSTRAR LOS NOMBRES DE LAS COLUMNAS DEL DATATABLE
@@ -62,10 +90,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
         /// <summary>
         /// Fuerza que la próxima llamada a <see cref="GetCboCatalogDataTable"/> para <paramref name="catalogName"/>
         /// vuelva a consultar la base de datos, ignorando el archivo cacheado en disco.
-        /// Se necesita para catálogos como <see cref="ClsObject.AttendanceType.Cbo"/> cuya tabla no tiene
-        /// un registro de actualización en Pack_TablesUpdates (por lo que la comparación de fechas nunca
-        /// detecta cambios por sí sola); se debe llamar manualmente después de cualquier alta/modificación/
-        /// cambio de estatus hecho desde la aplicación.
+        /// Útil después de un alta/modificación/estatus hecho desde la aplicación, si se quiere
+        /// refrescar de inmediato sin esperar a que Change Tracking marque un watermark distinto.
         /// </summary>
         public static void InvalidateCache(string catalogName)
         {
@@ -169,7 +195,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     break;
                 case ClsObject.Lot.CboOnlyNameLotFacility:
                     queryDataTable = ClsObject.Lot.QueryCboOnlyNameLotFacility;
-					break;
+                    break;
                 case ClsObject.Lot.CboOnlyNameLotPlantTracking:
                     queryDataTable = ClsObject.Lot.QueryOnlyNameLotPlantTracking;
                     break;
@@ -215,14 +241,14 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Season.Cbo:
                     queryDataTable = ClsObject.Season.QueryCbo;
                     break;
-				case ClsObject.Season.CboWithDates:
-					queryDataTable = ClsObject.Season.QueryCboWithDates;
-					break;
+                case ClsObject.Season.CboWithDates:
+                    queryDataTable = ClsObject.Season.QueryCboWithDates;
+                    break;
                 case ClsObject.SeasonType.Cbo:
                     queryDataTable = ClsObject.SeasonType.QueryCbo;
                     break;
-				case ClsObject.PlacePayment.Cbo:
-                        queryDataTable = ClsObject.PlacePayment.QueryCbo;
+                case ClsObject.PlacePayment.Cbo:
+                    queryDataTable = ClsObject.PlacePayment.QueryCbo;
                     break;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
                     queryDataTable = ClsObject.Payroll_AttendancePeriod.QueryCbo;
@@ -303,76 +329,116 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             return ClsQuerysDB.GetDataTable(queryDataTable);
         }
 
-        private static string GetDataBaseLastUpdateDate(string catalogName)
+        /// <summary>
+        /// OBTIENE EL WATERMARK DE CHANGE TRACKING PARA EL CATALOGO.
+        /// SI FALTA CT EN LA BD O EN ALGUNA TABLA DEL GRUPO, LO HABILITA Y FUERZA REFRESCO ESA PRIMERA VEZ.
+        /// </summary>
+        private static string GetDataBaseLastUpdateDate(string catalogName, out bool forceRefresh)
         {
-            string query = "SELECT MAX(d_update) AS 'd_update' FROM Pack_TablesUpdates WHERE v_nameTable ";
-            switch (catalogName) //SI ES UNO DE LAS OPCIONES LE METE EL FILTRO PARA OBTENER LA FECHA MAS RECIENTE DE ESAS DOS
+            forceRefresh = false;
+
+            List<string> tables = GetCatalogTables(catalogName); //TABLAS QUE AFECTAN ESTE CATALOGO (1 O VARIAS)
+            if (tables.Count == 0)
+                return string.Empty;
+
+            //SI LA BD NO TIENE CHANGE TRACKING, LO ACTIVA UNA SOLA VEZ
+            if (!EnsureDatabaseChangeTracking())
+                return DateTime.UtcNow.Ticks.ToString(); //SI FALLA EL ENSURE, FUERZA REFRESCO PARA NO QUEDAR CON CACHE VIEJO
+
+            bool newlyEnabled = false;
+            foreach (string tableName in tables) //REVISA CADA TABLA DEL GRUPO; SI NO TIENE CT, LO CREA
+            {
+                if (EnsureTableChangeTracking(tableName))
+                    newlyEnabled = true;
+            }
+
+            string currentVersion = GetChangeTrackingCurrentVersion(); //VERSION ACTUAL DE CT EN LA BD
+            if (string.IsNullOrEmpty(currentVersion))
+                currentVersion = "0";
+
+            //SI SE ACABA DE HABILITAR CT EN ALGUNA TABLA, NO HAY HISTORIAL PREVIO: HAY QUE REFRESCAR EL .DAT
+            if (newlyEnabled)
+            {
+                forceRefresh = true;
+                return currentVersion;
+            }
+
+            //SI EL WATERMARK LOCAL NO ES NUMERICO (CACHE VIEJO DE Pack_TablesUpdates / MinValue), FUERZA REFRESCO
+            if (!long.TryParse(lastUpdateDates.GetValueOrDefault(catalogName), out long lastVersion))
+            {
+                forceRefresh = true;
+                return currentVersion;
+            }
+
+            if (long.TryParse(currentVersion, out long current) && current > lastVersion)
+            {
+                //SI LA VERSION SUBIO, REVISA SI ALGUNA TABLA DEL GRUPO TUVO CAMBIOS DESDE LA VERSION LOCAL
+                forceRefresh = CatalogTablesHaveChanges(tables, lastVersion);
+            }
+
+            return currentVersion;
+        }
+
+        /// <summary>
+        /// LISTA DE TABLAS CUYOS CAMBIOS INVALIDAN EL CACHE DEL CATALOGO.
+        /// SI EL CATALOGO DEPENDE DE JOINS/COMBOS RELACIONADOS, SE PONEN VARIAS.
+        /// </summary>
+        private static List<string> GetCatalogTables(string catalogName)
+        {
+            switch (catalogName) //SI ES UNO DE LOS QUE DEPENDEN DE VARIAS TABLAS, DEVUELVE EL GRUPO
             {
                 case ClsObject.Variety.Cbo:
-                    query += " IN ('Pack_Variety', 'Pack_Crop')";
-                    break;
+                    return new List<string> { "Pack_Variety", "Pack_Crop" };
                 case ClsObject.Lot.Cbo:
                 case ClsObject.Lot.CboOnlyNameLot:
                 case ClsObject.Lot.CboOnlyNameLotPlantTracking:
                 case ClsObject.Lot.CboOnlyNameLotFacility:
-					query += " IN ('Pack_Variety', 'Pack_Crop', 'Pack_Lot', 'Grow_Farm')";
-                    break;
+                    return new List<string> { "Pack_Variety", "Pack_Crop", "Pack_Lot", "Grow_Farm" };
                 case ClsObject.Presentation.Cbo:
-                    query += " IN ('Pack_Category', 'Pack_Presentation') ";
-                    break;
+                    return new List<string> { "Pack_Category", "Pack_Presentation" };
                 case ClsObject.WorkGroup.Cbo:
-                    query += " IN ('Pack_Contractor', 'Pack_WorkGroup', 'Pack_Season', 'Pack_SeasonType') ";
-                    break;
+                    return new List<string> { "Pack_Contractor", "Pack_WorkGroup", "Pack_Season", "Pack_SeasonType" };
                 case ClsObject.Gtin.DgvCatalog:
-                    query += " IN ('Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Price', 'Pack_Pti', 'Pack_Presentation') ";
-                    break;
+                case ClsObject.Gtin.DgvForWorkPlan:
+                    return new List<string> { "Pack_GTIN", "Pack_Variety", "Pack_Container", "Pack_Distributor", "Pack_Price", "Pack_PtiType", "Pack_Presentation" };
                 case ClsObject.WorkPlan.DgvCatalog:
                 case ClsObject.WorkPlan.CboPresentation:
-                    query += " IN ('Pack_WorkPlan', 'Pack_Gtin', 'Pack_Variety', 'Pack_Container', 'Pack_Distributor', 'Pack_Pti', 'Pack_Size', 'Pack_WorkGroup', 'Pack_Contractor', 'Pack_Lot', 'Pack_Presentation', 'Pack_Crop', 'Pack_TypeBox', 'Pack_LabelLegend') ";
-                    break;
+                    return new List<string>
+                    {
+                        "Pack_WorkPlan", "Pack_GTIN", "Pack_Variety", "Pack_Container", "Pack_Distributor",
+                        "Pack_PtiType", "Pack_Size", "Pack_WorkGroup", "Pack_Contractor", "Pack_Lot",
+                        "Pack_Presentation", "Pack_Crop", "Pack_TypeBox", "Pack_LabelLegend"
+                    };
                 case ClsObject.ProductionLine.Cbo:
-                    query += " IN ('Nom_ProductionLine', 'Pack_WorkGroup') ";
-                    break;
+                    return new List<string> { "Nom_ProductionLine", "Pack_WorkGroup" };
                 case ClsObject.Season.Cbo:
-				case ClsObject.Season.CboWithDates:
-					query += " IN ('Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
-                    break;
+                case ClsObject.Season.CboWithDates:
+                    return new List<string> { "Pack_Season", "Pack_Crop", "Pack_SeasonType" };
                 case ClsObject.PlacePayment.Cbo:
-                    query += " IN ('Nom_PlacePayment', 'Pack_Grower', 'Pack_Contractor', 'Pack_WorkGroup') ";
-                    break;
+                    return new List<string> { "Nom_PlacePayment", "Pack_Grower", "Pack_Contractor", "Pack_WorkGroup" };
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
-                    query += " IN ('Payroll_AttendancePeriod', 'Pack_Season', 'Pack_Crop', 'Pack_SeasonType') ";
-                    break;
+                    return new List<string> { "Payroll_AttendancePeriod", "Pack_Season", "Pack_Crop", "Pack_SeasonType" };
                 case ClsObject.Consignee.Cbo:
-                    query += " IN ('Pack_Consignee', 'Pack_Distributor') ";
-                    break;
+                    return new List<string> { "Pack_Consignee", "Pack_Distributor" };
                 case ClsObject.Driver.Cbo:
-                    query += " IN ('Pack_TransportLine', 'Pack_Driver') ";
-                    break;
+                    return new List<string> { "Pack_TransportLine", "Pack_Driver" };
                 case ClsObject.Truck.Cbo:
-                    query += " IN ('Pack_TransportLine', 'Pack_Truck') ";
-                    break;
+                    return new List<string> { "Pack_TransportLine", "Pack_Truck" };
                 case ClsObject.FreightContainer.Cbo:
                 case ClsObject.FreightContainer.CboTypeContainer:
-                    query += " IN ('Pack_TransportLine', 'Pack_FreightContainer') ";
-                    break;
+                    return new List<string> { "Pack_TransportLine", "Pack_FreightContainer" };
                 case ClsObject.ManifestTemplate.Cbo:
-                    query += " IN ('Pack_ManifestTemplates', 'Pack_Distributor', 'Pack_Grower', 'Pack_Consignee', 'Pack_AgencyTrade', 'Pack_City') ";
-                    break;
+                    return new List<string> { "Pack_ManifestTemplates", "Pack_Distributor", "Pack_Grower", "Pack_Consignee", "Pack_AgencyTrade", "Pack_City" };
                 case ClsObject.MaterialCatalog.Cbo:
-                    query += " IN ('Pack_MaterialCatalog', 'Pack_MaterialType', 'Pack_Distributor', 'Pack_Color', 'Pack_Unit', 'Pack_Category') ";
-                    break;
+                    return new List<string> { "Pack_MaterialCatalog", "Pack_MaterialType", "Pack_Distributor", "Pack_Color", "Pack_Unit", "Pack_Category" };
                 case ClsObject.MaterialType.Cbo:
-                    query += " IN ('Pack_MaterialType', 'Pack_MaterialCatalog') ";
-                    break;
+                    return new List<string> { "Pack_MaterialType", "Pack_MaterialCatalog" };
                 default: //SI NO ES NINGUNO DE ESOS, BUSCA EL NOMBRE DE LA TABLA PARA QUE SEA ESA SOLAMENTE
                     string tableName = GetTableName(catalogName);
-                    query += $" = '{tableName}'";
-                    break;
+                    return string.IsNullOrEmpty(tableName)
+                        ? new List<string>()
+                        : new List<string> { tableName };
             }
-            //if (catalogName == ClsObject.MaterialType.Cbo)
-            //Clipboard.SetText(rutaConsultaCbo);
-            return ClsQuerysDB.GetData(query).ToString();
         }
 
         private static string GetTableName(string catalogName)
@@ -391,7 +457,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.Lot.CboOnlyNameLot:
                 case ClsObject.Lot.CboOnlyNameLotPlantTracking:
                 case ClsObject.Lot.CboOnlyNameLotFacility:
-					return ClsObject.Lot.TableName;
+                    return ClsObject.Lot.TableName;
                 case ClsObject.Distributor.Cbo:
                     return ClsObject.Distributor.TableName;
                 case ClsObject.Container.Cbo:
@@ -423,7 +489,7 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.SeasonType.Cbo:
                     return ClsObject.SeasonType.TableName;
                 case ClsObject.PlacePayment.Cbo:
-                        return ClsObject.PlacePayment.TableName;
+                    return ClsObject.PlacePayment.TableName;
                 case ClsObject.Payroll_AttendancePeriod.Cbo:
                     return ClsObject.Payroll_AttendancePeriod.TableName;
                 case ClsObject.City.Cbo:
@@ -476,19 +542,122 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
             }
         }
 
+        /// <summary>
+        /// ACTIVA CHANGE TRACKING A NIVEL DE BASE DE DATOS SI AUN NO ESTA ACTIVO.
+        /// </summary>
+        private static bool EnsureDatabaseChangeTracking()
+        {
+            if (dbChangeTrackingReady)
+                return true;
+
+            //REVISA SI YA ESTA ACTIVO EN LA BD ACTUAL
+            string exists = ClsQuerysDB.GetData("SELECT 1 FROM sys.change_tracking_databases WHERE database_id = DB_ID()");
+
+            if (exists == "1")
+            {
+                dbChangeTrackingReady = true;
+                return true;
+            }
+
+            //LO ACTIVA EN LA BD ACTUAL (REQUIERE PERMISOS DE ALTER DATABASE)
+            string enableDb = @"DECLARE @db sysname = DB_NAME();
+                                DECLARE @sql nvarchar(max) = N'ALTER DATABASE ' + QUOTENAME(@db)
+                                    + N' SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 7 DAYS, AUTO_CLEANUP = ON)';
+                                EXEC sys.sp_executesql @sql;";
+
+            if (!ClsQuerysDB.ExecuteQuery(enableDb))
+                return false;
+
+            dbChangeTrackingReady = true;
+            return true;
+        }
+
+        /// <summary>
+        /// ACTIVA CHANGE TRACKING EN LA TABLA SI AUN NO LO TIENE.
+        /// DEVUELVE TRUE SI LO HABILITO EN ESTE MOMENTO (PRIMERA VEZ).
+        /// </summary>
+        private static bool EnsureTableChangeTracking(string tableName)
+        {
+            if (string.IsNullOrWhiteSpace(tableName) || !safeSqlName.IsMatch(tableName))
+                return false;
+
+            if (tablesWithChangeTracking.Contains(tableName)) //YA SE VERIFICO EN ESTA SESION
+                return false;
+
+            //REVISA SI LA TABLA YA TIENE CT
+            string exists = ClsQuerysDB.GetData($@" SELECT 1
+                                                    FROM sys.change_tracking_tables ct
+                                                    INNER JOIN sys.tables t ON t.object_id = ct.object_id
+                                                    INNER JOIN sys.schemas s ON s.schema_id = t.schema_id
+                                                    WHERE s.name = 'dbo' AND t.name = '{tableName}'");
+
+            if (exists == "1")
+            {
+                tablesWithChangeTracking.Add(tableName);
+                return false; //YA EXISTIA: NO ES PRIMERA VEZ
+            }
+
+            //SI LA TABLA NO EXISTE, NO INTENTA ALTER
+            string tableExists = ClsQuerysDB.GetData(
+                $"SELECT 1 FROM sys.tables t INNER JOIN sys.schemas s ON s.schema_id = t.schema_id WHERE s.name = 'dbo' AND t.name = '{tableName}'");
+            if (tableExists != "1")
+                return false;
+
+            //HABILITA CT EN LA TABLA (REQUIERE PK Y PERMISOS DE ALTER TABLE)
+            string enableTable =
+                $"ALTER TABLE [dbo].[{tableName}] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);";
+
+            if (!ClsQuerysDB.ExecuteQuery(enableTable))
+                return false;
+
+            tablesWithChangeTracking.Add(tableName);
+            return true; //SE CREO AHORA: LA PRIMERA VEZ HAY QUE REFRESCAR CACHE
+        }
+
+        private static string GetChangeTrackingCurrentVersion()
+        {
+            //VERSION GLOBAL DE CHANGE TRACKING EN LA BD (SUBE CON CUALQUIER CAMBIO EN TABLAS CON CT)
+            return ClsQuerysDB.GetData("SELECT CAST(CHANGE_TRACKING_CURRENT_VERSION() AS varchar(30))");
+        }
+
+        /// <summary>
+        /// REVISA SI ALGUNA DE LAS TABLAS DEL GRUPO TUVO CAMBIOS DESDE @lastVersion.
+        /// ASI NO SE INVALIDA EL CACHE POR CAMBIOS DE TABLAS AJENAS AL CATALOGO.
+        /// </summary>
+        private static bool CatalogTablesHaveChanges(List<string> tables, long lastVersion)
+        {
+            foreach (string tableName in tables)
+            {
+                if (string.IsNullOrWhiteSpace(tableName) || !safeSqlName.IsMatch(tableName))
+                    continue;
+
+                //SI LA VERSION LOCAL ES MENOR A LA MINIMA VALIDA, CT YA LIMPIO EL HISTORIAL: HAY QUE REFRESCAR
+                string minValid = ClsQuerysDB.GetData(
+                    $"SELECT CAST(CHANGE_TRACKING_MIN_VALID_VERSION(OBJECT_ID('dbo.{tableName}')) AS varchar(30))");
+                if (long.TryParse(minValid, out long minVersion) && lastVersion < minVersion)
+                    return true;
+
+                //BUSCA CAMBIOS EN ESA TABLA DESDE LA VERSION LOCAL
+                string hasChanges = ClsQuerysDB.GetData($@"SELECT TOP (1) 1 FROM CHANGETABLE(CHANGES [dbo].[{tableName}], {lastVersion}) AS CT");
+
+                if (hasChanges == "1")
+                    return true;
+            }
+
+            return false;
+        }
+
         public static bool IsInfoNeededToUpdate(string catalogName)
         {
-            //CONSULTA SI LA INFORMACION DEL CATALOGO NECESITA SER ACTUALIZADA
+            //CONSULTA SI LA INFORMACION DEL CATALOGO NECESITA SER ACTUALIZADA (CAMBIOS EN SU GRUPO DE TABLAS)
+            if (lastUpdateDates.Count == 0)
+                LoadLastUpdateDates();
+
             if (!lastUpdateDates.ContainsKey(catalogName))
                 return false;
 
-            string lastUpdateDate = lastUpdateDates[catalogName];
-
-            string databaseLastUpdateDate = GetDataBaseLastUpdateDate(catalogName);
-            if (lastUpdateDate != databaseLastUpdateDate)
-                return true;
-            else
-                return false;
+            GetDataBaseLastUpdateDate(catalogName, out bool forceRefresh);
+            return forceRefresh;
         }
     }
 }
