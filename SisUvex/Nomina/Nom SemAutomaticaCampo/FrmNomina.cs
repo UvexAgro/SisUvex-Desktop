@@ -76,10 +76,25 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			txbReferencia.Text = dtpFecha.Value.ToString("yyyyMMdd");
 			txbJornada.Text = "8";
 			txbDestajo.Text = "0";
+			txbLote.Text = "0000";
+			txbActividad.Text = "1775";
 
 			cls.CargarCuadrillasConCsv(lbCSV, dtpFecha.Value.Date);
+			ConfigurarCamposFestivo();
 		}
+		private void ConfigurarCamposFestivo()
+		{
+			bool esFestivo = rbFestivo.Checked;
 
+			txbLote.Enabled = esFestivo;
+			txbActividad.Enabled = esFestivo;
+			txbReferenciaFestivo.Enabled = esFestivo;
+
+			// Opcional: cambiar apariencia
+			txbLote.BackColor = esFestivo ? Color.White : Color.LightGray;
+			txbActividad.BackColor = esFestivo ? Color.White : Color.LightGray;
+			txbReferenciaFestivo.BackColor = esFestivo ? Color.White : Color.LightGray;
+		}
 		private void btnConsultar_Click(object sender, EventArgs e)
 		{
 			cls.ConsultarNomina();
@@ -631,14 +646,14 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		{
 			string[] columnas =
 			{
-		"VIE_OTRA",
-		"SAB_OTRA",
-		"DOM_OTRA",
-		"LUN_OTRA",
-		"MAR_OTRA",
-		"MIE_OTRA",
-		"JUE_OTRA"
-	};
+				"VIE_OTRA",
+				"SAB_OTRA",
+				"DOM_OTRA",
+				"LUN_OTRA",
+				"MAR_OTRA",
+				"MIE_OTRA",
+				"JUE_OTRA"
+			};
 
 			foreach (string columna in columnas)
 			{
@@ -667,6 +682,11 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			dgvNomina.DataSource = null;
 			dgvNomina.Rows.Clear();
 			dgvNomina.Columns.Clear();
+		}
+
+		private void rbFestivo_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurarCamposFestivo();
 		}
 	}
 }
