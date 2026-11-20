@@ -322,6 +322,12 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                 case ClsObject.AttendanceType.Cbo:
                     queryDataTable = ClsObject.AttendanceType.QueryCbo;
                     break;
+                case ClsObject.Nom_WorkGroup.Cbo:
+                    queryDataTable = ClsObject.Nom_WorkGroup.QueryCbo;
+                    break;
+                case ClsObject.Nom_AgriculturalCycle.Cbo:
+                    queryDataTable = ClsObject.Nom_AgriculturalCycle.QueryCbo;
+                    break;
                 default:
                     // Handle unknown table names
                     break;
@@ -537,6 +543,10 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return ClsObject.LabelLegend.TableName;
                 case ClsObject.AttendanceType.Cbo:
                     return ClsObject.AttendanceType.TableName;
+                case ClsObject.Nom_WorkGroup.TableName:
+                    return ClsObject.Nom_WorkGroup.Cbo;
+                case ClsObject.Nom_AgriculturalCycle.TableName:
+                    return ClsObject.Nom_AgriculturalCycle.Cbo;
                 default:
                     return string.Empty;// Handle unknown table names
             }

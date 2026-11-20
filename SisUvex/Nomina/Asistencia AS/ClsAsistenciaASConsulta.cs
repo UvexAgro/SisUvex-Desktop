@@ -105,6 +105,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // invalida manualmente esa caché (ClsComboBoxFiles.InvalidateCache) tras cualquier alta,
             // modificación o cambio de estatus, para que aquí siempre se refleje el dato más reciente.
             ClsComboBoxes.CboLoadActives(frm.cboAttendenceType, AttendanceType.Cbo);
+            ClsComboBoxes.CboLoadActives(frm.cboNomWorkGroup, Nom_WorkGroup.Cbo);
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAttendenceType, "04"); //<-- falta injustificada
 
             ClsComboBoxes.CboLoadActives(frm.cboLP, PlacePayment.Cbo);

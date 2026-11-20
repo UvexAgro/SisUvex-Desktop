@@ -40,16 +40,25 @@ namespace SisUvex.Nomina.Asistencia_AS
             cboAttendenceType = new ComboBox();
             lblSobrantesInfo = new Label();
             label2 = new Label();
+            btnLoadReport = new Button();
+            txbLastDays = new TextBox();
+            lblLastDays = new Label();
             dtpDate1 = new DateTimePicker();
             labelDate = new Label();
             labelDateTo = new Label();
             dtpDate2 = new DateTimePicker();
-            btnLoadReport = new Button();
-            txbLastDays = new TextBox();
-            lblLastDays = new Label();
             btnModifyAttendance = new Button();
             btnExcel = new Button();
             gpbFilters = new GroupBox();
+            comboBox4 = new ComboBox();
+            label6 = new Label();
+            comboBox3 = new ComboBox();
+            label5 = new Label();
+            comboBox2 = new ComboBox();
+            label4 = new Label();
+            btnAddNomWorkGroup = new Button();
+            cboNomWorkGroup = new ComboBox();
+            label3 = new Label();
             lblEmployeeAdvice = new Label();
             btnAddList = new Button();
             btnAddEmployee = new Button();
@@ -86,7 +95,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnClearList.Font = new Font("Segoe UI", 12F);
             btnClearList.Image = Properties.Resources.limpiarIcon16;
             btnClearList.ImageAlign = ContentAlignment.MiddleLeft;
-            btnClearList.Location = new Point(11, 252);
+            btnClearList.Location = new Point(11, 333);
             btnClearList.Name = "btnClearList";
             btnClearList.Padding = new Padding(5, 0, 0, 0);
             btnClearList.Size = new Size(96, 31);
@@ -102,7 +111,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             chbShowReport.Font = new Font("Segoe UI", 12F);
             chbShowReport.Image = Properties.Resources.verIcon16;
             chbShowReport.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowReport.Location = new Point(210, 252);
+            chbShowReport.Location = new Point(210, 333);
             chbShowReport.Name = "chbShowReport";
             chbShowReport.Padding = new Padding(4, 0, 0, 0);
             chbShowReport.Size = new Size(95, 31);
@@ -118,7 +127,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             chbShowReportCalendar.Font = new Font("Segoe UI", 12F);
             chbShowReportCalendar.Image = Properties.Resources.verIcon16;
             chbShowReportCalendar.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowReportCalendar.Location = new Point(311, 252);
+            chbShowReportCalendar.Location = new Point(311, 333);
             chbShowReportCalendar.Name = "chbShowReportCalendar";
             chbShowReportCalendar.Padding = new Padding(4, 0, 0, 0);
             chbShowReportCalendar.Size = new Size(115, 31);
@@ -134,7 +143,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             chbShowEmployees.Font = new Font("Segoe UI", 12F);
             chbShowEmployees.Image = Properties.Resources.verIcon16;
             chbShowEmployees.ImageAlign = ContentAlignment.MiddleLeft;
-            chbShowEmployees.Location = new Point(113, 252);
+            chbShowEmployees.Location = new Point(113, 333);
             chbShowEmployees.Name = "chbShowEmployees";
             chbShowEmployees.Padding = new Padding(4, 0, 0, 0);
             chbShowEmployees.Size = new Size(91, 31);
@@ -150,15 +159,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             bgpInfo.Controls.Add(cboAttendenceType);
             bgpInfo.Controls.Add(lblSobrantesInfo);
             bgpInfo.Controls.Add(label2);
-            bgpInfo.Controls.Add(dtpDate1);
-            bgpInfo.Controls.Add(labelDate);
-            bgpInfo.Controls.Add(labelDateTo);
-            bgpInfo.Controls.Add(dtpDate2);
             bgpInfo.Controls.Add(btnLoadReport);
             bgpInfo.Controls.Add(txbLastDays);
             bgpInfo.Controls.Add(lblLastDays);
             bgpInfo.Font = new Font("Segoe UI", 12F);
-            bgpInfo.Location = new Point(12, 168);
+            bgpInfo.Location = new Point(11, 249);
             bgpInfo.Name = "bgpInfo";
             bgpInfo.Size = new Size(909, 78);
             bgpInfo.TabIndex = 87;
@@ -200,42 +205,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             label2.TabIndex = 91;
             label2.Text = "Inasistencia por defecto";
             // 
-            // dtpDate1
-            // 
-            dtpDate1.Format = DateTimePickerFormat.Short;
-            dtpDate1.Location = new Point(118, 20);
-            dtpDate1.Name = "dtpDate1";
-            dtpDate1.Size = new Size(120, 29);
-            dtpDate1.TabIndex = 52;
-            // 
-            // labelDate
-            // 
-            labelDate.AutoSize = true;
-            labelDate.Location = new Point(12, 25);
-            labelDate.Margin = new Padding(0);
-            labelDate.Name = "labelDate";
-            labelDate.Size = new Size(103, 21);
-            labelDate.TabIndex = 50;
-            labelDate.Text = "Rango fechas";
-            // 
-            // labelDateTo
-            // 
-            labelDateTo.AutoSize = true;
-            labelDateTo.Location = new Point(244, 25);
-            labelDateTo.Margin = new Padding(0);
-            labelDateTo.Name = "labelDateTo";
-            labelDateTo.Size = new Size(22, 21);
-            labelDateTo.TabIndex = 51;
-            labelDateTo.Text = "al";
-            // 
-            // dtpDate2
-            // 
-            dtpDate2.Format = DateTimePickerFormat.Short;
-            dtpDate2.Location = new Point(269, 20);
-            dtpDate2.Name = "dtpDate2";
-            dtpDate2.Size = new Size(120, 29);
-            dtpDate2.TabIndex = 53;
-            // 
             // btnLoadReport
             // 
             btnLoadReport.Font = new Font("Segoe UI", 12F);
@@ -270,12 +239,48 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblLastDays.TabIndex = 97;
             lblLastDays.Text = "Últimos días";
             // 
+            // dtpDate1
+            // 
+            dtpDate1.Format = DateTimePickerFormat.Short;
+            dtpDate1.Location = new Point(572, 101);
+            dtpDate1.Name = "dtpDate1";
+            dtpDate1.Size = new Size(120, 29);
+            dtpDate1.TabIndex = 52;
+            // 
+            // labelDate
+            // 
+            labelDate.AutoSize = true;
+            labelDate.Location = new Point(466, 106);
+            labelDate.Margin = new Padding(0);
+            labelDate.Name = "labelDate";
+            labelDate.Size = new Size(103, 21);
+            labelDate.TabIndex = 50;
+            labelDate.Text = "Rango fechas";
+            // 
+            // labelDateTo
+            // 
+            labelDateTo.AutoSize = true;
+            labelDateTo.Location = new Point(698, 106);
+            labelDateTo.Margin = new Padding(0);
+            labelDateTo.Name = "labelDateTo";
+            labelDateTo.Size = new Size(22, 21);
+            labelDateTo.TabIndex = 51;
+            labelDateTo.Text = "al";
+            // 
+            // dtpDate2
+            // 
+            dtpDate2.Format = DateTimePickerFormat.Short;
+            dtpDate2.Location = new Point(723, 101);
+            dtpDate2.Name = "dtpDate2";
+            dtpDate2.Size = new Size(120, 29);
+            dtpDate2.TabIndex = 53;
+            // 
             // btnModifyAttendance
             // 
             btnModifyAttendance.Font = new Font("Segoe UI", 12F);
             btnModifyAttendance.Image = Properties.Resources.editPencilIcon16;
             btnModifyAttendance.ImageAlign = ContentAlignment.MiddleLeft;
-            btnModifyAttendance.Location = new Point(535, 252);
+            btnModifyAttendance.Location = new Point(535, 333);
             btnModifyAttendance.Name = "btnModifyAttendance";
             btnModifyAttendance.Padding = new Padding(4, 0, 0, 0);
             btnModifyAttendance.Size = new Size(183, 31);
@@ -290,7 +295,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnExcel.Font = new Font("Segoe UI", 12F);
             btnExcel.Image = Properties.Resources.excelIcon;
             btnExcel.ImageAlign = ContentAlignment.MiddleRight;
-            btnExcel.Location = new Point(432, 252);
+            btnExcel.Location = new Point(432, 333);
             btnExcel.Name = "btnExcel";
             btnExcel.Padding = new Padding(0, 0, 4, 0);
             btnExcel.Size = new Size(97, 31);
@@ -303,6 +308,19 @@ namespace SisUvex.Nomina.Asistencia_AS
             // gpbFilters
             // 
             gpbFilters.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbFilters.Controls.Add(comboBox4);
+            gpbFilters.Controls.Add(label6);
+            gpbFilters.Controls.Add(comboBox3);
+            gpbFilters.Controls.Add(dtpDate1);
+            gpbFilters.Controls.Add(labelDate);
+            gpbFilters.Controls.Add(label5);
+            gpbFilters.Controls.Add(labelDateTo);
+            gpbFilters.Controls.Add(comboBox2);
+            gpbFilters.Controls.Add(dtpDate2);
+            gpbFilters.Controls.Add(label4);
+            gpbFilters.Controls.Add(btnAddNomWorkGroup);
+            gpbFilters.Controls.Add(cboNomWorkGroup);
+            gpbFilters.Controls.Add(label3);
             gpbFilters.Controls.Add(lblEmployeeAdvice);
             gpbFilters.Controls.Add(btnAddList);
             gpbFilters.Controls.Add(btnAddEmployee);
@@ -316,17 +334,110 @@ namespace SisUvex.Nomina.Asistencia_AS
             gpbFilters.Font = new Font("Segoe UI", 12F);
             gpbFilters.Location = new Point(12, 33);
             gpbFilters.Name = "gpbFilters";
-            gpbFilters.Size = new Size(909, 129);
+            gpbFilters.Size = new Size(909, 221);
             gpbFilters.TabIndex = 85;
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
+            // 
+            // comboBox4
+            // 
+            comboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox4.FormattingEnabled = true;
+            comboBox4.Location = new Point(662, 66);
+            comboBox4.Margin = new Padding(0, 3, 3, 3);
+            comboBox4.Name = "comboBox4";
+            comboBox4.Size = new Size(57, 29);
+            comboBox4.TabIndex = 93;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(635, 69);
+            label6.Margin = new Padding(0);
+            label6.Name = "label6";
+            label6.Size = new Size(18, 21);
+            label6.TabIndex = 92;
+            label6.Text = "a";
+            // 
+            // comboBox3
+            // 
+            comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox3.FormattingEnabled = true;
+            comboBox3.Location = new Point(572, 66);
+            comboBox3.Margin = new Padding(0, 3, 3, 3);
+            comboBox3.Name = "comboBox3";
+            comboBox3.Size = new Size(57, 29);
+            comboBox3.TabIndex = 91;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(506, 69);
+            label5.Margin = new Padding(0);
+            label5.Name = "label5";
+            label5.Size = new Size(66, 21);
+            label5.TabIndex = 90;
+            label5.Text = "Semana";
+            // 
+            // comboBox2
+            // 
+            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(572, 28);
+            comboBox2.Margin = new Padding(0, 3, 3, 3);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(57, 29);
+            comboBox2.TabIndex = 89;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(528, 33);
+            label4.Margin = new Padding(0);
+            label4.Name = "label4";
+            label4.Size = new Size(44, 21);
+            label4.TabIndex = 88;
+            label4.Text = "Ciclo";
+            // 
+            // btnAddNomWorkGroup
+            // 
+            btnAddNomWorkGroup.Font = new Font("Segoe UI", 12F);
+            btnAddNomWorkGroup.Image = Properties.Resources.mas_16;
+            btnAddNomWorkGroup.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAddNomWorkGroup.Location = new Point(357, 107);
+            btnAddNomWorkGroup.Name = "btnAddNomWorkGroup";
+            btnAddNomWorkGroup.Padding = new Padding(5, 0, 0, 0);
+            btnAddNomWorkGroup.Size = new Size(31, 31);
+            btnAddNomWorkGroup.TabIndex = 87;
+            btnAddNomWorkGroup.TextAlign = ContentAlignment.MiddleRight;
+            btnAddNomWorkGroup.UseVisualStyleBackColor = true;
+            // 
+            // cboNomWorkGroup
+            // 
+            cboNomWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboNomWorkGroup.FormattingEnabled = true;
+            cboNomWorkGroup.Location = new Point(124, 109);
+            cboNomWorkGroup.Margin = new Padding(0, 3, 3, 3);
+            cboNomWorkGroup.Name = "cboNomWorkGroup";
+            cboNomWorkGroup.Size = new Size(227, 29);
+            cboNomWorkGroup.TabIndex = 86;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(16, 112);
+            label3.Margin = new Padding(0);
+            label3.Name = "label3";
+            label3.Size = new Size(72, 21);
+            label3.TabIndex = 85;
+            label3.Text = "Cuadrilla";
             // 
             // lblEmployeeAdvice
             // 
             lblEmployeeAdvice.AutoSize = true;
             lblEmployeeAdvice.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblEmployeeAdvice.ForeColor = Color.Gray;
-            lblEmployeeAdvice.Location = new Point(230, 102);
+            lblEmployeeAdvice.Location = new Point(154, 55);
             lblEmployeeAdvice.Name = "lblEmployeeAdvice";
             lblEmployeeAdvice.Size = new Size(105, 15);
             lblEmployeeAdvice.TabIndex = 84;
@@ -337,12 +448,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnAddList.Font = new Font("Segoe UI", 12F);
             btnAddList.Image = Properties.Resources.mas_16;
             btnAddList.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddList.Location = new Point(756, 21);
+            btnAddList.Location = new Point(357, 72);
             btnAddList.Name = "btnAddList";
             btnAddList.Padding = new Padding(5, 0, 0, 0);
-            btnAddList.Size = new Size(147, 31);
+            btnAddList.Size = new Size(31, 31);
             btnAddList.TabIndex = 83;
-            btnAddList.Text = "Agregar listado";
             btnAddList.TextAlign = ContentAlignment.MiddleRight;
             btnAddList.UseVisualStyleBackColor = true;
             btnAddList.Click += btnAddList_Click;
@@ -352,12 +462,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnAddEmployee.Font = new Font("Segoe UI", 12F);
             btnAddEmployee.Image = Properties.Resources.mas_16;
             btnAddEmployee.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddEmployee.Location = new Point(230, 68);
+            btnAddEmployee.Location = new Point(357, 20);
             btnAddEmployee.Name = "btnAddEmployee";
             btnAddEmployee.Padding = new Padding(5, 0, 0, 0);
-            btnAddEmployee.Size = new Size(168, 31);
+            btnAddEmployee.Size = new Size(31, 31);
             btnAddEmployee.TabIndex = 82;
-            btnAddEmployee.Text = "Agregar empleado";
             btnAddEmployee.TextAlign = ContentAlignment.MiddleRight;
             btnAddEmployee.UseVisualStyleBackColor = true;
             btnAddEmployee.Click += btnAddEmployee_Click;
@@ -367,7 +476,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnSearchEmployee.Font = new Font("Segoe UI", 12F);
             btnSearchEmployee.Image = Properties.Resources.BuscarLupa1;
             btnSearchEmployee.ImageAlign = ContentAlignment.MiddleRight;
-            btnSearchEmployee.Location = new Point(102, 69);
+            btnSearchEmployee.Location = new Point(115, 21);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Padding = new Padding(0, 0, 4, 0);
             btnSearchEmployee.Size = new Size(33, 31);
@@ -379,7 +488,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(3, 73);
+            label1.Location = new Point(16, 25);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(96, 42);
@@ -390,10 +499,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             txbIdEmployee.ContextMenuStrip = cmsIdEmployee;
             txbIdEmployee.Font = new Font("Segoe UI", 10F);
-            txbIdEmployee.Location = new Point(141, 69);
+            txbIdEmployee.Location = new Point(154, 21);
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.ScrollBars = RichTextBoxScrollBars.Vertical;
-            txbIdEmployee.Size = new Size(83, 48);
+            txbIdEmployee.Size = new Size(197, 31);
             txbIdEmployee.TabIndex = 79;
             txbIdEmployee.Text = "";
             txbIdEmployee.KeyDown += txbIdEmployee_KeyDown;
@@ -461,7 +570,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
             cboSeason.FormattingEnabled = true;
-            cboSeason.Location = new Point(89, 22);
+            cboSeason.Location = new Point(718, 28);
             cboSeason.Margin = new Padding(0, 3, 3, 3);
             cboSeason.Name = "cboSeason";
             cboSeason.Size = new Size(190, 29);
@@ -471,16 +580,16 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             cboLP.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLP.FormattingEnabled = true;
-            cboLP.Location = new Point(395, 22);
+            cboLP.Location = new Point(124, 74);
             cboLP.Margin = new Padding(0, 3, 3, 3);
             cboLP.Name = "cboLP";
-            cboLP.Size = new Size(360, 29);
+            cboLP.Size = new Size(227, 29);
             cboLP.TabIndex = 45;
             // 
             // labelLP
             // 
             labelLP.AutoSize = true;
-            labelLP.Location = new Point(287, 25);
+            labelLP.Location = new Point(16, 77);
             labelLP.Margin = new Padding(0);
             labelLP.Name = "labelLP";
             labelLP.Size = new Size(110, 21);
@@ -490,7 +599,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // labelSeason
             // 
             labelSeason.AutoSize = true;
-            labelSeason.Location = new Point(3, 25);
+            labelSeason.Location = new Point(632, 31);
             labelSeason.Margin = new Padding(0);
             labelSeason.Name = "labelSeason";
             labelSeason.Size = new Size(87, 21);
@@ -516,7 +625,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvReport.EnableHeadersVisualStyles = false;
             dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(12, 303);
+            dgvReport.Location = new Point(12, 388);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -530,7 +639,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             dgvReport.RowHeadersVisible = false;
             dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(909, 328);
+            dgvReport.Size = new Size(909, 243);
             dgvReport.TabIndex = 86;
             dgvReport.CellFormatting += dgvReport_CellFormatting;
             dgvReport.CellPainting += dgvReport_CellPainting;
@@ -542,7 +651,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // 
             // pgrReport
             // 
-            pgrReport.Location = new Point(12, 285);
+            pgrReport.Location = new Point(12, 366);
             pgrReport.Maximum = 1000;
             pgrReport.Name = "pgrReport";
             pgrReport.Size = new Size(706, 16);
@@ -580,7 +689,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             lblSelectedDaysCaption.AutoSize = true;
             lblSelectedDaysCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblSelectedDaysCaption.ForeColor = Color.DarkGray;
-            lblSelectedDaysCaption.Location = new Point(726, 257);
+            lblSelectedDaysCaption.Location = new Point(726, 338);
             lblSelectedDaysCaption.Margin = new Padding(0);
             lblSelectedDaysCaption.Name = "lblSelectedDaysCaption";
             lblSelectedDaysCaption.Size = new Size(151, 21);
@@ -677,5 +786,14 @@ namespace SisUvex.Nomina.Asistencia_AS
         private ToolStripMenuItem tsmiSelectAll;
         private Label lblSelectedDaysCaption;
         public Label lblSelectedDays;
+        private Button btnAddNomWorkGroup;
+        public ComboBox cboNomWorkGroup;
+        private Label label3;
+        public ComboBox comboBox3;
+        private Label label5;
+        public ComboBox comboBox2;
+        private Label label4;
+        public ComboBox comboBox4;
+        private Label label6;
     }
 }

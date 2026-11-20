@@ -1,15 +1,7 @@
-
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Microsoft.Identity.Client;
 using SisUvex.Catalogos.Metods.ComboBoxes;
 using SisUvex.Catalogos.Metods.Querys;
 using SisUvex.Usuarios;
-using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
-using System.Diagnostics.Metrics;
-using System.Web;
 
 namespace SisUvex.Catalogos.Metods
 {
@@ -752,6 +744,32 @@ namespace SisUvex.Catalogos.Metods
             public const string DgvCatalog = "DgvCatalogLabelLegend";
             public const string QueryDgvCatalog = " SELECT cat.* FROM vw_PackLabelLegendCat cat ";
             public const string QueryCbo = $" SELECT id_labelLegend AS [{Column.id}], c_active AS [{Column.active}], v_labelLegend AS [{Column.name}], v_labelLegend2 AS [{ColumnLegend2}], v_description AS [{ColumnDescription}] FROM Pack_LabelLegend ";
+        }
+
+        public static class Nom_WorkGroup
+        {
+            public const string TableName = "Nom_WorkGroup";
+            public const string ColumnId = "idNomWorkGroup";
+            public const string ColumnName = "Nombre cuadrilla";
+            public const string ColumnOrder = "Orden";
+            public const string ColumnDepartment = "Departamento";
+            public const string ColumnActive = "ActiveWorkGroup";
+            public const string Cbo = "CboNomWorkGroup";
+            public const string DgvCatalog = "DgvCatalogWorkGroup";
+            public const string QueryCbo = $" SELECT id_workGroup AS [{Column.id}], CASE WHEN c_order IS NULL OR c_order = '' THEN '1' ELSE c_order END AS [{ColumnOrder}], CONCAT_WS(' | ', v_nameWorkGroup, id_workGroup) AS [{Column.name}], c_active AS [{Column.active}], id_department AS [{ColumnDepartment}] FROM Nom_WorkGroup ORDER BY c_order, v_nameWorkGroup ";
+        }
+
+        public static class Nom_AgriculturalCycle
+        {
+            public const string TableName = "Nom_AgriculturalCycle";
+            public const string ColumnId = "idAgriculturalCycle";
+            public const string ColumnName = "Ciclo";
+            public const string ColumnStartDate = "Fecha_inicio";
+            public const string ColumnEndDate = "Fecha_fin";
+            public const string ColumnActive = "ActiveAgriculturalCycle";
+            public const string Cbo = "CboAgriculturalCycle";
+            public const string DgvCatalog = "DgvCatalogAgriculturalCycle";
+            public const string QueryCbo = $" SELECT c_codigo_tem AS [{Column.id}], v_nombre_tem AS [{Column.name}], d_inicio_tem  AS [{ColumnStartDate}], d_fin_tem AS [{ColumnEndDate}], c_activo_tem AS [{Column.active}] FROM Nom_AgriculturalCycle ";
         }
 
         public static class Payroll_AttendancePeriod
