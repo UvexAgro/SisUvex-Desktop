@@ -41,13 +41,13 @@
 			dtpFecha = new DateTimePicker();
 			btnConsultar = new Button();
 			txbReferencia = new TextBox();
-			txbDestajo = new TextBox();
 			txbJornada = new TextBox();
 			label9 = new Label();
 			label8 = new Label();
 			btnCSV = new Button();
 			label7 = new Label();
 			panel6 = new Panel();
+			button1 = new Button();
 			label10 = new Label();
 			tabNomina = new TabPage();
 			tabPage2 = new TabPage();
@@ -56,6 +56,8 @@
 			tbpNomina = new TabPage();
 			btnSeleccionar = new Button();
 			tabPage4 = new TabPage();
+			label17 = new Label();
+			txbLote = new TextBox();
 			label16 = new Label();
 			panel4 = new Panel();
 			panel3 = new Panel();
@@ -63,7 +65,7 @@
 			label14 = new Label();
 			label13 = new Label();
 			txbReferenciaFestivo = new TextBox();
-			textBox1 = new TextBox();
+			txbDestajo = new TextBox();
 			txbActividad = new TextBox();
 			rbFestivo = new RadioButton();
 			tabPage1 = new TabPage();
@@ -78,7 +80,6 @@
 			lblCuadrillas = new Label();
 			lbCSV = new ListBox();
 			label12 = new Label();
-			button1 = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -231,21 +232,14 @@
 			// 
 			// txbReferencia
 			// 
-			txbReferencia.Location = new Point(94, 43);
+			txbReferencia.Location = new Point(90, 62);
 			txbReferencia.Name = "txbReferencia";
 			txbReferencia.Size = new Size(100, 27);
 			txbReferencia.TabIndex = 13;
 			// 
-			// txbDestajo
-			// 
-			txbDestajo.Location = new Point(469, 44);
-			txbDestajo.Name = "txbDestajo";
-			txbDestajo.Size = new Size(100, 27);
-			txbDestajo.TabIndex = 12;
-			// 
 			// txbJornada
 			// 
-			txbJornada.Location = new Point(283, 43);
+			txbJornada.Location = new Point(272, 23);
 			txbJornada.Name = "txbJornada";
 			txbJornada.Size = new Size(100, 27);
 			txbJornada.TabIndex = 11;
@@ -255,7 +249,7 @@
 			label9.AutoSize = true;
 			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label9.ForeColor = Color.FromArgb(31, 95, 145);
-			label9.Location = new Point(403, 50);
+			label9.Location = new Point(206, 83);
 			label9.Name = "label9";
 			label9.Size = new Size(60, 17);
 			label9.TabIndex = 10;
@@ -266,7 +260,7 @@
 			label8.AutoSize = true;
 			label8.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label8.ForeColor = Color.FromArgb(31, 95, 145);
-			label8.Location = new Point(214, 49);
+			label8.Location = new Point(203, 29);
 			label8.Name = "label8";
 			label8.Size = new Size(63, 17);
 			label8.TabIndex = 9;
@@ -294,7 +288,7 @@
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label7.ForeColor = Color.FromArgb(31, 95, 145);
-			label7.Location = new Point(15, 48);
+			label7.Location = new Point(11, 67);
 			label7.Name = "label7";
 			label7.Size = new Size(77, 17);
 			label7.TabIndex = 2;
@@ -310,6 +304,23 @@
 			panel6.Name = "panel6";
 			panel6.Size = new Size(1509, 48);
 			panel6.TabIndex = 8;
+			// 
+			// button1
+			// 
+			button1.BackColor = Color.White;
+			button1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			button1.ForeColor = Color.Black;
+			button1.Image = (Image)resources.GetObject("button1.Image");
+			button1.ImageAlign = ContentAlignment.MiddleLeft;
+			button1.Location = new Point(230, 8);
+			button1.Name = "button1";
+			button1.Padding = new Padding(25, 0, 25, 0);
+			button1.Size = new Size(143, 35);
+			button1.TabIndex = 10;
+			button1.Text = "Limpiar";
+			button1.TextAlign = ContentAlignment.MiddleRight;
+			button1.UseVisualStyleBackColor = false;
+			button1.Click += button1_Click;
 			// 
 			// label10
 			// 
@@ -405,6 +416,8 @@
 			// tabPage4
 			// 
 			tabPage4.BackColor = Color.FromArgb(236, 243, 249);
+			tabPage4.Controls.Add(label17);
+			tabPage4.Controls.Add(txbLote);
 			tabPage4.Controls.Add(label16);
 			tabPage4.Controls.Add(panel4);
 			tabPage4.Controls.Add(panel3);
@@ -412,11 +425,10 @@
 			tabPage4.Controls.Add(label14);
 			tabPage4.Controls.Add(label13);
 			tabPage4.Controls.Add(txbReferenciaFestivo);
-			tabPage4.Controls.Add(textBox1);
+			tabPage4.Controls.Add(txbDestajo);
 			tabPage4.Controls.Add(txbActividad);
 			tabPage4.Controls.Add(rbFestivo);
 			tabPage4.Controls.Add(btnCSV);
-			tabPage4.Controls.Add(txbDestajo);
 			tabPage4.Controls.Add(label9);
 			tabPage4.Controls.Add(txbReferencia);
 			tabPage4.Controls.Add(txbJornada);
@@ -429,13 +441,31 @@
 			tabPage4.TabIndex = 1;
 			tabPage4.Text = "CSV";
 			// 
+			// label17
+			// 
+			label17.AutoSize = true;
+			label17.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label17.ForeColor = Color.FromArgb(31, 95, 145);
+			label17.Location = new Point(645, 22);
+			label17.Name = "label17";
+			label17.Size = new Size(41, 17);
+			label17.TabIndex = 24;
+			label17.Text = "Lote :";
+			// 
+			// txbLote
+			// 
+			txbLote.Location = new Point(699, 17);
+			txbLote.Name = "txbLote";
+			txbLote.Size = new Size(100, 27);
+			txbLote.TabIndex = 23;
+			// 
 			// label16
 			// 
 			label16.AutoSize = true;
 			label16.BackColor = Color.Transparent;
 			label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label16.ForeColor = Color.Black;
-			label16.Location = new Point(597, 2);
+			label16.Location = new Point(518, 8);
 			label16.Name = "label16";
 			label16.Size = new Size(128, 13);
 			label16.TabIndex = 22;
@@ -452,7 +482,7 @@
 			// panel3
 			// 
 			panel3.BackColor = Color.Gray;
-			panel3.Location = new Point(589, 8);
+			panel3.Location = new Point(497, 8);
 			panel3.Name = "panel3";
 			panel3.Size = new Size(2, 100);
 			panel3.TabIndex = 20;
@@ -498,12 +528,12 @@
 			txbReferenciaFestivo.Size = new Size(100, 27);
 			txbReferenciaFestivo.TabIndex = 17;
 			// 
-			// textBox1
+			// txbDestajo
 			// 
-			textBox1.Location = new Point(470, 44);
-			textBox1.Name = "textBox1";
-			textBox1.Size = new Size(100, 27);
-			textBox1.TabIndex = 16;
+			txbDestajo.Location = new Point(273, 77);
+			txbDestajo.Name = "txbDestajo";
+			txbDestajo.Size = new Size(100, 27);
+			txbDestajo.TabIndex = 16;
 			// 
 			// txbActividad
 			// 
@@ -517,13 +547,14 @@
 			rbFestivo.AutoSize = true;
 			rbFestivo.BackColor = Color.Transparent;
 			rbFestivo.ForeColor = Color.FromArgb(31, 95, 145);
-			rbFestivo.Location = new Point(699, 18);
+			rbFestivo.Location = new Point(518, 53);
 			rbFestivo.Name = "rbFestivo";
 			rbFestivo.Size = new Size(75, 24);
 			rbFestivo.TabIndex = 14;
 			rbFestivo.TabStop = true;
 			rbFestivo.Text = "Festivo";
 			rbFestivo.UseVisualStyleBackColor = false;
+			rbFestivo.CheckedChanged += rbFestivo_CheckedChanged;
 			rbFestivo.Click += rbFestivo_Click;
 			rbFestivo.MouseDown += rbFestivo_MouseDown;
 			// 
@@ -665,23 +696,6 @@
 			label12.TabIndex = 10;
 			label12.Text = "Cuadrilla con un csv:";
 			// 
-			// button1
-			// 
-			button1.BackColor = Color.White;
-			button1.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			button1.ForeColor = Color.Black;
-			button1.Image = (Image)resources.GetObject("button1.Image");
-			button1.ImageAlign = ContentAlignment.MiddleLeft;
-			button1.Location = new Point(230, 8);
-			button1.Name = "button1";
-			button1.Padding = new Padding(25, 0, 25, 0);
-			button1.Size = new Size(143, 35);
-			button1.TabIndex = 10;
-			button1.Text = "Limpiar";
-			button1.TextAlign = ContentAlignment.MiddleRight;
-			button1.UseVisualStyleBackColor = false;
-			button1.Click += button1_Click;
-			// 
 			// FrmNomina
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -734,7 +748,7 @@
 		private TextBox textBox2;
 		private Label label9;
 		private Label label8;
-		public TextBox txbDestajo;
+	
 		public TextBox txbReferencia;
 		public TextBox txbJornada;
 		public DateTimePicker dtpFecha;
@@ -768,7 +782,7 @@
 		private Label label14;
 		private Label label13;
 		public TextBox txbReferenciaFestivo;
-		public TextBox textBox1;
+		public TextBox txbDestajo;
 		public TextBox txbActividad;
 		private RadioButton radioButton1;
 		private Label label16;
@@ -776,5 +790,7 @@
 		private Panel panel3;
 		private Label label15;
 		private Button button1;
+		private Label label17;
+		public TextBox txbLote;
 	}
 }

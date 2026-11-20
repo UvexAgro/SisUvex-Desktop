@@ -377,6 +377,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		}
 
 
+
 		public void GenerarArchivoCsv()
 		{
 			DataTable dtNomina = GetDtNomina();
@@ -393,13 +394,11 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			bool esFestivo = frm.rbFestivo.Checked;
 
-			// =====================================================
-			// VALIDAR REFERENCIAS
-			// =====================================================
-
+			// REFERENCIAS
 			string referenciaNormal = frm.txbReferencia.Text.Trim();
 			string referenciaFestivo = frm.txbReferenciaFestivo.Text.Trim();
 			string actividadFestivo = frm.txbActividad.Text.Trim();
+			string loteFestivo = frm.txbLote.Text.Trim();
 
 			if (string.IsNullOrWhiteSpace(referenciaNormal))
 			{
@@ -420,42 +419,73 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					MessageBox.Show("Captura la actividad del pago festivo.");
 					return;
 				}
+
+				if (string.IsNullOrWhiteSpace(loteFestivo))
+				{
+					MessageBox.Show("Captura el lote del pago festivo.");
+					return;
+				}
 			}
 
 			DateTime fechaNomina =
 				Convert.ToDateTime(dtNomina.Rows[0]["Fecha"]);
 
-			// =====================================================
-			// PREPARAR DATOS DE LOS CSV
-			// =====================================================
+			// =========================================
+			// PREPARAR LOS CSV
+			// =========================================
 
-			DataTable dtNormal =
-				GetDtCSV(false, referenciaNormal, "");
-
+			DataTable dtNormal;
 			DataTable dtFestivo = null;
 
 			if (esFestivo)
 			{
+				// PRIMER CSV: SALARIO DIARIO
+				dtNormal = GetDtCSV(
+					true,
+					false,
+					referenciaNormal,
+					"");
+
+				// SEGUNDO CSV: PAGO FESTIVO
 				dtFestivo = GetDtCSV(
+					true,
 					true,
 					referenciaFestivo,
 					actividadFestivo);
 
+				if (dtNormal == null || dtNormal.Rows.Count == 0)
+				{
+					MessageBox.Show(
+						"No existen salarios para generar el primer archivo.");
+					return;
+				}
+
 				if (dtFestivo == null || dtFestivo.Rows.Count == 0)
 				{
 					MessageBox.Show(
-						"No existen importes de pago festivo para generar el segundo archivo.",
-						"CSV Festivo",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
+						"No existen importes de pago festivo para generar el segundo archivo.");
+					return;
+				}
+			}
+			else
+			{
+				// DÍA NORMAL: TOTAL
+				dtNormal = GetDtCSV(
+					false,
+					false,
+					referenciaNormal,
+					"");
 
+				if (dtNormal == null || dtNormal.Rows.Count == 0)
+				{
+					MessageBox.Show("No existen datos para generar el CSV.");
 					return;
 				}
 			}
 
-			// =====================================================
+			// =========================================
 			// SELECCIONAR UBICACIÓN
-			// =====================================================
+			// =========================================
 
 			string rutaNormal;
 			string rutaFestivo = "";
@@ -463,39 +493,41 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			using (SaveFileDialog sfd = new SaveFileDialog())
 			{
 				sfd.Filter = "Archivo CSV (*.csv)|*.csv";
-				sfd.FileName = $"{fechaNomina:yyyy-MM-dd}.csv";
+				sfd.FileName = $"{referenciaNormal}.csv";
 
 				if (sfd.ShowDialog() != DialogResult.OK)
 					return;
 
 				rutaNormal = sfd.FileName;
 
-				rutaFestivo = Path.Combine(
+				if (esFestivo)
+				{
+					rutaFestivo = Path.Combine(
 					Path.GetDirectoryName(rutaNormal),
-					Path.GetFileNameWithoutExtension(rutaNormal)
-					+ "_Festivo.csv");
+					$"{referenciaFestivo}.csv");
+				}
 			}
 
 			try
 			{
-				// =====================================================
-				// GENERAR CSV NORMAL
-				// =====================================================
+				// =========================================
+				// GENERAR PRIMER CSV
+				// =========================================
 
 				GuardarArchivoCsv(dtNormal, rutaNormal);
 
-				// =====================================================
-				// GENERAR CSV FESTIVO
-				// =====================================================
+				// =========================================
+				// GENERAR SEGUNDO CSV FESTIVO
+				// =========================================
 
 				if (esFestivo)
 				{
 					GuardarArchivoCsv(dtFestivo, rutaFestivo);
 				}
 
-				// =====================================================
+				// =========================================
 				// OBTENER CUADRILLAS
-				// =====================================================
+				// =========================================
 
 				if (!dtNomina.Columns.Contains("id_workGroup_CSV"))
 				{
@@ -516,10 +548,9 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 						.Distinct()
 						.ToList();
 
-				// =====================================================
+				// =========================================
 				// REGISTRAR CSV GENERADO
-				// SE REGISTRA UNA SOLA VEZ POR CUADRILLA
-				// =====================================================
+				// =========================================
 
 				SQLControl sql = new SQLControl();
 
@@ -552,9 +583,9 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					sql.CloseConectionWrite();
 				}
 
-				// =====================================================
+				// =========================================
 				// MENSAJE FINAL
-				// =====================================================
+				// =========================================
 
 				string mensaje;
 
@@ -562,11 +593,18 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				{
 					mensaje =
 						"Se generaron los dos archivos correctamente.\n\n" +
-						"NÓMINA NORMAL\n" +
+
+						"PRIMER CSV - SALARIO DIARIO\n" +
 						"Referencia: " + referenciaNormal + "\n" +
+						"Importe: Salario Diario\n" +
+						"Lote: Código Lote\n" +
+						"Actividad: Código Actividad\n" +
 						"Archivo: " + Path.GetFileName(rutaNormal) + "\n\n" +
-						"NÓMINA FESTIVA\n" +
+
+						"SEGUNDO CSV - PAGO FESTIVO\n" +
 						"Referencia: " + referenciaFestivo + "\n" +
+						"Importe: Pago Festivo\n" +
+						"Lote: " + loteFestivo + "\n" +
 						"Actividad: " + actividadFestivo + "\n" +
 						"Archivo: " + Path.GetFileName(rutaFestivo);
 				}
@@ -575,6 +613,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					mensaje =
 						"El archivo CSV se generó correctamente.\n\n" +
 						"Referencia: " + referenciaNormal + "\n" +
+						"Importe: Total\n" +
 						"Archivo: " + Path.GetFileName(rutaNormal);
 				}
 
@@ -603,7 +642,12 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		}
 
 
+
+
+
+
 		private DataTable GetDtCSV(
+			bool esDiaFestivo,
 			bool soloFestivo,
 			string referencia,
 			string actividadFestivo)
@@ -625,54 +669,100 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			dtCsv.Columns.Add("HorasTrabajadas", typeof(string));
 
 			string jornada = frm.txbJornada.Text.Trim();
+
 			string destajo = string.IsNullOrWhiteSpace(frm.txbDestajo.Text)
-			? "0"
-			: frm.txbDestajo.Text.Trim();
+				? "0"
+				: frm.txbDestajo.Text.Trim();
+
+			// Lote capturado para el segundo CSV festivo
+			string loteFestivo = frm.txbLote.Text.Trim();
 
 			foreach (DataRow dr in dtNomina.Rows)
 			{
-				decimal total = Convert.ToDecimal(
-					dr["Total"] == DBNull.Value ? 0 : dr["Total"]);
+				decimal sueldo = 0;
 
-				decimal pagoFestivo = 0;
+				// =====================================
+				// DETERMINAR SUELDO
+				// =====================================
 
-				if (dtNomina.Columns.Contains("Pago Festivo"))
+				if (esDiaFestivo)
 				{
-					pagoFestivo = Convert.ToDecimal(
-						dr["Pago Festivo"] == DBNull.Value
-							? 0
-							: dr["Pago Festivo"]);
-				}
-
-				decimal sueldo;
-
-				if (soloFestivo)
-				{
-					sueldo = pagoFestivo;
-
-					// No incluir empleados sin pago festivo.
-					if (sueldo <= 0)
-						continue;
-				}
-				
-					// Sueldo normal sin el adicional festivo.
+					if (soloFestivo)
+					{
+						// SEGUNDO CSV: PAGO FESTIVO
+						sueldo = Convert.ToDecimal(
+							dr["Pago Festivo"] == DBNull.Value
+								? 0
+								: dr["Pago Festivo"]);
+					}
 					else
 					{
-						// Tomar el sueldo normal de Salario Diario.
+						// PRIMER CSV: SALARIO DIARIO
 						sueldo = Convert.ToDecimal(
 							dr["Salario Diario"] == DBNull.Value
 								? 0
 								: dr["Salario Diario"]);
 					}
-				
+
+					if (sueldo <= 0)
+						continue;
+				}
+				else
+				{
+					// DÍA NORMAL: TOTAL
+					sueldo = Convert.ToDecimal(
+						dr["Total"] == DBNull.Value
+							? 0
+							: dr["Total"]);
+				}
+
+				// =====================================
+				// FECHA
+				// =====================================
 
 				string fechaFormateada =
 					Convert.ToDateTime(dr["Fecha"])
 						.ToString("yyyy/MM/dd");
 
-				string actividad = soloFestivo
-					? actividadFestivo
-					: dr["Código Actividad"].ToString();
+				// =====================================
+				// ACTIVIDAD
+				// =====================================
+
+				string actividad;
+
+				if (esDiaFestivo && soloFestivo)
+				{
+					// SEGUNDO CSV: ACTIVIDAD CAPTURADA
+					actividad = actividadFestivo;
+				}
+				else
+				{
+					// PRIMER CSV Y DÍA NORMAL:
+					// ACTIVIDAD DE LA COLUMNA
+					actividad = dr["Código Actividad"].ToString();
+				}
+
+				// =====================================
+				// LOTE
+				// =====================================
+
+				string lote;
+
+				if (esDiaFestivo && soloFestivo)
+				{
+					// SEGUNDO CSV: LOTE DEL TXBLOTE
+					lote = loteFestivo;
+				}
+				else
+				{
+					// PRIMER CSV Y DÍA NORMAL:
+					// LOTE DE LA COLUMNA
+					lote = dr["Código Lote"].ToString();
+				}
+
+				// =====================================
+				// AGREGAR REGISTRO
+				// =====================================
 
 				dtCsv.Rows.Add(
 					fechaFormateada,
@@ -681,7 +771,7 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 					ClsValues.FormatZeros(
 						sueldo.ToString("0.00"),
 						"0000.00"),
-					dr["Código Lote"].ToString(),
+					lote,
 					actividad,
 					destajo,
 					jornada
@@ -690,6 +780,9 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 
 			return dtCsv;
 		}
+
+
+
 
 		private void AbrirArchivoCsv(string ruta)
 		{
