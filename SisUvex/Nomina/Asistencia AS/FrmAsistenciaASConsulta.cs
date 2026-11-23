@@ -10,8 +10,26 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         public FrmAsistenciaASConsulta()
         {
+            AntdTheme.Apply();
             InitializeComponent();
+            ApplyAntdLook();
             cls = new ClsAsistenciaASConsulta { frm = this };
+        }
+
+        /// <summary>Detalles visuales que el diseñador no genera (foco de las cajas de texto y ayudas emergentes).</summary>
+        private void ApplyAntdLook()
+        {
+            AntdInputHost.Bind(pnlEmployeeInput, txbIdEmployee);
+            AntdInputHost.Bind(pnlLastDaysInput, txbLastDays);
+
+            toolTip.SetToolTip(btnSearchEmployee, "Buscar empleado");
+            toolTip.SetToolTip(btnAddEmployee, "Agregar al listado los códigos escritos");
+            toolTip.SetToolTip(btnAddList, "Agregar al listado los empleados del lugar de pago");
+            toolTip.SetToolTip(btnClearList, "Limpiar el listado de empleados");
+            toolTip.SetToolTip(btnModifyAttendance, "Modificar asistencias");
+            toolTip.SetToolTip(btnExcel, "Exportar a Excel");
+            toolTip.SetToolTip(btnOpenFrmAttendanceType, "Abrir el catálogo de tipos de asistencia");
+            toolTip.SetToolTip(txbLastDays, "Sin listado: solo empleados con importe en los últimos X días. Vacío = sin ese límite");
         }
 
         private void FrmAsistenciaASConsulta_Load(object sender, EventArgs e)
@@ -177,8 +195,19 @@ namespace SisUvex.Nomina.Asistencia_AS
         internal void SetOperationBusy(bool busy)
         {
             bool enabled = !busy;
-            gpbFilters.Enabled = enabled;
-            bgpInfo.Enabled = enabled;
+            // Filtros (antes gpbFilters). cboAttendenceType no se toca: siempre está deshabilitado.
+            foreach (Control filter in new Control[]
+            {
+                btnSearchEmployee, pnlEmployeeInput, btnAddEmployee,
+                cboLP, btnAddList, cboNomWorkGroup, btnAddNomWorkGroup,
+                cboAgriculturalCycle, cboSeason, cboWeek1, cboWeek2, dtpDate1, dtpDate2
+            })
+                filter.Enabled = enabled;
+
+            // Opciones del reporte (antes bgpInfo).
+            pnlLastDaysInput.Enabled = enabled;
+            btnLoadReport.Enabled = enabled;
+
             btnClearList.Enabled = enabled;
             chbShowEmployees.Enabled = enabled;
             chbShowReport.Enabled = enabled;
