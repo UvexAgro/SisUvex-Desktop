@@ -422,8 +422,8 @@ namespace SisUvex.Catalogos.Metods.ComboBoxes
                     return new List<string> { "Pack_Season", "Pack_Crop", "Pack_SeasonType" };
                 case ClsObject.PlacePayment.Cbo:
                     return new List<string> { "Nom_PlacePayment", "Pack_Grower", "Pack_Contractor", "Pack_WorkGroup" };
-                case ClsObject.Payroll_AttendancePeriod.Cbo:
-                    return new List<string> { "Payroll_AttendancePeriod", "Pack_Season", "Pack_Crop", "Pack_SeasonType" };
+                //case ClsObject.Payroll_AttendancePeriod.Cbo:
+                //    return new List<string> { "Payroll_AttendancePeriod" };
                 case ClsObject.Consignee.Cbo:
                     return new List<string> { "Pack_Consignee", "Pack_Distributor" };
                 case ClsObject.Driver.Cbo:

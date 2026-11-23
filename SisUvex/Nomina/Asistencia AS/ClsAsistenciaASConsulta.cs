@@ -78,6 +78,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         private bool _headerSelChecked;
         /// <summary>Evita reentrada al marcar/desmarcar todos los checkboxes del listado.</summary>
         private bool _updatingSel;
+        /// <summary>Evita que el recálculo de semanas (al cambiar el ciclo) dispare las fechas a medias.</summary>
+        private bool _updatingWeekCombos;
         /// <summary>Profundidad de BeginProgress: EndProgress solo cierra la barra en el nivel más externo.</summary>
         private int _progressDepth;
         private readonly ClsAsistenciaASCalendario _calendarCls = new();
@@ -104,18 +106,41 @@ namespace SisUvex.Nomina.Asistencia_AS
             // Nom_AttendanceType no tiene registro en Pack_TablesUpdates, por lo que ClsAttendanceType
             // invalida manualmente esa caché (ClsComboBoxFiles.InvalidateCache) tras cualquier alta,
             // modificación o cambio de estatus, para que aquí siempre se refleje el dato más reciente.
+
+            //ClsComboBoxes.CboLoadAll(frm.cboWeek1, Payroll_AttendancePeriod.Cbo);
+            //ClsComboBoxes.CboLoadActives(frm.cboWeek2, Payroll_AttendancePeriod.Cbo);
+
+            //MessageBox.Show("AttendanceType");
             ClsComboBoxes.CboLoadActives(frm.cboAttendenceType, AttendanceType.Cbo);
+            //MessageBox.Show("NomWorkGroup");
             ClsComboBoxes.CboLoadActives(frm.cboNomWorkGroup, Nom_WorkGroup.Cbo);
+            //MessageBox.Show("SELECCIONAR CBOATTENDENCETYPE");
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAttendenceType, "04"); //<-- falta injustificada
-
+            //MessageBox.Show("PlacePayment");
             ClsComboBoxes.CboLoadActives(frm.cboLP, PlacePayment.Cbo);
-
+            //MessageBox.Show("Season.CboWithDates");
             ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.CboWithDates);
+
+            // Ciclo: se cargan todos (los años anteriores quedan inactivos) para poder cambiar de año
+            // y conservar el mismo número de semana. Las semanas se filtran por id_period = ciclo.
+            //MessageBox.Show("Season.cboAgriculturalCycle");
+            ClsComboBoxes.CboLoadAll(frm.cboAgriculturalCycle, Nom_AgriculturalCycle.Cbo);
+            //MessageBox.Show("cboWeek1");
+            ConfigureWeekCombo(frm.cboWeek1);
+            //MessageBox.Show("cboWeek1");
+
+            ConfigureWeekCombo(frm.cboWeek2);
 
             frm.txbLastDays.Clear();
             ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbLastDays);
 
             frm.cboSeason.SelectedIndexChanged += CboSeason_SelectedIndexChanged;
+            frm.cboAgriculturalCycle.SelectedIndexChanged += CboAgriculturalCycle_SelectedIndexChanged;
+            frm.cboWeek1.SelectedIndexChanged += CboWeek1_SelectedIndexChanged;
+            frm.cboWeek2.SelectedIndexChanged += CboWeek2_SelectedIndexChanged;
+
+            SelectActiveAgriculturalCycle();
+            FilterWeekCombosKeepingSequence(selectTodayIfMissing: true);
         }
 
         // ── Evento temporada → fechas ─────────────────────────────────────────
@@ -145,6 +170,230 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             frm.dtpDate1.Value = seasonStart;
             frm.dtpDate2.Value = today <= seasonEnd ? today : seasonEnd;
+        }
+
+        // ── Ciclo agrícola → semanas (cboWeek1 / cboWeek2) → fechas ──────────
+
+        public void CboAgriculturalCycle_SelectedIndexChanged(object? sender, EventArgs e)
+            => FilterWeekCombosKeepingSequence();
+
+        public void CboWeek1_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_updatingWeekCombos) return;
+            ApplyWeekStartDate();
+        }
+
+        public void CboWeek2_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_updatingWeekCombos) return;
+            ApplyWeekEndDate();
+        }
+
+        /// <summary>
+        /// Carga <see cref="Payroll_AttendancePeriod.Cbo"/> y muestra sólo el número de semana
+        /// (<see cref="Payroll_AttendancePeriod.ColumnSequence"/> / c_sequence_per).
+        /// Permite escribir el número (1 = 01).
+        /// </summary>
+        private void ConfigureWeekCombo(ComboBox cbo)
+        {
+            ClsComboBoxes.CboLoadActives(cbo, Payroll_AttendancePeriod.Cbo);
+            cbo.DisplayMember = Payroll_AttendancePeriod.ColumnSequence;
+            cbo.DropDownStyle = ComboBoxStyle.DropDown;
+            cbo.AutoCompleteMode = AutoCompleteMode.None;
+            cbo.AutoCompleteSource = AutoCompleteSource.None;
+            cbo.KeyPress += WeekCombo_KeyPress;
+            cbo.KeyDown += WeekCombo_KeyDown;
+            cbo.Validated += WeekCombo_Validated;
+        }
+
+        private static void WeekCombo_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (sender is not ComboBox cbo) return;
+            if (cbo.SelectionLength == 0 && cbo.Text.Length >= 2)
+                e.Handled = true;
+        }
+
+        private void WeekCombo_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || sender is not ComboBox cbo) return;
+            e.SuppressKeyPress = true;
+            ApplyTypedWeekNumber(cbo);
+        }
+
+        private void WeekCombo_Validated(object? sender, EventArgs e)
+        {
+            if (sender is ComboBox cbo)
+                ApplyTypedWeekNumber(cbo);
+        }
+
+        /// <summary>Si el texto es un número de semana válido (1 = 01), lo selecciona y actualiza la fecha.</summary>
+        private void ApplyTypedWeekNumber(ComboBox cbo)
+        {
+            if (_updatingWeekCombos) return;
+
+            string typed = cbo.Text.Trim();
+            if (SelectWeekBySequence(cbo, typed))
+                return;
+
+            if (cbo.SelectedIndex >= 0)
+                cbo.SelectedIndex = cbo.SelectedIndex;
+            else if (cbo.Items.Count > 0)
+                cbo.SelectedIndex = 0;
+        }
+
+        /// <summary>Selecciona el ciclo con Activo = 1, si hay uno.</summary>
+        private void SelectActiveAgriculturalCycle()
+        {
+            if (frm?.cboAgriculturalCycle.DataSource is not DataTable dt) return;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string id = row[Column.id]?.ToString()?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(id)) continue;
+                if ((row[Column.active]?.ToString()?.Trim() ?? string.Empty) != "1") continue;
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAgriculturalCycle, id);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Filtra cboWeek1 y cboWeek2 por <see cref="Payroll_AttendancePeriod.ColumnId"/> (id_period)
+        /// = ciclo seleccionado, y retiene el mismo número de semana (secuencia) si existe en ese año.
+        /// </summary>
+        private void FilterWeekCombosKeepingSequence(bool selectTodayIfMissing = false)
+        {
+            if (frm == null) return;
+
+            string? seq1 = GetSelectedWeekSequence(frm.cboWeek1);
+            string? seq2 = GetSelectedWeekSequence(frm.cboWeek2);
+
+            _updatingWeekCombos = true;
+            try
+            {
+                FilterWeekCombo(frm.cboWeek1);
+                FilterWeekCombo(frm.cboWeek2);
+                SelectWeekOrFallback(frm.cboWeek1, seq1, selectTodayIfMissing);
+                SelectWeekOrFallback(frm.cboWeek2, seq2, selectTodayIfMissing);
+            }
+            finally
+            {
+                _updatingWeekCombos = false;
+            }
+
+            ApplyWeekStartDate();
+            ApplyWeekEndDate();
+        }
+
+        private static void SelectWeekOrFallback(ComboBox cbo, string? sequence, bool selectTodayIfMissing)
+        {
+            if (SelectWeekBySequence(cbo, sequence)) return;
+            if (selectTodayIfMissing && SelectWeekContainingToday(cbo)) return;
+            if (cbo.Items.Count > 0) cbo.SelectedIndex = 0;
+        }
+
+        private void FilterWeekCombo(ComboBox cboWeek)
+        {
+            if (cboWeek.DataSource is not DataTable dt) return;
+
+            string select = ClsComboBoxes.textSelect;
+            if (frm!.cboAgriculturalCycle.SelectedIndex > 0)
+            {
+                string cycleId = frm.cboAgriculturalCycle.SelectedValue?.ToString()?.Replace("'", "''") ?? string.Empty;
+                dt.DefaultView.RowFilter =
+                    $"[{Payroll_AttendancePeriod.ColumnId}] = '{cycleId}' AND [{Column.active}] = '1' OR [{Column.name}] = '{select}'";
+            }
+            else
+            {
+                dt.DefaultView.RowFilter = $"[{Column.name}] = '{select}'";
+            }
+
+            cboWeek.DataSource = dt;
+            if (cboWeek.Items.Count > 0)
+                cboWeek.SelectedIndex = 0;
+        }
+
+        private static string? GetSelectedWeekSequence(ComboBox cbo)
+        {
+            if (cbo.SelectedIndex < 1 || cbo.SelectedItem is not DataRowView drv) return null;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnSequence)) return null;
+            string seq = drv[Payroll_AttendancePeriod.ColumnSequence]?.ToString()?.Trim() ?? string.Empty;
+            return string.IsNullOrEmpty(seq) ? null : seq;
+        }
+
+        private static bool SelectWeekBySequence(ComboBox cbo, string? sequence)
+        {
+            if (string.IsNullOrWhiteSpace(sequence) || cbo.Items.Count == 0)
+                return false;
+
+            bool seqIsInt = int.TryParse(sequence, out int seqNum);
+            for (int i = 0; i < cbo.Items.Count; i++)
+            {
+                if (cbo.Items[i] is not DataRowView drv) continue;
+                string current = drv[Payroll_AttendancePeriod.ColumnSequence]?.ToString()?.Trim() ?? string.Empty;
+                if (string.Equals(current, sequence, StringComparison.OrdinalIgnoreCase)
+                    || (seqIsInt && int.TryParse(current, out int currentNum) && currentNum == seqNum))
+                {
+                    if (cbo.SelectedIndex != i)
+                        cbo.SelectedIndex = i;
+                    else
+                        cbo.Text = current;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>Selecciona la semana cuyo rango incluye la fecha de hoy.</summary>
+        private static bool SelectWeekContainingToday(ComboBox cbo)
+        {
+            DateTime today = DateTime.Today;
+            for (int i = 0; i < cbo.Items.Count; i++)
+            {
+                if (cbo.Items[i] is not DataRowView drv) continue;
+                if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnStartDate)
+                    || !drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnEndDate))
+                    continue;
+                if (drv[Payroll_AttendancePeriod.ColumnStartDate] is DBNull
+                    || drv[Payroll_AttendancePeriod.ColumnEndDate] is DBNull)
+                    continue;
+
+                DateTime start = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnStartDate]).Date;
+                DateTime end = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnEndDate]).Date;
+                if (today >= start && today <= end)
+                {
+                    cbo.SelectedIndex = i;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ApplyWeekStartDate()
+        {
+            if (frm == null || frm.cboWeek1.SelectedIndex < 1) return;
+            if (frm.cboWeek1.SelectedItem is not DataRowView drv) return;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnStartDate)) return;
+            if (drv[Payroll_AttendancePeriod.ColumnStartDate] is DBNull) return;
+            frm.dtpDate1.Value = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnStartDate]);
+        }
+
+        private void ApplyWeekEndDate()
+        {
+            if (frm == null || frm.cboWeek2.SelectedIndex < 1) return;
+            if (frm.cboWeek2.SelectedItem is not DataRowView drv) return;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnEndDate)) return;
+            if (drv[Payroll_AttendancePeriod.ColumnEndDate] is DBNull) return;
+            frm.dtpDate2.Value = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnEndDate]);
         }
 
         // ── Buscar empleado (formulario de selección visual) ──────────────────

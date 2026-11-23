@@ -791,9 +791,9 @@ namespace SisUvex.Catalogos.Metods
                                             id_period AS [{ColumnId}], 
                                             c_sequence_per AS [{ColumnSequence}], 
                                             d_startDate_per AS [{ColumnStartDate}], 
-                                            d_endDate_per AS [{ColumnEndDate}], 
-                                            id_season AS [{Season.ColumnId}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
-            public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], id_season AS [{Season.ColumnId}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+                                            d_endDate_per AS [{ColumnEndDate}]
+                                            FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
+            public const string QueryDgvCatalog = $" SELECT id_period AS [{ColumnId}], c_sequence_per AS [{ColumnSequence}], d_startDate_per AS [{ColumnStartDate}], d_endDate_per AS [{ColumnEndDate}], v_name_per AS [{ColumnName}], c_active AS [{ColumnActive}], d_created AS [{ColumnCreated}], d_updated AS [{ColumnUpdated}] FROM Payroll_AttendancePeriod ORDER BY id_period, c_sequence_per ";
         }
 
         public static class AttendanceType

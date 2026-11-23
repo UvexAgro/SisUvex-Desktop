@@ -50,11 +50,11 @@ namespace SisUvex.Nomina.Asistencia_AS
             btnModifyAttendance = new Button();
             btnExcel = new Button();
             gpbFilters = new GroupBox();
-            comboBox4 = new ComboBox();
+            cboWeek2 = new ComboBox();
             label6 = new Label();
-            comboBox3 = new ComboBox();
+            cboWeek1 = new ComboBox();
             label5 = new Label();
-            comboBox2 = new ComboBox();
+            cboAgriculturalCycle = new ComboBox();
             label4 = new Label();
             btnAddNomWorkGroup = new Button();
             cboNomWorkGroup = new ComboBox();
@@ -242,7 +242,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // dtpDate1
             // 
             dtpDate1.Format = DateTimePickerFormat.Short;
-            dtpDate1.Location = new Point(572, 101);
+            dtpDate1.Location = new Point(558, 159);
             dtpDate1.Name = "dtpDate1";
             dtpDate1.Size = new Size(120, 29);
             dtpDate1.TabIndex = 52;
@@ -250,7 +250,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // labelDate
             // 
             labelDate.AutoSize = true;
-            labelDate.Location = new Point(466, 106);
+            labelDate.Location = new Point(452, 164);
             labelDate.Margin = new Padding(0);
             labelDate.Name = "labelDate";
             labelDate.Size = new Size(103, 21);
@@ -260,7 +260,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // labelDateTo
             // 
             labelDateTo.AutoSize = true;
-            labelDateTo.Location = new Point(698, 106);
+            labelDateTo.Location = new Point(684, 164);
             labelDateTo.Margin = new Padding(0);
             labelDateTo.Name = "labelDateTo";
             labelDateTo.Size = new Size(22, 21);
@@ -270,7 +270,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             // dtpDate2
             // 
             dtpDate2.Format = DateTimePickerFormat.Short;
-            dtpDate2.Location = new Point(723, 101);
+            dtpDate2.Location = new Point(709, 159);
             dtpDate2.Name = "dtpDate2";
             dtpDate2.Size = new Size(120, 29);
             dtpDate2.TabIndex = 53;
@@ -308,14 +308,14 @@ namespace SisUvex.Nomina.Asistencia_AS
             // gpbFilters
             // 
             gpbFilters.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            gpbFilters.Controls.Add(comboBox4);
+            gpbFilters.Controls.Add(cboWeek2);
             gpbFilters.Controls.Add(label6);
-            gpbFilters.Controls.Add(comboBox3);
+            gpbFilters.Controls.Add(cboWeek1);
             gpbFilters.Controls.Add(dtpDate1);
             gpbFilters.Controls.Add(labelDate);
             gpbFilters.Controls.Add(label5);
             gpbFilters.Controls.Add(labelDateTo);
-            gpbFilters.Controls.Add(comboBox2);
+            gpbFilters.Controls.Add(cboAgriculturalCycle);
             gpbFilters.Controls.Add(dtpDate2);
             gpbFilters.Controls.Add(label4);
             gpbFilters.Controls.Add(btnAddNomWorkGroup);
@@ -339,60 +339,60 @@ namespace SisUvex.Nomina.Asistencia_AS
             gpbFilters.TabStop = false;
             gpbFilters.Text = "Filtros";
             // 
-            // comboBox4
+            // cboWeek2
             // 
-            comboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox4.FormattingEnabled = true;
-            comboBox4.Location = new Point(662, 66);
-            comboBox4.Margin = new Padding(0, 3, 3, 3);
-            comboBox4.Name = "comboBox4";
-            comboBox4.Size = new Size(57, 29);
-            comboBox4.TabIndex = 93;
+            cboWeek2.DropDownStyle = ComboBoxStyle.DropDown;
+            cboWeek2.FormattingEnabled = true;
+            cboWeek2.Location = new Point(648, 124);
+            cboWeek2.Margin = new Padding(0, 3, 3, 3);
+            cboWeek2.Name = "cboWeek2";
+            cboWeek2.Size = new Size(57, 29);
+            cboWeek2.TabIndex = 93;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(635, 69);
+            label6.Location = new Point(621, 127);
             label6.Margin = new Padding(0);
             label6.Name = "label6";
             label6.Size = new Size(18, 21);
             label6.TabIndex = 92;
             label6.Text = "a";
             // 
-            // comboBox3
+            // cboWeek1
             // 
-            comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new Point(572, 66);
-            comboBox3.Margin = new Padding(0, 3, 3, 3);
-            comboBox3.Name = "comboBox3";
-            comboBox3.Size = new Size(57, 29);
-            comboBox3.TabIndex = 91;
+            cboWeek1.DropDownStyle = ComboBoxStyle.DropDown;
+            cboWeek1.FormattingEnabled = true;
+            cboWeek1.Location = new Point(558, 124);
+            cboWeek1.Margin = new Padding(0, 3, 3, 3);
+            cboWeek1.Name = "cboWeek1";
+            cboWeek1.Size = new Size(57, 29);
+            cboWeek1.TabIndex = 91;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(506, 69);
+            label5.Location = new Point(492, 127);
             label5.Margin = new Padding(0);
             label5.Name = "label5";
             label5.Size = new Size(66, 21);
             label5.TabIndex = 90;
             label5.Text = "Semana";
             // 
-            // comboBox2
+            // cboAgriculturalCycle
             // 
-            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(572, 28);
-            comboBox2.Margin = new Padding(0, 3, 3, 3);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(57, 29);
-            comboBox2.TabIndex = 89;
+            cboAgriculturalCycle.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboAgriculturalCycle.FormattingEnabled = true;
+            cboAgriculturalCycle.Location = new Point(509, 55);
+            cboAgriculturalCycle.Margin = new Padding(0, 3, 3, 3);
+            cboAgriculturalCycle.Name = "cboAgriculturalCycle";
+            cboAgriculturalCycle.Size = new Size(257, 29);
+            cboAgriculturalCycle.TabIndex = 89;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(528, 33);
+            label4.Location = new Point(509, 31);
             label4.Margin = new Padding(0);
             label4.Name = "label4";
             label4.Size = new Size(44, 21);
@@ -789,11 +789,11 @@ namespace SisUvex.Nomina.Asistencia_AS
         private Button btnAddNomWorkGroup;
         public ComboBox cboNomWorkGroup;
         private Label label3;
-        public ComboBox comboBox3;
+        public ComboBox cboWeek1;
         private Label label5;
-        public ComboBox comboBox2;
+        public ComboBox cboAgriculturalCycle;
         private Label label4;
-        public ComboBox comboBox4;
+        public ComboBox cboWeek2;
         private Label label6;
     }
 }
