@@ -569,7 +569,7 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             int box = S(16);
             Rectangle glyph = new(r.X + S(8), r.Y + (r.Height - box) / 2, box, box);
-            DrawCheck(g, glyph, state);
+            AntdCheckGlyph.Draw(g, glyph, state);
 
             Rectangle textRect = new(glyph.Right + S(8), r.Y, r.Right - glyph.Right - S(12), r.Height);
             Font font = item is Entry ? _list.Font : new Font(_list.Font, FontStyle.Bold);
@@ -583,10 +583,18 @@ namespace SisUvex.Nomina.Asistencia_AS
                 if (item is not Entry) font.Dispose();
             }
         }
+    }
 
-        private static void DrawCheck(Graphics g, Rectangle r, bool? state)
+    /// <summary>Casilla redondeada morada (marcada, vacía o a medias) compartida por el filtro y el DataGridView.</summary>
+    internal static class AntdCheckGlyph
+    {
+        public const int DefaultSize = 16;
+
+        public static void Draw(Graphics g, Rectangle r, bool? state)
         {
+            SmoothingMode old = g.SmoothingMode;
             g.SmoothingMode = SmoothingMode.AntiAlias;
+
             using GraphicsPath path = new();
             int d = 6;
             Rectangle b = new(r.X, r.Y, r.Width - 1, r.Height - 1);
@@ -616,6 +624,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             {
                 g.DrawLine(mark, r.X + r.Width * 0.28f, r.Y + r.Height * 0.5f, r.X + r.Width * 0.72f, r.Y + r.Height * 0.5f);
             }
+
+            g.SmoothingMode = old;
         }
     }
 }

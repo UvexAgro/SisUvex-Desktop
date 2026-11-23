@@ -83,6 +83,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             MouseLeave += (_, _) => SetHot(false);
             GotFocus += (_, _) => Invalidate();
             LostFocus += (_, _) => Invalidate();
+            Enter += (_, _) => Invalidate();
+            Leave += (_, _) => Invalidate();
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -117,22 +119,23 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         protected override void WndProc(ref Message m)
         {
-            bool selfDraw = DropDownStyle == ComboBoxStyle.DropDownList;
-
-            if (selfDraw && m.Msg == WM_ERASEBKGND)
+            // Pintamos nosotros todo el marco (borde redondeado, fondo y flecha), con doble búfer: así no se
+            // ve el marco cuadrado del sistema ni parpadea al pasar el mouse. En los combos editables el
+            // cuadro de texto interno se pinta solo (se excluye de nuestra zona de dibujo).
+            if (m.Msg == WM_ERASEBKGND)
             {
                 m.Result = (IntPtr)1;
                 return;
             }
 
-            if (selfDraw && m.Msg == WM_PAINT && IsHandleCreated)
+            if (m.Msg == WM_PAINT && IsHandleCreated)
             {
                 PAINTSTRUCT ps = new();
                 IntPtr hdc = m.WParam != IntPtr.Zero ? m.WParam : BeginPaint(Handle, ref ps);
                 try
                 {
-                    using Graphics g = Graphics.FromHdc(hdc);
-                    DrawFull(g);
+                    using Graphics target = Graphics.FromHdc(hdc);
+                    PaintBuffered(target);
                 }
                 finally
                 {
@@ -144,23 +147,35 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             base.WndProc(ref m);
-
-            if (!selfDraw && m.Msg == WM_PAINT && IsHandleCreated)
-            {
-                IntPtr hdc = GetDC(Handle);
-                if (hdc == IntPtr.Zero) return;
-                try
-                {
-                    using Graphics g = Graphics.FromHdc(hdc);
-                    DrawOverlay(g);
-                }
-                finally
-                {
-                    ReleaseDC(Handle, hdc);
-                }
-            }
         }
 
+        private void PaintBuffered(Graphics target)
+        {
+            Rectangle r = ClientRectangle;
+            if (r.Width <= 2 || r.Height <= 2) return;
+
+            bool editable = DropDownStyle != ComboBoxStyle.DropDownList;
+            Rectangle edit = Rectangle.Empty;
+            Rectangle button = Rectangle.Empty;
+
+            COMBOBOXINFO info = new() { cbSize = Marshal.SizeOf<COMBOBOXINFO>() };
+            if (GetComboBoxInfo(Handle, ref info))
+            {
+                button = Rectangle.FromLTRB(info.rcButton.Left, info.rcButton.Top, info.rcButton.Right, info.rcButton.Bottom);
+                if (editable)
+                    edit = Rectangle.FromLTRB(info.rcItem.Left, info.rcItem.Top, info.rcItem.Right, info.rcItem.Bottom);
+            }
+            if (button.Width <= 0 || button.Height <= 0)
+                button = new Rectangle(r.Right - 26, r.Y, 26, r.Height);
+
+            // El cuadro de texto interno se repinta solo; no hay que tocar su zona.
+            if (!edit.IsEmpty)
+                target.SetClip(edit, CombineMode.Exclude);
+
+            using BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(target, r);
+            DrawFrame(buffer.Graphics, r, button, editable);
+            buffer.Render(target);
+        }
         /// <summary>Permite a las clases derivadas mantener resaltado el borde (p. ej. con un popup propio abierto).</summary>
         protected virtual bool ForceActive => false;
 
@@ -200,11 +215,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             g.DrawLines(pen, new[] { new PointF(cx - 4, cy - 2), new PointF(cx, cy + 2), new PointF(cx + 4, cy - 2) });
         }
 
-        private void DrawFull(Graphics g)
+        private void DrawFrame(Graphics g, Rectangle r, Rectangle button, bool editable)
         {
-            Rectangle r = ClientRectangle;
-            if (r.Width <= 2 || r.Height <= 2) return;
-
             using (SolidBrush outer = new(OuterColor))
                 g.FillRectangle(outer, r);
 
@@ -213,57 +225,21 @@ namespace SisUvex.Nomina.Asistencia_AS
             using GraphicsPath path = BuildPath(r);
             using (SolidBrush b = new(fill))
                 g.FillPath(b, path);
-            using (Pen p = new(CurrentBorder(), 1f))
-                g.DrawPath(p, path);
 
-            const int arrowW = 26;
-            Rectangle arrow = new(r.Right - arrowW, r.Y, arrowW, r.Height);
-            Rectangle text = new(r.X + 9, r.Y + 1, r.Width - arrowW - 12, r.Height - 2);
-
-            string caption = GetCaptionText();
-            Color fore = Enabled ? AntdTheme.TextNormal : Color.FromArgb(150, 158, 175);
-            TextRenderer.DrawText(g, caption, Font, text, fore,
-                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
-
-            DrawChevron(g, arrow);
-        }
-
-        private void DrawOverlay(Graphics g)
-        {
-            Rectangle r = ClientRectangle;
-            if (r.Width <= 2 || r.Height <= 2) return;
-
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            using GraphicsPath path = BuildPath(r);
-
-            // Esquinas: rellena todo lo que queda fuera del rectángulo redondeado.
-            GraphicsState state = g.Save();
-            g.SetClip(path, CombineMode.Exclude);
-            using (SolidBrush outer = new(OuterColor))
-                g.FillRectangle(outer, r);
-            g.Restore(state);
-
-            // Botón de la lista desplegable.
-            COMBOBOXINFO info = new() { cbSize = Marshal.SizeOf<COMBOBOXINFO>() };
-            Rectangle button = new(r.Right - 24, r.Y + 1, 23, r.Height - 2);
-            if (GetComboBoxInfo(Handle, ref info))
+            if (!editable)
             {
-                Rectangle rc = Rectangle.FromLTRB(info.rcButton.Left, info.rcButton.Top, info.rcButton.Right, info.rcButton.Bottom);
-                if (rc.Width > 0 && rc.Height > 0)
-                    button = rc;
+                Rectangle text = new(r.X + 9, r.Y + 1, Math.Max(1, button.Left - r.X - 9), r.Height - 2);
+                string caption = GetCaptionText();
+                Color fore = Enabled ? AntdTheme.TextNormal : Color.FromArgb(150, 158, 175);
+                TextRenderer.DrawText(g, caption, Font, text, fore,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
             }
 
-            GraphicsState state2 = g.Save();
-            g.SetClip(path, CombineMode.Intersect);
-            using (SolidBrush b = new(BackColor))
-                g.FillRectangle(b, button);
-            g.Restore(state2);
             DrawChevron(g, button);
 
             using Pen p = new(CurrentBorder(), 1f);
             g.DrawPath(p, path);
         }
-
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT { public int Left, Top, Right, Bottom; }
 

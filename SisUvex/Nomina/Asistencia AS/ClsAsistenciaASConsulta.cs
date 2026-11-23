@@ -1878,25 +1878,32 @@ namespace SisUvex.Nomina.Asistencia_AS
             chkCol.HeaderCell.ToolTipText = "Seleccionar / deseleccionar todos";
         }
 
+        /// <summary>
+        /// Dibuja las casillas de la columna "Sel." (encabezado y filas) con el mismo estilo
+        /// redondeado morado que las casillas del filtro de los combos.
+        /// </summary>
         private void PaintSelHeaderCheckBox(DataGridViewCellPaintingEventArgs e)
         {
-            if (frm == null || e.RowIndex != -1 || e.ColumnIndex < 0) return;
+            if (frm == null || e.ColumnIndex < 0 || e.RowIndex < -1) return;
             if (e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
             if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
 
+            bool isChecked;
+            if (e.RowIndex == -1)
+                isChecked = _headerSelChecked;
+            else
+                isChecked = e.FormattedValue is bool b ? b : e.Value?.ToString() == "1";
+
             e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border);
 
-            CheckBoxState state = _headerSelChecked
-                ? CheckBoxState.CheckedNormal
-                : CheckBoxState.UncheckedNormal;
-            System.Drawing.Size glyph = CheckBoxRenderer.GetGlyphSize(e.Graphics, state);
-            var location = new Point(
-                e.CellBounds.X + Math.Max(0, (e.CellBounds.Width - glyph.Width) / 2),
-                e.CellBounds.Y + Math.Max(0, (e.CellBounds.Height - glyph.Height) / 2));
-            CheckBoxRenderer.DrawCheckBox(e.Graphics, location, state);
+            int size = AntdCheckGlyph.DefaultSize;
+            var glyph = new Rectangle(
+                e.CellBounds.X + Math.Max(0, (e.CellBounds.Width - size) / 2),
+                e.CellBounds.Y + Math.Max(0, (e.CellBounds.Height - size) / 2),
+                size, size);
+            AntdCheckGlyph.Draw(e.Graphics!, glyph, isChecked);
             e.Handled = true;
         }
-
         public void DgvReport_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (frm == null || _showingReport || _showingCalendar) return;
