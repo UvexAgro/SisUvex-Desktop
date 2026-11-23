@@ -54,10 +54,10 @@
             btnAddEmployee = new AntdUI.Button();
             lblEmployeeAdvice = new Label();
             labelLP = new AntdUI.Label();
-            cboLP = new AntdComboBox();
+            cboLP = new AntdMultiSelectComboBox();
             btnAddList = new AntdUI.Button();
             label3 = new AntdUI.Label();
-            cboNomWorkGroup = new AntdComboBox();
+            cboNomWorkGroup = new AntdMultiSelectComboBox();
             btnAddNomWorkGroup = new AntdUI.Button();
             pnlCardDates = new AntdUI.Panel();
             lblCardDates = new AntdUI.Label();
@@ -801,7 +801,7 @@
             chbShowEmployees.DefaultBack = Color.White;
             chbShowEmployees.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             chbShowEmployees.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowEmployees.ForeColor = Color.FromArgb(51, 65, 85);
+            chbShowEmployees.ForeColor = Color.FromArgb(122, 44, 166);
             chbShowEmployees.IconSize = new Size(16, 16);
             chbShowEmployees.IconSvg = AntdIcons.List;
             chbShowEmployees.Location = new Point(16, 40);
@@ -829,7 +829,7 @@
             chbShowReport.DefaultBack = Color.White;
             chbShowReport.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             chbShowReport.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowReport.ForeColor = Color.FromArgb(51, 65, 85);
+            chbShowReport.ForeColor = Color.FromArgb(122, 44, 166);
             chbShowReport.IconSize = new Size(16, 16);
             chbShowReport.IconSvg = AntdIcons.Document;
             chbShowReport.Location = new Point(132, 40);
@@ -857,7 +857,7 @@
             chbShowReportCalendar.DefaultBack = Color.White;
             chbShowReportCalendar.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             chbShowReportCalendar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowReportCalendar.ForeColor = Color.FromArgb(51, 65, 85);
+            chbShowReportCalendar.ForeColor = Color.FromArgb(122, 44, 166);
             chbShowReportCalendar.IconSize = new Size(16, 16);
             chbShowReportCalendar.IconSvg = AntdIcons.Calendar;
             chbShowReportCalendar.Location = new Point(248, 40);
@@ -1028,10 +1028,10 @@
         private AntdUI.Button btnAddEmployee;
         public Label lblEmployeeAdvice;
         private AntdUI.Label labelLP;
-        public AntdComboBox cboLP;
+        public AntdMultiSelectComboBox cboLP;
         private AntdUI.Button btnAddList;
         private AntdUI.Label label3;
-        public AntdComboBox cboNomWorkGroup;
+        public AntdMultiSelectComboBox cboNomWorkGroup;
         private AntdUI.Button btnAddNomWorkGroup;
         private AntdUI.Panel pnlCardDates;
         private AntdUI.Label lblCardDates;

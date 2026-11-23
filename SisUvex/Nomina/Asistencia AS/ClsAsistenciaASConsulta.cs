@@ -617,9 +617,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             BeginProgress();
             try
             {
-                string? idPaymentPlace = frm.cboLP.ComboValueOrNull();
+                // Varios lugares de pago marcados en el filtro; vacío = sin filtro (todos).
+                IReadOnlyList<string> paymentPlaces = frm.cboLP.SelectedValues;
 
-                DataTable dt = FetchEmployeeListByPaymentPlace(idPaymentPlace);
+                DataTable dt = FetchEmployeeListByPaymentPlace(paymentPlaces);
                 AdvanceTo(220);
 
                 if (dt.Rows.Count == 0)
@@ -646,20 +647,30 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         /// <summary>
         /// Trae los empleados de vw_Employees_Info, filtrando (opcionalmente) por el lugar de pago
-        /// (Nom_Employees.id_paymentPlace) cuando el usuario seleccionó uno en cboLP.
+        /// (Nom_Employees.id_paymentPlace) con los lugares marcados en cboLP (uno o varios; ninguno = todos).
         /// </summary>
-        private DataTable FetchEmployeeListByPaymentPlace(string? idPaymentPlace)
+        private DataTable FetchEmployeeListByPaymentPlace(IReadOnlyList<string> idPaymentPlaces)
         {
-            var p = new Dictionary<string, object>
+            var p = new Dictionary<string, object>();
+            string where = string.Empty;
+
+            if (idPaymentPlaces.Count > 0)
             {
-                ["@idPaymentPlace"] = (object?)idPaymentPlace ?? DBNull.Value,
-            };
+                var names = new List<string>();
+                for (int i = 0; i < idPaymentPlaces.Count; i++)
+                {
+                    string name = $"@idPaymentPlace{i}";
+                    names.Add(name);
+                    p[name] = idPaymentPlaces[i];
+                }
+                where = $"WHERE emp.id_paymentPlace IN ({string.Join(", ", names)})";
+            }
 
             return ClsQuerysDB.ExecuteParameterizedQuery(
                 $@"SELECT '1' AS [{ColSel}], vw.id_employee AS [{ColCodigo}], vw.*
                    FROM vw_Employees_Info vw
                    LEFT JOIN Nom_Employees emp ON emp.id_employee = vw.id_employee
-                   WHERE (@idPaymentPlace IS NULL OR emp.id_paymentPlace = @idPaymentPlace)
+                   {where}
                    ORDER BY Nombre;",
                 p);
         }

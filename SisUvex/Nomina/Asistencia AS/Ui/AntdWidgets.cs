@@ -161,7 +161,14 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
         }
 
-        private bool IsActive => Focused || ContainsFocus || DroppedDown;
+        /// <summary>Permite a las clases derivadas mantener resaltado el borde (p. ej. con un popup propio abierto).</summary>
+        protected virtual bool ForceActive => false;
+
+        /// <summary>Texto que se dibuja en el control cuando es de solo lista.</summary>
+        protected virtual string GetCaptionText()
+            => SelectedIndex >= 0 ? GetItemText(SelectedItem) : string.Empty;
+
+        private bool IsActive => Focused || ContainsFocus || DroppedDown || ForceActive;
 
         private GraphicsPath BuildPath(Rectangle r)
         {
@@ -213,7 +220,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             Rectangle arrow = new(r.Right - arrowW, r.Y, arrowW, r.Height);
             Rectangle text = new(r.X + 9, r.Y + 1, r.Width - arrowW - 12, r.Height - 2);
 
-            string caption = SelectedIndex >= 0 ? GetItemText(SelectedItem) : string.Empty;
+            string caption = GetCaptionText();
             Color fore = Enabled ? AntdTheme.TextNormal : Color.FromArgb(150, 158, 175);
             TextRenderer.DrawText(g, caption, Font, text, fore,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
