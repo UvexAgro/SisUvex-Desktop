@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -340,7 +340,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 Cursor = Cursors.Hand,
                 Size = new Size(S(84), S(32)),
             };
-            _cancel.Location = new Point(w - pad - _cancel.Width, h - bottomBar + S(8));
+            _cancel.Location = new Point(w - S(18) - _cancel.Width, h - bottomBar + S(8));
 
             _ok = new AntdUI.Button
             {
@@ -357,6 +357,17 @@ namespace SisUvex.Nomina.Asistencia_AS
                 Size = new Size(S(84), S(32)),
             };
             _ok.Location = new Point(_cancel.Left - S(8) - _ok.Width, h - bottomBar + S(8));
+
+            // Anclajes para poder redimensionar con la esquina inferior derecha.
+            _searchHost.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            _search.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            hint.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            _list.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            _empty.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            _count.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            _ok.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            _cancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            MinimumSize = new Size(S(240), S(220));
 
             Controls.Add(_searchHost);
             Controls.Add(_list);
@@ -403,6 +414,44 @@ namespace SisUvex.Nomina.Asistencia_AS
             using Pen sep = new(Color.FromArgb(235, 235, 243));
             int y = _ok.Top - S(6);
             e.Graphics.DrawLine(sep, S(8), y, Width - S(8), y);
+
+            // Tirador de redimensionado (esquina inferior derecha).
+            using SolidBrush dot = new(Color.FromArgb(150, 150, 165));
+            int d = Math.Max(2, S(2));
+            int gap = Math.Max(2, S(4));
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j <= i; j++)
+                    e.Graphics.FillRectangle(dot,
+                        Width - S(4) - d - j * gap,
+                        Height - S(4) - d - (2 - i) * gap,
+                        d, d);
+        }
+
+        private const int WM_NCHITTEST = 0x0084;
+        private const int HTBOTTOMRIGHT = 17;
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+                if ((int)m.Result == 1)   // HTCLIENT
+                {
+                    long lp = m.LParam.ToInt64();
+                    Point pt = PointToClient(new Point((short)(lp & 0xFFFF), (short)((lp >> 16) & 0xFFFF)));
+                    int grip = S(16);
+                    if (pt.X >= Width - grip && pt.Y >= Height - grip)
+                        m.Result = (IntPtr)HTBOTTOMRIGHT;
+                }
+                return;
+            }
+            base.WndProc(ref m);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            Invalidate();
         }
 
         /// <summary>Se muestra debajo del control (o encima si no cabe), dentro del área de trabajo.</summary>
