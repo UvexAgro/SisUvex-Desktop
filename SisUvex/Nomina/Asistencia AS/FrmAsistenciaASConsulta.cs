@@ -152,7 +152,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             UpdateEmployeesMinExpButton();
         }
 
-        /// <summary>Minimiza el panel de empleados (lo usa "Cargar" al terminar de cargar datos).</summary>
+        /// <summary>Indica si el panel de empleados está minimizado.</summary>
+        internal bool EmployeesCollapsed => _employeesCollapsed;
+
+        /// <summary>Minimiza el panel de empleados (lo usa "Cargar" justo antes de empezar a cargar el reporte).</summary>
         internal void CollapseEmployeesPanel() => SetEmployeesCollapsed(true);
 
         private void UpdateEmployeesMinExpButton()
