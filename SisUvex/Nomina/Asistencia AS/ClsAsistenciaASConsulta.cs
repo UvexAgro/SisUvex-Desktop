@@ -845,6 +845,13 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             if (!ValidateConnectionSettings()) return;
 
+            // Ya validado todo: primero se minimiza el listado de empleados (para que el grid del reporte tenga
+            // espacio) y hasta entonces empieza la carga. Si no se logra cargar el reporte, se restaura el panel.
+            bool employeesWereCollapsed = frm.EmployeesCollapsed;
+            bool reportLoaded = false;
+            frm.CollapseEmployeesPanel();
+            frm.Update();
+
             BeginProgress();
             try
             {
@@ -913,8 +920,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
-                // Hay datos en el grid del reporte: se minimiza el listado de empleados para darle espacio.
-                frm.CollapseEmployeesPanel();
+                reportLoaded = true;
 
                 var adviceParts = new List<string>();
                 if (omittedLastDays > 0)
@@ -930,6 +936,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             finally
             {
                 EndProgress();
+                if (!reportLoaded && !employeesWereCollapsed)
+                    frm.SetEmployeesCollapsed(false);
             }
         }
 
@@ -1706,7 +1714,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     {
                         DataGridViewColumn col = dgv.Columns[i];
                         if (TryParseDayColumn(col.Name, out _))
-                            col.Width = 48;
+                            col.Width = DgvAsistenciaASPerf.DayColumnWidth(dgv);
                         else
                             dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
 
@@ -2312,6 +2320,23 @@ namespace SisUvex.Nomina.Asistencia_AS
     /// </summary>
     internal static class DgvAsistenciaASPerf
     {
+        /// <summary>
+        /// Ancho de las columnas de fecha: el mínimo (48 px) o lo que ocupe "mmm-dd" con la fuente del encabezado
+        /// (más un margen), para que el salto de línea mes-día / día de la semana se vea SIEMPRE en 2 renglones.
+        /// Si la columna es más angosta que la primera línea, el DGV recorta la segunda línea del encabezado.
+        /// </summary>
+        public static int DayColumnWidth(DataGridView dgv)
+        {
+            Font font = dgv.ColumnHeadersDefaultCellStyle.Font ?? dgv.Font;
+            int widest = 0;
+            for (int month = 1; month <= 12; month++)
+            {
+                string month3 = new DateTime(2026, month, 28).ToString("MMM", ClsAsistenciaASConsulta.CultureEs).Replace(".", string.Empty);
+                widest = Math.Max(widest, TextRenderer.MeasureText(month3 + "-28", font, new System.Drawing.Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+            }
+            // 16 px = relleno interno de la celda de encabezado + holgura.
+            return Math.Max(48, widest + 16);
+        }
         private const int WmSetRedraw = 0x000B;
 
         [DllImport("user32.dll")]

@@ -595,7 +595,7 @@ internal class ClsModifyAttendanceEmployees
             {
                 if (TryParseDayColumn(col.Name, out _))
                 {
-                    col.Width = 48;
+                    col.Width = DgvAsistenciaASPerf.DayColumnWidth(dgv);
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
                 else
