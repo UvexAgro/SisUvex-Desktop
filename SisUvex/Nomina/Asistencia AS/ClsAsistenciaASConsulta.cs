@@ -93,6 +93,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             SetControls();
             DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvReport);
             DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvReport);
+            DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvEmployees);
+            DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvEmployees);
             frm.lblEmployeeAdvice.Text = string.Empty;
             ShowEmployeeList(showProgress: false);
         }
@@ -675,6 +677,77 @@ namespace SisUvex.Nomina.Asistencia_AS
                 p);
         }
 
+        // ── Agregar listado por cuadrilla ─────────────────────────────────────
+
+        /// <summary>
+        /// Agrega al listado los empleados cuya cuadrilla actual (columna Cuadrilla de vw_Employees_Info:
+        /// la de la última semana registrada en Nom_EmployeeAttendanceWeekly) coincide con alguna de las
+        /// cuadrillas marcadas en cboNomWorkGroup.
+        /// </summary>
+        public void BtnAddNomWorkGroup()
+        {
+            if (frm == null) return;
+
+            IReadOnlyList<string> workGroups = frm.cboNomWorkGroup.SelectedValues;
+            if (workGroups.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                SetAdvice("Selecciona al menos una cuadrilla en el filtro.", isError: true);
+                return;
+            }
+
+            BeginProgress();
+            try
+            {
+                DataTable dt = FetchEmployeeListByWorkGroup(workGroups);
+                AdvanceTo(220);
+
+                if (dt.Rows.Count == 0)
+                {
+                    SetAdvice("No se encontraron empleados en las cuadrillas seleccionadas.", isError: true);
+                    return;
+                }
+
+                int added = AddRowsToEmployeeList(dt, rangeFrom: 220, rangeTo: 820);
+                AdvanceTo(820);
+                RefreshEmployeeDgv();
+                SetAdvice($"{added} empleado(s) agregado(s) al listado.", isError: false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al agregar cuadrilla", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                EndProgress();
+            }
+        }
+
+        /// <summary>
+        /// La vista expone la cuadrilla por nombre, así que los ids marcados en el combo se traducen a
+        /// nombre con Nom_WorkGroup y se compara contra vw_Employees_Info.Cuadrilla.
+        /// </summary>
+        private DataTable FetchEmployeeListByWorkGroup(IReadOnlyList<string> idWorkGroups)
+        {
+            var p = new Dictionary<string, object>();
+            var names = new List<string>();
+            for (int i = 0; i < idWorkGroups.Count; i++)
+            {
+                string name = $"@idWorkGroup{i}";
+                names.Add(name);
+                p[name] = idWorkGroups[i];
+            }
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(
+                $@"SELECT '1' AS [{ColSel}], vw.id_employee AS [{ColCodigo}], vw.*
+                   FROM vw_Employees_Info vw
+                   WHERE vw.Cuadrilla IN (
+                       SELECT wg.v_nameWorkGroup
+                       FROM Nom_WorkGroup wg
+                       WHERE wg.id_workGroup IN ({string.Join(", ", names)}))
+                   ORDER BY Nombre;",
+                p);
+        }
         // ── Limpiar listado ───────────────────────────────────────────────────
 
         public void BtnClearList()
@@ -687,22 +760,20 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         // ── Alternar vista DGV ────────────────────────────────────────────────
 
-        public void ChbShowEmployees_CheckedChanged()
-        {
-            if (frm == null || _updatingViewButtons) return;
-            if (frm.chbShowEmployees.Checked)
-                ShowEmployeeList();
-        }
-
         public void ChbShowReport_CheckedChanged()
         {
             if (frm == null || _updatingViewButtons) return;
-            if (!frm.chbShowReport.Checked) return;
+            if (!frm.chbShowReport.Checked)
+            {
+                // Si se desmarca la vista que está activa, se vuelve a marcar (siempre hay una vista del reporte).
+                if (_showingReport) SetViewButtons(report: true, calendar: false);
+                return;
+            }
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                SetViewButtons(employees: true, report: false, calendar: false);
+                SetViewButtons(report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -713,12 +784,16 @@ namespace SisUvex.Nomina.Asistencia_AS
         public void ChbShowReportCalendar_CheckedChanged()
         {
             if (frm == null || _updatingViewButtons) return;
-            if (!frm.chbShowReportCalendar.Checked) return;
+            if (!frm.chbShowReportCalendar.Checked)
+            {
+                if (_showingCalendar) SetViewButtons(report: false, calendar: true);
+                return;
+            }
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                SetViewButtons(employees: true, report: false, calendar: false);
+                SetViewButtons(report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -838,6 +913,8 @@ namespace SisUvex.Nomina.Asistencia_AS
                     onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
+                // Hay datos en el grid del reporte: se minimiza el listado de empleados para darle espacio.
+                frm.CollapseEmployeesPanel();
 
                 var adviceParts = new List<string>();
                 if (omittedLastDays > 0)
@@ -1063,12 +1140,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (_showingCalendar)
             {
                 _calendarCls.CellPainting(e, frm.dgvReport);
-                return;
-            }
-
-            if (!_showingReport && !_showingCalendar)
-            {
-                PaintSelHeaderCheckBox(e);
                 return;
             }
 
@@ -1643,7 +1714,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     }
                 }
 
-                SetViewButtons(employees: false, report: true, calendar: false);
+                SetViewButtons(report: true, calendar: false);
                 DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
@@ -1699,7 +1770,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                         onProgress: (done, total) => ReportRange(done, total, formatFrom, to));
                 }
 
-                SetViewButtons(employees: false, report: false, calendar: true);
+                SetViewButtons(report: false, calendar: true);
                 DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, frm.dgvReport);
                 AdvanceTo(to);
             }
@@ -1755,10 +1826,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (ownProgress) BeginProgress();
             try
             {
-                _showingReport   = false;
-                _showingCalendar = false;
-
-                DataGridView dgv = frm.dgvReport;
+                // El listado vive en su propio grid (dgvEmployees): no cambia la vista del reporte/calendario.
+                DataGridView dgv = frm.dgvEmployees;
                 using (DgvAsistenciaASPerf.PausePainting(dgv))
                 {
                     dgv.ColumnHeadersVisible = true;
@@ -1773,6 +1842,9 @@ namespace SisUvex.Nomina.Asistencia_AS
                     ReportRange(1, 4, from, to);
                     ApplyCheckBoxColumnToSel();
                     HideColumnsInDgv(_columnsToHideInDgv);
+                    // Sin empleados en el listado no se muestra la columna (ni el checkbox del encabezado).
+                    if (dgv.Columns.Contains(ColSel))
+                        dgv.Columns[ColSel].Visible = _dtEmployeeList.Rows.Count > 0;
                     ReportRange(2, 4, from, to);
 
                     int colCount = dgv.Columns.Count;
@@ -1788,9 +1860,6 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 SyncHeaderSelFromRows();
-
-                SetViewButtons(employees: true, report: false, calendar: false);
-                DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
             finally
@@ -1799,14 +1868,13 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
         }
 
-        private void SetViewButtons(bool employees, bool report, bool calendar)
+        private void SetViewButtons(bool report, bool calendar)
         {
             if (frm == null) return;
 
             _updatingViewButtons = true;
             try
             {
-                frm.chbShowEmployees.Checked = employees;
                 frm.chbShowReport.Checked = report;
                 frm.chbShowReportCalendar.Checked = calendar;
             }
@@ -1825,8 +1893,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (frm == null) return;
             foreach (string col in columnsToHide)
             {
-                if (frm.dgvReport.Columns.Contains(col))
-                    frm.dgvReport.Columns[col].Visible = false;
+                if (frm.dgvEmployees.Columns.Contains(col))
+                    frm.dgvEmployees.Columns[col].Visible = false;
             }
         }
 
@@ -1843,9 +1911,9 @@ namespace SisUvex.Nomina.Asistencia_AS
         private void ApplyCheckBoxColumnToSel()
         {
             if (frm == null) return;
-            if (!frm.dgvReport.Columns.Contains(ColSel)) return;
+            if (!frm.dgvEmployees.Columns.Contains(ColSel)) return;
 
-            var col = frm.dgvReport.Columns[ColSel];
+            var col = frm.dgvEmployees.Columns[ColSel];
             if (col is DataGridViewCheckBoxColumn existing)
             {
                 ConfigureSelCheckBoxColumn(existing);
@@ -1853,7 +1921,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             int ordinal = col.Index;
-            frm.dgvReport.Columns.Remove(col);
+            frm.dgvEmployees.Columns.Remove(col);
 
             var chkCol = new DataGridViewCheckBoxColumn
             {
@@ -1865,7 +1933,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 DisplayIndex     = ordinal,
             };
             ConfigureSelCheckBoxColumn(chkCol);
-            frm.dgvReport.Columns.Insert(ordinal, chkCol);
+            frm.dgvEmployees.Columns.Insert(ordinal, chkCol);
         }
 
         private static void ConfigureSelCheckBoxColumn(DataGridViewCheckBoxColumn chkCol)
@@ -1885,8 +1953,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         private void PaintSelHeaderCheckBox(DataGridViewCellPaintingEventArgs e)
         {
             if (frm == null || e.ColumnIndex < 0 || e.RowIndex < -1) return;
-            if (e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (e.ColumnIndex >= frm.dgvEmployees.Columns.Count) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
 
             bool isChecked;
             if (e.RowIndex == -1)
@@ -1904,29 +1972,32 @@ namespace SisUvex.Nomina.Asistencia_AS
             AntdCheckGlyph.Draw(e.Graphics!, glyph, isChecked);
             e.Handled = true;
         }
-        public void DgvReport_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        public void DgvEmployees_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+            => PaintSelHeaderCheckBox(e);
+
+        public void DgvEmployees_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
-            if (frm == null || _showingReport || _showingCalendar) return;
-            if (e.ColumnIndex < 0 || e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (frm == null) return;
+            if (e.ColumnIndex < 0 || e.ColumnIndex >= frm.dgvEmployees.Columns.Count) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
 
             SetAllEmployeeSelection(!_headerSelChecked);
         }
 
-        public void DgvReport_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+        public void DgvEmployees_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
         {
-            if (frm == null || _showingReport || _showingCalendar) return;
-            if (!frm.dgvReport.IsCurrentCellDirty) return;
-            if (frm.dgvReport.CurrentCell?.OwningColumn?.Name != ColSel) return;
+            if (frm == null) return;
+            if (!frm.dgvEmployees.IsCurrentCellDirty) return;
+            if (frm.dgvEmployees.CurrentCell?.OwningColumn?.Name != ColSel) return;
 
-            frm.dgvReport.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            frm.dgvEmployees.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
 
-        public void DgvReport_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        public void DgvEmployees_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
         {
-            if (_updatingSel || frm == null || _showingReport || _showingCalendar) return;
+            if (_updatingSel || frm == null) return;
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
 
             SyncHeaderSelFromRows();
         }
@@ -1935,7 +2006,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || !_dtEmployeeList.Columns.Contains(ColSel)) return;
 
-            DataGridView dgv = frm.dgvReport;
+            DataGridView dgv = frm.dgvEmployees;
             _updatingSel = true;
             try
             {
@@ -1980,8 +2051,8 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             if (_headerSelChecked == allChecked) return;
             _headerSelChecked = allChecked;
-            if (frm.dgvReport.Columns.Contains(ColSel))
-                frm.dgvReport.InvalidateColumn(frm.dgvReport.Columns[ColSel].Index);
+            if (frm.dgvEmployees.Columns.Contains(ColSel))
+                frm.dgvEmployees.InvalidateColumn(frm.dgvEmployees.Columns[ColSel].Index);
         }
 
         // ── Helpers listado ───────────────────────────────────────────────────

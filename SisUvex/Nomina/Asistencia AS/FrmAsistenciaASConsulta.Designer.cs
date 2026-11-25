@@ -33,12 +33,50 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAsistenciaASConsulta));
-            pnlHeader = new AntdUI.Panel();
-            lblTitle = new AntdUI.Label();
-            btnOpenFrmAttendanceType = new AntdUI.Button();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            pnlGrid = new AntdUI.Panel();
+            dgvReport = new DataGridView();
+            pgrReport = new AntdProgressBar();
+            pnlCardView = new AntdUI.Panel();
+            lblCardView = new AntdUI.Label();
+            chbShowReport = new AntdToggleButton();
+            chbShowReportCalendar = new AntdToggleButton();
+            lblSelectedDaysCaption = new AntdUI.Label();
+            lblEmployeeAdvice = new Label();
+            lblSelectedDays = new Label();
+            pnlCardActions = new AntdUI.Panel();
+            lblCardActions = new AntdUI.Label();
+            btnModifyAttendance = new AntdUI.Button();
+            btnExcel = new AntdUI.Button();
+            lblLastDays = new AntdUI.Label();
+            pnlLastDaysInput = new AntdUI.Panel();
+            txbLastDays = new TextBox();
+            label2 = new AntdUI.Label();
+            cboAttendenceType = new AntdComboBox();
+            lblSobrantesInfo = new AntdUI.Label();
+            btnLoadReport = new AntdUI.Button();
+            btnClearList = new AntdUI.Button();
+            pnlCardDates = new AntdUI.Panel();
+            lblCardDates = new AntdUI.Label();
+            cboAgriculturalCycle = new AntdComboBox();
+            cboSeason = new AntdComboBox();
+            label5 = new AntdUI.Label();
+            cboWeek1 = new AntdComboBox();
+            label6 = new AntdUI.Label();
+            cboWeek2 = new AntdComboBox();
+            labelDate = new AntdUI.Label();
+            dtpDate1 = new AntdDatePicker();
+            labelDateTo = new AntdUI.Label();
+            dtpDate2 = new AntdDatePicker();
+            label4 = new AntdUI.Label();
+            labelSeason = new AntdUI.Label();
             pnlCardEmployees = new AntdUI.Panel();
-            lblCardEmployees = new AntdUI.Label();
-            label1 = new AntdUI.Label();
+            gripEmployeesResize = new AntdResizeGrip();
+            btnEmployeesMinExp = new AntdUI.Button();
+            pnlListEmployees = new AntdUI.Panel();
+            dgvEmployees = new DataGridView();
             btnSearchEmployee = new AntdUI.Button();
             pnlEmployeeInput = new AntdUI.Panel();
             txbIdEmployee = new RichTextBox();
@@ -52,152 +90,724 @@
             tssIdEmployee2 = new ToolStripSeparator();
             tsmiSelectAll = new ToolStripMenuItem();
             btnAddEmployee = new AntdUI.Button();
-            lblEmployeeAdvice = new Label();
-            labelLP = new AntdUI.Label();
             cboLP = new AntdMultiSelectComboBox();
             btnAddList = new AntdUI.Button();
-            label3 = new AntdUI.Label();
             cboNomWorkGroup = new AntdMultiSelectComboBox();
             btnAddNomWorkGroup = new AntdUI.Button();
-            pnlCardDates = new AntdUI.Panel();
-            lblCardDates = new AntdUI.Label();
-            label4 = new AntdUI.Label();
-            cboAgriculturalCycle = new AntdComboBox();
-            labelSeason = new AntdUI.Label();
-            cboSeason = new AntdComboBox();
-            label5 = new AntdUI.Label();
-            cboWeek1 = new AntdComboBox();
-            label6 = new AntdUI.Label();
-            cboWeek2 = new AntdComboBox();
-            labelDate = new AntdUI.Label();
-            dtpDate1 = new AntdDatePicker();
-            labelDateTo = new AntdUI.Label();
-            dtpDate2 = new AntdDatePicker();
-            pnlCardActions = new AntdUI.Panel();
-            lblCardActions = new AntdUI.Label();
-            btnLoadReport = new AntdUI.Button();
-            btnClearList = new AntdUI.Button();
-            btnModifyAttendance = new AntdUI.Button();
-            btnExcel = new AntdUI.Button();
-            lblLastDays = new AntdUI.Label();
-            pnlLastDaysInput = new AntdUI.Panel();
-            txbLastDays = new TextBox();
-            label2 = new AntdUI.Label();
-            cboAttendenceType = new AntdComboBox();
-            lblSobrantesInfo = new AntdUI.Label();
-            pnlCardView = new AntdUI.Panel();
-            lblCardView = new AntdUI.Label();
-            chbShowEmployees = new AntdToggleButton();
-            chbShowReport = new AntdToggleButton();
-            chbShowReportCalendar = new AntdToggleButton();
-            lblSelectedDaysCaption = new AntdUI.Label();
-            lblSelectedDays = new Label();
-            pgrReport = new AntdProgressBar();
-            pnlGrid = new AntdUI.Panel();
-            dgvReport = new DataGridView();
+            label1 = new AntdUI.Label();
+            lblCardEmployees = new AntdUI.Label();
+            label3 = new AntdUI.Label();
+            labelLP = new AntdUI.Label();
+            pnlHeader = new AntdUI.Panel();
+            lblTitle = new AntdUI.Label();
+            btnOpenFrmAttendanceType = new AntdUI.Button();
             toolTip = new ToolTip(components);
-            pnlHeader.SuspendLayout();
-            pnlCardEmployees.SuspendLayout();
-            pnlEmployeeInput.SuspendLayout();
-            cmsIdEmployee.SuspendLayout();
-            pnlCardDates.SuspendLayout();
-            pnlCardActions.SuspendLayout();
-            pnlLastDaysInput.SuspendLayout();
-            pnlCardView.SuspendLayout();
+            pnlEmployeeAdvice = new AntdUI.Panel();
             pnlGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
+            pnlCardView.SuspendLayout();
+            pnlCardActions.SuspendLayout();
+            pnlLastDaysInput.SuspendLayout();
+            pnlCardDates.SuspendLayout();
+            pnlCardEmployees.SuspendLayout();
+            pnlListEmployees.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvEmployees).BeginInit();
+            pnlEmployeeInput.SuspendLayout();
+            cmsIdEmployee.SuspendLayout();
+            pnlHeader.SuspendLayout();
+            pnlEmployeeAdvice.SuspendLayout();
             SuspendLayout();
             // 
-            // pnlHeader
+            // pnlGrid
             // 
-            pnlHeader.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlHeader.Back = Color.FromArgb(122, 44, 166);
-            pnlHeader.BorderWidth = 0F;
-            pnlHeader.Controls.Add(lblTitle);
-            pnlHeader.Controls.Add(btnOpenFrmAttendanceType);
-            pnlHeader.Location = new Point(12, 10);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Radius = 8;
-            pnlHeader.Size = new Size(909, 40);
-            pnlHeader.TabIndex = 0;
+            pnlGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlGrid.Back = Color.White;
+            pnlGrid.BorderColor = Color.FromArgb(201, 184, 225);
+            pnlGrid.BorderWidth = 1F;
+            pnlGrid.Controls.Add(dgvReport);
+            pnlGrid.Location = new Point(12, 532);
+            pnlGrid.Name = "pnlGrid";
+            pnlGrid.Radius = 8;
+            pnlGrid.Size = new Size(1209, 213);
+            pnlGrid.TabIndex = 13;
             // 
-            // lblTitle
+            // dgvReport
             // 
-            lblTitle.BackColor = Color.Transparent;
-            lblTitle.Font = new Font("Segoe UI", 12.5F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(14, 5);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(420, 30);
-            lblTitle.TabIndex = 0;
-            lblTitle.Tag = "lotData";
-            lblTitle.Text = "Configurar reporte";
-            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
+            dgvReport.AllowUserToAddRows = false;
+            dgvReport.AllowUserToDeleteRows = false;
+            dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvReport.BackgroundColor = Color.White;
+            dgvReport.BorderStyle = BorderStyle.None;
+            dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvReport.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvReport.ColumnHeadersHeight = 30;
+            dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(222, 206, 244);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvReport.DefaultCellStyle = dataGridViewCellStyle2;
+            dgvReport.EnableHeadersVisualStyles = false;
+            dgvReport.GridColor = Color.FromArgb(214, 218, 230);
+            dgvReport.ImeMode = ImeMode.NoControl;
+            dgvReport.Location = new Point(4, 4);
+            dgvReport.Name = "dgvReport";
+            dgvReport.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvReport.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dgvReport.RowHeadersVisible = false;
+            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReport.Size = new Size(1201, 205);
+            dgvReport.TabIndex = 0;
+            dgvReport.CellFormatting += dgvReport_CellFormatting;
+            dgvReport.CellPainting += dgvReport_CellPainting;
+            dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
+            dgvReport.SelectionChanged += dgvReport_SelectionChanged;
             // 
-            // btnOpenFrmAttendanceType
+            // pgrReport
             // 
-            btnOpenFrmAttendanceType.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnOpenFrmAttendanceType.BorderWidth = 0F;
-            btnOpenFrmAttendanceType.Cursor = Cursors.Hand;
-            btnOpenFrmAttendanceType.DefaultBack = Color.White;
-            btnOpenFrmAttendanceType.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnOpenFrmAttendanceType.ForeColor = Color.FromArgb(122, 44, 166);
-            btnOpenFrmAttendanceType.IconSize = new Size(15, 15);
-            btnOpenFrmAttendanceType.IconSvg = AntdIcons.Settings;
-            btnOpenFrmAttendanceType.Location = new Point(731, 5);
-            btnOpenFrmAttendanceType.Name = "btnOpenFrmAttendanceType";
-            btnOpenFrmAttendanceType.Radius = 8;
-            btnOpenFrmAttendanceType.Size = new Size(168, 30);
-            btnOpenFrmAttendanceType.TabIndex = 1;
-            btnOpenFrmAttendanceType.Text = "Tipo de asistencia";
-            btnOpenFrmAttendanceType.Click += btnOpenFrmAttendanceType_Click;
+            pgrReport.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pgrReport.Location = new Point(12, 517);
+            pgrReport.Maximum = 1000;
+            pgrReport.Name = "pgrReport";
+            pgrReport.Size = new Size(1209, 10);
+            pgrReport.Style = ProgressBarStyle.Continuous;
+            pgrReport.TabIndex = 12;
+            // 
+            // pnlCardView
+            // 
+            pnlCardView.Back = Color.White;
+            pnlCardView.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlCardView.BorderWidth = 1F;
+            pnlCardView.Controls.Add(lblCardView);
+            pnlCardView.Controls.Add(chbShowReport);
+            pnlCardView.Controls.Add(chbShowReportCalendar);
+            pnlCardView.Location = new Point(12, 467);
+            pnlCardView.Name = "pnlCardView";
+            pnlCardView.Radius = 10;
+            pnlCardView.Size = new Size(351, 45);
+            pnlCardView.TabIndex = 11;
+            // 
+            // lblCardView
+            // 
+            lblCardView.BackColor = Color.Transparent;
+            lblCardView.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCardView.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCardView.Location = new Point(16, 8);
+            lblCardView.Name = "lblCardView";
+            lblCardView.Size = new Size(74, 28);
+            lblCardView.TabIndex = 0;
+            lblCardView.Text = "Visualizar";
+            // 
+            // chbShowReport
+            // 
+            chbShowReport.AutoToggle = true;
+            chbShowReport.BackHover = Color.FromArgb(240, 230, 250);
+            chbShowReport.BorderWidth = 1.5F;
+            chbShowReport.Cursor = Cursors.Hand;
+            chbShowReport.DefaultBack = Color.White;
+            chbShowReport.DefaultBorderColor = Color.FromArgb(206, 212, 224);
+            chbShowReport.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            chbShowReport.ForeColor = Color.FromArgb(122, 44, 166);
+            chbShowReport.IconSize = new Size(16, 16);
+            chbShowReport.IconSvg = resources.GetString("chbShowReport.IconSvg");
+            chbShowReport.Location = new Point(96, 5);
+            chbShowReport.Name = "chbShowReport";
+            chbShowReport.Radius = 8;
+            chbShowReport.Size = new Size(108, 36);
+            chbShowReport.TabIndex = 2;
+            chbShowReport.Text = "Reporte";
+            chbShowReport.ToggleBack = Color.FromArgb(122, 44, 166);
+            chbShowReport.ToggleBackActive = Color.FromArgb(98, 28, 138);
+            chbShowReport.ToggleBackHover = Color.FromArgb(140, 66, 186);
+            chbShowReport.ToggleFore = Color.White;
+            chbShowReport.ToggleForeActive = Color.White;
+            chbShowReport.ToggleForeHover = Color.White;
+            chbShowReport.ToggleIconSvg = resources.GetString("chbShowReport.ToggleIconSvg");
+            chbShowReport.ToggleText = "Reporte";
+            chbShowReport.ToggleType = AntdUI.TTypeMini.Primary;
+            chbShowReport.CheckedChanged += chbShowReport_CheckedChanged;
+            // 
+            // chbShowReportCalendar
+            // 
+            chbShowReportCalendar.AutoToggle = true;
+            chbShowReportCalendar.BackHover = Color.FromArgb(240, 230, 250);
+            chbShowReportCalendar.BorderWidth = 1.5F;
+            chbShowReportCalendar.Cursor = Cursors.Hand;
+            chbShowReportCalendar.DefaultBack = Color.White;
+            chbShowReportCalendar.DefaultBorderColor = Color.FromArgb(206, 212, 224);
+            chbShowReportCalendar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            chbShowReportCalendar.ForeColor = Color.FromArgb(122, 44, 166);
+            chbShowReportCalendar.IconSize = new Size(16, 16);
+            chbShowReportCalendar.IconSvg = resources.GetString("chbShowReportCalendar.IconSvg");
+            chbShowReportCalendar.Location = new Point(212, 5);
+            chbShowReportCalendar.Name = "chbShowReportCalendar";
+            chbShowReportCalendar.Radius = 8;
+            chbShowReportCalendar.Size = new Size(124, 36);
+            chbShowReportCalendar.TabIndex = 3;
+            chbShowReportCalendar.Text = "Calendario";
+            chbShowReportCalendar.ToggleBack = Color.FromArgb(122, 44, 166);
+            chbShowReportCalendar.ToggleBackActive = Color.FromArgb(98, 28, 138);
+            chbShowReportCalendar.ToggleBackHover = Color.FromArgb(140, 66, 186);
+            chbShowReportCalendar.ToggleFore = Color.White;
+            chbShowReportCalendar.ToggleForeActive = Color.White;
+            chbShowReportCalendar.ToggleForeHover = Color.White;
+            chbShowReportCalendar.ToggleIconSvg = resources.GetString("chbShowReportCalendar.ToggleIconSvg");
+            chbShowReportCalendar.ToggleText = "Calendario";
+            chbShowReportCalendar.ToggleType = AntdUI.TTypeMini.Primary;
+            chbShowReportCalendar.CheckedChanged += chbShowReportCalendar_CheckedChanged;
+            // 
+            // lblSelectedDaysCaption
+            // 
+            lblSelectedDaysCaption.BackColor = Color.Transparent;
+            lblSelectedDaysCaption.Font = new Font("Segoe UI", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSelectedDaysCaption.ForeColor = Color.FromArgb(120, 130, 150);
+            lblSelectedDaysCaption.Location = new Point(315, 10);
+            lblSelectedDaysCaption.Name = "lblSelectedDaysCaption";
+            lblSelectedDaysCaption.Size = new Size(129, 26);
+            lblSelectedDaysCaption.TabIndex = 4;
+            lblSelectedDaysCaption.Text = "Días seleccionados:";
+            // 
+            // lblEmployeeAdvice
+            // 
+            lblEmployeeAdvice.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblEmployeeAdvice.BackColor = Color.Transparent;
+            lblEmployeeAdvice.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblEmployeeAdvice.ForeColor = Color.Gray;
+            lblEmployeeAdvice.Location = new Point(4, 6);
+            lblEmployeeAdvice.Name = "lblEmployeeAdvice";
+            lblEmployeeAdvice.Size = new Size(343, 35);
+            lblEmployeeAdvice.TabIndex = 5;
+            lblEmployeeAdvice.Text = "lblEmployeeAdvice";
+            // 
+            // lblSelectedDays
+            // 
+            lblSelectedDays.BackColor = Color.Transparent;
+            lblSelectedDays.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSelectedDays.ForeColor = Color.FromArgb(120, 130, 150);
+            lblSelectedDays.Location = new Point(445, 9);
+            lblSelectedDays.Margin = new Padding(0);
+            lblSelectedDays.Name = "lblSelectedDays";
+            lblSelectedDays.Size = new Size(52, 26);
+            lblSelectedDays.TabIndex = 5;
+            lblSelectedDays.Text = "0";
+            lblSelectedDays.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pnlCardActions
+            // 
+            pnlCardActions.Back = Color.White;
+            pnlCardActions.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlCardActions.BorderWidth = 1F;
+            pnlCardActions.Controls.Add(lblCardActions);
+            pnlCardActions.Controls.Add(btnModifyAttendance);
+            pnlCardActions.Controls.Add(btnExcel);
+            pnlCardActions.Controls.Add(lblSelectedDaysCaption);
+            pnlCardActions.Controls.Add(lblSelectedDays);
+            pnlCardActions.Location = new Point(369, 467);
+            pnlCardActions.Name = "pnlCardActions";
+            pnlCardActions.Radius = 10;
+            pnlCardActions.Size = new Size(497, 45);
+            pnlCardActions.TabIndex = 10;
+            // 
+            // lblCardActions
+            // 
+            lblCardActions.BackColor = Color.Transparent;
+            lblCardActions.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCardActions.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCardActions.Location = new Point(16, 8);
+            lblCardActions.Name = "lblCardActions";
+            lblCardActions.Size = new Size(74, 28);
+            lblCardActions.TabIndex = 0;
+            lblCardActions.Text = "Acciones";
+            // 
+            // btnModifyAttendance
+            // 
+            btnModifyAttendance.BackActive = Color.FromArgb(225, 210, 245);
+            btnModifyAttendance.BackHover = Color.FromArgb(240, 230, 250);
+            btnModifyAttendance.BorderWidth = 1.5F;
+            btnModifyAttendance.Cursor = Cursors.Hand;
+            btnModifyAttendance.DefaultBack = Color.White;
+            btnModifyAttendance.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnModifyAttendance.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnModifyAttendance.ForeColor = Color.FromArgb(122, 44, 166);
+            btnModifyAttendance.IconSize = new Size(16, 16);
+            btnModifyAttendance.IconSvg = resources.GetString("btnModifyAttendance.IconSvg");
+            btnModifyAttendance.Location = new Point(93, 5);
+            btnModifyAttendance.Name = "btnModifyAttendance";
+            btnModifyAttendance.Radius = 8;
+            btnModifyAttendance.Size = new Size(116, 36);
+            btnModifyAttendance.TabIndex = 3;
+            btnModifyAttendance.Text = "Modificar";
+            btnModifyAttendance.Click += btnModifyAttendance_Click;
+            // 
+            // btnExcel
+            // 
+            btnExcel.BackActive = Color.FromArgb(225, 210, 245);
+            btnExcel.BackHover = Color.FromArgb(240, 230, 250);
+            btnExcel.BorderWidth = 1.5F;
+            btnExcel.Cursor = Cursors.Hand;
+            btnExcel.DefaultBack = Color.White;
+            btnExcel.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnExcel.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnExcel.ForeColor = Color.FromArgb(122, 44, 166);
+            btnExcel.IconSize = new Size(16, 16);
+            btnExcel.IconSvg = resources.GetString("btnExcel.IconSvg");
+            btnExcel.Location = new Point(210, 5);
+            btnExcel.Name = "btnExcel";
+            btnExcel.Radius = 8;
+            btnExcel.Size = new Size(88, 36);
+            btnExcel.TabIndex = 4;
+            btnExcel.Text = "Excel";
+            btnExcel.Click += btnExcel_Click;
+            // 
+            // lblLastDays
+            // 
+            lblLastDays.BackColor = Color.Transparent;
+            lblLastDays.Font = new Font("Segoe UI", 9.5F);
+            lblLastDays.ForeColor = Color.FromArgb(51, 65, 85);
+            lblLastDays.Location = new Point(739, 7);
+            lblLastDays.Name = "lblLastDays";
+            lblLastDays.Size = new Size(82, 28);
+            lblLastDays.TabIndex = 5;
+            lblLastDays.Text = "Últimos días";
+            // 
+            // pnlLastDaysInput
+            // 
+            pnlLastDaysInput.Back = Color.White;
+            pnlLastDaysInput.BackColor = Color.Transparent;
+            pnlLastDaysInput.BorderColor = Color.FromArgb(206, 212, 224);
+            pnlLastDaysInput.BorderWidth = 1F;
+            pnlLastDaysInput.Controls.Add(txbLastDays);
+            pnlLastDaysInput.Location = new Point(680, 6);
+            pnlLastDaysInput.Name = "pnlLastDaysInput";
+            pnlLastDaysInput.Radius = 8;
+            pnlLastDaysInput.Size = new Size(54, 30);
+            pnlLastDaysInput.TabIndex = 6;
+            // 
+            // txbLastDays
+            // 
+            txbLastDays.BackColor = Color.White;
+            txbLastDays.BorderStyle = BorderStyle.None;
+            txbLastDays.Font = new Font("Segoe UI", 10F);
+            txbLastDays.Location = new Point(6, 5);
+            txbLastDays.MaxLength = 4;
+            txbLastDays.Name = "txbLastDays";
+            txbLastDays.Size = new Size(40, 18);
+            txbLastDays.TabIndex = 0;
+            txbLastDays.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label2
+            // 
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Segoe UI", 9.5F);
+            label2.ForeColor = Color.FromArgb(51, 65, 85);
+            label2.Location = new Point(860, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(146, 28);
+            label2.TabIndex = 7;
+            label2.Text = "Inasistencia por defecto";
+            // 
+            // cboAttendenceType
+            // 
+            cboAttendenceType.BackColor = Color.White;
+            cboAttendenceType.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboAttendenceType.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboAttendenceType.CornerRadius = 6;
+            cboAttendenceType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboAttendenceType.Enabled = false;
+            cboAttendenceType.Font = new Font("Segoe UI", 10F);
+            cboAttendenceType.FormattingEnabled = true;
+            cboAttendenceType.Location = new Point(1000, 10);
+            cboAttendenceType.Margin = new Padding(0, 3, 3, 3);
+            cboAttendenceType.Name = "cboAttendenceType";
+            cboAttendenceType.OuterColor = Color.White;
+            cboAttendenceType.Size = new Size(200, 25);
+            cboAttendenceType.TabIndex = 8;
+            // 
+            // lblSobrantesInfo
+            // 
+            lblSobrantesInfo.BackColor = Color.Transparent;
+            lblSobrantesInfo.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblSobrantesInfo.ForeColor = Color.FromArgb(120, 130, 150);
+            lblSobrantesInfo.Location = new Point(680, 42);
+            lblSobrantesInfo.Name = "lblSobrantesInfo";
+            lblSobrantesInfo.Size = new Size(242, 31);
+            lblSobrantesInfo.TabIndex = 9;
+            lblSobrantesInfo.Text = "ℹ Sin listado: indica Últimos días (empleados con importe). Vacío = sin ese límite";
+            // 
+            // btnLoadReport
+            // 
+            btnLoadReport.BackActive = Color.FromArgb(98, 28, 138);
+            btnLoadReport.BackColor = Color.FromArgb(122, 44, 166);
+            btnLoadReport.BackHover = Color.FromArgb(140, 66, 186);
+            btnLoadReport.Cursor = Cursors.Hand;
+            btnLoadReport.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnLoadReport.ForeColor = Color.White;
+            btnLoadReport.IconSize = new Size(16, 16);
+            btnLoadReport.IconSvg = "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5v14l11-7z\"/></svg>";
+            btnLoadReport.Location = new Point(556, 68);
+            btnLoadReport.Name = "btnLoadReport";
+            btnLoadReport.Radius = 8;
+            btnLoadReport.Size = new Size(98, 36);
+            btnLoadReport.TabIndex = 1;
+            btnLoadReport.Text = "Cargar";
+            btnLoadReport.Type = AntdUI.TTypeMini.Primary;
+            btnLoadReport.Click += btnLoadReport_Click;
+            // 
+            // btnClearList
+            // 
+            btnClearList.BackActive = Color.FromArgb(225, 210, 245);
+            btnClearList.BackHover = Color.FromArgb(240, 230, 250);
+            btnClearList.BorderWidth = 1.5F;
+            btnClearList.Cursor = Cursors.Hand;
+            btnClearList.DefaultBack = Color.White;
+            btnClearList.DefaultBorderColor = Color.FromArgb(122, 44, 166);
+            btnClearList.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnClearList.ForeColor = Color.FromArgb(122, 44, 166);
+            btnClearList.IconSize = new Size(16, 16);
+            btnClearList.IconSvg = "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15 16h4v2h-4zm0-8h7v2h-7zm0 4h6v2h-6zM3 18c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V8H3v10zM14 5h-3l-1-1H6L5 5H2v2h12z\"/></svg>";
+            btnClearList.Location = new Point(46, 22);
+            btnClearList.Name = "btnClearList";
+            btnClearList.Radius = 8;
+            btnClearList.Size = new Size(98, 36);
+            btnClearList.TabIndex = 2;
+            btnClearList.Text = "Limpiar";
+            btnClearList.Click += btnClearList_Click;
+            // 
+            // pnlCardDates
+            // 
+            pnlCardDates.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlCardDates.Back = Color.White;
+            pnlCardDates.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlCardDates.BorderWidth = 1F;
+            pnlCardDates.Controls.Add(lblCardDates);
+            pnlCardDates.Controls.Add(btnLoadReport);
+            pnlCardDates.Controls.Add(cboAgriculturalCycle);
+            pnlCardDates.Controls.Add(cboSeason);
+            pnlCardDates.Controls.Add(cboAttendenceType);
+            pnlCardDates.Controls.Add(label5);
+            pnlCardDates.Controls.Add(pnlLastDaysInput);
+            pnlCardDates.Controls.Add(cboWeek1);
+            pnlCardDates.Controls.Add(lblSobrantesInfo);
+            pnlCardDates.Controls.Add(label6);
+            pnlCardDates.Controls.Add(cboWeek2);
+            pnlCardDates.Controls.Add(labelDate);
+            pnlCardDates.Controls.Add(dtpDate1);
+            pnlCardDates.Controls.Add(labelDateTo);
+            pnlCardDates.Controls.Add(dtpDate2);
+            pnlCardDates.Controls.Add(label4);
+            pnlCardDates.Controls.Add(labelSeason);
+            pnlCardDates.Controls.Add(lblLastDays);
+            pnlCardDates.Controls.Add(label2);
+            pnlCardDates.Location = new Point(12, 349);
+            pnlCardDates.Name = "pnlCardDates";
+            pnlCardDates.Radius = 10;
+            pnlCardDates.Size = new Size(1208, 112);
+            pnlCardDates.TabIndex = 9;
+            // 
+            // lblCardDates
+            // 
+            lblCardDates.BackColor = Color.Transparent;
+            lblCardDates.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCardDates.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCardDates.Location = new Point(11, 4);
+            lblCardDates.Name = "lblCardDates";
+            lblCardDates.Size = new Size(126, 28);
+            lblCardDates.TabIndex = 0;
+            lblCardDates.Text = "Rango de fechas";
+            // 
+            // cboAgriculturalCycle
+            // 
+            cboAgriculturalCycle.BackColor = Color.White;
+            cboAgriculturalCycle.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboAgriculturalCycle.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboAgriculturalCycle.CornerRadius = 6;
+            cboAgriculturalCycle.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboAgriculturalCycle.Font = new Font("Segoe UI", 10F);
+            cboAgriculturalCycle.FormattingEnabled = true;
+            cboAgriculturalCycle.Location = new Point(229, 9);
+            cboAgriculturalCycle.Margin = new Padding(0, 3, 3, 3);
+            cboAgriculturalCycle.Name = "cboAgriculturalCycle";
+            cboAgriculturalCycle.OuterColor = Color.White;
+            cboAgriculturalCycle.Size = new Size(122, 25);
+            cboAgriculturalCycle.TabIndex = 2;
+            // 
+            // cboSeason
+            // 
+            cboSeason.BackColor = Color.White;
+            cboSeason.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboSeason.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboSeason.CornerRadius = 6;
+            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboSeason.Font = new Font("Segoe UI", 10F);
+            cboSeason.FormattingEnabled = true;
+            cboSeason.Location = new Point(510, 9);
+            cboSeason.Margin = new Padding(0, 3, 3, 3);
+            cboSeason.Name = "cboSeason";
+            cboSeason.OuterColor = Color.White;
+            cboSeason.Size = new Size(141, 25);
+            cboSeason.TabIndex = 4;
+            // 
+            // label5
+            // 
+            label5.BackColor = Color.Transparent;
+            label5.Font = new Font("Segoe UI", 9.5F);
+            label5.ForeColor = Color.FromArgb(51, 65, 85);
+            label5.Location = new Point(171, 41);
+            label5.Name = "label5";
+            label5.Size = new Size(52, 28);
+            label5.TabIndex = 5;
+            label5.Text = "Semana";
+            label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // cboWeek1
+            // 
+            cboWeek1.BackColor = Color.White;
+            cboWeek1.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboWeek1.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboWeek1.CornerRadius = 6;
+            cboWeek1.Font = new Font("Segoe UI", 10F);
+            cboWeek1.FormattingEnabled = true;
+            cboWeek1.Location = new Point(229, 43);
+            cboWeek1.Margin = new Padding(0, 3, 3, 3);
+            cboWeek1.Name = "cboWeek1";
+            cboWeek1.OuterColor = Color.White;
+            cboWeek1.Size = new Size(80, 25);
+            cboWeek1.TabIndex = 6;
+            // 
+            // label6
+            // 
+            label6.BackColor = Color.Transparent;
+            label6.Font = new Font("Segoe UI", 9.5F);
+            label6.ForeColor = Color.FromArgb(51, 65, 85);
+            label6.Location = new Point(317, 41);
+            label6.Name = "label6";
+            label6.Size = new Size(16, 28);
+            label6.TabIndex = 7;
+            label6.Text = "a";
+            label6.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // cboWeek2
+            // 
+            cboWeek2.BackColor = Color.White;
+            cboWeek2.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboWeek2.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboWeek2.CornerRadius = 6;
+            cboWeek2.Font = new Font("Segoe UI", 10F);
+            cboWeek2.FormattingEnabled = true;
+            cboWeek2.Location = new Point(341, 43);
+            cboWeek2.Margin = new Padding(0, 3, 3, 3);
+            cboWeek2.Name = "cboWeek2";
+            cboWeek2.OuterColor = Color.White;
+            cboWeek2.Size = new Size(80, 25);
+            cboWeek2.TabIndex = 8;
+            // 
+            // labelDate
+            // 
+            labelDate.BackColor = Color.Transparent;
+            labelDate.Font = new Font("Segoe UI", 9.5F);
+            labelDate.ForeColor = Color.FromArgb(51, 65, 85);
+            labelDate.Location = new Point(171, 73);
+            labelDate.Name = "labelDate";
+            labelDate.Size = new Size(52, 28);
+            labelDate.TabIndex = 9;
+            labelDate.Text = "Rango";
+            labelDate.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // dtpDate1
+            // 
+            dtpDate1.BorderActive = Color.FromArgb(122, 44, 166);
+            dtpDate1.BorderColor = Color.FromArgb(206, 212, 224);
+            dtpDate1.BorderHover = Color.FromArgb(140, 66, 186);
+            dtpDate1.EnabledValueTextChange = true;
+            dtpDate1.Font = new Font("Segoe UI", 10F);
+            dtpDate1.Format = "dd/MM/yyyy";
+            dtpDate1.Location = new Point(225, 70);
+            dtpDate1.Name = "dtpDate1";
+            dtpDate1.Size = new Size(146, 34);
+            dtpDate1.TabIndex = 10;
+            // 
+            // labelDateTo
+            // 
+            labelDateTo.BackColor = Color.Transparent;
+            labelDateTo.Font = new Font("Segoe UI", 9.5F);
+            labelDateTo.ForeColor = Color.FromArgb(51, 65, 85);
+            labelDateTo.Location = new Point(377, 73);
+            labelDateTo.Name = "labelDateTo";
+            labelDateTo.Size = new Size(16, 28);
+            labelDateTo.TabIndex = 11;
+            labelDateTo.Text = "a";
+            labelDateTo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // dtpDate2
+            // 
+            dtpDate2.BorderActive = Color.FromArgb(122, 44, 166);
+            dtpDate2.BorderColor = Color.FromArgb(206, 212, 224);
+            dtpDate2.BorderHover = Color.FromArgb(140, 66, 186);
+            dtpDate2.EnabledValueTextChange = true;
+            dtpDate2.Font = new Font("Segoe UI", 10F);
+            dtpDate2.Format = "dd/MM/yyyy";
+            dtpDate2.Location = new Point(399, 70);
+            dtpDate2.Name = "dtpDate2";
+            dtpDate2.Size = new Size(146, 34);
+            dtpDate2.TabIndex = 12;
+            // 
+            // label4
+            // 
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Segoe UI", 9.5F);
+            label4.ForeColor = Color.FromArgb(51, 65, 85);
+            label4.Location = new Point(180, 7);
+            label4.Name = "label4";
+            label4.Size = new Size(43, 28);
+            label4.TabIndex = 1;
+            label4.Text = "Ciclo";
+            label4.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // labelSeason
+            // 
+            labelSeason.BackColor = Color.Transparent;
+            labelSeason.Font = new Font("Segoe UI", 9.5F);
+            labelSeason.ForeColor = Color.FromArgb(51, 65, 85);
+            labelSeason.Location = new Point(439, 7);
+            labelSeason.Name = "labelSeason";
+            labelSeason.Size = new Size(80, 28);
+            labelSeason.TabIndex = 3;
+            labelSeason.Text = "Temporada";
             // 
             // pnlCardEmployees
             // 
+            pnlCardEmployees.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pnlCardEmployees.Back = Color.White;
             pnlCardEmployees.BorderColor = Color.FromArgb(228, 228, 238);
             pnlCardEmployees.BorderWidth = 1F;
-            pnlCardEmployees.Controls.Add(lblCardEmployees);
-            pnlCardEmployees.Controls.Add(label1);
+            pnlCardEmployees.Controls.Add(gripEmployeesResize);
+            pnlCardEmployees.Controls.Add(btnEmployeesMinExp);
+            pnlCardEmployees.Controls.Add(pnlListEmployees);
             pnlCardEmployees.Controls.Add(btnSearchEmployee);
+            pnlCardEmployees.Controls.Add(btnClearList);
             pnlCardEmployees.Controls.Add(pnlEmployeeInput);
             pnlCardEmployees.Controls.Add(btnAddEmployee);
-            pnlCardEmployees.Controls.Add(lblEmployeeAdvice);
-            pnlCardEmployees.Controls.Add(labelLP);
             pnlCardEmployees.Controls.Add(cboLP);
             pnlCardEmployees.Controls.Add(btnAddList);
-            pnlCardEmployees.Controls.Add(label3);
             pnlCardEmployees.Controls.Add(cboNomWorkGroup);
             pnlCardEmployees.Controls.Add(btnAddNomWorkGroup);
-            pnlCardEmployees.Location = new Point(12, 58);
+            pnlCardEmployees.Controls.Add(label1);
+            pnlCardEmployees.Controls.Add(lblCardEmployees);
+            pnlCardEmployees.Controls.Add(label3);
+            pnlCardEmployees.Controls.Add(labelLP);
+            pnlCardEmployees.Location = new Point(12, 60);
             pnlCardEmployees.Name = "pnlCardEmployees";
             pnlCardEmployees.Radius = 10;
-            pnlCardEmployees.Size = new Size(452, 196);
-            pnlCardEmployees.TabIndex = 1;
+            pnlCardEmployees.Size = new Size(1208, 283);
+            pnlCardEmployees.TabIndex = 8;
             // 
-            // lblCardEmployees
+            // gripEmployeesResize
             // 
-            lblCardEmployees.BackColor = Color.Transparent;
-            lblCardEmployees.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCardEmployees.ForeColor = Color.FromArgb(30, 41, 59);
-            lblCardEmployees.Location = new Point(16, 8);
-            lblCardEmployees.Name = "lblCardEmployees";
-            lblCardEmployees.Size = new Size(300, 28);
-            lblCardEmployees.TabIndex = 0;
-            lblCardEmployees.Text = "Seleccionar empleados";
-            lblCardEmployees.TextAlign = ContentAlignment.MiddleLeft;
+            gripEmployeesResize.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gripEmployeesResize.BackColor = Color.White;
+            gripEmployeesResize.HandleColor = Color.FromArgb(196, 184, 216);
+            gripEmployeesResize.HandleColorActive = Color.FromArgb(122, 44, 166);
+            gripEmployeesResize.LineColor = Color.FromArgb(228, 228, 238);
+            gripEmployeesResize.Location = new Point(7, 271);
+            gripEmployeesResize.Name = "gripEmployeesResize";
+            gripEmployeesResize.Size = new Size(1197, 8);
+            gripEmployeesResize.TabIndex = 16;
+            gripEmployeesResize.TabStop = false;
             // 
-            // label1
+            // btnEmployeesMinExp
             // 
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9.5F);
-            label1.ForeColor = Color.FromArgb(51, 65, 85);
-            label1.Location = new Point(16, 46);
-            label1.Name = "label1";
-            label1.Size = new Size(92, 28);
-            label1.TabIndex = 1;
-            label1.Text = "Empleado(s):";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            btnEmployeesMinExp.BorderWidth = 1F;
+            btnEmployeesMinExp.Cursor = Cursors.Hand;
+            btnEmployeesMinExp.DefaultBack = Color.FromArgb(240, 230, 250);
+            btnEmployeesMinExp.ForeColor = Color.FromArgb(122, 44, 166);
+            btnEmployeesMinExp.IconSize = new Size(18, 18);
+            btnEmployeesMinExp.IconSvg = resources.GetString("btnEmployeesMinExp.IconSvg");
+            btnEmployeesMinExp.Location = new Point(6, 23);
+            btnEmployeesMinExp.Name = "btnEmployeesMinExp";
+            btnEmployeesMinExp.Radius = 15;
+            btnEmployeesMinExp.Size = new Size(34, 34);
+            btnEmployeesMinExp.TabIndex = 15;
+            btnEmployeesMinExp.Click += btnEmployeesMinExp_Click;
+            // 
+            // pnlListEmployees
+            // 
+            pnlListEmployees.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlListEmployees.Back = Color.White;
+            pnlListEmployees.BorderColor = Color.FromArgb(201, 184, 225);
+            pnlListEmployees.BorderWidth = 1F;
+            pnlListEmployees.Controls.Add(dgvEmployees);
+            pnlListEmployees.Location = new Point(7, 61);
+            pnlListEmployees.Name = "pnlListEmployees";
+            pnlListEmployees.Radius = 8;
+            pnlListEmployees.Size = new Size(1197, 205);
+            pnlListEmployees.TabIndex = 14;
+            // 
+            // dgvEmployees
+            // 
+            dgvEmployees.AllowUserToAddRows = false;
+            dgvEmployees.AllowUserToDeleteRows = false;
+            dgvEmployees.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvEmployees.BackgroundColor = Color.White;
+            dgvEmployees.BorderStyle = BorderStyle.None;
+            dgvEmployees.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvEmployees.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dgvEmployees.ColumnHeadersHeight = 30;
+            dgvEmployees.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.White;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle5.ForeColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(222, 206, 244);
+            dataGridViewCellStyle5.SelectionForeColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dgvEmployees.DefaultCellStyle = dataGridViewCellStyle5;
+            dgvEmployees.EnableHeadersVisualStyles = false;
+            dgvEmployees.GridColor = Color.FromArgb(214, 218, 230);
+            dgvEmployees.ImeMode = ImeMode.NoControl;
+            dgvEmployees.Location = new Point(4, 4);
+            dgvEmployees.Name = "dgvEmployees";
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(237, 228, 248);
+            dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(48, 20, 78);
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvEmployees.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dgvEmployees.RowHeadersVisible = false;
+            dgvEmployees.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvEmployees.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvEmployees.Size = new Size(1189, 197);
+            dgvEmployees.TabIndex = 1;
+            dgvEmployees.CellPainting += dgvEmployees_CellPainting;
+            dgvEmployees.CellValueChanged += dgvEmployees_CellValueChanged;
+            dgvEmployees.ColumnHeaderMouseClick += dgvEmployees_ColumnHeaderMouseClick;
+            dgvEmployees.CurrentCellDirtyStateChanged += dgvEmployees_CurrentCellDirtyStateChanged;
             // 
             // btnSearchEmployee
             // 
@@ -207,8 +817,8 @@
             btnSearchEmployee.DefaultBorderColor = Color.FromArgb(206, 212, 224);
             btnSearchEmployee.ForeColor = Color.FromArgb(122, 44, 166);
             btnSearchEmployee.IconSize = new Size(18, 18);
-            btnSearchEmployee.IconSvg = AntdIcons.Search;
-            btnSearchEmployee.Location = new Point(108, 43);
+            btnSearchEmployee.IconSvg = resources.GetString("btnSearchEmployee.IconSvg");
+            btnSearchEmployee.Location = new Point(195, 24);
             btnSearchEmployee.Name = "btnSearchEmployee";
             btnSearchEmployee.Radius = 8;
             btnSearchEmployee.Size = new Size(34, 34);
@@ -218,13 +828,14 @@
             // pnlEmployeeInput
             // 
             pnlEmployeeInput.Back = Color.White;
+            pnlEmployeeInput.BackColor = Color.Transparent;
             pnlEmployeeInput.BorderColor = Color.FromArgb(206, 212, 224);
             pnlEmployeeInput.BorderWidth = 1F;
             pnlEmployeeInput.Controls.Add(txbIdEmployee);
-            pnlEmployeeInput.Location = new Point(148, 43);
+            pnlEmployeeInput.Location = new Point(229, 27);
             pnlEmployeeInput.Name = "pnlEmployeeInput";
             pnlEmployeeInput.Radius = 8;
-            pnlEmployeeInput.Size = new Size(248, 34);
+            pnlEmployeeInput.Size = new Size(248, 28);
             pnlEmployeeInput.TabIndex = 3;
             // 
             // txbIdEmployee
@@ -233,10 +844,10 @@
             txbIdEmployee.BorderStyle = BorderStyle.None;
             txbIdEmployee.ContextMenuStrip = cmsIdEmployee;
             txbIdEmployee.Font = new Font("Segoe UI", 10F);
-            txbIdEmployee.Location = new Point(9, 6);
+            txbIdEmployee.Location = new Point(9, 4);
             txbIdEmployee.Name = "txbIdEmployee";
             txbIdEmployee.ScrollBars = RichTextBoxScrollBars.Vertical;
-            txbIdEmployee.Size = new Size(230, 22);
+            txbIdEmployee.Size = new Size(230, 20);
             txbIdEmployee.TabIndex = 0;
             txbIdEmployee.Text = "";
             txbIdEmployee.KeyDown += txbIdEmployee_KeyDown;
@@ -302,737 +913,239 @@
             // 
             // btnAddEmployee
             // 
-            btnAddEmployee.BorderWidth = 0F;
             btnAddEmployee.Cursor = Cursors.Hand;
             btnAddEmployee.DefaultBack = Color.FromArgb(240, 230, 250);
             btnAddEmployee.ForeColor = Color.FromArgb(122, 44, 166);
             btnAddEmployee.IconSize = new Size(18, 18);
-            btnAddEmployee.IconSvg = AntdIcons.Add;
-            btnAddEmployee.Location = new Point(404, 43);
+            btnAddEmployee.IconSvg = "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z\"/></svg>";
+            btnAddEmployee.Location = new Point(478, 24);
             btnAddEmployee.Name = "btnAddEmployee";
             btnAddEmployee.Radius = 8;
             btnAddEmployee.Size = new Size(34, 34);
             btnAddEmployee.TabIndex = 4;
             btnAddEmployee.Click += btnAddEmployee_Click;
             // 
-            // lblEmployeeAdvice
-            // 
-            lblEmployeeAdvice.BackColor = Color.Transparent;
-            lblEmployeeAdvice.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblEmployeeAdvice.ForeColor = Color.Gray;
-            lblEmployeeAdvice.Location = new Point(108, 81);
-            lblEmployeeAdvice.Name = "lblEmployeeAdvice";
-            lblEmployeeAdvice.Size = new Size(330, 30);
-            lblEmployeeAdvice.TabIndex = 5;
-            lblEmployeeAdvice.Text = "lblEmployeeAdvice";
-            // 
-            // labelLP
-            // 
-            labelLP.BackColor = Color.Transparent;
-            labelLP.Font = new Font("Segoe UI", 9.5F);
-            labelLP.ForeColor = Color.FromArgb(51, 65, 85);
-            labelLP.Location = new Point(16, 116);
-            labelLP.Name = "labelLP";
-            labelLP.Size = new Size(92, 28);
-            labelLP.TabIndex = 6;
-            labelLP.Text = "Lugar de pago:";
-            labelLP.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // cboLP
             // 
+            cboLP.BackColor = Color.White;
+            cboLP.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboLP.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboLP.CornerRadius = 6;
             cboLP.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLP.Font = new Font("Segoe UI", 10F);
             cboLP.FormattingEnabled = true;
-            cboLP.Location = new Point(108, 117);
+            cboLP.Location = new Point(530, 29);
             cboLP.Margin = new Padding(0, 3, 3, 3);
             cboLP.Name = "cboLP";
-            cboLP.Size = new Size(288, 26);
+            cboLP.OuterColor = Color.White;
+            cboLP.SearchPlaceholder = "Buscar";
+            cboLP.Size = new Size(288, 25);
             cboLP.TabIndex = 7;
             // 
             // btnAddList
             // 
-            btnAddList.BorderWidth = 0F;
             btnAddList.Cursor = Cursors.Hand;
             btnAddList.DefaultBack = Color.FromArgb(240, 230, 250);
             btnAddList.ForeColor = Color.FromArgb(122, 44, 166);
             btnAddList.IconSize = new Size(18, 18);
-            btnAddList.IconSvg = AntdIcons.Add;
-            btnAddList.Location = new Point(404, 113);
+            btnAddList.IconSvg = "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z\"/></svg>";
+            btnAddList.Location = new Point(820, 24);
             btnAddList.Name = "btnAddList";
             btnAddList.Radius = 8;
             btnAddList.Size = new Size(34, 34);
             btnAddList.TabIndex = 8;
             btnAddList.Click += btnAddList_Click;
             // 
+            // cboNomWorkGroup
+            // 
+            cboNomWorkGroup.BackColor = Color.White;
+            cboNomWorkGroup.BorderColorActive = Color.FromArgb(122, 44, 166);
+            cboNomWorkGroup.BorderColorNormal = Color.FromArgb(206, 212, 224);
+            cboNomWorkGroup.CornerRadius = 6;
+            cboNomWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboNomWorkGroup.Font = new Font("Segoe UI", 10F);
+            cboNomWorkGroup.FormattingEnabled = true;
+            cboNomWorkGroup.Location = new Point(872, 29);
+            cboNomWorkGroup.Margin = new Padding(0, 3, 3, 3);
+            cboNomWorkGroup.Name = "cboNomWorkGroup";
+            cboNomWorkGroup.OuterColor = Color.White;
+            cboNomWorkGroup.SearchPlaceholder = "Buscar";
+            cboNomWorkGroup.Size = new Size(288, 25);
+            cboNomWorkGroup.TabIndex = 10;
+            // 
+            // btnAddNomWorkGroup
+            // 
+            btnAddNomWorkGroup.Cursor = Cursors.Hand;
+            btnAddNomWorkGroup.DefaultBack = Color.FromArgb(240, 230, 250);
+            btnAddNomWorkGroup.ForeColor = Color.FromArgb(122, 44, 166);
+            btnAddNomWorkGroup.IconSize = new Size(18, 18);
+            btnAddNomWorkGroup.IconSvg = "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z\"/></svg>";
+            btnAddNomWorkGroup.Location = new Point(1162, 24);
+            btnAddNomWorkGroup.Name = "btnAddNomWorkGroup";
+            btnAddNomWorkGroup.Radius = 8;
+            btnAddNomWorkGroup.Size = new Size(34, 34);
+            btnAddNomWorkGroup.TabIndex = 11;
+            btnAddNomWorkGroup.Click += btnAddNomWorkGroup_Click;
+            // 
+            // label1
+            // 
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Segoe UI", 9.5F);
+            label1.ForeColor = Color.FromArgb(51, 65, 85);
+            label1.Location = new Point(201, 3);
+            label1.Name = "label1";
+            label1.Size = new Size(92, 28);
+            label1.TabIndex = 1;
+            label1.Text = "Empleado(s)";
+            // 
+            // lblCardEmployees
+            // 
+            lblCardEmployees.BackColor = Color.Transparent;
+            lblCardEmployees.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCardEmployees.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCardEmployees.Location = new Point(7, -1);
+            lblCardEmployees.Name = "lblCardEmployees";
+            lblCardEmployees.Size = new Size(168, 28);
+            lblCardEmployees.TabIndex = 0;
+            lblCardEmployees.Text = "Seleccionar empleados";
+            // 
             // label3
             // 
             label3.BackColor = Color.Transparent;
             label3.Font = new Font("Segoe UI", 9.5F);
             label3.ForeColor = Color.FromArgb(51, 65, 85);
-            label3.Location = new Point(16, 156);
+            label3.Location = new Point(872, 5);
             label3.Name = "label3";
             label3.Size = new Size(92, 28);
             label3.TabIndex = 9;
-            label3.Text = "Cuadrilla:";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cboNomWorkGroup
-            // 
-            cboNomWorkGroup.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboNomWorkGroup.Font = new Font("Segoe UI", 10F);
-            cboNomWorkGroup.FormattingEnabled = true;
-            cboNomWorkGroup.Location = new Point(108, 157);
-            cboNomWorkGroup.Margin = new Padding(0, 3, 3, 3);
-            cboNomWorkGroup.Name = "cboNomWorkGroup";
-            cboNomWorkGroup.Size = new Size(288, 26);
-            cboNomWorkGroup.TabIndex = 10;
-            // 
-            // btnAddNomWorkGroup
-            // 
-            btnAddNomWorkGroup.BorderWidth = 0F;
-            btnAddNomWorkGroup.Cursor = Cursors.Hand;
-            btnAddNomWorkGroup.DefaultBack = Color.FromArgb(240, 230, 250);
-            btnAddNomWorkGroup.ForeColor = Color.FromArgb(122, 44, 166);
-            btnAddNomWorkGroup.IconSize = new Size(18, 18);
-            btnAddNomWorkGroup.IconSvg = AntdIcons.Add;
-            btnAddNomWorkGroup.Location = new Point(404, 153);
-            btnAddNomWorkGroup.Name = "btnAddNomWorkGroup";
-            btnAddNomWorkGroup.Radius = 8;
-            btnAddNomWorkGroup.Size = new Size(34, 34);
-            btnAddNomWorkGroup.TabIndex = 11;
-            // 
-            // pnlCardDates
-            // 
-            pnlCardDates.Back = Color.White;
-            pnlCardDates.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlCardDates.BorderWidth = 1F;
-            pnlCardDates.Controls.Add(lblCardDates);
-            pnlCardDates.Controls.Add(label4);
-            pnlCardDates.Controls.Add(cboAgriculturalCycle);
-            pnlCardDates.Controls.Add(labelSeason);
-            pnlCardDates.Controls.Add(cboSeason);
-            pnlCardDates.Controls.Add(label5);
-            pnlCardDates.Controls.Add(cboWeek1);
-            pnlCardDates.Controls.Add(label6);
-            pnlCardDates.Controls.Add(cboWeek2);
-            pnlCardDates.Controls.Add(labelDate);
-            pnlCardDates.Controls.Add(dtpDate1);
-            pnlCardDates.Controls.Add(labelDateTo);
-            pnlCardDates.Controls.Add(dtpDate2);
-            pnlCardDates.Location = new Point(474, 58);
-            pnlCardDates.Name = "pnlCardDates";
-            pnlCardDates.Radius = 10;
-            pnlCardDates.Size = new Size(447, 196);
-            pnlCardDates.TabIndex = 2;
-            // 
-            // lblCardDates
-            // 
-            lblCardDates.BackColor = Color.Transparent;
-            lblCardDates.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCardDates.ForeColor = Color.FromArgb(30, 41, 59);
-            lblCardDates.Location = new Point(16, 8);
-            lblCardDates.Name = "lblCardDates";
-            lblCardDates.Size = new Size(300, 28);
-            lblCardDates.TabIndex = 0;
-            lblCardDates.Text = "Rango de fechas";
-            lblCardDates.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label4
-            // 
-            label4.BackColor = Color.Transparent;
-            label4.Font = new Font("Segoe UI", 9.5F);
-            label4.ForeColor = Color.FromArgb(51, 65, 85);
-            label4.Location = new Point(16, 46);
-            label4.Name = "label4";
-            label4.Size = new Size(52, 28);
-            label4.TabIndex = 1;
-            label4.Text = "Ciclo:";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cboAgriculturalCycle
-            // 
-            cboAgriculturalCycle.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboAgriculturalCycle.Font = new Font("Segoe UI", 10F);
-            cboAgriculturalCycle.FormattingEnabled = true;
-            cboAgriculturalCycle.Location = new Point(70, 47);
-            cboAgriculturalCycle.Margin = new Padding(0, 3, 3, 3);
-            cboAgriculturalCycle.Name = "cboAgriculturalCycle";
-            cboAgriculturalCycle.Size = new Size(122, 26);
-            cboAgriculturalCycle.TabIndex = 2;
-            // 
-            // labelSeason
-            // 
-            labelSeason.BackColor = Color.Transparent;
-            labelSeason.Font = new Font("Segoe UI", 9.5F);
-            labelSeason.ForeColor = Color.FromArgb(51, 65, 85);
-            labelSeason.Location = new Point(206, 46);
-            labelSeason.Name = "labelSeason";
-            labelSeason.Size = new Size(80, 28);
-            labelSeason.TabIndex = 3;
-            labelSeason.Text = "Temporada:";
-            labelSeason.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cboSeason
-            // 
-            cboSeason.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboSeason.Font = new Font("Segoe UI", 10F);
-            cboSeason.FormattingEnabled = true;
-            cboSeason.Location = new Point(290, 47);
-            cboSeason.Margin = new Padding(0, 3, 3, 3);
-            cboSeason.Name = "cboSeason";
-            cboSeason.Size = new Size(141, 26);
-            cboSeason.TabIndex = 4;
-            // 
-            // label5
-            // 
-            label5.BackColor = Color.Transparent;
-            label5.Font = new Font("Segoe UI", 9.5F);
-            label5.ForeColor = Color.FromArgb(51, 65, 85);
-            label5.Location = new Point(16, 96);
-            label5.Name = "label5";
-            label5.Size = new Size(52, 28);
-            label5.TabIndex = 5;
-            label5.Text = "Semana:";
-            label5.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cboWeek1
-            // 
-            cboWeek1.DropDownStyle = ComboBoxStyle.DropDown;
-            cboWeek1.Font = new Font("Segoe UI", 10F);
-            cboWeek1.FormattingEnabled = true;
-            cboWeek1.Location = new Point(70, 97);
-            cboWeek1.Margin = new Padding(0, 3, 3, 3);
-            cboWeek1.Name = "cboWeek1";
-            cboWeek1.Size = new Size(80, 26);
-            cboWeek1.TabIndex = 6;
-            // 
-            // label6
-            // 
-            label6.BackColor = Color.Transparent;
-            label6.Font = new Font("Segoe UI", 9.5F);
-            label6.ForeColor = Color.FromArgb(51, 65, 85);
-            label6.Location = new Point(158, 96);
-            label6.Name = "label6";
-            label6.Size = new Size(16, 28);
-            label6.TabIndex = 7;
-            label6.Text = "a";
-            label6.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // cboWeek2
-            // 
-            cboWeek2.DropDownStyle = ComboBoxStyle.DropDown;
-            cboWeek2.Font = new Font("Segoe UI", 10F);
-            cboWeek2.FormattingEnabled = true;
-            cboWeek2.Location = new Point(182, 97);
-            cboWeek2.Margin = new Padding(0, 3, 3, 3);
-            cboWeek2.Name = "cboWeek2";
-            cboWeek2.Size = new Size(80, 26);
-            cboWeek2.TabIndex = 8;
-            // 
-            // labelDate
-            // 
-            labelDate.BackColor = Color.Transparent;
-            labelDate.Font = new Font("Segoe UI", 9.5F);
-            labelDate.ForeColor = Color.FromArgb(51, 65, 85);
-            labelDate.Location = new Point(16, 146);
-            labelDate.Name = "labelDate";
-            labelDate.Size = new Size(52, 28);
-            labelDate.TabIndex = 9;
-            labelDate.Text = "Rango:";
-            labelDate.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // dtpDate1
-            // 
-            dtpDate1.BorderActive = Color.FromArgb(122, 44, 166);
-            dtpDate1.BorderColor = Color.FromArgb(206, 212, 224);
-            dtpDate1.BorderHover = Color.FromArgb(140, 66, 186);
-            dtpDate1.Font = new Font("Segoe UI", 10F);
-            dtpDate1.Format = "dd/MM/yyyy";
-            dtpDate1.Location = new Point(70, 143);
-            dtpDate1.Name = "dtpDate1";
-            dtpDate1.Radius = 6;
-            dtpDate1.Size = new Size(146, 34);
-            dtpDate1.TabIndex = 10;
-            // 
-            // labelDateTo
-            // 
-            labelDateTo.BackColor = Color.Transparent;
-            labelDateTo.Font = new Font("Segoe UI", 9.5F);
-            labelDateTo.ForeColor = Color.FromArgb(51, 65, 85);
-            labelDateTo.Location = new Point(222, 146);
-            labelDateTo.Name = "labelDateTo";
-            labelDateTo.Size = new Size(16, 28);
-            labelDateTo.TabIndex = 11;
-            labelDateTo.Text = "a";
-            labelDateTo.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // dtpDate2
-            // 
-            dtpDate2.BorderActive = Color.FromArgb(122, 44, 166);
-            dtpDate2.BorderColor = Color.FromArgb(206, 212, 224);
-            dtpDate2.BorderHover = Color.FromArgb(140, 66, 186);
-            dtpDate2.Font = new Font("Segoe UI", 10F);
-            dtpDate2.Format = "dd/MM/yyyy";
-            dtpDate2.Location = new Point(244, 143);
-            dtpDate2.Name = "dtpDate2";
-            dtpDate2.Radius = 6;
-            dtpDate2.Size = new Size(146, 34);
-            dtpDate2.TabIndex = 12;
-            // 
-            // pnlCardActions
-            // 
-            pnlCardActions.Back = Color.White;
-            pnlCardActions.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlCardActions.BorderWidth = 1F;
-            pnlCardActions.Controls.Add(lblCardActions);
-            pnlCardActions.Controls.Add(btnLoadReport);
-            pnlCardActions.Controls.Add(btnClearList);
-            pnlCardActions.Controls.Add(btnModifyAttendance);
-            pnlCardActions.Controls.Add(btnExcel);
-            pnlCardActions.Controls.Add(lblLastDays);
-            pnlCardActions.Controls.Add(pnlLastDaysInput);
-            pnlCardActions.Controls.Add(label2);
-            pnlCardActions.Controls.Add(cboAttendenceType);
-            pnlCardActions.Controls.Add(lblSobrantesInfo);
-            pnlCardActions.Location = new Point(12, 262);
-            pnlCardActions.Name = "pnlCardActions";
-            pnlCardActions.Radius = 10;
-            pnlCardActions.Size = new Size(500, 148);
-            pnlCardActions.TabIndex = 3;
-            // 
-            // lblCardActions
-            // 
-            lblCardActions.BackColor = Color.Transparent;
-            lblCardActions.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCardActions.ForeColor = Color.FromArgb(30, 41, 59);
-            lblCardActions.Location = new Point(16, 6);
-            lblCardActions.Name = "lblCardActions";
-            lblCardActions.Size = new Size(300, 28);
-            lblCardActions.TabIndex = 0;
-            lblCardActions.Text = "Acciones";
-            lblCardActions.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // btnLoadReport
-            // 
-            btnLoadReport.BackActive = Color.FromArgb(98, 28, 138);
-            btnLoadReport.BackColor = Color.FromArgb(122, 44, 166);
-            btnLoadReport.BackHover = Color.FromArgb(140, 66, 186);
-            btnLoadReport.BorderWidth = 0F;
-            btnLoadReport.Cursor = Cursors.Hand;
-            btnLoadReport.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnLoadReport.ForeColor = Color.White;
-            btnLoadReport.IconSize = new Size(16, 16);
-            btnLoadReport.IconSvg = AntdIcons.Play;
-            btnLoadReport.Location = new Point(16, 40);
-            btnLoadReport.Name = "btnLoadReport";
-            btnLoadReport.Radius = 8;
-            btnLoadReport.Size = new Size(142, 36);
-            btnLoadReport.TabIndex = 1;
-            btnLoadReport.Text = "Cargar reporte";
-            btnLoadReport.Type = AntdUI.TTypeMini.Primary;
-            btnLoadReport.Click += btnLoadReport_Click;
-            // 
-            // btnClearList
-            // 
-            btnClearList.BackActive = Color.FromArgb(225, 210, 245);
-            btnClearList.BackHover = Color.FromArgb(240, 230, 250);
-            btnClearList.BorderWidth = 1.5F;
-            btnClearList.Cursor = Cursors.Hand;
-            btnClearList.DefaultBack = Color.White;
-            btnClearList.DefaultBorderColor = Color.FromArgb(122, 44, 166);
-            btnClearList.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnClearList.ForeColor = Color.FromArgb(122, 44, 166);
-            btnClearList.IconSize = new Size(16, 16);
-            btnClearList.IconSvg = AntdIcons.Clear;
-            btnClearList.Location = new Point(166, 40);
-            btnClearList.Name = "btnClearList";
-            btnClearList.Radius = 8;
-            btnClearList.Size = new Size(98, 36);
-            btnClearList.TabIndex = 2;
-            btnClearList.Text = "Limpiar";
-            btnClearList.Click += btnClearList_Click;
-            // 
-            // btnModifyAttendance
-            // 
-            btnModifyAttendance.BackActive = Color.FromArgb(225, 210, 245);
-            btnModifyAttendance.BackHover = Color.FromArgb(240, 230, 250);
-            btnModifyAttendance.BorderWidth = 1.5F;
-            btnModifyAttendance.Cursor = Cursors.Hand;
-            btnModifyAttendance.DefaultBack = Color.White;
-            btnModifyAttendance.DefaultBorderColor = Color.FromArgb(122, 44, 166);
-            btnModifyAttendance.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnModifyAttendance.ForeColor = Color.FromArgb(122, 44, 166);
-            btnModifyAttendance.IconSize = new Size(16, 16);
-            btnModifyAttendance.IconSvg = AntdIcons.Edit;
-            btnModifyAttendance.Location = new Point(272, 40);
-            btnModifyAttendance.Name = "btnModifyAttendance";
-            btnModifyAttendance.Radius = 8;
-            btnModifyAttendance.Size = new Size(116, 36);
-            btnModifyAttendance.TabIndex = 3;
-            btnModifyAttendance.Text = "Modificar";
-            btnModifyAttendance.Click += btnModifyAttendance_Click;
-            // 
-            // btnExcel
-            // 
-            btnExcel.BackActive = Color.FromArgb(225, 210, 245);
-            btnExcel.BackHover = Color.FromArgb(240, 230, 250);
-            btnExcel.BorderWidth = 1.5F;
-            btnExcel.Cursor = Cursors.Hand;
-            btnExcel.DefaultBack = Color.White;
-            btnExcel.DefaultBorderColor = Color.FromArgb(122, 44, 166);
-            btnExcel.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnExcel.ForeColor = Color.FromArgb(122, 44, 166);
-            btnExcel.IconSize = new Size(16, 16);
-            btnExcel.IconSvg = AntdIcons.Table;
-            btnExcel.Location = new Point(396, 40);
-            btnExcel.Name = "btnExcel";
-            btnExcel.Radius = 8;
-            btnExcel.Size = new Size(88, 36);
-            btnExcel.TabIndex = 4;
-            btnExcel.Text = "Excel";
-            btnExcel.Click += btnExcel_Click;
-            // 
-            // lblLastDays
-            // 
-            lblLastDays.BackColor = Color.Transparent;
-            lblLastDays.Font = new Font("Segoe UI", 9.5F);
-            lblLastDays.ForeColor = Color.FromArgb(51, 65, 85);
-            lblLastDays.Location = new Point(16, 91);
-            lblLastDays.Name = "lblLastDays";
-            lblLastDays.Size = new Size(82, 28);
-            lblLastDays.TabIndex = 5;
-            lblLastDays.Text = "Últimos días:";
-            lblLastDays.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // pnlLastDaysInput
-            // 
-            pnlLastDaysInput.Back = Color.White;
-            pnlLastDaysInput.BorderColor = Color.FromArgb(206, 212, 224);
-            pnlLastDaysInput.BorderWidth = 1F;
-            pnlLastDaysInput.Controls.Add(txbLastDays);
-            pnlLastDaysInput.Location = new Point(100, 90);
-            pnlLastDaysInput.Name = "pnlLastDaysInput";
-            pnlLastDaysInput.Radius = 8;
-            pnlLastDaysInput.Size = new Size(54, 30);
-            pnlLastDaysInput.TabIndex = 6;
-            // 
-            // txbLastDays
-            // 
-            txbLastDays.BackColor = Color.White;
-            txbLastDays.BorderStyle = BorderStyle.None;
-            txbLastDays.Font = new Font("Segoe UI", 10F);
-            txbLastDays.Location = new Point(6, 5);
-            txbLastDays.MaxLength = 4;
-            txbLastDays.Name = "txbLastDays";
-            txbLastDays.Size = new Size(40, 19);
-            txbLastDays.TabIndex = 0;
-            txbLastDays.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label2
-            // 
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 9.5F);
-            label2.ForeColor = Color.FromArgb(51, 65, 85);
-            label2.Location = new Point(166, 91);
-            label2.Name = "label2";
-            label2.Size = new Size(146, 28);
-            label2.TabIndex = 7;
-            label2.Text = "Inasistencia por defecto:";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cboAttendenceType
-            // 
-            cboAttendenceType.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboAttendenceType.Enabled = false;
-            cboAttendenceType.Font = new Font("Segoe UI", 10F);
-            cboAttendenceType.FormattingEnabled = true;
-            cboAttendenceType.Location = new Point(316, 92);
-            cboAttendenceType.Margin = new Padding(0, 3, 3, 3);
-            cboAttendenceType.Name = "cboAttendenceType";
-            cboAttendenceType.Size = new Size(168, 26);
-            cboAttendenceType.TabIndex = 8;
-            // 
-            // lblSobrantesInfo
-            // 
-            lblSobrantesInfo.BackColor = Color.Transparent;
-            lblSobrantesInfo.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSobrantesInfo.ForeColor = Color.FromArgb(120, 130, 150);
-            lblSobrantesInfo.Location = new Point(16, 122);
-            lblSobrantesInfo.Name = "lblSobrantesInfo";
-            lblSobrantesInfo.Size = new Size(470, 20);
-            lblSobrantesInfo.TabIndex = 9;
-            lblSobrantesInfo.Text = "ℹ Sin listado: indica Últimos días (empleados con importe). Vacío = sin ese límite";
-            lblSobrantesInfo.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // pnlCardView
-            // 
-            pnlCardView.Back = Color.White;
-            pnlCardView.BorderColor = Color.FromArgb(228, 228, 238);
-            pnlCardView.BorderWidth = 1F;
-            pnlCardView.Controls.Add(lblCardView);
-            pnlCardView.Controls.Add(chbShowEmployees);
-            pnlCardView.Controls.Add(chbShowReport);
-            pnlCardView.Controls.Add(chbShowReportCalendar);
-            pnlCardView.Controls.Add(lblSelectedDaysCaption);
-            pnlCardView.Controls.Add(lblSelectedDays);
-            pnlCardView.Location = new Point(522, 262);
-            pnlCardView.Name = "pnlCardView";
-            pnlCardView.Radius = 10;
-            pnlCardView.Size = new Size(399, 148);
-            pnlCardView.TabIndex = 4;
-            // 
-            // lblCardView
-            // 
-            lblCardView.BackColor = Color.Transparent;
-            lblCardView.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCardView.ForeColor = Color.FromArgb(30, 41, 59);
-            lblCardView.Location = new Point(16, 6);
-            lblCardView.Name = "lblCardView";
-            lblCardView.Size = new Size(300, 28);
-            lblCardView.TabIndex = 0;
-            lblCardView.Text = "Visualizar";
-            lblCardView.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // chbShowEmployees
-            // 
-            chbShowEmployees.BackHover = Color.FromArgb(240, 230, 250);
-            chbShowEmployees.BorderWidth = 1.5F;
-            chbShowEmployees.Cursor = Cursors.Hand;
-            chbShowEmployees.DefaultBack = Color.White;
-            chbShowEmployees.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            chbShowEmployees.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowEmployees.ForeColor = Color.FromArgb(122, 44, 166);
-            chbShowEmployees.IconSize = new Size(16, 16);
-            chbShowEmployees.IconSvg = AntdIcons.List;
-            chbShowEmployees.Location = new Point(16, 40);
-            chbShowEmployees.Name = "chbShowEmployees";
-            chbShowEmployees.Radius = 8;
-            chbShowEmployees.Size = new Size(108, 36);
-            chbShowEmployees.TabIndex = 1;
-            chbShowEmployees.Text = "Listado";
-            chbShowEmployees.ToggleBack = Color.FromArgb(122, 44, 166);
-            chbShowEmployees.ToggleIconSvg = AntdIcons.List;
-            chbShowEmployees.ToggleType = AntdUI.TTypeMini.Primary;
-            chbShowEmployees.ToggleText = "Listado";
-            chbShowEmployees.ToggleBackActive = Color.FromArgb(98, 28, 138);
-            chbShowEmployees.ToggleBackHover = Color.FromArgb(140, 66, 186);
-            chbShowEmployees.ToggleFore = Color.White;
-            chbShowEmployees.ToggleForeActive = Color.White;
-            chbShowEmployees.ToggleForeHover = Color.White;
-            chbShowEmployees.CheckedChanged += chbShowEmployees_CheckedChanged;
-            // 
-            // chbShowReport
-            // 
-            chbShowReport.BackHover = Color.FromArgb(240, 230, 250);
-            chbShowReport.BorderWidth = 1.5F;
-            chbShowReport.Cursor = Cursors.Hand;
-            chbShowReport.DefaultBack = Color.White;
-            chbShowReport.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            chbShowReport.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowReport.ForeColor = Color.FromArgb(122, 44, 166);
-            chbShowReport.IconSize = new Size(16, 16);
-            chbShowReport.IconSvg = AntdIcons.Document;
-            chbShowReport.Location = new Point(132, 40);
-            chbShowReport.Name = "chbShowReport";
-            chbShowReport.Radius = 8;
-            chbShowReport.Size = new Size(108, 36);
-            chbShowReport.TabIndex = 2;
-            chbShowReport.Text = "Reporte";
-            chbShowReport.ToggleBack = Color.FromArgb(122, 44, 166);
-            chbShowReport.ToggleIconSvg = AntdIcons.Document;
-            chbShowReport.ToggleType = AntdUI.TTypeMini.Primary;
-            chbShowReport.ToggleText = "Reporte";
-            chbShowReport.ToggleBackActive = Color.FromArgb(98, 28, 138);
-            chbShowReport.ToggleBackHover = Color.FromArgb(140, 66, 186);
-            chbShowReport.ToggleFore = Color.White;
-            chbShowReport.ToggleForeActive = Color.White;
-            chbShowReport.ToggleForeHover = Color.White;
-            chbShowReport.CheckedChanged += chbShowReport_CheckedChanged;
-            // 
-            // chbShowReportCalendar
-            // 
-            chbShowReportCalendar.BackHover = Color.FromArgb(240, 230, 250);
-            chbShowReportCalendar.BorderWidth = 1.5F;
-            chbShowReportCalendar.Cursor = Cursors.Hand;
-            chbShowReportCalendar.DefaultBack = Color.White;
-            chbShowReportCalendar.DefaultBorderColor = Color.FromArgb(206, 212, 224);
-            chbShowReportCalendar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            chbShowReportCalendar.ForeColor = Color.FromArgb(122, 44, 166);
-            chbShowReportCalendar.IconSize = new Size(16, 16);
-            chbShowReportCalendar.IconSvg = AntdIcons.Calendar;
-            chbShowReportCalendar.Location = new Point(248, 40);
-            chbShowReportCalendar.Name = "chbShowReportCalendar";
-            chbShowReportCalendar.Radius = 8;
-            chbShowReportCalendar.Size = new Size(124, 36);
-            chbShowReportCalendar.TabIndex = 3;
-            chbShowReportCalendar.Text = "Calendario";
-            chbShowReportCalendar.ToggleBack = Color.FromArgb(122, 44, 166);
-            chbShowReportCalendar.ToggleIconSvg = AntdIcons.Calendar;
-            chbShowReportCalendar.ToggleType = AntdUI.TTypeMini.Primary;
-            chbShowReportCalendar.ToggleText = "Calendario";
-            chbShowReportCalendar.ToggleBackActive = Color.FromArgb(98, 28, 138);
-            chbShowReportCalendar.ToggleBackHover = Color.FromArgb(140, 66, 186);
-            chbShowReportCalendar.ToggleFore = Color.White;
-            chbShowReportCalendar.ToggleForeActive = Color.White;
-            chbShowReportCalendar.ToggleForeHover = Color.White;
-            chbShowReportCalendar.CheckedChanged += chbShowReportCalendar_CheckedChanged;
-            // 
-            // lblSelectedDaysCaption
-            // 
-            lblSelectedDaysCaption.BackColor = Color.Transparent;
-            lblSelectedDaysCaption.Font = new Font("Segoe UI", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSelectedDaysCaption.ForeColor = Color.FromArgb(120, 130, 150);
-            lblSelectedDaysCaption.Location = new Point(16, 94);
-            lblSelectedDaysCaption.Name = "lblSelectedDaysCaption";
-            lblSelectedDaysCaption.Size = new Size(140, 26);
-            lblSelectedDaysCaption.TabIndex = 4;
-            lblSelectedDaysCaption.Text = "Días seleccionados:";
-            lblSelectedDaysCaption.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblSelectedDays
-            // 
-            lblSelectedDays.BackColor = Color.Transparent;
-            lblSelectedDays.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSelectedDays.ForeColor = Color.FromArgb(120, 130, 150);
-            lblSelectedDays.Location = new Point(158, 94);
-            lblSelectedDays.Margin = new Padding(0);
-            lblSelectedDays.Name = "lblSelectedDays";
-            lblSelectedDays.Size = new Size(70, 26);
-            lblSelectedDays.TabIndex = 5;
-            lblSelectedDays.Text = "0";
-            lblSelectedDays.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // pgrReport
-            // 
-            pgrReport.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pgrReport.Location = new Point(12, 418);
-            pgrReport.Maximum = 1000;
-            pgrReport.Name = "pgrReport";
-            pgrReport.Size = new Size(909, 8);
-            pgrReport.Style = ProgressBarStyle.Continuous;
-            pgrReport.TabIndex = 5;
-            // 
-            // pnlGrid
-            // 
-            pnlGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlGrid.Back = Color.White;
-            pnlGrid.BorderColor = Color.FromArgb(201, 184, 225);
-            pnlGrid.BorderWidth = 1F;
-            pnlGrid.Controls.Add(dgvReport);
-            pnlGrid.Location = new Point(12, 434);
-            pnlGrid.Name = "pnlGrid";
-            pnlGrid.Radius = 8;
-            pnlGrid.Size = new Size(909, 254);
-            pnlGrid.TabIndex = 6;
-            // 
-            // dgvReport
-            // 
-            dgvReport.AllowUserToAddRows = false;
-            dgvReport.AllowUserToDeleteRows = false;
-            dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.BackgroundColor = Color.White;
-            dgvReport.BorderStyle = BorderStyle.None;
-            dgvReport.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(237, 228, 248);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.FromArgb(48, 20, 78);
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(237, 228, 248);
-            dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(48, 20, 78);
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvReport.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvReport.ColumnHeadersHeight = 30;
-            dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.BackColor = Color.White;
-            dataGridViewCellStyle3.ForeColor = Color.FromArgb(30, 41, 59);
-            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(222, 206, 244);
-            dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(30, 41, 59);
-            dgvReport.DefaultCellStyle = dataGridViewCellStyle3;
-            dgvReport.EnableHeadersVisualStyles = false;
-            dgvReport.GridColor = Color.FromArgb(214, 218, 230);
-            dgvReport.ImeMode = ImeMode.NoControl;
-            dgvReport.Location = new Point(3, 3);
-            dgvReport.Name = "dgvReport";
-            dgvReport.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(237, 228, 248);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(48, 20, 78);
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(237, 228, 248);
-            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(48, 20, 78);
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvReport.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvReport.RowHeadersVisible = false;
-            dgvReport.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvReport.Size = new Size(903, 248);
-            dgvReport.TabIndex = 0;
-            dgvReport.CellFormatting += dgvReport_CellFormatting;
-            dgvReport.CellPainting += dgvReport_CellPainting;
-            dgvReport.CellToolTipTextNeeded += dgvReport_CellToolTipTextNeeded;
-            dgvReport.CellValueChanged += dgvReport_CellValueChanged;
-            dgvReport.ColumnHeaderMouseClick += dgvReport_ColumnHeaderMouseClick;
-            dgvReport.CurrentCellDirtyStateChanged += dgvReport_CurrentCellDirtyStateChanged;
-            dgvReport.SelectionChanged += dgvReport_SelectionChanged;
+            label3.Text = "Cuadrilla";
+            // 
+            // labelLP
+            // 
+            labelLP.BackColor = Color.Transparent;
+            labelLP.Font = new Font("Segoe UI", 9.5F);
+            labelLP.ForeColor = Color.FromArgb(51, 65, 85);
+            labelLP.Location = new Point(530, 5);
+            labelLP.Name = "labelLP";
+            labelLP.Size = new Size(92, 28);
+            labelLP.TabIndex = 6;
+            labelLP.Text = "Lugar de pago";
+            // 
+            // pnlHeader
+            // 
+            pnlHeader.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlHeader.Back = Color.FromArgb(122, 44, 166);
+            pnlHeader.Controls.Add(lblTitle);
+            pnlHeader.Controls.Add(btnOpenFrmAttendanceType);
+            pnlHeader.Location = new Point(12, 12);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Radius = 8;
+            pnlHeader.Size = new Size(1209, 40);
+            pnlHeader.TabIndex = 7;
+            // 
+            // lblTitle
+            // 
+            lblTitle.BackColor = Color.Transparent;
+            lblTitle.Font = new Font("Segoe UI", 12.5F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(14, 5);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(206, 30);
+            lblTitle.TabIndex = 0;
+            lblTitle.Tag = "lotData";
+            lblTitle.Text = "Reporte de asistencias";
+            // 
+            // btnOpenFrmAttendanceType
+            // 
+            btnOpenFrmAttendanceType.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOpenFrmAttendanceType.Cursor = Cursors.Hand;
+            btnOpenFrmAttendanceType.DefaultBack = Color.White;
+            btnOpenFrmAttendanceType.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnOpenFrmAttendanceType.ForeColor = Color.FromArgb(122, 44, 166);
+            btnOpenFrmAttendanceType.IconSize = new Size(15, 15);
+            btnOpenFrmAttendanceType.IconSvg = resources.GetString("btnOpenFrmAttendanceType.IconSvg");
+            btnOpenFrmAttendanceType.Location = new Point(1061, 5);
+            btnOpenFrmAttendanceType.Name = "btnOpenFrmAttendanceType";
+            btnOpenFrmAttendanceType.Radius = 8;
+            btnOpenFrmAttendanceType.Size = new Size(138, 30);
+            btnOpenFrmAttendanceType.TabIndex = 1;
+            btnOpenFrmAttendanceType.Text = "Tipo de asistencia";
+            btnOpenFrmAttendanceType.Click += btnOpenFrmAttendanceType_Click;
+            // 
+            // pnlEmployeeAdvice
+            // 
+            pnlEmployeeAdvice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlEmployeeAdvice.Back = Color.White;
+            pnlEmployeeAdvice.BorderColor = Color.FromArgb(228, 228, 238);
+            pnlEmployeeAdvice.BorderWidth = 1F;
+            pnlEmployeeAdvice.Controls.Add(lblEmployeeAdvice);
+            pnlEmployeeAdvice.Location = new Point(869, 467);
+            pnlEmployeeAdvice.Name = "pnlEmployeeAdvice";
+            pnlEmployeeAdvice.Radius = 10;
+            pnlEmployeeAdvice.Size = new Size(351, 45);
+            pnlEmployeeAdvice.TabIndex = 11;
             // 
             // FrmAsistenciaASConsulta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(1233, 680);
             BackColor = Color.FromArgb(244, 245, 250);
-            ClientSize = new Size(933, 700);
+            ClientSize = new Size(1233, 757);
+            Controls.Add(pnlEmployeeAdvice);
             Controls.Add(pnlGrid);
             Controls.Add(pgrReport);
             Controls.Add(pnlCardView);
             Controls.Add(pnlCardActions);
             Controls.Add(pnlCardDates);
-            Controls.Add(pnlCardEmployees);
             Controls.Add(pnlHeader);
+            Controls.Add(pnlCardEmployees);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAsistenciaASConsulta";
             Text = "Reporte de asistencias";
             Load += FrmAsistenciaASConsulta_Load;
-            pnlHeader.ResumeLayout(false);
-            pnlCardEmployees.ResumeLayout(false);
-            pnlEmployeeInput.ResumeLayout(false);
-            cmsIdEmployee.ResumeLayout(false);
-            pnlCardDates.ResumeLayout(false);
-            pnlCardActions.ResumeLayout(false);
-            pnlLastDaysInput.ResumeLayout(false);
-            pnlCardView.ResumeLayout(false);
             pnlGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
+            pnlCardView.ResumeLayout(false);
+            pnlCardActions.ResumeLayout(false);
+            pnlLastDaysInput.ResumeLayout(false);
+            pnlLastDaysInput.PerformLayout();
+            pnlCardDates.ResumeLayout(false);
+            pnlCardEmployees.ResumeLayout(false);
+            pnlListEmployees.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvEmployees).EndInit();
+            pnlEmployeeInput.ResumeLayout(false);
+            cmsIdEmployee.ResumeLayout(false);
+            pnlHeader.ResumeLayout(false);
+            pnlEmployeeAdvice.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private AntdUI.Panel pnlHeader;
-        public AntdUI.Label lblTitle;
-        private AntdUI.Button btnOpenFrmAttendanceType;
-        private AntdUI.Panel pnlCardEmployees;
-        private AntdUI.Label lblCardEmployees;
-        private AntdUI.Label label1;
-        private AntdUI.Button btnSearchEmployee;
-        private AntdUI.Panel pnlEmployeeInput;
-        public RichTextBox txbIdEmployee;
-        private ContextMenuStrip cmsIdEmployee;
-        private ToolStripMenuItem tsmiUndo;
-        private ToolStripSeparator tssIdEmployee1;
-        private ToolStripMenuItem tsmiCut;
-        private ToolStripMenuItem tsmiCopy;
-        private ToolStripMenuItem tsmiPaste;
-        private ToolStripMenuItem tsmiDelete;
-        private ToolStripSeparator tssIdEmployee2;
-        private ToolStripMenuItem tsmiSelectAll;
-        private AntdUI.Button btnAddEmployee;
+        private AntdUI.Panel pnlGrid;
+        public DataGridView dgvReport;
+        public AntdProgressBar pgrReport;
+        private AntdUI.Panel pnlCardView;
+        private AntdUI.Label lblCardView;
+        public AntdToggleButton chbShowReport;
+        public AntdToggleButton chbShowReportCalendar;
+        private AntdUI.Label lblSelectedDaysCaption;
         public Label lblEmployeeAdvice;
-        private AntdUI.Label labelLP;
-        public AntdMultiSelectComboBox cboLP;
-        private AntdUI.Button btnAddList;
-        private AntdUI.Label label3;
-        public AntdMultiSelectComboBox cboNomWorkGroup;
-        private AntdUI.Button btnAddNomWorkGroup;
+        public Label lblSelectedDays;
+        private AntdUI.Panel pnlCardActions;
+        private AntdUI.Label lblCardActions;
+        private AntdUI.Button btnLoadReport;
+        private AntdUI.Button btnClearList;
+        private AntdUI.Button btnModifyAttendance;
+        private AntdUI.Button btnExcel;
+        private AntdUI.Label lblLastDays;
+        private AntdUI.Panel pnlLastDaysInput;
+        public TextBox txbLastDays;
+        private AntdUI.Label label2;
+        public AntdComboBox cboAttendenceType;
+        private AntdUI.Label lblSobrantesInfo;
         private AntdUI.Panel pnlCardDates;
         private AntdUI.Label lblCardDates;
         private AntdUI.Label label4;
@@ -1047,28 +1160,35 @@
         public AntdDatePicker dtpDate1;
         private AntdUI.Label labelDateTo;
         public AntdDatePicker dtpDate2;
-        private AntdUI.Panel pnlCardActions;
-        private AntdUI.Label lblCardActions;
-        private AntdUI.Button btnLoadReport;
-        private AntdUI.Button btnClearList;
-        private AntdUI.Button btnModifyAttendance;
-        private AntdUI.Button btnExcel;
-        private AntdUI.Label lblLastDays;
-        private AntdUI.Panel pnlLastDaysInput;
-        public TextBox txbLastDays;
-        private AntdUI.Label label2;
-        public AntdComboBox cboAttendenceType;
-        private AntdUI.Label lblSobrantesInfo;
-        private AntdUI.Panel pnlCardView;
-        private AntdUI.Label lblCardView;
-        public AntdToggleButton chbShowEmployees;
-        public AntdToggleButton chbShowReport;
-        public AntdToggleButton chbShowReportCalendar;
-        private AntdUI.Label lblSelectedDaysCaption;
-        public Label lblSelectedDays;
-        public AntdProgressBar pgrReport;
-        private AntdUI.Panel pnlGrid;
-        public DataGridView dgvReport;
-        private ToolTip toolTip;
+        private AntdUI.Panel pnlCardEmployees;
+        private AntdUI.Button btnSearchEmployee;
+        private AntdUI.Panel pnlEmployeeInput;
+        public RichTextBox txbIdEmployee;
+        private AntdUI.Button btnAddEmployee;
+        public AntdMultiSelectComboBox cboLP;
+        private AntdUI.Button btnAddList;
+        public AntdMultiSelectComboBox cboNomWorkGroup;
+        private AntdUI.Button btnAddNomWorkGroup;
+        private AntdUI.Label label1;
+        private AntdUI.Label lblCardEmployees;
+        private AntdUI.Label label3;
+        private AntdUI.Label labelLP;
+        private AntdUI.Panel pnlHeader;
+        public AntdUI.Label lblTitle;
+        private AntdUI.Button btnOpenFrmAttendanceType;
+        private AntdUI.Panel pnlListEmployees;
+        public DataGridView dgvEmployees;
+        private AntdUI.Button btnEmployeesMinExp;
+        private AntdResizeGrip gripEmployeesResize;
+        private ContextMenuStrip cmsIdEmployee;
+        private ToolStripMenuItem tsmiUndo;
+        private ToolStripSeparator tssIdEmployee1;
+        private ToolStripMenuItem tsmiCut;
+        private ToolStripMenuItem tsmiCopy;
+        private ToolStripMenuItem tsmiPaste;
+        private ToolStripMenuItem tsmiDelete;
+        private ToolStripSeparator tssIdEmployee2;
+        private ToolStripMenuItem tsmiSelectAll;
+        private ToolTip toolTip;        private AntdUI.Panel pnlEmployeeAdvice;
     }
 }

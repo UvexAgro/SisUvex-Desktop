@@ -49,6 +49,10 @@ namespace SisUvex.Nomina.Asistencia_AS
         public static readonly string Calendar = Svg("M19 4h-1V2h-2v2H8V2H6v2H5C3.89 4 3.01 4.9 3.01 6L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5zm2 4h4v4H7z");
         public static readonly string List = Svg("M3 14h4v-4H3v4zm0 5h4v-4H3v4zM3 9h4V5H3v4zm5 5h13v-4H8v4zm0 5h13v-4H8v4zM8 5v4h13V5H8z");
         public static readonly string Settings = Svg("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z");
+        /// <summary>Chevrones hacia adentro (comprimir / minimizar el panel).</summary>
+        public static readonly string Compress = Svg("M7.41 18.59L8.83 20 12 16.83 15.17 20l1.41-1.41L12 14l-4.59 4.59zm9.18-13.18L15.17 4 12 7.17 8.83 4 7.41 5.41 12 10l4.59-4.59z");
+        /// <summary>Chevrones hacia afuera (expandir el panel).</summary>
+        public static readonly string Expand = Svg("M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z");
     }
 
     /// <summary>
@@ -292,12 +296,36 @@ namespace SisUvex.Nomina.Asistencia_AS
     /// </summary>
     public class AntdDatePicker : AntdUI.DatePicker
     {
+        public AntdDatePicker()
+        {
+            // Sin esto, al escribir la fecha con el teclado el valor interno no cambia hasta confirmar la fecha
+            // completa, y un botón (que no quita el foco) leía todavía la fecha anterior.
+            EnabledValueTextChange = true;
+        }
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new DateTime Value
         {
-            get => base.Value ?? DateTime.Today;
+            get => TryParseTypedText(out DateTime typed) ? typed : (base.Value ?? DateTime.Today);
             set => base.Value = value;
+        }
+
+        /// <summary>
+        /// Si lo que se ve escrito en el cuadro es una fecha completa y válida (aunque el control todavía no la haya
+        /// confirmado), se usa esa: lo que el usuario ve es lo que se consulta.
+        /// </summary>
+        private bool TryParseTypedText(out DateTime date)
+        {
+            date = default;
+            string text = (Text ?? string.Empty).Trim();
+            if (text.Length == 0) return false;
+
+            string format = string.IsNullOrWhiteSpace(Format) ? "dd/MM/yyyy" : Format;
+            string shortFormat = format.Replace("dd", "d").Replace("MM", "M");
+            return DateTime.TryParseExact(text, new[] { format, shortFormat },
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out date);
         }
     }
 
