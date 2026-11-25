@@ -34,6 +34,7 @@ internal class ClsModifyAttendanceEmployees
     private const string DayColumnPrefix = "D_";
 
     private static readonly Color ColorAsistencia = Color.FromArgb(0xC5, 0xDF, 0xB4); // verde claro
+    private static readonly Color ColorSeleccion = Color.FromArgb(205, 175, 238); // celdas seleccionadas
     private static readonly Color ColorPendiente = Color.FromArgb(0xFF, 0xE1, 0x99); // resalte de celdas sin guardar
 
     private List<(string Code, string FullName, string Lp)> _employees = new();
@@ -593,7 +594,10 @@ internal class ClsModifyAttendanceEmployees
             foreach (DataGridViewColumn col in dgv.Columns)
             {
                 if (TryParseDayColumn(col.Name, out _))
+                {
                     col.Width = 48;
+                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
                 else
                     dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.DisplayedCells);
             }
@@ -786,7 +790,7 @@ internal class ClsModifyAttendanceEmployees
         if (color.HasValue)
         {
             e.CellStyle.BackColor = color.Value;
-            e.CellStyle.SelectionBackColor = ControlPaint.Dark(color.Value, 0.1f);
+            e.CellStyle.SelectionBackColor = ColorSeleccion; // la selección se ve morada, igual que el resto del formulario
         }
 
         // Las celdas con cambios sin guardar siempre se marcan en negrita (indicador de "pendiente"),
@@ -977,9 +981,12 @@ internal class ClsModifyAttendanceEmployees
 
     private void UpdatePendingSummary()
     {
-        frm.lblPending.Text = _pendingEdits.Count > 0
-            ? $"{_pendingEdits.Count} cambio(s) sin guardar"
-            : string.Empty;
+        frm.lblPending.Text = _pendingEdits.Count switch
+        {
+            0 => string.Empty,
+            1 => "1 cambio pendiente",
+            _ => $"{_pendingEdits.Count} cambios pendientes"
+        };
         frm.lblPending.ForeColor = Color.DarkOrange;
     }
 }

@@ -10,7 +10,21 @@ namespace SisUvex.Nomina.Asistencia_AS.ModifyAttendanceEmployees
 
         public FrmModifyAttendanceEmployees()
         {
+            AntdTheme.Apply();
             InitializeComponent();
+            ApplyAntdLook();
+        }
+
+        /// <summary>Detalles visuales que el diseñador no genera (foco de la caja de texto y ayudas emergentes).</summary>
+        private void ApplyAntdLook()
+        {
+            AntdInputHost.Bind(pnlCommentsInput, txbComments);
+
+            toolTip.SetToolTip(btnApply, "Aplicar el tipo y comentario a las celdas seleccionadas (aún sin guardar)");
+            toolTip.SetToolTip(btnSave, "Guardar los cambios pendientes");
+            toolTip.SetToolTip(btnDiscard, "Descartar los cambios pendientes");
+            toolTip.SetToolTip(btnClose, "Cerrar la ventana");
+            toolTip.SetToolTip(cboDefaultType, "Inasistencia que se muestra en las celdas en blanco");
         }
 
         private void FrmModifyAttendanceEmployees_Load(object sender, EventArgs e)
