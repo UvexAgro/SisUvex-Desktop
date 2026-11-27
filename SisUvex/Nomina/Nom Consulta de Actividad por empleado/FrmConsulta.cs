@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SisUvex.Catalogos.Metods.Forms.SelectionForms;
+using static SisUvex.Catalogos.Metods.ClsObject;
 
 namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 {
@@ -25,24 +26,17 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 		private void FrmConsulta_Load(object sender, EventArgs e)
 		{
-			cls.CargarSemanas();
+			cls.CargarPeriodos();
+			
 		}
 
-		private void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
+		public void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (cboSemana.SelectedIndex < 0)
+			if (cboSemana.SelectedValue == null ||
+	   cboSemana.SelectedValue is DataRowView)
 				return;
 
-			DataRowView fila = cboSemana.SelectedItem as DataRowView;
-
-			if (fila == null)
-				return;
-
-			dtpInicio.Value =
-				Convert.ToDateTime(fila["d_startDate_per"]).Date;
-
-			dtpFinal.Value =
-				Convert.ToDateTime(fila["d_endDate_per"]).Date;
+			cls.CargarFechasSemana();
 		}
 
 		private void btnBuscar_Click(object sender, EventArgs e)
@@ -105,6 +99,15 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 		private void btnConsultar_Click(object sender, EventArgs e)
 		{
 			Close();
+		}
+
+		public void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null ||
+				cboPeriodo.SelectedValue is DataRowView)
+				return;
+
+			cls.CargarSemanas();
 		}
 	}
 }

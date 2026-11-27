@@ -36,6 +36,8 @@
 			pictureBox1 = new PictureBox();
 			label1 = new Label();
 			panel2 = new Panel();
+			label10 = new Label();
+			cboPeriodo = new ComboBox();
 			dtpFinal = new DateTimePicker();
 			dtpInicio = new DateTimePicker();
 			label14 = new Label();
@@ -121,6 +123,8 @@
 			// panel2
 			// 
 			panel2.BackColor = Color.FromArgb(236, 243, 249);
+			panel2.Controls.Add(label10);
+			panel2.Controls.Add(cboPeriodo);
 			panel2.Controls.Add(dtpFinal);
 			panel2.Controls.Add(dtpInicio);
 			panel2.Controls.Add(label14);
@@ -133,10 +137,31 @@
 			panel2.Size = new Size(1168, 108);
 			panel2.TabIndex = 7;
 			// 
+			// label10
+			// 
+			label10.AutoSize = true;
+			label10.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label10.ForeColor = Color.FromArgb(31, 95, 145);
+			label10.Location = new Point(7, 68);
+			label10.Name = "label10";
+			label10.Size = new Size(43, 17);
+			label10.TabIndex = 54;
+			label10.Text = "Ciclo :";
+			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(57, 65);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 53;
+			cboPeriodo.SelectedIndexChanged += cboPeriodo_SelectedIndexChanged;
+			// 
 			// dtpFinal
 			// 
 			dtpFinal.Format = DateTimePickerFormat.Custom;
-			dtpFinal.Location = new Point(498, 65);
+			dtpFinal.Location = new Point(606, 65);
 			dtpFinal.Name = "dtpFinal";
 			dtpFinal.Size = new Size(84, 23);
 			dtpFinal.TabIndex = 17;
@@ -145,7 +170,7 @@
 			// 
 			dtpInicio.CustomFormat = "";
 			dtpInicio.Format = DateTimePickerFormat.Custom;
-			dtpInicio.Location = new Point(323, 65);
+			dtpInicio.Location = new Point(448, 65);
 			dtpInicio.Name = "dtpInicio";
 			dtpInicio.Size = new Size(84, 23);
 			dtpInicio.TabIndex = 16;
@@ -155,7 +180,7 @@
 			label14.AutoSize = true;
 			label14.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label14.ForeColor = Color.FromArgb(31, 95, 145);
-			label14.Location = new Point(465, 68);
+			label14.Location = new Point(573, 68);
 			label14.Name = "label14";
 			label14.Size = new Size(27, 17);
 			label14.TabIndex = 15;
@@ -166,7 +191,7 @@
 			label13.AutoSize = true;
 			label13.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label13.ForeColor = Color.FromArgb(31, 95, 145);
-			label13.Location = new Point(283, 68);
+			label13.Location = new Point(408, 68);
 			label13.Name = "label13";
 			label13.Size = new Size(34, 17);
 			label13.TabIndex = 14;
@@ -176,7 +201,7 @@
 			// 
 			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(132, 65);
+			cboSemana.Location = new Point(296, 65);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(78, 25);
 			cboSemana.TabIndex = 13;
@@ -187,7 +212,7 @@
 			label6.AutoSize = true;
 			label6.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label6.ForeColor = Color.FromArgb(31, 95, 145);
-			label6.Location = new Point(51, 68);
+			label6.Location = new Point(221, 68);
 			label6.Name = "label6";
 			label6.Size = new Size(63, 17);
 			label6.TabIndex = 12;
@@ -487,5 +512,6 @@
 		public Label lblNombre;
 		public Label lblCuadrilla;
 		private Label label16;
+		public ComboBox cboPeriodo;
 	}
 }

@@ -883,28 +883,37 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		public void CargarSemanas()
 		{
 			SQLControl sql = new SQLControl();
-
-			string query = @"
-		SELECT
-			id_period,
-			c_sequence_per,
-			d_startDate_per,
-			d_endDate_per,
-			v_name_per
-		FROM dbo.Payroll_AttendancePeriod
-		WHERE c_active = '1'
-		ORDER BY d_startDate_per DESC";
-
 			DataTable dt = new DataTable();
 
 			try
 			{
+				if (frm.cboPeriodo.SelectedValue == null)
+					return;
+
+				string periodo = frm.cboPeriodo.SelectedValue.ToString();
+
 				sql.OpenConectionWrite();
 
+				string query = @"
+            SELECT
+                id_period,
+                c_sequence_per,
+                d_startDate_per,
+                d_endDate_per,
+                v_name_per
+            FROM dbo.Payroll_AttendancePeriod
+            WHERE c_active = '1'
+              AND id_period = @Periodo
+            ORDER BY d_startDate_per DESC;";
+
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.AddWithValue("@Periodo", periodo);
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -920,38 +929,77 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 				sql.CloseConectionWrite();
 			}
 
-			// Crear texto que se mostrará en el ComboBox
 			if (!dt.Columns.Contains("SemanaMostrar"))
-			{
 				dt.Columns.Add("SemanaMostrar", typeof(string));
-			}
 
 			foreach (DataRow row in dt.Rows)
 			{
-				DateTime fechaInicio =
-					Convert.ToDateTime(row["d_startDate_per"]).Date;
-
-				DateTime fechaFin =
-					Convert.ToDateTime(row["d_endDate_per"]).Date;
+				DateTime inicio = Convert.ToDateTime(row["d_startDate_per"]);
+				DateTime fin = Convert.ToDateTime(row["d_endDate_per"]);
 
 				row["SemanaMostrar"] =
 					"Semana " + row["c_sequence_per"].ToString().Trim() +
 					" | " +
-					fechaInicio.ToString("dd/MM/yyyy") +
+					inicio.ToString("dd/MM/yyyy") +
 					" - " +
-					fechaFin.ToString("dd/MM/yyyy");
+					fin.ToString("dd/MM/yyyy");
 			}
 
 			frm.cboSemana.DataSource = null;
-
 			frm.cboSemana.DisplayMember = "SemanaMostrar";
 			frm.cboSemana.ValueMember = "c_sequence_per";
-
 			frm.cboSemana.DataSource = dt;
 
-			SeleccionarSemanaActual(dt);
+			if (dt.Rows.Count > 0)
+				SeleccionarSemanaActual(dt);
+			else
+				frm.cboSemana.SelectedIndex = -1;
 		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
 
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                CONCAT(c_codigo_tem, ' - ', v_nombre_tem) AS Periodo
+            FROM dbo.Nom_AgriculturalCycle
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+
+				frm.cboPeriodo.SelectedIndexChanged -= frm.cboPeriodo_SelectedIndexChanged;
+				frm.cboPeriodo.SelectedIndexChanged += frm.cboPeriodo_SelectedIndexChanged;
+
+				frm.cboPeriodo.DataSource = null;
+				frm.cboPeriodo.DisplayMember = "Periodo"; // CAMBIO
+				frm.cboPeriodo.ValueMember = "c_codigo_tem";
+				frm.cboPeriodo.DataSource = dt;
+
+				if (dt.Rows.Count > 0)
+					frm.cboPeriodo.SelectedIndex = 0;
+				else
+					frm.cboPeriodo.SelectedIndex = -1;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al cargar periodos: " + ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+		}
 		private void SeleccionarSemanaActual(DataTable dt)
 		{
 			DateTime fechaActual = DateTime.Today;
