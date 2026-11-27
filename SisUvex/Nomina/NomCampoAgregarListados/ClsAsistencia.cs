@@ -133,7 +133,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_frmA.cboCuadrilla.SelectedIndex = -1;
 			_frmA.cboCuadrilla.Text = "";
 		}
-		public void CargarSemanas()
+
+		public void CargarSemanas(string idPeriodo)
 		{
 			string query = @"
         SELECT
@@ -143,8 +144,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
             d_endDate_per,
             v_name_per
         FROM dbo.Payroll_AttendancePeriod
-        WHERE c_active = '1'
-        ORDER BY d_startDate_per DESC";
+        WHERE id_period = @idPeriodo
+        ORDER BY
+            TRY_CONVERT(INT, c_sequence_per) DESC,
+            d_startDate_per DESC;";
 
 			DataTable dt = new DataTable();
 
@@ -153,9 +156,14 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.Add("@idPeriodo", SqlDbType.Char, 2)
+						.Value = idPeriodo;
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -165,18 +173,25 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
+				return;
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			_frmA.cboSemana.DataSource = dt;
+			_frmA.cboSemana.DataSource = null;
+
 			_frmA.cboSemana.DisplayMember = "v_name_per";
 			_frmA.cboSemana.ValueMember = "c_sequence_per";
+			_frmA.cboSemana.DataSource = dt;
 
-			SeleccionarSemanaActual(dt);
+			if (dt.Rows.Count > 0)
+				SeleccionarSemanaActual(dt);
+			else
+				_frmA.cboSemana.SelectedIndex = -1;
 		}
+
 
 		private void SeleccionarSemanaActual(DataTable dt)
 		{
@@ -3654,7 +3669,106 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
 
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                c_activo_tem
+            FROM dbo.Nom_AgriculturalCycle
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da =
+					new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar los períodos:\n\n" +
+					ex.Message,
+					"Períodos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+
+			// ==========================================
+			// COLUMNA PARA MOSTRAR
+			// ==========================================
+
+			if (!dt.Columns.Contains("PeriodoMostrar"))
+			{
+				dt.Columns.Add(
+					"PeriodoMostrar",
+					typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				row["PeriodoMostrar"] =
+					row["c_codigo_tem"].ToString().Trim()
+					+ " - "
+					+ row["v_nombre_tem"].ToString().Trim();
+			}
+
+
+			// ==========================================
+			// CONFIGURAR COMBO
+			// ==========================================
+
+			_frmA.cboPeriodo.DataSource = null;
+
+			_frmA.cboPeriodo.DisplayMember =
+				"PeriodoMostrar";
+
+			_frmA.cboPeriodo.ValueMember =
+				"c_codigo_tem";
+
+			_frmA.cboPeriodo.DataSource = dt;
+
+
+			// ==========================================
+			// SELECCIONAR PERÍODO ACTIVO MÁS RECIENTE
+			// ==========================================
+
+			DataRow periodoActual = dt.AsEnumerable()
+				.Where(r =>
+					r["c_activo_tem"] != DBNull.Value &&
+					Convert.ToInt32(r["c_activo_tem"]) == 1)
+				.OrderByDescending(r =>
+					Convert.ToInt32(r["c_codigo_tem"]))
+				.FirstOrDefault();
+
+			if (periodoActual != null)
+			{
+				_frmA.cboPeriodo.SelectedValue =
+					periodoActual["c_codigo_tem"].ToString().Trim();
+			}
+			else
+			{
+				_frmA.cboPeriodo.SelectedIndex = -1;
+			}
+		}
 	}
 }
 

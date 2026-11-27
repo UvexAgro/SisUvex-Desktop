@@ -12,6 +12,7 @@ using System.Windows.Forms.VisualStyles;
 using NPOI.SS.Formula.Functions;
 using SisUvex.Nomina.Asistencia_AS;
 using SisUvex.Nomina.Reporte_de_Asistencia;
+using static SisUvex.Catalogos.Metods.ClsObject;
 using static SisUvex.Nomina.NomCampoAgregarListados.ClsAsistencia;
 using static SisUvex.Nomina.NomCampoAgregarListados.FrmAgregarLoteyActividad;
 using static SisUvex.Nomina.NomCampoAgregarListados.FrmAsistencia;
@@ -69,11 +70,19 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			_clsA.ConfigurarGrid();
 			_clsA.CargarCuadrillas();
 			clsJ.CargarCuadrillas();
-			_clsA.CargarSemanas();
 			clsJ.ConfigurarGridChecador();
 			clsJ.EstilizarDgvReloj();
 			_clsA.CargarDiasSemana();
 			clsAjuste.CargarConceptosCombo();
+			_clsA.CargarPeriodos();
+
+			if (cboPeriodo.SelectedValue != null &&
+				!(cboPeriodo.SelectedValue is DataRowView))
+			{
+				string idPeriodo = cboPeriodo.SelectedValue.ToString().Trim();
+
+				_clsA.CargarSemanas(idPeriodo);
+			}
 
 			cboDiaChecador.Items.Clear();
 
@@ -1707,6 +1716,24 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				"Horas actualizadas",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
+		}
+
+		private void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null)
+				return;
+
+			// Evitar ejecutar mientras se está enlazando el DataSource
+			if (cboPeriodo.SelectedValue is DataRowView)
+				return;
+
+			string idPeriodo =
+				cboPeriodo.SelectedValue.ToString().Trim();
+
+			if (!string.IsNullOrWhiteSpace(idPeriodo))
+			{
+				_clsA.CargarSemanas(idPeriodo);
+			}
 		}
 	}
 }
