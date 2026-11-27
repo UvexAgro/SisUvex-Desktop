@@ -470,9 +470,9 @@
 			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label9.Location = new Point(571, 19);
 			label9.Name = "label9";
-			label9.Size = new Size(62, 17);
+			label9.Size = new Size(43, 17);
 			label9.TabIndex = 48;
-			label9.Text = "Periodo :";
+			label9.Text = "Ciclo :";
 			// 
 			// btnActividad
 			// 

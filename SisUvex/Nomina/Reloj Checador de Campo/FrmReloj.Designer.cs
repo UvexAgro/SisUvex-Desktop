@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReloj));
 			dgvLista = new DataGridView();
 			groupBox1 = new GroupBox();
@@ -59,9 +59,11 @@
 			txbEmpleado = new TextBox();
 			label1 = new Label();
 			panel2 = new Panel();
+			pictureBox1 = new PictureBox();
 			label3 = new Label();
 			label4 = new Label();
-			pictureBox1 = new PictureBox();
+			cboPeriodo = new ComboBox();
+			label16 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			panel2.SuspendLayout();
@@ -78,28 +80,28 @@
 			dgvLista.BackgroundColor = SystemColors.ControlLightLight;
 			dgvLista.BorderStyle = BorderStyle.Fixed3D;
 			dgvLista.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvLista.ColumnHeadersHeight = 29;
 			dgvLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvLista.EnableHeadersVisualStyles = false;
 			dgvLista.ImeMode = ImeMode.NoControl;
 			dgvLista.Location = new Point(2, 548);
 			dgvLista.Name = "dgvLista";
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvLista.RowHeadersVisible = false;
 			dgvLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -109,6 +111,8 @@
 			// groupBox1
 			// 
 			groupBox1.BackColor = Color.FromArgb(236, 243, 249);
+			groupBox1.Controls.Add(cboPeriodo);
+			groupBox1.Controls.Add(label16);
 			groupBox1.Controls.Add(label15);
 			groupBox1.Controls.Add(label14);
 			groupBox1.Controls.Add(label13);
@@ -169,7 +173,7 @@
 			label13.AutoSize = true;
 			label13.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label13.ForeColor = Color.DimGray;
-			label13.Location = new Point(670, 360);
+			label13.Location = new Point(690, 360);
 			label13.Name = "label13";
 			label13.Size = new Size(543, 26);
 			label13.TabIndex = 44;
@@ -260,7 +264,7 @@
 			btnConsultarSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultarSemana.Image = (Image)resources.GetObject("btnConsultarSemana.Image");
 			btnConsultarSemana.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultarSemana.Location = new Point(354, 313);
+			btnConsultarSemana.Location = new Point(465, 313);
 			btnConsultarSemana.Name = "btnConsultarSemana";
 			btnConsultarSemana.Padding = new Padding(20, 0, 20, 0);
 			btnConsultarSemana.Size = new Size(152, 33);
@@ -273,7 +277,7 @@
 			// label9
 			// 
 			label9.AutoSize = true;
-			label9.Location = new Point(670, 259);
+			label9.Location = new Point(690, 259);
 			label9.Name = "label9";
 			label9.Size = new Size(156, 25);
 			label9.TabIndex = 16;
@@ -283,7 +287,7 @@
 			// 
 			label8.AutoSize = true;
 			label8.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label8.Location = new Point(838, 297);
+			label8.Location = new Point(858, 297);
 			label8.Name = "label8";
 			label8.Size = new Size(78, 17);
 			label8.TabIndex = 15;
@@ -294,7 +298,7 @@
 			dtpFechaFinal.CustomFormat = "dd/MM/yyyy";
 			dtpFechaFinal.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			dtpFechaFinal.Format = DateTimePickerFormat.Custom;
-			dtpFechaFinal.Location = new Point(838, 317);
+			dtpFechaFinal.Location = new Point(858, 317);
 			dtpFechaFinal.Name = "dtpFechaFinal";
 			dtpFechaFinal.Size = new Size(110, 25);
 			dtpFechaFinal.TabIndex = 14;
@@ -303,7 +307,7 @@
 			// 
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label7.Location = new Point(670, 297);
+			label7.Location = new Point(690, 297);
 			label7.Name = "label7";
 			label7.Size = new Size(84, 17);
 			label7.TabIndex = 13;
@@ -314,7 +318,7 @@
 			dtpFechaInicial.CustomFormat = "dd/MM/yyyy";
 			dtpFechaInicial.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			dtpFechaInicial.Format = DateTimePickerFormat.Custom;
-			dtpFechaInicial.Location = new Point(670, 317);
+			dtpFechaInicial.Location = new Point(690, 317);
 			dtpFechaInicial.Name = "dtpFechaInicial";
 			dtpFechaInicial.Size = new Size(110, 25);
 			dtpFechaInicial.TabIndex = 12;
@@ -341,7 +345,7 @@
 			// 
 			label5.AutoSize = true;
 			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(10, 297);
+			label5.Location = new Point(121, 297);
 			label5.Name = "label5";
 			label5.Size = new Size(59, 17);
 			label5.TabIndex = 9;
@@ -351,7 +355,7 @@
 			// 
 			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(10, 317);
+			cboSemana.Location = new Point(121, 317);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(338, 25);
 			cboSemana.TabIndex = 8;
@@ -361,7 +365,7 @@
 			btnConsultar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(982, 312);
+			btnConsultar.Location = new Point(1002, 312);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(20, 0, 20, 0);
 			btnConsultar.Size = new Size(152, 33);
@@ -423,6 +427,17 @@
 			panel2.Size = new Size(1271, 133);
 			panel2.TabIndex = 7;
 			// 
+			// pictureBox1
+			// 
+			pictureBox1.BackColor = Color.Transparent;
+			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			pictureBox1.Location = new Point(11, 10);
+			pictureBox1.Name = "pictureBox1";
+			pictureBox1.Size = new Size(83, 107);
+			pictureBox1.TabIndex = 10;
+			pictureBox1.TabStop = false;
+			// 
 			// label3
 			// 
 			label3.AutoSize = true;
@@ -447,16 +462,24 @@
 			label4.TabIndex = 8;
 			label4.Text = "Consulta de Asistencia en el Reloj Checador ";
 			// 
-			// pictureBox1
+			// cboPeriodo
 			// 
-			pictureBox1.BackColor = Color.Transparent;
-			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(11, 10);
-			pictureBox1.Name = "pictureBox1";
-			pictureBox1.Size = new Size(83, 107);
-			pictureBox1.TabIndex = 10;
-			pictureBox1.TabStop = false;
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(220, 262);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 51;
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label16.Location = new Point(220, 241);
+			label16.Name = "label16";
+			label16.Size = new Size(43, 17);
+			label16.TabIndex = 50;
+			label16.Text = "Ciclo :";
 			// 
 			// FrmReloj
 			// 
@@ -513,5 +536,7 @@
 		private Label label13;
 		private Label label15;
 		private PictureBox pictureBox1;
+		public ComboBox cboPeriodo;
+		private Label label16;
 	}
 }

@@ -44,6 +44,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			cboDireccion.Items.Add("Ascendente (A-Z)");
 			cboDireccion.Items.Add("Descendente (Z-A)");
+			rbContinuo.Checked = true;
 
 			cboDireccion.SelectedIndex = 0;
 

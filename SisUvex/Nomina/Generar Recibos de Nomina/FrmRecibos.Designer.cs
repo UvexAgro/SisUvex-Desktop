@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRecibos));
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			dtpFechaFinal = new DateTimePicker();
 			cboSemana = new ComboBox();
 			label2 = new Label();
@@ -95,6 +95,8 @@
 			panel12 = new Panel();
 			pictureBox8 = new PictureBox();
 			label16 = new Label();
+			rbContinuo = new RadioButton();
+			rbEntrecruzado = new RadioButton();
 			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -396,7 +398,7 @@
 			panel6.Controls.Add(txbCodigo);
 			panel6.Controls.Add(label11);
 			panel6.Controls.Add(panel7);
-			panel6.Location = new Point(301, 201);
+			panel6.Location = new Point(463, 201);
 			panel6.Name = "panel6";
 			panel6.Size = new Size(562, 162);
 			panel6.TabIndex = 9;
@@ -496,6 +498,8 @@
 			// panel8
 			// 
 			panel8.BackColor = Color.FromArgb(242, 245, 249);
+			panel8.Controls.Add(rbEntrecruzado);
+			panel8.Controls.Add(rbContinuo);
 			panel8.Controls.Add(label14);
 			panel8.Controls.Add(label13);
 			panel8.Controls.Add(cboDireccion);
@@ -503,7 +507,7 @@
 			panel8.Controls.Add(panel9);
 			panel8.Location = new Point(4, 201);
 			panel8.Name = "panel8";
-			panel8.Size = new Size(291, 162);
+			panel8.Size = new Size(433, 162);
 			panel8.TabIndex = 9;
 			// 
 			// label14
@@ -550,7 +554,7 @@
 			panel9.Controls.Add(label8);
 			panel9.Location = new Point(1, 0);
 			panel9.Name = "panel9";
-			panel9.Size = new Size(290, 36);
+			panel9.Size = new Size(432, 36);
 			panel9.TabIndex = 8;
 			// 
 			// pictureBox3
@@ -580,7 +584,7 @@
 			btnConsultar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(881, 253);
+			btnConsultar.Location = new Point(1071, 253);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(25, 0, 25, 0);
 			btnConsultar.Size = new Size(145, 41);
@@ -595,7 +599,7 @@
 			btnLimpiar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnLimpiar.Image = (Image)resources.GetObject("btnLimpiar.Image");
 			btnLimpiar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnLimpiar.Location = new Point(881, 313);
+			btnLimpiar.Location = new Point(1071, 313);
 			btnLimpiar.Name = "btnLimpiar";
 			btnLimpiar.Padding = new Padding(30, 0, 30, 0);
 			btnLimpiar.Size = new Size(145, 41);
@@ -620,14 +624,14 @@
 			dgvRecibo.BackgroundColor = Color.White;
 			dgvRecibo.BorderStyle = BorderStyle.Fixed3D;
 			dgvRecibo.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvRecibo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvRecibo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvRecibo.ColumnHeadersHeight = 29;
 			dgvRecibo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvRecibo.EnableHeadersVisualStyles = false;
@@ -635,14 +639,14 @@
 			dgvRecibo.Location = new Point(2, 408);
 			dgvRecibo.Name = "dgvRecibo";
 			dgvRecibo.ReadOnly = true;
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvRecibo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvRecibo.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvRecibo.RowHeadersVisible = false;
 			dgvRecibo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvRecibo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -864,6 +868,30 @@
 			label16.TabIndex = 7;
 			label16.Text = "Empleados  Econtrados";
 			// 
+			// rbContinuo
+			// 
+			rbContinuo.AutoSize = true;
+			rbContinuo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			rbContinuo.Location = new Point(301, 69);
+			rbContinuo.Name = "rbContinuo";
+			rbContinuo.Size = new Size(74, 19);
+			rbContinuo.TabIndex = 11;
+			rbContinuo.TabStop = true;
+			rbContinuo.Text = "Continuo";
+			rbContinuo.UseVisualStyleBackColor = true;
+			// 
+			// rbEntrecruzado
+			// 
+			rbEntrecruzado.AutoSize = true;
+			rbEntrecruzado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			rbEntrecruzado.Location = new Point(301, 116);
+			rbEntrecruzado.Name = "rbEntrecruzado";
+			rbEntrecruzado.Size = new Size(95, 19);
+			rbEntrecruzado.TabIndex = 12;
+			rbEntrecruzado.TabStop = true;
+			rbEntrecruzado.Text = "Entrecruzado";
+			rbEntrecruzado.UseVisualStyleBackColor = true;
+			// 
 			// FrmRecibos
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -990,5 +1018,7 @@
 		public Label lblEmpleados;
 		private Label label21;
 		private Label label20;
+		public RadioButton rbEntrecruzado;
+		public RadioButton rbContinuo;
 	}
 }
