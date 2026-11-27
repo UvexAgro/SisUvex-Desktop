@@ -33,8 +33,16 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 		}
 		private void FrmReloj_Load(object sender, EventArgs e)
 		{
-			cls.CargarSemanas();
 			HasEditCatalogsPermission();
+			cls.CargarPeriodos();
+
+			if (cboPeriodo.SelectedValue != null &&
+				!(cboPeriodo.SelectedValue is DataRowView))
+			{
+				string idPeriodo = cboPeriodo.SelectedValue.ToString().Trim();
+
+				cls.CargarSemanas(idPeriodo);
+			}
 			dtpFechaFinal.MinDate = dtpFechaInicial.Value.Date;
 		}
 
@@ -199,6 +207,16 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			// Regresar el cursor al código
 			txbCodigo.Focus();
 		}
-	}
 
+		private void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null ||
+				cboPeriodo.SelectedValue is DataRowView)
+				return;
+
+			string idPeriodo = cboPeriodo.SelectedValue.ToString().Trim();
+
+			cls.CargarSemanas(idPeriodo);
+		}
+	}
 }

@@ -33,6 +33,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReloj));
 			dgvLista = new DataGridView();
 			groupBox1 = new GroupBox();
+			cboPeriodo = new ComboBox();
+			label16 = new Label();
 			label15 = new Label();
 			label14 = new Label();
 			label13 = new Label();
@@ -62,8 +64,6 @@
 			pictureBox1 = new PictureBox();
 			label3 = new Label();
 			label4 = new Label();
-			cboPeriodo = new ComboBox();
-			label16 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvLista).BeginInit();
 			groupBox1.SuspendLayout();
 			panel2.SuspendLayout();
@@ -146,6 +146,26 @@
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Filtro de Busqueda";
 			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(6, 320);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 51;
+			cboPeriodo.SelectedIndexChanged += cboPeriodo_SelectedIndexChanged;
+			// 
+			// label16
+			// 
+			label16.AutoSize = true;
+			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label16.Location = new Point(6, 299);
+			label16.Name = "label16";
+			label16.Size = new Size(43, 17);
+			label16.TabIndex = 50;
+			label16.Text = "Ciclo :";
+			// 
 			// label15
 			// 
 			label15.AutoSize = true;
@@ -173,7 +193,7 @@
 			label13.AutoSize = true;
 			label13.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			label13.ForeColor = Color.DimGray;
-			label13.Location = new Point(690, 360);
+			label13.Location = new Point(714, 360);
 			label13.Name = "label13";
 			label13.Size = new Size(543, 26);
 			label13.TabIndex = 44;
@@ -264,7 +284,7 @@
 			btnConsultarSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultarSemana.Image = (Image)resources.GetObject("btnConsultarSemana.Image");
 			btnConsultarSemana.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultarSemana.Location = new Point(465, 313);
+			btnConsultarSemana.Location = new Point(491, 316);
 			btnConsultarSemana.Name = "btnConsultarSemana";
 			btnConsultarSemana.Padding = new Padding(20, 0, 20, 0);
 			btnConsultarSemana.Size = new Size(152, 33);
@@ -277,7 +297,7 @@
 			// label9
 			// 
 			label9.AutoSize = true;
-			label9.Location = new Point(690, 259);
+			label9.Location = new Point(714, 259);
 			label9.Name = "label9";
 			label9.Size = new Size(156, 25);
 			label9.TabIndex = 16;
@@ -287,7 +307,7 @@
 			// 
 			label8.AutoSize = true;
 			label8.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label8.Location = new Point(858, 297);
+			label8.Location = new Point(882, 297);
 			label8.Name = "label8";
 			label8.Size = new Size(78, 17);
 			label8.TabIndex = 15;
@@ -298,7 +318,7 @@
 			dtpFechaFinal.CustomFormat = "dd/MM/yyyy";
 			dtpFechaFinal.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			dtpFechaFinal.Format = DateTimePickerFormat.Custom;
-			dtpFechaFinal.Location = new Point(858, 317);
+			dtpFechaFinal.Location = new Point(882, 317);
 			dtpFechaFinal.Name = "dtpFechaFinal";
 			dtpFechaFinal.Size = new Size(110, 25);
 			dtpFechaFinal.TabIndex = 14;
@@ -307,7 +327,7 @@
 			// 
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label7.Location = new Point(690, 297);
+			label7.Location = new Point(714, 297);
 			label7.Name = "label7";
 			label7.Size = new Size(84, 17);
 			label7.TabIndex = 13;
@@ -318,9 +338,9 @@
 			dtpFechaInicial.CustomFormat = "dd/MM/yyyy";
 			dtpFechaInicial.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			dtpFechaInicial.Format = DateTimePickerFormat.Custom;
-			dtpFechaInicial.Location = new Point(690, 317);
+			dtpFechaInicial.Location = new Point(714, 317);
 			dtpFechaInicial.Name = "dtpFechaInicial";
-			dtpFechaInicial.Size = new Size(110, 25);
+			dtpFechaInicial.Size = new Size(125, 25);
 			dtpFechaInicial.TabIndex = 12;
 			dtpFechaInicial.ValueChanged += dtpFechaInicial_ValueChanged;
 			// 
@@ -345,7 +365,7 @@
 			// 
 			label5.AutoSize = true;
 			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label5.Location = new Point(121, 297);
+			label5.Location = new Point(147, 300);
 			label5.Name = "label5";
 			label5.Size = new Size(59, 17);
 			label5.TabIndex = 9;
@@ -355,7 +375,7 @@
 			// 
 			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(121, 317);
+			cboSemana.Location = new Point(147, 320);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(338, 25);
 			cboSemana.TabIndex = 8;
@@ -365,7 +385,7 @@
 			btnConsultar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			btnConsultar.Image = (Image)resources.GetObject("btnConsultar.Image");
 			btnConsultar.ImageAlign = ContentAlignment.MiddleLeft;
-			btnConsultar.Location = new Point(1002, 312);
+			btnConsultar.Location = new Point(1026, 312);
 			btnConsultar.Name = "btnConsultar";
 			btnConsultar.Padding = new Padding(20, 0, 20, 0);
 			btnConsultar.Size = new Size(152, 33);
@@ -461,25 +481,6 @@
 			label4.Size = new Size(579, 37);
 			label4.TabIndex = 8;
 			label4.Text = "Consulta de Asistencia en el Reloj Checador ";
-			// 
-			// cboPeriodo
-			// 
-			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			cboPeriodo.FormattingEnabled = true;
-			cboPeriodo.Location = new Point(220, 262);
-			cboPeriodo.Name = "cboPeriodo";
-			cboPeriodo.Size = new Size(135, 25);
-			cboPeriodo.TabIndex = 51;
-			// 
-			// label16
-			// 
-			label16.AutoSize = true;
-			label16.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label16.Location = new Point(220, 241);
-			label16.Name = "label16";
-			label16.Size = new Size(43, 17);
-			label16.TabIndex = 50;
-			label16.Text = "Ciclo :";
 			// 
 			// FrmReloj
 			// 
