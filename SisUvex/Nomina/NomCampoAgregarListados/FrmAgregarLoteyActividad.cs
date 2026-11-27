@@ -77,14 +77,34 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 		private void FrmAgregarLoteyActividad_Load(object sender, EventArgs e)
 		{
+			// ==========================================
+			// 1. DISEÑAR DATAGRIDVIEW
+			// ==========================================
+
 			clsCAL.DiseñarDgvEmpleados();
 
+			// Crear columnas ocultas antes de cargar información
+			clsCAL.ConfigurarColumnasOcultas();
+
+			// Configurar selección de empleados
+			clsCAL.ConfigurarSeleccionEmpleados();
+
+			// ==========================================
+			// 2. CARGAR EMPLEADOS
+			// ==========================================
+
 			clsCAL.CargarEmpleadosSeleccionados();
-			dgvAgregarLoteyActividad.ColumnHeaderMouseClick -= dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
 
-			dgvAgregarLoteyActividad.ColumnHeaderMouseClick += dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick -=
+				dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
 
-			// Cargar la actividad anterior del día seleccionado
+			dgvAgregarLoteyActividad.ColumnHeaderMouseClick +=
+				dgvAgregarLoteyActividad_ColumnHeaderMouseClick;
+
+			// ==========================================
+			// 3. ACTIVIDAD ANTERIOR
+			// ==========================================
+
 			if (cboFecha.SelectedItem is DiaRegistro dia)
 			{
 				FechaSeleccionada = dia.Fecha;
@@ -92,21 +112,41 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				clsCAL.CargarActividadAnterior(FechaSeleccionada);
 			}
 
+			// ==========================================
+			// 4. CARGAR ACTIVIDADES
+			// ==========================================
+
 			CargarActividades();
+
 			ConfigurarActividadDgv();
+
+			// ==========================================
+			// 5. CARGAR CULTIVOS Y LOTES
+			// ==========================================
+
 			clsCAL.CargarComboCultivos();
-			ConfigurarLoteDgv();
+
+			// No llamar aquí ConfigurarLoteDgv()
+			// porque CargarComboLotes ya lo ejecuta.
+
+			// ==========================================
+			// 6. CARGAR DÍAS
+			// ==========================================
 
 			clsCAL.CargarDiasRegistro(FechaInicio);
-			clsCAL.ConfigurarSeleccionEmpleados();
-			clsCAL.ConfigurarColumnasOcultas();
 
+			// ==========================================
+			// 7. EVENTOS
+			// ==========================================
 
-			dgvAgregarLoteyActividad.EditingControlShowing += dgvAgregarLoteyActividad_EditingControlShowing;
+			dgvAgregarLoteyActividad.EditingControlShowing +=
+				dgvAgregarLoteyActividad_EditingControlShowing;
 
-			dgvAgregarLoteyActividad.KeyDown += dgvAgregarLoteyActividad_KeyDown;
+			dgvAgregarLoteyActividad.KeyDown +=
+				dgvAgregarLoteyActividad_KeyDown;
 
-			cboCultivo.SelectionChangeCommitted += cboCultivo_SelectionChangeCommitted;
+			cboCultivo.SelectionChangeCommitted +=
+				cboCultivo_SelectionChangeCommitted;
 		}
 		private void CargarActividades()
 		{
