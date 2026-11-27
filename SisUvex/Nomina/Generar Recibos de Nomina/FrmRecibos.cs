@@ -48,7 +48,10 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			cboDireccion.SelectedIndex = 0;
 
-			cls.CargarSemanas();
+			cboSemana.SelectedIndexChanged -= cboSemana_SelectedIndexChanged;
+			cboSemana.SelectedIndexChanged += cboSemana_SelectedIndexChanged;
+
+			cls.CargarPeriodos();
 			cls.CargarLugarPago(cboLugarPago);
 		}
 
@@ -160,6 +163,22 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			// Actualizar resumen
 			cls.ActualizarResumenDesdeGrid();
+		}
+
+		public void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null)
+				return;
+
+			if (cboPeriodo.SelectedValue is DataRowView)
+				return;
+
+			cls.CargarSemanas();
+		}
+
+		public void cboSemana_SelectedIndexChanged(object sender, EventArgs e)
+		{
+		cls.CargarFechasSemana();
 		}
 	}
 }

@@ -29,12 +29,14 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRecibos));
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			dtpFechaFinal = new DateTimePicker();
 			cboSemana = new ComboBox();
 			label2 = new Label();
 			panel1 = new Panel();
+			cboPeriodo = new ComboBox();
+			label20 = new Label();
 			label1 = new Label();
 			dtpFechaInicial = new DateTimePicker();
 			panel2 = new Panel();
@@ -66,6 +68,8 @@
 			pictureBox6 = new PictureBox();
 			label7 = new Label();
 			panel8 = new Panel();
+			rbEntrecruzado = new RadioButton();
+			rbContinuo = new RadioButton();
 			label14 = new Label();
 			label13 = new Label();
 			cboDireccion = new ComboBox();
@@ -95,8 +99,6 @@
 			panel12 = new Panel();
 			pictureBox8 = new PictureBox();
 			label16 = new Label();
-			rbContinuo = new RadioButton();
-			rbEntrecruzado = new RadioButton();
 			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -125,7 +127,7 @@
 			// 
 			dtpFechaFinal.Enabled = false;
 			dtpFechaFinal.Format = DateTimePickerFormat.Custom;
-			dtpFechaFinal.Location = new Point(346, 67);
+			dtpFechaFinal.Location = new Point(509, 67);
 			dtpFechaFinal.Name = "dtpFechaFinal";
 			dtpFechaFinal.Size = new Size(129, 23);
 			dtpFechaFinal.TabIndex = 1;
@@ -133,16 +135,17 @@
 			// cboSemana
 			// 
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(17, 67);
+			cboSemana.Location = new Point(180, 67);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(121, 23);
 			cboSemana.TabIndex = 2;
+			cboSemana.SelectedIndexChanged += cboSemana_SelectedIndexChanged;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
 			label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label2.Location = new Point(19, 49);
+			label2.Location = new Point(182, 49);
 			label2.Name = "label2";
 			label2.Size = new Size(53, 15);
 			label2.TabIndex = 4;
@@ -151,6 +154,8 @@
 			// panel1
 			// 
 			panel1.BackColor = Color.FromArgb(242, 245, 249);
+			panel1.Controls.Add(cboPeriodo);
+			panel1.Controls.Add(label20);
 			panel1.Controls.Add(label1);
 			panel1.Controls.Add(dtpFechaInicial);
 			panel1.Controls.Add(label2);
@@ -158,14 +163,34 @@
 			panel1.Controls.Add(dtpFechaFinal);
 			panel1.Location = new Point(4, 75);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(502, 109);
+			panel1.Size = new Size(711, 109);
 			panel1.TabIndex = 0;
+			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(10, 65);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 51;
+			cboPeriodo.SelectedIndexChanged += cboPeriodo_SelectedIndexChanged;
+			// 
+			// label20
+			// 
+			label20.AutoSize = true;
+			label20.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label20.Location = new Point(10, 44);
+			label20.Name = "label20";
+			label20.Size = new Size(43, 17);
+			label20.TabIndex = 50;
+			label20.Text = "Ciclo :";
 			// 
 			// label1
 			// 
 			label1.AutoSize = true;
 			label1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			label1.Location = new Point(310, 72);
+			label1.Location = new Point(473, 72);
 			label1.Name = "label1";
 			label1.Size = new Size(18, 15);
 			label1.TabIndex = 6;
@@ -175,7 +200,7 @@
 			// 
 			dtpFechaInicial.Enabled = false;
 			dtpFechaInicial.Format = DateTimePickerFormat.Custom;
-			dtpFechaInicial.Location = new Point(162, 67);
+			dtpFechaInicial.Location = new Point(325, 67);
 			dtpFechaInicial.Name = "dtpFechaInicial";
 			dtpFechaInicial.Size = new Size(129, 23);
 			dtpFechaInicial.TabIndex = 5;
@@ -187,7 +212,7 @@
 			panel2.Controls.Add(label3);
 			panel2.Location = new Point(4, 75);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(502, 35);
+			panel2.Size = new Size(711, 35);
 			panel2.TabIndex = 7;
 			// 
 			// pictureBox4
@@ -221,16 +246,16 @@
 			panel3.Controls.Add(rbCfdi);
 			panel3.Controls.Add(label9);
 			panel3.Controls.Add(panel4);
-			panel3.Location = new Point(529, 74);
+			panel3.Location = new Point(741, 75);
 			panel3.Name = "panel3";
-			panel3.Size = new Size(496, 110);
+			panel3.Size = new Size(475, 110);
 			panel3.TabIndex = 7;
 			// 
 			// pictureBox2
 			// 
 			pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
 			pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox2.Location = new Point(336, 54);
+			pictureBox2.Location = new Point(295, 53);
 			pictureBox2.Name = "pictureBox2";
 			pictureBox2.Size = new Size(39, 35);
 			pictureBox2.TabIndex = 13;
@@ -240,7 +265,7 @@
 			// 
 			rbNormal.AutoSize = true;
 			rbNormal.ImageAlign = ContentAlignment.MiddleLeft;
-			rbNormal.Location = new Point(304, 66);
+			rbNormal.Location = new Point(263, 65);
 			rbNormal.Name = "rbNormal";
 			rbNormal.Padding = new Padding(5, 0, 5, 0);
 			rbNormal.Size = new Size(24, 13);
@@ -254,7 +279,7 @@
 			label10.AutoSize = true;
 			label10.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label10.ForeColor = Color.Black;
-			label10.Location = new Point(379, 54);
+			label10.Location = new Point(338, 53);
 			label10.Name = "label10";
 			label10.Size = new Size(66, 34);
 			label10.TabIndex = 11;
@@ -265,7 +290,7 @@
 			// 
 			pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
 			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-			pictureBox1.Location = new Point(54, 54);
+			pictureBox1.Location = new Point(67, 53);
 			pictureBox1.Name = "pictureBox1";
 			pictureBox1.Size = new Size(39, 35);
 			pictureBox1.TabIndex = 10;
@@ -275,7 +300,7 @@
 			// 
 			rbCfdi.AutoSize = true;
 			rbCfdi.ImageAlign = ContentAlignment.MiddleLeft;
-			rbCfdi.Location = new Point(22, 66);
+			rbCfdi.Location = new Point(35, 65);
 			rbCfdi.Name = "rbCfdi";
 			rbCfdi.Padding = new Padding(5, 0, 5, 0);
 			rbCfdi.Size = new Size(24, 13);
@@ -289,7 +314,7 @@
 			label9.AutoSize = true;
 			label9.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label9.ForeColor = Color.Black;
-			label9.Location = new Point(97, 54);
+			label9.Location = new Point(110, 53);
 			label9.Name = "label9";
 			label9.Size = new Size(100, 34);
 			label9.TabIndex = 8;
@@ -303,7 +328,7 @@
 			panel4.Controls.Add(label6);
 			panel4.Location = new Point(1, 0);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(495, 36);
+			panel4.Size = new Size(474, 36);
 			panel4.TabIndex = 8;
 			// 
 			// pictureBox5
@@ -510,6 +535,30 @@
 			panel8.Size = new Size(433, 162);
 			panel8.TabIndex = 9;
 			// 
+			// rbEntrecruzado
+			// 
+			rbEntrecruzado.AutoSize = true;
+			rbEntrecruzado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			rbEntrecruzado.Location = new Point(301, 116);
+			rbEntrecruzado.Name = "rbEntrecruzado";
+			rbEntrecruzado.Size = new Size(95, 19);
+			rbEntrecruzado.TabIndex = 12;
+			rbEntrecruzado.TabStop = true;
+			rbEntrecruzado.Text = "Entrecruzado";
+			rbEntrecruzado.UseVisualStyleBackColor = true;
+			// 
+			// rbContinuo
+			// 
+			rbContinuo.AutoSize = true;
+			rbContinuo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			rbContinuo.Location = new Point(301, 69);
+			rbContinuo.Name = "rbContinuo";
+			rbContinuo.Size = new Size(74, 19);
+			rbContinuo.TabIndex = 11;
+			rbContinuo.TabStop = true;
+			rbContinuo.Text = "Continuo";
+			rbContinuo.UseVisualStyleBackColor = true;
+			// 
 			// label14
 			// 
 			label14.AutoSize = true;
@@ -624,14 +673,14 @@
 			dgvRecibo.BackgroundColor = Color.White;
 			dgvRecibo.BorderStyle = BorderStyle.Fixed3D;
 			dgvRecibo.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.BackColor = SystemColors.Control;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-			dgvRecibo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = SystemColors.Control;
+			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+			dgvRecibo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			dgvRecibo.ColumnHeadersHeight = 29;
 			dgvRecibo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvRecibo.EnableHeadersVisualStyles = false;
@@ -639,14 +688,14 @@
 			dgvRecibo.Location = new Point(2, 408);
 			dgvRecibo.Name = "dgvRecibo";
 			dgvRecibo.ReadOnly = true;
-			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = SystemColors.Control;
-			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-			dgvRecibo.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = SystemColors.Control;
+			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+			dgvRecibo.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			dgvRecibo.RowHeadersVisible = false;
 			dgvRecibo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvRecibo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -868,30 +917,6 @@
 			label16.TabIndex = 7;
 			label16.Text = "Empleados  Econtrados";
 			// 
-			// rbContinuo
-			// 
-			rbContinuo.AutoSize = true;
-			rbContinuo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			rbContinuo.Location = new Point(301, 69);
-			rbContinuo.Name = "rbContinuo";
-			rbContinuo.Size = new Size(74, 19);
-			rbContinuo.TabIndex = 11;
-			rbContinuo.TabStop = true;
-			rbContinuo.Text = "Continuo";
-			rbContinuo.UseVisualStyleBackColor = true;
-			// 
-			// rbEntrecruzado
-			// 
-			rbEntrecruzado.AutoSize = true;
-			rbEntrecruzado.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-			rbEntrecruzado.Location = new Point(301, 116);
-			rbEntrecruzado.Name = "rbEntrecruzado";
-			rbEntrecruzado.Size = new Size(95, 19);
-			rbEntrecruzado.TabIndex = 12;
-			rbEntrecruzado.TabStop = true;
-			rbEntrecruzado.Text = "Entrecruzado";
-			rbEntrecruzado.UseVisualStyleBackColor = true;
-			// 
 			// FrmRecibos
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1020,5 +1045,6 @@
 		private Label label20;
 		public RadioButton rbEntrecruzado;
 		public RadioButton rbContinuo;
+		public ComboBox cboPeriodo;
 	}
 }
