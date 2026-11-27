@@ -78,6 +78,8 @@ namespace SisUvex.Nomina.Asistencia_AS
         private bool _headerSelChecked;
         /// <summary>Evita reentrada al marcar/desmarcar todos los checkboxes del listado.</summary>
         private bool _updatingSel;
+        /// <summary>Evita que el recálculo de semanas (al cambiar el ciclo) dispare las fechas a medias.</summary>
+        private bool _updatingWeekCombos;
         /// <summary>Profundidad de BeginProgress: EndProgress solo cierra la barra en el nivel más externo.</summary>
         private int _progressDepth;
         private readonly ClsAsistenciaASCalendario _calendarCls = new();
@@ -91,6 +93,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             SetControls();
             DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvReport);
             DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvReport);
+            DgvAsistenciaASPerf.EnableDoubleBuffer(frm.dgvEmployees);
+            DgvAsistenciaASPerf.PrepareForFastScroll(frm.dgvEmployees);
             frm.lblEmployeeAdvice.Text = string.Empty;
             ShowEmployeeList(showProgress: false);
         }
@@ -104,17 +108,41 @@ namespace SisUvex.Nomina.Asistencia_AS
             // Nom_AttendanceType no tiene registro en Pack_TablesUpdates, por lo que ClsAttendanceType
             // invalida manualmente esa caché (ClsComboBoxFiles.InvalidateCache) tras cualquier alta,
             // modificación o cambio de estatus, para que aquí siempre se refleje el dato más reciente.
+
+            //ClsComboBoxes.CboLoadAll(frm.cboWeek1, Payroll_AttendancePeriod.Cbo);
+            //ClsComboBoxes.CboLoadActives(frm.cboWeek2, Payroll_AttendancePeriod.Cbo);
+
+            //MessageBox.Show("AttendanceType");
             ClsComboBoxes.CboLoadActives(frm.cboAttendenceType, AttendanceType.Cbo);
+            //MessageBox.Show("NomWorkGroup");
+            ClsComboBoxes.CboLoadActives(frm.cboNomWorkGroup, Nom_WorkGroup.Cbo);
+            //MessageBox.Show("SELECCIONAR CBOATTENDENCETYPE");
             ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAttendenceType, "04"); //<-- falta injustificada
-
+            //MessageBox.Show("PlacePayment");
             ClsComboBoxes.CboLoadActives(frm.cboLP, PlacePayment.Cbo);
-
+            //MessageBox.Show("Season.CboWithDates");
             ClsComboBoxes.CboLoadActives(frm.cboSeason, Season.CboWithDates);
+
+            // Ciclo: se cargan todos (los años anteriores quedan inactivos) para poder cambiar de año
+            // y conservar el mismo número de semana. Las semanas se filtran por id_period = ciclo.
+            //MessageBox.Show("Season.cboAgriculturalCycle");
+            ClsComboBoxes.CboLoadAll(frm.cboAgriculturalCycle, Nom_AgriculturalCycle.Cbo);
+            //MessageBox.Show("cboWeek1");
+            ConfigureWeekCombo(frm.cboWeek1);
+            //MessageBox.Show("cboWeek1");
+
+            ConfigureWeekCombo(frm.cboWeek2);
 
             frm.txbLastDays.Clear();
             ClsTextBoxes.TxbApplyKeyPressEventInt(frm.txbLastDays);
 
             frm.cboSeason.SelectedIndexChanged += CboSeason_SelectedIndexChanged;
+            frm.cboAgriculturalCycle.SelectedIndexChanged += CboAgriculturalCycle_SelectedIndexChanged;
+            frm.cboWeek1.SelectedIndexChanged += CboWeek1_SelectedIndexChanged;
+            frm.cboWeek2.SelectedIndexChanged += CboWeek2_SelectedIndexChanged;
+
+            SelectActiveAgriculturalCycle();
+            FilterWeekCombosKeepingSequence(selectTodayIfMissing: true);
         }
 
         // ── Evento temporada → fechas ─────────────────────────────────────────
@@ -144,6 +172,230 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             frm.dtpDate1.Value = seasonStart;
             frm.dtpDate2.Value = today <= seasonEnd ? today : seasonEnd;
+        }
+
+        // ── Ciclo agrícola → semanas (cboWeek1 / cboWeek2) → fechas ──────────
+
+        public void CboAgriculturalCycle_SelectedIndexChanged(object? sender, EventArgs e)
+            => FilterWeekCombosKeepingSequence();
+
+        public void CboWeek1_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_updatingWeekCombos) return;
+            ApplyWeekStartDate();
+        }
+
+        public void CboWeek2_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_updatingWeekCombos) return;
+            ApplyWeekEndDate();
+        }
+
+        /// <summary>
+        /// Carga <see cref="Payroll_AttendancePeriod.Cbo"/> y muestra sólo el número de semana
+        /// (<see cref="Payroll_AttendancePeriod.ColumnSequence"/> / c_sequence_per).
+        /// Permite escribir el número (1 = 01).
+        /// </summary>
+        private void ConfigureWeekCombo(ComboBox cbo)
+        {
+            ClsComboBoxes.CboLoadActives(cbo, Payroll_AttendancePeriod.Cbo);
+            cbo.DisplayMember = Payroll_AttendancePeriod.ColumnSequence;
+            cbo.DropDownStyle = ComboBoxStyle.DropDown;
+            cbo.AutoCompleteMode = AutoCompleteMode.None;
+            cbo.AutoCompleteSource = AutoCompleteSource.None;
+            cbo.KeyPress += WeekCombo_KeyPress;
+            cbo.KeyDown += WeekCombo_KeyDown;
+            cbo.Validated += WeekCombo_Validated;
+        }
+
+        private static void WeekCombo_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (sender is not ComboBox cbo) return;
+            if (cbo.SelectionLength == 0 && cbo.Text.Length >= 2)
+                e.Handled = true;
+        }
+
+        private void WeekCombo_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || sender is not ComboBox cbo) return;
+            e.SuppressKeyPress = true;
+            ApplyTypedWeekNumber(cbo);
+        }
+
+        private void WeekCombo_Validated(object? sender, EventArgs e)
+        {
+            if (sender is ComboBox cbo)
+                ApplyTypedWeekNumber(cbo);
+        }
+
+        /// <summary>Si el texto es un número de semana válido (1 = 01), lo selecciona y actualiza la fecha.</summary>
+        private void ApplyTypedWeekNumber(ComboBox cbo)
+        {
+            if (_updatingWeekCombos) return;
+
+            string typed = cbo.Text.Trim();
+            if (SelectWeekBySequence(cbo, typed))
+                return;
+
+            if (cbo.SelectedIndex >= 0)
+                cbo.SelectedIndex = cbo.SelectedIndex;
+            else if (cbo.Items.Count > 0)
+                cbo.SelectedIndex = 0;
+        }
+
+        /// <summary>Selecciona el ciclo con Activo = 1, si hay uno.</summary>
+        private void SelectActiveAgriculturalCycle()
+        {
+            if (frm?.cboAgriculturalCycle.DataSource is not DataTable dt) return;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string id = row[Column.id]?.ToString()?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(id)) continue;
+                if ((row[Column.active]?.ToString()?.Trim() ?? string.Empty) != "1") continue;
+
+                ClsComboBoxes.CboSelectIndexWithTextInValueMember(frm.cboAgriculturalCycle, id);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Filtra cboWeek1 y cboWeek2 por <see cref="Payroll_AttendancePeriod.ColumnId"/> (id_period)
+        /// = ciclo seleccionado, y retiene el mismo número de semana (secuencia) si existe en ese año.
+        /// </summary>
+        private void FilterWeekCombosKeepingSequence(bool selectTodayIfMissing = false)
+        {
+            if (frm == null) return;
+
+            string? seq1 = GetSelectedWeekSequence(frm.cboWeek1);
+            string? seq2 = GetSelectedWeekSequence(frm.cboWeek2);
+
+            _updatingWeekCombos = true;
+            try
+            {
+                FilterWeekCombo(frm.cboWeek1);
+                FilterWeekCombo(frm.cboWeek2);
+                SelectWeekOrFallback(frm.cboWeek1, seq1, selectTodayIfMissing);
+                SelectWeekOrFallback(frm.cboWeek2, seq2, selectTodayIfMissing);
+            }
+            finally
+            {
+                _updatingWeekCombos = false;
+            }
+
+            ApplyWeekStartDate();
+            ApplyWeekEndDate();
+        }
+
+        private static void SelectWeekOrFallback(ComboBox cbo, string? sequence, bool selectTodayIfMissing)
+        {
+            if (SelectWeekBySequence(cbo, sequence)) return;
+            if (selectTodayIfMissing && SelectWeekContainingToday(cbo)) return;
+            if (cbo.Items.Count > 0) cbo.SelectedIndex = 0;
+        }
+
+        private void FilterWeekCombo(ComboBox cboWeek)
+        {
+            if (cboWeek.DataSource is not DataTable dt) return;
+
+            string select = ClsComboBoxes.textSelect;
+            if (frm!.cboAgriculturalCycle.SelectedIndex > 0)
+            {
+                string cycleId = frm.cboAgriculturalCycle.SelectedValue?.ToString()?.Replace("'", "''") ?? string.Empty;
+                dt.DefaultView.RowFilter =
+                    $"[{Payroll_AttendancePeriod.ColumnId}] = '{cycleId}' AND [{Column.active}] = '1' OR [{Column.name}] = '{select}'";
+            }
+            else
+            {
+                dt.DefaultView.RowFilter = $"[{Column.name}] = '{select}'";
+            }
+
+            cboWeek.DataSource = dt;
+            if (cboWeek.Items.Count > 0)
+                cboWeek.SelectedIndex = 0;
+        }
+
+        private static string? GetSelectedWeekSequence(ComboBox cbo)
+        {
+            if (cbo.SelectedIndex < 1 || cbo.SelectedItem is not DataRowView drv) return null;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnSequence)) return null;
+            string seq = drv[Payroll_AttendancePeriod.ColumnSequence]?.ToString()?.Trim() ?? string.Empty;
+            return string.IsNullOrEmpty(seq) ? null : seq;
+        }
+
+        private static bool SelectWeekBySequence(ComboBox cbo, string? sequence)
+        {
+            if (string.IsNullOrWhiteSpace(sequence) || cbo.Items.Count == 0)
+                return false;
+
+            bool seqIsInt = int.TryParse(sequence, out int seqNum);
+            for (int i = 0; i < cbo.Items.Count; i++)
+            {
+                if (cbo.Items[i] is not DataRowView drv) continue;
+                string current = drv[Payroll_AttendancePeriod.ColumnSequence]?.ToString()?.Trim() ?? string.Empty;
+                if (string.Equals(current, sequence, StringComparison.OrdinalIgnoreCase)
+                    || (seqIsInt && int.TryParse(current, out int currentNum) && currentNum == seqNum))
+                {
+                    if (cbo.SelectedIndex != i)
+                        cbo.SelectedIndex = i;
+                    else
+                        cbo.Text = current;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>Selecciona la semana cuyo rango incluye la fecha de hoy.</summary>
+        private static bool SelectWeekContainingToday(ComboBox cbo)
+        {
+            DateTime today = DateTime.Today;
+            for (int i = 0; i < cbo.Items.Count; i++)
+            {
+                if (cbo.Items[i] is not DataRowView drv) continue;
+                if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnStartDate)
+                    || !drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnEndDate))
+                    continue;
+                if (drv[Payroll_AttendancePeriod.ColumnStartDate] is DBNull
+                    || drv[Payroll_AttendancePeriod.ColumnEndDate] is DBNull)
+                    continue;
+
+                DateTime start = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnStartDate]).Date;
+                DateTime end = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnEndDate]).Date;
+                if (today >= start && today <= end)
+                {
+                    cbo.SelectedIndex = i;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ApplyWeekStartDate()
+        {
+            if (frm == null || frm.cboWeek1.SelectedIndex < 1) return;
+            if (frm.cboWeek1.SelectedItem is not DataRowView drv) return;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnStartDate)) return;
+            if (drv[Payroll_AttendancePeriod.ColumnStartDate] is DBNull) return;
+            frm.dtpDate1.Value = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnStartDate]);
+        }
+
+        private void ApplyWeekEndDate()
+        {
+            if (frm == null || frm.cboWeek2.SelectedIndex < 1) return;
+            if (frm.cboWeek2.SelectedItem is not DataRowView drv) return;
+            if (!drv.Row.Table.Columns.Contains(Payroll_AttendancePeriod.ColumnEndDate)) return;
+            if (drv[Payroll_AttendancePeriod.ColumnEndDate] is DBNull) return;
+            frm.dtpDate2.Value = Convert.ToDateTime(drv[Payroll_AttendancePeriod.ColumnEndDate]);
         }
 
         // ── Buscar empleado (formulario de selección visual) ──────────────────
@@ -367,9 +619,10 @@ namespace SisUvex.Nomina.Asistencia_AS
             BeginProgress();
             try
             {
-                string? idPaymentPlace = frm.cboLP.ComboValueOrNull();
+                // Varios lugares de pago marcados en el filtro; vacío = sin filtro (todos).
+                IReadOnlyList<string> paymentPlaces = frm.cboLP.SelectedValues;
 
-                DataTable dt = FetchEmployeeListByPaymentPlace(idPaymentPlace);
+                DataTable dt = FetchEmployeeListByPaymentPlace(paymentPlaces);
                 AdvanceTo(220);
 
                 if (dt.Rows.Count == 0)
@@ -396,24 +649,105 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         /// <summary>
         /// Trae los empleados de vw_Employees_Info, filtrando (opcionalmente) por el lugar de pago
-        /// (Nom_Employees.id_paymentPlace) cuando el usuario seleccionó uno en cboLP.
+        /// (Nom_Employees.id_paymentPlace) con los lugares marcados en cboLP (uno o varios; ninguno = todos).
         /// </summary>
-        private DataTable FetchEmployeeListByPaymentPlace(string? idPaymentPlace)
+        private DataTable FetchEmployeeListByPaymentPlace(IReadOnlyList<string> idPaymentPlaces)
         {
-            var p = new Dictionary<string, object>
+            var p = new Dictionary<string, object>();
+            string where = string.Empty;
+
+            if (idPaymentPlaces.Count > 0)
             {
-                ["@idPaymentPlace"] = (object?)idPaymentPlace ?? DBNull.Value,
-            };
+                var names = new List<string>();
+                for (int i = 0; i < idPaymentPlaces.Count; i++)
+                {
+                    string name = $"@idPaymentPlace{i}";
+                    names.Add(name);
+                    p[name] = idPaymentPlaces[i];
+                }
+                where = $"WHERE emp.id_paymentPlace IN ({string.Join(", ", names)})";
+            }
 
             return ClsQuerysDB.ExecuteParameterizedQuery(
                 $@"SELECT '1' AS [{ColSel}], vw.id_employee AS [{ColCodigo}], vw.*
                    FROM vw_Employees_Info vw
                    LEFT JOIN Nom_Employees emp ON emp.id_employee = vw.id_employee
-                   WHERE (@idPaymentPlace IS NULL OR emp.id_paymentPlace = @idPaymentPlace)
+                   {where}
                    ORDER BY Nombre;",
                 p);
         }
 
+        // ── Agregar listado por cuadrilla ─────────────────────────────────────
+
+        /// <summary>
+        /// Agrega al listado los empleados cuya cuadrilla actual (columna Cuadrilla de vw_Employees_Info:
+        /// la de la última semana registrada en Nom_EmployeeAttendanceWeekly) coincide con alguna de las
+        /// cuadrillas marcadas en cboNomWorkGroup.
+        /// </summary>
+        public void BtnAddNomWorkGroup()
+        {
+            if (frm == null) return;
+
+            IReadOnlyList<string> workGroups = frm.cboNomWorkGroup.SelectedValues;
+            if (workGroups.Count == 0)
+            {
+                SystemSounds.Exclamation.Play();
+                SetAdvice("Selecciona al menos una cuadrilla en el filtro.", isError: true);
+                return;
+            }
+
+            BeginProgress();
+            try
+            {
+                DataTable dt = FetchEmployeeListByWorkGroup(workGroups);
+                AdvanceTo(220);
+
+                if (dt.Rows.Count == 0)
+                {
+                    SetAdvice("No se encontraron empleados en las cuadrillas seleccionadas.", isError: true);
+                    return;
+                }
+
+                int added = AddRowsToEmployeeList(dt, rangeFrom: 220, rangeTo: 820);
+                AdvanceTo(820);
+                RefreshEmployeeDgv();
+                SetAdvice($"{added} empleado(s) agregado(s) al listado.", isError: false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al agregar cuadrilla", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                EndProgress();
+            }
+        }
+
+        /// <summary>
+        /// La vista expone la cuadrilla por nombre, así que los ids marcados en el combo se traducen a
+        /// nombre con Nom_WorkGroup y se compara contra vw_Employees_Info.Cuadrilla.
+        /// </summary>
+        private DataTable FetchEmployeeListByWorkGroup(IReadOnlyList<string> idWorkGroups)
+        {
+            var p = new Dictionary<string, object>();
+            var names = new List<string>();
+            for (int i = 0; i < idWorkGroups.Count; i++)
+            {
+                string name = $"@idWorkGroup{i}";
+                names.Add(name);
+                p[name] = idWorkGroups[i];
+            }
+
+            return ClsQuerysDB.ExecuteParameterizedQuery(
+                $@"SELECT '1' AS [{ColSel}], vw.id_employee AS [{ColCodigo}], vw.*
+                   FROM vw_Employees_Info vw
+                   WHERE vw.Cuadrilla IN (
+                       SELECT wg.v_nameWorkGroup
+                       FROM Nom_WorkGroup wg
+                       WHERE wg.id_workGroup IN ({string.Join(", ", names)}))
+                   ORDER BY Nombre;",
+                p);
+        }
         // ── Limpiar listado ───────────────────────────────────────────────────
 
         public void BtnClearList()
@@ -426,22 +760,20 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         // ── Alternar vista DGV ────────────────────────────────────────────────
 
-        public void ChbShowEmployees_CheckedChanged()
-        {
-            if (frm == null || _updatingViewButtons) return;
-            if (frm.chbShowEmployees.Checked)
-                ShowEmployeeList();
-        }
-
         public void ChbShowReport_CheckedChanged()
         {
             if (frm == null || _updatingViewButtons) return;
-            if (!frm.chbShowReport.Checked) return;
+            if (!frm.chbShowReport.Checked)
+            {
+                // Si se desmarca la vista que está activa, se vuelve a marcar (siempre hay una vista del reporte).
+                if (_showingReport) SetViewButtons(report: true, calendar: false);
+                return;
+            }
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                SetViewButtons(employees: true, report: false, calendar: false);
+                SetViewButtons(report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -452,12 +784,16 @@ namespace SisUvex.Nomina.Asistencia_AS
         public void ChbShowReportCalendar_CheckedChanged()
         {
             if (frm == null || _updatingViewButtons) return;
-            if (!frm.chbShowReportCalendar.Checked) return;
+            if (!frm.chbShowReportCalendar.Checked)
+            {
+                if (_showingCalendar) SetViewButtons(report: false, calendar: true);
+                return;
+            }
 
             if (_dtReportPreview == null || _dtReportPreview.Rows.Count == 0)
             {
                 SystemSounds.Exclamation.Play();
-                SetViewButtons(employees: true, report: false, calendar: false);
+                SetViewButtons(report: false, calendar: false);
                 SetAdvice("No hay reporte cargado. Usa \"Cargar reporte\" primero.", isError: true);
                 return;
             }
@@ -508,6 +844,13 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             if (!ValidateConnectionSettings()) return;
+
+            // Ya validado todo: primero se minimiza el listado de empleados (para que el grid del reporte tenga
+            // espacio) y hasta entonces empieza la carga. Si no se logra cargar el reporte, se restaura el panel.
+            bool employeesWereCollapsed = frm.EmployeesCollapsed;
+            bool reportLoaded = false;
+            frm.CollapseEmployeesPanel();
+            frm.Update();
 
             BeginProgress();
             try
@@ -577,6 +920,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     onProgress: (done, total) => ReportRange(done, total, 400, 820));
 
                 ShowReport();
+                reportLoaded = true;
 
                 var adviceParts = new List<string>();
                 if (omittedLastDays > 0)
@@ -592,6 +936,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             finally
             {
                 EndProgress();
+                if (!reportLoaded && !employeesWereCollapsed)
+                    frm.SetEmployeesCollapsed(false);
             }
         }
 
@@ -802,12 +1148,6 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (_showingCalendar)
             {
                 _calendarCls.CellPainting(e, frm.dgvReport);
-                return;
-            }
-
-            if (!_showingReport && !_showingCalendar)
-            {
-                PaintSelHeaderCheckBox(e);
                 return;
             }
 
@@ -1374,7 +1714,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     {
                         DataGridViewColumn col = dgv.Columns[i];
                         if (TryParseDayColumn(col.Name, out _))
-                            col.Width = 48;
+                            col.Width = DgvAsistenciaASPerf.DayColumnWidth(dgv);
                         else
                             dgv.AutoResizeColumn(col.Index, DataGridViewAutoSizeColumnMode.AllCells);
 
@@ -1382,7 +1722,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                     }
                 }
 
-                SetViewButtons(employees: false, report: true, calendar: false);
+                SetViewButtons(report: true, calendar: false);
                 DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
@@ -1438,7 +1778,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                         onProgress: (done, total) => ReportRange(done, total, formatFrom, to));
                 }
 
-                SetViewButtons(employees: false, report: false, calendar: true);
+                SetViewButtons(report: false, calendar: true);
                 DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, frm.dgvReport);
                 AdvanceTo(to);
             }
@@ -1494,10 +1834,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (ownProgress) BeginProgress();
             try
             {
-                _showingReport   = false;
-                _showingCalendar = false;
-
-                DataGridView dgv = frm.dgvReport;
+                // El listado vive en su propio grid (dgvEmployees): no cambia la vista del reporte/calendario.
+                DataGridView dgv = frm.dgvEmployees;
                 using (DgvAsistenciaASPerf.PausePainting(dgv))
                 {
                     dgv.ColumnHeadersVisible = true;
@@ -1512,6 +1850,9 @@ namespace SisUvex.Nomina.Asistencia_AS
                     ReportRange(1, 4, from, to);
                     ApplyCheckBoxColumnToSel();
                     HideColumnsInDgv(_columnsToHideInDgv);
+                    // Sin empleados en el listado no se muestra la columna (ni el checkbox del encabezado).
+                    if (dgv.Columns.Contains(ColSel))
+                        dgv.Columns[ColSel].Visible = _dtEmployeeList.Rows.Count > 0;
                     ReportRange(2, 4, from, to);
 
                     int colCount = dgv.Columns.Count;
@@ -1527,9 +1868,6 @@ namespace SisUvex.Nomina.Asistencia_AS
                 }
 
                 SyncHeaderSelFromRows();
-
-                SetViewButtons(employees: true, report: false, calendar: false);
-                DgvAsistenciaASSelectedDays.UpdateLabel(frm.lblSelectedDays, dgv);
                 AdvanceTo(to);
             }
             finally
@@ -1538,14 +1876,13 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
         }
 
-        private void SetViewButtons(bool employees, bool report, bool calendar)
+        private void SetViewButtons(bool report, bool calendar)
         {
             if (frm == null) return;
 
             _updatingViewButtons = true;
             try
             {
-                frm.chbShowEmployees.Checked = employees;
                 frm.chbShowReport.Checked = report;
                 frm.chbShowReportCalendar.Checked = calendar;
             }
@@ -1564,8 +1901,8 @@ namespace SisUvex.Nomina.Asistencia_AS
             if (frm == null) return;
             foreach (string col in columnsToHide)
             {
-                if (frm.dgvReport.Columns.Contains(col))
-                    frm.dgvReport.Columns[col].Visible = false;
+                if (frm.dgvEmployees.Columns.Contains(col))
+                    frm.dgvEmployees.Columns[col].Visible = false;
             }
         }
 
@@ -1582,9 +1919,9 @@ namespace SisUvex.Nomina.Asistencia_AS
         private void ApplyCheckBoxColumnToSel()
         {
             if (frm == null) return;
-            if (!frm.dgvReport.Columns.Contains(ColSel)) return;
+            if (!frm.dgvEmployees.Columns.Contains(ColSel)) return;
 
-            var col = frm.dgvReport.Columns[ColSel];
+            var col = frm.dgvEmployees.Columns[ColSel];
             if (col is DataGridViewCheckBoxColumn existing)
             {
                 ConfigureSelCheckBoxColumn(existing);
@@ -1592,7 +1929,7 @@ namespace SisUvex.Nomina.Asistencia_AS
             }
 
             int ordinal = col.Index;
-            frm.dgvReport.Columns.Remove(col);
+            frm.dgvEmployees.Columns.Remove(col);
 
             var chkCol = new DataGridViewCheckBoxColumn
             {
@@ -1604,7 +1941,7 @@ namespace SisUvex.Nomina.Asistencia_AS
                 DisplayIndex     = ordinal,
             };
             ConfigureSelCheckBoxColumn(chkCol);
-            frm.dgvReport.Columns.Insert(ordinal, chkCol);
+            frm.dgvEmployees.Columns.Insert(ordinal, chkCol);
         }
 
         private static void ConfigureSelCheckBoxColumn(DataGridViewCheckBoxColumn chkCol)
@@ -1617,48 +1954,58 @@ namespace SisUvex.Nomina.Asistencia_AS
             chkCol.HeaderCell.ToolTipText = "Seleccionar / deseleccionar todos";
         }
 
+        /// <summary>
+        /// Dibuja las casillas de la columna "Sel." (encabezado y filas) con el mismo estilo
+        /// redondeado morado que las casillas del filtro de los combos.
+        /// </summary>
         private void PaintSelHeaderCheckBox(DataGridViewCellPaintingEventArgs e)
         {
-            if (frm == null || e.RowIndex != -1 || e.ColumnIndex < 0) return;
-            if (e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (frm == null || e.ColumnIndex < 0 || e.RowIndex < -1) return;
+            if (e.ColumnIndex >= frm.dgvEmployees.Columns.Count) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
+
+            bool isChecked;
+            if (e.RowIndex == -1)
+                isChecked = _headerSelChecked;
+            else
+                isChecked = e.FormattedValue is bool b ? b : e.Value?.ToString() == "1";
 
             e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border);
 
-            CheckBoxState state = _headerSelChecked
-                ? CheckBoxState.CheckedNormal
-                : CheckBoxState.UncheckedNormal;
-            System.Drawing.Size glyph = CheckBoxRenderer.GetGlyphSize(e.Graphics, state);
-            var location = new Point(
-                e.CellBounds.X + Math.Max(0, (e.CellBounds.Width - glyph.Width) / 2),
-                e.CellBounds.Y + Math.Max(0, (e.CellBounds.Height - glyph.Height) / 2));
-            CheckBoxRenderer.DrawCheckBox(e.Graphics, location, state);
+            int size = AntdCheckGlyph.DefaultSize;
+            var glyph = new Rectangle(
+                e.CellBounds.X + Math.Max(0, (e.CellBounds.Width - size) / 2),
+                e.CellBounds.Y + Math.Max(0, (e.CellBounds.Height - size) / 2),
+                size, size);
+            AntdCheckGlyph.Draw(e.Graphics!, glyph, isChecked);
             e.Handled = true;
         }
+        public void DgvEmployees_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+            => PaintSelHeaderCheckBox(e);
 
-        public void DgvReport_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        public void DgvEmployees_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
-            if (frm == null || _showingReport || _showingCalendar) return;
-            if (e.ColumnIndex < 0 || e.ColumnIndex >= frm.dgvReport.Columns.Count) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (frm == null) return;
+            if (e.ColumnIndex < 0 || e.ColumnIndex >= frm.dgvEmployees.Columns.Count) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
 
             SetAllEmployeeSelection(!_headerSelChecked);
         }
 
-        public void DgvReport_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+        public void DgvEmployees_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
         {
-            if (frm == null || _showingReport || _showingCalendar) return;
-            if (!frm.dgvReport.IsCurrentCellDirty) return;
-            if (frm.dgvReport.CurrentCell?.OwningColumn?.Name != ColSel) return;
+            if (frm == null) return;
+            if (!frm.dgvEmployees.IsCurrentCellDirty) return;
+            if (frm.dgvEmployees.CurrentCell?.OwningColumn?.Name != ColSel) return;
 
-            frm.dgvReport.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            frm.dgvEmployees.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
 
-        public void DgvReport_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        public void DgvEmployees_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
         {
-            if (_updatingSel || frm == null || _showingReport || _showingCalendar) return;
+            if (_updatingSel || frm == null) return;
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            if (frm.dgvReport.Columns[e.ColumnIndex].Name != ColSel) return;
+            if (frm.dgvEmployees.Columns[e.ColumnIndex].Name != ColSel) return;
 
             SyncHeaderSelFromRows();
         }
@@ -1667,7 +2014,7 @@ namespace SisUvex.Nomina.Asistencia_AS
         {
             if (frm == null || !_dtEmployeeList.Columns.Contains(ColSel)) return;
 
-            DataGridView dgv = frm.dgvReport;
+            DataGridView dgv = frm.dgvEmployees;
             _updatingSel = true;
             try
             {
@@ -1712,8 +2059,8 @@ namespace SisUvex.Nomina.Asistencia_AS
 
             if (_headerSelChecked == allChecked) return;
             _headerSelChecked = allChecked;
-            if (frm.dgvReport.Columns.Contains(ColSel))
-                frm.dgvReport.InvalidateColumn(frm.dgvReport.Columns[ColSel].Index);
+            if (frm.dgvEmployees.Columns.Contains(ColSel))
+                frm.dgvEmployees.InvalidateColumn(frm.dgvEmployees.Columns[ColSel].Index);
         }
 
         // ── Helpers listado ───────────────────────────────────────────────────
@@ -1973,6 +2320,23 @@ namespace SisUvex.Nomina.Asistencia_AS
     /// </summary>
     internal static class DgvAsistenciaASPerf
     {
+        /// <summary>
+        /// Ancho de las columnas de fecha: el mínimo (48 px) o lo que ocupe "mmm-dd" con la fuente del encabezado
+        /// (más un margen), para que el salto de línea mes-día / día de la semana se vea SIEMPRE en 2 renglones.
+        /// Si la columna es más angosta que la primera línea, el DGV recorta la segunda línea del encabezado.
+        /// </summary>
+        public static int DayColumnWidth(DataGridView dgv)
+        {
+            Font font = dgv.ColumnHeadersDefaultCellStyle.Font ?? dgv.Font;
+            int widest = 0;
+            for (int month = 1; month <= 12; month++)
+            {
+                string month3 = new DateTime(2026, month, 28).ToString("MMM", ClsAsistenciaASConsulta.CultureEs).Replace(".", string.Empty);
+                widest = Math.Max(widest, TextRenderer.MeasureText(month3 + "-28", font, new System.Drawing.Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+            }
+            // 16 px = relleno interno de la celda de encabezado + holgura.
+            return Math.Max(48, widest + 16);
+        }
         private const int WmSetRedraw = 0x000B;
 
         [DllImport("user32.dll")]

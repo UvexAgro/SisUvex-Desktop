@@ -224,7 +224,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
                 c_codigo_tem,
                 v_nombre_tem,
                 c_activo_tem
-            FROM dbo.Cat_Periods
+            FROM dbo.Nom_AgriculturalCycle
             ORDER BY c_codigo_tem DESC;";
 
 				using (SqlCommand cmd =

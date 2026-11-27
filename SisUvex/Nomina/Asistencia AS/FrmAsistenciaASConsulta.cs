@@ -10,13 +10,206 @@ namespace SisUvex.Nomina.Asistencia_AS
 
         public FrmAsistenciaASConsulta()
         {
+            AntdTheme.Apply();
             InitializeComponent();
+            ApplyAntdLook();
             cls = new ClsAsistenciaASConsulta { frm = this };
         }
 
+        /// <summary>Detalles visuales que el diseñador no genera (foco de las cajas de texto y ayudas emergentes).</summary>
+        private void ApplyAntdLook()
+        {
+            AntdInputHost.Bind(pnlEmployeeInput, txbIdEmployee);
+            AntdInputHost.Bind(pnlLastDaysInput, txbLastDays);
+
+            toolTip.SetToolTip(btnSearchEmployee, "Buscar empleado");
+            toolTip.SetToolTip(btnAddEmployee, "Agregar al listado los códigos escritos");
+            toolTip.SetToolTip(btnAddList, "Agregar al listado los empleados del lugar de pago");
+            toolTip.SetToolTip(btnAddNomWorkGroup, "Agregar al listado los empleados de la(s) cuadrilla(s) seleccionada(s)");
+            toolTip.SetToolTip(btnClearList, "Limpiar el listado de empleados");
+            toolTip.SetToolTip(btnModifyAttendance, "Modificar asistencias");
+            toolTip.SetToolTip(btnExcel, "Exportar a Excel");
+            toolTip.SetToolTip(btnOpenFrmAttendanceType, "Abrir el catálogo de tipos de asistencia");
+            toolTip.SetToolTip(txbLastDays, "Sin listado: solo empleados con importe en los últimos X días. Vacío = sin ese límite");
+            toolTip.SetToolTip(gripEmployeesResize, "Arrastra para cambiar el alto del listado de empleados");
+
+            gripEmployeesResize.DragStarted += gripEmployeesResize_DragStarted;
+            gripEmployeesResize.DragMoved += gripEmployeesResize_DragMoved;
+            gripEmployeesResize.DragEnded += gripEmployeesResize_DragEnded;
+            UpdateEmployeesMinExpButton();
+        }
+
+        /// <summary>Evita que los scrolls "salten" solos al enfocar un control (solo se mueven con el usuario).</summary>
+        protected override System.Drawing.Point ScrollToControl(Control activeControl)
+            => DisplayRectangle.Location;
+
         private void FrmAsistenciaASConsulta_Load(object sender, EventArgs e)
         {
+            // Debe ir antes de cualquier cambio de alto: toma las separaciones ya escaladas por el DPI.
+            CaptureEmployeesLayout();
             cls.BeginFormCat();
+        }
+
+        // ── Panel de empleados: minimizar / expandir y cambiar su alto ───────────
+
+        /// <summary>Alto del panel de empleados cuando está minimizado (px lógicos a 96 dpi).</summary>
+        private const int EmployeesCollapsedLogicalHeight = 160;
+        /// <summary>Alto mínimo que se le deja al grid del reporte al agrandar el panel de empleados.</summary>
+        private const int ReportGridMinLogicalHeight = 120;
+
+        private bool _employeesLayoutCaptured;
+        private bool _employeesCollapsed;
+        private int _employeesExpandedHeight;
+        private int _employeesCollapsedHeight;
+        private int _dragStartHeight;
+
+        /// <summary>Guarda las alturas de referencia (ya escaladas por el DPI) del panel de empleados.</summary>
+        private void CaptureEmployeesLayout()
+        {
+            if (_employeesLayoutCaptured) return;
+            _employeesLayoutCaptured = true;
+
+            _employeesExpandedHeight = pnlCardEmployees.Height;
+            _employeesCollapsedHeight = LogicalToDeviceUnits(EmployeesCollapsedLogicalHeight);
+        }
+
+        /// <summary>Alto máximo del panel de empleados sin dejar al grid del reporte sin espacio.</summary>
+        private int MaxEmployeesCardHeight()
+        {
+            int max = pnlCardEmployees.Height + pnlGrid.Height - LogicalToDeviceUnits(ReportGridMinLogicalHeight);
+            return Math.Max(_employeesCollapsedHeight, max);
+        }
+
+        /// <summary>
+        /// Cambia el alto del panel de empleados. Todo lo que está debajo se recorre la misma diferencia y el grid
+        /// del reporte absorbe el cambio (conserva su margen inferior actual, sea cual sea el tamaño de la ventana).
+        /// </summary>
+        private void ApplyEmployeesCardHeight(int height)
+        {
+            CaptureEmployeesLayout();
+            height = Math.Max(_employeesCollapsedHeight, Math.Min(height, MaxEmployeesCardHeight()));
+
+            int delta = height - pnlCardEmployees.Height;
+            if (delta == 0) return;
+
+            // Se congela el dibujo mientras se mueven las tarjetas y se repinta todo de una sola vez al final:
+            // así no quedan "fantasmas" de los controles movidos (Windows copia los píxeles al reposicionar).
+            bool freeze = IsHandleCreated && Visible;
+            if (freeze) SendMessage(Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+
+            SuspendLayout();
+            try
+            {
+                pnlCardEmployees.Height = height;
+                pnlCardDates.Top += delta;
+                pnlCardView.Top += delta;
+                pnlCardActions.Top += delta;
+                pnlEmployeeAdvice.Top += delta;
+                pgrReport.Top += delta;
+                pnlGrid.SetBounds(pnlGrid.Left, pnlGrid.Top + delta, pnlGrid.Width, pnlGrid.Height - delta);
+            }
+            finally
+            {
+                ResumeLayout(true);
+                if (freeze)
+                {
+                    SendMessage(Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                    RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero,
+                        RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+                }
+            }
+        }
+
+        private const int WM_SETREDRAW = 0x000B;
+        private const uint RDW_INVALIDATE = 0x0001;
+        private const uint RDW_ERASE = 0x0004;
+        private const uint RDW_ALLCHILDREN = 0x0080;
+        private const uint RDW_UPDATENOW = 0x0100;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags);
+        /// <summary>Minimiza (alto fijo de 160 px) o restaura el panel de empleados al alto que el usuario había dejado.</summary>
+        internal void SetEmployeesCollapsed(bool collapsed)
+        {
+            CaptureEmployeesLayout();
+
+            if (collapsed)
+            {
+                if (!_employeesCollapsed && pnlCardEmployees.Height > _employeesCollapsedHeight)
+                    _employeesExpandedHeight = pnlCardEmployees.Height;
+                _employeesCollapsed = true;
+                ApplyEmployeesCardHeight(_employeesCollapsedHeight);
+            }
+            else
+            {
+                _employeesCollapsed = false;
+                ApplyEmployeesCardHeight(Math.Max(_employeesExpandedHeight, _employeesCollapsedHeight + LogicalToDeviceUnits(40)));
+            }
+
+            UpdateEmployeesMinExpButton();
+        }
+
+        /// <summary>Indica si el panel de empleados está minimizado.</summary>
+        internal bool EmployeesCollapsed => _employeesCollapsed;
+
+        /// <summary>Minimiza el panel de empleados (lo usa "Cargar" justo antes de empezar a cargar el reporte).</summary>
+        internal void CollapseEmployeesPanel() => SetEmployeesCollapsed(true);
+
+        private void UpdateEmployeesMinExpButton()
+        {
+            btnEmployeesMinExp.IconSvg = _employeesCollapsed ? AntdIcons.Expand : AntdIcons.Compress;
+            toolTip.SetToolTip(btnEmployeesMinExp,
+                _employeesCollapsed ? "Expandir el listado de empleados" : "Minimizar el listado de empleados");
+        }
+
+        private void btnEmployeesMinExp_Click(object sender, EventArgs e)
+        {
+            SetEmployeesCollapsed(!_employeesCollapsed);
+        }
+
+        private void gripEmployeesResize_DragStarted(object? sender, EventArgs e)
+        {
+            CaptureEmployeesLayout();
+            _dragStartHeight = pnlCardEmployees.Height;
+            _pendingDragHeight = _dragStartHeight;
+        }
+
+        private long _lastDragApplyTick;
+        private int _pendingDragHeight;
+
+        private void gripEmployeesResize_DragMoved(object? sender, int deltaY)
+        {
+            _pendingDragHeight = Math.Max(_employeesCollapsedHeight, Math.Min(_dragStartHeight + deltaY, MaxEmployeesCardHeight()));
+
+            // Limita la frecuencia (~40 repintados por segundo): el último alto pedido se aplica al soltar.
+            long now = Environment.TickCount64;
+            if (now - _lastDragApplyTick < 25) return;
+            _lastDragApplyTick = now;
+
+            if (_pendingDragHeight != pnlCardEmployees.Height)
+                ApplyEmployeesCardHeight(_pendingDragHeight);
+        }
+
+        private void gripEmployeesResize_DragEnded(object? sender, EventArgs e)
+        {
+            if (_pendingDragHeight != pnlCardEmployees.Height && _pendingDragHeight >= _employeesCollapsedHeight)
+                ApplyEmployeesCardHeight(_pendingDragHeight);
+
+            // Arrastrado hasta el mínimo = minimizado; cualquier otro alto es el nuevo alto "expandido".
+            if (pnlCardEmployees.Height <= _employeesCollapsedHeight + 2)
+            {
+                _employeesCollapsed = true;
+            }
+            else
+            {
+                _employeesCollapsed = false;
+                _employeesExpandedHeight = pnlCardEmployees.Height;
+            }
+
+            UpdateEmployeesMinExpButton();
         }
 
         private void btnSearchEmployee_Click(object sender, EventArgs e)
@@ -34,14 +227,14 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.BtnAddList();
         }
 
+        private void btnAddNomWorkGroup_Click(object sender, EventArgs e)
+        {
+            cls.BtnAddNomWorkGroup();
+        }
+
         private void btnClearList_Click(object sender, EventArgs e)
         {
             cls.BtnClearList();
-        }
-
-        private void chbShowEmployees_CheckedChanged(object sender, EventArgs e)
-        {
-            cls.ChbShowEmployees_CheckedChanged();
         }
 
         private void chbShowReport_CheckedChanged(object sender, EventArgs e)
@@ -84,19 +277,26 @@ namespace SisUvex.Nomina.Asistencia_AS
             cls.DgvReport_CellPainting(sender, e);
         }
 
-        private void dgvReport_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        // ── Grid del listado de empleados (independiente de los grids del reporte) ──
+
+        private void dgvEmployees_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            cls.DgvReport_ColumnHeaderMouseClick(sender, e);
+            cls.DgvEmployees_CellPainting(sender, e);
         }
 
-        private void dgvReport_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        private void dgvEmployees_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            cls.DgvReport_CurrentCellDirtyStateChanged(sender, e);
+            cls.DgvEmployees_ColumnHeaderMouseClick(sender, e);
         }
 
-        private void dgvReport_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dgvEmployees_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            cls.DgvReport_CellValueChanged(sender, e);
+            cls.DgvEmployees_CurrentCellDirtyStateChanged(sender, e);
+        }
+
+        private void dgvEmployees_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            cls.DgvEmployees_CellValueChanged(sender, e);
         }
 
         private void dgvReport_SelectionChanged(object sender, EventArgs e)
@@ -177,10 +377,20 @@ namespace SisUvex.Nomina.Asistencia_AS
         internal void SetOperationBusy(bool busy)
         {
             bool enabled = !busy;
-            gpbFilters.Enabled = enabled;
-            bgpInfo.Enabled = enabled;
+            // Filtros (antes gpbFilters). cboAttendenceType no se toca: siempre está deshabilitado.
+            foreach (Control filter in new Control[]
+            {
+                btnSearchEmployee, pnlEmployeeInput, btnAddEmployee,
+                cboLP, btnAddList, cboNomWorkGroup, btnAddNomWorkGroup,
+                cboAgriculturalCycle, cboSeason, cboWeek1, cboWeek2, dtpDate1, dtpDate2
+            })
+                filter.Enabled = enabled;
+
+            // Opciones del reporte (antes bgpInfo).
+            pnlLastDaysInput.Enabled = enabled;
+            btnLoadReport.Enabled = enabled;
+
             btnClearList.Enabled = enabled;
-            chbShowEmployees.Enabled = enabled;
             chbShowReport.Enabled = enabled;
             chbShowReportCalendar.Enabled = enabled;
             btnExcel.Enabled = enabled;
@@ -200,8 +410,12 @@ namespace SisUvex.Nomina.Asistencia_AS
             Cursor.Current = wait ? Cursors.WaitCursor : Cursors.Default;
 
             dgvReport.UseWaitCursor = wait;
+            dgvEmployees.UseWaitCursor = wait;
             if (!wait)
+            {
                 dgvReport.Cursor = Cursors.Default;
+                dgvEmployees.Cursor = Cursors.Default;
+            }
 
             if (MdiParent != null)
             {
