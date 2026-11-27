@@ -175,22 +175,24 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 		}
 
 
-		public void CargarSemanas()
+		public void CargarSemanas(string idPeriodo)
 		{
 			SQLControl sql = new SQLControl();
 
-			string query = @"
-			SELECT
-				id_period,
-				c_sequence_per,
-				d_startDate_per,
-				d_endDate_per,
-				v_name_per
-			FROM dbo.Payroll_AttendancePeriod
-			WHERE c_active = '1'
-			ORDER BY d_startDate_per DESC";
-
 			DataTable dt = new DataTable();
+
+			string query = @"
+        SELECT
+            id_period,
+            c_sequence_per,
+            d_startDate_per,
+            d_endDate_per,
+            v_name_per
+        FROM dbo.Payroll_AttendancePeriod
+        WHERE id_period = @id_period
+        ORDER BY
+            TRY_CONVERT(INT, c_sequence_per) DESC,
+            d_startDate_per DESC;";
 
 			try
 			{
@@ -198,6 +200,12 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
 				{
+					cmd.Parameters.Add(
+						"@id_period",
+						SqlDbType.Char,
+						2
+					).Value = idPeriodo.Trim();
+
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 					{
 						da.Fill(dt);
@@ -210,14 +218,17 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 					"Error al cargar las semanas:\n" + ex.Message,
 					"Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+					MessageBoxIcon.Error
+				);
+
+				return;
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			// Crear texto para mostrar en el ComboBox
+			// CREAR TEXTO PARA MOSTRAR
 			if (!dt.Columns.Contains("SemanaMostrar"))
 			{
 				dt.Columns.Add("SemanaMostrar", typeof(string));
@@ -240,12 +251,21 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 					fechaFin.ToString("dd/MM/yyyy");
 			}
 
-			// Cargar ComboBox
+			// CARGAR COMBO DE SEMANAS
 			frm.cboSemana.DataSource = null;
+
 			frm.cboSemana.DisplayMember = "SemanaMostrar";
 			frm.cboSemana.ValueMember = "c_sequence_per";
 			frm.cboSemana.DataSource = dt;
-			SeleccionarSemanaActual(dt);
+
+			if (dt.Rows.Count > 0)
+			{
+				SeleccionarSemanaActual(dt);
+			}
+			else
+			{
+				frm.cboSemana.SelectedIndex = -1;
+			}
 		}
 		public DataTable CrearVistaSemanal(
 	DataTable checadas,
@@ -606,6 +626,106 @@ namespace SisUvex.Nomina.Reloj_Checador_de_Campo
 			dgv.GridColor = Color.FromArgb(220, 230, 238);
 
 			dgv.BackgroundColor = Color.White;
+		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                c_activo_tem
+            FROM dbo.Nom_AgriculturalCycle
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd =
+					new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da =
+					new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar los períodos:\n\n" +
+					ex.Message,
+					"Períodos",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+
+			// ==========================================
+			// COLUMNA PARA MOSTRAR
+			// ==========================================
+
+			if (!dt.Columns.Contains("PeriodoMostrar"))
+			{
+				dt.Columns.Add(
+					"PeriodoMostrar",
+					typeof(string));
+			}
+
+			foreach (DataRow row in dt.Rows)
+			{
+				row["PeriodoMostrar"] =
+					row["c_codigo_tem"].ToString().Trim()
+					+ " - "
+					+ row["v_nombre_tem"].ToString().Trim();
+			}
+
+
+			// ==========================================
+			// CONFIGURAR COMBO
+			// ==========================================
+
+			frm.cboPeriodo.DataSource = null;
+
+			frm.cboPeriodo.DisplayMember =
+				"PeriodoMostrar";
+
+			frm.cboPeriodo.ValueMember =
+				"c_codigo_tem";
+
+			frm.cboPeriodo.DataSource = dt;
+
+
+			// ==========================================
+			// SELECCIONAR PERÍODO ACTIVO MÁS RECIENTE
+			// ==========================================
+
+			DataRow periodoActual = dt.AsEnumerable()
+				.Where(r =>
+					r["c_activo_tem"] != DBNull.Value &&
+					Convert.ToInt32(r["c_activo_tem"]) == 1)
+				.OrderByDescending(r =>
+					Convert.ToInt32(r["c_codigo_tem"]))
+				.FirstOrDefault();
+
+			if (periodoActual != null)
+			{
+				frm.cboPeriodo.SelectedValue =
+					periodoActual["c_codigo_tem"].ToString().Trim();
+			}
+			else
+			{
+				frm.cboPeriodo.SelectedIndex = -1;
+			}
 		}
 	}
 }

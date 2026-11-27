@@ -26,27 +26,37 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			new List<string>();
 		public void CargarSemanas()
 		{
+			if (frm.cboPeriodo.SelectedValue == null)
+				return;
+
 			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
 
 			string query = @"
-			SELECT
-				c_sequence_per,
-				d_startDate_per,
-				d_endDate_per
-			FROM dbo.Payroll_AttendancePeriod
-			WHERE c_active = '1'
-			ORDER BY d_startDate_per DESC";
-
-			DataTable dt = new DataTable();
+        SELECT
+            c_sequence_per,
+            d_startDate_per,
+            d_endDate_per
+        FROM dbo.Payroll_AttendancePeriod
+        WHERE c_active = '1'
+          AND id_period = @Periodo
+        ORDER BY d_startDate_per DESC";
 
 			try
 			{
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.AddWithValue(
+						"@Periodo",
+						frm.cboPeriodo.SelectedValue.ToString().Trim()
+					);
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -56,27 +66,75 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
+
+				return;
 			}
 			finally
 			{
 				sql.CloseConectionWrite();
 			}
 
-			// El ComboBox SOLO mostrará c_sequence_per
 			frm.cboSemana.DataSource = null;
 
 			frm.cboSemana.DisplayMember = "c_sequence_per";
 			frm.cboSemana.ValueMember = "c_sequence_per";
-
 			frm.cboSemana.DataSource = dt;
-			// AQUÍ SE HACE LA REFERENCIA
-			frm.cboSemana.SelectedIndexChanged += (s, e) =>
-			{
-				CargarFechasSemana();
-			};
 
-			// Seleccionar la semana actual
+			// Seleccionar semana actual
 			SeleccionarSemanaActual(dt);
+		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                CONCAT(c_codigo_tem, ' - ', v_nombre_tem) AS Periodo
+            FROM dbo.Nom_AgriculturalCycle
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+
+				frm.cboPeriodo.SelectedIndexChanged -=
+					frm.cboPeriodo_SelectedIndexChanged;
+
+				frm.cboPeriodo.DataSource = null;
+				frm.cboPeriodo.DisplayMember = "Periodo";
+				frm.cboPeriodo.ValueMember = "c_codigo_tem";
+				frm.cboPeriodo.DataSource = dt;
+
+				frm.cboPeriodo.SelectedIndexChanged +=
+					frm.cboPeriodo_SelectedIndexChanged;
+
+				if (dt.Rows.Count > 0)
+					frm.cboPeriodo.SelectedIndex = 0;
+				else
+					frm.cboPeriodo.SelectedIndex = -1;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					"Error al cargar periodos: " + ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
+
+			// Cargar semanas del periodo seleccionado
+			if (frm.cboPeriodo.SelectedValue != null)
+				CargarSemanas();
 		}
 		private void SeleccionarSemanaActual(DataTable dt)
 		{
@@ -102,7 +160,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 			frm.cboSemana.SelectedIndex = -1;
 		}
-		private void CargarFechasSemana()
+		public void CargarFechasSemana()
 		{
 			if (frm.cboSemana.SelectedIndex < 0)
 				return;
@@ -122,36 +180,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 			frm.dtpFechaFinal.Value =
 				Convert.ToDateTime(fila["d_endDate_per"]).Date;
 		}
-
-		//public void CargarLugarPago(ComboBox combo)
-		//{
-		//	cargando = true;
-
-		//	dtLugaresPago = CboLugarPago();
-
-		//	DataRow dr = dtLugaresPago.NewRow();
-		//	dr["Código"] = "";
-		//	dr["Nombre"] = "------ selecciona ------";
-
-		//	dtLugaresPago.Rows.InsertAt(dr, 0);
-
-		//	dvLugaresPago = new DataView(dtLugaresPago);
-
-		//	combo.DataSource = dvLugaresPago;
-		//	combo.DisplayMember = "Nombre";
-		//	combo.ValueMember = "Código";
-
-		//	combo.DropDownStyle = ComboBoxStyle.DropDown;
-		//	combo.AutoCompleteMode = AutoCompleteMode.None;
-
-		//	combo.SelectedIndex = 0;
-
-		//	// Registrar evento de búsqueda
-		//	combo.TextUpdate -= comboLugarPago_TextUpdate;
-		//	combo.TextUpdate += comboLugarPago_TextUpdate;
-
-		//	cargando = false;
-		//}
 
 
 		public DataTable CboLugarPago()
@@ -1113,18 +1141,6 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				frm.cboLugarPago.Text =
 					nombres.Count + " lugares seleccionados";
 			}
-		}
-		private void cboLugarPago_Click(object sender, EventArgs e)
-		{
-			ComboBox combo = sender as ComboBox;
-
-			if (combo == null || menuLugares == null)
-				return;
-
-			menuLugares.Show(
-				combo,
-				0,
-				combo.Height);
 		}
 	
 		private List<string> ObtenerCodigosLugaresPago()

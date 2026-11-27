@@ -15,26 +15,36 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 		public void CargarSemanas()
 		{
 			SQLControl sql = new SQLControl();
-
-			string query = @"
-			SELECT
-				c_sequence_per,
-				d_startDate_per,
-				d_endDate_per
-			FROM dbo.Payroll_AttendancePeriod
-			WHERE c_active = '1'
-			ORDER BY d_startDate_per DESC";
-
 			DataTable dt = new DataTable();
 
 			try
 			{
+				if (frm.cboPeriodo.SelectedValue == null ||
+					frm.cboPeriodo.SelectedValue is DataRowView)
+					return;
+
+				string periodo = frm.cboPeriodo.SelectedValue.ToString();
+
+				string query = @"
+            SELECT
+                c_sequence_per,
+                d_startDate_per,
+                d_endDate_per
+            FROM dbo.Payroll_AttendancePeriod
+            WHERE c_active = '1'
+              AND id_period = @periodo
+            ORDER BY d_startDate_per DESC;";
+
 				sql.OpenConectionWrite();
 
 				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
-				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
 				{
-					da.Fill(dt);
+					cmd.Parameters.AddWithValue("@periodo", periodo);
+
+					using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+					{
+						da.Fill(dt);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -50,21 +60,71 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 				sql.CloseConectionWrite();
 			}
 
-			// El ComboBox SOLO mostrará c_sequence_per
-			frm.cboSemana.DataSource = null;
+			// Utilizar el evento que ya existe en FrmConsulta
+			frm.cboSemana.SelectedIndexChanged -= frm.cboSemana_SelectedIndexChanged;
 
+			frm.cboSemana.DataSource = null;
 			frm.cboSemana.DisplayMember = "c_sequence_per";
 			frm.cboSemana.ValueMember = "c_sequence_per";
-
 			frm.cboSemana.DataSource = dt;
-			// AQUÍ SE HACE LA REFERENCIA
-			frm.cboSemana.SelectedIndexChanged += (s, e) =>
-			{
-				CargarFechasSemana();
-			};
 
-			// Seleccionar la semana actual
-			SeleccionarSemanaActual(dt);
+			frm.cboSemana.SelectedIndexChanged += frm.cboSemana_SelectedIndexChanged;
+
+			if (dt.Rows.Count > 0)
+			{
+				SeleccionarSemanaActual(dt);
+			}
+			else
+			{
+				frm.cboSemana.SelectedIndex = -1;
+				frm.dtpInicio.Value = DateTime.Today;
+				frm.dtpFinal.Value = DateTime.Today;
+			}
+		}
+		public void CargarPeriodos()
+		{
+			SQLControl sql = new SQLControl();
+			DataTable dt = new DataTable();
+
+			try
+			{
+				sql.OpenConectionWrite();
+
+				string query = @"
+            SELECT
+                c_codigo_tem,
+                v_nombre_tem,
+                CONCAT(c_codigo_tem, ' - ', v_nombre_tem) AS Periodo
+            FROM dbo.Nom_AgriculturalCycle
+            ORDER BY c_codigo_tem DESC;";
+
+				using (SqlCommand cmd = new SqlCommand(query, sql.cnn))
+				using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+				{
+					da.Fill(dt);
+				}
+
+				frm.cboPeriodo.SelectedIndexChanged -= frm.cboPeriodo_SelectedIndexChanged;
+				frm.cboPeriodo.SelectedIndexChanged += frm.cboPeriodo_SelectedIndexChanged;
+
+				frm.cboPeriodo.DataSource = null;
+				frm.cboPeriodo.DisplayMember = "Periodo"; // CAMBIO
+				frm.cboPeriodo.ValueMember = "c_codigo_tem";
+				frm.cboPeriodo.DataSource = dt;
+
+				if (dt.Rows.Count > 0)
+					frm.cboPeriodo.SelectedIndex = 0;
+				else
+					frm.cboPeriodo.SelectedIndex = -1;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al cargar periodos: " + ex.Message);
+			}
+			finally
+			{
+				sql.CloseConectionWrite();
+			}
 		}
 		private void SeleccionarSemanaActual(DataTable dt)
 		{
@@ -90,7 +150,7 @@ namespace SisUvex.Nomina.Nom_Consulta_de_Actividad_por_empleado
 
 			frm.cboSemana.SelectedIndex = -1;
 		}
-		private void CargarFechasSemana()
+		public void CargarFechasSemana()
 		{
 			if (frm.cboSemana.SelectedIndex < 0)
 				return;

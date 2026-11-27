@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmNomina));
 			dgvNomina = new DataGridView();
 			label1 = new Label();
@@ -80,6 +80,8 @@
 			lblCuadrillas = new Label();
 			lbCSV = new ListBox();
 			label12 = new Label();
+			cboPeriodo = new ComboBox();
+			label20 = new Label();
 			((System.ComponentModel.ISupportInitialize)dgvNomina).BeginInit();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -104,28 +106,28 @@
 			dgvNomina.BackgroundColor = SystemColors.ControlLightLight;
 			dgvNomina.BorderStyle = BorderStyle.Fixed3D;
 			dgvNomina.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-			dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = SystemColors.Control;
-			dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-			dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-			dgvNomina.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.BackColor = SystemColors.Control;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+			dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+			dgvNomina.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			dgvNomina.ColumnHeadersHeight = 29;
 			dgvNomina.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			dgvNomina.EnableHeadersVisualStyles = false;
 			dgvNomina.ImeMode = ImeMode.NoControl;
 			dgvNomina.Location = new Point(3, 51);
 			dgvNomina.Name = "dgvNomina";
-			dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = SystemColors.Control;
-			dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-			dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = SystemColors.Control;
-			dataGridViewCellStyle2.SelectionForeColor = SystemColors.WindowText;
-			dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-			dgvNomina.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = SystemColors.Control;
+			dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+			dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
+			dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+			dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+			dgvNomina.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			dgvNomina.RowHeadersVisible = false;
 			dgvNomina.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 			dgvNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -561,6 +563,8 @@
 			// tabPage1
 			// 
 			tabPage1.BackColor = Color.FromArgb(236, 243, 249);
+			tabPage1.Controls.Add(cboPeriodo);
+			tabPage1.Controls.Add(label20);
 			tabPage1.Controls.Add(cboSemana);
 			tabPage1.Controls.Add(label6);
 			tabPage1.Controls.Add(cboLugarPago);
@@ -578,7 +582,7 @@
 			// 
 			cboSemana.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(9, 54);
+			cboSemana.Location = new Point(198, 54);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(256, 25);
 			cboSemana.TabIndex = 11;
@@ -589,7 +593,7 @@
 			label6.AutoSize = true;
 			label6.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label6.ForeColor = Color.FromArgb(31, 95, 145);
-			label6.Location = new Point(9, 34);
+			label6.Location = new Point(198, 34);
 			label6.Name = "label6";
 			label6.Size = new Size(63, 17);
 			label6.TabIndex = 10;
@@ -599,7 +603,7 @@
 			// 
 			cboLugarPago.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboLugarPago.FormattingEnabled = true;
-			cboLugarPago.Location = new Point(689, 54);
+			cboLugarPago.Location = new Point(743, 54);
 			cboLugarPago.Name = "cboLugarPago";
 			cboLugarPago.Size = new Size(256, 25);
 			cboLugarPago.TabIndex = 7;
@@ -610,7 +614,7 @@
 			label11.AutoSize = true;
 			label11.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label11.ForeColor = Color.FromArgb(31, 95, 145);
-			label11.Location = new Point(693, 34);
+			label11.Location = new Point(747, 34);
 			label11.Name = "label11";
 			label11.Size = new Size(103, 17);
 			label11.TabIndex = 6;
@@ -620,7 +624,7 @@
 			// 
 			cboCuadrillaRevisar.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			cboCuadrillaRevisar.FormattingEnabled = true;
-			cboCuadrillaRevisar.Location = new Point(391, 54);
+			cboCuadrillaRevisar.Location = new Point(511, 54);
 			cboCuadrillaRevisar.Name = "cboCuadrillaRevisar";
 			cboCuadrillaRevisar.Size = new Size(189, 25);
 			cboCuadrillaRevisar.TabIndex = 5;
@@ -631,7 +635,7 @@
 			label5.AutoSize = true;
 			label5.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
 			label5.ForeColor = Color.FromArgb(31, 95, 145);
-			label5.Location = new Point(391, 34);
+			label5.Location = new Point(511, 34);
 			label5.Name = "label5";
 			label5.Size = new Size(67, 17);
 			label5.TabIndex = 4;
@@ -695,6 +699,27 @@
 			label12.Size = new Size(132, 17);
 			label12.TabIndex = 10;
 			label12.Text = "Cuadrilla con un csv:";
+			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(6, 54);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 53;
+			cboPeriodo.SelectedIndexChanged += cboPeriodo_SelectedIndexChanged;
+			// 
+			// label20
+			// 
+			label20.AutoSize = true;
+			label20.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			label20.ForeColor = Color.FromArgb(31, 95, 145);
+			label20.Location = new Point(6, 33);
+			label20.Name = "label20";
+			label20.Size = new Size(43, 17);
+			label20.TabIndex = 52;
+			label20.Text = "Ciclo :";
 			// 
 			// FrmNomina
 			// 
@@ -792,5 +817,7 @@
 		private Button button1;
 		private Label label17;
 		public TextBox txbLote;
+		public ComboBox cboPeriodo;
+		private Label label20;
 	}
 }

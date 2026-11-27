@@ -209,6 +209,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			frm.cboSemana.SelectedIndex = -1;
 		}
+
 		public void CargarPeriodos()
 		{
 			SQLControl sql = new SQLControl();
@@ -288,24 +289,28 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// ==========================================
-			// SELECCIONAR PERÍODO ACTUAL
+			// SELECCIONAR PERÍODO ACTIVO MÁS RECIENTE
 			// ==========================================
 
-			DataRow[] periodoActual =
-				dt.Select("c_activo_tem = 1");
+			DataRow periodoActual = dt.AsEnumerable()
+				.Where(r =>
+					r["c_activo_tem"] != DBNull.Value &&
+					Convert.ToInt32(r["c_activo_tem"]) == 1)
+				.OrderByDescending(r =>
+					Convert.ToInt32(r["c_codigo_tem"]))
+				.FirstOrDefault();
 
-			if (periodoActual.Length > 0)
+			if (periodoActual != null)
 			{
 				frm.cboPeriodo.SelectedValue =
-					periodoActual[0]["c_codigo_tem"]
-					.ToString()
-					.Trim();
+					periodoActual["c_codigo_tem"].ToString().Trim();
 			}
 			else
 			{
 				frm.cboPeriodo.SelectedIndex = -1;
 			}
 		}
+
 		public void CrearColumnasListado()
 		{
 			DataGridView dgv = frm.dgvListado;
@@ -1460,6 +1465,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+
 		public void btnCopiarDatosDeLaSemanaAnterior()
 		{
 			if (frm.cboSemana.SelectedIndex < 0)
@@ -1492,14 +1498,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			string idPeriodo =
-				semanaSeleccionada["id_period"]?
-				.ToString()
-				.Trim();
+				semanaSeleccionada["id_period"]?.ToString().Trim();
 
 			string secuenciaSemana =
-				semanaSeleccionada["c_sequence_per"]?
-				.ToString()
-				.Trim();
+				semanaSeleccionada["c_sequence_per"]?.ToString().Trim();
 
 			DateTime fechaInicio =
 				Convert.ToDateTime(
@@ -1509,10 +1511,6 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				Convert.ToDateTime(
 					semanaSeleccionada["d_endDate_per"]).Date;
 
-
-			// ==========================================
-			// VALIDAR ID PERIODO
-			// ==========================================
 
 			if (string.IsNullOrWhiteSpace(idPeriodo))
 			{
@@ -1527,80 +1525,189 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// ==========================================
-			// OBTENER SEMANA ANTERIOR
+			// VARIABLES SEMANA ANTERIOR
 			// ==========================================
 
-			int indiceSemanaAnterior =
-				frm.cboSemana.SelectedIndex + 1;
+			string idPeriodoAnterior = "";
+			string secuenciaSemanaAnterior = "";
 
-			if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
+			DateTime fechaInicioAnterior;
+			DateTime fechaFinAnterior;
+
+
+			// ==========================================
+			// SI ES SEMANA 01, BUSCAR PERIODO ANTERIOR
+			// ==========================================
+
+			if (Convert.ToInt32(secuenciaSemana) == 1)
 			{
-				MessageBox.Show(
-					"No existe una semana anterior.",
-					"Semana",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
+				SQLControl sql = new SQLControl();
 
-				return;
+				try
+				{
+					sql.OpenConectionWrite();
+
+					// ==========================================
+					// OBTENER PERIODO ANTERIOR
+					// ==========================================
+
+					string queryPeriodo = @"
+                SELECT TOP 1
+                    c_codigo_tem
+                FROM dbo.Nom_AgriculturalCycle
+                WHERE TRY_CONVERT(INT, c_codigo_tem)
+                      < TRY_CONVERT(INT, @idPeriodo)
+                ORDER BY TRY_CONVERT(INT, c_codigo_tem) DESC;";
+
+					using (SqlCommand cmd =
+						new SqlCommand(queryPeriodo, sql.cnn))
+					{
+						cmd.Parameters.AddWithValue(
+							"@idPeriodo",
+							idPeriodo);
+
+						object resultado = cmd.ExecuteScalar();
+
+						if (resultado == null ||
+							resultado == DBNull.Value)
+						{
+							MessageBox.Show(
+								"No se encontró un período anterior.",
+								"Semana",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information);
+
+							return;
+						}
+
+						idPeriodoAnterior =
+							resultado.ToString().Trim();
+					}
+
+
+					// ==========================================
+					// OBTENER ULTIMA SEMANA DEL PERIODO ANTERIOR
+					// ==========================================
+
+					string querySemana = @"
+                SELECT TOP 1
+                    id_period,
+                    c_sequence_per,
+                    d_startDate_per,
+                    d_endDate_per
+                FROM dbo.Payroll_AttendancePeriod
+                WHERE id_period = @idPeriodoAnterior
+                ORDER BY
+                    TRY_CONVERT(INT, c_sequence_per) DESC,
+                    d_startDate_per DESC;";
+
+					using (SqlCommand cmd =
+						new SqlCommand(querySemana, sql.cnn))
+					{
+						cmd.Parameters.AddWithValue(
+							"@idPeriodoAnterior",
+							idPeriodoAnterior);
+
+						using (SqlDataReader reader =
+							cmd.ExecuteReader())
+						{
+							if (!reader.Read())
+							{
+								MessageBox.Show(
+									"No se encontraron semanas registradas " +
+									"en el período anterior.",
+									"Semana",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
+
+								return;
+							}
+
+							idPeriodoAnterior =
+								reader["id_period"].ToString().Trim();
+
+							secuenciaSemanaAnterior =
+								reader["c_sequence_per"].ToString().Trim();
+
+							fechaInicioAnterior =
+								Convert.ToDateTime(
+									reader["d_startDate_per"]).Date;
+
+							fechaFinAnterior =
+								Convert.ToDateTime(
+									reader["d_endDate_per"]).Date;
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(
+						"Error al obtener la última semana del período anterior:\n\n" +
+						ex.Message,
+						"Semana",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+
+					return;
+				}
+				finally
+				{
+					sql.CloseConectionWrite();
+				}
+			}
+			else
+			{
+				// ==========================================
+				// SEMANAS NORMALES DEL MISMO PERIODO
+				// ==========================================
+
+				int indiceSemanaAnterior =
+					frm.cboSemana.SelectedIndex + 1;
+
+				if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
+				{
+					MessageBox.Show(
+						"No existe una semana anterior.",
+						"Semana",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+
+					return;
+				}
+
+				DataRowView semanaAnterior =
+					frm.cboSemana.Items[indiceSemanaAnterior]
+					as DataRowView;
+
+				if (semanaAnterior == null)
+				{
+					MessageBox.Show(
+						"No se pudo obtener la semana anterior.",
+						"Semana",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+
+					return;
+				}
+
+				idPeriodoAnterior =
+					semanaAnterior["id_period"].ToString().Trim();
+
+				secuenciaSemanaAnterior =
+					semanaAnterior["c_sequence_per"].ToString().Trim();
+
+				fechaInicioAnterior =
+					Convert.ToDateTime(
+						semanaAnterior["d_startDate_per"]).Date;
+
+				fechaFinAnterior =
+					Convert.ToDateTime(
+						semanaAnterior["d_endDate_per"]).Date;
 			}
 
-			DataRowView semanaAnterior =
-				frm.cboSemana.Items[indiceSemanaAnterior]
-				as DataRowView;
-
-			if (semanaAnterior == null)
-			{
-				MessageBox.Show(
-					"No se pudo obtener la semana anterior.",
-					"Semana",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
 
 			// ==========================================
-			// DATOS DE LA SEMANA ANTERIOR
-			// ==========================================
-
-			string idPeriodoAnterior =
-				semanaAnterior["id_period"]?
-				.ToString()
-				.Trim();
-
-			string secuenciaSemanaAnterior =
-				semanaAnterior["c_sequence_per"]?
-				.ToString()
-				.Trim();
-
-			DateTime fechaInicioAnterior =
-				Convert.ToDateTime(
-					semanaAnterior["d_startDate_per"]).Date;
-
-			DateTime fechaFinAnterior =
-				Convert.ToDateTime(
-					semanaAnterior["d_endDate_per"]).Date;
-
-
-			// ==========================================
-			// VALIDAR ID PERIODO ANTERIOR
-			// ==========================================
-
-			if (string.IsNullOrWhiteSpace(idPeriodoAnterior))
-			{
-				MessageBox.Show(
-					"La semana anterior no tiene un ID de período.",
-					"Semana",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-
-				return;
-			}
-
-
-			// ==========================================
-			// VERIFICAR SI LA SEMANA ACTUAL YA TIENE EMPLEADOS
+			// VERIFICAR DATOS DE LA SEMANA ACTUAL
 			// ==========================================
 
 			bool existeDatos = ExisteEmpleadosSemana(
@@ -1610,7 +1717,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 
 			// ==========================================
-			// SI YA TIENE DATOS, PEDIR CONFIRMACIÓN
+			// CONFIRMAR ACTUALIZACION
 			// ==========================================
 
 			if (existeDatos)
@@ -1618,17 +1725,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				DialogResult resultado = MessageBox.Show(
 					"La semana seleccionada ya tiene empleados registrados.\n\n" +
 					"¿Está seguro de volver a realizar la acción?\n\n" +
-					"Esto copiará nuevamente TODOS los datos de la semana anterior " +
-					"y se perderán los cambios que haya realizado en la semana actual.",
+					"Se copiarán nuevamente TODOS los empleados de la semana anterior " +
+					"y se perderán los cambios realizados en la semana actual.",
 					"Actualizar semana",
 					MessageBoxButtons.YesNo,
 					MessageBoxIcon.Warning,
 					MessageBoxDefaultButton.Button2);
 
 				if (resultado != DialogResult.Yes)
-				{
 					return;
-				}
 			}
 
 
@@ -1654,14 +1759,17 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (copiado)
 			{
 				MessageBox.Show(
-					"Los empleados de la semana anterior fueron copiados correctamente.",
+					$"Los empleados de la semana {secuenciaSemanaAnterior} " +
+					$"del período {idPeriodoAnterior} fueron copiados " +
+					$"correctamente a la semana {secuenciaSemana} " +
+					$"del período {idPeriodo}.",
 					"Actualizar semana",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
 
 
 				// ==========================================
-				// MOSTRAR LA SEMANA SELECCIONADA
+				// RECARGAR EMPLEADOS
 				// ==========================================
 
 				if (frm.dgvCuadrilla.CurrentRow != null)
@@ -1687,7 +1795,15 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				}
 			}
 		}
-		public bool ActualizarActividadEmpleadoSemana(string secuenciaSemana, DateTime fechaInicio, DateTime fechaFin)
+
+
+		public bool ActualizarActividadEmpleadoSemana(
+			string idPeriodo,
+			string secuenciaSemana,
+			DateTime fechaInicio,
+			DateTime fechaFin,
+			DateTime fechaInicioAnterior,
+			DateTime fechaFinAnterior)
 		{
 			SQLControl sql = new SQLControl();
 
@@ -1701,6 +1817,9 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 
+					cmd.Parameters.Add("@id_period", SqlDbType.Char, 2)
+						.Value = idPeriodo;
+
 					cmd.Parameters.Add("@c_sequence_per", SqlDbType.Char, 2)
 						.Value = secuenciaSemana;
 
@@ -1709,6 +1828,12 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 					cmd.Parameters.Add("@d_endDate_per", SqlDbType.Date)
 						.Value = fechaFin.Date;
+
+					cmd.Parameters.Add("@d_startDate_anterior", SqlDbType.Date)
+						.Value = fechaInicioAnterior.Date;
+
+					cmd.Parameters.Add("@d_endDate_anterior", SqlDbType.Date)
+						.Value = fechaFinAnterior.Date;
 
 					cmd.ExecuteNonQuery();
 
@@ -1730,6 +1855,8 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				sql.CloseConectionWrite();
 			}
 		}
+
+
 		public void ActividadEmpleadoSemana()
 		{
 			if (frm.cboSemana.SelectedIndex < 0)
@@ -1743,58 +1870,217 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 				return;
 			}
 
-			// Obtener semana anterior
-			int indiceSemanaAnterior =
-				frm.cboSemana.SelectedIndex + 1;
+			// ==========================================
+			// OBTENER SEMANA ACTUAL
+			// ==========================================
 
-			if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
-			{
-				MessageBox.Show(
-					"No existe una semana anterior.",
-					"Semana",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
+			DataRowView semanaActual =
+				frm.cboSemana.SelectedItem as DataRowView;
 
+			if (semanaActual == null)
 				return;
+
+			string idPeriodo =
+				semanaActual["id_period"].ToString().Trim();
+
+			string secuenciaSemana =
+				semanaActual["c_sequence_per"].ToString().Trim();
+
+			DateTime fechaInicio =
+				Convert.ToDateTime(
+					semanaActual["d_startDate_per"]).Date;
+
+			DateTime fechaFin =
+				Convert.ToDateTime(
+					semanaActual["d_endDate_per"]).Date;
+
+
+			// ==========================================
+			// OBTENER SEMANA ANTERIOR
+			// ==========================================
+
+			string idPeriodoAnterior = "";
+			string secuenciaSemanaAnterior = "";
+
+			DateTime fechaInicioAnterior;
+			DateTime fechaFinAnterior;
+
+
+			if (Convert.ToInt32(secuenciaSemana) == 1)
+			{
+				// ==========================================
+				// BUSCAR ÚLTIMA SEMANA DEL PERIODO ANTERIOR
+				// ==========================================
+
+				SQLControl sql = new SQLControl();
+
+				try
+				{
+					sql.OpenConectionWrite();
+
+					// Obtener periodo anterior
+					string queryPeriodo = @"
+                SELECT TOP 1 c_codigo_tem
+                FROM dbo.Nom_AgriculturalCycle
+                WHERE TRY_CONVERT(INT, c_codigo_tem)
+                    < TRY_CONVERT(INT, @idPeriodo)
+                ORDER BY TRY_CONVERT(INT, c_codigo_tem) DESC;";
+
+					using (SqlCommand cmd =
+						new SqlCommand(queryPeriodo, sql.cnn))
+					{
+						cmd.Parameters.AddWithValue(
+							"@idPeriodo", idPeriodo);
+
+						object resultado = cmd.ExecuteScalar();
+
+						if (resultado == null ||
+							resultado == DBNull.Value)
+						{
+							MessageBox.Show(
+								"No existe un período anterior.",
+								"Semana",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information);
+
+							return;
+						}
+
+						idPeriodoAnterior = resultado.ToString().Trim();
+					}
+
+					// Obtener última semana del periodo anterior
+					string querySemana = @"
+                SELECT TOP 1
+                    id_period,
+                    c_sequence_per,
+                    d_startDate_per,
+                    d_endDate_per
+                FROM dbo.Payroll_AttendancePeriod
+                WHERE id_period = @idPeriodoAnterior
+                ORDER BY
+                    TRY_CONVERT(INT, c_sequence_per) DESC,
+                    d_startDate_per DESC;";
+
+					using (SqlCommand cmd =
+						new SqlCommand(querySemana, sql.cnn))
+					{
+						cmd.Parameters.AddWithValue(
+							"@idPeriodoAnterior",
+							idPeriodoAnterior);
+
+						using (SqlDataReader reader = cmd.ExecuteReader())
+						{
+							if (!reader.Read())
+							{
+								MessageBox.Show(
+									"No se encontró la última semana del período anterior.",
+									"Semana",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
+
+								return;
+							}
+
+							idPeriodoAnterior =
+								reader["id_period"].ToString().Trim();
+
+							secuenciaSemanaAnterior =
+								reader["c_sequence_per"].ToString().Trim();
+
+							fechaInicioAnterior =
+								Convert.ToDateTime(
+									reader["d_startDate_per"]).Date;
+
+							fechaFinAnterior =
+								Convert.ToDateTime(
+									reader["d_endDate_per"]).Date;
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(
+						ex.Message,
+						"Obtener semana anterior",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+
+					return;
+				}
+				finally
+				{
+					sql.CloseConectionWrite();
+				}
+			}
+			else
+			{
+				// ==========================================
+				// SEMANA ANTERIOR DEL MISMO PERIODO
+				// ==========================================
+
+				int indiceSemanaAnterior =
+					frm.cboSemana.SelectedIndex + 1;
+
+				if (indiceSemanaAnterior >= frm.cboSemana.Items.Count)
+				{
+					MessageBox.Show(
+						"No existe una semana anterior.",
+						"Semana",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+
+					return;
+				}
+
+				DataRowView semanaAnterior =
+					frm.cboSemana.Items[indiceSemanaAnterior]
+					as DataRowView;
+
+				if (semanaAnterior == null)
+					return;
+
+				idPeriodoAnterior =
+					semanaAnterior["id_period"].ToString().Trim();
+
+				secuenciaSemanaAnterior =
+					semanaAnterior["c_sequence_per"].ToString().Trim();
+
+				fechaInicioAnterior =
+					Convert.ToDateTime(
+						semanaAnterior["d_startDate_per"]).Date;
+
+				fechaFinAnterior =
+					Convert.ToDateTime(
+						semanaAnterior["d_endDate_per"]).Date;
 			}
 
-			DataRowView semanaAnterior =
-				frm.cboSemana.Items[indiceSemanaAnterior] as DataRowView;
 
-			if (semanaAnterior == null)
-			{
-				MessageBox.Show(
-					"No se pudo obtener la semana anterior.",
-					"Semana",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
+			// ==========================================
+			// ACTUALIZAR ACTIVIDADES
+			// ==========================================
 
-				return;
-			}
-
-			string secuenciaSemanaAnterior =
-				semanaAnterior["c_sequence_per"]?.ToString();
-
-			DateTime fechaInicioAnterior =
-				Convert.ToDateTime(
-					semanaAnterior["d_startDate_per"]);
-
-			DateTime fechaFinAnterior =
-				Convert.ToDateTime(
-					semanaAnterior["d_endDate_per"]);
-
-
-			// Actualizar actividad
 			bool actualizado = ActualizarActividadEmpleadoSemana(
-				secuenciaSemanaAnterior,
+				idPeriodo,
+				secuenciaSemana,
+				fechaInicio,
+				fechaFin,
 				fechaInicioAnterior,
 				fechaFinAnterior);
 
 
+			// ==========================================
+			// RESULTADO
+			// ==========================================
+
 			if (actualizado)
 			{
 				MessageBox.Show(
-					"Las actividades de los empleados se actualizaron correctamente.",
+					$"Las actividades se actualizaron correctamente.\n\n" +
+					$"Semana origen: {secuenciaSemanaAnterior} - " +
+					$"Período {idPeriodoAnterior}\n" +
+					$"Semana destino: {secuenciaSemana} - " +
+					$"Período {idPeriodo}",
 					"Actualizar actividad",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
@@ -1808,6 +2094,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 					MessageBoxIcon.Warning);
 			}
 		}
+
 		public void EstiloDgvCuadrilla()
 		{
 			DataGridView dgv = frm.dgvCuadrilla;

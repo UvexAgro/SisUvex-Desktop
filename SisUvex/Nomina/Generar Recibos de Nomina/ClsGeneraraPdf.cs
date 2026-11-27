@@ -26,10 +26,15 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		public ClsRecibos cls = new ClsRecibos();
 		DeviceRgb grisPagoNeto = new DeviceRgb(190, 190, 190);
 
+
 		public void GenerarPDF()
 		{
 			try
 			{
+				// =========================================
+				// OBTENER RECIBOS
+				// =========================================
+
 				var filas = frm.dgvRecibo.Rows
 					.Cast<DataGridViewRow>()
 					.Where(f =>
@@ -45,19 +50,50 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 
 				if (filas.Count == 0)
 				{
-					MessageBox.Show("No hay recibos para generar.",
-						"Recibos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(
+						"No hay recibos para generar.",
+						"Recibos",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
 					return;
 				}
 
+				// =========================================
+				// VALIDAR TIPO DE RECIBO
+				// =========================================
+
 				if (!frm.rbCfdi.Checked && !frm.rbNormal.Checked)
 				{
-					MessageBox.Show("Selecciona el tipo de recibo.",
-						"Recibos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(
+						"Selecciona el tipo de recibo.",
+						"Recibos",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
+					return;
+				}
+
+				// =========================================
+				// VALIDAR MÉTODO DE IMPRESIÓN
+				// =========================================
+
+				if (!frm.rbContinuo.Checked &&
+					!frm.rbEntrecruzado.Checked)
+				{
+					MessageBox.Show(
+						"Selecciona el método de impresión.",
+						"Recibos",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning);
 					return;
 				}
 
 				bool esCfdi = frm.rbCfdi.Checked;
+
+				bool esContinuo = frm.rbContinuo.Checked;
+
+				// =========================================
+				// GUARDAR PDF
+				// =========================================
 
 				using (SaveFileDialog guardar = new SaveFileDialog())
 				{
@@ -80,60 +116,166 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					{
 						documento.SetMargins(0, 0, 0, 0);
 
-						string ultimoLugarPago = null;
-						int recibosEnPagina = 0;
+						float alturaRecibo = esCfdi ? 391 : 380;
 
-						for (int i = 0; i < filas.Count; i++)
+						PdfFont bold = PdfFontFactory.CreateFont(
+							StandardFonts.HELVETICA_BOLD);
+
+						bool primeraHoja = true;
+
+						// =========================================
+						// AGRUPAR POR LUGAR DE PAGO
+						// =========================================
+
+						var grupos = filas
+							.GroupBy(f =>
+								f.Cells["CodigoLugarPago"].Value?
+									.ToString().Trim() ?? "")
+							.ToList();
+
+						// =========================================
+						// PROCESAR CADA LUGAR DE PAGO
+						// =========================================
+
+						foreach (var grupo in grupos)
 						{
-							string lugarPago = filas[i]
-								.Cells["CodigoLugarPago"]
-								.Value?.ToString()
-								.Trim() ?? "";
+							List<DataGridViewRow> recibos = grupo.ToList();
 
-							// Nueva hoja cuando cambia el lugar de pago
-							if (ultimoLugarPago != null &&
-								!string.Equals(
-									ultimoLugarPago,
-									lugarPago,
-									StringComparison.OrdinalIgnoreCase))
+							int totalRecibos = recibos.Count;
+
+							// Cantidad de recibos de la parte superior
+							int mitadSuperior = (totalRecibos + 1) / 2;
+
+							// Total de hojas de este lugar de pago
+							int totalHojas = mitadSuperior;
+
+							string codigoLugar = grupo.Key;
+
+							string nombreLugar = Valor(
+								recibos[0], "LugarPago");
+
+							// =====================================
+							// GENERAR HOJAS
+							// =====================================
+
+							for (int hoja = 0; hoja < totalHojas; hoja++)
 							{
-								documento.Add(
-									new AreaBreak(AreaBreakType.NEXT_PAGE));
+								// Nueva página
+								if (!primeraHoja)
+								{
+									documento.Add(
+										new AreaBreak(AreaBreakType.NEXT_PAGE));
+								}
 
-								recibosEnPagina = 0;
+								primeraHoja = false;
+
+								int indiceArriba;
+								int indiceAbajo;
+
+								// =================================
+								// DISTRIBUCIÓN CONTINUA
+								// =================================
+
+								if (esContinuo)
+								{
+									indiceArriba = hoja;
+
+									indiceAbajo = hoja + mitadSuperior;
+								}
+								// =================================
+								// DISTRIBUCIÓN ENTRECRUZADA
+								// =================================
+								else
+								{
+									indiceArriba = hoja * 2;
+
+									indiceAbajo = indiceArriba + 1;
+								}
+
+								// =================================
+								// RECIBO SUPERIOR
+								// =================================
+
+								if (indiceArriba < totalRecibos)
+								{
+									Div reciboArriba = new Div()
+										.SetWidth(UnitValue.CreatePercentValue(100))
+										.SetHeight(alturaRecibo)
+										.SetMinHeight(alturaRecibo)
+										.SetMaxHeight(alturaRecibo)
+										.SetMargin(0)
+										.SetPadding(esCfdi ? 2 : 3)
+										.SetBorder(new SolidBorder(
+											new DeviceRgb(65, 65, 65), 0.5f));
+
+									if (esCfdi)
+										CrearReciboCFDI(
+											reciboArriba,
+											recibos[indiceArriba]);
+									else
+										CrearReciboNormal(
+											reciboArriba,
+											recibos[indiceArriba]);
+
+									documento.Add(reciboArriba);
+								}
+
+								// =================================
+								// RECIBO INFERIOR
+								// =================================
+
+								if (indiceAbajo < totalRecibos)
+								{
+									Div reciboAbajo = new Div()
+										.SetWidth(UnitValue.CreatePercentValue(100))
+										.SetHeight(alturaRecibo)
+										.SetMinHeight(alturaRecibo)
+										.SetMaxHeight(alturaRecibo)
+										.SetMargin(0)
+										.SetPadding(esCfdi ? 2 : 3)
+										.SetBorder(new SolidBorder(
+											new DeviceRgb(65, 65, 65), 0.5f));
+
+									if (esCfdi)
+										CrearReciboCFDI(
+											reciboAbajo,
+											recibos[indiceAbajo]);
+									else
+										CrearReciboNormal(
+											reciboAbajo,
+											recibos[indiceAbajo]);
+
+									documento.Add(reciboAbajo);
+								}
+
+								// =================================
+								// NUMERACIÓN POR LUGAR DE PAGO
+								// =================================
+
+								int paginaPdf = pdf.GetNumberOfPages();
+
+								Paragraph numeroHoja = new Paragraph(
+									$"Lugar: {codigoLugar} - {nombreLugar}    " +
+									$"Hoja {hoja + 1} de {totalHojas}")
+									.SetFont(bold)
+									.SetFontSize(6)
+									.SetTextAlignment(TextAlignment.RIGHT)
+									.SetMargin(0);
+
+								numeroHoja.SetFixedPosition(
+									paginaPdf,
+									350,
+									1,
+									240);
+
+								documento.Add(numeroHoja);
 							}
-							// Máximo dos recibos por hoja
-							else if (recibosEnPagina >= 2)
-							{
-								documento.Add(
-									new AreaBreak(AreaBreakType.NEXT_PAGE));
-
-								recibosEnPagina = 0;
-							}
-
-							float alturaRecibo = esCfdi ? 391 : 380;
-
-							Div recibo = new Div()
-								.SetWidth(UnitValue.CreatePercentValue(100))
-								.SetHeight(alturaRecibo)
-								.SetMinHeight(alturaRecibo)
-								.SetMaxHeight(alturaRecibo)
-								.SetMargin(0)
-								.SetPadding(esCfdi ? 2 : 3)
-								.SetBorder(new SolidBorder(
-									new DeviceRgb(65, 65, 65), 0.5f));
-
-							if (esCfdi)
-								CrearReciboCFDI(recibo, filas[i]);
-							else
-								CrearReciboNormal(recibo, filas[i]);
-
-							documento.Add(recibo);
-
-							recibosEnPagina++;
-							ultimoLugarPago = lugarPago;
 						}
 					}
+
+					// =========================================
+					// ABRIR PDF
+					// =========================================
 
 					Process.Start(new ProcessStartInfo
 					{
@@ -151,6 +293,9 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxIcon.Error);
 			}
 		}
+
+
+
 
 		private string ObtenerNombreArchivo(List<DataGridViewRow> filas)
 		{
@@ -1217,10 +1362,15 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 		}
 
 
+
 		public void GenerarPDFParaImprimir()
 		{
 			try
 			{
+				// =========================================
+				// OBTENER RECIBOS
+				// =========================================
+
 				var filas = frm.dgvRecibo.Rows
 					.Cast<DataGridViewRow>()
 					.Where(f =>
@@ -1244,13 +1394,41 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					return;
 				}
 
+				// =========================================
+				// VALIDACIONES
+				// =========================================
+
 				if (!frm.rbCfdi.Checked && !frm.rbNormal.Checked)
 				{
 					MessageBox.Show("Selecciona el tipo de recibo.");
 					return;
 				}
 
+				if (!frm.rbContinuo.Checked &&
+					!frm.rbEntrecruzado.Checked)
+				{
+					MessageBox.Show(
+						"Selecciona el método de impresión.");
+					return;
+				}
+
 				bool esCfdi = frm.rbCfdi.Checked;
+
+				bool esContinuo = frm.rbContinuo.Checked;
+
+				// =========================================
+				// AGRUPAR POR LUGAR DE PAGO
+				// =========================================
+
+				var grupos = filas
+					.GroupBy(f =>
+						f.Cells["CodigoLugarPago"].Value?
+							.ToString().Trim() ?? "")
+					.ToList();
+
+				// =========================================
+				// PREPARAR PDF
+				// =========================================
 
 				string carpeta = System.IO.Path.Combine(
 					System.IO.Path.GetTempPath(),
@@ -1259,6 +1437,7 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				System.IO.Directory.CreateDirectory(carpeta);
 
 				string nombre = $"Recibos_{Guid.NewGuid():N}.pdf";
+
 				string ruta = System.IO.Path.Combine(carpeta, nombre);
 
 				using (PdfWriter writer = new PdfWriter(ruta))
@@ -1267,60 +1446,134 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 				{
 					documento.SetMargins(0, 0, 0, 0);
 
-					string ultimoLugarPago = null;
-					int recibosEnPagina = 0;
+					float altura = esCfdi ? 391 : 380;
 
-					for (int i = 0; i < filas.Count; i++)
+					PdfFont bold = PdfFontFactory.CreateFont(
+						StandardFonts.HELVETICA_BOLD);
+
+					bool primeraHoja = true;
+
+					// =========================================
+					// PROCESAR CADA LUGAR DE PAGO
+					// =========================================
+
+					foreach (var grupo in grupos)
 					{
-						string lugarPago = filas[i]
-							.Cells["CodigoLugarPago"]
-							.Value?.ToString()
-							.Trim() ?? "";
+						List<DataGridViewRow> recibos = grupo.ToList();
 
-						// Si cambia el lugar de pago, iniciar otra hoja
-						if (ultimoLugarPago != null &&
-							!string.Equals(
-								ultimoLugarPago,
-								lugarPago,
-								StringComparison.OrdinalIgnoreCase))
+						int totalRecibos = recibos.Count;
+
+						// Cantidad de recibos en la parte superior
+						int mitad = (totalRecibos + 1) / 2;
+
+						// Total de hojas para este lugar de pago
+						int totalHojas = mitad;
+
+						string codigoLugar = grupo.Key;
+
+						string nombreLugar = Valor(
+							recibos[0], "LugarPago");
+
+						// =========================================
+						// GENERAR CADA HOJA
+						// =========================================
+
+						for (int hoja = 0; hoja < totalHojas; hoja++)
 						{
-							documento.Add(
-								new AreaBreak(AreaBreakType.NEXT_PAGE));
+							if (!primeraHoja)
+							{
+								documento.Add(
+									new AreaBreak(AreaBreakType.NEXT_PAGE));
+							}
 
-							recibosEnPagina = 0;
+							primeraHoja = false;
+
+							int indiceArriba;
+							int indiceAbajo;
+
+							if (esContinuo)
+							{
+								// CONTINUO
+								//
+								// Arriba: 1, 2, 3...
+								// Abajo:  16, 17, 18...
+
+								indiceArriba = hoja;
+
+								indiceAbajo = hoja + mitad;
+							}
+							else
+							{
+								// ENTRECRUZADO
+								//
+								// Hoja 1: 1 y 2
+								// Hoja 2: 3 y 4
+								// Hoja 3: 5 y 6
+
+								indiceArriba = hoja * 2;
+
+								indiceAbajo = indiceArriba + 1;
+							}
+
+							// =====================================
+							// RECIBO SUPERIOR
+							// =====================================
+
+							if (indiceArriba < totalRecibos)
+							{
+								Div reciboArriba = CrearDivRecibo(
+									recibos[indiceArriba],
+									esCfdi,
+									altura);
+
+								documento.Add(reciboArriba);
+							}
+
+							// =====================================
+							// RECIBO INFERIOR
+							// =====================================
+
+							if (indiceAbajo < totalRecibos)
+							{
+								Div reciboAbajo = CrearDivRecibo(
+									recibos[indiceAbajo],
+									esCfdi,
+									altura);
+
+								documento.Add(reciboAbajo);
+							}
+
+							// =====================================
+							// NUMERACIÓN POR LUGAR DE PAGO
+							// =====================================
+
+							int paginaPdf = pdf.GetNumberOfPages();
+
+							Paragraph numeroHoja = new Paragraph(
+								$"Lugar: {codigoLugar} - {nombreLugar}    " +
+								$"Hoja {hoja + 1} de {totalHojas}")
+								.SetFont(bold)
+								.SetFontSize(6)
+								.SetTextAlignment(TextAlignment.RIGHT)
+								.SetMargin(0);
+
+							// Se coloca en el espacio inferior
+							// sin modificar el diseño del recibo.
+
+							numeroHoja.SetFixedPosition(
+								paginaPdf,
+								350,
+								1,
+								240);
+
+							documento.Add(numeroHoja);
 						}
-						// Máximo dos recibos por hoja
-						else if (recibosEnPagina >= 2)
-						{
-							documento.Add(
-								new AreaBreak(AreaBreakType.NEXT_PAGE));
-
-							recibosEnPagina = 0;
-						}
-
-						float altura = esCfdi ? 391 : 380;
-
-						Div recibo = new Div()
-							.SetWidth(UnitValue.CreatePercentValue(100))
-							.SetHeight(altura)
-							.SetMinHeight(altura)
-							.SetMaxHeight(altura)
-							.SetMargin(0)
-							.SetPadding(esCfdi ? 2 : 3)
-							.SetBorder(new SolidBorder(
-								new DeviceRgb(65, 65, 65), 0.5f));
-
-						if (esCfdi)
-							CrearReciboCFDI(recibo, filas[i]);
-						else
-							CrearReciboNormal(recibo, filas[i]);
-
-						documento.Add(recibo);
-
-						recibosEnPagina++;
-						ultimoLugarPago = lugarPago;
 					}
 				}
+
+				// =========================================
+				// ABRIR PDF
+				// =========================================
 
 				Process.Start(new ProcessStartInfo
 				{
@@ -1337,5 +1590,30 @@ namespace SisUvex.Nomina.Generar_Recibos_de_Nomina
 					MessageBoxIcon.Error);
 			}
 		}
+
+
+		private Div CrearDivRecibo(
+			DataGridViewRow fila,
+			bool esCfdi,
+			float altura)
+		{
+			Div recibo = new Div()
+				.SetWidth(UnitValue.CreatePercentValue(100))
+				.SetHeight(altura)
+				.SetMinHeight(altura)
+				.SetMaxHeight(altura)
+				.SetMargin(0)
+				.SetPadding(esCfdi ? 2 : 3)
+				.SetBorder(new SolidBorder(
+					new DeviceRgb(65, 65, 65), 0.5f));
+
+			if (esCfdi)
+				CrearReciboCFDI(recibo, fila);
+			else
+				CrearReciboNormal(recibo, fila);
+
+			return recibo;
+		}
+
 	}
 }

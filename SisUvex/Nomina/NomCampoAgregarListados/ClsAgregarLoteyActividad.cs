@@ -205,25 +205,31 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 
 			return dt;
 		}
+
 		public void CargarComboLotes(string idCrop)
 		{
 			if (string.IsNullOrWhiteSpace(idCrop))
 			{
 				frmCAL.cboLote.DataSource = null;
 				frmCAL.cboLote.Text = "";
-
-				frmCAL.dtLotesDgv = new DataTable();
-
 				return;
 			}
+
+			// ==========================================
+			// GUARDAR CATÁLOGO ANTERIOR
+			// ==========================================
+
+			DataTable lotesAnteriores = frmCAL.dtLotesDgv;
+
+			// ==========================================
+			// OBTENER LOTES DEL NUEVO CULTIVO
+			// ==========================================
 
 			DataTable dtLotes = ObtenerLotes(idCrop);
 
 			if (!dtLotes.Columns.Contains("LoteCompleto"))
 			{
-				dtLotes.Columns.Add(
-					"LoteCompleto",
-					typeof(string));
+				dtLotes.Columns.Add("LoteCompleto", typeof(string));
 			}
 
 			foreach (DataRow row in dtLotes.Rows)
@@ -237,25 +243,111 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			}
 
 			// ==========================================
-			// GUARDAR LOS LOTES PARA EL DGV
+			// CREAR CATÁLOGO PARA EL DATAGRIDVIEW
 			// ==========================================
 
-			frmCAL.dtLotesDgv = dtLotes;
+			DataTable dtLotesGrid = dtLotes.Clone();
+
+			HashSet<string> idsIncluidos = new HashSet<string>();
+
+			foreach (DataRow row in dtLotes.Rows)
+			{
+				dtLotesGrid.ImportRow(row);
+
+				idsIncluidos.Add(
+					row["id_lot"].ToString().Trim());
+			}
 
 			// ==========================================
-			// COMBO SUPERIOR DE LOTE
+			// IDENTIFICAR LOTES ASIGNADOS
+			// ==========================================
+
+			HashSet<string> idsAsignados = new HashSet<string>();
+
+			DataGridView dgv = frmCAL.dgvAgregarLoteyActividad;
+
+			foreach (DataGridViewRow fila in dgv.Rows)
+			{
+				if (fila.IsNewRow)
+					continue;
+
+				string idLote = "";
+
+				// Obtener ID de lote si existe la columna
+				if (dgv.Columns.Contains("IdLote"))
+				{
+					idLote =
+						fila.Cells["IdLote"].Value?
+						.ToString().Trim() ?? "";
+				}
+
+				// Si no hay ID, intentar obtenerlo de la celda Lote
+				if (string.IsNullOrWhiteSpace(idLote) &&
+					dgv.Columns.Contains("Lote"))
+				{
+					idLote =
+						fila.Cells["Lote"].Value?
+						.ToString().Trim() ?? "";
+				}
+
+				if (!string.IsNullOrWhiteSpace(idLote))
+				{
+					idsAsignados.Add(idLote);
+				}
+			}
+
+			// ==========================================
+			// RECUPERAR LOTES ANTERIORES
+			// ==========================================
+
+			if (lotesAnteriores != null &&
+				lotesAnteriores.Rows.Count > 0)
+			{
+				foreach (DataRow loteAnterior in lotesAnteriores.Rows)
+				{
+					string idAnterior =
+						loteAnterior["id_lot"].ToString().Trim();
+
+					if (!idsAsignados.Contains(idAnterior))
+						continue;
+
+					if (idsIncluidos.Contains(idAnterior))
+						continue;
+
+					DataRow nuevaFila = dtLotesGrid.NewRow();
+
+					foreach (DataColumn columna in dtLotesGrid.Columns)
+					{
+						if (lotesAnteriores.Columns.Contains(
+							columna.ColumnName))
+						{
+							nuevaFila[columna.ColumnName] =
+								loteAnterior[columna.ColumnName];
+						}
+					}
+
+					dtLotesGrid.Rows.Add(nuevaFila);
+
+					idsIncluidos.Add(idAnterior);
+				}
+			}
+
+			// ==========================================
+			// GUARDAR CATÁLOGO DEL DATAGRIDVIEW
+			// ==========================================
+
+			frmCAL.dtLotesDgv = dtLotesGrid;
+
+			// ==========================================
+			// COMBO SUPERIOR
+			// SOLO LOTES DEL CULTIVO SELECCIONADO
 			// ==========================================
 
 			frmCAL.cboLote.DataSource = null;
 
-			frmCAL.cboLote.DisplayMember =
-				"LoteCompleto";
-
-			frmCAL.cboLote.ValueMember =
-				"id_lot";
-
-			frmCAL.cboLote.DataSource =
-				dtLotes;
+			frmCAL.cboLote.DisplayMember = "LoteCompleto";
+			frmCAL.cboLote.ValueMember = "id_lot";
+			frmCAL.cboLote.DataSource = dtLotes;
 
 			frmCAL.cboLote.DropDownStyle =
 				ComboBoxStyle.DropDown;
@@ -270,11 +362,13 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			frmCAL.cboLote.Text = "";
 
 			// ==========================================
-			// ACTUALIZAR LOTE DEL DGV
+			// ACTUALIZAR COLUMNA LOTE DEL DGV
 			// ==========================================
 
 			frmCAL.ConfigurarLoteDgv();
 		}
+
+
 		public void CargarLotesDelCultivoSeleccionado()
 		{
 			if (frmCAL.cboCultivo.SelectedIndex < 0)
@@ -291,27 +385,10 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			if (string.IsNullOrWhiteSpace(idCrop))
 				return;
 
-			// ==========================================
-			// LIMPIAR LOTES ACTUALES
-			// ==========================================
-
-			foreach (DataGridViewRow fila in frmCAL.dgvAgregarLoteyActividad.Rows)
-			{
-				if (fila.IsNewRow)
-					continue;
-
-				if (fila.Cells["Lote"] != null)
-				{
-					fila.Cells["Lote"].Value = null;
-				}
-			}
-
-			// ==========================================
-			// CARGAR LOTES DEL NUEVO CULTIVO
-			// ==========================================
-
+			// Cargar únicamente los lotes del cultivo seleccionado
 			CargarComboLotes(idCrop);
 		}
+
 		public DataTable ObtenerActividades()
 		{
 			SQLControl sql = new SQLControl();

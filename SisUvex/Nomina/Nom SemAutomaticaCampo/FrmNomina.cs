@@ -72,7 +72,8 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 			cls.CargarCuadrillaCampoCheck(listaCuadrillas);
 			cls.CargarCuadrillaCampo(cboCuadrillaRevisar);
 			cls.CargarLugarPago(cboLugarPago);
-			cls.CargarSemanas();
+			cls.CargarPeriodos();
+			
 			txbReferencia.Text = dtpFecha.Value.ToString("yyyyMMdd");
 			txbJornada.Text = "8";
 			txbDestajo.Text = "0";
@@ -687,6 +688,14 @@ namespace SisUvex.Nomina.Nom_SemAutomaticaCampo
 		private void rbFestivo_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigurarCamposFestivo();
+		}
+
+		public void cboPeriodo_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cboPeriodo.SelectedValue == null || cboPeriodo.SelectedValue is DataRowView)
+				return;
+
+			cls.CargarSemanas();
 		}
 	}
 }
