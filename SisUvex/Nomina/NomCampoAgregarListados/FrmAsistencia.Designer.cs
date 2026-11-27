@@ -75,6 +75,8 @@
 			dgvChecador = new DataGridView();
 			label2 = new Label();
 			panel1 = new Panel();
+			cboPeriodo = new ComboBox();
+			label21 = new Label();
 			label20 = new Label();
 			button5 = new Button();
 			cboDia1 = new ComboBox();
@@ -612,6 +614,8 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(cboPeriodo);
+			panel1.Controls.Add(label21);
 			panel1.Controls.Add(label20);
 			panel1.Controls.Add(button5);
 			panel1.Controls.Add(cboDia1);
@@ -637,6 +641,25 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(778, 1142);
 			panel1.TabIndex = 0;
+			// 
+			// cboPeriodo
+			// 
+			cboPeriodo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			cboPeriodo.FormattingEnabled = true;
+			cboPeriodo.Location = new Point(70, 79);
+			cboPeriodo.Name = "cboPeriodo";
+			cboPeriodo.Size = new Size(135, 25);
+			cboPeriodo.TabIndex = 51;
+			// 
+			// label21
+			// 
+			label21.AutoSize = true;
+			label21.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			label21.Location = new Point(6, 77);
+			label21.Name = "label21";
+			label21.Size = new Size(38, 13);
+			label21.TabIndex = 50;
+			label21.Text = "Ciclo :";
 			// 
 			// label20
 			// 
@@ -969,7 +992,7 @@
 			// cboSemana
 			// 
 			cboSemana.FormattingEnabled = true;
-			cboSemana.Location = new Point(7, 171);
+			cboSemana.Location = new Point(70, 125);
 			cboSemana.Name = "cboSemana";
 			cboSemana.Size = new Size(288, 23);
 			cboSemana.TabIndex = 4;
@@ -979,7 +1002,7 @@
 			// 
 			label4.AutoSize = true;
 			label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label4.Location = new Point(7, 151);
+			label4.Location = new Point(7, 122);
 			label4.Name = "label4";
 			label4.Size = new Size(53, 13);
 			label4.TabIndex = 3;
@@ -989,7 +1012,7 @@
 			// 
 			label3.AutoSize = true;
 			label3.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			label3.Location = new Point(8, 87);
+			label3.Location = new Point(5, 171);
 			label3.Name = "label3";
 			label3.Size = new Size(59, 13);
 			label3.TabIndex = 2;
@@ -998,7 +1021,7 @@
 			// cboCuadrilla
 			// 
 			cboCuadrilla.FormattingEnabled = true;
-			cboCuadrilla.Location = new Point(8, 107);
+			cboCuadrilla.Location = new Point(70, 173);
 			cboCuadrilla.Name = "cboCuadrilla";
 			cboCuadrilla.Size = new Size(287, 23);
 			cboCuadrilla.TabIndex = 1;
@@ -1126,5 +1149,7 @@
 		public TextBox txbHoras;
 		private Label label20;
 		public ComboBox cboDia1;
+		public ComboBox cboPeriodo;
+		private Label label21;
 	}
 }

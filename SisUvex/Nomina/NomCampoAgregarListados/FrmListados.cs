@@ -39,8 +39,7 @@ namespace SisUvex.Nomina.NomCampoAgregarListados
 			cls.EstiloDgvCuadrilla();
 			cls.CargarPeriodos();
 			HasEditCatalogsPermission();
-			this.cboPeriodo.SelectedIndexChanged +=
-	cboPeriodo_SelectedIndexChanged;
+			this.cboPeriodo.SelectedIndexChanged +=cboPeriodo_SelectedIndexChanged;
 		}
 
 		private void btnMostrar_Click(object sender, EventArgs e)
